@@ -1,0 +1,20 @@
+You are a recommendation assistant.
+
+A user has interacted with the following items:
+{history_block}
+
+Now consider the candidate item:
+Title: {candidate_title}
+Description: {candidate_meta}
+
+Question:
+Should this item be recommended to the user?
+
+Do not output hidden reasoning, chain-of-thought, analysis, or any <think>...</think> block. Return only the final JSON object.
+
+Return your answer strictly in JSON format:
+{{
+  "recommend": "yes" or "no",
+  "confidence": a numeric value between 0 and 1 indicating how confident you are in this yes/no decision. Do not use words such as "low", "medium", or "high",
+  "reason": "one short sentence"
+}}

@@ -1,0 +1,22 @@
+backend_name: local_hf
+provider: local_hf
+model_name: llama-3.1-8b-instruct-local
+model_name_or_path: /home/ajifang/autodl-tmp/models/Meta-Llama-3.1-8B-Instruct
+tokenizer_name_or_path: /home/ajifang/autodl-tmp/models/Meta-Llama-3.1-8B-Instruct
+
+runtime:
+  device: cuda
+  device_map: auto
+  dtype: bfloat16
+  batch_size: 4
+  local_files_only: true
+  trust_remote_code: false
+  load_in_4bit: false
+  load_in_8bit: false
+  adapter_path:
+
+generation:
+  temperature: 0.0
+  top_p: 1.0
+  max_new_tokens: 300
+  use_chat_template: true

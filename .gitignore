@@ -1,0 +1,222 @@
+# =========================
+# Python bytecode / caches
+# =========================
+__pycache__/
+*.py[codz]
+*$py.class
+*.pyc
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.hypothesis/
+
+# =========================
+# C extensions
+# =========================
+*.so
+
+# =========================
+# Distribution / packaging
+# =========================
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# =========================
+# PyInstaller
+# =========================
+*.manifest
+*.spec
+
+# =========================
+# Installer logs
+# =========================
+pip-log.txt
+pip-delete-this-directory.txt
+
+# =========================
+# Unit test / coverage
+# =========================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+cover/
+
+# =========================
+# Translations
+# =========================
+*.mo
+*.pot
+
+# =========================
+# Django / Flask / Scrapy
+# =========================
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+.scrapy
+
+# =========================
+# Documentation builds
+# =========================
+docs/_build/
+site/
+
+# =========================
+# PyBuilder
+# =========================
+.pybuilder/
+target/
+
+# =========================
+# Jupyter / IPython
+# =========================
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# =========================
+# Environment / local config
+# =========================
+.env
+.envrc
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+.pdm-python
+.pdm-build/
+.pixi/
+__pypackages__/
+
+# =========================
+# IDE / editor
+# =========================
+.spyderproject
+.spyproject
+.ropeproject
+.abstra/
+.cursorignore
+.cursorindexingignore
+.vscode/
+.idea/
+
+# =========================
+# Marimo
+# =========================
+marimo/_static/
+marimo/_lsp/
+__marimo__/
+
+# =========================
+# Research project data
+# 永远不要提交真实数据、处理后数据、缓存
+# =========================
+data/raw/
+data/processed/
+data/cache/
+
+# =========================
+# Research outputs
+# 实验输出、中间结果、旧备份都不提交
+# =========================
+outputs/**
+!outputs/
+!outputs/**/
+!outputs/.gitkeep
+!outputs/**/.gitkeep
+outputs_backup_old/
+logs/
+results/
+experiments/
+artifacts/
+checkpoints/
+
+# =========================
+# Experiment tracking / ML tools
+# =========================
+wandb/
+mlruns/
+lightning_logs/
+tensorboard/
+tb_logs/
+
+# =========================
+# Large generated files
+# 作为兜底规则，防止手滑把大产物加进去
+# =========================
+*.jsonl
+*.csv
+*.tsv
+*.parquet
+*.pkl
+*.pickle
+*.joblib
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+
+# =========================
+# Papers / reports / local docs
+# 本地论文材料和导出报告不进仓库
+# =========================
+Paper/**
+!Paper/
+!Paper/**/
+!Paper/.gitkeep
+!Paper/**/.gitkeep
+*.pdf
+*.ppt
+*.pptx
+*.doc
+*.docx
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+Paper (2).zip
+baseline/
+!configs/baseline/
+!configs/baseline/**
+docs/version3/
+docs/
+tmp_outputs/
+tmp_pycache/
+docs.zip
