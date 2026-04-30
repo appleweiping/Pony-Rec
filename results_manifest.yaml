@@ -1,0 +1,34 @@
+main_tables:
+  - outputs/summary/final_results.csv
+  - outputs/summary/weekly_summary.csv
+  - outputs/summary/model_results.csv
+  - outputs/summary/main_table_with_ci.csv
+  - outputs/summary/calibration_table.csv
+  - outputs/summary/significance_tests.csv
+  - outputs/summary/candidate_protocol_audit.csv
+  - outputs/summary/baseline_reliability_proxy_audit.csv
+  - outputs/summary/generative_title_bridge_status.csv
+figures:
+  - outputs/figures/reliability_diagram.pdf
+  - outputs/figures/risk_coverage_curve.pdf
+seeds:
+  - 42
+  - 43
+  - 44
+model_versions:
+  local_model: qwen3_8b_local_or_configured_backend
+  api_model: configured_in_configs/model/*.yaml
+data_hashes:
+  amazon_beauty: record_with_dataset_release_or_file_sha256_before_submission
+  amazon_books: record_with_dataset_release_or_file_sha256_before_submission
+  amazon_electronics: record_with_dataset_release_or_file_sha256_before_submission
+  amazon_movies: record_with_dataset_release_or_file_sha256_before_submission
+protocol_files:
+  - docs/paper_claims_and_status.md
+  - docs/candidate_protocol.md
+  - docs/baseline_protocol.md
+  - docs/calibration_protocol.md
+  - docs/shadow_method.md
+  - docs/generative_title_bridge.md
+  - docs/reproduction.md
+  - docs/limitations.md

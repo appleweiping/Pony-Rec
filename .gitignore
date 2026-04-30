@@ -220,3 +220,17 @@ docs/
 tmp_outputs/
 tmp_pycache/
 docs.zip
+
+# Public artifact/protocol documentation kept in the repository.
+!/docs/
+/docs/*
+!/docs/experiments.md
+!/docs/tables.md
+!/docs/reproduction.md
+!/docs/candidate_protocol.md
+!/docs/baseline_protocol.md
+!/docs/calibration_protocol.md
+!/docs/limitations.md
+!/docs/paper_claims_and_status.md
+!/docs/shadow_method.md
+!/docs/generative_title_bridge.md

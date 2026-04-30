@@ -1,0 +1,13 @@
+name: uncertainty-rec
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - openai>=1.30.0
+      - tqdm>=4.66.0
+      - scikit-learn>=1.4.0
+      - matplotlib>=3.8.0
+      - pandas>=2.2.0
+      - PyYAML>=6.0.0

@@ -97,6 +97,8 @@ def aggregate_compare_dir(compare_dir: Path) -> dict[str, Any]:
         "noisy_exp": noisy_exp,
         "domain": domain,
         "model": model,
+        "status_label": "completed_result",
+        "main_table_eligible": True,
     }
     row.update(summary_row)
     row.update(
@@ -141,6 +143,7 @@ def build_brief_summary(df: pd.DataFrame) -> pd.DataFrame:
         "clean_exp",
         "noisy_exp",
         "noise_level",
+        "status_label",
         "rerank_HR@10_drop",
         "rerank_NDCG@10_drop",
         "rerank_MRR@10_drop",
@@ -166,6 +169,7 @@ def build_curve_summary(df: pd.DataFrame) -> pd.DataFrame:
         "clean_exp",
         "noisy_exp",
         "noise_level",
+        "status_label",
         "rerank_HR@10_drop",
         "rerank_NDCG@10_drop",
         "rerank_MRR@10_drop",

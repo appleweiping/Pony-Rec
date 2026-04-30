@@ -7,6 +7,7 @@ from dataclasses import dataclass
 class ShadowVariantSpec:
     variant: str
     method_name: str
+    paper_role: str
     signal_role: str
     prompt_path: str
     primary_score_field: str
@@ -21,6 +22,7 @@ SHADOW_VARIANTS: dict[str, ShadowVariantSpec] = {
     "shadow_v1": ShadowVariantSpec(
         variant="shadow_v1",
         method_name="C-CRP",
+        paper_role="main_method",
         signal_role="calibrated candidate relevance posterior",
         prompt_path="prompts/shadow_v1_relevance_probability.txt",
         primary_score_field="relevance_probability",
@@ -38,6 +40,7 @@ SHADOW_VARIANTS: dict[str, ShadowVariantSpec] = {
     "shadow_v2": ShadowVariantSpec(
         variant="shadow_v2",
         method_name="T-KIP",
+        paper_role="appendix_design_variant_only",
         signal_role="top-k/frontier inclusion posterior",
         prompt_path="prompts/shadow_v2_topk_inclusion_probability.txt",
         primary_score_field="topk_inclusion_probability",
@@ -62,6 +65,7 @@ SHADOW_VARIANTS: dict[str, ShadowVariantSpec] = {
     "shadow_v3": ShadowVariantSpec(
         variant="shadow_v3",
         method_name="U-PFS",
+        paper_role="appendix_design_variant_only",
         signal_role="user-conditioned preference field strength",
         prompt_path="prompts/shadow_v3_preference_strength.txt",
         primary_score_field="preference_strength",
@@ -86,6 +90,7 @@ SHADOW_VARIANTS: dict[str, ShadowVariantSpec] = {
     "shadow_v4": ShadowVariantSpec(
         variant="shadow_v4",
         method_name="RPD-ERU",
+        paper_role="appendix_design_variant_only",
         signal_role="rank-position distribution with expected rank uncertainty",
         prompt_path="prompts/shadow_v4_rank_position_distribution.txt",
         primary_score_field="expected_rank_percentile",
@@ -108,6 +113,7 @@ SHADOW_VARIANTS: dict[str, ShadowVariantSpec] = {
     "shadow_v5": ShadowVariantSpec(
         variant="shadow_v5",
         method_name="IGMP",
+        paper_role="appendix_design_variant_only",
         signal_role="intent-prototype generation and match posterior",
         prompt_path="prompts/shadow_v5_intent_prototype_match.txt",
         primary_score_field="match_probability",
@@ -131,6 +137,7 @@ SHADOW_VARIANTS: dict[str, ShadowVariantSpec] = {
     "shadow_v6": ShadowVariantSpec(
         variant="shadow_v6",
         method_name="SCARF",
+        paper_role="appendix_design_variant_only",
         signal_role="signal-conditioned adaptive rerank and fine-tuning bridge",
         prompt_path="prompts/shadow_v6_signal_to_decision.txt",
         primary_score_field="decision_score",

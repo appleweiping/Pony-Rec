@@ -1,0 +1,64 @@
+baselines:
+  - baseline_name: llm_direct_ranking
+    baseline_family: llm_direct_ranking
+    confidence_semantics: non_isomorphic
+    calibration_target: none
+    risk_of_unfair_comparison: low_when_same_prompt_schema
+    protocol_gap: no_confidence_output
+    status_label: proxy_only
+  - baseline_name: raw_verbalized_confidence
+    baseline_family: uncertainty_baseline
+    confidence_semantics: self_reported_confidence
+    calibration_target: relevance
+    risk_of_unfair_comparison: low
+    protocol_gap: none
+    status_label: completed_result
+  - baseline_name: calibrated_confidence_platt
+    baseline_family: uncertainty_baseline
+    confidence_semantics: calibrated_relevance_probability
+    calibration_target: relevance
+    risk_of_unfair_comparison: low
+    protocol_gap: none
+    status_label: completed_result
+  - baseline_name: calibrated_confidence_isotonic
+    baseline_family: uncertainty_baseline
+    confidence_semantics: calibrated_relevance_probability
+    calibration_target: relevance
+    risk_of_unfair_comparison: medium_when_valid_small
+    protocol_gap: none
+    status_label: completed_result
+  - baseline_name: self_consistency
+    baseline_family: uncertainty_baseline
+    confidence_semantics: stability_reliability
+    calibration_target: ranking_stability
+    risk_of_unfair_comparison: medium_compute_budget
+    protocol_gap: different_sampling_budget
+    status_label: proxy_only
+  - baseline_name: popularity_prior
+    baseline_family: simple_recommendation_prior
+    confidence_semantics: exposure_policy_certainty
+    calibration_target: exposure_policy
+    risk_of_unfair_comparison: high
+    protocol_gap: not_relevance_calibratable
+    status_label: proxy_only
+  - baseline_name: recency_prior
+    baseline_family: simple_recommendation_prior
+    confidence_semantics: exposure_policy_certainty
+    calibration_target: exposure_policy
+    risk_of_unfair_comparison: high
+    protocol_gap: not_relevance_calibratable
+    status_label: proxy_only
+  - baseline_name: bm25_title_overlap
+    baseline_family: simple_recommendation_prior
+    confidence_semantics: score_margin_reliability
+    calibration_target: ranking_stability
+    risk_of_unfair_comparison: medium
+    protocol_gap: not_relevance_calibratable
+    status_label: proxy_only
+  - baseline_name: candidate_order
+    baseline_family: protocol_prior
+    confidence_semantics: non_isomorphic
+    calibration_target: none
+    risk_of_unfair_comparison: high
+    protocol_gap: candidate_order_artifact
+    status_label: proxy_only

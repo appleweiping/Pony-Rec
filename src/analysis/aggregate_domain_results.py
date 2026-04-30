@@ -222,6 +222,8 @@ def aggregate_experiment(exp_dir: Path) -> dict[str, Any]:
         "exp_name": exp_name,
         "domain": infer_domain_name(exp_name),
         "model": infer_model_name(exp_name),
+        "status_label": "completed_result",
+        "main_table_eligible": True,
     }
     row.update(load_diagnostic_metrics(resolve_table_path(exp_dir, "diagnostic_metrics.csv")))
     row.update(load_calibration_metrics(resolve_table_path(exp_dir, "calibration_comparison.csv")))
@@ -234,6 +236,7 @@ def build_weekly_summary(summary_df: pd.DataFrame) -> pd.DataFrame:
         "domain",
         "model",
         "exp_name",
+        "status_label",
         "lambda",
         "diagnostic_accuracy",
         "diagnostic_ece",

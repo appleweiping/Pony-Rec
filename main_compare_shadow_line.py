@@ -6,6 +6,8 @@ from typing import Any
 
 import pandas as pd
 
+from src.shadow.schema import get_shadow_variant
+
 
 def _read_first_row(path: Path) -> dict[str, Any]:
     if not path.exists():
@@ -92,6 +94,7 @@ def build_summary(
 
             calib_after_ece = ""
             calib_after_brier = ""
+            spec = get_shadow_variant(variant)
             if calib_path.exists():
                 calib_df = pd.read_csv(calib_path)
                 test_ece = calib_df[(calib_df["split"] == "test") & (calib_df["metric"] == "ece")]
@@ -113,6 +116,9 @@ def build_summary(
                     "scenario": scenario,
                     "domain": domain,
                     "shadow_variant": variant,
+                    "shadow_method_name": spec.method_name,
+                    "paper_role": spec.paper_role,
+                    "status_label": "completed_result" if spec.paper_role == "main_method" else "design_only",
                     "pointwise_exp_name": pointwise_exp,
                     "rerank_exp_name": rerank_exp,
                     "noisy_pointwise_exp_name": noisy_pointwise_exp,
@@ -144,7 +150,7 @@ def build_summary(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenario", default="small_prior")
-    parser.add_argument("--variants", default="shadow_v1,shadow_v2,shadow_v3,shadow_v4,shadow_v5,shadow_v6")
+    parser.add_argument("--variants", default="shadow_v1")
     parser.add_argument("--domains", default="beauty,books,electronics,movies")
     parser.add_argument("--output_root", default="outputs")
     return parser.parse_args()

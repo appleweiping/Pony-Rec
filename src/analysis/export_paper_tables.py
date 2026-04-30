@@ -26,8 +26,11 @@ def load_optional_csv(path: Path) -> pd.DataFrame | None:
 
 def build_beauty_main_results(final_df: pd.DataFrame) -> pd.DataFrame:
     beauty_df = final_df[final_df["domain"].astype(str).str.lower() == "beauty"].copy()
+    if "status_label" not in beauty_df.columns:
+        beauty_df["status_label"] = "completed_result"
     columns = [
         "model",
+        "status_label",
         "lambda",
         "diagnostic_accuracy",
         "diagnostic_ece",
@@ -46,9 +49,13 @@ def build_beauty_main_results(final_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_beauty_estimator_brief(estimator_df: pd.DataFrame) -> pd.DataFrame:
+    if "status_label" not in estimator_df.columns:
+        estimator_df = estimator_df.copy()
+        estimator_df["status_label"] = "completed_result"
     columns = [
         "model",
         "estimator",
+        "status_label",
         "lambda",
         "fusion_alpha",
         "num_eval_samples",
@@ -67,8 +74,11 @@ def build_beauty_estimator_brief(estimator_df: pd.DataFrame) -> pd.DataFrame:
 
 def build_beauty_robustness_curve_brief(curve_df: pd.DataFrame) -> pd.DataFrame:
     beauty_df = curve_df[curve_df["domain"].astype(str).str.lower() == "beauty"].copy()
+    if "status_label" not in beauty_df.columns:
+        beauty_df["status_label"] = "completed_result"
     columns = [
         "model",
+        "status_label",
         "clean_exp",
         "noisy_exp",
         "noise_level",
@@ -86,9 +96,12 @@ def build_beauty_robustness_curve_brief(curve_df: pd.DataFrame) -> pd.DataFrame:
 
 def build_beauty_reproducibility_brief(repro_df: pd.DataFrame) -> pd.DataFrame:
     beauty_df = repro_df[repro_df["domain"].astype(str).str.lower() == "beauty"].copy()
+    if "status_label" not in beauty_df.columns:
+        beauty_df["status_label"] = "completed_result"
     columns = [
         "setting",
         "model",
+        "status_label",
         "run_a",
         "run_b",
         "diagnostic_ece_abs_diff",
@@ -106,8 +119,12 @@ def build_beauty_reproducibility_brief(repro_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_beauty_consistency_sensitivity_brief(sensitivity_df: pd.DataFrame) -> pd.DataFrame:
+    if "status_label" not in sensitivity_df.columns:
+        sensitivity_df = sensitivity_df.copy()
+        sensitivity_df["status_label"] = "completed_result"
     columns = [
         "exp_name",
+        "status_label",
         "temperature",
         "num_samples",
         "avg_vote_entropy",
@@ -128,9 +145,13 @@ def build_beauty_consistency_sensitivity_brief(sensitivity_df: pd.DataFrame) -> 
 
 
 def build_beauty_fused_alpha_brief(alpha_df: pd.DataFrame) -> pd.DataFrame:
+    if "status_label" not in alpha_df.columns:
+        alpha_df = alpha_df.copy()
+        alpha_df["status_label"] = "completed_result"
     columns = [
         "model",
         "estimator",
+        "status_label",
         "fusion_alpha",
         "num_eval_samples",
         "calibration_ece",

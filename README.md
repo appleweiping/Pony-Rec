@@ -1,503 +1,510 @@
-# Uncertainty-Aware LLM Recommendation
+# Task-Grounded Uncertainty for LLM-based Recommendation
 
-> Diagnosing, calibrating, and operationalizing confidence in LLM-based recommendation.
+This repository studies whether uncertainty from large language models can be
+made reliable enough to support recommendation decisions.
 
-This repository studies a simple but important question: when a large language model says it is confident about a recommendation, can that confidence be trusted as a decision signal?
+The project is intentionally scoped as a controlled candidate-ranking and
+reranking study. It asks a focused question:
 
-Our answer is structured as a full pipeline rather than a single metric. We first diagnose whether verbalized confidence is informative, calibrated, and behaviorally biased. We then convert raw confidence into calibrated confidence, derive uncertainty from it, and finally test whether uncertainty can be used at decision time through lightweight reranking. The goal is not only to analyze confidence, but to make it usable.
+> Can LLM recommendation confidence be upgraded from unreliable verbalized
+> self-reporting into task-grounded calibrated uncertainty, and can that signal
+> improve ranking reliability, coverage, and exposure behavior under a
+> same-schema evaluation protocol?
 
-## Overview
+The repository is not positioned as a full-catalog recommender SOTA claim, a
+generative-title recommender system, or a LoRA distillation paper unless those
+separate protocols are explicitly completed and labeled as such.
 
-The project is organized as an evidence chain:
+## Core Claim
 
-1. Build a clean pointwise recommendation task from sequential interaction data.
-2. Query an LLM for recommendation decisions with verbalized confidence.
-3. Diagnose confidence quality through correctness, calibration, and popularity-related bias.
-4. Fit a post-hoc calibrator on validation predictions and apply it to test predictions.
-5. Use calibrated uncertainty in reranking and evaluate both utility and exposure behavior.
-6. Extend the framework toward richer uncertainty estimators and robustness analysis.
-
-This progression matters. Calibration is only meaningful after diagnosis, and reranking is only meaningful once uncertainty is defined in a leakage-free way.
-
-## Research Scope
-
-The repository is designed around four connected research questions:
-
-- Is LLM confidence informative in recommendation, or merely stylistic?
-- How miscalibrated is verbalized confidence, and can it be corrected post hoc?
-- Can calibrated uncertainty influence downstream ranking behavior in a controlled way?
-- Does uncertainty-awareness change not only ranking metrics, but also exposure patterns across head and long-tail items?
-
-The current implementation focuses on method validation and pipeline integrity. It is meant to support clean empirical iteration rather than overclaiming final conclusions from small-scale runs.
-
-## Method Pipeline
-
-At a high level, the implemented workflow is:
+Primary claim:
 
 ```text
-Preprocess -> Build Samples -> Inference -> Evaluation -> Calibration -> Reranking
+Task-grounded calibrated uncertainty improves controlled candidate ranking /
+reranking reliability under same-schema evaluation.
 ```
 
-The current method layer includes:
+The main evidence chain is:
 
-- Confidence extraction from LLM outputs
-- Calibration via standard post-hoc methods such as isotonic regression and Platt scaling
-- Leakage-aware calibration protocol: fit on `valid`, apply on `test`
-- Uncertainty-aware reranking with a minimal decision rule built on calibrated confidence
-- Evaluation over both ranking quality and distributional behavior
+```text
+Diagnosis -> Calibration -> Task-Grounded Uncertainty -> Decision-Time Reranking -> Protocol Audit
+```
 
-This repository intentionally favors standard, interpretable baselines before more complex uncertainty modeling.
+The paper-facing contribution is organized as:
+
+1. Diagnosis: LLM verbalized confidence is informative in recommendation, but
+   unreliable under miscalibration, confidence collapse, and domain-dependent
+   failure.
+2. Method: C-CRP, a calibrated candidate relevance posterior with uncertainty
+   decomposed into boundary ambiguity, calibration gap, and evidence
+   insufficiency.
+3. Decision: risk-adjusted candidate ranking/reranking evaluated with utility,
+   calibration, coverage, exposure, robustness, and paired statistical tests.
+
+For the frozen claim and status rules, see
+[docs/paper_claims_and_status.md](docs/paper_claims_and_status.md).
 
 ## What Is Implemented
 
-The codebase already supports the core week-one research loop:
+The repository includes:
 
-- Data preprocessing and pointwise sample construction
-- LLM inference with configurable backends
-- Confidence parsing and normalization
-- Calibration diagnostics, including ECE and Brier score
-- Strict calibration with separate validation and test prediction files
-- Reranking evaluation with ranking metrics and bias-oriented metrics
-- Initial scaffolding for richer uncertainty estimators, including consistency-based and fused variants
-- Cross-domain validation across Beauty, Movies, Books, and Electronics under the same experimental definition
+- Sequential recommendation data preprocessing for Amazon-style domains.
+- Pointwise, pairwise, and candidate-ranking sample construction.
+- LLM inference backends for API and local model experiments.
+- Confidence parsing and normalization.
+- Calibration diagnostics with ECE, Brier score, AUROC, reliability bins, and
+  bootstrap confidence intervals.
+- Strict validation-to-test calibration with split metadata, overlap checks,
+  split hashes, and source file hashes.
+- Candidate ranking/reranking evaluation with HR@K, NDCG@K, MRR, coverage,
+  head exposure, long-tail coverage, parse success, and out-of-candidate rate.
+- Candidate protocol audit for candidate set size, positive count, negative
+  sampling, popularity distribution, title duplicates, split overlap, and
+  HR/Recall equivalence.
+- Baseline reliability proxy audit to prevent score-derived priors from being
+  mislabeled as confidence.
+- Paired bootstrap and permutation tests with Holm correction.
+- C-CRP shadow method implementation and ablations.
+- Generative-title bridge status tracking, explicitly outside the primary
+  claim until fully completed.
+- Artifact documentation, smoke tests, and reproduction scripts.
 
-In other words, the project has moved beyond pure diagnosis and into the first decision-level uncertainty pipeline.
-
-## Repository Layout
+## Project Tree
 
 ```text
 .
-|-- configs/                  # data, model, and experiment configurations
-|-- data/                     # raw and processed datasets
-|-- outputs/                  # predictions, calibrated outputs, tables, and figures
-|-- prompts/                  # LLM prompting templates
-|-- scripts/                  # convenience scripts for staged runs
+|-- README.md
+|-- requirements.txt
+|-- environment.yml
+|-- results_manifest.yaml
+|-- configs/
+|   |-- baseline/                     # literature baseline configs
+|   |-- baseline_reliability/         # reliability proxy manifest
+|   |-- batch/                        # staged experiment batches
+|   |-- data/                         # domain preprocessing/sample configs
+|   |-- exp/                          # experiment configs
+|   |-- lora/                         # local LoRA training configs
+|   |-- model/                        # API/local model configs
+|   |-- shadow/                       # shadow/C-CRP runtime configs
+|   |-- srpd/                         # SRPD training data configs
+|   `-- task/                         # pointwise/pairwise/ranking task configs
+|-- data/
+|   `-- processed/                    # ignored by git; local processed data
+|-- docs/
+|   |-- paper_claims_and_status.md
+|   |-- reproduction.md
+|   |-- candidate_protocol.md
+|   |-- baseline_protocol.md
+|   |-- calibration_protocol.md
+|   |-- shadow_method.md
+|   |-- generative_title_bridge.md
+|   |-- limitations.md
+|   |-- experiments.md
+|   `-- tables.md
+|-- outputs/
+|   `-- summary/                      # ignored except .gitkeep; generated tables
+|-- prompts/                          # LLM prompt templates
+|-- scripts/
+|   |-- reproduce_smoke_test.sh
+|   |-- reproduce_main_tables.sh
+|   `-- run_*.sh
 |-- src/
-|   |-- analysis/             # diagnostic analysis and plotting
-|   |-- data/                 # preprocessing, sample construction, noise, popularity
-|   |-- eval/                 # ranking, calibration, bias, and robustness metrics
-|   |-- llm/                  # backends, prompting, parsing, inference
-|   |-- methods/              # baseline ranking and uncertainty-aware reranking
-|   |-- uncertainty/          # confidence extraction, calibration, estimator variants
-|   `-- utils/                # IO, logging, paths, registry, seeding
+|   |-- analysis/                     # aggregation, plotting, paper table export
+|   |-- baselines/                    # literature/proxy baseline code
+|   |-- data/                         # preprocessing and sample construction
+|   |-- eval/                         # ranking, calibration, protocol, statistics
+|   |-- llm/                          # model backends, prompts, parsers, inference
+|   |-- methods/                      # rankers, rerankers, uncertainty aggregation
+|   |-- shadow/                       # C-CRP and shadow signal code
+|   |-- training/                     # LoRA/SRPD data and training utilities
+|   |-- uncertainty/                  # confidence, calibration, reliability proxy
+|   `-- utils/                        # IO, paths, registry, reproducibility
+|-- tests/
+|   |-- test_confidence_parser.py
+|   |-- test_calibration_metrics.py
+|   |-- test_ranking_metrics.py
+|   |-- test_candidate_protocol.py
+|   |-- test_shadow_parser.py
+|   `-- test_statistical_tests.py
 |-- main_preprocess.py
 |-- main_build_samples.py
 |-- main_infer.py
 |-- main_eval.py
 |-- main_calibrate.py
 |-- main_rerank.py
-`-- main_uncertainty_compare.py
+|-- main_eval_rank.py
+|-- main_audit_candidate_protocol.py
+|-- main_baseline_reliability_audit.py
+|-- main_stat_tests.py
+|-- main_shadow_ccrp_eval.py
+`-- main_generative_title_bridge_status.py
 ```
+
+## Method Overview
+
+### 1. Verbalized confidence diagnosis
+
+LLM outputs are parsed into recommendation decisions and confidence values.
+The diagnostic layer asks whether confidence tracks correctness, whether it is
+calibrated, and whether it interacts with popularity or exposure behavior.
+
+Representative metrics:
+
+- accuracy
+- average confidence
+- ECE and MCE
+- Brier score
+- AUROC
+- wrong-high-confidence fraction
+- reliability bins
+
+### 2. Leakage-aware calibration
+
+Calibration is fit on validation predictions and applied once to test
+predictions.
+
+The calibration entry point enforces strict checks by default:
+
+- `--strict_split_check true`
+- `--allow_user_overlap false`
+- `--allow_item_overlap true`
+
+User overlap between validation and test raises an error unless explicitly
+allowed for a non-main diagnostic audit. The split metadata records sample
+counts, user/item counts, overlap rates, split hash, source file SHA256 hashes,
+calibration method, and bin counts.
+
+See [docs/calibration_protocol.md](docs/calibration_protocol.md).
+
+### 3. C-CRP: Calibrated Candidate Relevance Posterior
+
+C-CRP is the main task-grounded uncertainty method. It uses a calibrated
+candidate relevance posterior and defines uncertainty as:
+
+```text
+U = alpha * U_boundary
+  + beta  * U_calibration_gap
+  + gamma * U_evidence
+```
+
+where:
+
+```text
+U_boundary        = 4 * p_cal * (1 - p_cal)
+U_calibration_gap = abs(p_raw - p_cal)
+U_evidence        = 1 - clamp(evidence_support - counterevidence_strength, 0, 1)
+```
+
+The risk-adjusted score is:
+
+```text
+score = p_cal * (1 - U)^eta
+```
+
+Default fixed weights are `alpha=0.5`, `beta=0.3`, `gamma=0.2`. Any learned or
+selected weights must be chosen on validation only.
+
+See [docs/shadow_method.md](docs/shadow_method.md).
+
+### 4. Decision-time reranking
+
+Calibrated uncertainty is used at decision time to adjust candidate scores.
+The evaluation reports both utility and distributional behavior:
+
+- HR@K
+- NDCG@K
+- MRR
+- coverage@K
+- head exposure ratio
+- long-tail coverage
+- parse success
+- out-of-candidate rate
+
+Small differences are not called winners without paired statistical support.
+
+## Baseline Policy
+
+Baselines are divided into four groups:
+
+1. Non-LLM recommenders: SASRec, BERT4Rec, GRU4Rec, LightGCN where available.
+2. Simple recommendation priors: popularity, recency, history overlap, BM25 or
+   title embedding.
+3. LLM direct ranking: same candidate set and prompt schema, no uncertainty.
+4. Uncertainty baselines: raw confidence, Platt/isotonic calibrated confidence,
+   self-consistency, entropy or logprob when available.
+
+Internal SRPD and shadow variants are ablations, not substitutes for external
+baselines.
+
+Score-derived quantities are audited as reliability proxies, not automatically
+treated as confidence. ECE and Brier are valid only for relevance-calibratable
+signals such as self-reported confidence or calibrated relevance probability.
+
+See [docs/baseline_protocol.md](docs/baseline_protocol.md).
+
+## Candidate Ranking Protocol
+
+The primary evaluation is controlled candidate ranking/reranking unless a
+full-catalog audit says otherwise.
+
+Every main candidate-ranking claim should be backed by:
+
+```text
+outputs/summary/candidate_protocol_audit.csv
+```
+
+The audit reports:
+
+- candidate set size mean/min/max
+- positives per event
+- negative sampling strategy
+- hard-negative ratio
+- popularity-bin distribution
+- duplicate-title rate
+- valid/test user overlap
+- train/test item overlap
+- one-positive setting
+- whether HR@K and Recall@K are numerically equivalent
+- whether full-catalog evaluation is available
+
+If `full_catalog_eval_available_flag=false`, the paper must not claim
+full-catalog recommender SOTA.
+
+See [docs/candidate_protocol.md](docs/candidate_protocol.md).
+
+## Statistical Testing
+
+Use paired tests before making winner claims.
+
+Implemented in [main_stat_tests.py](main_stat_tests.py):
+
+- paired bootstrap confidence intervals over users/events
+- paired permutation tests
+- delta vs direct
+- delta vs structured risk
+- Holm-Bonferroni correction
+
+Rows whose confidence interval crosses zero or whose corrected p-value is not
+significant are labeled `observed_best`, not `winner`.
 
 ## Environment
 
-Use the project with Python 3.12. In this repository, the safest convention is to avoid ambiguous `python` calls and instead use `py -3.12` or the project virtual environment explicitly.
+Python 3.12 is recommended.
 
-Minimal setup:
+Linux/macOS:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Windows PowerShell:
 
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-If you are using the DeepSeek backend, set the API key in the environment before inference:
+Conda users can start from:
+
+```bash
+conda env create -f environment.yml
+conda activate uncertainty-rec
+```
+
+API-backed inference requires the relevant model key, for example:
 
 ```powershell
 $env:DEEPSEEK_API_KEY="your_api_key"
 ```
 
-## Config Structure
-
-The repository is organized around three config layers:
-
-- `configs/data/`: domain-specific preprocessing and sample-building settings
-- `configs/model/`: backend, model, connection, and generation settings
-- `configs/exp/`: experiment-level inference settings such as `exp_name`, input path, output root, prompt path, and model config
-
-This design keeps experiments reproducible and makes Week2 extensions easier. In practice:
-
-- changing domains should mostly mean switching `configs/data/*.yaml`
-- changing models should mostly mean switching `configs/model/*.yaml`
-- changing an experiment run should mostly mean switching `configs/exp/*.yaml`
-
-Current model config files include:
-
-- `configs/model/deepseek.yaml`: active backend used in Week1 experiments
-- `configs/model/qwen.yaml`: Qwen API-compatible backend config
-- `configs/model/glm.yaml`: GLM API-compatible backend config
-- `configs/model/doubao.yaml`: Doubao API-compatible backend config
-- `configs/model/kimi.yaml`: Kimi API-compatible backend config
-
-Environment variables are read from model configs via `api_key_env`. Typical examples are:
-
-- `DEEPSEEK_API_KEY`
-- `QWEN_API_KEY`
-- `DOUBAO_API_KEY`
-- `KIMI_API_KEY`
+Model configs read key names from `configs/model/*.yaml`.
 
 ## Quickstart
 
-The commands below show the intended end-to-end flow on Amazon Beauty and the lightweight cross-domain subsets used for Week1 validation.
+The commands below show the standard Beauty pipeline. Replace config files and
+experiment names for other domains.
 
-For Week2 multi-model validation, keep the same data and pipeline, and only switch `model_config` / `exp_name`. Typical Beauty experiment names are:
+### 1. Preprocess
 
-- `beauty_deepseek`
-- `beauty_qwen`
-- `beauty_glm`
-- `beauty_doubao`
-- `beauty_kimi`
-
-The same pattern now extends to the lightweight cross-domain subsets:
-
-- `movies_small_deepseek`, `movies_small_qwen`, `movies_small_kimi`, `movies_small_doubao`
-- `books_small_deepseek`, `books_small_qwen`, `books_small_kimi`, `books_small_doubao`
-- `electronics_small_deepseek`, `electronics_small_qwen`, `electronics_small_kimi`, `electronics_small_doubao`
-
-### Beauty End-to-End
-
-#### 1. Preprocess raw data
-
-```powershell
-py -3.12 main_preprocess.py --config configs/data/amazon_beauty.yaml
+```bash
+python main_preprocess.py --config configs/data/amazon_beauty.yaml
 ```
 
-#### 2. Build pointwise train/valid/test samples
+### 2. Build samples
 
-```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_beauty.yaml
+```bash
+python main_build_samples.py --config configs/data/amazon_beauty.yaml
 ```
 
-#### 3. Run LLM inference
+### 3. Run inference
 
-Generate split-specific prediction files:
+Validation split:
 
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/beauty_deepseek.yaml `
-  --input_path data/processed/amazon_beauty/valid.jsonl `
-  --output_path outputs/beauty_deepseek/predictions/valid_raw.jsonl `
-  --split_name valid `
+```bash
+python main_infer.py \
+  --config configs/exp/beauty_deepseek.yaml \
+  --input_path data/processed/amazon_beauty/valid.jsonl \
+  --output_path outputs/beauty_deepseek/predictions/valid_raw.jsonl \
+  --split_name valid \
   --overwrite
 ```
 
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/beauty_deepseek.yaml `
-  --input_path data/processed/amazon_beauty/test.jsonl `
-  --output_path outputs/beauty_deepseek/predictions/test_raw.jsonl `
-  --split_name test `
+Test split:
+
+```bash
+python main_infer.py \
+  --config configs/exp/beauty_deepseek.yaml \
+  --input_path data/processed/amazon_beauty/test.jsonl \
+  --output_path outputs/beauty_deepseek/predictions/test_raw.jsonl \
+  --split_name test \
   --overwrite
 ```
 
-#### 4. Evaluate prediction quality
+### 4. Evaluate predictions
 
-```powershell
-py -3.12 main_eval.py --exp_name beauty_deepseek
+```bash
+python main_eval.py \
+  --exp_name beauty_deepseek \
+  --input_path outputs/beauty_deepseek/predictions/test_raw.jsonl
 ```
 
-#### 5. Run strict calibration
+### 5. Calibrate
 
-Calibration is designed to be leakage-aware:
-
-- fit on `valid_raw.jsonl`
-- apply on `test_raw.jsonl`
-- output calibrated confidence and uncertainty
-
-```powershell
-py -3.12 main_calibrate.py `
-  --exp_name beauty_deepseek `
-  --valid_path outputs/beauty_deepseek/predictions/valid_raw.jsonl `
-  --test_path outputs/beauty_deepseek/predictions/test_raw.jsonl `
-  --method isotonic
+```bash
+python main_calibrate.py \
+  --exp_name beauty_deepseek \
+  --valid_path outputs/beauty_deepseek/predictions/valid_raw.jsonl \
+  --test_path outputs/beauty_deepseek/predictions/test_raw.jsonl \
+  --method isotonic \
+  --strict_split_check true \
+  --allow_user_overlap false
 ```
 
-#### 6. Run uncertainty-aware reranking
+If validation has too few rows for isotonic calibration, the script falls back
+to Platt scaling and records both requested and effective methods.
 
-```powershell
-py -3.12 main_rerank.py `
-  --exp_name beauty_deepseek `
-  --input_path outputs/beauty_deepseek/calibrated/test_calibrated.jsonl `
+### 6. Rerank
+
+```bash
+python main_rerank.py \
+  --exp_name beauty_deepseek \
+  --input_path outputs/beauty_deepseek/calibrated/test_calibrated.jsonl \
   --lambda_penalty 0.5
 ```
 
-### Movies-Small Validation
+### 7. Audit protocols
 
-Week1 Day5 uses a lightweight Movies subset to validate that the same pipeline is not Beauty-specific.
+Candidate protocol:
 
-#### 1. Build the Movies-small split data
-
-The full Movies preprocess has already been validated. After preprocess, create a lightweight subset under `data/processed/amazon_movies_small/`, then run the original sample-building pipeline:
-
-```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_movies_small.yaml
+```bash
+python main_audit_candidate_protocol.py \
+  --domain beauty \
+  --data_dir data/processed/amazon_beauty \
+  --negative_sampling_strategy sampled_candidate_one_positive \
+  --output_path outputs/summary/candidate_protocol_audit.csv
 ```
 
-#### 2. Run inference on valid and test
+Baseline reliability proxy:
 
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/movies_small_deepseek.yaml `
-  --input_path data/processed/amazon_movies_small/valid.jsonl `
-  --output_path outputs/movies_small_deepseek/predictions/valid_raw.jsonl `
-  --split_name valid `
-  --max_samples 100 `
-  --overwrite
+```bash
+python main_baseline_reliability_audit.py \
+  --config configs/baseline_reliability/week7_9_manifest.yaml \
+  --output_path outputs/summary/baseline_reliability_proxy_audit.csv
 ```
 
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/movies_small_deepseek.yaml `
-  --input_path data/processed/amazon_movies_small/test.jsonl `
-  --output_path outputs/movies_small_deepseek/predictions/test_raw.jsonl `
-  --split_name test `
-  --max_samples 100 `
-  --overwrite
+Generative-title extension status template:
+
+```bash
+python main_generative_title_bridge_status.py
 ```
 
-#### 3. Run evaluation, calibration, and reranking
+## Reproduction
 
-```powershell
-py -3.12 main_eval.py --exp_name movies_small_deepseek --input_path outputs/movies_small_deepseek/predictions/test_raw.jsonl
+Smoke test:
+
+```bash
+bash scripts/reproduce_smoke_test.sh
 ```
 
-```powershell
-py -3.12 main_calibrate.py `
-  --exp_name movies_small_deepseek `
-  --valid_path outputs/movies_small_deepseek/predictions/valid_raw.jsonl `
-  --test_path outputs/movies_small_deepseek/predictions/test_raw.jsonl `
-  --method isotonic
+Main summary regeneration from existing outputs:
+
+```bash
+bash scripts/reproduce_main_tables.sh
 ```
 
-```powershell
-py -3.12 main_rerank.py `
-  --exp_name movies_small_deepseek `
-  --input_path outputs/movies_small_deepseek/calibrated/test_calibrated.jsonl `
-  --lambda_penalty 0.5
-```
-
-### Books-Small And Electronics-Small Validation
-
-Books and Electronics follow the same principle used for Movies:
-
-- run full-domain `preprocess` first
-- construct a lightweight processed-level subset
-- reuse the original downstream pipeline unchanged
-
-#### 1. Run full preprocess
-
-```powershell
-py -3.12 main_preprocess.py --config configs/data/amazon_books.yaml
-```
-
-```powershell
-py -3.12 main_preprocess.py --config configs/data/amazon_electronics.yaml
-```
-
-#### 2. Build the small-subset samples
-
-Once `data/processed/amazon_books_small/` and `data/processed/amazon_electronics_small/` have been constructed from the processed full-domain outputs, run:
-
-```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_books_small.yaml
-```
-
-```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_electronics_small.yaml
-```
-
-#### 3. Run valid/test inference
-
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/books_small_deepseek.yaml `
-  --input_path data/processed/amazon_books_small/valid.jsonl `
-  --output_path outputs/books_small_deepseek/predictions/valid_raw.jsonl `
-  --split_name valid `
-  --max_samples 100 `
-  --overwrite
-```
-
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/books_small_deepseek.yaml `
-  --input_path data/processed/amazon_books_small/test.jsonl `
-  --output_path outputs/books_small_deepseek/predictions/test_raw.jsonl `
-  --split_name test `
-  --max_samples 100 `
-  --overwrite
-```
-
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/electronics_small_deepseek.yaml `
-  --input_path data/processed/amazon_electronics_small/valid.jsonl `
-  --output_path outputs/electronics_small_deepseek/predictions/valid_raw.jsonl `
-  --split_name valid `
-  --max_samples 100 `
-  --overwrite
-```
-
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/electronics_small_deepseek.yaml `
-  --input_path data/processed/amazon_electronics_small/test.jsonl `
-  --output_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl `
-  --split_name test `
-  --max_samples 100 `
-  --overwrite
-```
-
-#### 4. Run evaluation, calibration, and reranking
-
-```powershell
-py -3.12 main_eval.py --exp_name books_small_deepseek --input_path outputs/books_small_deepseek/predictions/test_raw.jsonl
-py -3.12 main_calibrate.py --exp_name books_small_deepseek --valid_path outputs/books_small_deepseek/predictions/valid_raw.jsonl --test_path outputs/books_small_deepseek/predictions/test_raw.jsonl --method isotonic
-py -3.12 main_rerank.py --exp_name books_small_deepseek --input_path outputs/books_small_deepseek/calibrated/test_calibrated.jsonl --lambda_penalty 0.5
-```
-
-```powershell
-py -3.12 main_eval.py --exp_name electronics_small_deepseek --input_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl
-py -3.12 main_calibrate.py --exp_name electronics_small_deepseek --valid_path outputs/electronics_small_deepseek/predictions/valid_raw.jsonl --test_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl --method isotonic
-py -3.12 main_rerank.py --exp_name electronics_small_deepseek --input_path outputs/electronics_small_deepseek/calibrated/test_calibrated.jsonl --lambda_penalty 0.5
-```
-
-### Aggregate Results
-
-To regenerate the current summary layer in one command:
-
-```powershell
-py -3.12 main_aggregate_all.py --output_root outputs
-```
-
-This entry point runs:
-
-- `src/analysis/aggregate_domain_results.py`
-- `src/analysis/aggregate_model_results.py`
-- `src/analysis/aggregate_estimator_results.py`
-- `src/analysis/robustness_summary.py`
-
-If you only want the domain-level rerank/calibration summary, you can still run:
-
-```powershell
-py -3.12 src\analysis\aggregate_domain_results.py --output_root outputs
-```
-
-For a more complete experiment map, see:
-
-- [docs/experiments.md](docs/experiments.md)
-- [docs/tables.md](docs/tables.md)
-
-### Robustness Baseline
-
-The robustness line now extends beyond a single-model baseline. On `Beauty`, the repository currently supports multi-level noisy evaluation for:
-
-- `beauty_deepseek`
-- `beauty_glm`
-- `beauty_qwen`
-- `beauty_kimi`
-- `beauty_doubao`
-
-with `noise_level = 0.1 / 0.2 / 0.3` summarized in:
-
-- `outputs/summary/beauty_robustness_curve_brief.csv`
-- `outputs/summary/robustness_curve_results.csv`
-
-The original robustness entry point remains `Beauty + DeepSeek + noisy`, and the same clean/noisy structure can be reused for additional models or domains.
-
-Generate noisy pointwise data:
-
-```powershell
-py -3.12 main_generate_noisy.py `
-  --input_path data/processed/amazon_beauty/test.jsonl `
-  --output_path data/processed/amazon_beauty_noisy/test.jsonl `
-  --history_drop_prob 0.2 `
-  --text_noise_prob 0.5 `
-  --label_flip_prob 0.0
-```
-
-Run the noisy experiment:
-
-```powershell
-py -3.12 main_infer.py `
-  --config configs/exp/beauty_deepseek_noisy.yaml `
-  --input_path data/processed/amazon_beauty_noisy/test.jsonl `
-  --output_path outputs/beauty_deepseek_noisy/predictions/test_raw.jsonl `
-  --split_name test `
-  --max_samples 100 `
-  --overwrite
-```
-
-Then evaluate clean vs noisy:
-
-```powershell
-py -3.12 main_robustness.py --clean_exp beauty_deepseek --noisy_exp beauty_deepseek_noisy
-```
+On Windows without Bash, run the Python commands listed in
+[docs/reproduction.md](docs/reproduction.md).
 
 ## Key Outputs
 
-Typical experiment artifacts are written under `outputs/{exp_name}/`:
+Experiment-local outputs under `outputs/{exp_name}/`:
 
-- `predictions/valid_raw.jsonl`
-- `predictions/test_raw.jsonl`
-- `calibrated/test_calibrated.jsonl`
-- `tables/calibration_comparison.csv`
-- `tables/calibration_split_metadata.csv`
-- `tables/rerank_results.csv`
+```text
+predictions/valid_raw.jsonl
+predictions/test_raw.jsonl
+calibrated/valid_calibrated.jsonl
+calibrated/test_calibrated.jsonl
+tables/diagnostic_metrics.csv
+tables/calibration_comparison.csv
+tables/calibration_metric_ci.csv
+tables/calibration_split_metadata.csv
+tables/reliability_before_calibration.csv
+tables/reliability_after_calibration.csv
+tables/rerank_results.csv
+figures/reliability_before_after_calibration.png
+```
 
-These files are enough to audit whether calibration is leakage-free, whether calibration improves reliability, and whether uncertainty-aware reranking changes ranking or exposure behavior.
+Summary outputs under `outputs/summary/`:
 
-Under `outputs/summary/`, the repository also maintains:
+```text
+final_results.csv
+weekly_summary.csv
+model_results.csv
+domain_model_summary.csv
+estimator_results.csv
+robustness_results.csv
+candidate_protocol_audit.csv
+baseline_reliability_proxy_audit.csv
+significance_tests.csv
+main_table_with_ci.csv
+generative_title_bridge_status.csv
+```
 
-- `rerank_ablation.csv`: unified cross-domain / cross-lambda summary table
-- `weekly_summary.csv`: compact view over diagnosis, calibration, and reranking metrics
-- `final_results.csv`: consolidated cross-model, cross-domain result table with explicit `domain` and `lambda` columns
-- `model_results.csv`: cross-domain / cross-model summary table
-- `domain_model_summary.csv`: grouped model comparison per domain
-- `estimator_results.csv`: multi-estimator comparison table
-- `beauty_estimator_results.csv`: Beauty-focused estimator table when estimator comparisons are available
-- `robustness_results.csv`: clean/noisy robustness summary rows
-- `robustness_brief.csv`: compact robustness table for reporting
+Generated data, predictions, checkpoints, and large experiment outputs are
+ignored by git. The reproducibility contract is documented through configs,
+scripts, manifests, and protocol files.
 
-## Evaluation Philosophy
+## Paper-Facing Status Labels
 
-The project does not treat ranking quality as the only outcome. We evaluate two classes of effects together:
+Paper-facing tables use:
 
-- Ranking utility: HR@K, NDCG@K, MRR
-- Distributional behavior: head exposure ratio and long-tail coverage
+- `completed_result`: completed under the stated protocol.
+- `runnable_not_complete`: code exists but the result is not complete enough
+  for a main table.
+- `design_only`: documented method or plan, not fully run.
+- `proxy_only`: useful for related-work positioning or fairness audit, not
+  same-schema evidence.
+- `future_extension`: intentionally outside the main claim.
 
-This is deliberate. A method that appears stable in ranking metrics may still change who receives exposure, and a method that slightly reshapes ranking may still be valuable if it produces more reliable decision behavior.
+Only `completed_result` rows are eligible for main result tables, and only when
+the protocol audits are present.
 
-## Current Status
+## Limitations
 
-The repository already supports:
+Current limitations are part of the artifact, not footnotes:
 
-- clean data-to-sample construction
-- end-to-end inference and evaluation
-- strict validation-to-test calibration
-- first-pass uncertainty-aware reranking
+- Candidate-ranking results are not full-catalog SOTA unless audited as such.
+- Proxy related-work numbers cannot be mixed into same-schema main tables.
+- User overlap in valid/test splits invalidates main calibration claims unless
+  the protocol explicitly defines a temporal same-user setting and labels it.
+- Small NDCG/MRR differences require paired confidence intervals.
+- Generative title recommendation is an extension bridge until catalog
+  grounding, hallucination, unsupported confidence, and semantic audits are
+  completed.
 
-Current experiments are best understood as method-grounding and pipeline validation. The stable week1-week4 research loop covers:
-
-- Week1: pointwise observation of LLM recommendation confidence and correctness.
-- Week2: post-hoc calibration with validation-to-test separation.
-- Week3: uncertainty-aware ranking / reranking under a controlled candidate setting.
-- Week4: robustness, coverage, head exposure, and long-tail exposure analysis.
-
-The implemented pipeline supports the core ingredients needed for these stages:
-
-- configurable model backends for repeated observation under the same data schema
-- pointwise prediction files for both `valid` and `test`
-- calibration diagnostics such as ECE, Brier score, and reliability bins
-- uncertainty-aware reranking outputs with utility and exposure metrics
-- noisy-input evaluation for robustness checks
-
-This README intentionally keeps the public-facing repository centered on the week1-week4 pipeline rather than on deprecated paper-version planning notes.
-
-## Notes
-
-- Current small-scale runs are useful for validating methodology, not for claiming final large-scale empirical conclusions.
-- The first reranking variant is intentionally conservative and interpretable.
-- The codebase is structured so that new uncertainty estimators can be added without rewriting the evaluation chain.
+See [docs/limitations.md](docs/limitations.md).
 
 ## License
 
