@@ -9,6 +9,9 @@ from src.llm.inference import run_pointwise_inference
 from src.utils.exp_io import get_prompt_builder, load_jsonl, load_yaml, save_jsonl
 from src.utils.paths import default_input_path_for_exp, ensure_exp_dirs
 from src.utils.reproducibility import set_global_seed
+from src.utils.deprecation import warn_legacy_entrypoint
+
+warn_legacy_entrypoint("main_infer.py", "python -m src.cli.infer")
 
 
 def infer_prediction_filename(input_path: str | Path) -> str:

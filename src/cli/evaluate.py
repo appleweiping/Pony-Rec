@@ -8,6 +8,7 @@ import numpy as np
 
 from src.data.protocol import read_jsonl, write_json
 from src.eval.paper_metrics import brier_score, ece_mce, exposure_metrics, ranking_metrics, risk_coverage
+from src.utils.manifest import build_manifest, write_manifest
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,8 +48,37 @@ def main() -> None:
         "accuracy": float(np.mean(y_true)) if len(y_true) else float("nan"),
     }
     exposure = exposure_metrics(rows)
-    metrics = {"ranking": ranking, "calibration": calibration, "exposure": exposure}
+    first = rows[0] if rows else {}
+    metadata = {
+        "dataset": first.get("dataset"),
+        "domain": first.get("domain"),
+        "seed": first.get("seed"),
+        "method": first.get("method"),
+        "config_hash": first.get("config_hash"),
+        "backend": first.get("backend"),
+        "backend_type": first.get("backend_type"),
+        "run_type": first.get("run_type"),
+        "is_paper_result": first.get("is_paper_result"),
+    }
+    metrics = {"metadata": metadata, "ranking": ranking, "calibration": calibration, "exposure": exposure}
     write_json(metrics, out_dir / "metrics.json")
+    write_manifest(
+        out_dir / "manifest.json",
+        build_manifest(
+            config={"predictions_path": args.predictions_path},
+            dataset=str(first.get("dataset", "unknown")),
+            domain=str(first.get("domain", "unknown")),
+            processed_data_paths=[args.predictions_path],
+            method="evaluate",
+            backend=str(first.get("backend", "unknown")),
+            model=str(first.get("model", "unknown")),
+            prompt_template=str(first.get("prompt_template_id", "unknown")),
+            seed=int(first.get("seed", 0) or 0),
+            candidate_size=len(first.get("candidate_item_ids", [])) if first else None,
+            calibration_source="prediction_file",
+            mock_data_used=str(first.get("backend_type", "")) == "mock",
+        ),
+    )
     _write_csv(risk_coverage(rows), out_dir / "risk_coverage.csv")
     print(f"[evaluate] saved={out_dir / 'metrics.json'}")
 

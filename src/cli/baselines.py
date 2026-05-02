@@ -5,6 +5,7 @@ from pathlib import Path
 
 from src.baselines.standard import bm25_text_rank, popularity_rank, random_rank
 from src.data.protocol import read_jsonl, write_jsonl
+from src.utils.manifest import is_paper_result
 from src.utils.research_artifacts import utc_timestamp
 
 
@@ -39,8 +40,11 @@ def main() -> None:
                 "seed": args.seed,
                 "method": args.method,
                 "backend": "none",
+                "backend_type": "none",
                 "model": args.method,
                 "prompt_template_id": "none",
+                "run_type": "pilot",
+                "is_paper_result": is_paper_result("pilot", "none"),
                 "timestamp": utc_timestamp(),
                 "user_id": sample.get("user_id"),
                 "history_length": sample.get("history_length"),

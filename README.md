@@ -6,6 +6,8 @@
 
 The rigorous path is now the module CLI under `src.cli`; legacy `main_*.py` scripts are kept only for archival continuity until their outputs are migrated.
 
+Do not start new experiments from `main_*.py`. Those scripts are deprecated legacy entrypoints and may use old assumptions, implicit paths, missing manifests, or week-specific settings. See `docs/LEGACY_MIGRATION.md` for the migration map.
+
 Small no-key smoke run:
 
 ```bash

@@ -18,8 +18,14 @@ from src.eval.ranking_task_metrics import (
     compute_ranking_exposure_distribution,
     compute_ranking_task_metrics,
 )
+from src.utils.deprecation import warn_legacy_entrypoint
 from src.utils.exp_io import load_yaml
 from src.utils.io import ensure_dir, load_jsonl, save_jsonl
+
+warn_legacy_entrypoint(
+    "main_run_literature_baselines.py",
+    "python -m src.cli.baselines or python -m src.cli.run_recbole_baseline",
+)
 
 
 DEFAULT_RANK_BASELINES = [

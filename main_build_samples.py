@@ -17,6 +17,9 @@ from src.data.sample_builder import (
     sort_and_group_interactions,
     split_user_sequence_leave_one_out,
 )
+from src.utils.deprecation import warn_legacy_entrypoint
+
+warn_legacy_entrypoint("main_build_samples.py", "python -m src.cli.preprocess && python -m src.cli.build_candidates")
 
 
 def load_yaml(path: str) -> dict:

@@ -9,6 +9,7 @@ $PYTHON_BIN -m src.cli.build_candidates --config "$DATASET_CFG" --negative_count
 PROCESSED_DIR="$($PYTHON_BIN -c "import yaml;print(yaml.safe_load(open('$DATASET_CFG'))['processed_dir'])")"
 OUT_ROOT="outputs/baselines/$(basename "$PROCESSED_DIR")"
 mkdir -p "$OUT_ROOT"
+$PYTHON_BIN -m src.cli.export_recbole_data --dataset_config "$DATASET_CFG" --output_dir "$OUT_ROOT/recbole_atomic"
 
 for method in random popularity bm25
 do
@@ -21,5 +22,10 @@ do
     --output_dir "$OUT_ROOT/${method}_eval"
 done
 
-echo "[recbole] Install recbole and map $PROCESSED_DIR to RecBole atomic format for BPR/LightGCN/GRU4Rec/SASRec/BERT4Rec/FMLPRec."
-echo "[recbole] Official integration status and modifications must be recorded in docs/BASELINES.md before paper use."
+for cfg in configs/baselines/pop.yaml configs/baselines/bprmf.yaml configs/baselines/lightgcn.yaml configs/baselines/gru4rec.yaml configs/baselines/sasrec.yaml configs/baselines/bert4rec.yaml
+do
+  $PYTHON_BIN -m src.cli.run_recbole_baseline \
+    --baseline_config "$cfg" \
+    --dataset_dir "$OUT_ROOT/recbole_atomic" \
+    --output_dir "$OUT_ROOT/recbole_runs"
+done

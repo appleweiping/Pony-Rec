@@ -12,6 +12,7 @@ from src.backends import GenerationRequest, build_backend
 from src.data.protocol import read_jsonl, write_jsonl
 from src.prompts import candidate_block, get_prompt_template, history_block, parse_pointwise_output, parse_ranking_output
 from src.uncertainty.interface import VerbalizedConfidenceEstimator
+from src.utils.manifest import backend_type_from_name, build_manifest, is_paper_result, write_manifest
 from src.utils.research_artifacts import config_hash, git_commit_or_unknown, utc_timestamp
 
 
@@ -86,6 +87,9 @@ async def _run(config: dict[str, Any], args: argparse.Namespace) -> None:
         prompt = _build_prompt(sample, prompt_id, item_texts, topk)
         requests.append(GenerationRequest(prompt=prompt, request_id=f"{split}:{sample['user_id']}"))
     backend = build_backend(backend_cfg)
+    backend_name = getattr(backend, "backend_name", str(backend_cfg.get("backend", "unknown")))
+    backend_type = backend_type_from_name(backend_name)
+    run_type = str(config.get("run_type") or ("smoke" if backend_type == "mock" else "pilot")).lower()
     responses = await backend.abatch_generate(requests)
     estimator = VerbalizedConfidenceEstimator()
     records = list(existing)
@@ -98,6 +102,9 @@ async def _run(config: dict[str, Any], args: argparse.Namespace) -> None:
         "prompt_template_id": prompt_id,
         "config_hash": config_hash(config),
         "git_commit": git_commit_or_unknown("."),
+        "run_type": run_type,
+        "backend_type": backend_type,
+        "is_paper_result": is_paper_result(run_type, backend_type),
     }
     for sample, response in zip(samples, responses):
         task = get_prompt_template(prompt_id).task
@@ -151,6 +158,26 @@ async def _run(config: dict[str, Any], args: argparse.Namespace) -> None:
             }
         )
     write_jsonl(records, output_path)
+    api_key_env = (backend_cfg.get("connection", {}) or {}).get("api_key_env") or backend_cfg.get("api_key_env")
+    write_manifest(
+        output_path.parent.parent / "manifest.json",
+        build_manifest(
+            config=config,
+            dataset=str(meta_common["dataset"]),
+            domain=str(meta_common["domain"]),
+            raw_data_paths=[],
+            processed_data_paths=[str(processed_dir)],
+            method=str(meta_common["method"]),
+            backend=backend_name,
+            model=getattr(backend, "model_name", str(backend_cfg.get("model", "unknown"))),
+            prompt_template=prompt_id,
+            seed=int(meta_common["seed"]),
+            candidate_size=len(samples[0].get("candidate_item_ids", [])) if samples else None,
+            calibration_source=None,
+            api_key_env=str(api_key_env) if api_key_env else None,
+            mock_data_used=backend_type == "mock",
+        ),
+    )
     print(f"[infer] saved={output_path} rows={len(records)}")
 
 

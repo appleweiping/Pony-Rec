@@ -1,0 +1,15 @@
+seed: 13
+run_type: smoke
+method: mock_listwise_smoke
+output_dir: outputs/smoke_mock
+dataset:
+  dataset: smoke_amazon_tiny
+  domain: smoke
+  processed_dir: outputs/smoke_mock/processed
+backend:
+  backend: mock
+  model: mock-deterministic
+inference:
+  split: test
+  prompt_id: listwise_ranking_v1
+  topk: 4

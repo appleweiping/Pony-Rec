@@ -9,6 +9,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Export paper-ready markdown tables from aggregated CSV metrics.")
     parser.add_argument("--aggregate_csv", required=True)
     parser.add_argument("--output_dir", required=True)
+    parser.add_argument("--allow_smoke", action="store_true")
     return parser.parse_args()
 
 
@@ -23,6 +24,18 @@ def main() -> None:
     args = parse_args()
     with Path(args.aggregate_csv).open("r", encoding="utf-8", newline="") as f:
         rows = list(csv.DictReader(f))
+    required = ["metadata.dataset", "metadata.domain", "metadata.seed", "metadata.method", "metadata.config_hash"]
+    if rows and not args.allow_smoke:
+        for idx, row in enumerate(rows):
+            missing = [col for col in required if not row.get(col)]
+            if missing:
+                raise ValueError(f"Refusing paper export: row {idx} missing required metadata {missing}.")
+            if row.get("metadata.backend_type") == "mock":
+                raise ValueError("Refusing paper export: mock backend outputs require --allow_smoke.")
+            if row.get("metadata.run_type") == "smoke":
+                raise ValueError("Refusing paper export: smoke outputs require --allow_smoke.")
+            if str(row.get("metadata.is_paper_result")).lower() not in {"true", "1"}:
+                raise ValueError("Refusing paper export: is_paper_result must be true unless --allow_smoke is set.")
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     table_specs = {

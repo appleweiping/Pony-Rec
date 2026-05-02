@@ -1,0 +1,10 @@
+dataset: amazon_beauty_missing
+domain: Beauty
+raw:
+  format: amazon
+  review_path: data/raw/missing_beauty/All_Beauty.jsonl.gz
+  meta_path: data/raw/missing_beauty/meta_All_Beauty.jsonl.gz
+processed_dir: outputs/missing_beauty/processed
+filter:
+  rating_threshold: 4.0
+  k_core: 5

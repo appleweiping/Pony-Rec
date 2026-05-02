@@ -15,8 +15,37 @@ from src.backends.base import GenerationRequest, GenerationResponse
 from src.utils.research_artifacts import stable_json_dumps
 
 
-def _cache_key(payload: dict[str, Any]) -> str:
+def stable_cache_key(payload: dict[str, Any]) -> str:
     return hashlib.sha256(stable_json_dumps(payload).encode("utf-8")).hexdigest()
+
+
+def build_openai_chat_payload(
+    *,
+    prompt: str,
+    model: str,
+    system_prompt: str | None = None,
+    temperature: float = 0.0,
+    max_tokens: int = 512,
+    top_p: float = 1.0,
+    response_format: dict[str, Any] | None = None,
+    extra_body: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": prompt})
+    payload: dict[str, Any] = {
+        "model": model,
+        "messages": messages,
+        "temperature": float(temperature),
+        "max_tokens": int(max_tokens),
+        "top_p": float(top_p),
+    }
+    if response_format:
+        payload["response_format"] = response_format
+    if extra_body:
+        payload["extra_body"] = extra_body
+    return payload
 
 
 def _usage_to_dict(value: Any) -> dict[str, Any]:
@@ -79,36 +108,30 @@ class OpenAICompatibleBackend:
         self.client = AsyncOpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
 
     def _request_payload(self, request: GenerationRequest, kwargs: dict[str, Any]) -> dict[str, Any]:
-        messages = []
-        if request.system_prompt:
-            messages.append({"role": "system", "content": request.system_prompt})
-        messages.append({"role": "user", "content": request.prompt})
-        payload: dict[str, Any] = {
-            "model": str(kwargs.get("model_name", self.model_name)),
-            "messages": messages,
-            "temperature": float(kwargs.get("temperature", self.temperature)),
-            "max_tokens": int(kwargs.get("max_tokens", self.max_tokens)),
-            "top_p": float(kwargs.get("top_p", self.top_p)),
-        }
         response_format = kwargs.get("response_format") or request.response_format
-        if response_format:
-            payload["response_format"] = response_format
         extra_body = dict(self.extra_body)
         if isinstance(kwargs.get("extra_body"), dict):
             extra_body.update(kwargs["extra_body"])
-        if extra_body:
-            payload["extra_body"] = extra_body
-        return payload
+        return build_openai_chat_payload(
+            prompt=request.prompt,
+            system_prompt=request.system_prompt,
+            model=str(kwargs.get("model_name", self.model_name)),
+            temperature=float(kwargs.get("temperature", self.temperature)),
+            max_tokens=int(kwargs.get("max_tokens", self.max_tokens)),
+            top_p=float(kwargs.get("top_p", self.top_p)),
+            response_format=response_format,
+            extra_body=extra_body,
+        )
 
     def _cache_path(self, payload: dict[str, Any]) -> Path | None:
         if not self.cache_dir:
             return None
-        return self.cache_dir / f"{_cache_key(payload)}.json"
+        return self.cache_dir / f"{stable_cache_key(payload)}.json"
 
     def _raw_path(self, request_id: str, payload: dict[str, Any]) -> Path | None:
         if not self.raw_response_dir:
             return None
-        safe_id = request_id or _cache_key(payload)[:16]
+        safe_id = request_id or stable_cache_key(payload)[:16]
         return self.raw_response_dir / f"{safe_id}.json"
 
     async def agenerate(self, request: GenerationRequest, **kwargs: Any) -> GenerationResponse:

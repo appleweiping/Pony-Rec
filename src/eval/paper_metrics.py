@@ -108,3 +108,15 @@ def exposure_metrics(records: list[dict[str, Any]]) -> dict[str, float]:
         "long_tail_coverage": len(set(top_items)) / denom,
         "unique_top_items": float(len(set(top_items))),
     }
+
+
+def groupwise_ece(records: list[dict[str, Any]], *, group_key: str, n_bins: int = 10) -> dict[str, float]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for record in records:
+        grouped.setdefault(str(record.get(group_key, "unknown")), []).append(record)
+    out: dict[str, float] = {}
+    for group, rows in grouped.items():
+        y_true = [int(bool(row.get("correctness", row.get("is_correct", False)))) for row in rows]
+        y_prob = [float(row.get("calibrated_confidence", row.get("raw_confidence", 0.5)) or 0.5) for row in rows]
+        out[group] = ece_mce(y_true, y_prob, n_bins=n_bins)[0]
+    return out

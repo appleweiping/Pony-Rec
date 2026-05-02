@@ -1,0 +1,6 @@
+name: pop
+model: Pop
+dataset_name: amazon_beauty
+seed: 42
+topk: [10]
+epochs: 1

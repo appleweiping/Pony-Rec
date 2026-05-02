@@ -1,0 +1,27 @@
+seed: 42
+method: deepseek_zero_shot_listwise
+datasets:
+  - configs/datasets/amazon_beauty.yaml
+  - configs/datasets/amazon_electronics.yaml
+  - configs/datasets/amazon_books.yaml
+  - configs/datasets/movie.yaml
+backend:
+  backend: deepseek
+  model: deepseek-v4-flash
+  connection:
+    base_url: https://api.deepseek.com
+    api_key_env: DEEPSEEK_API_KEY
+  generation:
+    temperature: 0.0
+    max_tokens: 800
+    top_p: 1.0
+    thinking_mode: false
+  runtime:
+    max_concurrency: 16
+    max_retries: 6
+  cache:
+    cache_dir: outputs/cache/deepseek_v4_flash
+    raw_response_dir: outputs/raw_responses/deepseek_v4_flash
+inference:
+  prompt_id: listwise_ranking_v1
+  topk: 10

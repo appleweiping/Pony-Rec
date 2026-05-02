@@ -3,6 +3,7 @@ model: deepseek-v4-flash
 connection:
   base_url: https://api.deepseek.com
   api_key_env: DEEPSEEK_API_KEY
+  timeout: 60
 generation:
   temperature: 0.0
   max_tokens: 800
@@ -12,6 +13,11 @@ runtime:
   max_concurrency: 16
   max_retries: 6
   retry_backoff_seconds: 1.0
+logging:
+  save_raw_response: true
+  save_token_usage: true
+  save_latency: true
+  save_retry_count: true
 cache:
   cache_dir: outputs/cache/deepseek_v4_flash
   raw_response_dir: outputs/raw_responses/deepseek_v4_flash

@@ -23,8 +23,11 @@ from src.eval.calibration_metrics import (
     compute_calibration_metrics,
     get_reliability_dataframe,
 )
+from src.utils.deprecation import warn_legacy_entrypoint
 from src.utils.paths import ensure_exp_dirs
 from src.utils.reproducibility import set_global_seed
+
+warn_legacy_entrypoint("main_eval.py", "python -m src.cli.evaluate")
 
 
 def load_jsonl(path: str | Path) -> pd.DataFrame:

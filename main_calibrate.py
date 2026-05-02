@@ -24,7 +24,10 @@ from src.uncertainty.verbalized_confidence import (
     add_uncertainty_from_confidence,
     normalize_confidence_column,
 )
+from src.utils.deprecation import warn_legacy_entrypoint
 from src.utils.paths import ensure_exp_dirs
+
+warn_legacy_entrypoint("main_calibrate.py", "python -m src.cli.calibrate")
 
 
 def load_jsonl(path: str | Path) -> pd.DataFrame:

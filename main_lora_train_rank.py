@@ -3,6 +3,9 @@ from __future__ import annotations
 import argparse
 
 from src.training import run_lora_rank_training
+from src.utils.deprecation import warn_legacy_entrypoint
+
+warn_legacy_entrypoint("main_lora_train_rank.py", "python -m src.cli.train_lora")
 
 
 def parse_args() -> argparse.Namespace:

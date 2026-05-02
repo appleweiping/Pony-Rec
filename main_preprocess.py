@@ -11,6 +11,9 @@ import yaml
 from src.data.popularity import compute_item_popularity, build_popularity_groups
 from src.data.raw_loaders import load_amazon_domain
 from src.data.text_builder import attach_candidate_text
+from src.utils.deprecation import warn_legacy_entrypoint
+
+warn_legacy_entrypoint("main_preprocess.py", "python -m src.cli.preprocess")
 
 
 def parse_args() -> argparse.Namespace:

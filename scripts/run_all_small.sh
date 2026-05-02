@@ -29,4 +29,5 @@ $PYTHON_BIN -m src.cli.aggregate \
   --output_path outputs/smoke_mock/tables/aggregate.csv
 $PYTHON_BIN -m src.cli.export_paper_tables \
   --aggregate_csv outputs/smoke_mock/tables/aggregate.csv \
-  --output_dir outputs/smoke_mock/paper_tables
+  --output_dir outputs/smoke_mock/paper_tables \
+  --allow_smoke

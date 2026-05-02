@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 
 from src.data.protocol import read_jsonl, write_jsonl
 from src.methods.uncertainty_reranking import RerankConfig, rerank_candidate_record
+from src.utils.manifest import build_manifest, write_manifest
 
 
 def parse_args() -> argparse.Namespace:
@@ -31,6 +33,24 @@ def main() -> None:
     for row in rows:
         row["correctness"] = bool(row.get("predicted_item_id") == row.get("target_item_id")) if not row.get("abstained") else False
     write_jsonl(rows, args.output_path)
+    first = rows[0] if rows else {}
+    write_manifest(
+        Path(args.output_path).parent.parent / "manifest.json",
+        build_manifest(
+            config=vars(args),
+            dataset=str(first.get("dataset", "unknown")),
+            domain=str(first.get("domain", "unknown")),
+            processed_data_paths=[args.input_path, args.output_path],
+            method="rerank",
+            backend=str(first.get("backend", "unknown")),
+            model=str(first.get("model", "unknown")),
+            prompt_template=str(first.get("prompt_template_id", "unknown")),
+            seed=int(first.get("seed", 0) or 0),
+            candidate_size=len(first.get("candidate_item_ids", [])) if first else None,
+            calibration_source="test_calibrated",
+            mock_data_used=str(first.get("backend_type", "")) == "mock",
+        ),
+    )
     print(f"[rerank] saved={args.output_path} rows={len(rows)}")
 
 

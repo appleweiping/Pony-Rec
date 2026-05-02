@@ -1,0 +1,10 @@
+name: lightgcn
+model: LightGCN
+dataset_name: amazon_beauty
+seed: 42
+topk: [10]
+epochs: 100
+recbole:
+  embedding_size: 64
+  n_layers: 3
+  reg_weight: 0.0001

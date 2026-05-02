@@ -11,6 +11,7 @@ from sklearn.linear_model import LogisticRegression
 
 from src.data.protocol import read_jsonl, write_json, write_jsonl
 from src.eval.paper_metrics import brier_score, ece_mce
+from src.utils.manifest import build_manifest, write_manifest
 
 
 def parse_args() -> argparse.Namespace:
@@ -94,6 +95,24 @@ def main() -> None:
     }
     metrics_path = Path(args.metrics_path) if args.metrics_path else Path(args.output_path).with_suffix(".metrics.json")
     write_json(metrics, metrics_path)
+    first = out_rows[0] if out_rows else {}
+    write_manifest(
+        Path(args.output_path).parent.parent / "manifest.json",
+        build_manifest(
+            config={"method": args.method, "group_by": args.group_by},
+            dataset=str(first.get("dataset", "unknown")),
+            domain=str(first.get("domain", "unknown")),
+            processed_data_paths=[args.valid_path, args.test_path, args.output_path],
+            method="calibrate",
+            backend=str(first.get("backend", "unknown")),
+            model=str(first.get("model", "unknown")),
+            prompt_template=str(first.get("prompt_template_id", "unknown")),
+            seed=int(first.get("seed", 0) or 0),
+            candidate_size=len(first.get("candidate_item_ids", [])) if first else None,
+            calibration_source="valid",
+            mock_data_used=str(first.get("backend_type", "")) == "mock",
+        ),
+    )
     print(f"[calibrate] saved={args.output_path}")
     print(f"[calibrate] metrics={metrics_path}")
 
