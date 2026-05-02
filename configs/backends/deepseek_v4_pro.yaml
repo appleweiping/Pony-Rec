@@ -1,0 +1,17 @@
+backend: deepseek
+model: deepseek-v4-pro
+connection:
+  base_url: https://api.deepseek.com
+  api_key_env: DEEPSEEK_API_KEY
+generation:
+  temperature: 0.0
+  max_tokens: 1200
+  top_p: 1.0
+  thinking_mode: true
+runtime:
+  max_concurrency: 8
+  max_retries: 6
+  retry_backoff_seconds: 1.0
+cache:
+  cache_dir: outputs/cache/deepseek_v4_pro
+  raw_response_dir: outputs/raw_responses/deepseek_v4_pro

@@ -4,3 +4,11 @@ scikit-learn>=1.4.0
 matplotlib>=3.8.0
 pandas>=2.2.0
 PyYAML>=6.0.0
+pytest>=8.0.0
+numpy>=1.26.0
+
+# Server-side LoRA/local inference dependencies. Install on GPU hosts for real runs.
+transformers>=4.44.0
+peft>=0.12.0
+datasets>=2.20.0
+accelerate>=0.33.0

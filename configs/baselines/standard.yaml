@@ -1,0 +1,13 @@
+sanity:
+  - random
+  - popularity
+  - itemknn
+  - bm25
+recbole_preferred:
+  - BPR
+  - LightGCN
+  - GRU4Rec
+  - SASRec
+  - BERT4Rec
+  - FMLPRec
+notes: "RecBole execution is configured by scripts/run_baselines_recbole.sh; official/approximate status must be recorded in docs/BASELINES.md."

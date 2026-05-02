@@ -2,6 +2,44 @@
 
 > Diagnosing, calibrating, and operationalizing confidence in LLM-based recommendation.
 
+## Current Experiment Interface
+
+The rigorous path is now the module CLI under `src.cli`; legacy `main_*.py` scripts are kept only for archival continuity until their outputs are migrated.
+
+Small no-key smoke run:
+
+```bash
+bash scripts/run_all_small.sh
+```
+
+DeepSeek multi-domain run:
+
+```bash
+export DEEPSEEK_API_KEY="your_key"
+bash scripts/run_api_multidomain_deepseek.sh
+```
+
+Baseline comparison:
+
+```bash
+bash scripts/run_baselines_recbole.sh configs/datasets/amazon_beauty.yaml
+```
+
+LoRA server run:
+
+```bash
+bash scripts/run_lora_ablation.sh configs/lora/server_qwen_rank.yaml
+```
+
+Paper table export:
+
+```bash
+python -m src.cli.aggregate --metrics_glob "outputs/**/eval/metrics.json" --output_path outputs/paper/aggregate.csv
+python -m src.cli.export_paper_tables --aggregate_csv outputs/paper/aggregate.csv --output_dir outputs/paper/tables
+```
+
+Mock/smoke outputs are not paper evidence.
+
 This repository studies a simple but important question: when a large language model says it is confident about a recommendation, can that confidence be trusted as a decision signal?
 
 Our answer is structured as a full pipeline rather than a single metric. We first diagnose whether verbalized confidence is informative, calibrated, and behaviorally biased. We then convert raw confidence into calibrated confidence, derive uncertainty from it, and finally test whether uncertainty can be used at decision time through lightweight reranking. The goal is not only to analyze confidence, but to make it usable.

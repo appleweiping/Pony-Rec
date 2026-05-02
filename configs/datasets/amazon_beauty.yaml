@@ -1,0 +1,20 @@
+dataset: amazon_beauty
+domain: Beauty
+seed: 42
+raw:
+  format: amazon
+  review_path: data/raw/amazon_beauty/All_Beauty.jsonl.gz
+  meta_path: data/raw/amazon_beauty/meta_All_Beauty.jsonl.gz
+processed_dir: data/processed/amazon_beauty
+filter:
+  rating_threshold: 4.0
+  k_core: 5
+split:
+  method: temporal_leave_one_out
+  min_sequence_length: 5
+candidates:
+  negative_count: 99
+  strategy: popularity_stratified
+popularity:
+  head_ratio: 0.2
+  mid_ratio: 0.6

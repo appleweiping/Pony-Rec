@@ -1,0 +1,5 @@
+base_model: smoke-only
+qlora: false
+train_path: outputs/smoke_mock/processed/train_candidates.jsonl
+valid_path: outputs/smoke_mock/processed/valid_candidates.jsonl
+adapter_output_dir: outputs/smoke_mock/lora_adapter

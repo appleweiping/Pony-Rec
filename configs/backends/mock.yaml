@@ -1,0 +1,4 @@
+backend: mock
+model: mock-deterministic
+runtime:
+  latency_seconds: 0.0

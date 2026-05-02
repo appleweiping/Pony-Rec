@@ -1,0 +1,7 @@
+negative_count: 99
+strategy: popularity_stratified
+allowed_counts: [19, 99, 199, 499]
+exclude:
+  target_item: true
+  user_history: true
+  all_user_positives: true

@@ -1,0 +1,8 @@
+method: temporal_leave_one_out
+train_history: all_except_last_two
+valid_target: second_last
+test_target: last
+leakage_policy:
+  fit_calibration_on: valid
+  apply_calibration_to: test
+  forbid_future_history: true

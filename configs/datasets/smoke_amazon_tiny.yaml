@@ -1,0 +1,22 @@
+dataset: smoke_amazon_tiny
+domain: smoke
+seed: 13
+raw:
+  format: amazon
+  review_path: tests/fixtures/raw/amazon_tiny/reviews.jsonl
+  meta_path: tests/fixtures/raw/amazon_tiny/meta.jsonl
+processed_dir: outputs/smoke_mock/processed
+filter:
+  rating_threshold: 4.0
+  k_core: 2
+split:
+  method: temporal_leave_one_out
+  min_sequence_length: 4
+candidates:
+  negative_count: 3
+  strategy: uniform
+popularity:
+  head_ratio: 0.25
+  mid_ratio: 0.5
+text:
+  max_description_chars: 240

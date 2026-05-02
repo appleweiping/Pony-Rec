@@ -1,0 +1,20 @@
+dataset: movie
+domain: Movie
+seed: 42
+raw:
+  format: movie
+  review_path: data/raw/movie/ratings.csv
+  meta_path: data/raw/movie/movies.csv
+processed_dir: data/processed/movie
+filter:
+  rating_threshold: 4.0
+  k_core: 5
+split:
+  method: temporal_leave_one_out
+  min_sequence_length: 5
+candidates:
+  negative_count: 99
+  strategy: popularity_stratified
+popularity:
+  head_ratio: 0.2
+  mid_ratio: 0.6
