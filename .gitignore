@@ -108,6 +108,8 @@ ipython_config.py
 # =========================
 .env
 .envrc
+*.key
+secrets/
 .venv/
 venv/
 env/
@@ -220,3 +222,8 @@ docs/
 tmp_outputs/
 tmp_pycache/
 docs.zip
+
+# Local server environments
+.venv_lora/
+.venv*/
+.conda_pkgs/
