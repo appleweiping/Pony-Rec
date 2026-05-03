@@ -15,6 +15,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate ranking, uncertainty calibration, exposure, and risk-coverage.")
     parser.add_argument("--predictions_path", required=True)
     parser.add_argument("--output_dir", required=True)
+    parser.add_argument(
+        "--candidates_source_path",
+        default=None,
+        help="Optional reprocess/candidates JSONL path recorded in manifest processed_data_paths.",
+    )
     return parser.parse_args()
 
 
@@ -62,13 +67,19 @@ def main() -> None:
     }
     metrics = {"metadata": metadata, "ranking": ranking, "calibration": calibration, "exposure": exposure}
     write_json(metrics, out_dir / "metrics.json")
+    processed_paths: list[str] = [args.predictions_path]
+    if args.candidates_source_path:
+        processed_paths = [args.candidates_source_path, args.predictions_path]
     write_manifest(
         out_dir / "manifest.json",
         build_manifest(
-            config={"predictions_path": args.predictions_path},
+            config={
+                "predictions_path": args.predictions_path,
+                "run_type": str(first.get("run_type", "pilot") or "pilot").lower(),
+            },
             dataset=str(first.get("dataset", "unknown")),
             domain=str(first.get("domain", "unknown")),
-            processed_data_paths=[args.predictions_path],
+            processed_data_paths=processed_paths,
             method="evaluate",
             backend=str(first.get("backend", "unknown")),
             model=str(first.get("model", "unknown")),

@@ -223,6 +223,7 @@ docs/
 !docs/
 !docs/REPROCESS_PROCESSED_SOURCE.md
 !docs/CLEANUP_AUDIT.md
+!docs/PILOT_DEEPSEEK_PROCESSED.md
 tmp_outputs/
 tmp_pycache/
 docs.zip
