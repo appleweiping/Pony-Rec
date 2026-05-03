@@ -18,6 +18,8 @@ def backend_type_from_name(name: str) -> str:
         return "api"
     if normalized in {"hf", "local_hf", "hf_local", "transformers"}:
         return "local"
+    if normalized in {"lora", "hf_lora", "peft"}:
+        return "lora"
     return "unknown"
 
 

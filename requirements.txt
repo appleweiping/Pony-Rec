@@ -8,7 +8,8 @@ pytest>=8.0.0
 numpy>=1.26.0
 
 # Server-side LoRA/local inference dependencies. Install on GPU hosts for real runs.
-transformers>=4.44.0
+# Qwen3 (model_type qwen3) requires transformers >= ~4.51; 4.44.x fails AutoConfig.
+transformers>=4.51.0
 peft>=0.12.0
 datasets>=2.20.0
 accelerate>=0.33.0

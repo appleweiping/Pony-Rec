@@ -49,7 +49,11 @@ class HFLocalBackend:
         except ImportError as exc:
             raise ImportError("HFLocalBackend requires torch and transformers.") from exc
         self._torch = torch
-        tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path, trust_remote_code=self.trust_remote_code)
+        tokenizer = AutoTokenizer.from_pretrained(
+            self.model_name_or_path,
+            trust_remote_code=self.trust_remote_code,
+            use_fast=False,
+        )
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = "left"

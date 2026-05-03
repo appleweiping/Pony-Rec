@@ -76,6 +76,7 @@ def test_manifest_paper_result_flags() -> None:
     assert manifest["is_paper_result"] is True
     assert is_paper_result("smoke", "api") is False
     assert backend_type_from_name("mock") == "mock"
+    assert backend_type_from_name("lora") == "lora"
 
 
 def test_recbole_export_atomic_format(tmp_path: Path) -> None:
