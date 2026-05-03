@@ -13,6 +13,8 @@ Design principles (see `docs/PILOT_CARE_RERANK.md` and `configs/methods/care_rer
 
 Implemented entrypoint: `python -m src.cli.run_care_rerank_pilot`. Audit tables and manifest checks: `python -m src.cli.summarize_care_rerank_pilot --output_root outputs/pilots/care_rerank_deepseek_v4_flash_processed_20u_c19_seed42`.
 
+**CARE-LoRA (pilot):** training-data construction + tiny adapter debug is documented in [`docs/PILOT_CARE_LORA_DEBUG.md`](PILOT_CARE_LORA_DEBUG.md) (`build_care_lora_data`, `run_care_lora_debug`).
+
 ---
 
 The codebase supports uncertainty-aware LLM4Rec as a decision pipeline:

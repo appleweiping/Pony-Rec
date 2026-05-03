@@ -231,6 +231,7 @@ docs/
 !docs/CODEX_TOPCONF_UNCERTAINTY_LLM4REC_PLAN.md
 !docs/CALIBRATION_DIAGNOSTICS.md
 !docs/PILOT_CARE_RERANK.md
+!docs/PILOT_CARE_LORA_DEBUG.md
 tmp_outputs/
 tmp_pycache/
 docs.zip
