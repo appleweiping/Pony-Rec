@@ -1,0 +1,33 @@
+# Reference paths for 100-user × candidate_size=99 DeepSeek + CARE rerank pilot (seed 42).
+# All runs: run_type=pilot, is_paper_result=false (see manifests / pilot_run_meta.json).
+
+reprocess:
+  source_root: data/processed
+  output_dir: outputs/reprocessed_processed_source_100u_c99_seed42
+  max_users_per_domain: 100
+  candidate_size: 99
+  seed: 42
+  domains:
+    - amazon_beauty
+    - amazon_books
+    - amazon_electronics
+    - amazon_movies
+
+deepseek_pilot:
+  reprocess_dir: outputs/reprocessed_processed_source_100u_c99_seed42
+  output_root: outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42
+  backend_config: configs/backends/deepseek_v4_flash.yaml
+  seed: 42
+  splits:
+    - valid
+    - test
+
+calibration:
+  batch_glob: outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42/**/predictions/rank_predictions.jsonl
+  output_dir: outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42/calibration_diagnostics
+
+care_rerank:
+  pilot_root: outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42
+  output_root: outputs/pilots/care_rerank_deepseek_v4_flash_processed_100u_c99_seed42
+  config: configs/methods/care_rerank_pilot.yaml
+  reprocess_dir: outputs/reprocessed_processed_source_100u_c99_seed42

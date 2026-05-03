@@ -23,7 +23,7 @@ from src.utils.manifest import backend_type_from_name, build_manifest, is_paper_
 from src.utils.research_artifacts import config_hash, git_commit_or_unknown, utc_timestamp
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Run DeepSeek pilot inference on reprocessed candidate JSONL.")
     p.add_argument("--reprocess_dir", default="outputs/reprocessed_processed_source")
     p.add_argument("--output_root", default="outputs/pilots/deepseek_v4_flash_processed_20u_c19_seed42")
@@ -38,7 +38,13 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--prompt_id", default="listwise_ranking_v1")
     p.add_argument("--run_type", default="pilot")
     p.add_argument("--method", default="llm_listwise")
-    return p.parse_args()
+    p.add_argument(
+        "--topk",
+        type=int,
+        default=None,
+        help="Listwise slate size for parse_ranking_output. Default: infer from first row's candidate_item_ids length.",
+    )
+    return p.parse_args(argv)
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
@@ -280,13 +286,12 @@ def _aggregate_metrics(output_root: Path, output_csv: Path) -> None:
 
 
 def main() -> None:
-    args = parse_args()
+    args = parse_args(None)
     reprocess_dir = Path(args.reprocess_dir)
     output_root = Path(args.output_root)
     backend_cfg = _load_yaml(Path(args.backend_config))
     runtime = backend_cfg.get("runtime", {}) or {}
     concurrency = int(runtime.get("max_concurrency", 8))
-    inference_topk = 19
     pilot_config = {
         "run_type": args.run_type,
         "seed": args.seed,
@@ -312,6 +317,14 @@ def main() -> None:
             if not in_path.exists():
                 raise FileNotFoundError(f"Missing pilot input: {in_path}")
             samples = read_jsonl(in_path)
+            if args.topk is not None:
+                inference_topk = int(args.topk)
+            elif samples:
+                inference_topk = len(samples[0].get("candidate_item_ids") or [])
+            else:
+                inference_topk = 0
+            if inference_topk <= 0:
+                raise ValueError(f"No samples or empty candidate_item_ids in {in_path}")
             out_dir = output_root / domain / split
             pred_dir = out_dir / "predictions"
             pred_dir.mkdir(parents=True, exist_ok=True)

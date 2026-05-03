@@ -17,6 +17,8 @@ Always align implementations and reports with:
 - `docs/PILOT_CARE_RERANK_100U.md`
 - `docs/PILOT_RECBOLE_100U.md`
 - `docs/PILOT_CARE_LORA_100U.md`
+- `docs/PILOT_100U_AUDIT_AND_NEXT_GATE.md`
+- `docs/PILOT_C99_DEEPSEEK_CARE_RERANK.md`
 
 ## 1) Non-negotiable objective
 
@@ -132,11 +134,10 @@ Every result artifact must include enough metadata for replay and audit:
 
 Given current repo status, follow this staged priority:
 
-1. LoRA debug pass (small-scale, one-domain, short-step).
-2. Uncertainty feature extraction.
-3. Calibration + diagnostics.
-4. CARE rerank pilot.
-5. CARE-LoRA pilot.
+1. **API mainline:** c99 DeepSeek + CARE rerank pilots (`docs/PILOT_C99_DEEPSEEK_CARE_RERANK.md`) before any paper-scale run.
+2. Uncertainty feature extraction + calibration diagnostics on pilot outputs.
+3. CARE rerank ablations on frozen API predictions.
+4. **CARE-LoRA:** parallel research only (strict generation / constrained decoding blocked for scaling; see `docs/PILOT_CARE_LORA_100U.md`).
 
 Do not jump to full-scale experiments before each prior stage is stable and documented.
 
