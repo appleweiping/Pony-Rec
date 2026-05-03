@@ -161,6 +161,8 @@ outputs/**
 !outputs/**/.gitkeep
 outputs_backup_old/
 logs/
+log/
+log_tensorboard/
 results/
 experiments/
 artifacts/
@@ -225,6 +227,7 @@ docs/
 !docs/CLEANUP_AUDIT.md
 !docs/PILOT_DEEPSEEK_PROCESSED.md
 !docs/PILOT_RECBOLE_SMOKE.md
+!docs/PILOT_LORA_QWEN3_DEBUG.md
 tmp_outputs/
 tmp_pycache/
 docs.zip
