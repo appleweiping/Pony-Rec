@@ -8,6 +8,7 @@ seed: 42
 candidate_size: 19
 
 paths:
+  # domain also accepted at top-level `domain:` (mirrored for clarity)
   output_root: outputs/pilots/care_lora_qwen3_8b_beauty_20u_c19_seed42_debug
   reprocess_dir: outputs/reprocessed_processed_source
   processed_dir: data/processed/amazon_beauty

@@ -25,12 +25,55 @@ from transformers import (
 
 from src.cli.run_lora_debug_reprocessed import _gpu_mem_snapshot, _infer_split, validate_reprocess_candidate_rows
 from src.data.protocol import read_jsonl, write_jsonl
+from src.utils.exp_io import load_yaml
 from src.utils.manifest import backend_type_from_name, build_manifest, write_manifest
 from src.utils.research_artifacts import config_hash, git_commit_or_unknown, utc_timestamp
 
 
-def parse_args() -> argparse.Namespace:
+def _apply_yaml_to_args(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
+    if cfg.get("domain"):
+        args.domain = str(cfg["domain"])
+    paths = cfg.get("paths") or {}
+    if paths.get("output_root"):
+        args.output_root = str(paths["output_root"])
+    if paths.get("reprocess_dir"):
+        args.reprocess_dir = str(paths["reprocess_dir"])
+    if paths.get("processed_dir"):
+        args.processed_dir = str(paths["processed_dir"])
+    if paths.get("base_model"):
+        args.base_model = str(paths["base_model"])
+    tr = cfg.get("training") or {}
+    if tr.get("max_train_steps") is not None:
+        args.max_train_steps = int(tr["max_train_steps"])
+    if tr.get("per_device_train_batch_size") is not None:
+        args.per_device_train_batch_size = int(tr["per_device_train_batch_size"])
+    if tr.get("gradient_accumulation_steps") is not None:
+        args.gradient_accumulation_steps = int(tr["gradient_accumulation_steps"])
+    if tr.get("learning_rate") is not None:
+        args.learning_rate = float(tr["learning_rate"])
+    if tr.get("lora_r") is not None:
+        args.lora_r = int(tr["lora_r"])
+    if tr.get("lora_alpha") is not None:
+        args.lora_alpha = int(tr["lora_alpha"])
+    if tr.get("max_seq_length") is not None:
+        args.max_seq_length = int(tr["max_seq_length"])
+    if tr.get("topk") is not None:
+        args.topk = int(tr["topk"])
+    if tr.get("prompt_id"):
+        args.prompt_id = str(tr["prompt_id"])
+    inf = cfg.get("inference") or {}
+    if inf.get("max_new_tokens") is not None:
+        args.max_new_tokens = int(inf["max_new_tokens"])
+    if cfg.get("seed") is not None:
+        args.seed = int(cfg["seed"])
+    # stash extra paths for subprocess (not on argparse object by default)
+    setattr(args, "_deepseek_root", str(paths.get("deepseek_pilot_root", "outputs/pilots/deepseek_v4_flash_processed_20u_c19_seed42")))
+    setattr(args, "_care_rerank_config", str(paths.get("care_rerank_config", "configs/methods/care_rerank_pilot.yaml")))
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--config", type=str, default=None, help="YAML config (e.g. configs/lora/care_qwen3_8b_debug.yaml). CLI flags override YAML.")
     p.add_argument("--domain", default="amazon_beauty")
     p.add_argument("--reprocess_dir", default="outputs/reprocessed_processed_source")
     p.add_argument("--processed_dir", default="data/processed/amazon_beauty")
@@ -50,7 +93,17 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--max_new_tokens", type=int, default=384)
     p.add_argument("--skip_build_data", action="store_true")
     p.add_argument("--skip_train", action="store_true", help="Only run inference using existing adapters.")
-    return p.parse_args()
+    ns = p.parse_args(argv)
+    if ns.config:
+        cfg = load_yaml(ns.config)
+        if not isinstance(cfg, dict):
+            raise ValueError(f"Config must be a mapping: {ns.config}")
+        _apply_yaml_to_args(ns, cfg)
+    if not getattr(ns, "_deepseek_root", None):
+        setattr(ns, "_deepseek_root", "outputs/pilots/deepseek_v4_flash_processed_20u_c19_seed42")
+    if not getattr(ns, "_care_rerank_config", None):
+        setattr(ns, "_care_rerank_config", "configs/methods/care_rerank_pilot.yaml")
+    return ns
 
 
 class LossLogCallback(TrainerCallback):
@@ -199,15 +252,47 @@ def _train_adapter_from_jsonl(
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
+    loss_history: list[dict[str, Any]] = []
+    if loss_path.is_file():
+        for line in loss_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line:
+                try:
+                    loss_history.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
+
+    def _max_gpu_bytes(snaps: list[dict[str, Any]]) -> int | None:
+        best = 0
+        found = False
+        for s in snaps:
+            if not isinstance(s, dict):
+                continue
+            for k in ("reserved_bytes", "allocated_bytes"):
+                v = s.get(k)
+                if isinstance(v, int) and v > best:
+                    best = v
+                    found = True
+        return best if found else None
+
+    gpu_snaps = [snap_before, snap_loaded, snap_after]
     return {
         "trainable_parameters": trainable,
         "train_rows": len(records),
         "max_train_steps": int(args.max_train_steps),
         "train_global_steps": int(getattr(train_out, "global_step", 0) or 0),
+        "lora_config": {
+            "r": int(args.lora_r),
+            "lora_alpha": int(args.lora_alpha),
+            "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+        },
+        "adapter_save_path": str(adapter_dir.resolve()),
         "gpu_mem_before_load": snap_before,
         "gpu_mem_after_peft": snap_loaded,
         "gpu_mem_after_train": snap_after,
+        "gpu_mem_reserved_max_bytes": _max_gpu_bytes(gpu_snaps),
         "loss_log_path": str(loss_path),
+        "loss_history": loss_history,
         "weighted_loss": bool(use_sample_weights),
     }
 
@@ -243,9 +328,10 @@ def _run_infer_for_adapter(
     for split in ("valid", "test"):
         in_path = rep / f"{split}_candidates.jsonl"
         samples = read_jsonl(in_path)
-        run_dir = out_root / "eval_runs" / run_name / domain / split
-        pred_dir = run_dir / "predictions"
-        pred_dir.mkdir(parents=True, exist_ok=True)
+        # Flat layout: eval_runs/<adapter>/<split>/*.jsonl (beauty-only debug)
+        run_dir = out_root / "eval_runs" / run_name / split
+        run_dir.mkdir(parents=True, exist_ok=True)
+        pred_dir = run_dir
         meta = {
             "dataset": domain,
             "domain": domain,
@@ -316,8 +402,8 @@ def _run_infer_for_adapter(
         )
 
 
-def main() -> None:
-    args = parse_args()
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
     domain = str(args.domain)
     rep = Path(args.reprocess_dir) / domain
     out_root = Path(args.output_root)
@@ -349,6 +435,10 @@ def main() -> None:
                 str(args.topk),
                 "--seed",
                 str(args.seed),
+                "--deepseek_root",
+                str(getattr(args, "_deepseek_root", "")),
+                "--care_rerank_config",
+                str(getattr(args, "_care_rerank_config", "")),
             ],
             check=True,
             cwd=str(Path.cwd()),
@@ -406,13 +496,26 @@ def main() -> None:
         "is_paper_result": False,
         "domain": domain,
         "output_root": str(out_root.resolve()),
-        "base_model": str(args.base_model),
+        "base_model": str(Path(args.base_model).resolve()),
+        "max_train_steps": int(args.max_train_steps),
+        "lora_hyperparameters": {
+            "lora_r": int(args.lora_r),
+            "lora_alpha": int(args.lora_alpha),
+            "per_device_train_batch_size": int(args.per_device_train_batch_size),
+            "gradient_accumulation_steps": int(args.gradient_accumulation_steps),
+            "learning_rate": float(args.learning_rate),
+        },
         "train": train_results,
-        "note": "CARE-LoRA debug: tiny steps, beauty only; eval_runs/<adapter>/ holds inference mirroring DeepSeek pilot schema.",
+        "adapter_paths": {
+            "vanilla_lora_baseline": str((adapters_root / "vanilla_lora_baseline").resolve()),
+            "care_full_training": str((adapters_root / "care_full_training").resolve()),
+        },
+        "eval_runs_root": str((out_root / "eval_runs").resolve()),
+        "note": "CARE-LoRA debug: tiny steps, beauty only; eval_runs/<adapter>/<split>/ holds predictions + eval.",
     }
     (out_root / "train_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[care_lora_debug] done output_root={out_root}")
 
 
 if __name__ == "__main__":
-    main()
+    main(None)
