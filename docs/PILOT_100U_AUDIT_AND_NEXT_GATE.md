@@ -15,6 +15,7 @@ Checked roots:
 - `outputs/pilots/care_rerank_deepseek_v4_flash_processed_100u_c19_seed42/`
 - `outputs/pilots/recbole_processed_100u_c19_seed42/`
 - `outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_pilot/`
+- (post-audit) `outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_strictgen/` — **strictgen attempt C**, recorded only as a **negative** decode/prompt iteration; **not** a new baseline.
 
 Findings:
 
@@ -254,6 +255,16 @@ Critical interpretation:
 
 - Safe-repaired metrics are **engineering usability** metrics, not pure generation-quality metrics.
 
+### 6.5 Strictgen attempt C (negative; inference-only)
+
+See `docs/PILOT_CARE_LORA_100U.md` for commands and decode knobs. **Accepted as a negative result:**
+
+- **Mainline CARE-LoRA strict JSON validity** remains the **original 100u pilot** band **~0.35–0.47** (`repair_summary.json` under `..._pilot/`). **Strict output is not fixed**; do not claim otherwise.
+- Strictgen attempt C **did not consistently improve** over that pilot (latest on-disk summaries: vanilla valid/test matched pilot at **0.47 / 0.43**; **CARE_full_training** valid/test **0.23 / 0.32** vs pilot **0.47 / 0.35** — regression on CARE valid in particular).
+- **`usable_ranking_rate_after_safe_repair=1.00`** still holds in strictgen outputs, but that is **engineering usability**, not proof of strict generative quality.
+
+**Paper-result / scaling implication:** CARE-LoRA remains **blocked** for paper-result scaling until **strict generation** improves (true constrained decoding) or the method shifts to **non-generative scoring** over candidates.
+
 ---
 
 ## 7) Decision gate (A–E)
@@ -271,7 +282,7 @@ Signal exists (especially beauty exposure shift), but cross-domain consistency i
 ### C. Is CARE-LoRA ready for 100u multi-domain?
 
 **No.**  
-Strict JSON validity (`~0.35–0.47`) remains the primary blocker for multi-domain expansion.
+Strict JSON validity (`~0.35–0.47`) on the **original beauty 100u pilot** remains the primary blocker for multi-domain expansion. **Strictgen attempt C** (decode/prompt iteration only) is an **accepted negative result** and does **not** change this gate.
 
 ### D. Should RecBole be expanded/adapted/kept?
 
@@ -288,23 +299,25 @@ See section 8 (single recommended next phase).
 
 Selected next phase:
 
-- **CARE-LoRA format/constrained-decoding improvement**
+- **candidate_size=99 DeepSeek pilot + CARE rerank on those outputs** (API / rerank mainline), still `run_type=pilot` and `is_paper_result=false`.
 
 Rationale:
 
-- Current hard blocker is strict generation validity for LoRA.
-- Safe repair gives usability but does not solve pure generation quality.
-- Before c99/full-scale expansion, improve strict JSON validity and confidence reliability under constrained decoding / structured output controls.
+- **CARE-LoRA strict JSON validity** on the beauty 100u pilot remains **~0.35–0.47**; **strictgen attempt C** did **not** consistently improve over that pilot and is **accepted as negative**. Safe-repaired **`usable_ranking=1.00`** is **engineering usability**, not proof that strict generative JSON is solved. **Do not run a full experiment** or claim LoRA strict output is fixed.
+- The API + rerank stack already supports the next scaling knob (**c99**) without depending on LoRA free-form JSON.
+- LoRA remains a **blocked** paper-result track until **strict generation** or **true constrained decoding** / **non-generative scoring** lands.
+
+**Recommended LoRA-side research (parallel, not mainline gate unblocker by itself):** true constrained decoding (grammar / token masks over the candidate set) or a non-generative scoring head—**not** further decode-only heuristics on ASIN strings.
 
 Not recommended yet:
 
 - full experiment preparation (blockers still open)
 - all-domain LoRA scale-up
-- c99 broad expansion across all domains
+- treating CARE-LoRA repaired metrics as paper-result evidence of generation quality
 
 ---
 
 ## Final audit stance
 
 100-user pilot phases are complete and useful for gating decisions, but they remain pilot evidence only.  
-Proceed with targeted format-stability work (especially LoRA strict generation) before wider scaling.
+**Mainline:** proceed toward a **c99 DeepSeek + CARE rerank** pilot while keeping protocol gaps explicit. **CARE-LoRA:** strict generation remains the hard blocker; strictgen attempt C is a **negative** control on decode-only fixes—continue only as **constrained decoding / non-generative** research, not as the primary scaling path until strict validity materially improves.

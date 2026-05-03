@@ -2,6 +2,15 @@
 
 Scope: `amazon_beauty` only, pilot-only, `is_paper_result=false`.
 
+## Executive status (strictgen attempt C accepted as negative)
+
+- **Mainline strict JSON validity (original 100u pilot)** remains **~0.35–0.47** across adapters/splits (`repair_summary.json` under `outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_pilot/`). **CARE-LoRA strict output is not fixed**; do not describe it as resolved.
+- **Strictgen attempt C** (inference-only decode/prompt iteration under `outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_strictgen/`) **did not consistently improve** over that pilot: vanilla matched pilot on valid/test in the latest on-disk summaries; **CARE_full_training regressed** (especially valid). Treat strictgen as a **negative engineering result**, not a new baseline.
+- **`usable_ranking_rate_after_safe_repair=1.00`** still holds, but repaired rankings are **engineering usability** metrics (deterministic completion from allowed candidates), **not** pure model-generation quality. Report strict vs repaired separately.
+- **Paper-result / broad scaling:** CARE-LoRA remains **blocked** until **strict generation** improves materially (e.g. **true constrained decoding**) or the task moves to a **non-generative scoring** formulation that does not depend on free-form JSON from the base LM.
+- **Recommended next mainline (pilot):** **candidate_size=99** DeepSeek run **plus** CARE rerank on those outputs (API track, not LoRA).
+- **Recommended LoRA-side research:** **true constrained decoding** (grammar / token masks over the candidate set) or **non-generative** reranking/scoring—**not** further n-gram heuristics on ASIN strings.
+
 ## Command
 
 ```bash
@@ -166,10 +175,10 @@ Chat template path unchanged: `runtime.use_chat_template=true`, `runtime.enable_
 | **Baseline** | original pilot run (`max_new_tokens=384`, no extra decode hooks) | vanilla valid/test **0.47 / 0.43**, CARE valid/test **0.47 / 0.35** | reference |
 | **A** | `no_repeat_ngram_size=8` + mild `repetition_penalty` + `stop_at_json_end` + stop strings | **~0.00** all splits | **Invalid for ASIN JSON**: n-gram repetition rules corrupt 10-char IDs (spaces, wrong tail chars, glued strings). **Do not use** for this task. |
 | **B** | remove n-gram repeat; keep `stop_at_json_end`; stricter prompt contract | vanilla **~0.31** valid/test; CARE **~0.23 / 0.32** | **Worse than baseline**; primary strict-invalid bucket remained `incomplete_ranking`. |
-| **C (current yaml)** | restore standard `listwise_ranking_json_lora` text; `max_new_tokens=512`; `stop_at_json_end=false`; ASIN-safe decode | from `repair_summary.json` under `outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_strictgen/`: vanilla valid/test **0.47 / 0.31**, CARE valid/test **0.23 / 0.32**; `usable_ranking_rate_after_safe_repair=1.00` all four | **Does not beat the original pilot on every split** (e.g. vanilla test 0.43 and CARE valid 0.47 in baseline); treat as evidence that decode-only tweaks are **not** a reliable strict-JSON fix yet. |
+| **C (accepted negative)** | restore standard `listwise_ranking_json_lora` text; `max_new_tokens=512`; `stop_at_json_end=false`; ASIN-safe decode | latest on-disk `repair_summary.json` under `outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_strictgen/`: vanilla valid/test **0.47 / 0.43** (matches pilot), CARE valid/test **0.23 / 0.32** (worse than pilot **0.47 / 0.35**); `usable_ranking_rate_after_safe_repair=1.00` all four | **Accepted negative result:** no consistent strict-validity gain vs the original 100u pilot; decode-only iteration is **not** a substitute for constrained decoding or a non-generative head. |
 
 `usable_ranking_rate_after_safe_repair` stayed **1.00** across attempts (repair remains a separate bridge; still no target leakage in repair code).
 
 ### Remaining blocker
 
-Pilot-scale **strict JSON validity** is still the gate: until it moves materially above ~0.35–0.47 **without** relying on repair, treat ranking metrics from repaired slates as engineering-only. Next technical step is **true constrained decoding** (or a small supervised “format head” / JSON LM wrapper), not more n-gram heuristics on ASIN strings.
+Pilot-scale **strict JSON validity** stays in the **~0.35–0.47** band on the **original 100u pilot** outputs. Until that moves materially **without** relying on repair, treat ranking metrics from repaired slates as **engineering-only**. Strictgen attempt C confirms that **prompt/decode hygiene alone** is insufficient. Next LoRA-side technical work is **true constrained decoding** or **non-generative scoring** over the candidate set—not more n-gram tricks on ASIN strings.
