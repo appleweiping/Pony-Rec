@@ -194,6 +194,86 @@ Example: `eval_runs/vanilla_lora_baseline/valid/eval/metrics.json` → HR@1 **0.
 
 ---
 
+## Structured decoding / format-stability pass (safe repair bridge)
+
+This pass is still **amazon_beauty, n=20**, and still **not** a paper result. It introduces a deterministic **candidate-only** repair bridge to separate:
+
+- **strict model generation validity** (`strict_json_valid`)
+- **usable ranking after safe repair** (`usable_ranking`)
+
+### Failure taxonomy from baseline JSON debug output
+
+Baseline taxonomy file written at:
+`outputs/pilots/care_lora_qwen3_8b_beauty_20u_c19_seed42_json_debug/format_failure_taxonomy.csv`
+
+Observed primary failures (80 rows across 2 adapters x 2 splits x 20 users):
+
+- `incomplete_ranking`: **49**
+- `strict_valid`: **30**
+- `no_json_object`: **1**
+
+This confirms the dominant blocker is **full-slate completion**, not candidate-set leakage.
+
+### Safe repair rules (inference robustness only)
+
+Implemented in `src/parsing/ranking_repair.py`:
+
+1. Keep strict parse result when already valid.
+2. Else, try first JSON object extraction and read ranking-like IDs.
+3. If unavailable, collect candidate IDs mentioned in generation order from raw text.
+4. Filter to allowed candidate set, dedupe while preserving order.
+5. Append missing allowed IDs in original candidate order.
+6. Mark `repaired_by="candidate_completion_fallback"` and
+   `repair_reason="strict_json_invalid_then_candidate_completion"`.
+7. Never read or use `target_item_id` for repair; no ground-truth leakage.
+8. Do not hallucinate confidence. `confidence_available` remains true only when strict confidence was valid.
+
+### Structured debug run (no retraining)
+
+Adapters reused from prior JSON debug run; inference-only command:
+
+```bash
+cd /home/ajifang/projects/fresh/uncertainty-llm4rec
+.venv_lora/bin/python3.11 -m src.cli.run_care_lora_debug \
+  --domain amazon_beauty \
+  --reprocess_dir outputs/reprocessed_processed_source \
+  --processed_dir data/processed/amazon_beauty \
+  --base_model /home/ajifang/models/Qwen/Qwen3-8B \
+  --output_root outputs/pilots/care_lora_qwen3_8b_beauty_20u_c19_seed42_structured_debug \
+  --prompt_id listwise_ranking_json_lora \
+  --topk 19 \
+  --max_new_tokens 384 \
+  --seed 42 \
+  --skip_build_data \
+  --skip_train
+```
+
+Per split artifacts now include:
+`raw_responses.jsonl`, `parsed_responses.jsonl`, `rank_predictions.jsonl`,
+`format_failure_taxonomy.csv`, `repair_summary.json`, `eval/metrics.json`, `manifest.json`.
+
+### Strict vs repaired validity (structured debug)
+
+- Strict valid remains around **35–40%** (`strict_json_valid_rate`).
+- Safe repaired usability reaches **100%** (`usable_ranking_rate_after_safe_repair=1.0`) in this n=20 run.
+- `confidence_available_rate_after_repair` equals strict confidence availability (repair never fabricates confidence).
+
+Example repaired-ranking metrics (still debug-only):
+
+- vanilla/test: HR@5 **0.35**, NDCG@5 **0.272**, MRR@5 **0.248**
+- CARE/test: HR@5 **0.30**, NDCG@5 **0.251**, MRR@5 **0.235**
+
+These are **repaired-ranking metrics**, not pure strict-generation metrics.
+
+### What must happen before 100-user pilot
+
+At least one of:
+
+1. Strict JSON valid rate improves materially (preferred), **or**
+2. Repaired-ranking evaluation remains clearly separated and labeled from strict generation quality.
+
+---
+
 ## Data policies (Part A)
 
 | Policy | Behavior |

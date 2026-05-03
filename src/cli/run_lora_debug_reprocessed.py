@@ -14,6 +14,12 @@ from typing import Any
 from src.backends import GenerationRequest, build_backend
 from src.cli.run_pilot_reprocessed_deepseek import _build_ranking_prompt, _load_item_lookup
 from src.data.protocol import read_jsonl, write_jsonl
+from src.parsing import (
+    build_repair_summary,
+    failure_taxonomy_row,
+    safe_repair_ranking,
+    write_failure_taxonomy_csv,
+)
 from src.prompts import parse_ranking_output, ranking_parse_strict_for_prompt
 from src.uncertainty.interface import VerbalizedConfidenceEstimator
 from src.utils.manifest import backend_type_from_name, build_manifest, write_manifest
@@ -219,10 +225,11 @@ async def _infer_split(
     prompt_id: str,
     topk: int,
     meta: dict[str, Any],
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     backend = build_backend(backend_cfg)
     estimator = VerbalizedConfidenceEstimator()
     raw_rows, parsed_rows, pred_rows = [], [], []
+    taxonomy_rows: list[dict[str, Any]] = []
     for sample in samples:
         prompt = _build_ranking_prompt(sample, prompt_id, item_lookup, topk)
         resp = (await backend.abatch_generate([GenerationRequest(prompt=prompt, request_id=f"{meta['split']}:{sample.get('user_id')}")]))[0]
@@ -234,15 +241,25 @@ async def _infer_split(
             topk=topk,
             strict_json_only=ranking_parse_strict_for_prompt(prompt_id),
         )
-        ranking = list(parsed.ranked_item_ids or [])
+        strict_ranking = list(parsed.ranked_item_ids or [])
+        strict_conf_avail = bool(parsed.is_valid and parsed.confidence is not None and not parsed.missing_confidence)
+        repaired = safe_repair_ranking(
+            raw_text=raw_text,
+            allowed_item_ids=allowed,
+            strict_json_valid=bool(parsed.is_valid),
+            strict_ranking=strict_ranking,
+            strict_confidence_available=strict_conf_avail,
+        )
+        ranking = list(repaired.ranking)
         predicted = ranking[0] if ranking else ""
-        raw_conf = float(parsed.confidence or 0.0)
+        raw_conf = float(parsed.confidence) if strict_conf_avail and parsed.confidence is not None else 0.0
         est = estimator.estimate({"raw_confidence": raw_conf})
         target = str(sample.get("target_item_id", ""))
+        request_id = f"{meta['split']}:{sample.get('user_id')}"
         raw_rows.append(
             {
                 "timestamp": utc_timestamp(),
-                "request_id": f"{meta['split']}:{sample.get('user_id')}",
+                "request_id": request_id,
                 "raw_response": raw_text,
                 "api_response": None,
                 "token_usage": resp.usage or {},
@@ -255,18 +272,41 @@ async def _infer_split(
             {
                 "timestamp": utc_timestamp(),
                 "user_id": sample.get("user_id"),
-                "is_valid": parsed.is_valid,
-                "invalid_output": parsed.invalid_output,
+                "is_valid": repaired.usable_ranking,
+                "strict_json_valid": parsed.is_valid,
+                "invalid_output": not repaired.usable_ranking,
+                "invalid_output_strict": parsed.invalid_output,
                 "hallucinated_item": parsed.hallucinated_item,
                 "duplicate_item": parsed.duplicate_item,
                 "missing_confidence": parsed.missing_confidence,
                 "output_not_in_candidate_set": parsed.output_not_in_candidate_set,
                 "malformed_json": parsed.malformed_json,
                 "repaired_json": parsed.repaired_json,
+                "strict_ranked_item_ids": strict_ranking,
                 "ranked_item_ids": ranking,
                 "confidence": parsed.confidence,
+                "confidence_available_strict": strict_conf_avail,
+                "confidence_available": repaired.confidence_available_after_repair,
+                "usable_ranking": repaired.usable_ranking,
+                "repaired_by": repaired.repaired_by,
+                "repair_reason": repaired.repair_reason,
                 "error": resp.error,
             }
+        )
+        taxonomy_rows.append(
+            failure_taxonomy_row(
+                user_id=str(sample.get("user_id", "")),
+                request_id=request_id,
+                raw_text=raw_text,
+                strict_json_valid=bool(parsed.is_valid),
+                strict_ranking=strict_ranking,
+                allowed_item_ids=allowed,
+                missing_confidence=bool(parsed.missing_confidence),
+                malformed_json=bool(parsed.malformed_json),
+                duplicate_item=bool(parsed.duplicate_item),
+                output_not_in_candidate_set=bool(parsed.output_not_in_candidate_set),
+                max_new_tokens=int(backend_cfg.get("generation", {}).get("max_new_tokens", 0) or 0),
+            )
         )
         pred_rows.append(
             {
@@ -287,11 +327,18 @@ async def _infer_split(
                 "uncertainty_estimator_name": est.estimator_name,
                 "item_popularity_count": sample.get("target_popularity_count"),
                 "item_popularity_bucket": sample.get("target_popularity_bucket"),
-                "is_valid": parsed.is_valid,
+                "is_valid": repaired.usable_ranking,
+                "strict_json_valid": parsed.is_valid,
+                "usable_ranking": repaired.usable_ranking,
                 "hallucinated_item": parsed.hallucinated_item,
                 "duplicate_item": parsed.duplicate_item,
                 "missing_confidence": parsed.missing_confidence,
                 "output_not_in_candidate_set": parsed.output_not_in_candidate_set,
+                "strict_predicted_ranking": strict_ranking,
+                "repaired_by": repaired.repaired_by,
+                "repair_reason": repaired.repair_reason,
+                "confidence_available_strict": strict_conf_avail,
+                "confidence_available": repaired.confidence_available_after_repair,
                 "backend": "lora",
                 "model": Path(str(backend_cfg.get("model_name_or_path", ""))).name,
                 "raw_response": raw_text,
@@ -302,7 +349,7 @@ async def _infer_split(
                 "error": resp.error,
             }
         )
-    return raw_rows, parsed_rows, pred_rows
+    return raw_rows, parsed_rows, pred_rows, taxonomy_rows, build_repair_summary(pred_rows, taxonomy_rows)
 
 
 def main() -> None:
@@ -375,7 +422,7 @@ def main() -> None:
             "backend_type": backend_type_from_name("lora"),
             "is_paper_result": False,
         }
-        raw_rows, parsed_rows, pred_rows = asyncio.run(
+        raw_rows, parsed_rows, pred_rows, taxonomy_rows, repair_summary = asyncio.run(
             _infer_split(
                 samples=samples,
                 item_lookup=item_lookup,
@@ -389,6 +436,8 @@ def main() -> None:
         write_jsonl(parsed_rows, pred_dir / "parsed_responses.jsonl")
         pred_path = pred_dir / "rank_predictions.jsonl"
         write_jsonl(pred_rows, pred_path)
+        write_failure_taxonomy_csv(taxonomy_rows, pred_dir / "format_failure_taxonomy.csv")
+        (pred_dir / "repair_summary.json").write_text(json.dumps(repair_summary, ensure_ascii=False, indent=2), encoding="utf-8")
         write_manifest(
             out_dir / "manifest.json",
             build_manifest(

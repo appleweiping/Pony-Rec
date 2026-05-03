@@ -25,6 +25,7 @@ from transformers import (
 
 from src.cli.run_lora_debug_reprocessed import _gpu_mem_snapshot, _infer_split, validate_reprocess_candidate_rows
 from src.data.protocol import read_jsonl, write_jsonl
+from src.parsing import write_failure_taxonomy_csv
 from src.utils.exp_io import load_yaml
 from src.utils.manifest import backend_type_from_name, build_manifest, write_manifest
 from src.utils.research_artifacts import config_hash, git_commit_or_unknown, utc_timestamp
@@ -347,7 +348,7 @@ def _run_infer_for_adapter(
             "backend_type": backend_type_from_name("lora"),
             "is_paper_result": False,
         }
-        raw_rows, parsed_rows, pred_rows = asyncio.run(
+        raw_rows, parsed_rows, pred_rows, taxonomy_rows, repair_summary = asyncio.run(
             _infer_split(
                 samples=samples,
                 item_lookup=item_lookup,
@@ -367,6 +368,8 @@ def _run_infer_for_adapter(
         write_jsonl(parsed_rows, pred_dir / "parsed_responses.jsonl")
         pred_path = pred_dir / "rank_predictions.jsonl"
         write_jsonl(pred_rows, pred_path)
+        write_failure_taxonomy_csv(taxonomy_rows, pred_dir / "format_failure_taxonomy.csv")
+        (pred_dir / "repair_summary.json").write_text(json.dumps(repair_summary, ensure_ascii=False, indent=2), encoding="utf-8")
         write_manifest(
             run_dir / "manifest.json",
             build_manifest(
