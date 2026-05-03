@@ -14,12 +14,18 @@ import numpy as np
 
 from src.data.protocol import read_jsonl, write_jsonl
 from src.uncertainty.calibration import (
+    aggregate_calibration_batch,
     build_calibration_diagnostic_rows,
     group_calibration_by_popularity_bucket,
     high_confidence_error_by_bucket,
     reliability_bins,
     summarize_calibration_diagnostics,
 )
+
+_KNOWN_DOMAINS = frozenset(
+    {"amazon_beauty", "amazon_books", "amazon_electronics", "amazon_movies"}
+)
+_KNOWN_SPLITS = frozenset({"valid", "test", "train"})
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,6 +43,11 @@ def parse_args() -> argparse.Namespace:
         "--batch_glob",
         default=None,
         help="Recursive glob of rank_predictions.jsonl (e.g. outputs/pilots/deepseek_*/**/rank_predictions.jsonl).",
+    )
+    p.add_argument(
+        "--no_aggregate",
+        action="store_true",
+        help="With --batch_glob, skip writing calibration_aggregate.csv.",
     )
     return p.parse_args()
 
@@ -76,6 +87,15 @@ def _safe_subdir(output_dir: Path, pred_path: Path, cwd: Path) -> Path:
     key = "__".join(rel.parts)
     key = re.sub(r"[^\w.\-]+", "_", key)[:200]
     return output_dir / key
+
+
+def _batch_subdir(output_dir: Path, pred_path: Path, cwd: Path) -> Path:
+    """Prefer ``{domain}_{split}`` when path matches ``.../<domain>/<split>/predictions/rank_predictions.jsonl``."""
+    parts = pred_path.parts
+    for i, p in enumerate(parts):
+        if p in _KNOWN_DOMAINS and i + 1 < len(parts) and parts[i + 1] in _KNOWN_SPLITS:
+            return output_dir / f"{p}_{parts[i + 1]}"
+    return _safe_subdir(output_dir, pred_path, cwd)
 
 
 def _run_one(
@@ -142,10 +162,15 @@ def main() -> None:
             print(f"[calibration_diagnostics] no files matched: {args.batch_glob}")
             return
         for pred_path in paths:
-            sub = _safe_subdir(out_root, pred_path, cwd)
+            sub = _batch_subdir(out_root, pred_path, cwd)
             feat = Path(args.features_path) if args.features_path else _default_features_path(pred_path)
             _run_one(pred_path, feat, sub, confidence_field=args.confidence_field, num_bins=int(args.num_bins))
             print(f"[calibration_diagnostics] wrote {sub}")
+        if not args.no_aggregate:
+            agg = aggregate_calibration_batch(out_root)
+            agg_path = out_root / "calibration_aggregate.csv"
+            _write_csv(agg, agg_path)
+            print(f"[calibration_diagnostics] aggregate {agg_path} ({len(agg)} rows)")
         return
 
     if not args.predictions_path:

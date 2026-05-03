@@ -10,6 +10,7 @@ from src.cli.run_calibration_diagnostics import main as diag_main
 from src.data.protocol import read_jsonl, write_jsonl
 from src.uncertainty.calibration import (
     adaptive_ece,
+    aggregate_calibration_batch,
     brier_score,
     build_calibration_diagnostic_rows,
     compare_confidence_sources,
@@ -104,6 +105,46 @@ def test_adaptive_ece_finite() -> None:
     p = np.asarray([0.1, 0.9, 0.15, 0.85, 0.2, 0.8], dtype=float)
     v = adaptive_ece(y, p, n_bins=3)
     assert np.isfinite(v)
+
+
+def test_aggregate_calibration_batch(tmp_path: Path) -> None:
+    sub = tmp_path / "amazon_beauty_valid"
+    sub.mkdir(parents=True)
+    rows = [
+        {
+            "domain": "amazon_beauty",
+            "split": "valid",
+            "confidence": 0.9,
+            "is_correct_at_1": False,
+            "popularity_bucket": "head",
+        },
+        {
+            "domain": "amazon_beauty",
+            "split": "valid",
+            "confidence": 0.3,
+            "is_correct_at_1": True,
+            "popularity_bucket": "tail",
+        },
+    ]
+    from src.data.protocol import write_jsonl
+
+    write_jsonl(rows, str(sub / "calibration_rows.jsonl"))
+    summary = {
+        "ece": 0.4,
+        "adaptive_ece": 0.35,
+        "brier": 0.3,
+        "high_confidence_wrong_rate": 1.0,
+        "low_confidence_correct_rate": 1.0,
+        "auroc": 0.5,
+        "predictions_path": "/tmp/x.jsonl",
+    }
+    (sub / "calibration_summary.json").write_text(json.dumps(summary), encoding="utf-8")
+    agg = aggregate_calibration_batch(tmp_path)
+    assert len(agg) == 1
+    assert agg[0]["domain"] == "amazon_beauty"
+    assert agg[0]["rows"] == 2
+    assert agg[0]["head_high_confidence_wrong_rate"] == 1.0
+    assert agg[0]["tail_low_confidence_correct_rate"] == 1.0
 
 
 def test_cli_smoke_tiny_fixture(tmp_path: Path) -> None:

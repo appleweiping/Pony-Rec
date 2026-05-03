@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 import math
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import numpy as np
@@ -640,3 +642,97 @@ def summarize_calibration_diagnostics(
         "low_confidence_correct_rate": float(low_confidence_correct_rate(c_arr, y_arr.astype(bool))),
         "compare_confidence_sources": src,
     }
+
+
+def _mean_confidence_by_bucket(rows: list[dict[str, Any]], bucket: str) -> float:
+    vals: list[float] = []
+    for r in rows:
+        if str(r.get("popularity_bucket", "")).lower() != bucket:
+            continue
+        try:
+            c = float(r["confidence"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if np.isfinite(c):
+            vals.append(float(c))
+    return float(np.mean(vals)) if vals else float("nan")
+
+
+def _rate_head_high_conf_wrong(rows: list[dict[str, Any]], *, conf_thresh: float = 0.7) -> float:
+    sub = [
+        r
+        for r in rows
+        if str(r.get("popularity_bucket", "")).lower() == "head"
+        and r.get("confidence") is not None
+        and np.isfinite(float(r["confidence"]))
+        and float(r["confidence"]) >= conf_thresh
+    ]
+    if not sub:
+        return float("nan")
+    return float(np.mean([1.0 - float(bool(r.get("is_correct_at_1"))) for r in sub]))
+
+
+def _rate_tail_low_conf_correct(rows: list[dict[str, Any]], *, conf_thresh: float = 0.4) -> float:
+    sub = [
+        r
+        for r in rows
+        if str(r.get("popularity_bucket", "")).lower() == "tail"
+        and r.get("confidence") is not None
+        and np.isfinite(float(r["confidence"]))
+        and float(r["confidence"]) <= conf_thresh
+    ]
+    if not sub:
+        return float("nan")
+    return float(np.mean([float(bool(r.get("is_correct_at_1"))) for r in sub]))
+
+
+def aggregate_calibration_batch(batch_root: Path) -> list[dict[str, Any]]:
+    """One CSV row per ``*/calibration_summary.json`` under ``batch_root`` (batch CLI layout)."""
+    out: list[dict[str, Any]] = []
+    for summ_path in sorted(batch_root.glob("*/calibration_summary.json")):
+        subdir = summ_path.parent
+        rows_path = subdir / "calibration_rows.jsonl"
+        if not rows_path.is_file():
+            continue
+        from src.data.protocol import read_jsonl  # local import avoids cycles at import time
+
+        rows = read_jsonl(str(rows_path))
+        summary = json.loads(summ_path.read_text(encoding="utf-8"))
+        n = len(rows)
+        finite = 0
+        for r in rows:
+            try:
+                c = float(r["confidence"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if np.isfinite(c):
+                finite += 1
+        conf_avail = float(finite / n) if n else float("nan")
+        domain = str(rows[0].get("domain", "")) if rows else ""
+        split = str(rows[0].get("split", "")) if rows else ""
+        auroc = summary.get("auroc", float("nan"))
+        try:
+            auroc_f = float(auroc) if auroc is not None and np.isfinite(float(auroc)) else float("nan")
+        except (TypeError, ValueError):
+            auroc_f = float("nan")
+        out.append(
+            {
+                "domain": domain,
+                "split": split,
+                "rows": n,
+                "confidence_available_rate": conf_avail,
+                "ECE": float(summary.get("ece", float("nan"))),
+                "adaptive_ECE": float(summary.get("adaptive_ece", float("nan"))),
+                "Brier": float(summary.get("brier", float("nan"))),
+                "high_confidence_wrong_rate": float(summary.get("high_confidence_wrong_rate", float("nan"))),
+                "low_confidence_correct_rate": float(summary.get("low_confidence_correct_rate", float("nan"))),
+                "head_confidence_mean": _mean_confidence_by_bucket(rows, "head"),
+                "mid_confidence_mean": _mean_confidence_by_bucket(rows, "mid"),
+                "tail_confidence_mean": _mean_confidence_by_bucket(rows, "tail"),
+                "head_high_confidence_wrong_rate": _rate_head_high_conf_wrong(rows),
+                "tail_low_confidence_correct_rate": _rate_tail_low_conf_correct(rows),
+                "confidence_correctness_auc": auroc_f,
+                "predictions_path": summary.get("predictions_path", ""),
+            }
+        )
+    return out
