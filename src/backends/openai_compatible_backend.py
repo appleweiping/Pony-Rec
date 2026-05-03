@@ -9,7 +9,19 @@ import time
 from pathlib import Path
 from typing import Any
 
-from openai import APIConnectionError, APITimeoutError, AsyncOpenAI, RateLimitError
+try:
+    from openai import APIConnectionError, APITimeoutError, AsyncOpenAI, RateLimitError
+except ImportError:  # pragma: no cover - exercised when optional OpenAI deps are absent.
+    AsyncOpenAI = None  # type: ignore[assignment]
+
+    class APIConnectionError(Exception):
+        pass
+
+    class APITimeoutError(Exception):
+        pass
+
+    class RateLimitError(Exception):
+        pass
 
 from src.backends.base import GenerationRequest, GenerationResponse
 from src.utils.research_artifacts import stable_json_dumps
@@ -105,6 +117,8 @@ class OpenAICompatibleBackend:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
         if self.raw_response_dir:
             self.raw_response_dir.mkdir(parents=True, exist_ok=True)
+        if AsyncOpenAI is None:
+            raise ImportError("OpenAI-compatible backends require the optional openai dependency and its runtime deps")
         self.client = AsyncOpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
 
     def _request_payload(self, request: GenerationRequest, kwargs: dict[str, Any]) -> dict[str, Any]:

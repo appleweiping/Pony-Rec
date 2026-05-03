@@ -23,14 +23,21 @@ Recovery run from:
 - Driver: `570.211.01`
 - CUDA shown by `nvidia-smi`: `12.8`
 
-- DeepSeek key presence: `DEEPSEEK_API_KEY present: False`
+- DeepSeek key presence after sourcing `.env`: `True`
+- DeepSeek key placeholder check: `False`
+- DeepSeek key length: `35`
 - Qwen3-8B local model: configured in `configs/model/qwen3_8b_local.yaml` as `/home/ajifang/models/Qwen/Qwen3-8B`; that directory exists and contains local safetensor shards.
 
 ## Stable LoRA Environment
 
 - Existing `.venv` preserved for debugging; it was not modified.
 - New environment path: `/home/ajifang/projects/fresh/uncertainty-llm4rec/.venv_lora`
+- Environment type: conda prefix environment, not a standard `python -m venv` layout.
+- `conda-meta`: present.
+- `.venv_lora/bin/python3.11`: present.
+- `.venv_lora/bin/activate`: absent; this is expected for this conda-prefix verification path.
 - Python executable: `/home/ajifang/projects/fresh/uncertainty-llm4rec/.venv_lora/bin/python`
+- Direct interpreter path verified: `/home/ajifang/projects/fresh/uncertainty-llm4rec/.venv_lora/bin/python3.11`
 - Python version: `3.11.15`
 - Environment creation note: `python3.11` and `python3.12` were not available on `PATH`, so `.venv_lora` was created as an isolated conda-prefix environment with Python 3.11 at the requested path.
 - Torch version: `2.4.1+cu124`
@@ -51,6 +58,10 @@ python -m pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index
   - `peft==0.12.0`
 - bitsandbytes: `0.43.3`
 - bitsandbytes import: passed.
+- Direct-path imports verified: `transformers`, `accelerate`, `peft`, and `bitsandbytes` all imported successfully through `.venv_lora/bin/python3.11`.
+- `conda run -p /home/ajifang/projects/fresh/uncertainty-llm4rec/.venv_lora ...`: available and verified.
+- `conda run` Python executable: `/home/ajifang/projects/fresh/uncertainty-llm4rec/.venv_lora/bin/python`
+- `conda run` CUDA availability: `True`
 
 ## Pytest
 
@@ -84,6 +95,44 @@ The broader requested filename scan also found many processed Amazon-domain arti
 ## Blockers Before Live Tests
 
 - Use the new `.venv_lora` environment for LoRA/local-model work; the default `python3` is still Python 3.13.
-- Make `DEEPSEEK_API_KEY` available in the shell before any DeepSeek live run.
+- `.env` contains a non-placeholder-looking `DEEPSEEK_API_KEY`.
 - Confirm/copy required raw datasets into the fresh clone, because `data/raw` is empty or absent there.
 - Do not treat older processed artifacts under `/home/ajifang/projects/*` as source-of-truth raw data without verification.
+
+## DeepSeek Tiny Live Test
+
+- Preflight command:
+
+```bash
+set -a
+source .env
+set +a
+.venv_lora/bin/python3.11 - <<'PY'
+import os, sys, torch
+k = os.environ.get("DEEPSEEK_API_KEY", "")
+print("python:", sys.executable)
+print("DEEPSEEK_API_KEY present:", bool(k))
+print("looks_like_placeholder:", any(s in k for s in ["这里", "你的", "真实key", "DeepSeekKey"]))
+print("key_length:", len(k))
+print("torch:", torch.__version__)
+print("cuda_available:", torch.cuda.is_available())
+print("device:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "none")
+PY
+```
+
+- Live test command:
+
+```bash
+PYTHON=.venv_lora/bin/python3.11 bash scripts/test_deepseek_live.sh
+```
+
+- Python path used: `/home/ajifang/projects/fresh/uncertainty-llm4rec/.venv_lora/bin/python3.11`
+- DeepSeek model used: `deepseek-v4-flash`
+- Raw response output path: `outputs/deepseek_live_test/raw_responses.jsonl`
+- Parsed response output path: `outputs/deepseek_live_test/parsed_responses.jsonl`
+- Combined output path: `outputs/deepseek_live_test/deepseek_live_results.json`
+- Manifest path: `outputs/deepseek_live_test/manifest.json`
+- Latency logging status: enabled (`latency_seconds` recorded per request).
+- Token logging status: enabled (`token_usage` recorded per request).
+- Result: success (`3` raw responses and `3` parsed responses written).
+- Backend/config/script fix: `scripts/test_deepseek_live.sh` already respected `${PYTHON:-python}`, but the original backend import path failed because the current environment does not include `pydantic`, which is required by the installed `openai` SDK. Per the no-install constraint, the script was patched to use a direct `httpx` DeepSeek chat-completions tiny call while preserving config-driven model selection, parsing, config hash, latency logging, token logging, and manifest output.

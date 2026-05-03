@@ -147,6 +147,7 @@ __marimo__/
 # =========================
 data/raw/
 data/processed/
+data/processed_clean/
 data/cache/
 
 # =========================
@@ -219,6 +220,8 @@ baseline/
 !configs/baseline/**
 docs/version3/
 docs/
+!docs/
+!docs/REPROCESS_PROCESSED_SOURCE.md
 tmp_outputs/
 tmp_pycache/
 docs.zip
