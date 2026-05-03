@@ -99,10 +99,21 @@ From `parsed_responses.jsonl`, **`invalid_output: true` for 20/20 rows** on both
 4. **Confidence:** either extend the prompt + parse path for verbalized confidence or treat LoRA pilots as **ranking-only** in analysis.
 5. **Deprecation:** Transformers may warn that `torch_dtype` is deprecated in favor of `dtype` when loading the causal LM; harmless for now, can be cleaned in `run_lora_debug_reprocessed` / backend loaders.
 
+## Uncertainty probe (Section 13 step 2)
+
+After `rank_predictions.jsonl` exists:
+
+```bash
+.venv_lora/bin/python3.11 -m src.cli.run_uncertainty_probe \
+  --predictions_path outputs/pilots/lora_qwen3_8b_processed_20u_c19_seed42_debug/amazon_beauty/valid/predictions/rank_predictions.jsonl
+```
+
+Writes `uncertainty_features.jsonl` and `uncertainty_probe_summary.json` next to the predictions file.
+
 ## Tests
 
 ```bash
 .venv_lora/bin/python3.11 -m pytest
 ```
 
-Relevant tests: `tests/test_lora_debug_reprocessed_validation.py`, `tests/test_phase1_backend_manifest_baselines.py`.
+Relevant tests: `tests/test_lora_debug_reprocessed_validation.py`, `tests/test_phase1_backend_manifest_baselines.py`, `tests/test_uncertainty_features_probe.py`.
