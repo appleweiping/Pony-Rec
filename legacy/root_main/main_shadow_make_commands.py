@@ -42,11 +42,19 @@ def _quote(value: str | Path) -> str:
     return shlex.quote(text)
 
 
+_ROOT_MAIN_DIR = Path(__file__).resolve().parent
+
+
+def _lm(script: str) -> str:
+    """Shell-quoted path to a script in this legacy directory."""
+    return str(_quote(_ROOT_MAIN_DIR / script))
+
+
 def _noisy_build_command(clean_path: str, noisy_path: str, *, seed: str, python_cmd: str) -> str:
     return _shell_join(
         [
             "test -f", _quote(noisy_path),
-            f"|| {python_cmd} main_generate_noisy.py",
+            f"|| {python_cmd} {_lm('main_generate_noisy.py')}",
             "--input_path", _quote(clean_path),
             "--output_path", _quote(noisy_path),
             "--noise_level 0.1",
@@ -105,7 +113,7 @@ def build_commands(
         commands.append(
             _shell_join(
                 [
-                    f"{python_cmd} main_rank.py",
+                    f"{python_cmd} {_lm('main_rank.py')}",
                     "--exp_name", rank_exp,
                     "--input_path", domain_cfg["ranking_test_path"],
                     "--model_config", domain_cfg["rank_model_config"],
@@ -125,7 +133,7 @@ def build_commands(
             commands.append(
                 _shell_join(
                     [
-                        f"{python_cmd} main_rank.py",
+                        f"{python_cmd} {_lm('main_rank.py')}",
                         "--exp_name", noisy_rank_exp,
                         "--input_path", domain_cfg["noisy_ranking_test_path"],
                         "--model_config", domain_cfg["rank_model_config"],
@@ -147,7 +155,7 @@ def build_commands(
                 commands.append(
                     _shell_join(
                         [
-                            f"{python_cmd} main_build_shadow_v6_bridge.py",
+                            f"{python_cmd} {_lm('main_build_shadow_v6_bridge.py')}",
                             "--exp_name", bridge_exp,
                             "--rank_input_path", f"{output_root}/{rank_exp}/predictions/rank_predictions.jsonl",
                             "--signal_input_path", f"{output_root}/{signal_pointwise_exp}/calibrated/test_calibrated.jsonl",
@@ -166,7 +174,7 @@ def build_commands(
                     commands.append(
                         _shell_join(
                             [
-                                f"{python_cmd} main_build_shadow_v6_bridge.py",
+                                f"{python_cmd} {_lm('main_build_shadow_v6_bridge.py')}",
                                 "--exp_name", noisy_bridge_exp,
                                 "--rank_input_path", f"{output_root}/{noisy_rank_exp}/predictions/rank_predictions.jsonl",
                                 "--signal_input_path", f"{output_root}/{noisy_signal_pointwise_exp}/calibrated/test_calibrated.jsonl",
@@ -187,7 +195,7 @@ def build_commands(
                 [
                     _shell_join(
                         [
-                            f"{python_cmd} main_infer.py",
+                            f"{python_cmd} {_lm('main_infer.py')}",
                             "--exp_name", pointwise_exp,
                             "--input_path", domain_cfg["pointwise_valid_path"],
                             "--split_name valid",
@@ -204,7 +212,7 @@ def build_commands(
                     ),
                     _shell_join(
                         [
-                            f"{python_cmd} main_infer.py",
+                            f"{python_cmd} {_lm('main_infer.py')}",
                             "--exp_name", pointwise_exp,
                             "--input_path", domain_cfg["pointwise_test_path"],
                             "--split_name test",
@@ -219,8 +227,8 @@ def build_commands(
                             "--seed", seed,
                         ]
                     ),
-                    f"{python_cmd} main_eval_shadow.py --exp_name {pointwise_exp} --output_root {output_root} --score_col shadow_score --seed {seed}",
-                    f"{python_cmd} main_calibrate_shadow.py --exp_name {pointwise_exp} --shadow_variant {variant} --output_root {output_root} --score_col shadow_score --method isotonic",
+                    f"{python_cmd} {_lm('main_eval_shadow.py')} --exp_name {pointwise_exp} --output_root {output_root} --score_col shadow_score --seed {seed}",
+                    f"{python_cmd} {_lm('main_calibrate_shadow.py')} --exp_name {pointwise_exp} --shadow_variant {variant} --output_root {output_root} --score_col shadow_score --method isotonic",
                 ]
             )
 
@@ -228,7 +236,7 @@ def build_commands(
             commands.append(
                 _shell_join(
                     [
-                        f"{python_cmd} main_rank_rerank.py",
+                        f"{python_cmd} {_lm('main_rank_rerank.py')}",
                         "--exp_name", rank_exp,
                         "--new_exp_name", rerank_exp,
                         "--uncertainty_exp_name", pointwise_exp,
@@ -251,7 +259,7 @@ def build_commands(
                 [
                     _shell_join(
                         [
-                            f"{python_cmd} main_infer.py",
+                            f"{python_cmd} {_lm('main_infer.py')}",
                             "--exp_name", noisy_pointwise_exp,
                             "--input_path", domain_cfg["noisy_valid_path"],
                             "--split_name valid",
@@ -268,7 +276,7 @@ def build_commands(
                     ),
                     _shell_join(
                         [
-                            f"{python_cmd} main_infer.py",
+                            f"{python_cmd} {_lm('main_infer.py')}",
                             "--exp_name", noisy_pointwise_exp,
                             "--input_path", domain_cfg["noisy_test_path"],
                             "--split_name test",
@@ -283,15 +291,15 @@ def build_commands(
                             "--seed", seed,
                         ]
                     ),
-                    f"{python_cmd} main_eval_shadow.py --exp_name {noisy_pointwise_exp} --output_root {output_root} --score_col shadow_score --seed {seed}",
-                    f"{python_cmd} main_calibrate_shadow.py --exp_name {noisy_pointwise_exp} --shadow_variant {variant} --output_root {output_root} --score_col shadow_score --method isotonic",
+                    f"{python_cmd} {_lm('main_eval_shadow.py')} --exp_name {noisy_pointwise_exp} --output_root {output_root} --score_col shadow_score --seed {seed}",
+                    f"{python_cmd} {_lm('main_calibrate_shadow.py')} --exp_name {noisy_pointwise_exp} --shadow_variant {variant} --output_root {output_root} --score_col shadow_score --method isotonic",
                 ]
             )
             noisy_rerank_exp = f"{rerank_exp}_noisy_nl10"
             commands.append(
                 _shell_join(
                     [
-                        f"{python_cmd} main_rank_rerank.py",
+                        f"{python_cmd} {_lm('main_rank_rerank.py')}",
                         "--exp_name", noisy_rank_exp,
                         "--new_exp_name", noisy_rerank_exp,
                         "--uncertainty_exp_name", noisy_pointwise_exp,
@@ -308,7 +316,7 @@ def build_commands(
             )
 
     commands.append(
-        f"{python_cmd} main_compare_shadow_line.py --scenario {scenario} --variants {','.join(variants)} --domains {','.join(domains)}"
+        f"{python_cmd} {_lm('main_compare_shadow_line.py')} --scenario {scenario} --variants {','.join(variants)} --domains {','.join(domains)}"
     )
     return commands
 

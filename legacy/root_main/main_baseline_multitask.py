@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from main_rank_rerank import save_table
+from legacy.root_main.main_rank_rerank import save_table
 from src.methods.baseline_ranker_multitask import (
     build_pairwise_plain_baseline_rows,
     build_pointwise_baseline_compare_rows,

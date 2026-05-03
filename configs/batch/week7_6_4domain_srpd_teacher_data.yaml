@@ -14,7 +14,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_books_srpd_v1.yaml
     input_path: outputs/books_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_books_small/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_books_srpd_v1.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_books_srpd_v1.yaml
     notes: Build Books SRPD-v1 teacher data from DeepSeek compact evidence.
 
   - exp_name: books_srpd_v2_teacher_data
@@ -26,7 +26,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_books_srpd_v2.yaml
     input_path: outputs/books_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_books_small/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_books_srpd_v2.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_books_srpd_v2.yaml
     notes: Build Books SRPD-v2 teacher data from DeepSeek compact evidence.
 
   - exp_name: movies_srpd_v1_teacher_data
@@ -38,7 +38,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_movies_srpd_v1.yaml
     input_path: outputs/movies_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_movies_small/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_movies_srpd_v1.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_movies_srpd_v1.yaml
     notes: Build Movies SRPD-v1 teacher data from DeepSeek compact evidence.
 
   - exp_name: movies_srpd_v2_teacher_data
@@ -50,7 +50,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_movies_srpd_v2.yaml
     input_path: outputs/movies_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_movies_small/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_movies_srpd_v2.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_movies_srpd_v2.yaml
     notes: Build Movies SRPD-v2 teacher data from DeepSeek compact evidence.
 
   - exp_name: electronics_srpd_v1_teacher_data
@@ -62,7 +62,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_electronics_srpd_v1.yaml
     input_path: outputs/electronics_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_electronics_small/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_electronics_srpd_v1.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_electronics_srpd_v1.yaml
     notes: Build Electronics SRPD-v1 teacher data from DeepSeek compact evidence.
 
   - exp_name: electronics_srpd_v2_teacher_data
@@ -74,5 +74,5 @@ experiments:
     config_path: configs/srpd/qwen3_rank_electronics_srpd_v2.yaml
     input_path: outputs/electronics_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_electronics_small/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_electronics_srpd_v2.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_electronics_srpd_v2.yaml
     notes: Build Electronics SRPD-v2 teacher data from DeepSeek compact evidence.

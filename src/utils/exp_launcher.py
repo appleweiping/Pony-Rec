@@ -10,16 +10,20 @@ from src.utils.exp_io import load_yaml
 from src.utils.exp_registry import now_iso
 
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+_LEGACY_ROOT_MAIN = REPO_ROOT / "legacy" / "root_main"
+
+
 TASK_SCRIPT_MAP = {
-    "pointwise_yesno": "main_infer.py",
-    "pointwise": "main_infer.py",
-    "candidate_ranking": "main_rank.py",
-    "ranking": "main_rank.py",
-    "pairwise_preference": "main_pairwise.py",
-    "pairwise": "main_pairwise.py",
-    "candidate_ranking_rerank": "main_rank_rerank.py",
-    "rank_rerank": "main_rank_rerank.py",
-    "rerank": "main_rank_rerank.py",
+    "pointwise_yesno": str(_LEGACY_ROOT_MAIN / "main_infer.py"),
+    "pointwise": str(_LEGACY_ROOT_MAIN / "main_infer.py"),
+    "candidate_ranking": str(_LEGACY_ROOT_MAIN / "main_rank.py"),
+    "ranking": str(_LEGACY_ROOT_MAIN / "main_rank.py"),
+    "pairwise_preference": str(_LEGACY_ROOT_MAIN / "main_pairwise.py"),
+    "pairwise": str(_LEGACY_ROOT_MAIN / "main_pairwise.py"),
+    "candidate_ranking_rerank": str(_LEGACY_ROOT_MAIN / "main_rank_rerank.py"),
+    "rank_rerank": str(_LEGACY_ROOT_MAIN / "main_rank_rerank.py"),
+    "rerank": str(_LEGACY_ROOT_MAIN / "main_rank_rerank.py"),
 }
 
 

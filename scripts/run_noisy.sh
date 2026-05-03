@@ -18,18 +18,18 @@ echo "======================================"
 echo " Running NOISY experiment "
 echo "======================================"
 
-python main_infer.py \
+python legacy/root_main/main_infer.py \
   --exp_name noisy \
   --input_path data/processed/movielens_1m/test_noisy.jsonl \
   --overwrite
 
-python main_eval.py \
+python legacy/root_main/main_eval.py \
   --exp_name noisy
 
-python main_calibrate.py \
+python legacy/root_main/main_calibrate.py \
   --exp_name noisy
 
-python main_rerank.py \
+python legacy/root_main/main_rerank.py \
   --exp_name noisy \
   --lambda_penalty 0.5
 

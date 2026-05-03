@@ -9,14 +9,14 @@ PYTHON_BIN="${PYTHON_BIN:-python}"
 
 cd "$REPO_DIR"
 
-"$PYTHON_BIN" main_backend_check.py \
+"$PYTHON_BIN" legacy/root_main/main_backend_check.py \
   --model_config "$MODEL_CONFIG" \
   --status_path "$STATUS_PATH"
 
 if [[ "$RUN_SMOKE" == "1" ]]; then
-  "$PYTHON_BIN" main_infer.py --config configs/exp/beauty_qwen3_local_pointwise_smoke.yaml
-  "$PYTHON_BIN" main_rank.py --config configs/exp/beauty_qwen3_local_rank_smoke.yaml
-  "$PYTHON_BIN" main_pairwise.py --config configs/exp/beauty_qwen3_local_pairwise_smoke.yaml
+  "$PYTHON_BIN" legacy/root_main/main_infer.py --config configs/exp/beauty_qwen3_local_pointwise_smoke.yaml
+  "$PYTHON_BIN" legacy/root_main/main_rank.py --config configs/exp/beauty_qwen3_local_rank_smoke.yaml
+  "$PYTHON_BIN" legacy/root_main/main_pairwise.py --config configs/exp/beauty_qwen3_local_pairwise_smoke.yaml
 fi
 
 echo "Week7 Day1 server backend check finished."

@@ -9,7 +9,7 @@ experiments:
     method_family: trainable_lora_framework
     method_variant: qwen3_rank_beauty_framework_v1
     is_current_best_family: false
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml --startup_check
     output_dir: outputs/summary
     notes: Week7.5 Day2 startup validation for the Beauty ranking LoRA framework.
 
@@ -20,7 +20,7 @@ experiments:
     method_family: trainable_lora_framework
     method_variant: qwen3_rank_beauty_framework_v1
     is_current_best_family: false
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml
     output_dir: artifacts/adapters/qwen3_rank_beauty_framework_v1
     notes: First Beauty-domain LoRA framework training run.
 
@@ -31,7 +31,7 @@ experiments:
     method_family: trainable_lora_framework
     method_variant: qwen3_rank_beauty_framework_v1
     is_current_best_family: false
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml --overwrite
     output_dir: outputs/beauty_qwen3_rank_framework_v1
     notes: Evaluate the first LoRA-adapted framework checkpoint under the standard ranking metrics.
 
@@ -42,7 +42,7 @@ experiments:
     method_family: trainable_lora_framework
     method_variant: qwen3_rank_beauty_framework_v1
     is_current_best_family: false
-    command: python main_compare_framework.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml
+    command: python legacy/root_main/main_compare_framework.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml
     output_dir: outputs/summary
     notes: Refresh the framework compare CSV and markdown summary after evaluation.
 
@@ -53,6 +53,6 @@ experiments:
     method_family: trainable_lora_framework
     method_variant: qwen3_rank_beauty_framework_v1
     is_current_best_family: false
-    command: python main_prepare_speed_upgrade.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml
+    command: python legacy/root_main/main_prepare_speed_upgrade.py --config configs/lora/qwen3_rank_beauty_framework_v1.yaml
     output_dir: outputs/summary
     notes: Refresh the non-destructive speed-up plan after compare so that week8 entry keeps the same research scope.

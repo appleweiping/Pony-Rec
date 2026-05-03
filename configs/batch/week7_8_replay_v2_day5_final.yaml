@@ -9,7 +9,7 @@ experiments:
     model: summary_only
     method_family: local_hf_lora_replay
     method_variant: teacher_requested_local8b_lora_mainline_final
-    command: python main_compare_teacher_requested_line.py --mode final
+    command: python legacy/root_main/main_compare_teacher_requested_line.py --mode final
     output_dir: outputs/summary
     enabled: true
     notes: Build the formal Week7.8 final handoff table by joining the Day2 pointwise, Day3 rerank, and Day4 robustness summaries.

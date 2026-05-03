@@ -6,7 +6,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from main_rank_rerank import build_result_row, infer_domain_name, infer_model_name, load_jsonl, save_jsonl, save_table
+from legacy.root_main.main_rank_rerank import build_result_row, infer_domain_name, infer_model_name, load_jsonl, save_jsonl, save_table
 from src.methods.uncertainty_pairwise_aggregator import (
     aggregate_pairwise_preferences,
     build_pairwise_preference_rows,

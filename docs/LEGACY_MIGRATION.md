@@ -1,6 +1,6 @@
 # Legacy Migration
 
-The supported Phase-1 interface is `python -m src.cli.*`. Legacy `main_*.py` scripts remain only as historical implementation references until their remaining useful logic is migrated and tested.
+The supported Phase-1 interface is `python -m src.cli.*`. Former repo-root `main_*.py` files now live under `legacy/root_main/` as historical references until their remaining useful logic is migrated and tested.
 
 ## Superseded Entry Points
 

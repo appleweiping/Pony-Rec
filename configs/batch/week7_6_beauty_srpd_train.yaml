@@ -14,7 +14,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_beauty_srpd_v1.yaml
     input_path: outputs/beauty_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_beauty/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v1.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v1.yaml
     notes: Build structured-risk teacher SFT data for SRPD-v1.
 
   - exp_name: build_srpd_v2_teacher_data
@@ -26,7 +26,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_beauty_srpd_v2.yaml
     input_path: outputs/beauty_deepseek_rank_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_beauty/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v2.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v2.yaml
     notes: Build uncertainty-weighted structured-risk teacher data for SRPD-v2.
 
   - exp_name: build_srpd_v3_teacher_data
@@ -38,7 +38,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_beauty_srpd_v3.yaml
     input_path: outputs/beauty_deepseek_pairwise_coverage_to_rank/tables/pairwise_preference_rows.csv
     output_dir: data/processed/amazon_beauty/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v3.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v3.yaml
     notes: Build pairwise-preference-enhanced SRPD-v3 data.
 
   - exp_name: srpd_v1_startup_check
@@ -50,7 +50,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v1.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v1_train.jsonl
     output_dir: outputs/summary
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1.yaml --startup_check
     notes: Validate SRPD-v1 train/eval inputs before training.
 
   - exp_name: srpd_v1_train
@@ -62,7 +62,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v1.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v1_train.jsonl
     output_dir: artifacts/adapters/qwen3_rank_beauty_srpd_v1
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1.yaml
     notes: Train SRPD-v1 structured-risk teacher SFT adapter.
 
   - exp_name: srpd_v1_eval
@@ -74,7 +74,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v1.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_rank_srpd_v1
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1.yaml --overwrite
     notes: Evaluate SRPD-v1 on Beauty candidate ranking.
 
   - exp_name: srpd_v2_startup_check
@@ -86,7 +86,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v2_train.jsonl
     output_dir: outputs/summary
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2.yaml --startup_check
     notes: Validate SRPD-v2 train/eval inputs before training.
 
   - exp_name: srpd_v2_train
@@ -98,7 +98,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v2_train.jsonl
     output_dir: artifacts/adapters/qwen3_rank_beauty_srpd_v2
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2.yaml
     notes: Train SRPD-v2 uncertainty-weighted adapter.
 
   - exp_name: srpd_v2_eval
@@ -110,7 +110,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_rank_srpd_v2
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2.yaml --overwrite
     notes: Evaluate SRPD-v2 on Beauty candidate ranking.
 
   - exp_name: srpd_v3_startup_check
@@ -122,7 +122,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v3_train.jsonl
     output_dir: outputs/summary
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3.yaml --startup_check
     notes: Validate SRPD-v3 train/eval inputs before training.
 
   - exp_name: srpd_v3_train
@@ -134,7 +134,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v3_train.jsonl
     output_dir: artifacts/adapters/qwen3_rank_beauty_srpd_v3
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3.yaml
     notes: Train SRPD-v3 pairwise-preference-enhanced adapter.
 
   - exp_name: srpd_v3_eval
@@ -146,7 +146,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_rank_srpd_v3
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3.yaml --overwrite
     notes: Evaluate SRPD-v3 on Beauty candidate ranking.
 
   - exp_name: srpd_v1_v2_v3_compare
@@ -158,5 +158,5 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/summary
-    command: python main_compare_srpd_frameworks.py
+    command: python legacy/root_main/main_compare_srpd_frameworks.py
     notes: Combine SRPD-v1/v2/v3 framework compare rows after all evaluations finish.

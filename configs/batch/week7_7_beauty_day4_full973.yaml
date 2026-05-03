@@ -14,7 +14,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_pointwise_full.yaml
     input_path: data/processed/amazon_beauty/test.jsonl
     output_dir: outputs/beauty_deepseek_pointwise_full
-    command: python main_infer.py --config configs/exp/beauty_deepseek_pointwise_full.yaml --overwrite
+    command: python legacy/root_main/main_infer.py --config configs/exp/beauty_deepseek_pointwise_full.yaml --overwrite
     notes: Build full-coverage DeepSeek pointwise evidence for Week7.7 day4.
 
   - exp_name: beauty_deepseek_pointwise_full_eval
@@ -26,7 +26,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_pointwise_full.yaml
     input_path: outputs/beauty_deepseek_pointwise_full/predictions/test_raw.jsonl
     output_dir: outputs/beauty_deepseek_pointwise_full
-    command: python main_eval.py --exp_name beauty_deepseek_pointwise_full
+    command: python legacy/root_main/main_eval.py --exp_name beauty_deepseek_pointwise_full
     notes: Materialize diagnostic metrics before calibration.
 
   - exp_name: beauty_deepseek_pointwise_full_calibrate
@@ -38,7 +38,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_pointwise_full.yaml
     input_path: outputs/beauty_deepseek_pointwise_full/predictions/test_raw.jsonl
     output_dir: outputs/beauty_deepseek_pointwise_full
-    command: python main_calibrate.py --exp_name beauty_deepseek_pointwise_full
+    command: python legacy/root_main/main_calibrate.py --exp_name beauty_deepseek_pointwise_full
     notes: Produce calibrated uncertainty for full-coverage DeepSeek teacher construction.
 
   - exp_name: beauty_deepseek_rank_full973
@@ -50,7 +50,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_rank_full973.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_deepseek_rank_full973
-    command: python main_rank.py --config configs/exp/beauty_deepseek_rank_full973.yaml --overwrite
+    command: python legacy/root_main/main_rank.py --config configs/exp/beauty_deepseek_rank_full973.yaml --overwrite
     notes: Expand DeepSeek ranking teacher to the exact full Beauty ranking split of 973 rows.
 
   - exp_name: beauty_deepseek_rank_full973_structured_risk
@@ -62,7 +62,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_rank_full973.yaml
     input_path: outputs/beauty_deepseek_rank_full973/predictions/rank_predictions.jsonl
     output_dir: outputs/beauty_deepseek_rank_full973_structured_risk
-    command: python main_rank_rerank.py --exp_name beauty_deepseek_rank_full973 --new_exp_name beauty_deepseek_rank_full973_structured_risk --uncertainty_exp_name beauty_deepseek_pointwise_full --rerank_variant nonlinear_structured_risk_rerank --uncertainty_source pointwise_calibrated --lambda_penalty 0.5 --gate_topk 3 --tau 0.35 --gamma 2.0 --alpha 1.0 --beta 0.7 --delta 0.5 --coverage_fallback_scale 0.5 --eta 0.02 --k 10
+    command: python legacy/root_main/main_rank_rerank.py --exp_name beauty_deepseek_rank_full973 --new_exp_name beauty_deepseek_rank_full973_structured_risk --uncertainty_exp_name beauty_deepseek_pointwise_full --rerank_variant nonlinear_structured_risk_rerank --uncertainty_source pointwise_calibrated --lambda_penalty 0.5 --gate_topk 3 --tau 0.35 --gamma 2.0 --alpha 1.0 --beta 0.7 --delta 0.5 --coverage_fallback_scale 0.5 --eta 0.02 --k 10
     notes: Build the full Beauty structured-risk teacher used by SRPD full973.
 
   - exp_name: beauty_deepseek_pairwise_full500
@@ -74,7 +74,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_pairwise_coverage_full500.yaml
     input_path: data/processed/amazon_beauty/pairwise_coverage_test.jsonl
     output_dir: outputs/beauty_deepseek_pairwise_coverage_full500
-    command: python main_pairwise.py --config configs/exp/beauty_deepseek_pairwise_coverage_full500.yaml --overwrite
+    command: python legacy/root_main/main_pairwise.py --config configs/exp/beauty_deepseek_pairwise_coverage_full500.yaml --overwrite
     notes: Keep v3 mechanism evidence on the current maximum Beauty pairwise-coverage scope.
 
   - exp_name: beauty_deepseek_pairwise_full500_to_rank
@@ -86,7 +86,7 @@ experiments:
     config_path: configs/exp/beauty_deepseek_pairwise_coverage_full500.yaml
     input_path: outputs/beauty_deepseek_pairwise_coverage_full500/predictions/pairwise_predictions.jsonl
     output_dir: outputs/beauty_deepseek_pairwise_coverage_full500_to_rank
-    command: python main_pairwise_rank.py --pairwise_exp_name beauty_deepseek_pairwise_coverage_full500 --ranking_exp_name beauty_deepseek_rank_full973 --new_exp_name beauty_deepseek_pairwise_coverage_full500_to_rank --uncertainty_exp_name beauty_deepseek_pointwise_full --aggregation_variant weighted_win_count
+    command: python legacy/root_main/main_pairwise_rank.py --pairwise_exp_name beauty_deepseek_pairwise_coverage_full500 --ranking_exp_name beauty_deepseek_rank_full973 --new_exp_name beauty_deepseek_pairwise_coverage_full500_to_rank --uncertainty_exp_name beauty_deepseek_pointwise_full --aggregation_variant weighted_win_count
     notes: Convert Beauty full500 pairwise evidence into the v3 teacher-side preference rows.
 
   - exp_name: beauty_qwen3_pointwise_full_infer
@@ -98,7 +98,7 @@ experiments:
     config_path: configs/exp/beauty_qwen3_local_pointwise_full.yaml
     input_path: data/processed/amazon_beauty/test.jsonl
     output_dir: outputs/beauty_qwen3_local_pointwise_full
-    command: python main_infer.py --config configs/exp/beauty_qwen3_local_pointwise_full.yaml --overwrite
+    command: python legacy/root_main/main_infer.py --config configs/exp/beauty_qwen3_local_pointwise_full.yaml --overwrite
     notes: Align the local-HF uncertainty source with the full Beauty setting.
 
   - exp_name: beauty_qwen3_pointwise_full_eval
@@ -110,7 +110,7 @@ experiments:
     config_path: configs/exp/beauty_qwen3_local_pointwise_full.yaml
     input_path: outputs/beauty_qwen3_local_pointwise_full/predictions/test_raw.jsonl
     output_dir: outputs/beauty_qwen3_local_pointwise_full
-    command: python main_eval.py --exp_name beauty_qwen3_local_pointwise_full
+    command: python legacy/root_main/main_eval.py --exp_name beauty_qwen3_local_pointwise_full
     notes: Evaluate the full local-HF pointwise coverage run.
 
   - exp_name: beauty_qwen3_pointwise_full_calibrate
@@ -122,7 +122,7 @@ experiments:
     config_path: configs/exp/beauty_qwen3_local_pointwise_full.yaml
     input_path: outputs/beauty_qwen3_local_pointwise_full/predictions/test_raw.jsonl
     output_dir: outputs/beauty_qwen3_local_pointwise_full
-    command: python main_calibrate.py --exp_name beauty_qwen3_local_pointwise_full
+    command: python legacy/root_main/main_calibrate.py --exp_name beauty_qwen3_local_pointwise_full
     notes: Produce full-coverage calibrated uncertainty for local structured-risk and SRPD compare.
 
   - exp_name: beauty_qwen3_rank_full973
@@ -134,7 +134,7 @@ experiments:
     config_path: configs/exp/beauty_qwen3_local_rank_full973.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_local_rank_full973
-    command: python main_rank.py --config configs/exp/beauty_qwen3_local_rank_full973.yaml --overwrite
+    command: python legacy/root_main/main_rank.py --config configs/exp/beauty_qwen3_local_rank_full973.yaml --overwrite
     notes: Rebuild the direct local-HF ranking baseline at the same 973-row Beauty scope.
 
   - exp_name: beauty_qwen3_structured_risk_full973
@@ -146,7 +146,7 @@ experiments:
     config_path: configs/exp/beauty_qwen3_local_structured_risk_full973.yaml
     input_path: outputs/beauty_qwen3_local_rank_full973/predictions/rank_predictions.jsonl
     output_dir: outputs/beauty_qwen3_local_structured_risk_full973
-    command: python main_rank_rerank.py --config configs/exp/beauty_qwen3_local_structured_risk_full973.yaml
+    command: python legacy/root_main/main_rank_rerank.py --config configs/exp/beauty_qwen3_local_structured_risk_full973.yaml
     notes: Rebuild the strongest handcrafted baseline at the same 973-row Beauty scope.
 
   - exp_name: beauty_qwen3_pairwise_full500
@@ -158,7 +158,7 @@ experiments:
     config_path: configs/exp/beauty_qwen3_local_pairwise_full500.yaml
     input_path: data/processed/amazon_beauty/pairwise_coverage_test.jsonl
     output_dir: outputs/beauty_qwen3_local_pairwise_full500
-    command: python main_pairwise.py --config configs/exp/beauty_qwen3_local_pairwise_full500.yaml --overwrite
+    command: python legacy/root_main/main_pairwise.py --config configs/exp/beauty_qwen3_local_pairwise_full500.yaml --overwrite
     notes: Keep local pairwise support aligned with the current Beauty pairwise-coverage ceiling.
 
   - exp_name: build_srpd_v1_full973_teacher_data
@@ -170,7 +170,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_beauty_srpd_v1_full973.yaml
     input_path: outputs/beauty_deepseek_rank_full973_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_beauty/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v1_full973.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v1_full973.yaml
     notes: Build full973 SRPD-v1 teacher data.
 
   - exp_name: build_srpd_v2_full973_teacher_data
@@ -182,7 +182,7 @@ experiments:
     config_path: configs/srpd/qwen3_rank_beauty_srpd_v2_full973.yaml
     input_path: outputs/beauty_deepseek_rank_full973_structured_risk/reranked/rank_reranked.jsonl
     output_dir: data/processed/amazon_beauty/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v2_full973.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v2_full973.yaml
     notes: Build full973 SRPD-v2 teacher data.
 
   - exp_name: build_srpd_v3_full973_teacher_data
@@ -194,6 +194,6 @@ experiments:
     config_path: configs/srpd/qwen3_rank_beauty_srpd_v3_full973.yaml
     input_path: outputs/beauty_deepseek_pairwise_coverage_full500_to_rank/tables/pairwise_preference_rows.csv
     output_dir: data/processed/amazon_beauty/srpd
-    command: python main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v3_full973.yaml
+    command: python legacy/root_main/main_build_srpd_rank_data.py --config configs/srpd/qwen3_rank_beauty_srpd_v3_full973.yaml
     notes: Build full973 SRPD-v3 teacher data under the current 500-row pairwise-support ceiling.
 

@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from main_uncertainty_compare import evaluate_estimator
+from legacy.root_main.main_uncertainty_compare import evaluate_estimator
 from src.uncertainty.estimators import ensure_estimator_columns, merge_consistency_outputs
 from src.utils.paths import ensure_exp_dirs
 

@@ -7,7 +7,7 @@ from typing import Any
 
 import pandas as pd
 
-from main_rank_rerank import (
+from legacy.root_main.main_rank_rerank import (
     build_result_row,
     infer_domain_name,
     infer_model_name,

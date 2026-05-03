@@ -4,9 +4,9 @@
 
 ## Current Experiment Interface
 
-The rigorous path is now the module CLI under `src.cli`; legacy `main_*.py` scripts are kept only for archival continuity until their outputs are migrated.
+The rigorous path is now the module CLI under `src.cli`. The former repo-root `main_*.py` scripts are **physically archived under `legacy/root_main/`**. See `docs/LEGACY_MIGRATION.md` for command parity.
 
-Do not start new experiments from `main_*.py`. Those scripts are deprecated legacy entrypoints and may use old assumptions, implicit paths, missing manifests, or week-specific settings. See `docs/LEGACY_MIGRATION.md` for the migration map.
+Do not start new experiments from `legacy/root_main/main_*.py`. Those scripts are deprecated legacy entrypoints and may use old assumptions, implicit paths, missing manifests, or week-specific settings.
 
 Small no-key smoke run:
 
@@ -38,6 +38,17 @@ Paper table export:
 ```bash
 python -m src.cli.aggregate --metrics_glob "outputs/**/eval/metrics.json" --output_path outputs/paper/aggregate.csv
 python -m src.cli.export_paper_tables --aggregate_csv outputs/paper/aggregate.csv --output_dir outputs/paper/tables
+```
+
+Rebuild leakage-safe splits and candidates from the clean `data/processed` tables (see `docs/REPROCESS_PROCESSED_SOURCE.md`):
+
+```bash
+python -m src.cli.reprocess_processed_source \
+  --source_root data/processed \
+  --output_dir outputs/reprocessed_processed_source \
+  --max_users_per_domain 20 \
+  --candidate_size 19 \
+  --seed 42
 ```
 
 Mock/smoke outputs are not paper evidence.
@@ -120,13 +131,9 @@ In other words, the project has moved beyond pure diagnosis and into the first d
 |   |-- methods/              # baseline ranking and uncertainty-aware reranking
 |   |-- uncertainty/          # confidence extraction, calibration, estimator variants
 |   `-- utils/                # IO, logging, paths, registry, seeding
-|-- main_preprocess.py
-|-- main_build_samples.py
-|-- main_infer.py
-|-- main_eval.py
-|-- main_calibrate.py
-|-- main_rerank.py
-`-- main_uncertainty_compare.py
+|-- legacy/                   # historical material; not the default experiment surface
+|   |-- root_main/              # former repo-root main_*.py scripts
+|   `-- docs/                   # archived week7 / part5 notes
 ```
 
 ## Environment
@@ -198,13 +205,13 @@ The same pattern now extends to the lightweight cross-domain subsets:
 #### 1. Preprocess raw data
 
 ```powershell
-py -3.12 main_preprocess.py --config configs/data/amazon_beauty.yaml
+py -3.12 legacy/root_main/main_preprocess.py --config configs/data/amazon_beauty.yaml
 ```
 
 #### 2. Build pointwise train/valid/test samples
 
 ```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_beauty.yaml
+py -3.12 legacy/root_main/main_build_samples.py --config configs/data/amazon_beauty.yaml
 ```
 
 #### 3. Run LLM inference
@@ -212,7 +219,7 @@ py -3.12 main_build_samples.py --config configs/data/amazon_beauty.yaml
 Generate split-specific prediction files:
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/beauty_deepseek.yaml `
   --input_path data/processed/amazon_beauty/valid.jsonl `
   --output_path outputs/beauty_deepseek/predictions/valid_raw.jsonl `
@@ -221,7 +228,7 @@ py -3.12 main_infer.py `
 ```
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/beauty_deepseek.yaml `
   --input_path data/processed/amazon_beauty/test.jsonl `
   --output_path outputs/beauty_deepseek/predictions/test_raw.jsonl `
@@ -232,7 +239,7 @@ py -3.12 main_infer.py `
 #### 4. Evaluate prediction quality
 
 ```powershell
-py -3.12 main_eval.py --exp_name beauty_deepseek
+py -3.12 legacy/root_main/main_eval.py --exp_name beauty_deepseek
 ```
 
 #### 5. Run strict calibration
@@ -244,7 +251,7 @@ Calibration is designed to be leakage-aware:
 - output calibrated confidence and uncertainty
 
 ```powershell
-py -3.12 main_calibrate.py `
+py -3.12 legacy/root_main/main_calibrate.py `
   --exp_name beauty_deepseek `
   --valid_path outputs/beauty_deepseek/predictions/valid_raw.jsonl `
   --test_path outputs/beauty_deepseek/predictions/test_raw.jsonl `
@@ -254,7 +261,7 @@ py -3.12 main_calibrate.py `
 #### 6. Run uncertainty-aware reranking
 
 ```powershell
-py -3.12 main_rerank.py `
+py -3.12 legacy/root_main/main_rerank.py `
   --exp_name beauty_deepseek `
   --input_path outputs/beauty_deepseek/calibrated/test_calibrated.jsonl `
   --lambda_penalty 0.5
@@ -269,13 +276,13 @@ Week1 Day5 uses a lightweight Movies subset to validate that the same pipeline i
 The full Movies preprocess has already been validated. After preprocess, create a lightweight subset under `data/processed/amazon_movies_small/`, then run the original sample-building pipeline:
 
 ```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_movies_small.yaml
+py -3.12 legacy/root_main/main_build_samples.py --config configs/data/amazon_movies_small.yaml
 ```
 
 #### 2. Run inference on valid and test
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/movies_small_deepseek.yaml `
   --input_path data/processed/amazon_movies_small/valid.jsonl `
   --output_path outputs/movies_small_deepseek/predictions/valid_raw.jsonl `
@@ -285,7 +292,7 @@ py -3.12 main_infer.py `
 ```
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/movies_small_deepseek.yaml `
   --input_path data/processed/amazon_movies_small/test.jsonl `
   --output_path outputs/movies_small_deepseek/predictions/test_raw.jsonl `
@@ -297,11 +304,11 @@ py -3.12 main_infer.py `
 #### 3. Run evaluation, calibration, and reranking
 
 ```powershell
-py -3.12 main_eval.py --exp_name movies_small_deepseek --input_path outputs/movies_small_deepseek/predictions/test_raw.jsonl
+py -3.12 legacy/root_main/main_eval.py --exp_name movies_small_deepseek --input_path outputs/movies_small_deepseek/predictions/test_raw.jsonl
 ```
 
 ```powershell
-py -3.12 main_calibrate.py `
+py -3.12 legacy/root_main/main_calibrate.py `
   --exp_name movies_small_deepseek `
   --valid_path outputs/movies_small_deepseek/predictions/valid_raw.jsonl `
   --test_path outputs/movies_small_deepseek/predictions/test_raw.jsonl `
@@ -309,7 +316,7 @@ py -3.12 main_calibrate.py `
 ```
 
 ```powershell
-py -3.12 main_rerank.py `
+py -3.12 legacy/root_main/main_rerank.py `
   --exp_name movies_small_deepseek `
   --input_path outputs/movies_small_deepseek/calibrated/test_calibrated.jsonl `
   --lambda_penalty 0.5
@@ -326,11 +333,11 @@ Books and Electronics follow the same principle used for Movies:
 #### 1. Run full preprocess
 
 ```powershell
-py -3.12 main_preprocess.py --config configs/data/amazon_books.yaml
+py -3.12 legacy/root_main/main_preprocess.py --config configs/data/amazon_books.yaml
 ```
 
 ```powershell
-py -3.12 main_preprocess.py --config configs/data/amazon_electronics.yaml
+py -3.12 legacy/root_main/main_preprocess.py --config configs/data/amazon_electronics.yaml
 ```
 
 #### 2. Build the small-subset samples
@@ -338,17 +345,17 @@ py -3.12 main_preprocess.py --config configs/data/amazon_electronics.yaml
 Once `data/processed/amazon_books_small/` and `data/processed/amazon_electronics_small/` have been constructed from the processed full-domain outputs, run:
 
 ```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_books_small.yaml
+py -3.12 legacy/root_main/main_build_samples.py --config configs/data/amazon_books_small.yaml
 ```
 
 ```powershell
-py -3.12 main_build_samples.py --config configs/data/amazon_electronics_small.yaml
+py -3.12 legacy/root_main/main_build_samples.py --config configs/data/amazon_electronics_small.yaml
 ```
 
 #### 3. Run valid/test inference
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/books_small_deepseek.yaml `
   --input_path data/processed/amazon_books_small/valid.jsonl `
   --output_path outputs/books_small_deepseek/predictions/valid_raw.jsonl `
@@ -358,7 +365,7 @@ py -3.12 main_infer.py `
 ```
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/books_small_deepseek.yaml `
   --input_path data/processed/amazon_books_small/test.jsonl `
   --output_path outputs/books_small_deepseek/predictions/test_raw.jsonl `
@@ -368,7 +375,7 @@ py -3.12 main_infer.py `
 ```
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/electronics_small_deepseek.yaml `
   --input_path data/processed/amazon_electronics_small/valid.jsonl `
   --output_path outputs/electronics_small_deepseek/predictions/valid_raw.jsonl `
@@ -378,7 +385,7 @@ py -3.12 main_infer.py `
 ```
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/electronics_small_deepseek.yaml `
   --input_path data/processed/amazon_electronics_small/test.jsonl `
   --output_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl `
@@ -390,15 +397,15 @@ py -3.12 main_infer.py `
 #### 4. Run evaluation, calibration, and reranking
 
 ```powershell
-py -3.12 main_eval.py --exp_name books_small_deepseek --input_path outputs/books_small_deepseek/predictions/test_raw.jsonl
-py -3.12 main_calibrate.py --exp_name books_small_deepseek --valid_path outputs/books_small_deepseek/predictions/valid_raw.jsonl --test_path outputs/books_small_deepseek/predictions/test_raw.jsonl --method isotonic
-py -3.12 main_rerank.py --exp_name books_small_deepseek --input_path outputs/books_small_deepseek/calibrated/test_calibrated.jsonl --lambda_penalty 0.5
+py -3.12 legacy/root_main/main_eval.py --exp_name books_small_deepseek --input_path outputs/books_small_deepseek/predictions/test_raw.jsonl
+py -3.12 legacy/root_main/main_calibrate.py --exp_name books_small_deepseek --valid_path outputs/books_small_deepseek/predictions/valid_raw.jsonl --test_path outputs/books_small_deepseek/predictions/test_raw.jsonl --method isotonic
+py -3.12 legacy/root_main/main_rerank.py --exp_name books_small_deepseek --input_path outputs/books_small_deepseek/calibrated/test_calibrated.jsonl --lambda_penalty 0.5
 ```
 
 ```powershell
-py -3.12 main_eval.py --exp_name electronics_small_deepseek --input_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl
-py -3.12 main_calibrate.py --exp_name electronics_small_deepseek --valid_path outputs/electronics_small_deepseek/predictions/valid_raw.jsonl --test_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl --method isotonic
-py -3.12 main_rerank.py --exp_name electronics_small_deepseek --input_path outputs/electronics_small_deepseek/calibrated/test_calibrated.jsonl --lambda_penalty 0.5
+py -3.12 legacy/root_main/main_eval.py --exp_name electronics_small_deepseek --input_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl
+py -3.12 legacy/root_main/main_calibrate.py --exp_name electronics_small_deepseek --valid_path outputs/electronics_small_deepseek/predictions/valid_raw.jsonl --test_path outputs/electronics_small_deepseek/predictions/test_raw.jsonl --method isotonic
+py -3.12 legacy/root_main/main_rerank.py --exp_name electronics_small_deepseek --input_path outputs/electronics_small_deepseek/calibrated/test_calibrated.jsonl --lambda_penalty 0.5
 ```
 
 ### Aggregate Results
@@ -406,7 +413,7 @@ py -3.12 main_rerank.py --exp_name electronics_small_deepseek --input_path outpu
 To regenerate the current summary layer in one command:
 
 ```powershell
-py -3.12 main_aggregate_all.py --output_root outputs
+py -3.12 legacy/root_main/main_aggregate_all.py --output_root outputs
 ```
 
 This entry point runs:
@@ -447,7 +454,7 @@ The original robustness entry point remains `Beauty + DeepSeek + noisy`, and the
 Generate noisy pointwise data:
 
 ```powershell
-py -3.12 main_generate_noisy.py `
+py -3.12 legacy/root_main/main_generate_noisy.py `
   --input_path data/processed/amazon_beauty/test.jsonl `
   --output_path data/processed/amazon_beauty_noisy/test.jsonl `
   --history_drop_prob 0.2 `
@@ -458,7 +465,7 @@ py -3.12 main_generate_noisy.py `
 Run the noisy experiment:
 
 ```powershell
-py -3.12 main_infer.py `
+py -3.12 legacy/root_main/main_infer.py `
   --config configs/exp/beauty_deepseek_noisy.yaml `
   --input_path data/processed/amazon_beauty_noisy/test.jsonl `
   --output_path outputs/beauty_deepseek_noisy/predictions/test_raw.jsonl `
@@ -470,7 +477,7 @@ py -3.12 main_infer.py `
 Then evaluate clean vs noisy:
 
 ```powershell
-py -3.12 main_robustness.py --clean_exp beauty_deepseek --noisy_exp beauty_deepseek_noisy
+py -3.12 legacy/root_main/main_robustness.py --clean_exp beauty_deepseek --noisy_exp beauty_deepseek_noisy
 ```
 
 ## Key Outputs

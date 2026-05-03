@@ -222,6 +222,7 @@ docs/version3/
 docs/
 !docs/
 !docs/REPROCESS_PROCESSED_SOURCE.md
+!docs/CLEANUP_AUDIT.md
 tmp_outputs/
 tmp_pycache/
 docs.zip

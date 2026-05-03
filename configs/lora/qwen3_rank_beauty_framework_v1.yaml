@@ -82,7 +82,7 @@ speed_upgrade:
     must_verify_batch_generate: true
     target_batch_size: 4
     verify_entrypoints:
-      - main_rank.py
+      - legacy/root_main/main_rank.py
       - src/llm/local_hf_backend.py
   reuse_and_resume:
     reduce_repeated_model_loads: true

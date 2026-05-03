@@ -9,7 +9,7 @@ from src.analysis.build_pairwise_coverage_summary import build_pairwise_coverage
 from src.analysis.build_part5_figure_pack import build_part5_figure_pack, write_figure_pack_markdown
 
 
-REPO_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def parse_args() -> argparse.Namespace:
@@ -26,7 +26,7 @@ def parse_args() -> argparse.Namespace:
 def refresh_part5_final(output_root: str) -> None:
     cmd = [
         sys.executable,
-        str(REPO_ROOT / "main_compare_multitask.py"),
+        str(Path(__file__).resolve().parent / "main_compare_multitask.py"),
         "--output_root",
         output_root,
         "--finalize_part5",

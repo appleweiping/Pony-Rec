@@ -16,7 +16,7 @@ if [[ "$PULL_FIRST" == "1" ]]; then
 fi
 
 ARGS=(
-  main_batch_run.py
+  legacy/root_main/main_batch_run.py
   --batch_config "$BATCH_CONFIG"
   --status_path "$STATUS_PATH"
 )

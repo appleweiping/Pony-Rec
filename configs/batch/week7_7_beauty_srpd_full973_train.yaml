@@ -14,7 +14,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v1_full973_train.jsonl
     output_dir: outputs/summary
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml --startup_check
     notes: Validate full973 SRPD-v1 before training.
 
   - exp_name: srpd_v1_full973_train
@@ -26,7 +26,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v1_full973_train.jsonl
     output_dir: artifacts/adapters/qwen3_rank_beauty_srpd_v1_full973
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml
     notes: Train SRPD-v1 on the full973 Beauty teacher split.
 
   - exp_name: srpd_v1_full973_eval
@@ -38,7 +38,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_rank_srpd_v1_full973
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml --overwrite
     notes: Evaluate full973 SRPD-v1.
 
   - exp_name: srpd_v2_full973_startup_check
@@ -50,7 +50,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v2_full973_train.jsonl
     output_dir: outputs/summary
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml --startup_check
     notes: Validate full973 SRPD-v2 before training.
 
   - exp_name: srpd_v2_full973_train
@@ -62,7 +62,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v2_full973_train.jsonl
     output_dir: artifacts/adapters/qwen3_rank_beauty_srpd_v2_full973
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml
     notes: Train full973 SRPD-v2, the current trainable main line.
 
   - exp_name: srpd_v2_full973_eval
@@ -74,7 +74,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_rank_srpd_v2_full973
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml --overwrite
     notes: Evaluate full973 SRPD-v2.
 
   - exp_name: srpd_v3_full973_startup_check
@@ -86,7 +86,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v3_full973_train.jsonl
     output_dir: outputs/summary
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml --startup_check
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml --startup_check
     notes: Validate full973 SRPD-v3 before training.
 
   - exp_name: srpd_v3_full973_train
@@ -98,7 +98,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml
     input_path: data/processed/amazon_beauty/srpd/qwen3_rank_beauty_srpd_v3_full973_train.jsonl
     output_dir: artifacts/adapters/qwen3_rank_beauty_srpd_v3_full973
-    command: python main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml
+    command: python legacy/root_main/main_lora_train_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml
     notes: Train full973 SRPD-v3 under the retained pairwise-support setting.
 
   - exp_name: srpd_v3_full973_eval
@@ -110,7 +110,7 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/beauty_qwen3_rank_srpd_v3_full973
-    command: python main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml --overwrite
+    command: python legacy/root_main/main_eval_lora_rank.py --config configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml --overwrite
     notes: Evaluate full973 SRPD-v3.
 
   - exp_name: srpd_full973_compare
@@ -122,5 +122,5 @@ experiments:
     config_path: configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml
     input_path: data/processed/amazon_beauty/ranking_test.jsonl
     output_dir: outputs/summary
-    command: python main_compare_srpd_frameworks.py --configs configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml --output_path outputs/summary/week7_7_srpd_framework_compare_full973.csv --markdown_path outputs/summary/week7_7_srpd_framework_compare_full973.md
+    command: python legacy/root_main/main_compare_srpd_frameworks.py --configs configs/lora/qwen3_rank_beauty_srpd_v1_full973.yaml configs/lora/qwen3_rank_beauty_srpd_v2_full973.yaml configs/lora/qwen3_rank_beauty_srpd_v3_full973.yaml --output_path outputs/summary/week7_7_srpd_framework_compare_full973.csv --markdown_path outputs/summary/week7_7_srpd_framework_compare_full973.md
     notes: Combine full973 SRPD-v1/v2/v3 into a single Beauty winner-confirmation compare table.
