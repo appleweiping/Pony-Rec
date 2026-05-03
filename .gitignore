@@ -229,6 +229,7 @@ docs/
 !docs/PILOT_RECBOLE_SMOKE.md
 !docs/PILOT_LORA_QWEN3_DEBUG.md
 !docs/CODEX_TOPCONF_UNCERTAINTY_LLM4REC_PLAN.md
+!docs/CALIBRATION_DIAGNOSTICS.md
 tmp_outputs/
 tmp_pycache/
 docs.zip
