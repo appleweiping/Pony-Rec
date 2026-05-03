@@ -3,6 +3,21 @@
 This repository is a top-conference research codebase for uncertainty-aware LLM4Rec (working name: CARE-Rec).
 All work must serve the central claim: recommendation quality is not enough; confidence reliability and confidence-driven exposure risk must be modeled together.
 
+## 0) Required reading (current roadmap docs)
+
+Always align implementations and reports with:
+
+- `docs/CODEX_TOPCONF_UNCERTAINTY_LLM4REC_PLAN.md`
+- `docs/METHOD.md`
+- `docs/PILOT_CARE_LORA_DEBUG.md`
+- `docs/PILOT_CARE_RERANK.md`
+- `docs/CALIBRATION_DIAGNOSTICS.md`
+- `docs/PILOT_100U_PROTOCOL.md`
+- `docs/PILOT_DEEPSEEK_100U.md`
+- `docs/PILOT_CARE_RERANK_100U.md`
+- `docs/PILOT_RECBOLE_100U.md`
+- `docs/PILOT_CARE_LORA_100U.md`
+
 ## 1) Non-negotiable objective
 
 Build a coherent framework, not a loose stack of "LLM + calibration + reranking".
