@@ -66,15 +66,17 @@ Rationale: at c99, **`care_full` does not separate** from **`confidence_only`** 
 
 ## 5) What should be the next phase? (exactly one)
 
-**prompt/parser hardening for unstable domains**
+**Data-quality + prompt/parser hardening for unstable DeepSeek c99 domains**
 
-Rationale: c99 shows **books/movies** still dominate invalid-rate and weak-bucket risk; beauty/electronics **invalid rose** vs c19 under larger K. Until parse/invalid and calibration are under control per domain, **tuning CARE coefficients** or **a larger c99 API pilot** mostly stress a **broken observability** layer. **CARE-LoRA** remains a **separate** track blocked on strict JSON (`PILOT_CARE_LORA_100U.md`); the right LoRA research is **constrained decoding / non-generative** scoring, but the **immediate** API-listwise gate is **input/output contract stability** on weak domains—not more unbounded API volume.
+Rationale: High invalid rates may reflect **under-processed catalog text** (long `candidate_text`, HTML, duplicate titles, missing movie titles) as much as model parsing. c99 shows **books/movies** dominate invalid-rate and weak confidence; beauty/electronics **invalid rose** vs c19 under larger K. **Do not** expand API spend or retune CARE until **data + prompt payload** are audited and hardened (see `docs/DATA_QUALITY_AUDIT_C99_UNSTABLE_DOMAINS.md`). **CARE-LoRA** remains a **separate** track blocked on strict JSON (`PILOT_CARE_LORA_100U.md`). **Do not** change split/candidate protocol or mark paper results until that work is accepted.
 
 ---
 
 ## 6) What must not be done yet?
 
+- **No new large API jobs first** (no broad re-run) until data-quality + prompt hardening for unstable domains is decided.
 - **No full experiment** until c99 findings are manually accepted and domain follow-ups are chosen (`PILOT_C99` gate status).
+- **No split/candidate protocol change** yet (keep c99 reprocess + candidate files as-is while auditing).
 - **No paper-result marking** (`is_paper_result=false` on manifests; this summary is pilot evidence only).
 - **No repaired LoRA metric presented as strict generation quality** — repaired slates are **engineering usability** only (`PILOT_CARE_LORA_100U.md`, `PILOT_100U_AUDIT` §6.4).
 - **No RecBole / LLM same-protocol claim** — RecBole remains a separate atomic baseline track (`PILOT_100U_AUDIT` §5).
@@ -89,5 +91,5 @@ Rationale: c99 shows **books/movies** still dominate invalid-rate and weak-bucke
 | Clearer uncertainty than c19? | **No** — ECE/Brier/HC-worse generally **worse** at c99. |
 | `care_full` beats baselines? | **No** meaningful HR@5 separation; identical to confidence/uncertainty paths. |
 | CARE rerank role? | **Maybe** — ablation/diagnostic, not sole main method on this run. |
-| Next phase? | **Prompt/parser hardening** (unstable domains first). |
+| Next phase? | **Data-quality + prompt/parser hardening** (unstable c99 domains first). |
 | Hard stops? | No full experiment, no paper flags, no repaired-LoRA-as-strict, no RecBole–LLM protocol equivalence. |
