@@ -8,6 +8,8 @@ from typing import Any
 import pandas as pd
 import yaml
 
+from src.data.protocol import read_jsonl
+
 
 REQUIRED_INSTALL = "pip install recbole"
 
@@ -59,6 +61,82 @@ def export_recbole_atomic(
     return {"dataset_dir": str(output_dir), "atomic_dir": str(atomic_dir), "inter_file": str(inter_path), "item_file": str(item_path)}
 
 
+def _user_ids_from_reprocess_splits(reprocess_domain_dir: Path) -> set[str]:
+    users: set[str] = set()
+    for name in ("train.jsonl", "valid.jsonl", "test.jsonl"):
+        path = reprocess_domain_dir / name
+        if not path.exists():
+            continue
+        for row in read_jsonl(path):
+            uid = str(row.get("user_id", "")).strip()
+            if uid:
+                users.add(uid)
+    if not users:
+        raise FileNotFoundError(f"No user ids found under {reprocess_domain_dir}")
+    return users
+
+
+def export_recbole_atomic_for_reprocess_users(
+    *,
+    reprocess_domain_dir: str | Path,
+    processed_dir: str | Path,
+    output_dir: str | Path,
+    dataset_name: str,
+) -> dict[str, str]:
+    """Export RecBole .inter/.item using only users present in reprocess JSONL splits (pilot cohort).
+
+    Interaction rows come from ``processed_dir / interactions.csv`` (same source as reprocess),
+    filtered to those users. Item file is restricted to items appearing in the filtered interactions.
+    """
+    reprocess_domain_dir = Path(reprocess_domain_dir)
+    processed_dir = Path(processed_dir)
+    output_dir = Path(output_dir)
+    users = _user_ids_from_reprocess_splits(reprocess_domain_dir)
+    interactions_path = processed_dir / "interactions.csv"
+    if not interactions_path.exists():
+        raise FileNotFoundError(f"Processed interactions not found: {interactions_path}")
+    interactions = pd.read_csv(interactions_path)
+    required = {"user_id", "item_id", "timestamp"}
+    missing = sorted(required - set(interactions.columns))
+    if missing:
+        raise ValueError(f"Cannot export RecBole data; missing columns: {missing}")
+    user_col = "user_id"
+    interactions[user_col] = interactions[user_col].astype(str).str.strip()
+    interactions = interactions[interactions[user_col].isin(users)].copy()
+    if interactions.empty:
+        raise ValueError(f"No interactions left after filtering to reprocess users: {reprocess_domain_dir}")
+    if "rating" not in interactions.columns:
+        interactions["rating"] = 1.0
+    atomic = interactions[["user_id", "item_id", "rating", "timestamp"]].copy()
+    atomic_dir = output_dir / dataset_name
+    atomic_dir.mkdir(parents=True, exist_ok=True)
+    atomic.columns = ["user_id:token", "item_id:token", "rating:float", "timestamp:float"]
+    inter_path = atomic_dir / f"{dataset_name}.inter"
+    atomic.to_csv(inter_path, sep="\t", index=False)
+    item_src = processed_dir / "items.csv"
+    item_path = atomic_dir / f"{dataset_name}.item"
+    if item_src.exists():
+        items = pd.read_csv(item_src).fillna("")
+        item_cols = [c for c in ["item_id", "parent_asin", "asin", "movieId"] if c in items.columns]
+        if not item_cols:
+            raise ValueError(f"No item id column in {item_src}")
+        id_col = item_cols[0]
+        items = items[items[id_col].astype(str).str.strip().isin(set(atomic["item_id:token"].astype(str)))].copy()
+        items = items.rename(columns={id_col: "item_id"})
+        export_cols = ["item_id"]
+        if "title" in items.columns:
+            export_cols.append("title")
+        if "categories" in items.columns:
+            export_cols.append("categories")
+        item_atomic = items[export_cols].copy()
+        item_atomic.columns = [
+            "item_id:token" if col == "item_id" else f"{col}:token_seq"
+            for col in item_atomic.columns
+        ]
+        item_atomic.to_csv(item_path, sep="\t", index=False)
+    return {"dataset_dir": str(output_dir), "atomic_dir": str(atomic_dir), "inter_file": str(inter_path), "item_file": str(item_path)}
+
+
 def build_recbole_config(
     *,
     baseline_config: dict[str, Any],
@@ -69,6 +147,8 @@ def build_recbole_config(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     model = baseline_config["model"]
+    saved_root = output_dir / "saved"
+    saved_root.mkdir(parents=True, exist_ok=True)
     recbole_cfg = {
         "model": model,
         "dataset": dataset_name,
@@ -86,6 +166,8 @@ def build_recbole_config(
         "train_batch_size": int(baseline_config.get("train_batch_size", 2048)),
         "eval_batch_size": int(baseline_config.get("eval_batch_size", 4096)),
         "seed": int(baseline_config.get("seed", 42)),
+        "use_gpu": False,
+        "checkpoint_dir": str(saved_root),
         **(baseline_config.get("recbole", {}) or {}),
     }
     path = output_dir / f"{model.lower()}_recbole.yaml"
