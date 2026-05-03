@@ -1,0 +1,41 @@
+# CARE-LoRA 100-user beauty inference-only strict JSON generation pass.
+
+run_name: care_lora_qwen3_8b_beauty_100u_c19_strictgen
+domain: amazon_beauty
+seed: 42
+candidate_size: 19
+
+paths:
+  output_root: outputs/pilots/care_lora_qwen3_8b_beauty_100u_c19_seed42_strictgen
+  reprocess_dir: outputs/reprocessed_processed_source_100u_c19_seed42
+  processed_dir: data/processed/amazon_beauty
+  deepseek_pilot_root: outputs/pilots/deepseek_v4_flash_processed_100u_c19_seed42
+  care_rerank_config: configs/methods/care_rerank_pilot.yaml
+  base_model: /home/ajifang/models/Qwen/Qwen3-8B
+
+training:
+  max_train_steps: 60
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 4
+  learning_rate: 2.0e-4
+  lora_r: 8
+  lora_alpha: 16
+  max_seq_length: 512
+  topk: 19
+  prompt_id: listwise_ranking_json_lora
+
+inference:
+  # Slightly higher cap than baseline 384 to reduce early-EOS incomplete slates; keep ASIN-safe decode (no n-gram repeat).
+  max_new_tokens: 512
+  repetition_penalty: 1.0
+  no_repeat_ngram_size: 0
+  stop_at_json_end: false
+  stop_strings: []
+  splits:
+    - valid
+    - test
+
+flags:
+  run_type: pilot
+  backend_type: lora
+  is_paper_result: false

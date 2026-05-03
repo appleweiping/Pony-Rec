@@ -65,6 +65,14 @@ def _apply_yaml_to_args(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
     inf = cfg.get("inference") or {}
     if inf.get("max_new_tokens") is not None:
         args.max_new_tokens = int(inf["max_new_tokens"])
+    if inf.get("repetition_penalty") is not None:
+        args.repetition_penalty = float(inf["repetition_penalty"])
+    if inf.get("no_repeat_ngram_size") is not None:
+        args.no_repeat_ngram_size = int(inf["no_repeat_ngram_size"])
+    if inf.get("stop_at_json_end") is not None:
+        args.stop_at_json_end = bool(inf["stop_at_json_end"])
+    if inf.get("stop_strings") is not None:
+        args.stop_strings = [str(x) for x in list(inf["stop_strings"])]
     if cfg.get("seed") is not None:
         args.seed = int(cfg["seed"])
     # stash extra paths for subprocess (not on argparse object by default)
@@ -92,6 +100,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--gradient_accumulation_steps", type=int, default=4)
     p.add_argument("--learning_rate", type=float, default=2e-4)
     p.add_argument("--max_new_tokens", type=int, default=384)
+    p.add_argument("--repetition_penalty", type=float, default=1.0)
+    p.add_argument("--no_repeat_ngram_size", type=int, default=0)
+    p.add_argument("--stop_at_json_end", action="store_true")
+    p.add_argument("--stop_strings", nargs="*", default=None)
     p.add_argument("--skip_build_data", action="store_true")
     p.add_argument("--skip_train", action="store_true", help="Only run inference using existing adapters.")
     ns = p.parse_args(argv)
@@ -104,6 +116,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         setattr(ns, "_deepseek_root", "outputs/pilots/deepseek_v4_flash_processed_20u_c19_seed42")
     if not getattr(ns, "_care_rerank_config", None):
         setattr(ns, "_care_rerank_config", "configs/methods/care_rerank_pilot.yaml")
+    if ns.stop_strings is None:
+        ns.stop_strings = []
     return ns
 
 
@@ -324,6 +338,10 @@ def _run_infer_for_adapter(
         },
         "generation": {"max_new_tokens": int(args.max_new_tokens), "temperature": 0.0},
     }
+    backend_cfg["generation"]["repetition_penalty"] = float(args.repetition_penalty)
+    backend_cfg["generation"]["no_repeat_ngram_size"] = int(args.no_repeat_ngram_size)
+    backend_cfg["generation"]["stop_at_json_end"] = bool(args.stop_at_json_end)
+    backend_cfg["generation"]["stop_strings"] = [str(x) for x in (args.stop_strings or [])]
     from src.cli.run_pilot_reprocessed_deepseek import _load_item_lookup
 
     item_lookup = _load_item_lookup(Path(args.processed_dir))

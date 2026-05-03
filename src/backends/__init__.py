@@ -61,9 +61,13 @@ def build_backend(config: dict[str, Any]):
             trust_remote_code=bool(runtime.get("trust_remote_code", False)),
             max_new_tokens=int(generation.get("max_new_tokens", 512)),
             temperature=float(generation.get("temperature", 0.0)),
+            repetition_penalty=float(generation.get("repetition_penalty", 1.0)),
+            no_repeat_ngram_size=int(generation.get("no_repeat_ngram_size", 0)),
             batch_size=int(runtime.get("batch_size", 1)),
             use_chat_template=bool(runtime.get("use_chat_template", False)),
             enable_thinking=runtime.get("enable_thinking"),
+            stop_at_json_end=bool(generation.get("stop_at_json_end", False)),
+            stop_strings=generation.get("stop_strings"),
         )
     raise ValueError(f"Unsupported backend: {name}")
 
