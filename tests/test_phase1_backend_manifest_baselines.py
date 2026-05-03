@@ -18,6 +18,10 @@ from src.data.protocol import write_jsonl
 from src.utils.manifest import backend_type_from_name, build_manifest, is_paper_result
 
 
+def test_backend_type_rerank_maps() -> None:
+    assert backend_type_from_name("rerank") == "rerank"
+
+
 def test_deepseek_request_payload_shape_no_key() -> None:
     payload = build_openai_chat_payload(prompt="hello", model="deepseek-v4-flash", temperature=0.0, max_tokens=8)
     assert payload["model"] == "deepseek-v4-flash"

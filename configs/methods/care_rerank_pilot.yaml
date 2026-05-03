@@ -1,0 +1,46 @@
+# CARE rerank pilot (20 users / domain). Weights are on comparable ~[0,1] component scales.
+# Variants isolate terms; care_full combines them (not arbitrary A+B+C — see docs).
+
+global:
+  confidence_decay: 0.14
+  # Center confidence term at 0.5 neutral
+  confidence_center: 0.5
+
+variants:
+  original_deepseek:
+    identity: true
+    alpha: 0.0
+    beta: 0.0
+    gamma: 0.0
+    delta: 0.0
+
+  confidence_only:
+    identity: false
+    alpha: 0.65
+    beta: 0.0
+    gamma: 0.0
+    delta: 0.0
+
+  popularity_penalty_only:
+    identity: false
+    # Isolated blind popularity penalty (ablation): not the production CARE echo term.
+    blind_popularity_ablation: true
+    alpha: 0.0
+    beta: 0.0
+    gamma: 0.55
+    delta: 0.0
+
+  uncertainty_only:
+    identity: false
+    alpha: 0.0
+    beta: 0.5
+    gamma: 0.0
+    delta: 0.0
+
+  care_full:
+    identity: false
+    blind_popularity_ablation: false
+    alpha: 0.35
+    beta: 0.42
+    gamma: 0.48
+    delta: 0.18

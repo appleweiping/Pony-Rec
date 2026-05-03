@@ -20,6 +20,8 @@ def backend_type_from_name(name: str) -> str:
         return "local"
     if normalized in {"lora", "hf_lora", "peft"}:
         return "lora"
+    if normalized in {"rerank", "care_rerank"}:
+        return "rerank"
     return "unknown"
 
 
