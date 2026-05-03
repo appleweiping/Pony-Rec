@@ -62,6 +62,8 @@ def build_backend(config: dict[str, Any]):
             max_new_tokens=int(generation.get("max_new_tokens", 512)),
             temperature=float(generation.get("temperature", 0.0)),
             batch_size=int(runtime.get("batch_size", 1)),
+            use_chat_template=bool(runtime.get("use_chat_template", False)),
+            enable_thinking=runtime.get("enable_thinking"),
         )
     raise ValueError(f"Unsupported backend: {name}")
 

@@ -14,7 +14,7 @@ from typing import Any
 from src.backends import GenerationRequest, build_backend
 from src.cli.run_pilot_reprocessed_deepseek import _build_ranking_prompt, _load_item_lookup
 from src.data.protocol import read_jsonl, write_jsonl
-from src.prompts import parse_ranking_output
+from src.prompts import parse_ranking_output, ranking_parse_strict_for_prompt
 from src.uncertainty.interface import VerbalizedConfidenceEstimator
 from src.utils.manifest import backend_type_from_name, build_manifest, write_manifest
 from src.utils.research_artifacts import config_hash, git_commit_or_unknown, utc_timestamp
@@ -228,7 +228,12 @@ async def _infer_split(
         resp = (await backend.abatch_generate([GenerationRequest(prompt=prompt, request_id=f"{meta['split']}:{sample.get('user_id')}")]))[0]
         raw_text = str(resp.raw_text or "")
         allowed = [str(x) for x in sample.get("candidate_item_ids", [])]
-        parsed = parse_ranking_output(raw_text, allowed_item_ids=allowed, topk=topk)
+        parsed = parse_ranking_output(
+            raw_text,
+            allowed_item_ids=allowed,
+            topk=topk,
+            strict_json_only=ranking_parse_strict_for_prompt(prompt_id),
+        )
         ranking = list(parsed.ranked_item_ids or [])
         predicted = ranking[0] if ranking else ""
         raw_conf = float(parsed.confidence or 0.0)

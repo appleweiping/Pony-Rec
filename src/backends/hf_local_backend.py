@@ -24,6 +24,8 @@ class HFLocalBackend:
         temperature: float = 0.0,
         top_p: float = 1.0,
         batch_size: int = 1,
+        use_chat_template: bool = False,
+        enable_thinking: bool | None = None,
     ) -> None:
         self.model_name_or_path = model_name_or_path
         self.adapter_path = adapter_path
@@ -36,6 +38,8 @@ class HFLocalBackend:
         self.temperature = float(temperature)
         self.top_p = float(top_p)
         self.batch_size = max(1, int(batch_size))
+        self.use_chat_template = bool(use_chat_template)
+        self.enable_thinking = enable_thinking
         self._model = None
         self._tokenizer = None
         self._torch = None
@@ -75,6 +79,32 @@ class HFLocalBackend:
         self._tokenizer = tokenizer
         self._model = model
 
+    def _format_prompt(self, prompt: str) -> str:
+        tokenizer = self._tokenizer
+        if (
+            self.use_chat_template
+            and tokenizer is not None
+            and getattr(tokenizer, "chat_template", None)
+        ):
+            template_kwargs: dict[str, Any] = {
+                "tokenize": False,
+                "add_generation_prompt": True,
+            }
+            if self.enable_thinking is not None:
+                template_kwargs["enable_thinking"] = bool(self.enable_thinking)
+            try:
+                return tokenizer.apply_chat_template(
+                    [{"role": "user", "content": prompt}],
+                    **template_kwargs,
+                )
+            except TypeError:
+                template_kwargs.pop("enable_thinking", None)
+                return tokenizer.apply_chat_template(
+                    [{"role": "user", "content": prompt}],
+                    **template_kwargs,
+                )
+        return prompt
+
     async def agenerate(self, request: GenerationRequest, **kwargs: Any) -> GenerationResponse:
         return (await self.abatch_generate([request], **kwargs))[0]
 
@@ -92,7 +122,7 @@ class HFLocalBackend:
         results: list[GenerationResponse] = []
         for start_idx in range(0, len(requests), self.batch_size):
             batch = requests[start_idx : start_idx + self.batch_size]
-            prompts = [r.prompt for r in batch]
+            prompts = [self._format_prompt(r.prompt) for r in batch]
             start = time.perf_counter()
             inputs = self._tokenizer(prompts, return_tensors="pt", padding=True, truncation=True)
             inputs = {key: value.to(self._model.device) for key, value in inputs.items()}

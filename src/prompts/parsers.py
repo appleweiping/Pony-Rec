@@ -30,33 +30,82 @@ class ParsedLLMOutput:
 
 
 def strip_reasoning(text: str) -> str:
-    clean = re.sub(r"<think\b[^>]*>.*?</think>", "", str(text or ""), flags=re.I | re.S)
+    """Strip common reasoning wrappers and markdown fences before JSON parse."""
+    from src.llm.parser import strip_thinking_blocks
+
+    clean = strip_thinking_blocks(str(text or ""))
+    # Qwen3 may emit explicit think tags (avoid embedding raw tags in this file for XML-safe patches).
+    _o, _c = "<" + "think" + ">", "<" + "/" + "think" + ">"
+    clean = re.sub(re.escape(_o) + r"[\s\S]*?" + re.escape(_c), "", clean, flags=re.I)
     clean = re.sub(r"^```[a-zA-Z0-9_]*\s*", "", clean.strip())
     clean = re.sub(r"\s*```$", "", clean)
     return clean.strip()
 
 
+def extract_first_json_object(text: str) -> str | None:
+    """Return the first brace-balanced substring that yields a JSON object (strict or light repair)."""
+    s = str(text or "")
+    for i, ch in enumerate(s):
+        if ch != "{":
+            continue
+        depth = 0
+        for j in range(i, len(s)):
+            if s[j] == "{":
+                depth += 1
+            elif s[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    blob = s[i : j + 1]
+                    obj, _, _ = _try_load_json_blob(blob)
+                    if obj is not None:
+                        return blob
+                    break
+    return None
+
+
+def _try_load_json_blob(blob: str) -> tuple[dict[str, Any] | None, bool, bool]:
+    """Try strict then light repairs (trailing commas, single quotes). Returns (obj, malformed, repaired)."""
+    try:
+        out = json.loads(blob)
+        if isinstance(out, dict):
+            return out, False, False
+    except Exception:
+        pass
+    repaired = re.sub(r",\s*([}\]])", r"\1", blob)
+    repaired = repaired.replace("'", '"')
+    try:
+        out = json.loads(repaired)
+        if isinstance(out, dict):
+            return out, True, True
+    except Exception:
+        pass
+    return None, True, False
+
+
 def _extract_json(text: str) -> tuple[dict[str, Any] | None, bool, bool]:
     clean = strip_reasoning(text)
-    candidates = [clean]
+    candidates: list[str] = []
+    if clean:
+        candidates.append(clean)
+    balanced = extract_first_json_object(clean)
+    if balanced:
+        candidates.append(balanced)
     start = clean.find("{")
     end = clean.rfind("}")
     if start >= 0 and end > start:
-        candidates.append(clean[start : end + 1])
+        naive = clean[start : end + 1]
+        if naive not in candidates:
+            candidates.append(naive)
     for candidate in candidates:
-        try:
-            return json.loads(candidate), False, False
-        except Exception:
-            pass
-    if start >= 0 and end > start:
-        repaired = clean[start : end + 1]
-        repaired = re.sub(r",\s*([}\]])", r"\1", repaired)
-        repaired = repaired.replace("'", '"')
-        try:
-            return json.loads(repaired), True, True
-        except Exception:
-            return None, True, False
-    return None, False, False
+        obj, malformed, repaired = _try_load_json_blob(candidate)
+        if obj is not None:
+            return obj, malformed, repaired
+    return None, bool(start >= 0), False
+
+
+def ranking_parse_strict_for_prompt(prompt_id: str) -> bool:
+    """LoRA listwise debug: strict single JSON object, no prose fallback."""
+    return str(prompt_id) == "listwise_ranking_json_lora"
 
 
 def normalize_confidence(value: Any) -> float | None:
@@ -134,13 +183,66 @@ def parse_pointwise_output(text: str) -> ParsedLLMOutput:
     )
 
 
+def _parse_ranking_strict(
+    text: str,
+    *,
+    allowed_item_ids: list[str],
+    obj: dict[str, Any] | None,
+    malformed: bool,
+    repaired: bool,
+) -> ParsedLLMOutput:
+    """Strict listwise: one JSON object, full candidate slate, no prose ID recovery, no target-side repair."""
+    allowed = [str(x) for x in allowed_item_ids]
+    allowed_set = set(allowed)
+    confidence: float | None = None
+    ranked: list[str] = []
+    if obj is not None:
+        ranked = _normalize_item_ids(obj.get("ranking") or obj.get("ranked_item_ids") or obj.get("topk_item_ids"))
+        confidence = normalize_confidence(obj.get("confidence"))
+    duplicate, not_allowed = _flags_for_items(ranked, allowed)
+    deduped = list(dict.fromkeys(ranked))
+    complete = bool(allowed) and len(deduped) == len(allowed) and set(deduped) == allowed_set and not duplicate
+    valid = complete and not not_allowed and confidence is not None
+    return ParsedLLMOutput(
+        task="ranking",
+        raw_text=text,
+        parsed_json=obj,
+        ranked_item_ids=deduped if valid else [],
+        predicted_item_id=(deduped[0] if deduped and valid else None),
+        confidence=confidence,
+        is_valid=valid,
+        invalid_output=not valid,
+        malformed_json=malformed,
+        repaired_json=repaired,
+        hallucinated_item=not_allowed,
+        duplicate_item=duplicate,
+        missing_confidence=confidence is None,
+        output_not_in_candidate_set=not_allowed,
+    )
+
+
 def parse_ranking_output(
     text: str,
     *,
     allowed_item_ids: list[str],
     topk: int | None = None,
+    strict_json_only: bool = False,
 ) -> ParsedLLMOutput:
     obj, malformed, repaired = _extract_json(text)
+    if strict_json_only:
+        if obj is None:
+            blob = extract_first_json_object(strip_reasoning(text))
+            if blob:
+                obj, malformed, repaired = _try_load_json_blob(blob)
+        if obj is None:
+            malformed = True
+        return _parse_ranking_strict(
+            text,
+            allowed_item_ids=allowed_item_ids,
+            obj=obj,
+            malformed=malformed,
+            repaired=repaired,
+        )
     clean = strip_reasoning(text)
     confidence = None
     ranked: list[str] = []

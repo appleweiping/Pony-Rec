@@ -28,17 +28,10 @@ DEFAULT_CENTER = 0.5
 
 
 def teacher_listwise_response(target_item_id: str, candidate_item_ids: list[str], *, confidence: float = 0.88) -> str:
+    """Canonical teacher line for strict listwise LoRA: one JSON object, keys `ranking` + `confidence` only."""
     tid = str(target_item_id)
     order = [tid] + [str(x) for x in candidate_item_ids if str(x) != tid]
-    return json.dumps(
-        {
-            "ranked_item_ids": order,
-            "topk_item_ids": order[: min(5, len(order))],
-            "confidence": float(confidence),
-            "reason": "teacher_rank_target_first",
-        },
-        ensure_ascii=False,
-    )
+    return json.dumps({"ranking": order, "confidence": float(confidence)}, ensure_ascii=False)
 
 
 def _target_bucket(row: dict[str, Any]) -> str:

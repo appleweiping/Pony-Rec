@@ -57,8 +57,9 @@ def _feat_hc() -> dict:
 def test_teacher_response_is_valid_json() -> None:
     s = teacher_listwise_response("T1", ["A", "T1", "B"])
     d = json.loads(s)
-    assert d["ranked_item_ids"][0] == "T1"
-    assert len(d["ranked_item_ids"]) == 3
+    assert d["ranking"][0] == "T1"
+    assert len(d["ranking"]) == 3
+    assert set(d) == {"ranking", "confidence"}
 
 
 def test_vanilla_policy_always_keep_weight_one() -> None:
@@ -87,7 +88,7 @@ def test_sample_weight_bounds() -> None:
 def test_no_target_leakage_in_teacher_order() -> None:
     row = _row()
     tid = str(row["target_item_id"])
-    order = json.loads(teacher_listwise_response(tid, [str(x) for x in row["candidate_item_ids"]]))["ranked_item_ids"]
+    order = json.loads(teacher_listwise_response(tid, [str(x) for x in row["candidate_item_ids"]]))["ranking"]
     negs = set(order) - {tid}
     hist = set(row.get("history_item_ids", []))
     assert not (negs & hist)
@@ -159,12 +160,16 @@ def test_build_care_lora_data_cli_smoke(tmp_path: Path, monkeypatch: pytest.Monk
             str(proc),
             "--output_root",
             str(tmp_path / "out"),
+            "--prompt_id",
+            "listwise_ranking_json_lora",
             "--care_rerank_config",
             str(root / "configs/methods/care_rerank_pilot.yaml"),
         ]
     )
     data_dir = tmp_path / "out" / "data"
     assert (data_dir / "vanilla_lora_baseline_train.jsonl").is_file()
+    first = json.loads((data_dir / "vanilla_lora_baseline_train.jsonl").read_text(encoding="utf-8").splitlines()[0])
+    assert "ranking" in json.loads(first["response"])
     man = json.loads((data_dir / "data_manifest.json").read_text(encoding="utf-8"))
     assert man["run_type"] == "pilot"
     assert man["is_paper_result"] is False

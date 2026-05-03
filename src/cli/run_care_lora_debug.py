@@ -318,6 +318,8 @@ def _run_infer_for_adapter(
             "trust_remote_code": True,
             "batch_size": 1,
             "dtype": "bfloat16",
+            "use_chat_template": True,
+            "enable_thinking": False,
         },
         "generation": {"max_new_tokens": int(args.max_new_tokens), "temperature": 0.0},
     }
@@ -435,6 +437,8 @@ def main(argv: list[str] | None = None) -> None:
                 str(args.topk),
                 "--seed",
                 str(args.seed),
+                "--prompt_id",
+                str(args.prompt_id),
                 "--deepseek_root",
                 str(getattr(args, "_deepseek_root", "")),
                 "--care_rerank_config",

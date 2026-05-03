@@ -69,7 +69,8 @@ Writes under `.../data/`:
 
 Flags: `--skip_build_data` (reuse `data/`), `--skip_train` (only infer if adapters already exist).
 
-**LoRA YAML (reference bundle):** `configs/lora/care_qwen3_8b_debug.yaml`
+**LoRA YAML (reference bundle):** `configs/lora/care_qwen3_8b_debug.yaml`  
+**Strict JSON LoRA YAML:** `configs/lora/care_qwen3_8b_json_debug.yaml` (see “JSON-format repair run” below).
 
 ---
 
@@ -138,6 +139,61 @@ Full step losses are in `train_logs/*_loss.jsonl` and duplicated under `train_ma
 
 ---
 
+## JSON-format repair run (2026-05-03)
+
+### Audit: why the old parser saw ~0% valid
+
+Inspection of the earlier pilot (`listwise_ranking_v1`, teacher with `ranked_item_ids` / `topk_item_ids` / `reason`) plus `raw_responses.jsonl` showed the model **rarely emitted a single parseable JSON object**: long **prose / pseudo-schema narration**, optional **markdown fences**, and **no reliable numeric `confidence`**. The legacy `parse_ranking_output` path could sometimes **regex-scrape candidate IDs from prose**, but **`confidence` stayed `None`**, so **`is_valid` stayed false** and `predicted_ranking` stayed empty. Naive `_extract_json` (first `{` through last `}`) also **breaks when extra `{`/`}` appear inside rambling text**.
+
+### What we changed
+
+- **Teacher targets** (`teacher_listwise_response`): canonical **`{"ranking":[...all candidate IDs...],"confidence":float}`** only (no `reason`, no parallel key aliases).
+- **Prompt** `listwise_ranking_json_lora`: JSON-only contract, explicit **full slate** requirement, duplicate **JSON array copy** of allowed IDs, trailing **`/no_think`** for Qwen3.
+- **Strict parse mode** when `prompt_id=listwise_ranking_json_lora`: **first balanced JSON object** (+ allowed trailing-comma / quote repair only), **no prose ID recovery**, reject **OOD IDs**, **duplicates**, or **incomplete** slates; never fabricates missing ranks and never uses the target item to repair.
+- **HF `HFLocalBackend`**: optional **`apply_chat_template`** with **`enable_thinking=False`** for CARE-LoRA eval (`runtime.use_chat_template` / `runtime.enable_thinking` in the pilot `backend_cfg`), with **TypeError fallback** if the installed tokenizer does not accept `enable_thinking`.
+
+### Exact command
+
+```bash
+cd /home/ajifang/projects/fresh/uncertainty-llm4rec
+.venv_lora/bin/python3.11 -m src.cli.run_care_lora_debug \
+  --config configs/lora/care_qwen3_8b_json_debug.yaml
+```
+
+Bundle: `configs/lora/care_qwen3_8b_json_debug.yaml` (beauty, 20 users, 19 candidates, **`max_train_steps: 15`**, `prompt_id: listwise_ranking_json_lora`, `output_root: outputs/pilots/care_lora_qwen3_8b_beauty_20u_c19_seed42_json_debug/`).
+
+### Parser fallback rules (strict path)
+
+1. Strip reasoning wrappers / fences (`strip_reasoning`).
+2. Extract the **first brace-balanced** substring that yields a JSON **object** via `json.loads` or the **small** repairs above; set `repaired_json` when repair was used.
+3. **`ranking`** must be a permutation of the candidate list; **`confidence`** must normalize to **[0,1]**.
+4. Otherwise: **`is_valid=false`**, **`ranked_item_ids=[]`** in emitted predictions (no silent acceptance).
+
+### Valid parse rate: before vs after
+
+| Setting | Typical `parsed_responses.jsonl` valid rate (20 rows / split) |
+|--------|------------------------------------------------------------------|
+| Earlier run in this doc (`listwise_ranking_v1`, 12 steps, prose outputs) | **0 / 20 (0%)** |
+| JSON repair run (`listwise_ranking_json_lora`, 15 steps, strict parse + think off) | **7–8 / 20 (35–40%)** on captured splits (vanilla valid **7/20**, vanilla test **8/20**, CARE valid **8/20**, CARE test **7/20**) |
+
+### Metrics snapshot (JSON repair run)
+
+Example: `eval_runs/vanilla_lora_baseline/valid/eval/metrics.json` → HR@1 **0.0**, HR@5 **0.05**, NDCG@5 ≈ **0.032**, MRR@5 **0.025** (still **n=20** diagnostic; valid rows carry full 19-item `predicted_ranking` when `is_valid=true`, and `confidence_available` is **true** on those rows because `confidence` parses).
+
+### Qwen3 “thinking” in this local setup
+
+- **Enabled path:** `HFLocalBackend` uses **`tokenizer.apply_chat_template(..., enable_thinking=False)`** when `runtime.use_chat_template=true` (CARE-LoRA debug sets this).
+- **Prompt path:** template ends with **`/no_think`** (Qwen3 convention).
+- **Residual CoT:** if the model still emits think-tagged blocks, **`strip_reasoning`** strips common wrappers before JSON extraction.
+
+### Remaining blockers before a 100-user LoRA pilot
+
+1. **JSON compliance is partial** (~60% of rows still fail strict slate checks at 15 steps).
+2. **Train / split hygiene** unchanged (still valid-aligned DeepSeek merge for this pilot).
+3. **Eval throughput:** four cold **full Qwen3 reloads** per end-to-end debug remain expensive.
+
+---
+
 ## Data policies (Part A)
 
 | Policy | Behavior |
@@ -189,7 +245,7 @@ After `build_care_lora_data` on the frozen pilot, **`care_full_train.jsonl` ofte
 1. **Train vs inference split hygiene:** debug uses **valid** users for SFT; production must use true **train** users and hold out **valid** for model selection only.  
 2. **Weight calibration:** `sample_weight` mapping needs tuning on larger n, not the fixed pilot heuristics.  
 3. **GPU / memory:** Qwen3-8B + LoRA still needs a capable GPU; CPU-only is not supported for this path.  
-4. **Teacher quality:** listwise teacher is **target-first** JSON—richer teachers or DPO pairs would change the objective.  
+4. **Teacher quality:** listwise teacher is **target-first** canonical **`ranking` + `confidence`** JSON for strict LoRA; richer teachers or DPO pairs would change the objective.  
 5. **Statistical power:** n=20 cannot support claims; rerun `evaluate` summaries only as **sanity**, not benchmarks.
 
 ---
@@ -197,7 +253,7 @@ After `build_care_lora_data` on the frozen pilot, **`care_full_train.jsonl` ofte
 ## Tests
 
 ```bash
-.venv_lora/bin/python3.11 -m pytest tests/test_care_lora_data.py -q
+.venv_lora/bin/python3.11 -m pytest tests/test_care_lora_data.py tests/test_care_lora_ranking_parse.py -q
 ```
 
 ---
@@ -208,3 +264,4 @@ After `build_care_lora_data` on the frozen pilot, **`care_full_train.jsonl` ofte
 - `src/cli/build_care_lora_data.py` — artifact writer  
 - `src/cli/run_care_lora_debug.py` — train + infer driver  
 - `configs/lora/care_qwen3_8b_debug.yaml` — documented hyperparameters / paths  
+- `configs/lora/care_qwen3_8b_json_debug.yaml` — strict JSON LoRA pilot bundle (`listwise_ranking_json_lora`)  

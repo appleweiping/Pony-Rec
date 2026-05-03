@@ -46,6 +46,25 @@ PROMPT_TEMPLATES: dict[str, PromptTemplate] = {
             "Return strict JSON with ranked_item_ids, topk_item_ids, confidence, reason."
         ),
     ),
+    "listwise_ranking_json_lora": PromptTemplate(
+        prompt_id="listwise_ranking_json_lora",
+        task="listwise",
+        template=(
+            "You rank items for recommendation. Output EXACTLY one JSON object and nothing else.\n"
+            "Do not use markdown code fences. Do not add explanations, labels, or text before or after the JSON.\n"
+            "Do not output chain-of-thought.\n\n"
+            "The JSON object must have exactly two keys:\n"
+            '- "ranking": JSON array of strings — include EVERY candidate item_id exactly once, best-first.\n'
+            '- "confidence": a number from 0 to 1 (use 0.0 if unsure).\n\n'
+            "Each string in \"ranking\" must be copied verbatim from the allowed list (same spelling as below).\n\n"
+            "User history:\n{history_block}\n\n"
+            "Candidates:\n{candidate_block}\n\n"
+            "Allowed item IDs (comma-separated): {allowed_item_ids}\n"
+            "Same IDs as JSON string array: {allowed_item_ids_json}\n\n"
+            "Respond with only the JSON object.\n\n"
+            "/no_think"
+        ),
+    ),
     "generative_next_item_v1": PromptTemplate(
         prompt_id="generative_next_item_v1",
         task="generative",

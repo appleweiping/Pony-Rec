@@ -86,12 +86,16 @@ def _build_ranking_prompt(sample: dict[str, Any], prompt_id: str, item_lookup: d
     template = get_prompt_template(prompt_id)
     history = history_block([str(x) for x in sample.get("history_item_ids", [])], texts)
     candidates = candidate_block([str(x) for x in sample.get("candidate_item_ids", [])], texts)
-    return template.render(
-        history_block=history,
-        candidate_block=candidates,
-        allowed_item_ids=", ".join(str(x) for x in sample.get("candidate_item_ids", [])),
-        topk=topk,
-    )
+    allowed_list = [str(x) for x in sample.get("candidate_item_ids", [])]
+    kwargs: dict[str, Any] = {
+        "history_block": history,
+        "candidate_block": candidates,
+        "allowed_item_ids": ", ".join(allowed_list),
+        "topk": topk,
+    }
+    if prompt_id == "listwise_ranking_json_lora":
+        kwargs["allowed_item_ids_json"] = json.dumps(allowed_list, ensure_ascii=False)
+    return template.render(**kwargs)
 
 
 async def _one_request(
