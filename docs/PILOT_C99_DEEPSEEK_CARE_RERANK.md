@@ -6,6 +6,13 @@ Scope: four domains, `max_users_per_domain=100`, **candidate_size=99**, `seed=42
 Compare baseline: **c19** (`outputs/reprocessed_processed_source_100u_c19_seed42` + `outputs/pilots/deepseek_v4_flash_processed_100u_c19_seed42` + rerank root `..._c19_...`).  
 This run: **c99** reprocess + DeepSeek + uncertainty/calibration + CARE rerank as below.
 
+### Gate status (read before any new experiment)
+
+- **c99 is pilot only:** `run_type=pilot`, **`is_paper_result=false`** on DeepSeek manifests; this doc is not a paper claim.
+- **Invalid rates did not blow up** vs the pre-run gate check (books/movies remain the weak domains; see §3).
+- **CARE rerank c99 outputs are ready for human review** (aggregate CSVs + per-variant `eval/metrics.json` under the rerank root).
+- **Do not proceed to a full experiment** until c99 findings (invalid/calibration/CARE deltas) are **manually accepted** and any domain-specific follow-ups are decided.
+
 ---
 
 ## 1) Exact commands

@@ -260,7 +260,7 @@ Critical interpretation:
 See `docs/PILOT_CARE_LORA_100U.md` for commands and decode knobs. **Accepted as a negative result:**
 
 - **Mainline CARE-LoRA strict JSON validity** remains the **original 100u pilot** band **~0.35–0.47** (`repair_summary.json` under `..._pilot/`). **Strict output is not fixed**; do not claim otherwise.
-- Strictgen attempt C **did not consistently improve** over that pilot (latest on-disk summaries: vanilla valid/test matched pilot at **0.47 / 0.43**; **CARE_full_training** valid/test **0.23 / 0.32** vs pilot **0.47 / 0.35** — regression on CARE valid in particular).
+- Strictgen (attempt C + **v3** re-inference) **did not improve strict validity vs the registered pilot**: latest on-disk `repair_summary.json` under `.../strictgen/` matches pilot strict rates (**vanilla 0.47 / 0.43**, **CARE 0.47 / 0.35**). Intermediate strictgen snapshots with lower CARE strict cells are **superseded** by the current files.
 - **`usable_ranking_rate_after_safe_repair=1.00`** still holds in strictgen outputs, but that is **engineering usability**, not proof of strict generative quality.
 
 **Paper-result / scaling implication:** CARE-LoRA remains **blocked** for paper-result scaling until **strict generation** improves (true constrained decoding) or the method shifts to **non-generative scoring** over candidates.
@@ -303,7 +303,7 @@ Selected next phase:
 
 Rationale:
 
-- **CARE-LoRA strict JSON validity** on the beauty 100u pilot remains **~0.35–0.47**; **strictgen attempt C** did **not** consistently improve over that pilot and is **accepted as negative**. Safe-repaired **`usable_ranking=1.00`** is **engineering usability**, not proof that strict generative JSON is solved. **Do not run a full experiment** or claim LoRA strict output is fixed.
+- **CARE-LoRA strict JSON validity** on the beauty 100u pilot remains **~0.35–0.47**; **strictgen** (C + v3) did **not** raise strict validity **above** that pilot (latest strictgen `repair_summary` matches pilot strict rates) and remains **accepted as negative** for blocker clearance. Safe-repaired **`usable_ranking=1.00`** is **engineering usability**, not proof that strict generative JSON is solved. **Do not run a full experiment** or claim LoRA strict output is fixed.
 - The API + rerank stack already supports the next scaling knob (**c99**) without depending on LoRA free-form JSON.
 - LoRA remains a **blocked** paper-result track until **strict generation** or **true constrained decoding** / **non-generative scoring** lands.
 
@@ -320,4 +320,4 @@ Not recommended yet:
 ## Final audit stance
 
 100-user pilot phases are complete and useful for gating decisions, but they remain pilot evidence only.  
-**Mainline:** proceed toward a **c99 DeepSeek + CARE rerank** pilot while keeping protocol gaps explicit. **CARE-LoRA:** strict generation remains the hard blocker; strictgen attempt C is a **negative** control on decode-only fixes—continue only as **constrained decoding / non-generative** research, not as the primary scaling path until strict validity materially improves.
+**Mainline:** proceed toward a **c99 DeepSeek + CARE rerank** pilot while keeping protocol gaps explicit. **CARE-LoRA:** strict generation remains the hard blocker; strictgen (C + v3) is a **negative** control on decode-only fixes (**no strict lift vs pilot** on latest disk)—continue only as **constrained decoding / non-generative** research, not as the primary scaling path until strict validity materially improves.
