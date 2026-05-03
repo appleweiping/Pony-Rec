@@ -20,7 +20,7 @@ import html
 import json
 import re
 import unicodedata
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, fields
 
 # C0 controls excluding tab (0x09) and newline (0x0a)
 _CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
@@ -52,7 +52,33 @@ class CleaningConfig:
     max_categories_chars: int = 160
     include_description: bool = False
     max_description_chars: int = 400
+    """Cap for CSV ``candidate_text`` / merged JSONL blobs (title+category preferred elsewhere)."""
+    max_candidate_text_chars: int = 600
+    """After ``_merge_item_texts``, scrub any value (including JSONL fallbacks) to this max width."""
+    max_merged_line_chars: int = 1200
     ellipsis: str = "…"
+
+
+def cleaning_config_from_mapping(data: dict | None) -> CleaningConfig:
+    if not data:
+        return CleaningConfig()
+    allowed = {f.name for f in fields(CleaningConfig)}
+    kwargs = {k: v for k, v in data.items() if k in allowed}
+    return CleaningConfig(**kwargs)
+
+
+def cleaning_config_to_jsonable(cfg: CleaningConfig) -> dict:
+    return asdict(cfg)
+
+
+def scrub_merged_item_texts(lookup: dict[str, str], config: CleaningConfig | None = None) -> dict[str, str]:
+    """Deterministic cleanup on post-merge lookup (catalog + JSONL candidate lines)."""
+    cfg = config or CleaningConfig()
+    mc = cfg.max_merged_line_chars
+    out: dict[str, str] = {}
+    for k, v in lookup.items():
+        out[str(k)] = clean_free_text(str(v or ""), max_chars=mc, config=cfg)
+    return out
 
 
 def strip_html_tags(text: str) -> str:
@@ -109,7 +135,7 @@ def build_prompt_line_for_item(
     cfg = config or CleaningConfig()
     base = str(candidate_text or "").strip()
     if base:
-        line = clean_free_text(base, max_chars=max(cfg.max_title_chars, cfg.max_description_chars), config=cfg)
+        line = clean_free_text(base, max_chars=int(cfg.max_candidate_text_chars), config=cfg)
         if line:
             return line
     title_clean = clean_free_text(title, max_chars=cfg.max_title_chars, config=cfg)

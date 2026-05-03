@@ -1,0 +1,25 @@
+# Books + movies only: cleaned catalog + scrubbed JSONL lines, same c99 reprocess + candidates.
+# Usage:
+#   .venv_lora/bin/python3.11 -m src.cli.run_pilot_reprocessed_deepseek \
+#     --pilot_config configs/pilots/c99_deepseek_data_hardened_books_movies.yaml
+run_type: pilot
+seed: 42
+method: llm_listwise
+backend_config: configs/backends/deepseek_v4_flash.yaml
+reprocess_dir: outputs/reprocessed_processed_source_100u_c99_seed42
+output_root: outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42_data_hardened
+domains:
+  - amazon_books
+  - amazon_movies
+splits:
+  - valid
+  - test
+prompt_id: listwise_ranking_v1_structured_ids
+item_text_view: cleaned_v1
+item_text_cleaning:
+  max_title_chars: 280
+  max_categories_chars: 160
+  max_description_chars: 400
+  max_candidate_text_chars: 600
+  max_merged_line_chars: 1200
+  include_description: false

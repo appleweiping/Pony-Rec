@@ -13,8 +13,17 @@ from time import perf_counter
 from typing import Any
 
 import httpx
+import numpy as np
 import pandas as pd
 import yaml
+
+from src.data.item_text_cleaning import (
+    CleaningConfig,
+    build_cleaned_lookup_for_ids,
+    cleaning_config_from_mapping,
+    cleaning_config_to_jsonable,
+    scrub_merged_item_texts,
+)
 
 from src.data.protocol import read_jsonl, write_jsonl
 from src.prompts import candidate_block, get_prompt_template, history_block, parse_ranking_output
@@ -22,9 +31,17 @@ from src.uncertainty.interface import VerbalizedConfidenceEstimator
 from src.utils.manifest import backend_type_from_name, build_manifest, is_paper_result, write_manifest
 from src.utils.research_artifacts import config_hash, git_commit_or_unknown, utc_timestamp
 
+_STRUCTURED_ALLOWED_ID_PROMPTS = frozenset({"listwise_ranking_v1_structured_ids"})
+
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Run DeepSeek pilot inference on reprocessed candidate JSONL.")
+    p.add_argument(
+        "--pilot_config",
+        type=str,
+        default=None,
+        help="YAML merging into CLI args (reprocess_dir, output_root, domains, splits, item_text_view, ...).",
+    )
     p.add_argument("--reprocess_dir", default="outputs/reprocessed_processed_source")
     p.add_argument("--output_root", default="outputs/pilots/deepseek_v4_flash_processed_20u_c19_seed42")
     p.add_argument("--backend_config", default="configs/backends/deepseek_v4_flash.yaml")
@@ -44,7 +61,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Listwise slate size for parse_ranking_output. Default: infer from first row's candidate_item_ids length.",
     )
-    return p.parse_args(argv)
+    p.add_argument(
+        "--item_text_view",
+        default="raw",
+        help="raw | cleaned_v1 — cleaned_v1 uses deterministic item_text_cleaning on catalog + merged JSONL lines.",
+    )
+    args = p.parse_args(argv)
+    if args.pilot_config:
+        overlay = _load_yaml(Path(args.pilot_config))
+        for key, val in overlay.items():
+            if key == "item_text_cleaning":
+                setattr(args, "item_text_cleaning_dict", val)
+                continue
+            if hasattr(args, key):
+                setattr(args, key, val)
+    if not hasattr(args, "item_text_cleaning_dict"):
+        setattr(args, "item_text_cleaning_dict", {})
+    return args
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
@@ -72,6 +105,14 @@ def _load_item_lookup(processed_dir: Path) -> dict[str, str]:
     return out
 
 
+def _collect_needed_item_ids(samples: list[dict[str, Any]]) -> set[str]:
+    needed: set[str] = set()
+    for row in samples:
+        needed.update(str(x) for x in row.get("candidate_item_ids", []) or [])
+        needed.update(str(x) for x in row.get("history_item_ids", []) or [])
+    return {x for x in needed if str(x).strip()}
+
+
 def _merge_item_texts(sample: dict[str, Any], base: dict[str, str]) -> dict[str, str]:
     out = dict(base)
     ids = [str(x) for x in sample.get("candidate_item_ids", [])]
@@ -87,11 +128,10 @@ def _merge_item_texts(sample: dict[str, Any], base: dict[str, str]) -> dict[str,
     return out
 
 
-def _build_ranking_prompt(sample: dict[str, Any], prompt_id: str, item_lookup: dict[str, str], topk: int) -> str:
-    texts = _merge_item_texts(sample, item_lookup)
+def _build_ranking_prompt(sample: dict[str, Any], prompt_id: str, item_texts: dict[str, str], topk: int) -> str:
     template = get_prompt_template(prompt_id)
-    history = history_block([str(x) for x in sample.get("history_item_ids", [])], texts)
-    candidates = candidate_block([str(x) for x in sample.get("candidate_item_ids", [])], texts)
+    history = history_block([str(x) for x in sample.get("history_item_ids", [])], item_texts)
+    candidates = candidate_block([str(x) for x in sample.get("candidate_item_ids", [])], item_texts)
     allowed_list = [str(x) for x in sample.get("candidate_item_ids", [])]
     kwargs: dict[str, Any] = {
         "history_block": history,
@@ -101,7 +141,40 @@ def _build_ranking_prompt(sample: dict[str, Any], prompt_id: str, item_lookup: d
     }
     if prompt_id == "listwise_ranking_json_lora":
         kwargs["allowed_item_ids_json"] = json.dumps(allowed_list, ensure_ascii=False)
+    if prompt_id in _STRUCTURED_ALLOWED_ID_PROMPTS:
+        kwargs["allowed_item_ids_json"] = json.dumps(allowed_list, ensure_ascii=False)
     return template.render(**kwargs)
+
+
+def _item_texts_for_sample(
+    sample: dict[str, Any],
+    *,
+    item_lookup: dict[str, str],
+    item_text_view: str,
+    cleaning_cfg: CleaningConfig,
+) -> dict[str, str]:
+    texts = _merge_item_texts(sample, item_lookup)
+    if item_text_view == "cleaned_v1":
+        return scrub_merged_item_texts(texts, cleaning_cfg)
+    return texts
+
+
+def _prompt_length_diagnostics(samples: list[dict[str, Any]], *, prompt_id: str, topk: int, **kwargs: Any) -> dict[str, Any]:
+    lengths = [
+        len(_build_ranking_prompt(s, prompt_id, _item_texts_for_sample(s, **kwargs), topk)) for s in samples
+    ]
+    if not lengths:
+        return {"n": 0}
+    arr = np.array(lengths, dtype=np.float64)
+    return {
+        "n": int(len(lengths)),
+        "mean_chars": float(arr.mean()),
+        "p50_chars": float(np.quantile(arr, 0.5)),
+        "p90_chars": float(np.quantile(arr, 0.9)),
+        "p95_chars": float(np.quantile(arr, 0.95)),
+        "max_chars": float(np.max(arr)),
+        "approx_token_mean_chars_over_4": float(arr.mean() / 4.0),
+    }
 
 
 async def _one_request(
@@ -150,6 +223,9 @@ async def _run_split(
     topk: int,
     meta: dict[str, Any],
     concurrency: int,
+    item_lookup: dict[str, str],
+    item_text_view: str,
+    cleaning_cfg: CleaningConfig,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     connection = backend_cfg.get("connection", {}) or {}
     generation = backend_cfg.get("generation", {}) or {}
@@ -162,14 +238,19 @@ async def _run_split(
     model = str(backend_cfg.get("model", "deepseek-v4-flash"))
     url = f"{base_url}/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    item_lookup = _load_item_lookup(processed_dir)
     estimator = VerbalizedConfidenceEstimator()
     sem = asyncio.Semaphore(max(1, int(concurrency)))
 
     async with httpx.AsyncClient(timeout=timeout) as client:
 
         async def bound(sample: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
-            prompt = _build_ranking_prompt(sample, prompt_id, item_lookup, topk)
+            texts = _item_texts_for_sample(
+                sample,
+                item_lookup=item_lookup,
+                item_text_view=item_text_view,
+                cleaning_cfg=cleaning_cfg,
+            )
+            prompt = _build_ranking_prompt(sample, prompt_id, texts, topk)
             async with sem:
                 raw_text, usage, response_json, latency, err = await _one_request(
                     client,
@@ -292,6 +373,9 @@ def main() -> None:
     backend_cfg = _load_yaml(Path(args.backend_config))
     runtime = backend_cfg.get("runtime", {}) or {}
     concurrency = int(runtime.get("max_concurrency", 8))
+    cleaning_cfg = cleaning_config_from_mapping(getattr(args, "item_text_cleaning_dict", {}) or {})
+    cleaning_jsonable = cleaning_config_to_jsonable(cleaning_cfg)
+    cleaning_hash = config_hash({"cleaned_v1": cleaning_jsonable}) if args.item_text_view == "cleaned_v1" else ""
     pilot_config = {
         "run_type": args.run_type,
         "seed": args.seed,
@@ -302,6 +386,9 @@ def main() -> None:
         "prompt_id": args.prompt_id,
         "domains": list(args.domains),
         "splits": list(args.splits),
+        "item_text_view": args.item_text_view,
+        "item_text_cleaning": cleaning_jsonable,
+        "item_text_cleaning_config_hash": cleaning_hash,
     }
     summary: dict[str, Any] = {
         "created_at": utc_timestamp(),
@@ -325,9 +412,36 @@ def main() -> None:
                 inference_topk = 0
             if inference_topk <= 0:
                 raise ValueError(f"No samples or empty candidate_item_ids in {in_path}")
+            needed = _collect_needed_item_ids(samples)
+            if args.item_text_view == "cleaned_v1":
+                items_df = pd.read_csv(processed_dir / "items.csv", low_memory=False).fillna("")
+                item_lookup = build_cleaned_lookup_for_ids(items_df, needed, config=cleaning_cfg)
+            else:
+                item_lookup = _load_item_lookup(processed_dir)
+            diag = _prompt_length_diagnostics(
+                samples,
+                prompt_id=args.prompt_id,
+                topk=inference_topk,
+                item_lookup=item_lookup,
+                item_text_view=args.item_text_view,
+                cleaning_cfg=cleaning_cfg,
+            )
             out_dir = output_root / domain / split
             pred_dir = out_dir / "predictions"
             pred_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / "prompt_diagnostics.json").write_text(
+                json.dumps(
+                    {
+                        **diag,
+                        "item_text_view": args.item_text_view,
+                        "prompt_id": args.prompt_id,
+                        "item_text_cleaning_config_hash": cleaning_hash or None,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
             meta = {
                 "dataset": domain,
                 "domain": domain,
@@ -350,6 +464,9 @@ def main() -> None:
                     topk=inference_topk,
                     meta=meta,
                     concurrency=concurrency,
+                    item_lookup=item_lookup,
+                    item_text_view=args.item_text_view,
+                    cleaning_cfg=cleaning_cfg,
                 )
             )
             write_jsonl(raw_rows, pred_dir / "raw_responses.jsonl")
@@ -375,6 +492,11 @@ def main() -> None:
                     command=sys.argv,
                     api_key_env=api_key_env,
                     mock_data_used=False,
+                    manifest_extras={
+                        "item_text_view": args.item_text_view,
+                        "item_text_cleaning_config": cleaning_jsonable,
+                        "item_text_cleaning_config_hash": cleaning_hash or None,
+                    },
                 ),
             )
             n = len(parsed_rows)

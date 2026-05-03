@@ -20,11 +20,15 @@ This document is **pilot evidence only** (`is_paper_result=false`). It does **no
 
 3. **Pearson correlations** between `invalid_output` and prompt length are **small or inconsistent** at `n=100` (noise-dominated), so **do not** treat correlation alone as proof—**structural** differences (catalog completeness, HTML, description truncation at 1000 chars, duplicate titles in the global catalog) are the stronger story.
 
-4. **No hardened re-pilot was run** for this commit (no new API jobs). A future **small** books/movies-only rerun on the **same** candidate JSONL is specified in §Phase C when you choose to spend API budget.
+4. A **cleaned prompt-view API pilot** on **books + movies only** was run (same c99 candidates). Evidence is in §“Cleaned prompt-view rerun (API)” and under `outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42_data_hardened/` (gitignored).
 
 **Machine-readable audit:** run  
 `.venv_lora/bin/python3.11 -m src.cli.audit_c99_data_quality`  
-to regenerate `outputs/diagnostics/c99_data_quality_audit/audit_report.json` and exemplar JSON under `outputs/diagnostics/c99_prompt_cleaning_candidates/` (paths are **gitignored**; numbers below match a local run used for this write-up).
+to regenerate `outputs/diagnostics/c99_data_quality_audit/audit_report.json` and exemplar JSON under `outputs/diagnostics/c99_prompt_cleaning_candidates/` (paths are **gitignored**; Phase A tables match a local audit run).
+
+**Hardened pilot config (code):** `configs/pilots/c99_deepseek_data_hardened_books_movies.yaml`  
+**Invoked as:**  
+`.venv_lora/bin/python3.11 -m src.cli.run_pilot_reprocessed_deepseek --pilot_config configs/pilots/c99_deepseek_data_hardened_books_movies.yaml`
 
 ---
 
@@ -137,36 +141,107 @@ This is **not** an API improvement measurement—only **offline** prompt mass. I
 
 ---
 
-## Phase C — After audit: recommended order (no runs performed here)
+## Phase C — After audit: recommended order
 
 | Step | Action |
 | --- | --- |
-| 1 | Wire `item_text_cleaning` into the pilot **prompt builder** path (still reading the same `*_candidates.jsonl`; only change lookup text). |
-| 2 | If invalid remains high on books, tighten **template** (e.g., forbid raw description blobs) and **parser** diagnostics. |
+| 1 | **Done:** `item_text_cleaning` wired into `run_pilot_reprocessed_deepseek` via `item_text_view: cleaned_v1` and `--pilot_config` (same `*_andidates.jsonl`; `item_id`s unchanged). |
+| 2 | If invalid remains high on **movies**, tighten template/parser or improve raw/catalog metadata (missing titles). |
 | 3 | Evaluate **DeepSeek JSON mode** only if the contract is still unstable after (1)–(2). |
-| 4 | **Optional small API rerun** (only when approved): `amazon_books` + `amazon_movies`, valid+test, 100 users, c99, **same** candidate files, output root `outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42_data_hardened/`. Do **not** rerun beauty/electronics unless needed as a control. |
+| 4 | **Done:** Small API rerun: `amazon_books` + `amazon_movies`, valid+test, 100 users, c99, output `outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42_data_hardened/`. |
 
 ---
 
-## Phase D — Gate answers
+## Cleaned prompt-view rerun (API) — books & movies only
+
+**When:** 2026-05-03 (pilot class only). **Protocol:** unchanged reprocess root `outputs/reprocessed_processed_source_100u_c99_seed42`, `candidate_size=99`, `seed=42`, `run_type=pilot`, **`is_paper_result=false`**. **Prompt:** `listwise_ranking_v1_structured_ids` (allowed IDs duplicated as a **`json.dumps`** string array in the template). **Item view:** `cleaned_v1` per `src/data/item_text_cleaning.py` + post-merge scrub (`manifest.json` records `item_text_cleaning_config_hash`).
+
+**Baseline (“old”)** rows refer to `outputs/pilots/deepseek_v4_flash_processed_100u_c99_seed42/` with `listwise_ranking_v1`. **Hardened** rows refer to `..._data_hardened/`.
+
+### 1) Invalid output rate (`parsed_responses.jsonl`)
+
+| Domain | split | Old | Hardened |
+| --- | --- | ---:| ---:|
+| books | valid | 0.50 | **0.18** |
+| books | test | 0.59 | **0.22** |
+| movies | valid | 0.32 | 0.34 |
+| movies | test | 0.41 | 0.40 |
+
+**Interpretation:** **Books:** large drop—consistent with HTML/payload cleanup. **Movies:** essentially flat—consistent with metadata sparsity dominating over prompt length.
+
+### 2) Prompt length diagnostics (`prompt_diagnostics.json`; old = offline audit replay `listwise_ranking_v1`, hardened = live pilot)
+
+Old books/movies lengths are from the **pre-flight audit** reconstruction in §Phase A (raw catalog lookup). Hardened lengths include the **extra JSON allowed-ID line** in the structured template.
+
+| Domain | split | Old mean / p50 / p90 / p95 / max chars | Hardened mean / p50 / p90 / p95 / max chars | ~tokens hardened (mean/4) |
+| --- | --- | --- | --- | ---:|
+| books | valid | 76,537 / 72,954 / 88,323 / 96,745 / 151,661 | 50,695 / 48,446 / 57,134 / 64,145 / **97,313** | **12,674** |
+| books | test | 77,522 / 74,234 / 89,941 / 99,540 / 152,167 | 51,402 / 49,405 / 57,958 / 64,280 / **97,889** | **12,851** |
+| movies | valid | 46,129 / 44,230 / 54,633 / 59,073 / 89,460 | 36,377 / 35,344 / 41,468 / 45,848 / **65,007** | **9,094** |
+| movies | test | 47,369 / 45,944 / 56,024 / 58,878 / 94,932 | 37,121 / 36,129 / 42,442 / 45,180 / **66,795** | **9,280** |
+
+### 3) Confidence availability (`pilot_run_summary.json`, parsed rows)
+
+| Domain | split | Old | Hardened |
+| --- | --- | --- | --- |
+| books | valid | 0.68 | **0.94** |
+| books | test | 0.59 | **0.92** |
+| movies | valid | 0.80 | 0.76 |
+| movies | test | 0.72 | 0.73 |
+
+### 4) Calibration (`calibration_diagnostics/calibration_aggregate.csv`)
+
+| Domain | split | Metric | Old | Hardened |
+| --- | --- | --- | ---:| ---:|
+| books | valid | ECE | 0.523 | 0.577 |
+| books | valid | adaptive ECE | 0.503 | 0.577 |
+| books | valid | Brier | 0.468 | 0.515 |
+| books | valid | high-conf wrong | 0.809 | **0.777** |
+| books | test | ECE | 0.571 | 0.575 |
+| books | test | adaptive ECE | 0.571 | 0.555 |
+| books | test | Brier | 0.517 | 0.513 |
+| books | test | high-conf wrong | 0.881 | **0.772** |
+| movies | valid | ECE | 0.566 | 0.542 |
+| movies | valid | high-conf wrong | 0.886 | 0.893 |
+| movies | test | ECE | 0.559 | 0.515 |
+| movies | test | high-conf wrong | 0.944 | 0.898 |
+
+*(Pilot-only; not a paper claim.)*
+
+### 5) Ranking metrics — baseline `llm_listwise` DeepSeek (`eval/metrics.json`)
+
+Pilot-only **HR@5 / NDCG@5 / MRR@5**:
+
+| Domain | split | Old | Hardened |
+| --- | --- | --- | --- |
+| books | valid | 0.42 / 0.313 / 0.278 | 0.38 / 0.296 / 0.268 |
+| books | test | 0.43 / 0.329 / 0.294 | 0.42 / 0.318 / 0.284 |
+| movies | valid | 0.16 / 0.129 / 0.120 | **0.20** / **0.142** / **0.123** |
+| movies | test | 0.19 / 0.128 / 0.107 | **0.22** / **0.158** / **0.137** |
+
+### 6) Decision
+
+- **Did cleaned prompt-view reduce invalid?** **Yes for books (strongly).** **Movies:** negligible change—still treat movies as **metadata / raw-protocol** constrained, not “fixed by scrub.”
+- **Stable enough to rerun CARE rerank?** **Yes (pilot):** books invalid dropped materially; CARE rerank was run on hardened outputs only (`outputs/pilots/care_rerank_deepseek_v4_flash_processed_100u_c99_seed42_data_hardened/`, gitignored). **Do not** treat this as paper-ready; movies remain weak.
+- **Deeper data / raw fix?** Still recommended for **movies** (missing titles/categories in catalog).
+
+---
+
+## Phase D — Gate answers (updated post-hardened pilot)
 
 | Question | Answer |
 | --- | --- |
-| Does data quality plausibly explain invalid rates? | **Yes, plausibly major for books (payload/HTML/description truncation) and movies (missing titles/categories).** Slate sampling looks fine. |
-| Exact evidence | §Item tables, §Prompt lengths, §Cleaning halves books mean prompt chars in replay. |
-| Old invalid rates | books 0.50/0.59; movies 0.32/0.41; beauty 0.20/0.15; electronics 0.35/0.29. |
-| Data-feature correlation | Weak linear correlation at n=100; structural catalog issues are clearer. |
-| Cleaning rules | §Phase B |
-| Did hardened rerun improve invalid? | **Not run in this commit** — no new API calls. |
-| Are books/movies still unstable? | **Yes**, until cleaning + optional rerun show lower invalid. |
-| Should c99 continue? | **Yes, as pilot-only engineering**, with **data-quality first**, then prompt/parser; **no** paper marking; **no** protocol change yet. |
+| Does data quality plausibly explain invalid rates? | **Yes** for **books** (now validated by API). **Movies:** partial—invalid barely moved; catalog gaps likely dominate. |
+| Did hardened rerun improve invalid? | **Books: yes (0.50/0.59 → 0.18/0.22). Movies: ~flat.** |
+| Are books/movies still unstable? | **Books: much improved invalid; still pilot-only.** **Movies: still unstable.** |
+| Should c99 continue? | **Yes, pilot-only**; next focus **movie metadata / raw protocol** + optional parser work; **no** full experiment; **no** paper marking. |
 
 ---
 
 ## Hard stops (unchanged from program gate)
 
 - **No full experiment.**
-- **No new large API jobs** until the data-quality + prompt path is decided.
+- **No unbounded / full-scale API sweep** without an explicit gate (this doc records one **scoped** books/movies hardened pilot only).
 - **No split/candidate protocol change** from this audit alone.
 - **No `is_paper_result=true`.**
 - **No repaired LoRA metrics as strict generation.**

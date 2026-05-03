@@ -46,6 +46,18 @@ PROMPT_TEMPLATES: dict[str, PromptTemplate] = {
             "Return strict JSON with ranked_item_ids, topk_item_ids, confidence, reason."
         ),
     ),
+    "listwise_ranking_v1_structured_ids": PromptTemplate(
+        prompt_id="listwise_ranking_v1_structured_ids",
+        task="listwise",
+        template=(
+            "Rank candidate items for the user.\n"
+            "User history:\n{history_block}\n\n"
+            "Candidates:\n{candidate_block}\n\n"
+            "Allowed item IDs (comma-separated): {allowed_item_ids}\n"
+            "Same allowed item IDs as a JSON string array (copy verbatim from this list): {allowed_item_ids_json}\n"
+            "Return strict JSON with ranked_item_ids, topk_item_ids, confidence, reason."
+        ),
+    ),
     "listwise_ranking_json_lora": PromptTemplate(
         prompt_id="listwise_ranking_json_lora",
         task="listwise",

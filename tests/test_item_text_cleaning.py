@@ -10,6 +10,7 @@ from src.data.item_text_cleaning import (
     missing_title_placeholder,
     normalize_whitespace,
     remove_control_chars,
+    scrub_merged_item_texts,
     strip_html_tags,
 )
 
@@ -69,3 +70,10 @@ def test_build_cleaned_lookup_for_ids_subset() -> None:
     out = build_cleaned_lookup_for_ids(df, {"a", "b"}, config=CleaningConfig())
     assert "a" in out
     assert "Hi" in out["a"] or "hi" in out["a"].lower()
+
+
+def test_scrub_merged_item_texts_strips_html() -> None:
+    cfg = CleaningConfig(max_merged_line_chars=500)
+    d = scrub_merged_item_texts({"x": "<b>z</b>   y"}, cfg)
+    assert "x" in d
+    assert "<" not in d["x"]

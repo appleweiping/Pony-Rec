@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from src.backends import GenerationRequest, build_backend
-from src.cli.run_pilot_reprocessed_deepseek import _build_ranking_prompt, _load_item_lookup
+from src.cli.run_pilot_reprocessed_deepseek import _build_ranking_prompt, _load_item_lookup, _merge_item_texts
 from src.data.protocol import read_jsonl, write_jsonl
 from src.parsing import (
     build_repair_summary,
@@ -81,7 +81,7 @@ def _teacher_response_json(row: dict[str, Any]) -> str:
 def _sft_rows_from_candidates(rows: list[dict[str, Any]], *, item_lookup: dict[str, str], prompt_id: str, topk: int) -> list[dict[str, str]]:
     out: list[dict[str, str]] = []
     for row in rows:
-        prompt = _build_ranking_prompt(row, prompt_id, item_lookup, topk)
+        prompt = _build_ranking_prompt(row, prompt_id, _merge_item_texts(row, item_lookup), topk)
         out.append({"prompt": prompt, "response": _teacher_response_json(row)})
     return out
 
@@ -231,7 +231,7 @@ async def _infer_split(
     raw_rows, parsed_rows, pred_rows = [], [], []
     taxonomy_rows: list[dict[str, Any]] = []
     for sample in samples:
-        prompt = _build_ranking_prompt(sample, prompt_id, item_lookup, topk)
+        prompt = _build_ranking_prompt(sample, prompt_id, _merge_item_texts(sample, item_lookup), topk)
         resp = (await backend.abatch_generate([GenerationRequest(prompt=prompt, request_id=f"{meta['split']}:{sample.get('user_id')}")]))[0]
         raw_text = str(resp.raw_text or "")
         allowed = [str(x) for x in sample.get("candidate_item_ids", [])]

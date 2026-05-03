@@ -46,10 +46,11 @@ def build_manifest(
     command: list[str] | None = None,
     api_key_env: str | None = None,
     mock_data_used: bool | None = None,
+    manifest_extras: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     backend_type = backend_type_from_name(backend)
     run_type = str(config.get("run_type") or ("smoke" if backend_type == "mock" else "pilot")).lower()
-    return {
+    out = {
         "git_commit": git_commit_or_unknown("."),
         "config_hash": config_hash(config),
         "dataset": dataset,
@@ -77,6 +78,11 @@ def build_manifest(
         "run_type": run_type,
         "is_paper_result": is_paper_result(run_type, backend_type),
     }
+    if manifest_extras:
+        for k, v in manifest_extras.items():
+            if v is not None:
+                out[k] = v
+    return out
 
 
 def write_manifest(path: str | Path, manifest: dict[str, Any]) -> None:

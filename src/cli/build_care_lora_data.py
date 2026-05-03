@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from src.cli.run_pilot_reprocessed_deepseek import _build_ranking_prompt, _load_item_lookup
+from src.cli.run_pilot_reprocessed_deepseek import _build_ranking_prompt, _load_item_lookup, _merge_item_texts
 from src.data.protocol import read_jsonl, write_jsonl
 from src.methods.care_rerank import sanitize_listwise_ranking
 from src.methods.care_lora_data import (
@@ -90,7 +90,7 @@ def main(argv: list[str] | None = None) -> None:
         aligned_rows.append(row)
         pred_list.append(pr)
         feat_list.append(feat_by_user.get(uid))
-        prompts.append(_build_ranking_prompt(row, args.prompt_id, item_lookup, int(args.topk)))
+        prompts.append(_build_ranking_prompt(row, args.prompt_id, _merge_item_texts(row, item_lookup), int(args.topk)))
 
     outcomes_per: dict[str, list] = {pol: [] for pol in POLICIES}
     weighted_records: list[dict[str, Any]] = []
