@@ -104,6 +104,11 @@ adapter_entrypoints:
       - user_id_map.csv
       - item_id_map.csv
       - adapter_metadata.json
+  llmesr_adapter_audit:
+    script: main_audit_llmesr_adapter_package.py
+    status: adapter_package_audit
+    output_files:
+      - adapter_audit.csv
 
 paper_adapter_candidates:
   - method_name: LLM-ESR

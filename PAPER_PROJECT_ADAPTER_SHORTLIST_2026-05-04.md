@@ -77,6 +77,9 @@ python main_export_llmesr_same_candidate_task.py \
   --task_dir outputs/baselines/external_tasks/beauty_week8_same_candidate_external \
   --exp_name beauty_llmesr_same_candidate_adapter \
   --output_root outputs
+
+python main_audit_llmesr_adapter_package.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
 ```
 
 Expected output:
@@ -88,3 +91,8 @@ outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/
 This package is the handoff point for the LLM-ESR repo wrapper. It is not a
 result row and should not be included in the unified method matrix until it
 emits full-coverage same-candidate scores.
+
+The expected audit diagnosis at this stage is
+`adapter_core_ready_embeddings_missing_or_invalid`: the mapped package is ready,
+but LLM-ESR-compatible item embedding files are still required before scorer
+wrapping.

@@ -293,3 +293,15 @@ candidate coverage:
 ```text
 source_event_id,user_id,item_id,score
 ```
+
+Audit the package before attempting embedding generation or scorer wrapping:
+
+```bash
+python main_audit_llmesr_adapter_package.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
+```
+
+The expected pre-embedding diagnosis is
+`adapter_core_ready_embeddings_missing_or_invalid`. The package is not ready
+for scoring until both `llm_esr/handled/itm_emb_np.pkl` and
+`llm_esr/handled/pca64_itm_emb_np.pkl` are present with one row per mapped item.
