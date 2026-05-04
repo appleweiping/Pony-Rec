@@ -34,6 +34,17 @@ def _max_arg(name: str, value: Any) -> list[str]:
     return [name, str(value)]
 
 
+def _dataset_from_path(path: str) -> str:
+    parts = Path(path).parts
+    if len(parts) >= 2:
+        return parts[-2]
+    return "unknown"
+
+
+def _model_backend_from_config(path: str) -> str:
+    return Path(path).stem or "unknown"
+
+
 def build_commands(
     cfg: dict[str, Any],
     *,
@@ -41,6 +52,7 @@ def build_commands(
     variants: list[str],
     domains: list[str],
     include_noisy: bool,
+    winner_signal_variant: str,
 ) -> list[str]:
     scenario_cfg = cfg["scenarios"][scenario]
     output_root = str(cfg.get("output_root", "outputs"))
@@ -93,6 +105,58 @@ def build_commands(
             )
 
         for variant in variants:
+            if variant == "shadow_v6":
+                signal_pointwise_exp = f"{_exp_prefix(domain, winner_signal_variant, scenario)}_pointwise"
+                bridge_exp = f"{_exp_prefix(domain, variant, scenario)}_structured_risk"
+                commands.append(
+                    _shell_join(
+                        [
+                            "python main_build_shadow_v6_bridge.py",
+                            "--exp_name", bridge_exp,
+                            "--rank_input_path", f"{output_root}/{rank_exp}/predictions/rank_predictions.jsonl",
+                            "--signal_input_path", f"{output_root}/{signal_pointwise_exp}/calibrated/test_calibrated.jsonl",
+                            "--output_root", output_root,
+                            "--winner_signal_variant", winner_signal_variant,
+                            "--signal_score_col shadow_calibrated_score",
+                            "--signal_uncertainty_col shadow_uncertainty",
+                            "--dataset", _dataset_from_path(str(domain_cfg["pointwise_test_path"])),
+                            "--domain", domain,
+                            "--split test",
+                            "--model_backend", _model_backend_from_config(str(domain_cfg["model_config"])),
+                            "--prompt_id shadow_v6_signal_to_decision",
+                            "--artifact_class diagnostic",
+                            "--k", topk,
+                            "--seed", seed,
+                        ]
+                    )
+                )
+                if include_noisy:
+                    noisy_signal_pointwise_exp = f"{signal_pointwise_exp}_noisy_nl10"
+                    noisy_bridge_exp = f"{bridge_exp}_noisy_nl10"
+                    commands.append(
+                        _shell_join(
+                            [
+                                "python main_build_shadow_v6_bridge.py",
+                                "--exp_name", noisy_bridge_exp,
+                                "--rank_input_path", f"{output_root}/{noisy_rank_exp}/predictions/rank_predictions.jsonl",
+                                "--signal_input_path", f"{output_root}/{noisy_signal_pointwise_exp}/calibrated/test_calibrated.jsonl",
+                                "--output_root", output_root,
+                                "--winner_signal_variant", winner_signal_variant,
+                                "--signal_score_col shadow_calibrated_score",
+                                "--signal_uncertainty_col shadow_uncertainty",
+                                "--dataset", _dataset_from_path(str(domain_cfg["noisy_test_path"])),
+                                "--domain", domain,
+                                "--split test",
+                                "--model_backend", _model_backend_from_config(str(domain_cfg["model_config"])),
+                                "--prompt_id shadow_v6_signal_to_decision",
+                                "--artifact_class diagnostic",
+                                "--k", topk,
+                                "--seed", seed,
+                            ]
+                        )
+                    )
+                continue
+
             prompt_path = cfg["variants"][variant]["prompt_path"]
             pointwise_exp = f"{_exp_prefix(domain, variant, scenario)}_pointwise"
             commands.extend(
@@ -232,6 +296,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--variants", default="all")
     parser.add_argument("--domains", default="all")
     parser.add_argument("--include_noisy", action="store_true")
+    parser.add_argument(
+        "--winner_signal_variant",
+        default=None,
+        help="Winner shadow signal used by shadow_v6. Defaults to manifest winner_signal_variant or shadow_v1.",
+    )
     parser.add_argument("--output_path", default=None)
     return parser.parse_args()
 
@@ -242,12 +311,14 @@ def main() -> None:
     scenario_cfg = cfg["scenarios"][args.scenario]
     variants = _variant_list(cfg, args.variants)
     domains = _domain_list(scenario_cfg, args.domains)
+    winner_signal_variant = args.winner_signal_variant or str(cfg.get("winner_signal_variant", "shadow_v1"))
     commands = build_commands(
         cfg,
         scenario=args.scenario,
         variants=variants,
         domains=domains,
         include_noisy=args.include_noisy,
+        winner_signal_variant=winner_signal_variant,
     )
     text = "\n".join(commands) + "\n"
     if args.output_path:

@@ -91,8 +91,13 @@ def compute_shadow_scores(
         signal_uncertainty = _safe01(record, "signal_uncertainty")
         correction_gate = _safe01(record, "correction_gate")
         anchor_score = _safe01(record, "anchor_score", default=score)
+        anchor_disagreement = _safe01(record, "anchor_disagreement", default=abs(signal_score - anchor_score))
         utility_score = correction_gate * signal_score + (1.0 - correction_gate) * anchor_score
-        uncertainty = _clamp01(0.65 * signal_uncertainty + 0.35 * (1.0 - correction_gate))
+        uncertainty = _clamp01(
+            0.55 * signal_uncertainty
+            + 0.25 * (1.0 - correction_gate)
+            + 0.20 * anchor_disagreement
+        )
         return {
             "shadow_raw_score": raw_score,
             "shadow_score": _clamp01(utility_score),
