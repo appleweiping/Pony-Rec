@@ -107,6 +107,10 @@ def _status_from_row(row: dict[str, str]) -> str:
     return "missing"
 
 
+def _file_status(*paths: Path) -> str:
+    return "ready" if any(path.exists() for path in paths) else "missing"
+
+
 def _normalize_shadow_summary_row(row: dict[str, str], source_file: Path) -> dict[str, Any]:
     return {
         "evidence_layer": "signal_candidate",
@@ -129,6 +133,73 @@ def _normalize_shadow_summary_row(row: dict[str, str], source_file: Path) -> dic
         "noisy_pointwise_auroc": row.get("noisy_pointwise_auroc", ""),
         "noisy_rerank_ndcg_at_10": row.get("noisy_rerank_ndcg_at_10", ""),
         "ndcg_drop_noisy": row.get("ndcg_drop_noisy", ""),
+        "source_file": str(source_file),
+    }
+
+
+def _expected_signal_candidate_row(
+    *,
+    scenario: str,
+    domain: str,
+    variant: str,
+    shadow_output_root: Path | None,
+    source_file: Path,
+) -> dict[str, Any]:
+    pointwise_status = "missing"
+    calibration_status = "missing"
+    rerank_status = "missing"
+    noisy_pointwise_status = "missing"
+    noisy_rerank_status = "missing"
+
+    if shadow_output_root is not None:
+        prefix = f"{domain}_qwen3_{variant}_{scenario}"
+        pointwise_exp = f"{prefix}_pointwise"
+        rerank_exp = f"{prefix}_structured_risk"
+        noisy_pointwise_exp = f"{pointwise_exp}_noisy_nl10"
+        noisy_rerank_exp = f"{rerank_exp}_noisy_nl10"
+
+        pointwise_status = _file_status(
+            shadow_output_root / pointwise_exp / "tables" / "diagnostic_metrics.csv",
+            shadow_output_root / pointwise_exp / "tables" / "shadow_score_summary.csv",
+        )
+        calibration_status = _file_status(
+            shadow_output_root / pointwise_exp / "tables" / "calibration_comparison.csv",
+            shadow_output_root / pointwise_exp / "calibrated" / "test_calibrated.jsonl",
+        )
+        rerank_status = _file_status(
+            shadow_output_root / rerank_exp / "tables" / "rerank_results.csv",
+            shadow_output_root / rerank_exp / "reranked" / "rank_reranked.jsonl",
+        )
+        noisy_pointwise_status = _file_status(
+            shadow_output_root / noisy_pointwise_exp / "tables" / "diagnostic_metrics.csv",
+            shadow_output_root / noisy_pointwise_exp / "tables" / "shadow_score_summary.csv",
+        )
+        noisy_rerank_status = _file_status(
+            shadow_output_root / noisy_rerank_exp / "tables" / "rerank_results.csv",
+            shadow_output_root / noisy_rerank_exp / "reranked" / "rank_reranked.jsonl",
+        )
+
+    status = _status_from_row(
+        {
+            "pointwise_status": pointwise_status,
+            "calibration_status": calibration_status,
+            "rerank_status": rerank_status,
+            "noisy_pointwise_status": noisy_pointwise_status,
+            "noisy_rerank_status": noisy_rerank_status,
+        }
+    )
+    return {
+        "evidence_layer": "signal_candidate",
+        "scenario": scenario,
+        "domain": domain,
+        "shadow_variant": variant,
+        "winner_signal_variant": "",
+        "status": status,
+        "pointwise_status": pointwise_status,
+        "calibration_status": calibration_status,
+        "rerank_status": rerank_status,
+        "noisy_pointwise_status": noisy_pointwise_status,
+        "noisy_rerank_status": noisy_rerank_status,
         "source_file": str(source_file),
     }
 
@@ -197,17 +268,53 @@ def _build_v6_row(domain: str, v6_output_root: Path) -> dict[str, Any]:
 def build_shadow_v1_to_v6_matrix(
     *,
     shadow_summary_root: Path,
+    shadow_output_root: Path | None,
     v6_output_root: Path,
     domains: list[str],
+    signal_scenarios: list[str],
+    signal_variants: list[str],
 ) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
+    row_by_key: dict[tuple[str, str, str], dict[str, Any]] = {}
     for filename in [
         "week7_9_shadow_small_prior_summary.csv",
         "week7_9_shadow_full_replay_summary.csv",
     ]:
         path = shadow_summary_root / filename
         for row in _read_csv_rows(path):
-            rows.append(_normalize_shadow_summary_row(row, path))
+            normalized = _normalize_shadow_summary_row(row, path)
+            key = (
+                str(normalized.get("scenario", "")),
+                str(normalized.get("domain", "")),
+                str(normalized.get("shadow_variant", "")),
+            )
+            row_by_key[key] = normalized
+
+    rows: list[dict[str, Any]] = []
+    for scenario in signal_scenarios:
+        source_file = shadow_summary_root / f"week7_9_shadow_{scenario}_summary.csv"
+        for domain in domains:
+            for variant in signal_variants:
+                key = (scenario, domain, variant)
+                rows.append(
+                    row_by_key.get(key)
+                    or _expected_signal_candidate_row(
+                        scenario=scenario,
+                        domain=domain,
+                        variant=variant,
+                        shadow_output_root=shadow_output_root,
+                        source_file=source_file,
+                    )
+                )
+
+    expected_keys = {
+        (scenario, domain, variant)
+        for scenario in signal_scenarios
+        for domain in domains
+        for variant in signal_variants
+    }
+    for key, row in row_by_key.items():
+        if key not in expected_keys:
+            rows.append(row)
 
     for domain in domains:
         rows.append(_build_v6_row(domain, v6_output_root))
@@ -233,11 +340,18 @@ def parse_args() -> argparse.Namespace:
         help="Directory containing week7_9_shadow_*_summary.csv files.",
     )
     parser.add_argument(
+        "--shadow_output_root",
+        default=None,
+        help="Optional raw shadow outputs root used to mark partial/missing expected v1-v5 rows.",
+    )
+    parser.add_argument(
         "--v6_output_root",
         default="outputs",
         help="Directory containing shadow_v6 bridge output experiment folders.",
     )
     parser.add_argument("--domains", default="beauty,books,electronics,movies")
+    parser.add_argument("--signal_scenarios", default="small_prior,full_replay")
+    parser.add_argument("--signal_variants", default="shadow_v1,shadow_v2,shadow_v3,shadow_v4,shadow_v5")
     parser.add_argument("--output_root", default="outputs/summary")
     parser.add_argument("--output_name", default="shadow_v1_to_v6_status_matrix")
     return parser.parse_args()
@@ -246,10 +360,16 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     domains = [item.strip() for item in args.domains.split(",") if item.strip()]
+    signal_scenarios = [item.strip() for item in args.signal_scenarios.split(",") if item.strip()]
+    signal_variants = [item.strip() for item in args.signal_variants.split(",") if item.strip()]
+    shadow_output_root = Path(args.shadow_output_root).expanduser() if args.shadow_output_root else None
     rows = build_shadow_v1_to_v6_matrix(
         shadow_summary_root=Path(args.shadow_summary_root).expanduser(),
+        shadow_output_root=shadow_output_root,
         v6_output_root=Path(args.v6_output_root).expanduser(),
         domains=domains,
+        signal_scenarios=signal_scenarios,
+        signal_variants=signal_variants,
     )
     output_root = Path(args.output_root).expanduser()
     csv_path = output_root / f"{args.output_name}.csv"
