@@ -4,7 +4,12 @@ import csv
 import json
 import pickle
 
+import numpy as np
+import pytest
+
 import main_export_llmesr_same_candidate_task as exporter
+import main_generate_llmesr_sentence_embeddings as sentence_embeddings
+from main_run_llmesr_scaffold_four_domain import _raw_metadata_args
 from main_audit_llmesr_adapter_package import audit
 from main_enrich_llmesr_item_text_seed import enrich_item_text_seed
 from main_generate_llmesr_text_embeddings import generate_embeddings
@@ -166,3 +171,40 @@ def test_llmesr_export_writes_mapped_adapter_package(tmp_path, monkeypatch):
     assert len(score_rows) == 2
     assert set(score_rows[0]) == {"source_event_id", "user_id", "item_id", "score"}
     assert all(float(row["score"]) == float(row["score"]) for row in score_rows)
+
+    monkeypatch.setattr(
+        sentence_embeddings,
+        "_encode_hf_mean_pool",
+        lambda texts, **kwargs: np.ones((len(texts), 8), dtype=np.float32),
+    )
+    hf_summary = sentence_embeddings.generate_sentence_embeddings(
+        package_dir,
+        backend="hf_mean_pool",
+        model_name="local-qwen3-8b",
+        batch_size=2,
+        pca_dim=64,
+    )
+    assert hf_summary["backend"] == "hf_mean_pool"
+    assert hf_summary["model_name"] == "local-qwen3-8b"
+    assert hf_summary["artifact_class"] == "adapter_text_embedding"
+    assert hf_summary["embedding_dim"] == 8
+
+
+def test_raw_metadata_args_fail_fast_when_root_or_domain_file_missing(tmp_path):
+    with pytest.raises(FileNotFoundError, match="does not exist"):
+        _raw_metadata_args(tmp_path / "missing", "movies", allow_missing=False)
+
+    raw_root = tmp_path / "raw"
+    raw_root.mkdir()
+    with pytest.raises(FileNotFoundError, match="no raw metadata file"):
+        _raw_metadata_args(raw_root, "movies", allow_missing=False)
+
+    assert _raw_metadata_args(raw_root, "movies", allow_missing=True) == []
+
+
+def test_raw_metadata_args_emit_movie_metadata_path(tmp_path):
+    raw_path = tmp_path / "amazon_movies" / "meta_Movies_and_TV.jsonl.gz"
+    raw_path.parent.mkdir(parents=True)
+    raw_path.write_text("{}", encoding="utf-8")
+
+    assert _raw_metadata_args(tmp_path, "movies", allow_missing=False) == ["--raw_metadata_path", str(raw_path)]

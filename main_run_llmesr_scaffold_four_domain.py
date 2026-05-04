@@ -48,12 +48,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output_root", default="outputs")
     parser.add_argument("--domains", default="beauty,books,electronics,movies")
     parser.add_argument("--embedding_dim", type=int, default=384)
-    parser.add_argument("--embedding_backend", choices=["deterministic_text_hash", "sentence_transformers"], default="deterministic_text_hash")
+    parser.add_argument(
+        "--embedding_backend",
+        choices=["deterministic_text_hash", "sentence_transformers", "hf_mean_pool"],
+        default="deterministic_text_hash",
+    )
     parser.add_argument("--sentence_model_name", default="sentence-transformers/all-MiniLM-L6-v2")
     parser.add_argument("--sentence_batch_size", type=int, default=64)
+    parser.add_argument("--hf_model_name", default="")
+    parser.add_argument("--hf_batch_size", type=int, default=2)
+    parser.add_argument("--hf_max_length", type=int, default=256)
+    parser.add_argument("--hf_trust_remote_code", action="store_true")
+    parser.add_argument("--hf_torch_dtype", default="auto", choices=["auto", "float16", "bfloat16", "float32"])
+    parser.add_argument("--hf_device_map", default="")
     parser.add_argument("--similar_user_weight", type=float, default=0.15)
     parser.add_argument("--max_seq_len", type=int, default=200)
     parser.add_argument("--raw_metadata_root", default="")
+    parser.add_argument("--allow_missing_raw_metadata", action="store_true")
     parser.add_argument("--skip_task_export", action="store_true")
     parser.add_argument("--summary_name", default="llmesr_scaffold_four_domain_summary")
     return parser.parse_args()
@@ -112,14 +123,32 @@ def _adapter_dir(output_root: Path, domain: str) -> Path:
     return output_root / "baselines" / "paper_adapters" / f"{domain}_llmesr_same_candidate_adapter"
 
 
-def _raw_metadata_args(raw_metadata_root: Path | None, domain: str) -> list[str]:
+def _raw_metadata_args(raw_metadata_root: Path | None, domain: str, *, allow_missing: bool) -> list[str]:
     if raw_metadata_root is None:
         return []
+    if not raw_metadata_root.exists():
+        message = f"--raw_metadata_root does not exist: {raw_metadata_root}"
+        if allow_missing:
+            print(f"WARNING: {message}", flush=True)
+            return []
+        raise FileNotFoundError(message)
     args: list[str] = []
+    checked_paths = []
     for rel_path in RAW_METADATA_CANDIDATES.get(domain, []):
         path = raw_metadata_root / rel_path
+        checked_paths.append(path)
         if path.exists():
             args.extend(["--raw_metadata_path", str(path)])
+    if not args:
+        checked = ", ".join(str(path) for path in checked_paths)
+        message = (
+            f"--raw_metadata_root was provided, but no raw metadata file was found for domain={domain}. "
+            f"Checked: {checked}"
+        )
+        if allow_missing:
+            print(f"WARNING: {message}", flush=True)
+            return []
+        raise FileNotFoundError(message)
     return args
 
 
@@ -209,7 +238,7 @@ def main() -> None:
                 str(adapter_dir),
                 "--processed_dir",
                 str(processed_dir),
-                *_raw_metadata_args(raw_metadata_root, domain),
+                *_raw_metadata_args(raw_metadata_root, domain, allow_missing=args.allow_missing_raw_metadata),
             ]
         )
         if args.embedding_backend == "sentence_transformers":
@@ -219,12 +248,37 @@ def main() -> None:
                     "main_generate_llmesr_sentence_embeddings.py",
                     "--adapter_dir",
                     str(adapter_dir),
+                    "--backend",
+                    "sentence_transformers",
                     "--model_name",
                     args.sentence_model_name,
                     "--batch_size",
                     str(args.sentence_batch_size),
                 ]
             )
+        elif args.embedding_backend == "hf_mean_pool":
+            hf_model_name = args.hf_model_name or args.sentence_model_name
+            cmd = [
+                sys.executable,
+                "main_generate_llmesr_sentence_embeddings.py",
+                "--adapter_dir",
+                str(adapter_dir),
+                "--backend",
+                "hf_mean_pool",
+                "--model_name",
+                hf_model_name,
+                "--batch_size",
+                str(args.hf_batch_size),
+                "--max_length",
+                str(args.hf_max_length),
+                "--torch_dtype",
+                args.hf_torch_dtype,
+            ]
+            if args.hf_trust_remote_code:
+                cmd.append("--trust_remote_code")
+            if args.hf_device_map:
+                cmd.extend(["--hf_device_map", args.hf_device_map])
+            _run(cmd)
         else:
             _run(
                 [

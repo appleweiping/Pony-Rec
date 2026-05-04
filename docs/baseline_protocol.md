@@ -347,6 +347,10 @@ python main_run_llmesr_scaffold_four_domain.py \
   --output_root outputs
 ```
 
+When `--raw_metadata_root` is provided, the runner fails fast if a domain's
+expected raw metadata file is missing. Use `--allow_missing_raw_metadata` only
+for intentional smoke tests without raw catalog enrichment.
+
 The generated four-domain summary is also a scaffold/protocol artifact, not a
 main paper baseline table.
 
@@ -365,7 +369,23 @@ Then replace the deterministic hash pickle files with true text embeddings:
 ```bash
 python main_generate_llmesr_sentence_embeddings.py \
   --adapter_dir outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter \
+  --backend sentence_transformers \
   --model_name sentence-transformers/all-MiniLM-L6-v2
+```
+
+Local Hugging Face models such as Qwen3 8B can be used as a hidden-state
+mean-pooling backend when no dedicated embedding model is available:
+
+```bash
+python main_generate_llmesr_sentence_embeddings.py \
+  --adapter_dir outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter \
+  --backend hf_mean_pool \
+  --model_name /path/to/local/qwen3-8b \
+  --batch_size 2 \
+  --max_length 256 \
+  --torch_dtype bfloat16 \
+  --hf_device_map auto \
+  --trust_remote_code
 ```
 
 For Movies, raw metadata may not contain titles for every Prime Video item, but
@@ -373,6 +393,7 @@ it can still fill useful `embedding_text` from main category and details. Track
 both `title_seed_coverage` and `non_id_embedding_text_coverage`; the latter is
 the cleaner readiness signal for text embeddings.
 
-Even with true sentence-transformer item embeddings, the current centroid scorer
-remains `adapter_scaffold_score`. It verifies the same-candidate protocol and
-embedding files, but it is not an upstream LLM-ESR completed result.
+Even with true text item embeddings from sentence-transformers or HF mean
+pooling, the current centroid scorer remains `adapter_scaffold_score`. It
+verifies the same-candidate protocol and embedding files, but it is not an
+upstream LLM-ESR completed result.
