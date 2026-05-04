@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 from pathlib import Path
 from typing import Any
 
@@ -58,8 +59,11 @@ def main() -> None:
             blank_score_keys += 1
             continue
         try:
-            float(row.get(args.score_col))
+            score = float(row.get(args.score_col))
         except Exception:
+            invalid_scores += 1
+            continue
+        if not math.isfinite(score):
             invalid_scores += 1
             continue
         score_user_item_keys.add((user_id, item_id))

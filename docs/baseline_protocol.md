@@ -196,6 +196,9 @@ python main_audit_same_candidate_score_file.py \
   --scores_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv
 ```
 
+The audit must show `invalid_scores=0` and full exact-key coverage. A score
+file full of `nan` values is invalid even if the row count and keys match.
+
 After importing real external baseline scores, include those rows in the unified
 method matrix with:
 

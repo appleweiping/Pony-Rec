@@ -193,14 +193,15 @@ def _build_model_class(torch: Any, nn: Any):
             batch_size, seq_len = input_ids.shape
             positions = torch.arange(seq_len, device=input_ids.device).unsqueeze(0).expand(batch_size, seq_len)
             hidden = self.item_embedding(input_ids) + self.position_embedding(positions)
+            nonpad_mask = input_ids.ne(0).unsqueeze(-1)
+            hidden = hidden * nonpad_mask
             hidden = self.dropout(hidden)
-            padding_mask = input_ids.eq(0)
             causal_mask = torch.triu(
                 torch.full((seq_len, seq_len), float("-inf"), device=input_ids.device),
                 diagonal=1,
             )
-            encoded = self.encoder(hidden, mask=causal_mask, src_key_padding_mask=padding_mask)
-            return self.layer_norm(encoded)
+            encoded = self.encoder(hidden, mask=causal_mask)
+            return self.layer_norm(encoded) * nonpad_mask
 
     return SASRecModel
 
@@ -299,7 +300,13 @@ def _score_candidates(
                 candidate_indices = [item_to_idx[row["item_id"]] for row in candidate_rows]
                 candidate_tensor = torch.tensor(candidate_indices, dtype=torch.long, device=device)
                 candidate_emb = model.item_embedding(candidate_tensor)
-                scores = (candidate_emb * user_repr.squeeze(0)).sum(dim=-1).detach().cpu().tolist()
+                score_tensor = (candidate_emb * user_repr.squeeze(0)).sum(dim=-1)
+                if not torch.isfinite(score_tensor).all():
+                    raise RuntimeError(
+                        "SASRec produced non-finite candidate scores. "
+                        "This run is invalid; rerun after checking model stability."
+                    )
+                scores = score_tensor.detach().cpu().tolist()
                 for row, score in zip(candidate_rows, scores):
                     writer.writerow(
                         {
