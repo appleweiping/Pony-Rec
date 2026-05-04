@@ -334,4 +334,6 @@ python main_score_llmesr_same_candidate_adapter.py \
 
 This writes `llmesr_scaffold_scores.csv`. Import it only with a non-main status
 label such as `llmesr_adapter_scaffold_score`; it is a protocol check, not a
-paper-result row.
+paper-result row. The importer maps scaffold status labels to
+`artifact_class=adapter_scaffold_score` to prevent accidental
+`completed_result` labeling.

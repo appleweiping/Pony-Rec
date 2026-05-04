@@ -54,8 +54,23 @@ def _save_table(rows: list[dict[str, Any]] | pd.DataFrame, path: Path) -> None:
         pd.DataFrame(rows).to_csv(path, index=False)
 
 
+def normalize_artifact_class(status_label: str, artifact_class: str) -> str:
+    status = str(status_label or "").strip()
+    artifact = str(artifact_class or "").strip() or "completed_result"
+    if "scaffold" in status and artifact == "completed_result":
+        return "adapter_scaffold_score"
+    return artifact
+
+
 def main() -> None:
     args = parse_args()
+    artifact_class = normalize_artifact_class(args.status_label, args.artifact_class)
+    if args.status_label == "same_schema_external_baseline" and "scaffold" in artifact_class:
+        raise ValueError(
+            "Refusing to import a scaffold artifact as same_schema_external_baseline. "
+            "Use a non-main status_label such as llmesr_adapter_scaffold_score."
+        )
+
     paths = ensure_exp_dirs(args.exp_name, args.output_root)
     ranking_samples = load_jsonl(args.ranking_input_path)
     score_rows = load_score_rows(args.scores_path)
@@ -101,7 +116,7 @@ def main() -> None:
         "comparison_scope": "week8_same_candidate_external_baseline",
         "task": "candidate_ranking",
         "status_label": args.status_label,
-        "artifact_class": args.artifact_class,
+        "artifact_class": artifact_class,
         "ranking_input_path": str(args.ranking_input_path),
         "scores_path": str(args.scores_path),
         "prediction_path": str(prediction_path),

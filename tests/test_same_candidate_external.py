@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from main_import_same_candidate_baseline_scores import normalize_artifact_class
 from src.baselines.same_candidate_external import build_predictions_from_external_scores
 
 
@@ -59,3 +60,8 @@ def test_external_scores_keep_candidate_order_for_missing_ties() -> None:
     assert predictions[0]["pred_ranked_item_ids"] == ["i2", "i1", "i3"]
     assert predictions[0]["external_missing_score_count"] == 2
     assert summary["matched_candidates"] == 1
+
+
+def test_scaffold_status_does_not_default_to_completed_result() -> None:
+    assert normalize_artifact_class("llmesr_adapter_scaffold_score", "completed_result") == "adapter_scaffold_score"
+    assert normalize_artifact_class("same_schema_external_baseline", "completed_result") == "completed_result"
