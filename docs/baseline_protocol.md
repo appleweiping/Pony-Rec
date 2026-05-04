@@ -323,3 +323,15 @@ python main_generate_llmesr_text_embeddings.py \
 These scaffold embeddings are not a completed paper-project baseline. Replace
 them with true LLM item embeddings before marking an LLM-ESR row as
 `completed_result`.
+
+To smoke-test the exact-candidate scoring and import path, score the adapter
+package:
+
+```bash
+python main_score_llmesr_same_candidate_adapter.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
+```
+
+This writes `llmesr_scaffold_scores.csv`. Import it only with a non-main status
+label such as `llmesr_adapter_scaffold_score`; it is a protocol check, not a
+paper-result row.

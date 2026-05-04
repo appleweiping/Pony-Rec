@@ -116,6 +116,13 @@ adapter_entrypoints:
       - llm_esr/handled/itm_emb_np.pkl
       - llm_esr/handled/pca64_itm_emb_np.pkl
       - llmesr_embedding_metadata.json
+  llmesr_scaffold_scorer:
+    script: main_score_llmesr_same_candidate_adapter.py
+    status: adapter_scaffold_score
+    output_files:
+      - llmesr_scaffold_scores.csv
+      - llmesr_scaffold_score_summary.csv
+      - llmesr_scaffold_score_metadata.json
 
 paper_adapter_candidates:
   - method_name: LLM-ESR

@@ -7,6 +7,7 @@ import pickle
 import main_export_llmesr_same_candidate_task as exporter
 from main_audit_llmesr_adapter_package import audit
 from main_generate_llmesr_text_embeddings import generate_embeddings
+from main_score_llmesr_same_candidate_adapter import score_adapter
 
 
 def _write_csv(path, rows, fieldnames):
@@ -129,3 +130,11 @@ def test_llmesr_export_writes_mapped_adapter_package(tmp_path, monkeypatch):
     assert audit_row["ready_for_scoring"] is True
     assert audit_row["itm_emb_dim"] == 16
     assert audit_row["pca64_emb_dim"] == 64
+
+    score_summary = score_adapter(package_dir)
+    assert score_summary["artifact_class"] == "adapter_scaffold_score"
+    assert score_summary["score_coverage_rate"] == 1.0
+    score_rows = list(csv.DictReader((package_dir / "llmesr_scaffold_scores.csv").open(encoding="utf-8")))
+    assert len(score_rows) == 2
+    assert set(score_rows[0]) == {"source_event_id", "user_id", "item_id", "score"}
+    assert all(float(row["score"]) == float(row["score"]) for row in score_rows)

@@ -86,6 +86,9 @@ python main_generate_llmesr_text_embeddings.py \
 
 python main_audit_llmesr_adapter_package.py \
   --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
+
+python main_score_llmesr_same_candidate_adapter.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
 ```
 
 Expected output:
@@ -111,3 +114,7 @@ The deterministic embedding generator is only an adapter/scorer scaffold. It
 creates correctly shaped LLM-ESR pickle files so the wrapper can be tested, but
 it should be replaced by true LLM item embeddings before any completed
 paper-project result claim.
+
+The scaffold scorer emits full-coverage same-candidate scores for protocol
+smoke testing. Keep its import status outside `same_schema_external_baseline`
+until true LLM-ESR embeddings or an upstream-compatible run are used.
