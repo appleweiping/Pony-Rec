@@ -128,3 +128,50 @@ configs/baseline/week8_external_same_candidate_manifest.yaml
 Every external baseline must emit the same ranking prediction schema and carry
 `status_label=same_schema_external_baseline` before it can enter the unified
 method matrix.
+
+## Same-Candidate Adapter
+
+Use the export/import pair for SASRec, BERT4Rec, GRU4Rec, LightGCN, or any
+paper-specific implementation:
+
+```bash
+python main_export_same_candidate_baseline_task.py \
+  --processed_dir data/processed/amazon_beauty \
+  --ranking_input_path data/processed/amazon_beauty/ranking_test.jsonl \
+  --exp_name beauty_week8_same_candidate_external
+```
+
+The external model should train on the exported `train_interactions.csv` or
+RecBole-style `.inter` file, then score every row in `candidate_items.csv`.
+
+Expected score file schema:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+Import and evaluate:
+
+```bash
+python main_import_same_candidate_baseline_scores.py \
+  --baseline_name sasrec \
+  --exp_name beauty_sasrec_same_candidate \
+  --domain beauty \
+  --ranking_input_path data/processed/amazon_beauty/ranking_test.jsonl \
+  --scores_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv
+```
+
+The import step writes `predictions/rank_predictions.jsonl` and the same
+ranking metrics used by direct/SRPD/shadow rows.
+
+After importing real external baseline scores, include those rows in the unified
+method matrix with:
+
+```bash
+python main_build_unified_method_matrix.py \
+  --week77_root ~/projects/uncertainty-llm4rec/export/week7_7_four_domain_final \
+  --shadow_matrix_path outputs/summary/shadow_v1_to_v6_status_matrix.csv \
+  --external_summary_glob "outputs/*/tables/same_candidate_external_baseline_summary.csv" \
+  --output_root outputs/summary \
+  --output_name unified_method_matrix_week77_shadow_external
+```

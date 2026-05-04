@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import glob
 from pathlib import Path
 from typing import Any
 
@@ -222,17 +223,52 @@ def _shadow_rows(shadow_matrix_path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _external_baseline_rows(external_summary_glob: str | None) -> list[dict[str, Any]]:
+    if not external_summary_glob:
+        return []
+
+    rows: list[dict[str, Any]] = []
+    for path_text in sorted(glob.glob(external_summary_glob)):
+        path = Path(path_text)
+        for record in _read_csv_rows(path):
+            status = record.get("status_label", "")
+            if status != "same_schema_external_baseline":
+                continue
+            baseline_name = record.get("baseline_name", "")
+            rows.append(
+                {
+                    "domain": record.get("domain", ""),
+                    "comparison_scope": record.get("comparison_scope", "week8_same_candidate_external_baseline"),
+                    "evidence_family": "external_same_candidate_baseline",
+                    "method": baseline_name,
+                    "method_variant": baseline_name,
+                    "sample_count": record.get("sample_count", ""),
+                    "NDCG@10": record.get("NDCG@10", ""),
+                    "MRR": record.get("MRR", ""),
+                    "status_label": status,
+                    "artifact_class": record.get("artifact_class", "completed_result"),
+                    "is_paper_result": "",
+                    "paper_role_hint": "same_schema_external_baseline",
+                    "source_file": str(path),
+                    "notes": "External baseline imported through the same-candidate score adapter.",
+                }
+            )
+    return rows
+
+
 def build_unified_method_matrix(
     *,
     week77_root: Path,
     shadow_matrix_path: Path,
     domains: list[str],
+    external_summary_glob: str | None = None,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for domain in domains:
         rows.extend(_week77_direct_and_structured_rows(week77_root, domain))
         rows.extend(_week77_srpd_rows(week77_root, domain))
     rows.extend(_shadow_rows(shadow_matrix_path))
+    rows.extend(_external_baseline_rows(external_summary_glob))
     rows = _add_delta_fields(rows)
     rows.sort(
         key=lambda row: (
@@ -252,6 +288,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--week77_root", required=True)
     parser.add_argument("--shadow_matrix_path", default="outputs/summary/shadow_v1_to_v6_status_matrix.csv")
     parser.add_argument("--domains", default="beauty,books,electronics,movies")
+    parser.add_argument(
+        "--external_summary_glob",
+        default=None,
+        help="Optional glob for outputs/*/tables/same_candidate_external_baseline_summary.csv.",
+    )
     parser.add_argument("--output_root", default="outputs/summary")
     parser.add_argument("--output_name", default="unified_method_matrix_week77_shadow")
     return parser.parse_args()
@@ -264,6 +305,7 @@ def main() -> None:
         week77_root=Path(args.week77_root).expanduser(),
         shadow_matrix_path=Path(args.shadow_matrix_path).expanduser(),
         domains=domains,
+        external_summary_glob=args.external_summary_glob,
     )
     output_root = Path(args.output_root).expanduser()
     csv_path = output_root / f"{args.output_name}.csv"

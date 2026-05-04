@@ -223,6 +223,16 @@ First implementation order:
 3. GRU4Rec.
 4. LightGCN, if the interaction graph is dense enough to justify it.
 
+Adapter status:
+
+- `main_export_same_candidate_baseline_task.py` exports train interactions,
+  exact candidate rows, RecBole-style `.inter`, and metadata.
+- `main_import_same_candidate_baseline_scores.py` imports
+  `source_event_id,user_id,item_id,score` files and evaluates them under the
+  existing ranking schema.
+- Model training is still intentionally separate; no SASRec/BERT4Rec/GRU4Rec
+  result is claimed until a real model score file is imported.
+
 ### Week8.3: SRPD vs Shadow-V6 Alignment
 
 Goal:

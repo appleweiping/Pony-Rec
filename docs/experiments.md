@@ -254,6 +254,22 @@ baselines, followed by paper-specific adapters such as OpenP5, SLMRec,
 LLM-ESR, LLMEmb, LLM2Rec, RLMRec, IRLLRec, or SETRec when their repositories can
 score the exact candidate set.
 
+The same-candidate adapter entry points are:
+
+```bash
+python main_export_same_candidate_baseline_task.py
+python main_import_same_candidate_baseline_scores.py
+```
+
+The export script creates train interactions, exact candidate rows, and a
+RecBole-style `.inter` file. The import script turns external model scores into
+the repository's `rank_predictions.jsonl` format and evaluates them with the
+same ranking metric code used elsewhere.
+
+Once real external baseline summaries exist, pass
+`--external_summary_glob "outputs/*/tables/same_candidate_external_baseline_summary.csv"`
+to `main_build_unified_method_matrix.py` to add them to the unified matrix.
+
 ## Notes
 
 - Current `100`-sample runs are best treated as stable research baselines, not final large-scale paper numbers.

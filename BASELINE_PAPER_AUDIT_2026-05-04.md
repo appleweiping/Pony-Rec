@@ -122,3 +122,33 @@ paper-specific repositories:
 - Run one smoke domain first, then four-domain evaluation.
 
 Only after those rows are stable should the paper-derived adapters be attempted.
+
+## Week8.2 Adapter Update
+
+The same-candidate adapter layer now has two entry points:
+
+- `main_export_same_candidate_baseline_task.py`
+- `main_import_same_candidate_baseline_scores.py`
+
+The export step writes:
+
+- `train_interactions.csv`
+- `candidate_items.csv`
+- `recbole/<dataset>.inter`
+- `metadata.json`
+
+The import step expects external model scores with:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+and writes:
+
+- `predictions/rank_predictions.jsonl`
+- `tables/ranking_metrics.csv`
+- `tables/ranking_exposure_distribution.csv`
+- `tables/same_candidate_external_baseline_summary.csv`
+
+This is an adapter, not a completed SASRec/BERT4Rec/GRU4Rec/LightGCN result.
+Those methods still need real model training before any baseline claim.
