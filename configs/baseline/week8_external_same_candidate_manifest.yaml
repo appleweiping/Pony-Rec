@@ -93,36 +93,60 @@ adapter_entrypoints:
       - lightgcn_train_summary.csv
       - lightgcn_epoch_log.csv
       - lightgcn_model_metadata.json
+  llmesr_adapter_export:
+    script: main_export_llmesr_same_candidate_task.py
+    status: adapter_package_only
+    output_files:
+      - llm_esr/handled/inter.txt
+      - llm_esr/handled/sim_user_100.pkl
+      - candidate_items_mapped.csv
+      - item_text_seed.csv
+      - user_id_map.csv
+      - item_id_map.csv
+      - adapter_metadata.json
 
 paper_adapter_candidates:
-  - method_name: OpenP5
-    source_collection: NH
-    priority: B_adapter_candidate
-    notes: Open LLM-rec platform; inspect only after classical baselines are stable.
-  - method_name: SLMRec
-    source_collection: NH
-    priority: B_adapter_candidate
-    notes: Sequential LLM distillation baseline with code detected.
   - method_name: LLM-ESR
     source_collection: NH
-    priority: B_adapter_candidate
-    notes: Long-tail sequential recommendation; relevant to exposure/long-tail analysis.
+    priority: B1_first_adapter_target
+    repo_url: https://github.com/Applied-Machine-Learning-Lab/LLM-ESR
+    adapter_entrypoint: main_export_llmesr_same_candidate_task.py
+    status: adapter_package_export_ready
+    notes: Long-tail sequential recommendation; first paper-project target because it has item-level predict methods and directly supports the long-tail/exposure story. Requires LLM-compatible item embeddings before completed_result.
+  - method_name: LLM2Rec
+    source_collection: NR
+    priority: B2_backup_adapter_target
+    repo_url: https://github.com/HappyPointer/LLM2Rec
+    status: inspected_embedding_pipeline
+    notes: Embedding-model sequential recommendation; feasible if precomputed item/sequence embeddings are available, but dependency chain is heavier than LLM-ESR.
+  - method_name: OpenP5
+    source_collection: NH
+    priority: C_platform_reference
+    repo_url: https://github.com/agiresearch/OpenP5
+    status: inspected_platform_heavy
+    notes: Open LLM-rec platform; useful reference but not first adapter because native pipeline needs platform dataset generation/checkpoints.
+  - method_name: SLMRec
+    source_collection: NH
+    priority: C_heavy_training_chain
+    repo_url: https://github.com/WujiangXu/SLMRec
+    status: inspected_teacher_student_heavy
+    notes: Sequential LLM distillation baseline with code detected; requires teacher/student distillation resources before same-candidate scoring.
   - method_name: LLMEmb
     source_collection: NH
     priority: B_adapter_candidate
     notes: LLM embedding generator for sequential recommendation.
-  - method_name: LLM2Rec
-    source_collection: NR
-    priority: B_adapter_candidate
-    notes: LLM embedding model for sequential recommendation.
   - method_name: RLMRec
     source_collection: NR
-    priority: B_adapter_candidate
-    notes: Representation-learning recommendation baseline.
+    priority: B3_graph_embedding_candidate
+    repo_url: https://github.com/HKUDS/RLMRec
+    status: inspected_graph_embedding_pipeline
+    notes: Representation-learning baseline; graph/text-embedding format is feasible but should follow LLM-ESR/LLM2Rec.
   - method_name: IRLLRec
     source_collection: NR
-    priority: B_adapter_candidate
-    notes: Intent representation learning baseline.
+    priority: B3_graph_embedding_candidate
+    repo_url: https://github.com/wangyu0627/IRLLRec
+    status: inspected_graph_embedding_pipeline
+    notes: Intent representation learning baseline; adapted from RLMRec-style graph/text embeddings and should follow LLM-ESR/LLM2Rec.
   - method_name: SETRec
     source_collection: NR
     priority: B_adapter_candidate

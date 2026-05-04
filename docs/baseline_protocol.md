@@ -265,3 +265,31 @@ python main_build_unified_method_matrix.py \
   --output_root outputs/summary \
   --output_name unified_method_matrix_week77_shadow_external
 ```
+
+## Paper-Project Adapters
+
+The first paper-project target after the completed classical suite is LLM-ESR.
+Export an adapter package from an existing same-candidate task:
+
+```bash
+python main_export_llmesr_same_candidate_task.py \
+  --task_dir outputs/baselines/external_tasks/beauty_week8_same_candidate_external \
+  --exp_name beauty_llmesr_same_candidate_adapter \
+  --output_root outputs
+```
+
+This writes an `adapter_package_only` bundle under:
+
+```text
+outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/
+```
+
+The package contains mapped 1-based user/item ids, LLM-ESR-style `inter.txt`,
+candidate rows with mapped ids, item text seeds, and similar-user fallback
+files. It is not a completed result. A paper-project row can enter the unified
+matrix only after the adapted repo emits the same score schema with full
+candidate coverage:
+
+```text
+source_event_id,user_id,item_id,score
+```

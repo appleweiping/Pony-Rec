@@ -125,6 +125,26 @@ The classical rows are now stable enough for the unified method matrix; the
 paper-derived adapters can be attempted next if additional external coverage is
 needed.
 
+## Week8.3 Paper-Project Adapter Start
+
+The first paper-project adapter target is now LLM-ESR:
+
+- Repo: `https://github.com/Applied-Machine-Learning-Lab/LLM-ESR`
+- Reason: it is sequential, long-tail focused, and exposes model-level
+  candidate-item `predict` methods.
+- Local adapter package exporter:
+  `main_export_llmesr_same_candidate_task.py`
+
+The backup target is LLM2Rec because it is also scoreable through item/sequence
+embeddings, but its dependency chain is heavier. OpenP5 and SLMRec are deferred
+because their native pipelines are platform/checkpoint or teacher-student
+distillation heavy.
+
+The LLM-ESR exporter creates mapped ids, `inter.txt`, exact candidate rows,
+item text seeds, and similar-user fallback files. It is explicitly
+`adapter_package_only`; it does not create a completed result until a wrapped
+LLM-ESR run emits full-coverage same-candidate scores.
+
 ## Week8.2 Adapter Update
 
 The same-candidate adapter layer now has these entry points:
