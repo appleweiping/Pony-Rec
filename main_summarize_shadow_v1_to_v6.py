@@ -111,6 +111,28 @@ def _file_status(*paths: Path) -> str:
     return "ready" if any(path.exists() for path in paths) else "missing"
 
 
+def _first_row(path: Path) -> dict[str, str]:
+    rows = _read_csv_rows(path)
+    return rows[0] if rows else {}
+
+
+def _rerank_metric_row(path: Path) -> dict[str, str]:
+    rows = _read_csv_rows(path)
+    if not rows:
+        return {}
+    for row in rows:
+        if "uncertainty_aware" in str(row.get("method", "")):
+            return row
+    return rows[-1]
+
+
+def _calibration_after(path: Path, metric: str) -> str:
+    for row in _read_csv_rows(path):
+        if row.get("split") == "test" and row.get("metric") == metric:
+            return row.get("after", "")
+    return ""
+
+
 def _normalize_shadow_summary_row(row: dict[str, str], source_file: Path) -> dict[str, Any]:
     return {
         "evidence_layer": "signal_candidate",
@@ -150,6 +172,11 @@ def _expected_signal_candidate_row(
     rerank_status = "missing"
     noisy_pointwise_status = "missing"
     noisy_rerank_status = "missing"
+    pointwise: dict[str, str] = {}
+    rerank: dict[str, str] = {}
+    noisy_pointwise: dict[str, str] = {}
+    noisy_rerank: dict[str, str] = {}
+    calibrated_ece = ""
 
     if shadow_output_root is not None:
         prefix = f"{domain}_qwen3_{variant}_{scenario}"
@@ -158,26 +185,42 @@ def _expected_signal_candidate_row(
         noisy_pointwise_exp = f"{pointwise_exp}_noisy_nl10"
         noisy_rerank_exp = f"{rerank_exp}_noisy_nl10"
 
+        pointwise_path = shadow_output_root / pointwise_exp / "tables" / "diagnostic_metrics.csv"
+        calib_path = shadow_output_root / pointwise_exp / "tables" / "calibration_comparison.csv"
+        rerank_path = shadow_output_root / rerank_exp / "tables" / "rerank_results.csv"
+        noisy_pointwise_path = shadow_output_root / noisy_pointwise_exp / "tables" / "diagnostic_metrics.csv"
+        noisy_rerank_path = shadow_output_root / noisy_rerank_exp / "tables" / "rerank_results.csv"
+
         pointwise_status = _file_status(
-            shadow_output_root / pointwise_exp / "tables" / "diagnostic_metrics.csv",
+            pointwise_path,
             shadow_output_root / pointwise_exp / "tables" / "shadow_score_summary.csv",
         )
         calibration_status = _file_status(
-            shadow_output_root / pointwise_exp / "tables" / "calibration_comparison.csv",
+            calib_path,
             shadow_output_root / pointwise_exp / "calibrated" / "test_calibrated.jsonl",
         )
         rerank_status = _file_status(
-            shadow_output_root / rerank_exp / "tables" / "rerank_results.csv",
+            rerank_path,
             shadow_output_root / rerank_exp / "reranked" / "rank_reranked.jsonl",
         )
         noisy_pointwise_status = _file_status(
-            shadow_output_root / noisy_pointwise_exp / "tables" / "diagnostic_metrics.csv",
+            noisy_pointwise_path,
             shadow_output_root / noisy_pointwise_exp / "tables" / "shadow_score_summary.csv",
         )
         noisy_rerank_status = _file_status(
-            shadow_output_root / noisy_rerank_exp / "tables" / "rerank_results.csv",
+            noisy_rerank_path,
             shadow_output_root / noisy_rerank_exp / "reranked" / "rank_reranked.jsonl",
         )
+        pointwise = _first_row(pointwise_path)
+        rerank = _rerank_metric_row(rerank_path)
+        noisy_pointwise = _first_row(noisy_pointwise_path)
+        noisy_rerank = _rerank_metric_row(noisy_rerank_path)
+        calibrated_ece = _calibration_after(calib_path, "ece")
+
+    clean_ndcg = rerank.get("NDCG@10", "")
+    noisy_ndcg = noisy_rerank.get("NDCG@10", "")
+    clean_value = _safe_float(clean_ndcg)
+    noisy_value = _safe_float(noisy_ndcg)
 
     status = _status_from_row(
         {
@@ -200,6 +243,16 @@ def _expected_signal_candidate_row(
         "rerank_status": rerank_status,
         "noisy_pointwise_status": noisy_pointwise_status,
         "noisy_rerank_status": noisy_rerank_status,
+        "pointwise_auroc": pointwise.get("auroc", ""),
+        "pointwise_ece": pointwise.get("ece", ""),
+        "calibrated_ece": calibrated_ece,
+        "rerank_ndcg_at_10": clean_ndcg,
+        "rerank_mrr": rerank.get("MRR", ""),
+        "noisy_pointwise_auroc": noisy_pointwise.get("auroc", ""),
+        "noisy_rerank_ndcg_at_10": noisy_ndcg,
+        "ndcg_drop_noisy": _fmt_delta(clean_value - noisy_value)
+        if clean_value is not None and noisy_value is not None
+        else "",
         "source_file": str(source_file),
     }
 
