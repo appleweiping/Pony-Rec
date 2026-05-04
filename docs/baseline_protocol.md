@@ -184,7 +184,17 @@ python main_import_same_candidate_baseline_scores.py \
 ```
 
 The import step writes `predictions/rank_predictions.jsonl` and the same
-ranking metrics used by direct/SRPD/shadow rows.
+ranking metrics used by direct/SRPD/shadow rows. For
+`status_label=same_schema_external_baseline`, the import step requires full
+score coverage by default.
+
+If coverage fails, audit the score file before importing:
+
+```bash
+python main_audit_same_candidate_score_file.py \
+  --candidate_items_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/candidate_items.csv \
+  --scores_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv
+```
 
 After importing real external baseline scores, include those rows in the unified
 method matrix with:

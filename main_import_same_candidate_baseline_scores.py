@@ -37,6 +37,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--k", type=int, default=10)
     parser.add_argument("--artifact_class", default="completed_result")
     parser.add_argument("--status_label", default="same_schema_external_baseline")
+    parser.add_argument("--min_score_coverage", type=float, default=1.0)
+    parser.add_argument(
+        "--allow_partial_scores",
+        action="store_true",
+        help="Allow same_schema_external_baseline imports with score coverage below --min_score_coverage.",
+    )
     return parser.parse_args()
 
 
@@ -65,6 +71,22 @@ def main() -> None:
         missing_score=args.missing_score,
         k=args.k,
     )
+    score_summary["score_rows_loaded"] = len(score_rows)
+
+    coverage = float(score_summary.get("score_coverage_rate", 0.0))
+    if (
+        args.status_label == "same_schema_external_baseline"
+        and not args.allow_partial_scores
+        and coverage + 1.0e-12 < args.min_score_coverage
+    ):
+        raise ValueError(
+            "Refusing to write same_schema_external_baseline with partial score coverage: "
+            f"score_coverage_rate={coverage:.6f}, required>={args.min_score_coverage:.6f}, "
+            f"matched_candidates={score_summary.get('matched_candidates')}, "
+            f"total_candidates={score_summary.get('total_candidates')}, "
+            f"score_rows_loaded={len(score_rows)}. "
+            "Fix the external score file or rerun with --allow_partial_scores and a non-main status label."
+        )
 
     prediction_path = paths.predictions_dir / "rank_predictions.jsonl"
     save_jsonl(predictions, prediction_path)
