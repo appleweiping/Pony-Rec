@@ -32,10 +32,7 @@ Together with SASRec and GRU4Rec, it gives the paper table a three-model
 classical sequential baseline block under the exact same candidate, split, and
 metric protocol.
 
-## Next Baseline
+## Suite Status
 
-The next classical candidate is LightGCN:
-
-- Graph collaborative-filtering recommender.
-- Same export/import protocol.
-- Same `source_event_id,user_id,item_id,score` score file contract.
+LightGCN has now also been completed through the same adapter. The classical
+same-candidate suite is complete for SASRec/GRU4Rec/BERT4Rec/LightGCN.

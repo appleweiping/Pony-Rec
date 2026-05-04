@@ -32,10 +32,8 @@ This strengthens the baseline story: the main SRPD/shadow evidence is now
 compared against two classical sequential recommender baselines under the exact
 same candidate, split, and metric protocol.
 
-## Next Baseline
+## Suite Status
 
-The next classical candidate is BERT4Rec:
-
-- Bidirectional masked-sequence recommender.
-- Same export/import protocol.
-- Same `source_event_id,user_id,item_id,score` score file contract.
+BERT4Rec and LightGCN have now also been completed through the same adapter.
+The classical same-candidate suite is complete for
+SASRec/GRU4Rec/BERT4Rec/LightGCN.

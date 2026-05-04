@@ -113,22 +113,27 @@ Week8.1 is now a reproducible paper audit:
 - `main_audit_baseline_papers.py`
 - `baseline_paper_audit_matrix.csv/md` generated locally
 
-Week8.2 should implement the classical same-candidate adapter before cloning
+Week8.2 has implemented the classical same-candidate adapter before cloning
 paper-specific repositories:
 
-- Build a small external-baseline manifest for SASRec/BERT4Rec/GRU4Rec/LightGCN.
-- Add a common prediction writer that converts model scores into the existing
+- Built a small external-baseline manifest for SASRec/BERT4Rec/GRU4Rec/LightGCN.
+- Added a common prediction writer that converts model scores into the existing
   rank prediction schema.
-- Run one smoke domain first, then four-domain evaluation.
+- Ran four-domain evaluation for SASRec, GRU4Rec, BERT4Rec, and LightGCN.
 
-Only after those rows are stable should the paper-derived adapters be attempted.
+The classical rows are now stable enough for the unified method matrix; the
+paper-derived adapters can be attempted next if additional external coverage is
+needed.
 
 ## Week8.2 Adapter Update
 
-The same-candidate adapter layer now has two entry points:
+The same-candidate adapter layer now has these entry points:
 
 - `main_export_same_candidate_baseline_task.py`
 - `main_train_sasrec_same_candidate.py`
+- `main_train_gru4rec_same_candidate.py`
+- `main_train_bert4rec_same_candidate.py`
+- `main_train_lightgcn_same_candidate.py`
 - `main_import_same_candidate_baseline_scores.py`
 
 The export step writes:
@@ -151,7 +156,7 @@ and writes:
 - `tables/ranking_exposure_distribution.csv`
 - `tables/same_candidate_external_baseline_summary.csv`
 
-This is an adapter, not a completed SASRec/BERT4Rec/GRU4Rec/LightGCN result.
-SASRec now has a lightweight PyTorch trainer, but it becomes a completed result
-only after `sasrec_scores.csv` is imported with full score coverage. BERT4Rec,
-GRU4Rec, and LightGCN still need real model training before any baseline claim.
+This adapter now has completed same-candidate results for SASRec, GRU4Rec,
+BERT4Rec, and LightGCN. Each row should still keep
+`status_label=same_schema_external_baseline`, and winner wording still requires
+paired significance tests.

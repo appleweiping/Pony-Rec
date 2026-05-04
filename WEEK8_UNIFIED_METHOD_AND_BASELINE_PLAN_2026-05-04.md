@@ -105,8 +105,7 @@ Add or recover same-split baselines:
 - SASRec.
 - BERT4Rec.
 - GRU4Rec.
-- LightGCN or another graph collaborative-filtering baseline if data supports
-  it.
+- LightGCN.
 
 Required adaptation:
 
@@ -221,7 +220,7 @@ First implementation order:
 1. SASRec.
 2. GRU4Rec.
 3. BERT4Rec.
-4. LightGCN, if the interaction graph is dense enough to justify it.
+4. LightGCN.
 
 Adapter status:
 
@@ -247,8 +246,11 @@ Adapter status:
   `same_schema_external_baseline`.
 - BERT4Rec is verified on the four-domain server matrix as the third
   `same_schema_external_baseline`.
-- LightGCN trainer is ready; server train/audit/import remains the next
-  external-baseline step.
+- LightGCN is verified on the four-domain server matrix as the fourth
+  `same_schema_external_baseline`.
+- The classical external baseline suite is complete for
+  SASRec/GRU4Rec/BERT4Rec/LightGCN; the unified matrix with external baselines
+  rebuilds to `rows=46`.
 
 ### Week8.3: SRPD vs Shadow-V6 Alignment
 

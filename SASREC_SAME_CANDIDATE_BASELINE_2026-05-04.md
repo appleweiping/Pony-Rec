@@ -32,10 +32,8 @@ useful evidence: the main method line is no longer only compared against simple
 toy baselines, and the table now has a classical sequential recommender
 baseline under the exact same candidate and metric protocol.
 
-## Next Baseline
+## Suite Status
 
-GRU4Rec has now been completed as the second lightweight external baseline:
-
-- `main_train_gru4rec_same_candidate.py`
-
-BERT4Rec and LightGCN remain the next candidates.
+GRU4Rec, BERT4Rec, and LightGCN have now also been completed through the same
+adapter. The classical same-candidate suite is complete for
+SASRec/GRU4Rec/BERT4Rec/LightGCN.

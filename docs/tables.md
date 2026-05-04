@@ -52,6 +52,28 @@ Rows are eligible for the unified method matrix only when:
 - candidate protocol audit and significance testing are run before winner
   wording
 
+### `unified_method_matrix_week77_shadow_external.csv`
+
+Use this as the current paper-facing bridge table for Week7.7 methods,
+shadow diagnostics, and the completed same-candidate external baselines.
+
+Rows should include:
+
+- Week7.7 direct candidate ranking
+- Week7.7 structured-risk rerank
+- Week7.7 SRPD variants
+- full-replay `shadow_v1`
+- diagnostic `shadow_v6`
+- external same-candidate baselines from SASRec/GRU4Rec/BERT4Rec/LightGCN
+
+Recommended use:
+
+- method comparison table for the paper draft
+- cross-check that external baselines remain on the same candidate set and
+  metric path
+- source table for deciding whether `shadow_v6` is still only a bridge row or
+  deserves method-candidate wording
+
 ### `significance_tests.csv` and `main_table_with_ci.csv`
 
 Use these for winner claims. A row whose paired confidence interval crosses zero

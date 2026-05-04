@@ -22,28 +22,28 @@ classical_same_candidate:
     adapter_kind: sequential_recommender
     first_domain: beauty
     train_script: main_train_sasrec_same_candidate.py
-    notes: Strong sequential baseline; lightweight PyTorch trainer is available before paper-specific methods.
+    notes: Four-domain same-candidate completed result available; lightweight PyTorch trainer is available before paper-specific methods.
   - baseline_name: bert4rec
     priority: A
     implementation_status: lightweight_torch_trainer_ready
     adapter_kind: bidirectional_sequential_recommender
     first_domain: beauty
     train_script: main_train_bert4rec_same_candidate.py
-    notes: Standard masked-item sequential baseline; PyTorch trainer is available after GRU4Rec.
+    notes: Four-domain same-candidate completed result available; standard masked-item sequential baseline.
   - baseline_name: gru4rec
     priority: A
     implementation_status: lightweight_torch_trainer_ready
     adapter_kind: recurrent_sequential_recommender
     first_domain: beauty
     train_script: main_train_gru4rec_same_candidate.py
-    notes: Lightweight recurrent sanity baseline; PyTorch trainer is available after SASRec.
+    notes: Four-domain same-candidate completed result available; lightweight recurrent sanity baseline.
   - baseline_name: lightgcn
     priority: A_or_B
     implementation_status: lightweight_torch_trainer_ready
     adapter_kind: graph_collaborative_filtering
     first_domain: beauty
     train_script: main_train_lightgcn_same_candidate.py
-    notes: Lightweight graph collaborative-filtering baseline; train/audit before promotion to completed result.
+    notes: Four-domain same-candidate completed result available; lightweight graph collaborative-filtering baseline.
 
 adapter_entrypoints:
   export_task:
