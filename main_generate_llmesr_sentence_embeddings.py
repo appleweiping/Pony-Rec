@@ -177,12 +177,12 @@ def _encode_hf_mean_pool(
             mask = encoded["attention_mask"].unsqueeze(-1).to(token_embeddings.dtype)
             pooled = (token_embeddings * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-6)
             pooled = torch.nn.functional.normalize(pooled, p=2, dim=1)
-            vectors.append(pooled.cpu())
+            vectors.append(pooled.float().cpu())
             print(f"[hf_mean_pool] encoded {min(start + batch_size, len(texts))}/{len(texts)}", flush=True)
     if not vectors:
         np = _numpy()
         return np.zeros((0, 0), dtype=np.float32)
-    return torch.cat(vectors, dim=0).numpy()
+    return torch.cat(vectors, dim=0).float().numpy()
 
 
 def generate_sentence_embeddings(
