@@ -217,16 +217,12 @@ def score_adapter(
     _write_csv(rows, output_scores_path, ["source_event_id", "user_id", "item_id", "score"])
 
     embedding_artifact_class = str(embedding_metadata.get("artifact_class", "")).strip()
-    artifact_class = (
-        "adapter_scaffold_score"
-        if embedding_artifact_class == "adapter_scaffold_embedding"
-        else "paper_adapter_score"
-    )
+    artifact_class = "adapter_scaffold_score"
     summary = {
         "adapter_dir": str(adapter_dir),
         "baseline_name": "llmesr_same_candidate_adapter",
         "artifact_class": artifact_class,
-        "paper_result_ready": artifact_class == "paper_adapter_score",
+        "paper_result_ready": False,
         "embedding_source": embedding_source,
         "embedding_artifact_class": embedding_artifact_class,
         "similar_user_weight": similar_user_weight,
@@ -237,8 +233,9 @@ def score_adapter(
         "output_scores_path": str(output_scores_path),
         "note": (
             "This scorer uses the LLM-ESR adapter package and exact same-candidate rows. "
-            "Rows produced from deterministic scaffold embeddings are for protocol smoke "
-            "testing only and must not be promoted to completed_result."
+            "Rows produced by this centroid scorer are for protocol smoke testing "
+            "only and must not be promoted to completed_result, even when the item "
+            "embeddings come from a real text-embedding backend."
         ),
     }
     _write_csv([summary], adapter_dir / "llmesr_scaffold_score_summary.csv", list(summary.keys()))

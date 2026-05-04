@@ -22,6 +22,7 @@ FIELDS = [
     "sim_user_status",
     "item_text_rows",
     "title_seed_coverage",
+    "non_id_embedding_text_coverage",
     "itm_emb_status",
     "itm_emb_dim",
     "pca64_emb_status",
@@ -149,14 +150,23 @@ def _sim_user_status(path: Path, *, user_count: int) -> str:
     return "ready"
 
 
-def _item_text_status(path: Path, *, item_count: int) -> tuple[int, float]:
+def _item_text_status(path: Path, *, item_count: int) -> tuple[int, float, float]:
     rows = _read_csv(path)
     covered = 0
+    non_id_text = 0
     for row in rows:
         title = str(row.get("candidate_title", "")).strip()
         if title:
             covered += 1
-    return len(rows), float(covered / item_count) if item_count else 0.0
+        embedding_text = str(row.get("embedding_text", "")).strip()
+        item_id = str(row.get("item_id", "")).strip()
+        if embedding_text and embedding_text != item_id and embedding_text.lower() != f"item id: {item_id}".lower():
+            non_id_text += 1
+    return (
+        len(rows),
+        float(covered / item_count) if item_count else 0.0,
+        float(non_id_text / item_count) if item_count else 0.0,
+    )
 
 
 def _shape_of_pickle(path: Path) -> tuple[str, int | None, int | None]:
@@ -243,7 +253,7 @@ def audit(adapter_dir: Path) -> dict[str, Any]:
     item_map_valid, _ = _map_status(item_map_path, "item_id", "llmesr_item_idx", item_count)
     inter_valid, inter_rows = _inter_status(inter_path, expected_inter, user_count=user_count, item_count=item_count)
     sim_status = _sim_user_status(sim_path, user_count=user_count)
-    item_text_rows, title_seed_coverage = _item_text_status(item_text_path, item_count=item_count)
+    item_text_rows, title_seed_coverage, non_id_embedding_text_coverage = _item_text_status(item_text_path, item_count=item_count)
     itm_status, itm_ready, itm_dim = _embedding_status(itm_emb_path, expected_items=item_count)
     pca_status, pca_ready, pca_dim = _embedding_status(pca64_path, expected_items=item_count, expected_dim=64)
     embedding_metadata_status = _embedding_metadata_status(embedding_metadata_path)
@@ -280,6 +290,7 @@ def audit(adapter_dir: Path) -> dict[str, Any]:
         "sim_user_status": sim_status,
         "item_text_rows": item_text_rows,
         "title_seed_coverage": f"{title_seed_coverage:.6f}",
+        "non_id_embedding_text_coverage": f"{non_id_embedding_text_coverage:.6f}",
         "itm_emb_status": itm_status,
         "itm_emb_dim": itm_dim if itm_dim is not None else "",
         "pca64_emb_status": pca_status,

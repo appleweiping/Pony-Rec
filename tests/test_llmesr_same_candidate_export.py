@@ -6,6 +6,7 @@ import pickle
 
 import main_export_llmesr_same_candidate_task as exporter
 from main_audit_llmesr_adapter_package import audit
+from main_enrich_llmesr_item_text_seed import enrich_item_text_seed
 from main_generate_llmesr_text_embeddings import generate_embeddings
 from main_score_llmesr_same_candidate_adapter import score_adapter
 
@@ -122,6 +123,33 @@ def test_llmesr_export_writes_mapped_adapter_package(tmp_path, monkeypatch):
     assert audit_row["ready_for_embedding_generation"] is True
     assert audit_row["ready_for_scoring"] is False
     assert audit_row["itm_emb_status"] == "missing"
+
+    processed_dir = tmp_path / "processed"
+    _write_csv(
+        processed_dir / "items.csv",
+        [
+            {
+                "item_id": "i1",
+                "title": "History One",
+                "categories": "Catalog",
+                "description": "Seen in train history",
+                "candidate_text": "Title: History One Categories: Catalog Description: Seen in train history",
+            },
+            {
+                "item_id": "i3",
+                "title": "Target Catalog Title",
+                "categories": "Catalog",
+                "description": "Better target text",
+                "candidate_text": "Title: Target Catalog Title Categories: Catalog Description: Better target text",
+            },
+        ],
+        ["item_id", "title", "categories", "description", "candidate_text"],
+    )
+    enrich_summary = enrich_item_text_seed(adapter_dir=package_dir, processed_dir=processed_dir, raw_metadata_paths=[])
+    assert enrich_summary["embedding_text_coverage_after"] == 1.0
+    item_text_rows = list(csv.DictReader((package_dir / "item_text_seed.csv").open(encoding="utf-8")))
+    assert item_text_rows[2]["candidate_title"] == "Target Item"
+    assert "Better target text" in item_text_rows[2]["embedding_text"]
 
     embedding_summary = generate_embeddings(package_dir, embedding_dim=16, pca_dim=64, backend="deterministic_text_hash")
     assert embedding_summary["artifact_class"] == "adapter_scaffold_embedding"

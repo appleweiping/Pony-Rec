@@ -116,6 +116,19 @@ adapter_entrypoints:
       - llm_esr/handled/itm_emb_np.pkl
       - llm_esr/handled/pca64_itm_emb_np.pkl
       - llmesr_embedding_metadata.json
+  llmesr_item_text_enrichment:
+    script: main_enrich_llmesr_item_text_seed.py
+    status: item_text_catalog_enrichment
+    output_files:
+      - item_text_seed.csv
+      - item_text_enrichment_summary.json
+  llmesr_sentence_embedding_backend:
+    script: main_generate_llmesr_sentence_embeddings.py
+    status: adapter_text_embedding
+    output_files:
+      - llm_esr/handled/itm_emb_np.pkl
+      - llm_esr/handled/pca64_itm_emb_np.pkl
+      - llmesr_embedding_metadata.json
   llmesr_scaffold_scorer:
     script: main_score_llmesr_same_candidate_adapter.py
     status: adapter_scaffold_score

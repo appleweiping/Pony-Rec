@@ -343,8 +343,36 @@ To run this scaffold protocol across all four domains:
 ```bash
 python main_run_llmesr_scaffold_four_domain.py \
   --processed_root ~/projects/uncertainty-llm4rec/data/processed \
+  --raw_metadata_root ~/projects/uncertainty-llm4rec/data/raw \
   --output_root outputs
 ```
 
 The generated four-domain summary is also a scaffold/protocol artifact, not a
 main paper baseline table.
+
+Before using a real text-embedding backend, enrich `item_text_seed.csv` from the
+processed catalog and raw Amazon metadata:
+
+```bash
+python main_enrich_llmesr_item_text_seed.py \
+  --adapter_dir outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter \
+  --processed_dir ~/projects/uncertainty-llm4rec/data/processed/amazon_movies_small \
+  --raw_metadata_path ~/projects/uncertainty-llm4rec/data/raw/amazon_movies/meta_Movies_and_TV.jsonl.gz
+```
+
+Then replace the deterministic hash pickle files with true text embeddings:
+
+```bash
+python main_generate_llmesr_sentence_embeddings.py \
+  --adapter_dir outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter \
+  --model_name sentence-transformers/all-MiniLM-L6-v2
+```
+
+For Movies, raw metadata may not contain titles for every Prime Video item, but
+it can still fill useful `embedding_text` from main category and details. Track
+both `title_seed_coverage` and `non_id_embedding_text_coverage`; the latter is
+the cleaner readiness signal for text embeddings.
+
+Even with true sentence-transformer item embeddings, the current centroid scorer
+remains `adapter_scaffold_score`. It verifies the same-candidate protocol and
+embedding files, but it is not an upstream LLM-ESR completed result.

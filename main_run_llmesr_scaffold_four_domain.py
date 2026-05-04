@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -13,6 +14,25 @@ DOMAIN_DATASETS = {
     "books": "amazon_books_small",
     "electronics": "amazon_electronics_small",
     "movies": "amazon_movies_small",
+}
+
+RAW_METADATA_CANDIDATES = {
+    "beauty": [
+        "amazon_beauty/meta_Beauty.jsonl",
+        "amazon_beauty/meta_All_Beauty.jsonl.gz",
+    ],
+    "books": [
+        "amazon_books/meta_Books.jsonl.gz",
+        "amazon_books/meta_Books.jsonl",
+    ],
+    "electronics": [
+        "amazon_electronics/meta_Electronics.jsonl.gz",
+        "amazon_electronics/meta_Electronics.jsonl",
+    ],
+    "movies": [
+        "amazon_movies/meta_Movies_and_TV.jsonl.gz",
+        "amazon_movies/meta_Movies_and_TV.jsonl",
+    ],
 }
 
 
@@ -28,8 +48,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output_root", default="outputs")
     parser.add_argument("--domains", default="beauty,books,electronics,movies")
     parser.add_argument("--embedding_dim", type=int, default=384)
+    parser.add_argument("--embedding_backend", choices=["deterministic_text_hash", "sentence_transformers"], default="deterministic_text_hash")
+    parser.add_argument("--sentence_model_name", default="sentence-transformers/all-MiniLM-L6-v2")
+    parser.add_argument("--sentence_batch_size", type=int, default=64)
     parser.add_argument("--similar_user_weight", type=float, default=0.15)
     parser.add_argument("--max_seq_len", type=int, default=200)
+    parser.add_argument("--raw_metadata_root", default="")
     parser.add_argument("--skip_task_export", action="store_true")
     parser.add_argument("--summary_name", default="llmesr_scaffold_four_domain_summary")
     return parser.parse_args()
@@ -61,6 +85,9 @@ def _write_csv(rows: list[dict[str, Any]], path: Path) -> None:
         "sample_count",
         "NDCG@10",
         "MRR",
+        "title_coverage_after",
+        "non_id_embedding_text_coverage_after",
+        "embedding_backend",
     ]
     with path.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=fieldnames)
@@ -85,11 +112,30 @@ def _adapter_dir(output_root: Path, domain: str) -> Path:
     return output_root / "baselines" / "paper_adapters" / f"{domain}_llmesr_same_candidate_adapter"
 
 
+def _raw_metadata_args(raw_metadata_root: Path | None, domain: str) -> list[str]:
+    if raw_metadata_root is None:
+        return []
+    args: list[str] = []
+    for rel_path in RAW_METADATA_CANDIDATES.get(domain, []):
+        path = raw_metadata_root / rel_path
+        if path.exists():
+            args.extend(["--raw_metadata_path", str(path)])
+    return args
+
+
 def _summary_row(output_root: Path, domain: str, adapter_dir: Path) -> dict[str, Any]:
     exp_name = f"{domain}_llmesr_scaffold_same_candidate"
     summary_path = output_root / exp_name / "tables" / "same_candidate_external_baseline_summary.csv"
     rows = _read_csv(summary_path)
     record = rows[0] if rows else {}
+    enrichment_path = adapter_dir / "item_text_enrichment_summary.json"
+    enrichment = {}
+    if enrichment_path.exists():
+        enrichment = json.loads(enrichment_path.read_text(encoding="utf-8"))
+    embedding_metadata_path = adapter_dir / "llmesr_embedding_metadata.json"
+    embedding_metadata = {}
+    if embedding_metadata_path.exists():
+        embedding_metadata = json.loads(embedding_metadata_path.read_text(encoding="utf-8"))
     return {
         "domain": domain,
         "exp_name": exp_name,
@@ -102,6 +148,9 @@ def _summary_row(output_root: Path, domain: str, adapter_dir: Path) -> dict[str,
         "sample_count": record.get("sample_count", ""),
         "NDCG@10": record.get("NDCG@10", ""),
         "MRR": record.get("MRR", ""),
+        "title_coverage_after": enrichment.get("title_coverage_after", ""),
+        "non_id_embedding_text_coverage_after": enrichment.get("non_id_embedding_text_coverage_after", ""),
+        "embedding_backend": embedding_metadata.get("backend", ""),
     }
 
 
@@ -109,6 +158,7 @@ def main() -> None:
     args = parse_args()
     processed_root = Path(args.processed_root).expanduser()
     output_root = Path(args.output_root).expanduser()
+    raw_metadata_root = Path(args.raw_metadata_root).expanduser() if args.raw_metadata_root else None
     domains = _domain_list(args.domains)
     rows: list[dict[str, Any]] = []
 
@@ -154,13 +204,38 @@ def main() -> None:
         _run(
             [
                 sys.executable,
-                "main_generate_llmesr_text_embeddings.py",
+                "main_enrich_llmesr_item_text_seed.py",
                 "--adapter_dir",
                 str(adapter_dir),
-                "--embedding_dim",
-                str(args.embedding_dim),
+                "--processed_dir",
+                str(processed_dir),
+                *_raw_metadata_args(raw_metadata_root, domain),
             ]
         )
+        if args.embedding_backend == "sentence_transformers":
+            _run(
+                [
+                    sys.executable,
+                    "main_generate_llmesr_sentence_embeddings.py",
+                    "--adapter_dir",
+                    str(adapter_dir),
+                    "--model_name",
+                    args.sentence_model_name,
+                    "--batch_size",
+                    str(args.sentence_batch_size),
+                ]
+            )
+        else:
+            _run(
+                [
+                    sys.executable,
+                    "main_generate_llmesr_text_embeddings.py",
+                    "--adapter_dir",
+                    str(adapter_dir),
+                    "--embedding_dim",
+                    str(args.embedding_dim),
+                ]
+            )
         _run([sys.executable, "main_audit_llmesr_adapter_package.py", "--adapter_dir", str(adapter_dir)])
         _run(
             [
@@ -213,6 +288,9 @@ def main() -> None:
         print(
             f"{row['domain']} coverage={row['score_coverage_rate']} "
             f"NDCG@10={row['NDCG@10']} MRR={row['MRR']} "
+            f"title_cov={row['title_coverage_after']} "
+            f"non_id_text_cov={row['non_id_embedding_text_coverage_after']} "
+            f"embedding_backend={row['embedding_backend']} "
             f"artifact_class={row['artifact_class']}"
         )
 
