@@ -90,3 +90,41 @@ SRPD/shadow variants are not substitutes for external baselines. They answer
 method-ablation and trainable-framework questions. External baselines answer
 whether the framework is competitive with prior recommendation systems under a
 matched protocol.
+
+## Senior-Recommended Paper Audit
+
+Audit `Paper/BASELINE/NH` and `Paper/BASELINE/NR` before selecting paper-specific
+external baselines:
+
+```bash
+python main_audit_baseline_papers.py \
+  --baseline_root Paper/BASELINE \
+  --collections NH,NR \
+  --output_root outputs/summary \
+  --output_name baseline_paper_audit_matrix \
+  --include_archives
+```
+
+The audit matrix separates:
+
+- `B_adapter_candidate`: code/title suggests a possible same-candidate adapter,
+  but no result claim exists yet.
+- `C_proxy_only`: useful for related work or motivation, not ready for main
+  result comparison.
+- `D_related_only`: keep outside result tables unless a runnable implementation
+  is found.
+
+The first external result layer should still be SASRec, BERT4Rec, GRU4Rec, and
+LightGCN-style same-candidate baselines. Paper-specific adapters such as OpenP5,
+SLMRec, LLM-ESR, LLMEmb, LLM2Rec, RLMRec, IRLLRec, SETRec, PAD, ED2, or LRD are
+second-layer candidates after the classical baselines are stable.
+
+The selected Week8 manifest is:
+
+```text
+configs/baseline/week8_external_same_candidate_manifest.yaml
+```
+
+Every external baseline must emit the same ranking prediction schema and carry
+`status_label=same_schema_external_baseline` before it can enter the unified
+method matrix.

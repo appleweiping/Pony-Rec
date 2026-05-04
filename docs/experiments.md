@@ -232,6 +232,28 @@ Interpretation rule:
 - External baselines from related papers remain a separate validation gate
   unless they are reproduced under the same split, candidate set, and metrics.
 
+## Week8 External Baseline Audit
+
+The rescue branch adds a senior-paper audit entry point:
+
+```bash
+python main_audit_baseline_papers.py \
+  --baseline_root Paper/BASELINE \
+  --collections NH,NR \
+  --output_root outputs/summary \
+  --output_name baseline_paper_audit_matrix \
+  --include_archives
+```
+
+This scans the local `Paper/BASELINE/NH` and `Paper/BASELINE/NR` PDFs and emits
+`outputs/summary/baseline_paper_audit_matrix.csv/md`.
+
+Use this table to choose which external baselines are worth adapting. The first
+same-schema result layer should be SASRec/BERT4Rec/GRU4Rec/LightGCN-style
+baselines, followed by paper-specific adapters such as OpenP5, SLMRec,
+LLM-ESR, LLMEmb, LLM2Rec, RLMRec, IRLLRec, or SETRec when their repositories can
+score the exact candidate set.
+
 ## Notes
 
 - Current `100`-sample runs are best treated as stable research baselines, not final large-scale paper numbers.

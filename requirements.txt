@@ -4,3 +4,4 @@ scikit-learn>=1.4.0
 matplotlib>=3.8.0
 pandas>=2.2.0
 PyYAML>=6.0.0
+pypdf>=4.0.0

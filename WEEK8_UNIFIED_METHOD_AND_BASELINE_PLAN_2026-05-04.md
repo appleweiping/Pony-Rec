@@ -197,6 +197,12 @@ Output:
 - One row per senior-recommended paper/project.
 - Clear protocol-gap labels.
 
+Status:
+
+- Completed on 2026-05-04 via `main_audit_baseline_papers.py`.
+- Current matrix is a protocol audit only; no paper-result claim is promoted
+  from it.
+
 ### Week8.2: Classical Same-Candidate Baselines
 
 Goal:
@@ -209,6 +215,13 @@ Exit criteria:
 - Four-domain candidate-set predictions.
 - Same metrics as SRPD/shadow.
 - Baseline rows enter unified matrix with `same_schema_external_baseline`.
+
+First implementation order:
+
+1. SASRec.
+2. BERT4Rec.
+3. GRU4Rec.
+4. LightGCN, if the interaction graph is dense enough to justify it.
 
 ### Week8.3: SRPD vs Shadow-V6 Alignment
 

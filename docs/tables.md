@@ -20,6 +20,24 @@ Required for baseline fairness. It records whether a baseline score is a true
 relevance-calibratable signal, a score/rank/stability reliability proxy, an
 exposure policy certainty signal, or non-isomorphic to confidence.
 
+### `baseline_paper_audit_matrix.csv`
+
+Use this as the Week8 audit table for senior-recommended paper baselines under
+`Paper/BASELINE/NH` and `Paper/BASELINE/NR`.
+
+The table is not a result table. It records:
+
+- paper title and detected method name
+- code URL signal when visible in the PDF
+- paper family
+- runnable priority
+- same-candidate/same-split/same-metric protocol gaps
+- recommended next action
+
+Rows labeled `B_adapter_candidate` are candidates for future same-schema
+adapters. Rows labeled `C_proxy_only` or `D_related_only` must stay out of the
+main result table unless converted into the ranking prediction schema.
+
 ### `significance_tests.csv` and `main_table_with_ci.csv`
 
 Use these for winner claims. A row whose paired confidence interval crosses zero

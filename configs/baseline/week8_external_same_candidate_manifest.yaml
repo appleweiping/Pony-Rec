@@ -1,0 +1,80 @@
+status_label: same_schema_external_baseline
+task: candidate_ranking
+prediction_schema: rank_predictions_jsonl
+metrics:
+  - HR@10
+  - NDCG@10
+  - MRR
+  - coverage@10
+  - head_exposure_ratio@10
+  - longtail_coverage@10
+required_protocol:
+  train_split_only: true
+  score_exact_candidate_item_ids: true
+  reuse_existing_ranking_eval_code: true
+  run_candidate_protocol_audit: true
+  run_paired_significance_tests_before_winner_claim: true
+
+classical_same_candidate:
+  - baseline_name: sasrec
+    priority: A
+    implementation_status: todo
+    adapter_kind: sequential_recommender
+    first_domain: beauty
+    notes: Strong sequential baseline; should be adapted before paper-specific methods.
+  - baseline_name: bert4rec
+    priority: A
+    implementation_status: todo
+    adapter_kind: bidirectional_sequential_recommender
+    first_domain: beauty
+    notes: Standard masked-item sequential baseline.
+  - baseline_name: gru4rec
+    priority: A
+    implementation_status: todo
+    adapter_kind: recurrent_sequential_recommender
+    first_domain: beauty
+    notes: Lightweight recurrent sanity baseline.
+  - baseline_name: lightgcn
+    priority: A_or_B
+    implementation_status: todo
+    adapter_kind: graph_collaborative_filtering
+    first_domain: beauty
+    notes: Use if train interactions produce a usable user-item graph.
+
+paper_adapter_candidates:
+  - method_name: OpenP5
+    source_collection: NH
+    priority: B_adapter_candidate
+    notes: Open LLM-rec platform; inspect only after classical baselines are stable.
+  - method_name: SLMRec
+    source_collection: NH
+    priority: B_adapter_candidate
+    notes: Sequential LLM distillation baseline with code detected.
+  - method_name: LLM-ESR
+    source_collection: NH
+    priority: B_adapter_candidate
+    notes: Long-tail sequential recommendation; relevant to exposure/long-tail analysis.
+  - method_name: LLMEmb
+    source_collection: NH
+    priority: B_adapter_candidate
+    notes: LLM embedding generator for sequential recommendation.
+  - method_name: LLM2Rec
+    source_collection: NR
+    priority: B_adapter_candidate
+    notes: LLM embedding model for sequential recommendation.
+  - method_name: RLMRec
+    source_collection: NR
+    priority: B_adapter_candidate
+    notes: Representation-learning recommendation baseline.
+  - method_name: IRLLRec
+    source_collection: NR
+    priority: B_adapter_candidate
+    notes: Intent representation learning baseline.
+  - method_name: SETRec
+    source_collection: NR
+    priority: B_adapter_candidate
+    notes: Generative recommendation identifier baseline.
+  - method_name: Uncertainty Quantification and Decomposition for LLM-based Recommendation
+    source_collection: NR
+    priority: B_diagnostic_reference
+    notes: Closest uncertainty-specific paper; first audit outputs, then decide whether it can rank candidates.
