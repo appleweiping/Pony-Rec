@@ -194,6 +194,44 @@ At the current stage, the most stable reference settings are:
 - `beauty_*` for the full five-model estimator comparison
 - `movies_small_deepseek` for the minimal cross-domain estimator validation
 
+## Rescue-Branch Shadow / SRPD Matrix
+
+The pre-Cursor rescue branch adds two audit-oriented summary entry points:
+
+```bash
+python main_summarize_shadow_v1_to_v6.py
+python main_build_unified_method_matrix.py
+```
+
+`main_summarize_shadow_v1_to_v6.py` separates `shadow_v1`-`shadow_v5` signal
+candidates from the `shadow_v6` decision bridge. It should be run against the
+server shadow summary/raw output roots, not against incomplete local summaries.
+
+`main_build_unified_method_matrix.py` compares the server-exported Week7.7
+direct ranking, structured-risk rerank, and SRPD rows against full-replay
+`shadow_v1` and diagnostic `shadow_v6`. The matrix keeps `comparison_scope`
+visible because Week7.7 paper-candidate exports and Week7.9 shadow diagnostics
+must not be silently merged into one evidence tier.
+
+Recommended server command:
+
+```bash
+python main_build_unified_method_matrix.py \
+  --week77_root ~/projects/uncertainty-llm4rec/export/week7_7_four_domain_final \
+  --shadow_matrix_path outputs/summary/shadow_v1_to_v6_status_matrix.csv \
+  --output_root outputs/summary \
+  --output_name unified_method_matrix_week77_shadow
+```
+
+Interpretation rule:
+
+- SRPD is the current self-trained ranking framework result line.
+- `shadow_v1` is the current full-replay winner signal source.
+- `shadow_v6` is a promising signal-to-decision diagnostic bridge until rerun
+  or verified under the same paper-result protocol as SRPD.
+- External baselines from related papers remain a separate validation gate
+  unless they are reproduced under the same split, candidate set, and metrics.
+
 ## Notes
 
 - Current `100`-sample runs are best treated as stable research baselines, not final large-scale paper numbers.

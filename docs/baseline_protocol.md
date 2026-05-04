@@ -67,3 +67,26 @@ table. They can appear only in a proxy table with `protocol_gap`, for example:
 - `different_backbone`
 - `no_confidence_output`
 - `not_relevance_calibratable`
+
+## Week8 Baseline Gates
+
+The rescue branch distinguishes four baseline layers:
+
+1. Runnable task-aligned baselines:
+   candidate order, popularity prior, long-tail prior, history/title overlap,
+   and pairwise analogues. These are protocol/sanity baselines, not enough for
+   a final external-baseline claim.
+2. Classical recommender baselines:
+   SASRec, BERT4Rec, GRU4Rec, LightGCN, or equivalent RecBole-style methods.
+   These must score the exact candidate set used by the ranking task.
+3. Senior-recommended paper baselines:
+   methods selected from `Paper/BASELINE/NH` and `Paper/BASELINE/NR`. Each
+   paper/project needs a protocol-gap audit before entering a result table.
+4. Our trainable framework line:
+   SRPD is the current self-trained ranking framework evidence; shadow Signal
+   LoRA and Decision LoRA are future stages until run under the same protocol.
+
+SRPD/shadow variants are not substitutes for external baselines. They answer
+method-ablation and trainable-framework questions. External baselines answer
+whether the framework is competitive with prior recommendation systems under a
+matched protocol.

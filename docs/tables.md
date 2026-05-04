@@ -187,6 +187,42 @@ Recommended use:
 
 ## Auxiliary Tables
 
+### `shadow_v1_to_v6_status_matrix.csv`
+
+Use this as the shadow-family status table.
+
+It separates:
+
+- `shadow_v1`-`shadow_v5` as signal candidates
+- `shadow_v6` as a signal-to-decision bridge
+
+Recommended use:
+
+- internal status audit
+- appendix method-stage table
+- guardrail against overclaiming incomplete shadow variants
+
+### `unified_method_matrix_week77_shadow.csv`
+
+Use this as the bridge between Week7.7 SRPD evidence and Week7.9 shadow
+diagnostics.
+
+Rows should include:
+
+- Week7.7 direct candidate ranking
+- Week7.7 structured-risk rerank
+- Week7.7 SRPD variants
+- full-replay `shadow_v1`
+- diagnostic `shadow_v6`
+
+Recommended use:
+
+- decide whether `shadow_v6` remains a bridge/ablation or becomes a method
+  candidate
+- compare the trainable SRPD framework line against shadow diagnostics
+- preserve `comparison_scope` so diagnostic rows do not enter main paper tables
+  accidentally
+
 ### `weekly_summary.csv`
 
 Compact clean-result view with the most important diagnosis, calibration, and rerank metrics.
