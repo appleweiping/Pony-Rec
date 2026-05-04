@@ -123,6 +123,11 @@ adapter_entrypoints:
       - llmesr_scaffold_scores.csv
       - llmesr_scaffold_score_summary.csv
       - llmesr_scaffold_score_metadata.json
+  llmesr_four_domain_scaffold_runner:
+    script: main_run_llmesr_scaffold_four_domain.py
+    status: four_domain_adapter_scaffold_score
+    output_files:
+      - outputs/summary/llmesr_scaffold_four_domain_summary.csv
 
 paper_adapter_candidates:
   - method_name: LLM-ESR

@@ -337,3 +337,14 @@ label such as `llmesr_adapter_scaffold_score`; it is a protocol check, not a
 paper-result row. The importer maps scaffold status labels to
 `artifact_class=adapter_scaffold_score` to prevent accidental
 `completed_result` labeling.
+
+To run this scaffold protocol across all four domains:
+
+```bash
+python main_run_llmesr_scaffold_four_domain.py \
+  --processed_root ~/projects/uncertainty-llm4rec/data/processed \
+  --output_root outputs
+```
+
+The generated four-domain summary is also a scaffold/protocol artifact, not a
+main paper baseline table.
