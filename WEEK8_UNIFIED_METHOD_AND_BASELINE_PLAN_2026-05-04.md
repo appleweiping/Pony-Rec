@@ -238,8 +238,9 @@ Adapter status:
   `status_label=same_schema_external_baseline` and full score coverage.
 - SASRec is verified on the four-domain server matrix as the first
   `same_schema_external_baseline`.
-- BERT4Rec/LightGCN training remains future work after SASRec/GRU4Rec are
-  verified.
+- GRU4Rec is verified on the four-domain server matrix as the second
+  `same_schema_external_baseline`.
+- BERT4Rec/LightGCN training remains future work after SASRec/GRU4Rec.
 
 ### Week8.3: SRPD vs Shadow-V6 Alignment
 

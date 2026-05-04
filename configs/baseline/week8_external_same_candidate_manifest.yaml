@@ -25,10 +25,11 @@ classical_same_candidate:
     notes: Strong sequential baseline; lightweight PyTorch trainer is available before paper-specific methods.
   - baseline_name: bert4rec
     priority: A
-    implementation_status: adapter_ready_model_training_todo
+    implementation_status: lightweight_torch_trainer_ready
     adapter_kind: bidirectional_sequential_recommender
     first_domain: beauty
-    notes: Standard masked-item sequential baseline.
+    train_script: main_train_bert4rec_same_candidate.py
+    notes: Standard masked-item sequential baseline; PyTorch trainer is available after GRU4Rec.
   - baseline_name: gru4rec
     priority: A
     implementation_status: lightweight_torch_trainer_ready
@@ -77,6 +78,13 @@ adapter_entrypoints:
       - gru4rec_train_summary.csv
       - gru4rec_epoch_log.csv
       - gru4rec_model_metadata.json
+  bert4rec_train:
+    script: main_train_bert4rec_same_candidate.py
+    output_files:
+      - bert4rec_scores.csv
+      - bert4rec_train_summary.csv
+      - bert4rec_epoch_log.csv
+      - bert4rec_model_metadata.json
 
 paper_adapter_candidates:
   - method_name: OpenP5

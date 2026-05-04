@@ -34,8 +34,8 @@ baseline under the exact same candidate and metric protocol.
 
 ## Next Baseline
 
-The next lightweight external baseline is GRU4Rec:
+GRU4Rec has now been completed as the second lightweight external baseline:
 
 - `main_train_gru4rec_same_candidate.py`
 
-BERT4Rec and LightGCN remain the next candidates after GRU4Rec is verified.
+BERT4Rec and LightGCN remain the next candidates.
