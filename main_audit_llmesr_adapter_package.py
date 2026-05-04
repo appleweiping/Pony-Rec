@@ -23,7 +23,10 @@ FIELDS = [
     "item_text_rows",
     "title_seed_coverage",
     "itm_emb_status",
+    "itm_emb_dim",
     "pca64_emb_status",
+    "pca64_emb_dim",
+    "embedding_metadata_status",
     "ready_for_embedding_generation",
     "ready_for_scoring",
     "diagnosis",
@@ -126,17 +129,23 @@ def _sim_user_status(path: Path, *, user_count: int) -> str:
 
     if not isinstance(payload, list):
         return "invalid_type"
-    if len(payload) not in {user_count, user_count + 1}:
+    if len(payload) != user_count:
         return f"unexpected_length:{len(payload)}"
 
-    rows = payload[1:] if len(payload) == user_count + 1 else payload
-    for row in rows:
+    saw_legacy_one_based_upper = False
+    for row in payload:
         if not isinstance(row, list) or not row:
             return "invalid_row"
         for value in row:
             idx = _as_int(value)
-            if idx is None or not (1 <= idx <= user_count):
+            if idx is None:
                 return "out_of_range"
+            if idx == user_count:
+                saw_legacy_one_based_upper = True
+            if not (0 <= idx < user_count):
+                return "out_of_range"
+    if saw_legacy_one_based_upper:
+        return "legacy_one_based_user_indices"
     return "ready"
 
 
@@ -150,14 +159,14 @@ def _item_text_status(path: Path, *, item_count: int) -> tuple[int, float]:
     return len(rows), float(covered / item_count) if item_count else 0.0
 
 
-def _shape_of_pickle(path: Path) -> tuple[str, int | None]:
+def _shape_of_pickle(path: Path) -> tuple[str, int | None, int | None]:
     if not path.exists():
-        return "missing", None
+        return "missing", None, None
     try:
         with path.open("rb") as fh:
             payload = pickle.load(fh)
     except Exception as exc:
-        return f"unreadable:{type(exc).__name__}", None
+        return f"unreadable:{type(exc).__name__}", None, None
 
     shape = getattr(payload, "shape", None)
     if shape is not None:
@@ -165,22 +174,46 @@ def _shape_of_pickle(path: Path) -> tuple[str, int | None]:
             first_dim = int(shape[0])
         except Exception:
             first_dim = None
-        return f"present_shape:{tuple(int(dim) for dim in shape)}", first_dim
+        try:
+            second_dim = int(shape[1]) if len(shape) > 1 else None
+        except Exception:
+            second_dim = None
+        return f"present_shape:{tuple(int(dim) for dim in shape)}", first_dim, second_dim
 
     try:
         first_dim = len(payload)
     except Exception:
         first_dim = None
-    return f"present_len:{first_dim}", first_dim
+    second_dim = None
+    if first_dim:
+        try:
+            second_dim = len(payload[0])
+        except Exception:
+            second_dim = None
+    return f"present_len:{first_dim}", first_dim, second_dim
 
 
-def _embedding_status(path: Path, *, expected_items: int) -> tuple[str, bool]:
-    status, first_dim = _shape_of_pickle(path)
+def _embedding_status(path: Path, *, expected_items: int, expected_dim: int | None = None) -> tuple[str, bool, int | None]:
+    status, first_dim, second_dim = _shape_of_pickle(path)
     if status == "missing":
-        return status, False
+        return status, False, second_dim
     if first_dim != expected_items:
-        return f"{status}:expected_first_dim_{expected_items}", False
-    return status, True
+        return f"{status}:expected_first_dim_{expected_items}", False, second_dim
+    if expected_dim is not None and second_dim != expected_dim:
+        return f"{status}:expected_second_dim_{expected_dim}", False, second_dim
+    return status, True, second_dim
+
+
+def _embedding_metadata_status(path: Path) -> str:
+    if not path.exists():
+        return "missing"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return f"unreadable:{type(exc).__name__}"
+    backend = str(payload.get("backend", "")).strip() or "unknown_backend"
+    artifact_class = str(payload.get("artifact_class", "")).strip() or "unknown_artifact_class"
+    return f"ready:{backend}:{artifact_class}"
 
 
 def audit(adapter_dir: Path) -> dict[str, Any]:
@@ -203,6 +236,7 @@ def audit(adapter_dir: Path) -> dict[str, Any]:
     sim_path = handled_dir / "sim_user_100.pkl"
     itm_emb_path = handled_dir / "itm_emb_np.pkl"
     pca64_path = handled_dir / "pca64_itm_emb_np.pkl"
+    embedding_metadata_path = adapter_dir / "llmesr_embedding_metadata.json"
 
     candidate_rows, missing_mapped = _candidate_status(candidate_path, expected_candidates)
     user_map_valid, _ = _map_status(user_map_path, "user_id", "llmesr_user_idx", user_count)
@@ -210,8 +244,9 @@ def audit(adapter_dir: Path) -> dict[str, Any]:
     inter_valid, inter_rows = _inter_status(inter_path, expected_inter, user_count=user_count, item_count=item_count)
     sim_status = _sim_user_status(sim_path, user_count=user_count)
     item_text_rows, title_seed_coverage = _item_text_status(item_text_path, item_count=item_count)
-    itm_status, itm_ready = _embedding_status(itm_emb_path, expected_items=item_count)
-    pca_status, pca_ready = _embedding_status(pca64_path, expected_items=item_count)
+    itm_status, itm_ready, itm_dim = _embedding_status(itm_emb_path, expected_items=item_count)
+    pca_status, pca_ready, pca_dim = _embedding_status(pca64_path, expected_items=item_count, expected_dim=64)
+    embedding_metadata_status = _embedding_metadata_status(embedding_metadata_path)
 
     core_ready = (
         metadata.get("status") == "adapter_package_only"
@@ -246,7 +281,10 @@ def audit(adapter_dir: Path) -> dict[str, Any]:
         "item_text_rows": item_text_rows,
         "title_seed_coverage": f"{title_seed_coverage:.6f}",
         "itm_emb_status": itm_status,
+        "itm_emb_dim": itm_dim if itm_dim is not None else "",
         "pca64_emb_status": pca_status,
+        "pca64_emb_dim": pca_dim if pca_dim is not None else "",
+        "embedding_metadata_status": embedding_metadata_status,
         "ready_for_embedding_generation": core_ready,
         "ready_for_scoring": scoring_ready,
         "diagnosis": diagnosis,

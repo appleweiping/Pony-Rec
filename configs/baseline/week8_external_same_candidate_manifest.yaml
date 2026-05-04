@@ -109,6 +109,13 @@ adapter_entrypoints:
     status: adapter_package_audit
     output_files:
       - adapter_audit.csv
+  llmesr_text_embedding_scaffold:
+    script: main_generate_llmesr_text_embeddings.py
+    status: adapter_scaffold_embedding
+    output_files:
+      - llm_esr/handled/itm_emb_np.pkl
+      - llm_esr/handled/pca64_itm_emb_np.pkl
+      - llmesr_embedding_metadata.json
 
 paper_adapter_candidates:
   - method_name: LLM-ESR

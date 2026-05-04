@@ -305,3 +305,21 @@ The expected pre-embedding diagnosis is
 `adapter_core_ready_embeddings_missing_or_invalid`. The package is not ready
 for scoring until both `llm_esr/handled/itm_emb_np.pkl` and
 `llm_esr/handled/pca64_itm_emb_np.pkl` are present with one row per mapped item.
+The `pca64` file must have 64 columns because the upstream LLM-ESR model adds
+it directly to a 64-dimensional position embedding.
+
+Note that LLM-ESR item ids remain 1-based, but `sim_user_100.pkl` stores
+0-based dataset row indices because the upstream dataset code indexes
+`self.data[user]`.
+
+For adapter/scorer smoke tests, generate deterministic text-hash scaffold
+embeddings:
+
+```bash
+python main_generate_llmesr_text_embeddings.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
+```
+
+These scaffold embeddings are not a completed paper-project baseline. Replace
+them with true LLM item embeddings before marking an LLM-ESR row as
+`completed_result`.

@@ -160,6 +160,7 @@ def _item_map_rows(item_to_idx: dict[str, int]) -> list[dict[str, Any]]:
 def _similar_users_by_jaccard(train_sequences: dict[int, list[int]], *, top_k: int) -> dict[int, list[int]]:
     item_sets = {user_idx: set(seq) for user_idx, seq in train_sequences.items()}
     user_indices = sorted(item_sets)
+    dataset_index_by_user_idx = {user_idx: dataset_idx for dataset_idx, user_idx in enumerate(user_indices)}
     similar: dict[int, list[int]] = {}
     for user_idx in user_indices:
         current = item_sets[user_idx]
@@ -176,31 +177,30 @@ def _similar_users_by_jaccard(train_sequences: dict[int, list[int]], *, top_k: i
             ranked = [user_idx]
         while len(ranked) < top_k:
             ranked.extend(ranked)
-        similar[user_idx] = ranked[:top_k]
+        similar[user_idx] = [dataset_index_by_user_idx[other_idx] for other_idx in ranked[:top_k]]
     return similar
 
 
 def _write_sim_users(similar: dict[int, list[int]], output_dir: Path) -> dict[str, str]:
     output_dir.mkdir(parents=True, exist_ok=True)
     dataset_order = [similar[user_idx] for user_idx in sorted(similar)]
-    user_indexed = [[] for _ in range(max(similar, default=0) + 1)]
-    for user_idx, neighbors in similar.items():
-        user_indexed[user_idx] = neighbors
 
     dataset_order_path = output_dir / "sim_user_100.pkl"
-    user_indexed_path = output_dir / "sim_user_100_user_indexed.pkl"
     with dataset_order_path.open("wb") as fh:
         pickle.dump(dataset_order, fh)
-    with user_indexed_path.open("wb") as fh:
-        pickle.dump(user_indexed, fh)
 
     rows = []
     for user_idx, neighbors in sorted(similar.items()):
-        rows.append({"llmesr_user_idx": user_idx, "similar_user_indices": " ".join(str(idx) for idx in neighbors)})
-    _write_csv(rows, output_dir / "sim_user_100.csv", ["llmesr_user_idx", "similar_user_indices"])
+        rows.append(
+            {
+                "llmesr_user_idx": user_idx,
+                "llmesr_dataset_index": user_idx - 1,
+                "similar_dataset_indices": " ".join(str(idx) for idx in neighbors),
+            }
+        )
+    _write_csv(rows, output_dir / "sim_user_100.csv", ["llmesr_user_idx", "llmesr_dataset_index", "similar_dataset_indices"])
     return {
         "dataset_order_pickle": str(dataset_order_path),
-        "user_indexed_pickle": str(user_indexed_path),
         "csv": str(output_dir / "sim_user_100.csv"),
     }
 

@@ -80,6 +80,12 @@ python main_export_llmesr_same_candidate_task.py \
 
 python main_audit_llmesr_adapter_package.py \
   --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
+
+python main_generate_llmesr_text_embeddings.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
+
+python main_audit_llmesr_adapter_package.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter
 ```
 
 Expected output:
@@ -96,3 +102,12 @@ The expected audit diagnosis at this stage is
 `adapter_core_ready_embeddings_missing_or_invalid`: the mapped package is ready,
 but LLM-ESR-compatible item embedding files are still required before scorer
 wrapping.
+
+Compatibility note: item and user ids in `inter.txt` are 1-based, while
+`sim_user_100.pkl` must contain 0-based dataset indices to match the upstream
+LLM-ESR data loader.
+
+The deterministic embedding generator is only an adapter/scorer scaffold. It
+creates correctly shaped LLM-ESR pickle files so the wrapper can be tested, but
+it should be replaced by true LLM item embeddings before any completed
+paper-project result claim.

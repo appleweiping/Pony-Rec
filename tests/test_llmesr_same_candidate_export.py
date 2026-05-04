@@ -6,6 +6,7 @@ import pickle
 
 import main_export_llmesr_same_candidate_task as exporter
 from main_audit_llmesr_adapter_package import audit
+from main_generate_llmesr_text_embeddings import generate_embeddings
 
 
 def _write_csv(path, rows, fieldnames):
@@ -112,9 +113,19 @@ def test_llmesr_export_writes_mapped_adapter_package(tmp_path, monkeypatch):
         sim_users = pickle.load(fh)
     assert len(sim_users) == 2
     assert all(len(row) == 2 for row in sim_users)
+    assert set(sim_users[0]) <= {0, 1}
+    assert set(sim_users[1]) <= {0, 1}
 
     audit_row = audit(package_dir)
     assert audit_row["diagnosis"] == "adapter_core_ready_embeddings_missing_or_invalid"
     assert audit_row["ready_for_embedding_generation"] is True
     assert audit_row["ready_for_scoring"] is False
     assert audit_row["itm_emb_status"] == "missing"
+
+    embedding_summary = generate_embeddings(package_dir, embedding_dim=16, pca_dim=64, backend="deterministic_text_hash")
+    assert embedding_summary["artifact_class"] == "adapter_scaffold_embedding"
+    audit_row = audit(package_dir)
+    assert audit_row["diagnosis"] == "ready_for_llmesr_scorer_wrapper"
+    assert audit_row["ready_for_scoring"] is True
+    assert audit_row["itm_emb_dim"] == 16
+    assert audit_row["pca64_emb_dim"] == 64
