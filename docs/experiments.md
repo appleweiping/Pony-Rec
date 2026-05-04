@@ -259,14 +259,16 @@ The same-candidate adapter entry points are:
 ```bash
 python main_export_same_candidate_baseline_task.py
 python main_train_sasrec_same_candidate.py
+python main_train_gru4rec_same_candidate.py
 python main_import_same_candidate_baseline_scores.py
 ```
 
 The export script creates train interactions, exact candidate rows, and a
-RecBole-style `.inter` file. `main_train_sasrec_same_candidate.py` is the first
-lightweight PyTorch classical baseline trainer. The import script turns external
-model scores into the repository's `rank_predictions.jsonl` format and evaluates
-them with the same ranking metric code used elsewhere.
+RecBole-style `.inter` file. `main_train_sasrec_same_candidate.py` and
+`main_train_gru4rec_same_candidate.py` are the first lightweight PyTorch
+classical baseline trainers. The import script turns external model scores into
+the repository's `rank_predictions.jsonl` format and evaluates them with the
+same ranking metric code used elsewhere.
 
 Once real external baseline summaries exist, pass
 `--external_summary_glob "outputs/*/tables/same_candidate_external_baseline_summary.csv"`

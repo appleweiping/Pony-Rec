@@ -219,8 +219,8 @@ Exit criteria:
 First implementation order:
 
 1. SASRec.
-2. BERT4Rec.
-3. GRU4Rec.
+2. GRU4Rec.
+3. BERT4Rec.
 4. LightGCN, if the interaction graph is dense enough to justify it.
 
 Adapter status:
@@ -229,12 +229,16 @@ Adapter status:
   exact candidate rows, RecBole-style `.inter`, and metadata.
 - `main_train_sasrec_same_candidate.py` trains a lightweight PyTorch SASRec
   baseline and writes exact-candidate scores without requiring RecBole.
+- `main_train_gru4rec_same_candidate.py` trains a lightweight PyTorch GRU4Rec
+  baseline through the same export/import protocol.
 - `main_import_same_candidate_baseline_scores.py` imports
   `source_event_id,user_id,item_id,score` files and evaluates them under the
   existing ranking schema.
 - No SASRec result is claimed until `sasrec_scores.csv` is imported with
   `status_label=same_schema_external_baseline` and full score coverage.
-- BERT4Rec/GRU4Rec/LightGCN training remains future work after SASRec is
+- SASRec is verified on the four-domain server matrix as the first
+  `same_schema_external_baseline`.
+- BERT4Rec/LightGCN training remains future work after SASRec/GRU4Rec are
   verified.
 
 ### Week8.3: SRPD vs Shadow-V6 Alignment

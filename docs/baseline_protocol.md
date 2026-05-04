@@ -164,6 +164,24 @@ It writes:
 outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv
 ```
 
+For GRU4Rec, use the analogous lightweight PyTorch trainer:
+
+```bash
+python main_train_gru4rec_same_candidate.py \
+  --task_dir outputs/baselines/external_tasks/beauty_week8_same_candidate_external \
+  --epochs 60 \
+  --hidden_size 64 \
+  --num_layers 1 \
+  --batch_size 128 \
+  --device auto
+```
+
+It writes:
+
+```text
+outputs/baselines/external_tasks/beauty_week8_same_candidate_external/gru4rec_scores.csv
+```
+
 Expected score file schema:
 
 ```text
