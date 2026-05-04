@@ -231,6 +231,11 @@ Adapter status:
   baseline and writes exact-candidate scores without requiring RecBole.
 - `main_train_gru4rec_same_candidate.py` trains a lightweight PyTorch GRU4Rec
   baseline through the same export/import protocol.
+- `main_train_bert4rec_same_candidate.py` trains a lightweight masked-sequence
+  BERT4Rec baseline through the same export/import protocol.
+- `main_train_lightgcn_same_candidate.py` trains a lightweight graph
+  collaborative-filtering LightGCN baseline through the same export/import
+  protocol.
 - `main_import_same_candidate_baseline_scores.py` imports
   `source_event_id,user_id,item_id,score` files and evaluates them under the
   existing ranking schema.
@@ -240,7 +245,10 @@ Adapter status:
   `same_schema_external_baseline`.
 - GRU4Rec is verified on the four-domain server matrix as the second
   `same_schema_external_baseline`.
-- BERT4Rec/LightGCN training remains future work after SASRec/GRU4Rec.
+- BERT4Rec is verified on the four-domain server matrix as the third
+  `same_schema_external_baseline`.
+- LightGCN trainer is ready; server train/audit/import remains the next
+  external-baseline step.
 
 ### Week8.3: SRPD vs Shadow-V6 Alignment
 

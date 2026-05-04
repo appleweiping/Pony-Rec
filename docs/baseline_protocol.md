@@ -201,6 +201,24 @@ It writes:
 outputs/baselines/external_tasks/beauty_week8_same_candidate_external/bert4rec_scores.csv
 ```
 
+For LightGCN, use the graph collaborative-filtering trainer:
+
+```bash
+python main_train_lightgcn_same_candidate.py \
+  --task_dir outputs/baselines/external_tasks/beauty_week8_same_candidate_external \
+  --epochs 80 \
+  --embedding_size 64 \
+  --num_layers 2 \
+  --batch_size 512 \
+  --device auto
+```
+
+It writes:
+
+```text
+outputs/baselines/external_tasks/beauty_week8_same_candidate_external/lightgcn_scores.csv
+```
+
 Expected score file schema:
 
 ```text
