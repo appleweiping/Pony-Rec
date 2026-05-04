@@ -64,6 +64,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--similar_user_weight", type=float, default=0.15)
     parser.add_argument("--max_seq_len", type=int, default=200)
     parser.add_argument("--raw_metadata_root", default="")
+    parser.add_argument(
+        "--raw_metadata_path",
+        action="append",
+        default=[],
+        help="Per-domain raw metadata override, e.g. movies=/path/to/meta_Movies_and_TV.jsonl.gz. Can repeat.",
+    )
     parser.add_argument("--allow_missing_raw_metadata", action="store_true")
     parser.add_argument("--skip_task_export", action="store_true")
     parser.add_argument("--summary_name", default="llmesr_scaffold_four_domain_summary")
@@ -123,16 +129,60 @@ def _adapter_dir(output_root: Path, domain: str) -> Path:
     return output_root / "baselines" / "paper_adapters" / f"{domain}_llmesr_same_candidate_adapter"
 
 
-def _raw_metadata_args(raw_metadata_root: Path | None, domain: str, *, allow_missing: bool) -> list[str]:
-    if raw_metadata_root is None:
-        return []
+def _raw_metadata_overrides(raw_metadata_paths: list[str]) -> dict[str, list[Path]]:
+    overrides: dict[str, list[Path]] = {}
+    for raw_value in raw_metadata_paths:
+        if "=" not in raw_value:
+            raise ValueError(
+                "--raw_metadata_path must be DOMAIN=PATH, for example "
+                "movies=/path/to/meta_Movies_and_TV.jsonl.gz"
+            )
+        domain, path_text = raw_value.split("=", 1)
+        domain = domain.strip()
+        if domain not in DOMAIN_DATASETS:
+            raise ValueError(f"Unknown raw metadata override domain={domain!r}. Known domains: {sorted(DOMAIN_DATASETS)}")
+        path = Path(path_text.strip()).expanduser()
+        overrides.setdefault(domain, []).append(path)
+    return overrides
+
+
+def _fallback_raw_metadata_paths(raw_metadata_root: Path, domain: str) -> list[Path]:
+    found: list[Path] = []
+    seen: set[Path] = set()
+    for rel_path in RAW_METADATA_CANDIDATES.get(domain, []):
+        basename = Path(rel_path).name
+        for path in raw_metadata_root.rglob(basename):
+            resolved = path.resolve()
+            if resolved not in seen and path.exists():
+                found.append(path)
+                seen.add(resolved)
+    return found
+
+
+def _raw_metadata_args(
+    raw_metadata_root: Path | None,
+    domain: str,
+    *,
+    allow_missing: bool,
+    raw_metadata_overrides: dict[str, list[Path]] | None = None,
+) -> list[str]:
+    args: list[str] = []
+    override_paths = (raw_metadata_overrides or {}).get(domain, [])
+    for path in override_paths:
+        if path.exists():
+            args.extend(["--raw_metadata_path", str(path)])
+        elif allow_missing:
+            print(f"WARNING: raw metadata override does not exist for domain={domain}: {path}", flush=True)
+        else:
+            raise FileNotFoundError(f"raw metadata override does not exist for domain={domain}: {path}")
+    if args or raw_metadata_root is None:
+        return args
     if not raw_metadata_root.exists():
         message = f"--raw_metadata_root does not exist: {raw_metadata_root}"
         if allow_missing:
             print(f"WARNING: {message}", flush=True)
             return []
         raise FileNotFoundError(message)
-    args: list[str] = []
     checked_paths = []
     for rel_path in RAW_METADATA_CANDIDATES.get(domain, []):
         path = raw_metadata_root / rel_path
@@ -140,16 +190,22 @@ def _raw_metadata_args(raw_metadata_root: Path | None, domain: str, *, allow_mis
         if path.exists():
             args.extend(["--raw_metadata_path", str(path)])
     if not args:
-        checked = ", ".join(str(path) for path in checked_paths)
-        message = (
-            f"--raw_metadata_root was provided, but no raw metadata file was found for domain={domain}. "
-            f"Checked: {checked}"
-        )
-        if allow_missing:
-            print(f"WARNING: {message}", flush=True)
-            return []
-        raise FileNotFoundError(message)
-    return args
+        fallback_paths = _fallback_raw_metadata_paths(raw_metadata_root, domain)
+        for path in fallback_paths:
+            args.extend(["--raw_metadata_path", str(path)])
+    if args:
+        return args
+    checked = ", ".join(str(path) for path in checked_paths)
+    basenames = ", ".join(Path(path).name for path in RAW_METADATA_CANDIDATES.get(domain, []))
+    message = (
+        f"--raw_metadata_root was provided, but no raw metadata file was found for domain={domain}. "
+        f"Checked: {checked}. Also searched recursively for: {basenames}. "
+        f"Pass an explicit override such as --raw_metadata_path {domain}=/path/to/raw_metadata.jsonl.gz."
+    )
+    if allow_missing:
+        print(f"WARNING: {message}", flush=True)
+        return []
+    raise FileNotFoundError(message)
 
 
 def _summary_row(output_root: Path, domain: str, adapter_dir: Path) -> dict[str, Any]:
@@ -188,6 +244,7 @@ def main() -> None:
     processed_root = Path(args.processed_root).expanduser()
     output_root = Path(args.output_root).expanduser()
     raw_metadata_root = Path(args.raw_metadata_root).expanduser() if args.raw_metadata_root else None
+    raw_metadata_overrides = _raw_metadata_overrides(args.raw_metadata_path)
     domains = _domain_list(args.domains)
     rows: list[dict[str, Any]] = []
 
@@ -238,7 +295,12 @@ def main() -> None:
                 str(adapter_dir),
                 "--processed_dir",
                 str(processed_dir),
-                *_raw_metadata_args(raw_metadata_root, domain, allow_missing=args.allow_missing_raw_metadata),
+                *_raw_metadata_args(
+                    raw_metadata_root,
+                    domain,
+                    allow_missing=args.allow_missing_raw_metadata,
+                    raw_metadata_overrides=raw_metadata_overrides,
+                ),
             ]
         )
         if args.embedding_backend == "sentence_transformers":

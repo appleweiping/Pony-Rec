@@ -9,7 +9,7 @@ import pytest
 
 import main_export_llmesr_same_candidate_task as exporter
 import main_generate_llmesr_sentence_embeddings as sentence_embeddings
-from main_run_llmesr_scaffold_four_domain import _raw_metadata_args
+from main_run_llmesr_scaffold_four_domain import _raw_metadata_args, _raw_metadata_overrides
 from main_audit_llmesr_adapter_package import audit
 from main_enrich_llmesr_item_text_seed import enrich_item_text_seed
 from main_generate_llmesr_text_embeddings import generate_embeddings
@@ -208,3 +208,23 @@ def test_raw_metadata_args_emit_movie_metadata_path(tmp_path):
     raw_path.write_text("{}", encoding="utf-8")
 
     assert _raw_metadata_args(tmp_path, "movies", allow_missing=False) == ["--raw_metadata_path", str(raw_path)]
+
+
+def test_raw_metadata_args_support_domain_override_and_recursive_fallback(tmp_path):
+    override_path = tmp_path / "odd_layout" / "movie_meta.jsonl.gz"
+    override_path.parent.mkdir()
+    override_path.write_text("{}", encoding="utf-8")
+    overrides = _raw_metadata_overrides([f"movies={override_path}"])
+
+    assert _raw_metadata_args(None, "movies", allow_missing=False, raw_metadata_overrides=overrides) == [
+        "--raw_metadata_path",
+        str(override_path),
+    ]
+
+    fallback_path = tmp_path / "raw" / "nested" / "meta_Movies_and_TV.jsonl.gz"
+    fallback_path.parent.mkdir(parents=True)
+    fallback_path.write_text("{}", encoding="utf-8")
+    assert _raw_metadata_args(tmp_path / "raw", "movies", allow_missing=False) == [
+        "--raw_metadata_path",
+        str(fallback_path),
+    ]
