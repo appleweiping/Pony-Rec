@@ -142,16 +142,129 @@ but server parity should be checked before launching new server jobs.
 - Completed local shadow v1-v5 small-prior result folders are not visible under
   `outputs/` by directory name.
 
+## Server Cross-Check - 2026-05-04
+
+The user checked the remote server workspace under `~/projects` and preserved
+the command outputs in a server-side audit directory:
+
+- `~/projects/server_audit_20260504_225229`
+
+Top-level server storage shows the likely authoritative experiment directories:
+
+- `~/projects/uncertainty-llm4rec/` - `13G`
+- `~/projects/uncertainty-llm4rec-codex-apr12-preserve-local/` - `1.1G`
+- `~/projects/uncertainty-llm4rec_backup_before_week7_5/` - `544M`
+- `~/projects/fresh/` - `18G`
+
+### Week7.7 SRPD server export
+
+The week7.7 four-domain export is present on the server at:
+
+- `~/projects/uncertainty-llm4rec/export/week7_7_four_domain_final`
+
+This directory contains direct ranking, structured-risk rerank, SRPD prediction
+folders, summary files, and logs. The local paper summaries therefore do have a
+server-side raw/export source, even though `server_sync/` is absent locally.
+
+Server summary files include teacher-data alignment CSVs for:
+
+- Beauty full973: SRPD-v1, v2, v3, v4, v5.
+- Books small500: SRPD-v2, v4, v5.
+- Electronics small500: SRPD-v2, v4, v5.
+- Movies small500: SRPD-v2, v4, v5.
+
+All checked SRPD teacher-data summaries report:
+
+- `status`: `srpd_teacher_data_ready`
+- `teacher_match_rate`: `1.0`
+- `missing_base_rows`: `0`
+- Beauty: `base_rows=973`, `matched_rows=973`, `train_rows=778`,
+  `valid_rows=195`
+- Books/Electronics/Movies: `base_rows=500`, `matched_rows=500`,
+  `train_rows=400`, `valid_rows=100`
+
+Core week7.7 prediction counts are complete:
+
+- Beauty direct rank and SRPD-v1..v5 prediction files each have `973` rows.
+- Books direct rank and SRPD-v2/v4/v5 prediction files each have `500` rows.
+- Electronics direct rank and SRPD-v2/v4/v5 prediction files each have `500`
+  rows.
+- Movies direct rank and SRPD-v2/v4/v5 prediction files each have `500` rows.
+
+Checked week7.7 metrics from server tables:
+
+- Beauty full973: best SRPD row is `SRPD-v2`, NDCG@10 `0.6353658183`,
+  MRR `0.5184480987`. Structured-risk rerank is NDCG@10 `0.6140777971`,
+  MRR `0.4900479616`.
+- Books small500: best SRPD row is `SRPD-v2`, NDCG@10 `0.7057074243`,
+  MRR `0.6117666667`. Structured-risk rerank is NDCG@10 `0.6395142413`,
+  MRR `0.5235`.
+- Electronics small500: best SRPD row is `SRPD-v5`, NDCG@10 `0.6621001801`,
+  MRR `0.5528333333`. Structured-risk rerank is NDCG@10 `0.6583007652`,
+  MRR `0.5471666667`.
+- Movies small500: structured-risk rerank remains the best checked method,
+  NDCG@10 `0.5731826886`, MRR `0.4391000000`. Best SRPD repair row is
+  `SRPD-v4`, NDCG@10 `0.5463885554`, MRR `0.4043666667`.
+
+These server values match the local `Paper/pony2/results` conclusions.
+
+### Week7.9 shadow server backup
+
+The completed shadow summaries are present on the server at:
+
+- `~/projects/uncertainty-llm4rec-codex-apr12-preserve-local/outputs/summary`
+
+The server has completed `week7_9_shadow_small_prior_summary.csv` and
+`week7_9_shadow_full_replay_summary.csv` files, unlike the incomplete local
+summary visible in this rescue workspace.
+
+Checked small-prior shadow rows:
+
+- Beauty has ready `shadow_v1`, `shadow_v2`, and `shadow_v5` rows with
+  pointwise, calibration, rerank, noisy pointwise, and noisy rerank all marked
+  `ready`.
+- Books has ready `shadow_v1`, `shadow_v2`, and `shadow_v5` rows with the same
+  ready statuses.
+- Beauty small-prior rerank NDCG@10 is `0.6394303493` for v1/v2/v5; noisy
+  rerank NDCG@10 is `0.6277602928`.
+- Books small-prior best checked rerank row is `shadow_v5`, NDCG@10
+  `0.6516282885`, MRR `0.5400555556`; noisy rerank NDCG@10 is
+  `0.6567818881`.
+
+Checked full-replay shadow rows:
+
+- Full replay has ready `shadow_v1` rows for Beauty, Books, Electronics, and
+  Movies, including noisy variants.
+- Beauty `shadow_v1` full replay: pointwise AUROC `0.5723036899`, rerank
+  NDCG@10 `0.6353973143`, MRR `0.5184823570`.
+- Books `shadow_v1` full replay: pointwise AUROC `0.7133176`, rerank NDCG@10
+  `0.6362591123`, MRR `0.5191`.
+- Electronics `shadow_v1` full replay: pointwise AUROC `0.6230092`, rerank
+  NDCG@10 `0.6574286221`, MRR `0.5460333333`.
+- Movies `shadow_v1` full replay: pointwise AUROC `0.5223908`, rerank NDCG@10
+  `0.5725075524`, MRR `0.4381666667`.
+
+Practical implication:
+
+- Server results support `shadow_v1` as the current full-replay winner signal
+  source for a conservative v6 bridge.
+- `shadow_v2` and `shadow_v5` are small-prior alternatives for Beauty/Books,
+  but they are not four-domain full-replay winners in the checked summaries.
+- The next server step should not rerun everything blindly. First copy or
+  reference the server audit files and use the server raw/export folders as the
+  authoritative source for any v6 bridge command construction.
+
 ## Server Follow-Up
 
-Before claiming final status or running the next large job, recover or verify
-on the server:
+Before claiming final status or running the next large job, recover or preserve
+from the server:
 
-1. The source folder referenced by `Paper/pony2/results`:
-   `server_sync/week7_20260421/week7_7_four_domain_final`.
-2. Any completed shadow v1-v5 pointwise/calibration/rerank outputs.
-3. Any full replay outputs for Beauty full973 and Books/Electronics/Movies
-   small500.
+1. The server audit directory:
+   `~/projects/server_audit_20260504_225229`.
+2. The week7.7 source export:
+   `~/projects/uncertainty-llm4rec/export/week7_7_four_domain_final`.
+3. The week7.9 shadow summaries and raw output folders:
+   `~/projects/uncertainty-llm4rec-codex-apr12-preserve-local/outputs`.
 4. The exact command logs and environment used for week7.7 and week7.9.
 
 ## Working Rule
