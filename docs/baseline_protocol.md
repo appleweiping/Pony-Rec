@@ -144,6 +144,26 @@ python main_export_same_candidate_baseline_task.py \
 The external model should train on the exported `train_interactions.csv` or
 RecBole-style `.inter` file, then score every row in `candidate_items.csv`.
 
+For SASRec, the repository now includes a lightweight PyTorch trainer that does
+not require RecBole:
+
+```bash
+python main_train_sasrec_same_candidate.py \
+  --task_dir outputs/baselines/external_tasks/beauty_week8_same_candidate_external \
+  --epochs 80 \
+  --hidden_size 64 \
+  --num_layers 2 \
+  --num_heads 2 \
+  --batch_size 128 \
+  --device auto
+```
+
+It writes:
+
+```text
+outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv
+```
+
 Expected score file schema:
 
 ```text
@@ -158,7 +178,9 @@ python main_import_same_candidate_baseline_scores.py \
   --exp_name beauty_sasrec_same_candidate \
   --domain beauty \
   --ranking_input_path data/processed/amazon_beauty/ranking_test.jsonl \
-  --scores_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv
+  --scores_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/sasrec_scores.csv \
+  --artifact_class completed_result \
+  --status_label same_schema_external_baseline
 ```
 
 The import step writes `predictions/rank_predictions.jsonl` and the same

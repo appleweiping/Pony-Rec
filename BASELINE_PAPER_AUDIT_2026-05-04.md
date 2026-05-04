@@ -128,6 +128,7 @@ Only after those rows are stable should the paper-derived adapters be attempted.
 The same-candidate adapter layer now has two entry points:
 
 - `main_export_same_candidate_baseline_task.py`
+- `main_train_sasrec_same_candidate.py`
 - `main_import_same_candidate_baseline_scores.py`
 
 The export step writes:
@@ -151,4 +152,6 @@ and writes:
 - `tables/same_candidate_external_baseline_summary.csv`
 
 This is an adapter, not a completed SASRec/BERT4Rec/GRU4Rec/LightGCN result.
-Those methods still need real model training before any baseline claim.
+SASRec now has a lightweight PyTorch trainer, but it becomes a completed result
+only after `sasrec_scores.csv` is imported with full score coverage. BERT4Rec,
+GRU4Rec, and LightGCN still need real model training before any baseline claim.

@@ -18,10 +18,11 @@ required_protocol:
 classical_same_candidate:
   - baseline_name: sasrec
     priority: A
-    implementation_status: adapter_ready_model_training_todo
+    implementation_status: lightweight_torch_trainer_ready
     adapter_kind: sequential_recommender
     first_domain: beauty
-    notes: Strong sequential baseline; should be adapted before paper-specific methods.
+    train_script: main_train_sasrec_same_candidate.py
+    notes: Strong sequential baseline; lightweight PyTorch trainer is available before paper-specific methods.
   - baseline_name: bert4rec
     priority: A
     implementation_status: adapter_ready_model_training_todo
@@ -61,6 +62,13 @@ adapter_entrypoints:
       - tables/ranking_metrics.csv
       - tables/ranking_exposure_distribution.csv
       - tables/same_candidate_external_baseline_summary.csv
+  sasrec_train:
+    script: main_train_sasrec_same_candidate.py
+    output_files:
+      - sasrec_scores.csv
+      - sasrec_train_summary.csv
+      - sasrec_epoch_log.csv
+      - sasrec_model_metadata.json
 
 paper_adapter_candidates:
   - method_name: OpenP5

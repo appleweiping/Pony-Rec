@@ -227,11 +227,15 @@ Adapter status:
 
 - `main_export_same_candidate_baseline_task.py` exports train interactions,
   exact candidate rows, RecBole-style `.inter`, and metadata.
+- `main_train_sasrec_same_candidate.py` trains a lightweight PyTorch SASRec
+  baseline and writes exact-candidate scores without requiring RecBole.
 - `main_import_same_candidate_baseline_scores.py` imports
   `source_event_id,user_id,item_id,score` files and evaluates them under the
   existing ranking schema.
-- Model training is still intentionally separate; no SASRec/BERT4Rec/GRU4Rec
-  result is claimed until a real model score file is imported.
+- No SASRec result is claimed until `sasrec_scores.csv` is imported with
+  `status_label=same_schema_external_baseline` and full score coverage.
+- BERT4Rec/GRU4Rec/LightGCN training remains future work after SASRec is
+  verified.
 
 ### Week8.3: SRPD vs Shadow-V6 Alignment
 
