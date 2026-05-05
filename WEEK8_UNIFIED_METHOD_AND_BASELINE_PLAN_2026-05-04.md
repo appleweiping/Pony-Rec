@@ -396,3 +396,8 @@ The immediate paper-safe stance is:
 - The paired significance gate confirms the conservative claim: LLM2Rec-style
   Qwen3 is a competitive same-backbone external baseline, but it does not close
   the gap to uncertainty-aware/SRPD results on Beauty, Books, or Electronics.
+- The paper-project baseline block is still thin with only one completed row.
+  Before final paper wording, target at least one more completed
+  senior-recommended paper-project baseline. The next recommended target is
+  LLM-ESR-style Qwen3; if upstream LLM-ESR training blocks, switch to
+  LLMEmb-style before heavier graph/generative projects.
