@@ -1,8 +1,14 @@
 # LLM Project Qwen3 Baseline Combined Result - 2026-05-05
 
-This note records the final same-schema readout after rebuilding the unified
-matrix, the paper-ready table, and paired statistical tests with both
+This note records the initial same-schema readout after rebuilding the unified
+matrix, the paper-ready table, and paired statistical tests with two
 senior-recommended LLM-rec paper-project baselines.
+
+Superseding four-paper readout:
+
+```text
+LLM_PROJECT_QWEN3_4PAPER_BASELINE_RESULT_2026-05-05.md
+```
 
 Completed paper-project rows:
 
@@ -132,7 +138,10 @@ The baseline block is now paper-ready enough for the current claim:
 SRPD/structured-risk/shadow conclusions preserved under paired tests
 ```
 
-Additional LLMEmb-style and RLMRec-style entrypoints have been added as the
-next breadth extensions. Do not update this completed-result count from `2` to
-`4` until both new baselines are run on all four domains, imported with full
+Superseded status:
+
+```text
+The completed-result count has now been updated from 2 to 4 after LLMEmb-style
+and RLMRec-style were run on all four domains, imported with full
 same-candidate coverage, and included in paired statistical tests.
+```

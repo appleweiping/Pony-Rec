@@ -147,6 +147,14 @@ declare -A dataset=(
 )
 
 for d in beauty books electronics movies; do
+  python main_export_same_candidate_baseline_task.py \
+    --processed_dir ~/projects/uncertainty-llm4rec/data/processed/${dataset[$d]} \
+    --ranking_input_path ~/projects/uncertainty-llm4rec/data/processed/${dataset[$d]}/ranking_test.jsonl \
+    --exp_name ${d}_same_candidate \
+    --dataset_name ${d}_same_candidate
+done
+
+for d in beauty books electronics movies; do
   task=outputs/baselines/external_tasks/${d}_same_candidate
   emb_adapter=outputs/baselines/paper_adapters/${d}_llmesr_same_candidate_adapter
   emb=$emb_adapter/llm_esr/handled/itm_emb_np.pkl
@@ -232,12 +240,25 @@ grep "LLM2Rec-style\|LLM-ESR-style\|LLMEmb-style\|RLMRec-style" \
   outputs/summary/paper_ready_baseline_comparison_week77_qwen_4paper.md
 ```
 
-## Decision Boundary
+## Completed Result
 
-Do not update the combined result claim from `2 paper-project baselines` to
-`4 paper-project baselines` until:
+The decision boundary has been met:
 
-- all four domains are imported for both new baselines,
+- all four domains were imported for LLMEmb-style and RLMRec-style,
 - score coverage is `1.0`,
 - the paper-ready table has four paper-project rows per domain,
-- paired statistical tests have been rerun.
+- paired statistical tests were rerun in
+  `outputs/summary/week8_llm_project_qwen3_4paper_stat_tests`.
+
+Final result note:
+
+```text
+LLM_PROJECT_QWEN3_4PAPER_BASELINE_RESULT_2026-05-05.md
+```
+
+Paper-safe final count:
+
+```text
+4 classical same-candidate baselines
+4 senior-recommended LLM-rec paper-project same-schema baselines
+```

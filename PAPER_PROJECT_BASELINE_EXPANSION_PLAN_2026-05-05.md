@@ -179,6 +179,18 @@ main_train_llmemb_style_same_candidate.py
 main_train_rlmrec_style_same_candidate.py
 ```
 
-These are not completed result rows until their score CSVs pass full
-same-candidate coverage audit and are imported as
-`same_schema_external_baseline`.
+These rows have now been completed on Beauty, Books, Electronics, and Movies,
+imported with full same-candidate coverage, and included in the expanded paired
+statistical tests.
+
+Final paper-project completed count:
+
+```text
+4
+```
+
+Final result note:
+
+```text
+LLM_PROJECT_QWEN3_4PAPER_BASELINE_RESULT_2026-05-05.md
+```
