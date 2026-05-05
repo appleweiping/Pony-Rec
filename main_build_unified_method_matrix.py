@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import glob
+import json
 from pathlib import Path
 from typing import Any
 
@@ -223,6 +224,61 @@ def _shadow_rows(shadow_matrix_path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _llmesr_embedding_metadata(path: Path, domain: str) -> dict[str, Any]:
+    output_root = path.parents[2] if len(path.parents) >= 3 else Path("outputs")
+    metadata_path = (
+        output_root
+        / "baselines"
+        / "paper_adapters"
+        / f"{domain}_llmesr_same_candidate_adapter"
+        / "llmesr_embedding_metadata.json"
+    )
+    if not metadata_path.exists():
+        return {}
+    return json.loads(metadata_path.read_text(encoding="utf-8"))
+
+
+def _method_variant_for_external_row(baseline_name: str, record: dict[str, str], path: Path) -> str:
+    artifact_class = record.get("artifact_class", "")
+    status = record.get("status_label", "")
+    if "scaffold" not in status and "scaffold" not in artifact_class:
+        return baseline_name
+
+    metadata = _llmesr_embedding_metadata(path, record.get("domain", ""))
+    backend = str(metadata.get("backend", "")).strip()
+    model_name = str(metadata.get("model_name", "")).strip()
+    model_slug = Path(model_name).name if model_name else ""
+    parts = [baseline_name]
+    if backend:
+        parts.append(backend)
+    if model_slug:
+        parts.append(model_slug)
+    return "_".join(parts)
+
+
+def _external_row_context(record: dict[str, str]) -> dict[str, str] | None:
+    status = record.get("status_label", "")
+    artifact_class = record.get("artifact_class", "")
+    if status == "same_schema_external_baseline":
+        return {
+            "comparison_scope": record.get("comparison_scope", "week8_same_candidate_external_baseline"),
+            "evidence_family": "external_same_candidate_baseline",
+            "paper_role_hint": "same_schema_external_baseline",
+            "notes": "External baseline imported through the same-candidate score adapter.",
+        }
+    if "scaffold" in status or "scaffold" in artifact_class:
+        return {
+            "comparison_scope": "week8_same_candidate_adapter_diagnostic",
+            "evidence_family": "paper_adapter_scaffold",
+            "paper_role_hint": "adapter_scaffold_diagnostic_not_completed_result",
+            "notes": (
+                "Paper-project adapter scaffold imported through the same-candidate score adapter; "
+                "diagnostic only, not a completed upstream paper baseline."
+            ),
+        }
+    return None
+
+
 def _external_baseline_rows(external_summary_glob: str | None) -> list[dict[str, Any]]:
     if not external_summary_glob:
         return []
@@ -232,25 +288,27 @@ def _external_baseline_rows(external_summary_glob: str | None) -> list[dict[str,
         path = Path(path_text)
         for record in _read_csv_rows(path):
             status = record.get("status_label", "")
-            if status != "same_schema_external_baseline":
+            context = _external_row_context(record)
+            if context is None:
                 continue
             baseline_name = record.get("baseline_name", "")
+            method_variant = _method_variant_for_external_row(baseline_name, record, path)
             rows.append(
                 {
                     "domain": record.get("domain", ""),
-                    "comparison_scope": record.get("comparison_scope", "week8_same_candidate_external_baseline"),
-                    "evidence_family": "external_same_candidate_baseline",
+                    "comparison_scope": context["comparison_scope"],
+                    "evidence_family": context["evidence_family"],
                     "method": baseline_name,
-                    "method_variant": baseline_name,
+                    "method_variant": method_variant,
                     "sample_count": record.get("sample_count", ""),
                     "NDCG@10": record.get("NDCG@10", ""),
                     "MRR": record.get("MRR", ""),
                     "status_label": status,
                     "artifact_class": record.get("artifact_class", "completed_result"),
                     "is_paper_result": "",
-                    "paper_role_hint": "same_schema_external_baseline",
+                    "paper_role_hint": context["paper_role_hint"],
                     "source_file": str(path),
-                    "notes": "External baseline imported through the same-candidate score adapter.",
+                    "notes": context["notes"],
                 }
             )
     return rows
