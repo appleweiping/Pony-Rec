@@ -7,6 +7,7 @@ from typing import Any
 
 
 CLASSICAL_METHOD_ORDER = ["sasrec", "gru4rec", "bert4rec", "lightgcn"]
+PAPER_PROJECT_METHOD_ORDER = ["llm2rec_style_qwen3_sasrec"]
 
 OUTPUT_FIELDS = [
     "domain",
@@ -88,6 +89,8 @@ def _method_label(row: dict[str, str]) -> str:
         return f"SRPD best ({variant})"
     if method == "llmesr_scaffold":
         return variant or "LLM-ESR Qwen3 scaffold"
+    if method == "llm2rec_style_qwen3_sasrec":
+        return "LLM2Rec-style Qwen3-8B Emb. + SASRec"
     if method == "shadow_v6_decision_bridge":
         return "Shadow-v6 diagnostic"
     return method.upper() if method in CLASSICAL_METHOD_ORDER else method
@@ -103,6 +106,8 @@ def _table_group(row: dict[str, str]) -> str:
     if method == "srpd_lora_ranker":
         return "srpd_best_self_trained"
     if evidence_family == "external_same_candidate_baseline":
+        if method in PAPER_PROJECT_METHOD_ORDER:
+            return "paper_project_same_backbone_baseline"
         return "completed_external_baseline"
     if evidence_family == "paper_adapter_scaffold":
         return "paper_adapter_scaffold_diagnostic"
@@ -156,6 +161,15 @@ def _classical_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     return [by_method[method] for method in CLASSICAL_METHOD_ORDER if method in by_method]
 
 
+def _paper_project_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    by_method = {
+        row.get("method", ""): row
+        for row in rows
+        if row.get("evidence_family") == "external_same_candidate_baseline"
+    }
+    return [by_method[method] for method in PAPER_PROJECT_METHOD_ORDER if method in by_method]
+
+
 def build_paper_ready_rows(
     matrix_rows: list[dict[str, str]],
     *,
@@ -179,6 +193,7 @@ def build_paper_ready_rows(
         if srpd_best:
             selected.append(srpd_best)
         selected.extend(_classical_rows(rows))
+        selected.extend(_paper_project_rows(rows))
         scaffold = _best_by_ndcg([row for row in rows if row.get("evidence_family") == "paper_adapter_scaffold"])
         if scaffold:
             selected.append(scaffold)
