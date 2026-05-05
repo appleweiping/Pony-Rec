@@ -10,16 +10,17 @@ Completed external baseline rows:
 - Classical same-candidate baselines:
   `SASRec`, `GRU4Rec`, `BERT4Rec`, `LightGCN`.
 - Senior-recommended paper-project baselines:
-  `LLM2Rec-style Qwen3-8B Emb. + SASRec`.
+  `LLM2Rec-style Qwen3-8B Emb. + SASRec` and
+  `LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec`.
 
 Current paper-project completed count:
 
 ```text
-1
+2
 ```
 
-This is enough for an internal checkpoint, but thin for the final paper if the
-claim includes comparison against recent LLM-enhanced recommendation methods.
+This now satisfies the minimum target for a recent LLM-enhanced paper-project
+baseline block.
 
 ## Target Before Final Paper Wording
 
@@ -153,16 +154,17 @@ Promotion condition:
 
 ## Decision
 
-The next implementation target should be LLM-ESR-style, not another classical
-model. If LLM-ESR blocks on upstream training, switch to LLMEmb-style before
-trying heavier graph/generative projects.
+The LLM-ESR-style target has been completed with full same-candidate coverage
+on Beauty, Books, Electronics, and Movies.
 
 The paper-facing baseline statement should remain:
 
 ```text
-We evaluate four classical recommenders and at least two same-schema
+We evaluate four classical recommenders and two same-schema
 senior-recommended LLM-rec paper-project baselines under the same split,
 candidate set, and metric implementation.
 ```
 
-until the second paper-project row is completed.
+Next optional expansion: LLMEmb-style or RLMRec-style, only if additional
+baseline breadth is needed after the current paper-ready table and paired tests
+are rebuilt.
