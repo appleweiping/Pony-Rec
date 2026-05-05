@@ -85,7 +85,10 @@ main_run_week8_external_only_phenomenon_diagnostics.py
 Protocol:
 
 - Exclude `structured_risk` and SRPD from the candidate method set.
-- Use the direct base ranking only as a reference for event bins.
+- By default, use the best single external method as the base reference for
+  event bins, keeping this diagnostic external-only.
+- Optionally use `--base_reference direct` if the desired question is relative
+  to the Week7.7 direct base ranking.
 - Analyze the six external paper-project baselines by:
   - best single external method,
   - external-only per-event oracle,
@@ -104,6 +107,7 @@ python main_run_week8_external_only_phenomenon_diagnostics.py \
   --external_summary_glob "outputs/*/tables/same_candidate_external_baseline_summary.csv" \
   --domains beauty,books,electronics,movies \
   --external_methods llm2rec_style_qwen3_sasrec,llmesr_style_qwen3_sasrec,llmemb_style_qwen3_sasrec,rlmrec_style_qwen3_graphcl,irllrec_style_qwen3_intent,setrec_style_qwen3_identifier \
+  --base_reference best_single_external \
   --output_dir outputs/summary/week8_external_only_phenomenon
 
 cat outputs/summary/week8_external_only_phenomenon/external_only_oracle_summary.csv
@@ -116,8 +120,8 @@ What to look for:
 
 - `oracle_gain_vs_best_single_NDCG@10 > 0` means external methods contain
   complementary event-level signals even without our method.
-- Larger oracle gain in weaker base-rank bins means the earlier base phenomenon
-  is visible in the external-only setting.
+- Larger oracle gain in weaker best-single-external base-rank bins means the
+  earlier base phenomenon is visible in the external-only setting.
 - Larger oracle gain in high-disagreement bins means external method
   disagreement can serve as a diagnostic proxy for hard/uncertain events.
 

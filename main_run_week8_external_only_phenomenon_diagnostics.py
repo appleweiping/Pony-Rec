@@ -58,6 +58,16 @@ def parse_args() -> argparse.Namespace:
         default=",".join(DEFAULT_EXTERNAL_METHODS),
         help="Comma-separated external methods to include in the external-only set.",
     )
+    parser.add_argument(
+        "--base_reference",
+        choices=("best_single_external", "direct"),
+        default="best_single_external",
+        help=(
+            "Reference used for base-rank bins. best_single_external keeps the "
+            "diagnostic external-only; direct uses the Week7.7 direct prediction "
+            "file when it is available."
+        ),
+    )
     parser.add_argument("--output_dir", default="outputs/summary/week8_external_only_phenomenon")
     parser.add_argument("--k", type=int, default=10)
     return parser.parse_args()
@@ -142,7 +152,9 @@ def _resolve_path(path: Path, *, repo_root: Path) -> Path:
     return repo_root / path
 
 
-def _positive_rank(record: dict[str, Any]) -> int:
+def _positive_rank(record: dict[str, Any] | None) -> int | None:
+    if not record:
+        return None
     if "positive_rank" in record and not pd.isna(record.get("positive_rank")):
         return int(record["positive_rank"])
     positive = str(record.get("positive_item_id", "")).strip()
@@ -155,15 +167,21 @@ def _positive_rank(record: dict[str, Any]) -> int:
     return max(len(candidates), len(ranked)) + 1
 
 
-def _ndcg(rank: int, k: int) -> float:
+def _ndcg(rank: int | None, k: int) -> float:
+    if rank is None:
+        return float("nan")
     return float(1.0 / np.log2(rank + 1)) if 0 < rank <= k else 0.0
 
 
-def _mrr(rank: int) -> float:
+def _mrr(rank: int | None) -> float:
+    if rank is None:
+        return float("nan")
     return float(1.0 / rank) if rank > 0 else 0.0
 
 
-def _rank_bin(rank: int) -> str:
+def _rank_bin(rank: int | None) -> str:
+    if rank is None:
+        return "missing_base"
     if rank <= 1:
         return "rank_1"
     if rank <= 3:
@@ -173,7 +191,9 @@ def _rank_bin(rank: int) -> str:
     return "rank_gt_6"
 
 
-def _positive_popularity(record: dict[str, Any]) -> str:
+def _positive_popularity(record: dict[str, Any] | None) -> str:
+    if not record:
+        return "unknown"
     positive = str(record.get("positive_item_id", "")).strip()
     candidates = _normalize_item_list(record.get("candidate_item_ids"))
     groups = _normalize_item_list(record.get("candidate_popularity_groups"))
@@ -212,6 +232,7 @@ def build_external_only_event_rows(
     *,
     domain: str,
     base_records: list[dict[str, Any]],
+    base_reference_method: str,
     external_records: dict[str, list[dict[str, Any]]],
     k: int,
 ) -> list[dict[str, Any]]:
@@ -232,9 +253,10 @@ def build_external_only_event_rows(
         }
         if not method_records:
             continue
-        base_record = base_by_event.get(event_id) or next(iter(method_records.values()))
+        base_record = base_by_event.get(event_id)
+        exemplar_record = base_record or next(iter(method_records.values()))
         base_rank = _positive_rank(base_record)
-        candidates = _normalize_item_list(base_record.get("candidate_item_ids"))
+        candidates = _normalize_item_list(exemplar_record.get("candidate_item_ids"))
 
         method_metric_rows = []
         for method, record in method_records.items():
@@ -259,11 +281,12 @@ def build_external_only_event_rows(
         row = {
             "domain": domain,
             "event_id": event_id,
+            "base_reference_method": base_reference_method,
             "base_rank": base_rank,
             "base_rank_bin": _rank_bin(base_rank),
             f"base_NDCG@{k}": _ndcg(base_rank, k),
             "base_MRR": _mrr(base_rank),
-            "positive_popularity_group": _positive_popularity(base_record),
+            "positive_popularity_group": _positive_popularity(exemplar_record),
             "external_oracle_method": best_event["method"],
             "external_oracle_rank": best_event["rank"],
             f"external_oracle_NDCG@{k}": best_event["ndcg"],
@@ -393,21 +416,22 @@ def main() -> None:
         "external_summary_glob": args.external_summary_glob,
         "domains": domains,
         "external_methods": sorted(requested_external),
+        "base_reference": args.base_reference,
         "k": args.k,
         "note": (
             "This diagnostic excludes structured-risk and SRPD as candidate "
-            "methods. The direct row is only a base reference."
+            "methods. The base reference is used only for event bins and deltas."
         ),
     }
     _write_json(output_dir / "run_config.json", config)
 
     for domain in domains:
         direct_path = _resolve_path(_week77_direct_path(week77_root, domain), repo_root=repo_root)
-        base_records: list[dict[str, Any]] = []
+        direct_records: list[dict[str, Any]] = []
         manifest_rows.append(
             {
                 "domain": domain,
-                "role": "base_reference_only",
+                "role": "direct_base_reference_only",
                 "method": "direct",
                 "path": str(direct_path),
                 "exists": direct_path.exists(),
@@ -415,8 +439,8 @@ def main() -> None:
             }
         )
         if direct_path.exists():
-            base_records = _load_records(direct_path)
-            manifest_rows[-1]["rows"] = len(base_records)
+            direct_records = _load_records(direct_path)
+            manifest_rows[-1]["rows"] = len(direct_records)
 
         domain_external_paths = {
             method: path
@@ -445,9 +469,25 @@ def main() -> None:
 
         method_rows = _method_metrics(external_records, domain=domain, k=args.k)
         all_method_metrics.extend(method_rows)
+
+        base_reference_method = args.base_reference
+        base_records: list[dict[str, Any]] = []
+        if args.base_reference == "direct":
+            base_records = direct_records
+            base_reference_method = "direct"
+        elif method_rows:
+            best_single = (
+                pd.DataFrame(method_rows)
+                .sort_values([f"NDCG@{args.k}", "MRR"], ascending=False)
+                .iloc[0]
+            )
+            base_reference_method = str(best_single["method"])
+            base_records = external_records.get(base_reference_method, [])
+
         event_rows = build_external_only_event_rows(
             domain=domain,
             base_records=base_records,
+            base_reference_method=base_reference_method,
             external_records=external_records,
             k=args.k,
         )
