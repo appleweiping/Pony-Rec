@@ -1,0 +1,153 @@
+# LLM2Rec Adapter Audit - 2026-05-05
+
+## Upstream Findings
+
+Repo inspected:
+
+```text
+https://github.com/HappyPointer/LLM2Rec
+```
+
+Key upstream files:
+
+- `extract_llm_embedding.py`
+- `evaluate_with_seqrec.py`
+- `seqrec/recdata.py`
+- `seqrec/runner.py`
+- `seqrec/models/SASRec/_model.py`
+- `script_extract_and_evaluate.sh`
+
+LLM2Rec's downstream sequential evaluation expects a directory like:
+
+```text
+data/<dataset_path>/item_titles.json
+data/<dataset_path>/data.txt
+data/<dataset_path>/train_data.txt
+data/<dataset_path>/val_data.txt
+data/<dataset_path>/test_data.txt
+```
+
+The sequence files contain whitespace-separated 1-based item ids. In
+`seqrec/recdata.py`, each line is interpreted as a sequence where the final item
+is the label and previous items are history. `item_titles.json` is a dictionary
+whose keys start at `1`; item id `0` is reserved as padding.
+
+Important friction:
+
+- Dataset aliases and paths are hard-coded in upstream `source_dict` mappings.
+- Native evaluation ranks against the full item pool, not our exact candidate
+  rows.
+- Completed-result status requires an upstream-compatible extraction/training
+  and scoring wrapper that emits `source_event_id,user_id,item_id,score` with
+  full same-candidate coverage.
+
+## Implemented Adapter Package
+
+New exporter:
+
+```bash
+python main_export_llm2rec_same_candidate_task.py \
+  --task_dir outputs/baselines/external_tasks/beauty_week8_same_candidate_external \
+  --exp_name beauty_llm2rec_same_candidate_adapter \
+  --output_root outputs \
+  --dataset_alias beauty_same_candidate
+```
+
+New audit:
+
+```bash
+python main_audit_llm2rec_adapter_package.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter
+```
+
+The exporter writes:
+
+```text
+adapter_metadata.json
+README.md
+candidate_items_mapped.csv
+same_candidate_events.csv
+user_id_map.csv
+item_id_map.csv
+item_text_seed.csv
+llm2rec/data/<dataset_alias>/downstream/item_titles.json
+llm2rec/data/<dataset_alias>/downstream/data.txt
+llm2rec/data/<dataset_alias>/downstream/train_data.txt
+llm2rec/data/<dataset_alias>/downstream/val_data.txt
+llm2rec/data/<dataset_alias>/downstream/test_data.txt
+```
+
+Status remains:
+
+```text
+adapter_package_only
+```
+
+The package does not claim a completed baseline result.
+
+## Same-Candidate Scoring Handoff
+
+The adapter preserves exact candidate rows in:
+
+```text
+candidate_items_mapped.csv
+same_candidate_events.csv
+```
+
+Expected completed-result score schema remains:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+Possible wrapper paths:
+
+1. Patch upstream `seqrec/recdata.py` to register the adapter's `dataset_alias`
+   and `llm2rec/data/<dataset_alias>/downstream` directory.
+2. Train/evaluate upstream SASRec/GRU4Rec with LLM2Rec item embeddings.
+3. Patch model scoring so it returns scores for `candidate_items_mapped.csv`
+   instead of only full-pool top-k metrics.
+4. Import full-coverage score CSV through:
+
+```bash
+python main_import_same_candidate_baseline_scores.py \
+  --baseline_name llm2rec \
+  --exp_name beauty_llm2rec_same_candidate \
+  --domain beauty \
+  --ranking_input_path ~/projects/uncertainty-llm4rec/data/processed/amazon_beauty/ranking_test.jsonl \
+  --scores_path /path/to/llm2rec_scores.csv \
+  --status_label same_schema_external_baseline
+```
+
+Only step 4 after a genuine upstream-compatible scoring run can enter the main
+external baseline table as `completed_result`.
+
+## Four-Domain Export Commands
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+git pull --ff-only
+
+for d in beauty books electronics movies; do
+  python main_export_llm2rec_same_candidate_task.py \
+    --task_dir outputs/baselines/external_tasks/${d}_week8_same_candidate_external \
+    --exp_name ${d}_llm2rec_same_candidate_adapter \
+    --output_root outputs \
+    --dataset_alias ${d}_same_candidate
+
+  python main_audit_llm2rec_adapter_package.py \
+    --adapter_dir outputs/baselines/paper_adapters/${d}_llm2rec_same_candidate_adapter
+done
+```
+
+Expected audit diagnosis:
+
+```text
+diagnosis=ready_for_llm2rec_upstream_wrapper
+```
+
+## Current Recommendation
+
+Use this adapter package as the Week8.4 LLM2Rec handoff. The next engineering
+step is not to import a scaffold metric, but to patch/run the upstream LLM2Rec
+seqrec scorer so it can score our exact candidate rows.
