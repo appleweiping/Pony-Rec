@@ -175,37 +175,80 @@ def _candidate_mapped_rows(
     return mapped
 
 
-def _title_by_item(candidate_rows: list[dict[str, str]]) -> dict[str, str]:
-    titles: dict[str, str] = {}
-    for row in candidate_rows:
+def _item_catalog_from_rows(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
+    catalog: dict[str, dict[str, str]] = {}
+    for row in rows:
         item_id = _text(row.get("item_id"))
-        title = _text(row.get("candidate_title"))
-        if item_id and title and item_id not in titles:
-            titles[item_id] = title
-    return titles
+        if not item_id:
+            continue
+        current = catalog.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
+        title = _text(row.get("candidate_title") or row.get("title"))
+        text = _text(row.get("candidate_text") or row.get("embedding_text"))
+        if title and not current["candidate_title"]:
+            current["candidate_title"] = title
+        if text and not current["candidate_text"]:
+            current["candidate_text"] = text
+    return catalog
 
 
-def _item_text_seed_rows(candidate_rows: list[dict[str, str]], item_to_idx: dict[str, int]) -> list[dict[str, Any]]:
-    titles = _title_by_item(candidate_rows)
+def _load_item_metadata(task_dir: Path) -> dict[str, dict[str, str]]:
+    path = task_dir / "item_metadata.csv"
+    if not path.exists():
+        return {}
+    return _item_catalog_from_rows(_read_csv(path))
+
+
+def _merge_item_catalogs(
+    candidate_rows: list[dict[str, str]],
+    item_metadata: dict[str, dict[str, str]] | None = None,
+) -> dict[str, dict[str, str]]:
+    catalog = _item_catalog_from_rows(candidate_rows)
+    if item_metadata:
+        for item_id, info in item_metadata.items():
+            current = catalog.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
+            if info.get("candidate_title") and not current["candidate_title"]:
+                current["candidate_title"] = info["candidate_title"]
+            if info.get("candidate_text") and not current["candidate_text"]:
+                current["candidate_text"] = info["candidate_text"]
+    return catalog
+
+
+def _item_text_seed_rows(
+    candidate_rows: list[dict[str, str]],
+    item_to_idx: dict[str, int],
+    *,
+    item_metadata: dict[str, dict[str, str]] | None = None,
+) -> list[dict[str, Any]]:
+    catalog = _merge_item_catalogs(candidate_rows, item_metadata)
     rows = []
     for item_id, item_idx in sorted(item_to_idx.items(), key=lambda pair: pair[1]):
-        title = titles.get(item_id, "")
+        info = catalog.get(item_id, {})
+        title = _text(info.get("candidate_title"))
+        embedding_text = _text(info.get("candidate_text")) or title or item_id
+        source = "item_metadata" if item_metadata and item_id in item_metadata else "candidate_title"
+        if embedding_text == item_id:
+            source = "item_id_fallback"
         rows.append(
             {
                 "item_id": item_id,
                 "llm2rec_item_idx": item_idx,
                 "candidate_title": title,
-                "embedding_text": title or item_id,
-                "title_source": "candidate_title" if title else "item_id_fallback",
+                "embedding_text": embedding_text,
+                "title_source": source,
             }
         )
     return rows
 
 
-def _item_titles_payload(candidate_rows: list[dict[str, str]], item_to_idx: dict[str, int]) -> dict[str, str]:
-    titles = _title_by_item(candidate_rows)
+def _item_titles_payload(
+    candidate_rows: list[dict[str, str]],
+    item_to_idx: dict[str, int],
+    *,
+    item_metadata: dict[str, dict[str, str]] | None = None,
+) -> dict[str, str]:
+    catalog = _merge_item_catalogs(candidate_rows, item_metadata)
     return {
-        str(item_idx): titles.get(item_id) or item_id
+        str(item_idx): _text(catalog.get(item_id, {}).get("candidate_title")) or item_id
         for item_id, item_idx in sorted(item_to_idx.items(), key=lambda pair: pair[1])
     }
 
@@ -250,6 +293,7 @@ def export_llm2rec_package(
 
     train_rows = _read_csv(train_path)
     candidate_rows = _read_csv(candidate_path)
+    item_metadata = _load_item_metadata(task_dir)
     user_to_idx, item_to_idx = _build_user_item_maps(train_rows, candidate_rows)
     train_sequences = _group_train_sequences(train_rows, user_to_idx, item_to_idx)
     event_rows, event_index_by_source = _candidate_event_rows(candidate_rows, train_sequences, user_to_idx, item_to_idx)
@@ -267,7 +311,10 @@ def export_llm2rec_package(
     train_count = _write_sequence_lines(train_seq_rows, llm2rec_data_dir / "train_data.txt")
     valid_count = _write_sequence_lines(test_seq_rows, llm2rec_data_dir / "val_data.txt")
     test_count = _write_sequence_lines(test_seq_rows, llm2rec_data_dir / "test_data.txt")
-    _write_json(_item_titles_payload(candidate_rows, item_to_idx), llm2rec_data_dir / "item_titles.json")
+    _write_json(
+        _item_titles_payload(candidate_rows, item_to_idx, item_metadata=item_metadata),
+        llm2rec_data_dir / "item_titles.json",
+    )
 
     candidate_fieldnames = list(mapped_candidates[0].keys()) if mapped_candidates else [
         "source_event_id",
@@ -282,7 +329,7 @@ def export_llm2rec_package(
     _write_csv(_user_map_rows(user_to_idx), output_dir / "user_id_map.csv", ["user_id", "llm2rec_user_idx"])
     _write_csv(_item_map_rows(item_to_idx), output_dir / "item_id_map.csv", ["item_id", "llm2rec_item_idx"])
     _write_csv(
-        _item_text_seed_rows(candidate_rows, item_to_idx),
+        _item_text_seed_rows(candidate_rows, item_to_idx, item_metadata=item_metadata),
         output_dir / "item_text_seed.csv",
         ["item_id", "llm2rec_item_idx", "candidate_title", "embedding_text", "title_source"],
     )
@@ -314,6 +361,7 @@ def export_llm2rec_package(
         "user_id_map_path": str(output_dir / "user_id_map.csv"),
         "item_id_map_path": str(output_dir / "item_id_map.csv"),
         "item_text_seed_path": str(output_dir / "item_text_seed.csv"),
+        "item_metadata_path": str(task_dir / "item_metadata.csv") if item_metadata else "",
         "users": len(user_to_idx),
         "items": len(item_to_idx),
         "train_interaction_rows": len(train_rows),

@@ -126,24 +126,59 @@ def _candidate_mapped_rows(
     return rows
 
 
-def _item_text_seed_rows(candidate_rows: list[dict[str, str]], item_to_idx: dict[str, int]) -> list[dict[str, Any]]:
-    title_by_item: dict[str, str] = {}
-    for row in candidate_rows:
+def _item_catalog_from_rows(rows: list[dict[str, str]]) -> dict[str, dict[str, str]]:
+    catalog: dict[str, dict[str, str]] = {}
+    for row in rows:
         item_id = _text(row.get("item_id"))
-        title = _text(row.get("candidate_title"))
-        if item_id and title and item_id not in title_by_item:
-            title_by_item[item_id] = title
+        if not item_id:
+            continue
+        current = catalog.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
+        title = _text(row.get("candidate_title") or row.get("title"))
+        text = _text(row.get("candidate_text") or row.get("embedding_text"))
+        if title and not current["candidate_title"]:
+            current["candidate_title"] = title
+        if text and not current["candidate_text"]:
+            current["candidate_text"] = text
+    return catalog
+
+
+def _load_item_metadata(task_dir: Path) -> dict[str, dict[str, str]]:
+    path = task_dir / "item_metadata.csv"
+    if not path.exists():
+        return {}
+    return _item_catalog_from_rows(_read_csv(path))
+
+
+def _item_text_seed_rows(
+    candidate_rows: list[dict[str, str]],
+    item_to_idx: dict[str, int],
+    *,
+    item_metadata: dict[str, dict[str, str]] | None = None,
+) -> list[dict[str, Any]]:
+    catalog = _item_catalog_from_rows(candidate_rows)
+    if item_metadata:
+        for item_id, info in item_metadata.items():
+            current = catalog.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
+            if info.get("candidate_title") and not current["candidate_title"]:
+                current["candidate_title"] = info["candidate_title"]
+            if info.get("candidate_text") and not current["candidate_text"]:
+                current["candidate_text"] = info["candidate_text"]
 
     rows = []
     for item_id, item_idx in sorted(item_to_idx.items(), key=lambda pair: pair[1]):
-        title = title_by_item.get(item_id, "")
+        info = catalog.get(item_id, {})
+        title = _text(info.get("candidate_title"))
+        embedding_text = _text(info.get("candidate_text")) or title or item_id
+        source = "item_metadata" if item_metadata and item_id in item_metadata else "candidate_title"
+        if embedding_text == item_id:
+            source = "item_id_fallback"
         rows.append(
             {
                 "item_id": item_id,
                 "llmesr_item_idx": item_idx,
                 "candidate_title": title,
-                "embedding_text": title or item_id,
-                "title_source": "candidate_title" if title else "item_id_fallback",
+                "embedding_text": embedding_text,
+                "title_source": source,
             }
         )
     return rows
@@ -253,6 +288,7 @@ def main() -> None:
 
     train_rows = _read_csv(train_path)
     candidate_rows = _read_csv(candidate_path)
+    item_metadata = _load_item_metadata(task_dir)
     user_to_idx, item_to_idx = _build_user_item_maps(train_rows, candidate_rows)
     train_sequences = _group_train_sequences(train_rows, user_to_idx, item_to_idx)
 
@@ -269,7 +305,7 @@ def main() -> None:
     _write_csv(_user_map_rows(user_to_idx), output_dir / "user_id_map.csv", ["user_id", "llmesr_user_idx"])
     _write_csv(_item_map_rows(item_to_idx), output_dir / "item_id_map.csv", ["item_id", "llmesr_item_idx"])
     _write_csv(
-        _item_text_seed_rows(candidate_rows, item_to_idx),
+        _item_text_seed_rows(candidate_rows, item_to_idx, item_metadata=item_metadata),
         output_dir / "item_text_seed.csv",
         ["item_id", "llmesr_item_idx", "candidate_title", "embedding_text", "title_source"],
     )
@@ -297,6 +333,7 @@ def main() -> None:
         "user_id_map_path": str(output_dir / "user_id_map.csv"),
         "item_id_map_path": str(output_dir / "item_id_map.csv"),
         "item_text_seed_path": str(output_dir / "item_text_seed.csv"),
+        "item_metadata_path": str(task_dir / "item_metadata.csv") if item_metadata else "",
         "sim_user_paths": sim_paths,
         "users": len(user_to_idx),
         "items": len(item_to_idx),
