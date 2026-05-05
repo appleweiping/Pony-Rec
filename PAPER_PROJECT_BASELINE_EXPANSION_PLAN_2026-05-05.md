@@ -68,6 +68,30 @@ Promotion condition:
 - Score exact same-candidate rows with the trained model/checkpoint.
 - Import only after score coverage is `1.0`.
 
+Wrapper added:
+
+```text
+main_train_score_llmesr_upstream_adapter.py
+```
+
+This script imports the upstream LLM-ESR `LLMESR_SASRec` model class, trains it
+on the local same-candidate adapter interactions and Qwen3 item embeddings, and
+emits:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+for exact same-candidate import. It should be imported as:
+
+```text
+baseline_name=llmesr_style_qwen3_sasrec
+status_label=same_schema_external_baseline
+artifact_class=completed_result
+```
+
+only after score audit coverage is complete.
+
 Paper-safe label if completed:
 
 ```text
