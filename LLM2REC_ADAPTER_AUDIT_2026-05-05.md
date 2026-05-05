@@ -151,3 +151,65 @@ diagnosis=ready_for_llm2rec_upstream_wrapper
 Use this adapter package as the Week8.4 LLM2Rec handoff. The next engineering
 step is not to import a scaffold metric, but to patch/run the upstream LLM2Rec
 seqrec scorer so it can score our exact candidate rows.
+
+## Upstream Wrapper Step Added
+
+Two local entry points now cover the next handoff:
+
+```bash
+python main_prepare_llm2rec_upstream_adapter.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter \
+  --llm2rec_repo_dir ~/projects/LLM2Rec \
+  --link_mode copy
+```
+
+This installs:
+
+```text
+~/projects/LLM2Rec/data/beauty_same_candidate/downstream/
+```
+
+and patches upstream:
+
+```text
+seqrec/recdata.py
+extract_llm_embedding.py
+```
+
+so `beauty_same_candidate` is recognized by native LLM2Rec extraction and
+seqrec evaluation scripts. Repeat for `books_same_candidate`,
+`electronics_same_candidate`, and `movies_same_candidate`.
+
+After native LLM2Rec embedding extraction and seqrec training produce an item
+embedding `.npy` and a seqrec checkpoint, emit exact same-candidate scores:
+
+```bash
+python main_score_llm2rec_same_candidate_adapter.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter \
+  --llm2rec_repo_dir ~/projects/LLM2Rec \
+  --model SASRec \
+  --item_embedding_path ~/projects/LLM2Rec/item_info/beauty_same_candidate/<save_info>_title_item_embs.npy \
+  --checkpoint_path ~/projects/LLM2Rec/seqrec/ckpt/<best_checkpoint>.pth \
+  --output_scores_path outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv
+```
+
+Then audit and import only if coverage is complete:
+
+```bash
+python main_audit_same_candidate_score_file.py \
+  --candidate_items_path outputs/baselines/external_tasks/beauty_week8_same_candidate_external/candidate_items.csv \
+  --scores_path outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv
+
+python main_import_same_candidate_baseline_scores.py \
+  --baseline_name llm2rec \
+  --exp_name beauty_llm2rec_same_candidate \
+  --domain beauty \
+  --ranking_input_path data/processed/amazon_beauty/ranking_test.jsonl \
+  --scores_path outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv \
+  --status_label same_schema_external_baseline \
+  --artifact_class completed_result
+```
+
+This keeps the protocol boundary explicit: upstream native full-pool metrics
+are still not imported; only exact same-candidate score CSVs enter the local
+baseline matrix.
