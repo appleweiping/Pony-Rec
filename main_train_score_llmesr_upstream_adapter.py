@@ -394,8 +394,8 @@ def _score_candidates(
 def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
     torch, DataLoader, Dataset, Adam = _import_torch()
     _set_seed(args.seed, torch)
-    adapter_dir = Path(args.adapter_dir).expanduser()
-    llmesr_repo_dir = Path(args.llmesr_repo_dir).expanduser()
+    adapter_dir = Path(args.adapter_dir).expanduser().resolve()
+    llmesr_repo_dir = Path(args.llmesr_repo_dir).expanduser().resolve()
     metadata_path = adapter_dir / "adapter_metadata.json"
     if not metadata_path.exists():
         raise FileNotFoundError(f"adapter_metadata.json not found: {metadata_path}")
@@ -436,6 +436,17 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
     generator.manual_seed(args.seed)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, generator=generator)
 
+    output_scores_path = (
+        Path(args.output_scores_path).expanduser().resolve()
+        if args.output_scores_path
+        else adapter_dir / "llmesr_upstream_same_candidate_scores.csv"
+    )
+    checkpoint_path = (
+        Path(args.checkpoint_path).expanduser().resolve()
+        if args.checkpoint_path
+        else adapter_dir / "llmesr_upstream_model.pt"
+    )
+
     sys.path.insert(0, str(llmesr_repo_dir))
     with _pushd(llmesr_repo_dir):
         from models.LLMESR import LLMESR_SASRec
@@ -457,11 +468,6 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
             log_every=args.log_every,
         )
         candidate_events = _candidate_groups(adapter_dir / "candidate_items_mapped.csv")
-        output_scores_path = (
-            Path(args.output_scores_path).expanduser()
-            if args.output_scores_path
-            else adapter_dir / "llmesr_upstream_same_candidate_scores.csv"
-        )
         score_summary = _score_candidates(
             model=model,
             sequences=sequences,
@@ -470,11 +476,6 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
             max_len=args.max_len,
             torch=torch,
             device=device,
-        )
-        checkpoint_path = (
-            Path(args.checkpoint_path).expanduser()
-            if args.checkpoint_path
-            else adapter_dir / "llmesr_upstream_model.pt"
         )
         checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(
