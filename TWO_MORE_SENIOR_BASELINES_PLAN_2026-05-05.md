@@ -1,5 +1,12 @@
 # Two More Senior Baselines Plan - 2026-05-05
 
+Superseded status:
+
+```text
+This four-paper expansion has been superseded by the six-paper result in
+LLM_PROJECT_QWEN3_6PAPER_BASELINE_RESULT_2026-05-05.md.
+```
+
 This note records the next two senior-recommended paper-project baselines to
 add after completing:
 

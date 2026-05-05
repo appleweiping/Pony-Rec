@@ -1,5 +1,14 @@
 # LLM Project Qwen3 Baseline Combined Result - 2026-05-05
 
+Superseded status:
+
+```text
+This initial two-paper readout has been superseded by
+LLM_PROJECT_QWEN3_6PAPER_BASELINE_RESULT_2026-05-05.md after LLMEmb-style,
+RLMRec-style, IRLLRec-style, and SETRec-style were completed, imported, and
+included in paired statistical tests.
+```
+
 This note records the initial same-schema readout after rebuilding the unified
 matrix, the paper-ready table, and paired statistical tests with two
 senior-recommended LLM-rec paper-project baselines.

@@ -1,5 +1,12 @@
 # Paper-Project Baseline Expansion Plan - 2026-05-05
 
+Superseded status:
+
+```text
+The expansion moved beyond this four-paper target. The current final readout is
+LLM_PROJECT_QWEN3_6PAPER_BASELINE_RESULT_2026-05-05.md.
+```
+
 This note records the baseline coverage decision after completing the
 LLM2Rec-style Qwen3 result and paired statistical tests.
 

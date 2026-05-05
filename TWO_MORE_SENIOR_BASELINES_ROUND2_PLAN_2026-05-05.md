@@ -1,5 +1,14 @@
 # Two More Senior Baselines Round 2 Plan - 2026-05-05
 
+Completed status:
+
+```text
+IRLLRec-style and SETRec-style have now been completed on all four domains,
+imported with full same-candidate coverage, rebuilt into the six-paper
+paper-ready table, and included in paired statistical tests. The final readout
+is LLM_PROJECT_QWEN3_6PAPER_BASELINE_RESULT_2026-05-05.md.
+```
+
 This note records the next two senior-recommended external paper-project
 baselines after the completed four-paper block:
 
@@ -240,3 +249,10 @@ Do not update the final completed count from `4` to `6` until all four domains
 are imported for both new baselines, score coverage is `1.0`, the paper-ready
 table has six paper-project rows per domain, and paired statistical tests have
 been rerun.
+
+Final completed count:
+
+```text
+4 classical same-candidate baselines
+6 senior-recommended LLM-rec paper-project same-schema baselines
+```

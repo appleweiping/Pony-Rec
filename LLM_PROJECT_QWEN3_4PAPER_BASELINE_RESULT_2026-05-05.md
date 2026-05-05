@@ -1,5 +1,14 @@
 # LLM Project Qwen3 4-Paper Baseline Result - 2026-05-05
 
+Superseded status:
+
+```text
+This four-paper readout has been superseded by
+LLM_PROJECT_QWEN3_6PAPER_BASELINE_RESULT_2026-05-05.md after IRLLRec-style and
+SETRec-style were completed, imported, and included in the six-paper paired
+statistical tests.
+```
+
 This note records the completed four-paper-project baseline block after adding
 LLMEmb-style and RLMRec-style to the earlier LLM2Rec-style and LLM-ESR-style
 rows.
