@@ -7,7 +7,12 @@ from typing import Any
 
 
 CLASSICAL_METHOD_ORDER = ["sasrec", "gru4rec", "bert4rec", "lightgcn"]
-PAPER_PROJECT_METHOD_ORDER = ["llm2rec_style_qwen3_sasrec", "llmesr_style_qwen3_sasrec"]
+PAPER_PROJECT_METHOD_ORDER = [
+    "llm2rec_style_qwen3_sasrec",
+    "llmesr_style_qwen3_sasrec",
+    "llmemb_style_qwen3_sasrec",
+    "rlmrec_style_qwen3_graphcl",
+]
 
 OUTPUT_FIELDS = [
     "domain",
@@ -93,6 +98,10 @@ def _method_label(row: dict[str, str]) -> str:
         return "LLM2Rec-style Qwen3-8B Emb. + SASRec"
     if method == "llmesr_style_qwen3_sasrec":
         return "LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec"
+    if method == "llmemb_style_qwen3_sasrec":
+        return "LLMEmb-style Qwen3-8B Emb. + SASRec"
+    if method == "rlmrec_style_qwen3_graphcl":
+        return "RLMRec-style Qwen3-8B GraphCL"
     if method == "shadow_v6_decision_bridge":
         return "Shadow-v6 diagnostic"
     return method.upper() if method in CLASSICAL_METHOD_ORDER else method

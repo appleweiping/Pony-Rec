@@ -165,6 +165,20 @@ senior-recommended LLM-rec paper-project baselines under the same split,
 candidate set, and metric implementation.
 ```
 
-Next optional expansion: LLMEmb-style or RLMRec-style, only if additional
-baseline breadth is needed after the current paper-ready table and paired tests
-are rebuilt.
+Next expansion selected:
+
+```text
+LLMEmb-style Qwen3-8B Emb. + SASRec
+RLMRec-style Qwen3-8B GraphCL
+```
+
+Entrypoints added:
+
+```text
+main_train_llmemb_style_same_candidate.py
+main_train_rlmrec_style_same_candidate.py
+```
+
+These are not completed result rows until their score CSVs pass full
+same-candidate coverage audit and are imported as
+`same_schema_external_baseline`.

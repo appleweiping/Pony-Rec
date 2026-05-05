@@ -188,9 +188,9 @@ Safe wording:
 
 Also safe:
 
-> The external baseline block now includes four classical recommenders and one
-> same-backbone paper-project adapter baseline, all evaluated under the same
-> split, same candidate set, and same metric implementation.
+> The external baseline block now includes four classical recommenders and two
+> same-backbone senior-recommended paper-project baselines, all evaluated under
+> the same split, same candidate set, and same metric implementation.
 
 Unsafe wording:
 

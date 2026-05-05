@@ -111,11 +111,24 @@ Why unsafe:
 - It imports exact same-candidate logits, not native LLM-ESR sampled-negative
   metrics.
 
-## Remaining Gates
+## Final Gates
 
-- Rebuild the unified and paper-ready baseline tables including
-  `llmesr_style_qwen3_sasrec`.
-- Run paired statistical tests including LLM-ESR-style before final paper
-  wording.
-- Keep the row label as LLM-ESR-style unless the official LLM-ESR pipeline is
-  fully reproduced.
+Completed after the four-domain scoring run:
+
+- Rebuilt the unified matrix including `llmesr_style_qwen3_sasrec`:
+  `outputs/summary/unified_method_matrix_week77_shadow_external_qwen_llmesr_llm2rec.csv`.
+- Rebuilt the paper-ready baseline table:
+  `outputs/summary/paper_ready_baseline_comparison_week77_qwen_llmesr_llm2rec.md`.
+- Ran paired statistical tests including LLM-ESR-style:
+  `outputs/summary/week8_llm_project_qwen3_stat_tests/all_domains_significance_tests.csv`.
+
+Statistical summary:
+
+- LLM-ESR-style is significantly below structured-risk on all four domains.
+- It is nominally above LLM2Rec-style on Beauty by `0.022530`, but that gap is
+  not Holm-significant.
+- LLM2Rec-style is significantly above LLM-ESR-style on Books, Electronics, and
+  Movies.
+
+Keep the row label as LLM-ESR-style unless the official LLM-ESR pipeline is
+fully reproduced.

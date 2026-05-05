@@ -81,6 +81,26 @@ def test_paper_ready_rows_select_expected_methods_and_best_srpd():
         },
         {
             "domain": "books",
+            "comparison_scope": "week8_same_candidate_external_baseline",
+            "evidence_family": "external_same_candidate_baseline",
+            "method": "llmemb_style_qwen3_sasrec",
+            "method_variant": "llmemb_style_qwen3_sasrec",
+            "NDCG@10": "0.57",
+            "artifact_class": "completed_result",
+            "paper_role_hint": "same_schema_external_baseline",
+        },
+        {
+            "domain": "books",
+            "comparison_scope": "week8_same_candidate_external_baseline",
+            "evidence_family": "external_same_candidate_baseline",
+            "method": "rlmrec_style_qwen3_graphcl",
+            "method_variant": "rlmrec_style_qwen3_graphcl",
+            "NDCG@10": "0.58",
+            "artifact_class": "completed_result",
+            "paper_role_hint": "same_schema_external_baseline",
+        },
+        {
+            "domain": "books",
             "comparison_scope": "week8_same_candidate_adapter_diagnostic",
             "evidence_family": "paper_adapter_scaffold",
             "method": "llmesr_scaffold",
@@ -101,10 +121,14 @@ def test_paper_ready_rows_select_expected_methods_and_best_srpd():
         "completed_external_baseline",
         "paper_project_same_backbone_baseline",
         "paper_project_same_backbone_baseline",
+        "paper_project_same_backbone_baseline",
+        "paper_project_same_backbone_baseline",
         "paper_adapter_scaffold_diagnostic",
     ]
     assert rows[2]["display_method"] == "SRPD best (srpd_v2)"
-    assert rows[-3]["display_method"] == "LLM2Rec-style Qwen3-8B Emb. + SASRec"
-    assert rows[-2]["display_method"] == "LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec"
+    assert rows[-5]["display_method"] == "LLM2Rec-style Qwen3-8B Emb. + SASRec"
+    assert rows[-4]["display_method"] == "LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec"
+    assert rows[-3]["display_method"] == "LLMEmb-style Qwen3-8B Emb. + SASRec"
+    assert rows[-2]["display_method"] == "RLMRec-style Qwen3-8B GraphCL"
     assert rows[-1]["display_method"] == "llmesr_scaffold_hf_mean_pool_Qwen3-8B"
     assert rows[-1]["artifact_class"] == "adapter_scaffold_score"
