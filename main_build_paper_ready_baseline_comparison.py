@@ -12,6 +12,8 @@ PAPER_PROJECT_METHOD_ORDER = [
     "llmesr_style_qwen3_sasrec",
     "llmemb_style_qwen3_sasrec",
     "rlmrec_style_qwen3_graphcl",
+    "irllrec_style_qwen3_intent",
+    "setrec_style_qwen3_identifier",
 ]
 
 OUTPUT_FIELDS = [
@@ -102,6 +104,10 @@ def _method_label(row: dict[str, str]) -> str:
         return "LLMEmb-style Qwen3-8B Emb. + SASRec"
     if method == "rlmrec_style_qwen3_graphcl":
         return "RLMRec-style Qwen3-8B GraphCL"
+    if method == "irllrec_style_qwen3_intent":
+        return "IRLLRec-style Qwen3-8B IntentRep"
+    if method == "setrec_style_qwen3_identifier":
+        return "SETRec-style Qwen3-8B Identifier"
     if method == "shadow_v6_decision_bridge":
         return "Shadow-v6 diagnostic"
     return method.upper() if method in CLASSICAL_METHOD_ORDER else method

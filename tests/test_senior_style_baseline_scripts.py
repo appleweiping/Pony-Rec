@@ -128,3 +128,77 @@ def test_rlmrec_style_script_scores_all_candidates(tmp_path: Path) -> None:
     assert len(rows) == 6
     assert {row["source_event_id"] for row in rows} == {"e1", "e2"}
     assert all(row["score"] for row in rows)
+
+
+def test_irllrec_style_script_scores_all_candidates(tmp_path: Path) -> None:
+    task_dir, embedding_path, item_map_path = _make_task(tmp_path)
+    scores_path = tmp_path / "irllrec_scores.csv"
+
+    subprocess.run(
+        [
+            sys.executable,
+            "main_train_irllrec_style_same_candidate.py",
+            "--task_dir",
+            str(task_dir),
+            "--embedding_path",
+            str(embedding_path),
+            "--item_map_path",
+            str(item_map_path),
+            "--output_scores_path",
+            str(scores_path),
+            "--hidden_size",
+            "8",
+            "--num_intents",
+            "2",
+            "--epochs",
+            "1",
+            "--batch_size",
+            "2",
+            "--device",
+            "cpu",
+            "--log_every",
+            "0",
+        ],
+        check=True,
+    )
+
+    rows = _read_scores(scores_path)
+    assert len(rows) == 6
+    assert {row["source_event_id"] for row in rows} == {"e1", "e2"}
+    assert all(row["score"] for row in rows)
+
+
+def test_setrec_style_script_scores_all_candidates(tmp_path: Path) -> None:
+    task_dir, embedding_path, item_map_path = _make_task(tmp_path)
+    scores_path = tmp_path / "setrec_scores.csv"
+
+    subprocess.run(
+        [
+            sys.executable,
+            "main_train_setrec_style_same_candidate.py",
+            "--task_dir",
+            str(task_dir),
+            "--embedding_path",
+            str(embedding_path),
+            "--item_map_path",
+            str(item_map_path),
+            "--output_scores_path",
+            str(scores_path),
+            "--hidden_size",
+            "8",
+            "--epochs",
+            "1",
+            "--batch_size",
+            "2",
+            "--device",
+            "cpu",
+            "--log_every",
+            "0",
+        ],
+        check=True,
+    )
+
+    rows = _read_scores(scores_path)
+    assert len(rows) == 6
+    assert {row["source_event_id"] for row in rows} == {"e1", "e2"}
+    assert all(row["score"] for row in rows)
