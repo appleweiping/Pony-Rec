@@ -267,6 +267,42 @@ Decision:
 - Otherwise keep it as a bridge/ablation supporting the signal-to-decision
   story.
 
+### Week8.3b: Same-Backbone Paper-Project Baseline
+
+Decision:
+
+- Use the existing Qwen3-8B local model as the small LLM backbone for the
+  LLM2Rec-style paper-project baseline.
+- Do not claim this row as an official LLM2Rec CSFT/IEM reproduction unless
+  the upstream CSFT/IEM checkpoint and extraction pipeline are actually used.
+- The intended row name is:
+  `LLM2Rec-style Qwen3-8B Emb. + SASRec`.
+
+Rationale:
+
+- Classical external baselines (`SASRec`, `GRU4Rec`, `BERT4Rec`, `LightGCN`)
+  remain non-LLM recommender baselines and are not Qwen3-8B based.
+- Our method/reference rows (`direct ranking`, `structured-risk`, `SRPD`,
+  `shadow_v1/v6`) are Qwen3-8B based but are not external baselines.
+- The LLM2Rec-style row controls the LLM backbone by using Qwen3-8B only as an
+  item embedding generator, then training the upstream LLM2Rec/SASRec
+  sequential recommender without our uncertainty, SRPD, or shadow decision
+  logic.
+
+Implementation:
+
+- `main_prepare_llm2rec_upstream_adapter.py` installs four-domain adapter data
+  into the upstream `HappyPointer/LLM2Rec` checkout.
+- `main_generate_llm2rec_sentence_embeddings.py` generates padded
+  LLM2Rec-compatible item embedding `.npy` files from adapter item text using
+  `hf_mean_pool` over the local Qwen3-8B model.
+- Upstream `evaluate_with_seqrec.py` trains `SASRec` on these embeddings.
+- `main_score_llm2rec_same_candidate_adapter.py` emits exact same-candidate
+  score files.
+- Only after full score coverage and import through
+  `main_import_same_candidate_baseline_scores.py` can this row be labeled
+  `same_schema_external_baseline`.
+
 ### Week8.4: Trainable Signal Prototype
 
 Goal:

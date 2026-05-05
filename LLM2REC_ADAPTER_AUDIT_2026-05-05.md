@@ -152,6 +152,20 @@ Use this adapter package as the Week8.4 LLM2Rec handoff. The next engineering
 step is not to import a scaffold metric, but to patch/run the upstream LLM2Rec
 seqrec scorer so it can score our exact candidate rows.
 
+For the paper-project baseline, the safest practical choice is now:
+
+```text
+LLM2Rec-style Qwen3-8B Emb. + SASRec
+```
+
+That means:
+
+- Qwen3-8B is used as the item embedding backbone.
+- We generate padded LLM2Rec-compatible `.npy` embeddings locally.
+- The upstream LLM2Rec `SASRec` downstream runner trains on those embeddings.
+- We do **not** claim an official LLM2Rec CSFT/IEM reproduction unless the
+  upstream LLM2Rec extraction/training path is actually used.
+
 ## Upstream Wrapper Step Added
 
 Two local entry points now cover the next handoff:
@@ -213,3 +227,27 @@ python main_import_same_candidate_baseline_scores.py \
 This keeps the protocol boundary explicit: upstream native full-pool metrics
 are still not imported; only exact same-candidate score CSVs enter the local
 baseline matrix.
+
+## Small-Model Path
+
+If the server environment lacks `llm2vec` or `flash-attn`, use the local
+Qwen3-8B route instead of blocking the baseline:
+
+```bash
+python main_generate_llm2rec_sentence_embeddings.py \
+  --adapter_dir outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter \
+  --backend hf_mean_pool \
+  --model_name /path/to/local/Qwen3-8B \
+  --llm2rec_repo_dir ~/projects/LLM2Rec \
+  --save_info pony_qwen3_8b
+```
+
+This writes:
+
+```text
+outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy
+~/projects/LLM2Rec/item_info/beauty_same_candidate/pony_qwen3_8b_title_item_embs.npy
+```
+
+The generated matrix is padded with a zero row at index 0 so the upstream
+LLM2Rec `SASRec`/`GRU4Rec` loaders can consume it directly.
