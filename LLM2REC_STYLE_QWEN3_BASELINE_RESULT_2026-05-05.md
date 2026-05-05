@@ -106,6 +106,56 @@ Interpretation:
   full-catalog numbers from other papers; all rows here are exact
   same-candidate results.
 
+## Paired Statistical Tests
+
+Server output:
+
+```text
+outputs/summary/week8_llm2rec_style_qwen3_stat_tests/all_domains_significance_tests.csv
+outputs/summary/week8_llm2rec_style_qwen3_stat_tests/all_domains_main_table_with_ci.csv
+outputs/summary/week8_llm2rec_style_qwen3_stat_tests/input_manifest.csv
+```
+
+The test runner used paired bootstrap confidence intervals and paired
+permutation tests, with Holm correction across comparisons.
+
+Against `structured_risk`:
+
+| domain | structured-risk NDCG@10 | LLM2Rec-style NDCG@10 | delta | 95% CI | Holm p | significant |
+| --- | ---: | ---: | ---: | --- | ---: | --- |
+| beauty | 0.614078 | 0.551090 | -0.062988 | [-0.084946, -0.042041] | 0.017991 | yes |
+| books | 0.639514 | 0.555974 | -0.083540 | [-0.112655, -0.053344] | 0.017991 | yes |
+| electronics | 0.658301 | 0.558289 | -0.100012 | [-0.128305, -0.070998] | 0.017991 | yes |
+| movies | 0.573183 | 0.572491 | -0.000692 | [-0.032355, 0.031330] | 1.000000 | no |
+
+Against SRPD-best:
+
+| domain | SRPD-best row | SRPD-best NDCG@10 | LLM2Rec-style NDCG@10 | readout |
+| --- | --- | ---: | ---: | --- |
+| beauty | `srpd_best_srpd_v2` | 0.635366 | 0.551090 | SRPD is significantly higher. |
+| books | `srpd_best_srpd_v2` | 0.705707 | 0.555974 | SRPD is significantly higher. |
+| electronics | `srpd_best_srpd_v5` | 0.662100 | 0.558289 | SRPD is significantly higher. |
+| movies | `srpd_best_srpd_v4` | 0.546389 | 0.572491 | LLM2Rec-style is observed higher, but not Holm-significant. |
+
+Against classical external baselines:
+
+| domain | significant external-baseline readout |
+| --- | --- |
+| beauty | LightGCN is significantly higher than LLM2Rec-style; LLM2Rec-style is significantly higher than SASRec; gaps to BERT4Rec and GRU4Rec are not Holm-significant. |
+| books | LLM2Rec-style is significantly higher than SASRec, BERT4Rec, and LightGCN; the gap to GRU4Rec is not Holm-significant. |
+| electronics | LLM2Rec-style is significantly higher than SASRec, BERT4Rec, and LightGCN; the gap to GRU4Rec is not Holm-significant. |
+| movies | LLM2Rec-style is significantly higher than SASRec, BERT4Rec, and LightGCN; the gap to GRU4Rec is not Holm-significant after correction. |
+
+Statistical readout:
+
+- The LLM2Rec-style Qwen3 baseline is a strong same-backbone external design
+  check, especially versus classical sequential baselines.
+- It does not overturn the uncertainty-aware/SRPD story on Beauty, Books, or
+  Electronics.
+- Movies is a near-tie among structured-risk, shadow-v6 diagnostic, and
+  LLM2Rec-style; do not use winner wording there without additional aligned
+  tests.
+
 ## SRPD and Shadow Context
 
 Current method-side readout from the unified method interpretation:
@@ -131,9 +181,10 @@ Important interpretation:
 Safe wording:
 
 > Under the same Qwen3-8B backbone, an LLM2Rec-style embedding-plus-SASRec
-> baseline is competitive and nearly matches the structured-risk reference on
-> Movies, but it does not close the gap to the uncertainty-aware decision line
-> on Beauty, Books, or Electronics.
+> baseline is competitive and statistically indistinguishable from the
+> structured-risk reference on Movies, but it is significantly below the
+> uncertainty-aware structured-risk/SRPD lines on Beauty, Books, and
+> Electronics under the current paired tests.
 
 Also safe:
 
@@ -206,7 +257,10 @@ python main_import_same_candidate_baseline_scores.py \
 
 ## Remaining Gates
 
-- Run paired statistical tests before using winner wording.
+- Paired statistical tests are now available for the LLM2Rec-style row.
 - Keep the row label as LLM2Rec-style unless official LLM2Rec CSFT/IEM is run.
 - If official LLM2Rec is later run, add it as a separate row rather than
   overwriting this same-backbone adapter baseline.
+- Before final paper wording, decide whether Movies should be described as a
+  near-tie/indistinguishable case or re-tested with additional aligned shadow
+  variants.

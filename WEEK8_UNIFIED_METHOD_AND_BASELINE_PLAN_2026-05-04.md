@@ -365,6 +365,22 @@ This reads existing prediction files only. It compares direct, structured-risk,
 SRPD-best, classical external baselines, and the LLM2Rec-style Qwen3 baseline
 with paired bootstrap/permutation tests before any winner wording.
 
+2026-05-05 result:
+
+- The paired test runner completed on the server and wrote
+  `outputs/summary/week8_llm2rec_style_qwen3_stat_tests/`.
+- LLM2Rec-style Qwen3 is significantly below structured-risk on Beauty, Books,
+  and Electronics.
+- On Movies, LLM2Rec-style Qwen3 and structured-risk are statistically
+  indistinguishable in the current paired test.
+- SRPD-best remains significantly stronger than LLM2Rec-style Qwen3 on Beauty,
+  Books, and Electronics.
+- On Movies, LLM2Rec-style Qwen3 is observed above SRPD-v4 but not
+  Holm-significant.
+- Among classical external baselines, LLM2Rec-style is strongest on Books,
+  Electronics, and Movies except for non-significant gaps against GRU4Rec; on
+  Beauty, LightGCN is significantly higher.
+
 ## Recommendation
 
 The immediate paper-safe stance is:
@@ -377,5 +393,6 @@ The immediate paper-safe stance is:
 - External same-schema evidence now includes the four classical baselines and
   one completed same-backbone paper-project row:
   `LLM2Rec-style Qwen3-8B Emb. + SASRec`.
-- The next major validation gate is paired significance testing over the exact
-  event-level prediction files.
+- The paired significance gate confirms the conservative claim: LLM2Rec-style
+  Qwen3 is a competitive same-backbone external baseline, but it does not close
+  the gap to uncertainty-aware/SRPD results on Beauty, Books, or Electronics.
