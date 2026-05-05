@@ -335,6 +335,9 @@ Goal:
 
 - Merge external baselines, SRPD, structured-risk, shadow_v1, and shadow_v6 into
   one paper-facing evidence matrix.
+- As of 2026-05-05, include `llm2rec_style_qwen3_sasrec` as a completed
+  same-backbone paper-project baseline, labeled as
+  `paper_project_same_backbone_baseline`.
 
 Required labels:
 
@@ -347,6 +350,21 @@ Required labels:
 No row can become a main-table winner without candidate protocol audit,
 calibration split metadata, and paired significance checks.
 
+Next runnable gate:
+
+```bash
+python main_run_week8_llm2rec_paired_stat_tests.py \
+  --week77_root ~/projects/uncertainty-llm4rec/export/week7_7_four_domain_final \
+  --external_summary_glob "outputs/*/tables/same_candidate_external_baseline_summary.csv" \
+  --output_dir outputs/summary/week8_llm2rec_style_qwen3_stat_tests \
+  --bootstrap_iters 2000 \
+  --permutation_iters 2000
+```
+
+This reads existing prediction files only. It compares direct, structured-risk,
+SRPD-best, classical external baselines, and the LLM2Rec-style Qwen3 baseline
+with paired bootstrap/permutation tests before any winner wording.
+
 ## Recommendation
 
 The immediate paper-safe stance is:
@@ -356,5 +374,8 @@ The immediate paper-safe stance is:
 - Shadow_v6 is promising, especially on Books and Electronics, but remains a
   diagnostic bridge until aligned against week7.7 protocol and external
   baselines.
-- External baselines from the senior-recommended papers are not yet completed
-  same-schema evidence. They are the next major validation gate.
+- External same-schema evidence now includes the four classical baselines and
+  one completed same-backbone paper-project row:
+  `LLM2Rec-style Qwen3-8B Emb. + SASRec`.
+- The next major validation gate is paired significance testing over the exact
+  event-level prediction files.
