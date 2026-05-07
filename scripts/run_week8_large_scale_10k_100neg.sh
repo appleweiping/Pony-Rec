@@ -149,21 +149,21 @@ run_llm2rec_style() {
     (
       cd "$LLM2REC_REPO_DIR"
       python evaluate_with_seqrec.py \
-        --model SASRec \
-        --dataset "$dataset_alias" \
-        --embedding "./item_info/$dataset_alias/${LLM2REC_SAVE_INFO}_title_item_embs.npy" \
-        --exp_type srec \
+        --model=SASRec \
+        --dataset="$dataset_alias" \
+        --embedding=./item_info/$dataset_alias/${LLM2REC_SAVE_INFO}_title_item_embs.npy \
+        --exp_type=srec \
         --lr=1.0e-3 \
         --weight_decay=1.0e-4 \
         --dropout=0.3 \
         --loss_type=ce \
-        --run_id "LLM2Rec_style_qwen3_${d}_${NUM_NEGATIVES}neg" \
+        --run_id=LLM2Rec_style_qwen3_${d}_${NUM_NEGATIVES}neg \
         --max_seq_length=10 \
-        --train_batch_size="$LLM2REC_TRAIN_BATCH_SIZE" \
-        --eval_batch_size="$LLM2REC_EVAL_BATCH_SIZE" \
-        --epochs="$LLM2REC_EPOCHS" \
+        --train_batch_size=$LLM2REC_TRAIN_BATCH_SIZE \
+        --eval_batch_size=$LLM2REC_EVAL_BATCH_SIZE \
+        --epochs=$LLM2REC_EPOCHS \
         --eval_interval=5 \
-        --patience="$LLM2REC_PATIENCE"
+        --patience=$LLM2REC_PATIENCE
     )
     checkpoint="$(latest_checkpoint_since "$LLM2REC_REPO_DIR" "$marker")"
     rm -f "$marker"
