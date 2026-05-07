@@ -3,6 +3,10 @@ set -euo pipefail
 
 cd "${PONY_REC_ROOT:-$HOME/projects/pony-rec-rescue-shadow-v6}"
 
+if [[ "${SKIP_PROJECT_BOOTSTRAP:-0}" != "1" ]]; then
+  python main_project_bootstrap.py
+fi
+
 CONFIG="${CONFIG:-configs/week8_large_scale_future_framework.yaml}"
 DOMAINS="${DOMAINS:-all}"
 MAX_EVENTS_ARG=()

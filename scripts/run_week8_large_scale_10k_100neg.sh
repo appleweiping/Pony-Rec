@@ -3,6 +3,10 @@ set -euo pipefail
 
 cd "${PONY_REC_ROOT:-$HOME/projects/pony-rec-rescue-shadow-v6}"
 
+if [[ "${SKIP_PROJECT_BOOTSTRAP:-0}" != "1" ]]; then
+  python main_project_bootstrap.py
+fi
+
 OUTPUT_ROOT="${OUTPUT_ROOT:-outputs}"
 USER_LIMIT="${USER_LIMIT:-10000}"
 BEAUTY_USER_LIMIT="${BEAUTY_USER_LIMIT:-0}"

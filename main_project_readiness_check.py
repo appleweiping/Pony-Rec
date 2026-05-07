@@ -35,6 +35,7 @@ REQUIRED_FILES = [
     "main_audit_official_external_repos.py",
     "main_make_official_external_adapter_plan.py",
     "main_import_same_candidate_baseline_scores.py",
+    "main_project_bootstrap.py",
 ]
 
 REQUIRED_TEXT = {
@@ -50,7 +51,7 @@ REQUIRED_TEXT = {
     ],
     "docs/server_runbook.md": [
         "git pull --ff-only",
-        "nohup bash scripts/run_week8_large_scale_10k_100neg.sh",
+        "python main_project_readiness_check.py",
         "*_official_qwen3_lora_*",
     ],
     "docs/paper_claims_and_status.md": [
@@ -130,4 +131,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

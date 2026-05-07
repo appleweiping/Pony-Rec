@@ -8,7 +8,7 @@ chat memory.
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6
 git pull --ff-only
-git status --short
+python main_project_readiness_check.py
 ```
 
 Read these files before launching heavy work:
@@ -21,25 +21,20 @@ WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
 OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
 ```
 
-Then run the lightweight readiness check:
-
-```bash
-python main_project_readiness_check.py
-```
-
 ## Current Priority Order
 
 ```text
 1. Pull latest repo state.
-2. Confirm no stale nohup job is still running.
-3. Finish or restart the Week8 four-domain 100neg paper-style supplementary run
+2. Run the readiness check and confirm canonical docs are present.
+3. Confirm no stale nohup job is still running.
+4. Finish or restart the Week8 four-domain 100neg paper-style supplementary run
    only if that is the intended diagnostic.
-4. Audit official external repositories.
-5. Implement official adapters in order: LLM2Rec, LLM-ESR, LLMEmb, RLMRec,
+5. Audit official external repositories.
+6. Implement official adapters in order: LLM2Rec, LLM-ESR, LLMEmb, RLMRec,
    IRLLRec, SETRec.
-6. Run Shadow large-scale diagnostics only after the 100neg task packages are
+7. Run Shadow large-scale diagnostics only after the 100neg task packages are
    confirmed healthy.
-7. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
+8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
    validation gates exist.
 ```
 
@@ -95,3 +90,16 @@ paired-test inputs generated
   main-domain target.
 - Week7.7 compact six-candidate results and Week8 101-candidate results must
   not be mixed as direct row-level comparisons.
+
+## Legacy Entry Points
+
+These remain in the tree for history and compatibility, but they are not the
+preferred first-read files:
+
+- `CODEX_HANDOFF_WEEK8_2026-05-06.md`
+- `WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
+- `WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md`
+- `WEEK8_FUSION_EXTERNAL_ONLY_CONTRIBUTION_UPDATE_2026-05-06.md`
+- `WEEK8_OURS_EXTERNAL_COMBO_AND_EXTERNAL_ONLY_PLAN_2026-05-06.md`
+
+Use them only when you need historical detail for that specific stage.

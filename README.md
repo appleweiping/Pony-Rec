@@ -39,6 +39,9 @@ Canonical navigation starts here:
 - [docs/server_runbook.md](docs/server_runbook.md) is the stable server-side
   execution entry point.
 
+Legacy Week8 logs and plans remain in the tree for history, but they are not
+the preferred starting point anymore. Use the canonical docs above first.
+
 The current defended spine is:
 
 ```text
