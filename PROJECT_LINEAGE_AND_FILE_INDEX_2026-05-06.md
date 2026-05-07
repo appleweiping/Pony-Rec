@@ -4,6 +4,32 @@ This index is a lightweight organization layer. It intentionally avoids moving
 active code files because many scripts, notes, and server commands refer to
 their current paths.
 
+## Canonical Milestone Layer
+
+Start future project navigation from:
+
+```text
+docs/milestones/README.md
+docs/top_conference_review_gate.md
+docs/server_runbook.md
+```
+
+Milestone map:
+
+| milestone | role | canonical file |
+| --- | --- | --- |
+| M0 Week1-4 / pony12 | observation and confidence diagnosis | `docs/milestones/M0_week1_4_pony12_observation.md` |
+| M1 Pony framework | observation to framework | `docs/milestones/M1_pony_framework_week5_6.md` |
+| M2 Light series | verbalized-confidence boundary / negative control | `docs/milestones/M2_light_series.md` |
+| M3 Shadow series | task-grounded uncertainty signals | `docs/milestones/M3_shadow_series.md` |
+| M4 Baseline system | fairness, classical/paper-style/official baselines | `docs/milestones/M4_baseline_system.md` |
+| M5 Four-domain validation | small-domain to 100neg four-domain protocol | `docs/milestones/M5_four_domain_same_candidate.md` |
+| M6 Complete recommender roadmap | official baselines, Shadow, LoRA, generated-title system | `docs/milestones/M6_complete_recommender_system.md` |
+
+The old root markdown files are retained as evidence and handoff logs. The
+milestone layer decides which evidence is main-claim eligible, supplementary,
+or roadmap-only.
+
 ## Active Mainline
 
 Large-scale external baseline protocol:
@@ -56,6 +82,9 @@ itself changes.
 Current handoff and plans:
 
 ```text
+docs/milestones/README.md
+docs/server_runbook.md
+docs/top_conference_review_gate.md
 CODEX_HANDOFF_WEEK8_2026-05-06.md
 WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
 WEEK8_FUSION_EXTERNAL_ONLY_CONTRIBUTION_UPDATE_2026-05-06.md
@@ -261,12 +290,15 @@ Do not move them during an active server run unless necessary.
 Use this order:
 
 ```text
-1. CODEX_HANDOFF_WEEK8_2026-05-06.md
-2. OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
-3. WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
-4. WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md
-5. PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md
-6. SHADOW_V1_TO_V6_STATUS_2026-05-04.md
+1. docs/milestones/README.md
+2. docs/server_runbook.md
+3. docs/top_conference_review_gate.md
+4. CODEX_HANDOFF_WEEK8_2026-05-06.md
+5. OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
+6. WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
+7. WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md
+8. PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md
+9. SHADOW_V1_TO_V6_STATUS_2026-05-04.md
 ```
 
 Then check the active server log before launching any new heavy run.

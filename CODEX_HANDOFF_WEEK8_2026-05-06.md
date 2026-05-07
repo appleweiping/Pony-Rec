@@ -3,6 +3,25 @@
 This file is the current working handoff for the next Codex chat. Read this
 first before changing scripts or rerunning experiments.
 
+## Canonical First-Read Files
+
+Before using this handoff, read:
+
+```text
+docs/milestones/README.md
+docs/server_runbook.md
+docs/top_conference_review_gate.md
+```
+
+Current milestone position:
+
+```text
+M4 baseline system -> M5 four-domain same-candidate validation.
+M6 complete recommendation system remains a roadmap until official baselines,
+Shadow large-scale diagnostics, LoRA modules, and generated-title verification
+are complete under the shared protocol.
+```
+
 ## Current High-Level State
 
 The small/medium same-candidate proof block is complete:

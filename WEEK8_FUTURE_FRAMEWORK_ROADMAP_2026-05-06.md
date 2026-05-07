@@ -3,6 +3,17 @@
 This note keeps the post-large-scale plan explicit so later Codex chats do not
 forget the shadow/light/LoRA/generated-title direction.
 
+Canonical milestone view:
+
+```text
+docs/milestones/M6_complete_recommender_system.md
+docs/server_runbook.md
+docs/top_conference_review_gate.md
+```
+
+This is an M6 roadmap document. It should not be read as evidence that the full
+recommendation system is already complete.
+
 ## Current Priority
 
 Finish the running large-scale external baseline protocol first:

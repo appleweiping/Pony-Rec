@@ -234,3 +234,7 @@ docs.zip
 !/docs/paper_claims_and_status.md
 !/docs/shadow_method.md
 !/docs/generative_title_bridge.md
+!/docs/server_runbook.md
+!/docs/top_conference_review_gate.md
+!/docs/milestones/
+!/docs/milestones/**

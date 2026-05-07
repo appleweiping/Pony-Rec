@@ -15,6 +15,40 @@ The repository is not positioned as a full-catalog recommender SOTA claim, a
 generative-title recommender system, or a LoRA distillation paper unless those
 separate protocols are explicitly completed and labeled as such.
 
+## Milestone Spine
+
+The project is organized as a milestone-preserving research program rather than
+a flat experiment log:
+
+```text
+Week1-4 / pony12 observation
+-> Pony framework
+-> Light series boundary test
+-> Shadow series task-grounded uncertainty
+-> same-candidate baseline system
+-> small-domain to four-domain validation
+-> complete recommendation-system roadmap
+```
+
+Canonical navigation starts here:
+
+- [docs/milestones/README.md](docs/milestones/README.md) defines the M0-M6
+  milestone map, evidence levels, and agent roles.
+- [docs/top_conference_review_gate.md](docs/top_conference_review_gate.md)
+  records the standing top-conference reviewer gate.
+- [docs/server_runbook.md](docs/server_runbook.md) is the stable server-side
+  execution entry point.
+
+The current defended spine is:
+
+```text
+observation -> framework -> controlled same-candidate evidence
+```
+
+The complete recommendation-system layer is a staged roadmap until official
+baselines, Shadow large-scale diagnostics, LoRA modules, and generated-title
+verification are completed under the same protocol.
+
 ## Core Claim
 
 Primary claim:
@@ -97,6 +131,9 @@ The repository includes:
 |   `-- processed/                    # ignored by git; local processed data
 |-- docs/
 |   |-- paper_claims_and_status.md
+|   |-- milestones/                   # canonical M0-M6 project map
+|   |-- server_runbook.md             # server-side execution entry point
+|   |-- top_conference_review_gate.md # reviewer/literature defense gate
 |   |-- reproduction.md
 |   |-- candidate_protocol.md
 |   |-- baseline_protocol.md
@@ -170,6 +207,8 @@ monolithic training entry point.
 - `main_audit_official_external_repos.py` and
   `main_make_official_external_adapter_plan.py` support the official-upgrade
   workflow before heavy training starts.
+- `main_project_readiness_check.py` is the lightweight post-pull sanity check
+  for the canonical milestone/reviewer/server-runbook layer.
 - `main_export_*_same_candidate_task.py` scripts materialize unified
   same-candidate task packages in external-repository-friendly formats.
 - `main_train_*_same_candidate.py` scripts train local classical or
@@ -183,6 +222,9 @@ monolithic training entry point.
 - `PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md` is the human navigation map
   for active, future, and historical files. Prefer updating the index before
   moving root scripts or markdown notes.
+- `docs/milestones/README.md`, `docs/server_runbook.md`, and
+  `docs/top_conference_review_gate.md` are the canonical first-read files for
+  future Codex/server work.
 
 ## Method Overview
 

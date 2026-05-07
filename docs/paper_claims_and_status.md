@@ -48,6 +48,24 @@ Rows with `design_only`, `proxy_only`, or `future_extension` must not enter the
 main result table. Rows from fallback internal validation splits are not main
 table eligible.
 
+## Milestone claim eligibility
+
+The canonical milestone map lives in `docs/milestones/README.md`.
+
+| milestone | paper role | main-table eligible |
+| --- | --- | --- |
+| M0 Week1-4 / pony12 | diagnosis and motivation | no |
+| M1 Pony framework | method and protocol bridge | yes, if completed under frozen protocol |
+| M2 Light series | precursor / negative-control ablation | supplementary unless explicitly completed under main protocol |
+| M3 Shadow series | task-grounded signal family | diagnostic unless large-scale protocol and validation gates are complete |
+| M4 Baseline system | fairness and reviewer defense | yes for completed classical rows; official external rows only after provenance passes |
+| M5 Four-domain validation | robustness evidence | yes when 100neg outputs, audits, and paired tests are complete |
+| M6 Complete recommender system | future full-system roadmap | no until official baselines, Shadow, LoRA, and generated-title verification are completed |
+
+The `*_style_*` LLM-rec rows are paper-style supplementary rows, not official
+reproductions. Official external-baseline claims require the
+`*_official_qwen3_lora_*` family plus provenance and score coverage.
+
 ## Main table eligibility
 
 A row can enter the main ranking table only if all are true:
