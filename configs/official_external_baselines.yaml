@@ -1,0 +1,177 @@
+protocol_name: week8_official_external_same_candidate_qwen3_lora
+status: implementation_contract
+output_score_schema:
+  - source_event_id
+  - user_id
+  - item_id
+  - score
+unified_protocol:
+  train_source: outputs/baselines/external_tasks/<exp_prefix>_test_same_candidate/train_interactions.csv
+  valid_source: outputs/baselines/external_tasks/<exp_prefix>_valid_same_candidate/ranking_valid.jsonl
+  test_source: outputs/baselines/external_tasks/<exp_prefix>_test_same_candidate/ranking_test.jsonl
+  candidate_source: outputs/baselines/external_tasks/<exp_prefix>_test_same_candidate/candidate_items.csv
+  metric_importer: main_import_same_candidate_baseline_scores.py
+  metrics:
+    - HR@10
+    - NDCG@10
+    - MRR
+    - coverage@10
+    - head_exposure_ratio@10
+    - longtail_coverage@10
+backbone_policy:
+  name: Qwen3-8B LoRA
+  base_model_path: /home/ajifang/models/Qwen/Qwen3-8B
+  lora_adapter_env: QWEN3_LORA_ADAPTER
+  replacement_rule: >
+    Whenever the official baseline uses an LLM/text encoder, replace that
+    encoder with the same Qwen3-8B LoRA encoder. Preserve the recommender
+    architecture, training objective, and scoring module unless a change is
+    required to consume the unified same-candidate protocol.
+  score_rule: >
+    Full-catalog metrics from the official repository are not imported. Every
+    baseline must emit exact candidate scores using the shared schema, then use
+    the unified importer and paired tests.
+
+official_baselines:
+  llm2rec:
+    paper_style_name: LLM2Rec-style Qwen3-8B Emb. + SASRec
+    target_baseline_name: llm2rec_official_qwen3_lora_sasrec
+    official_repo: https://github.com/HappyPointer/LLM2Rec
+    pinned_commit: 73b481f710f67166ab958f4985d27b27fb410871
+    local_repo_env: LLM2REC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/LLM2Rec
+    current_status: partial_official_adapter_exists
+    existing_local_scripts:
+      - main_export_llm2rec_same_candidate_task.py
+      - main_prepare_llm2rec_upstream_adapter.py
+      - main_generate_llm2rec_sentence_embeddings.py
+      - main_score_llm2rec_same_candidate_adapter.py
+    official_modules_to_preserve:
+      - seqrec SASRec model implementation
+      - seqrec training/evaluation objective
+      - item embedding input contract
+    required_protocol_changes:
+      - install same-candidate data under LLM2Rec data/<dataset_alias>
+      - replace item text embedding source with Qwen3-8B LoRA encoder
+      - export exact same-candidate scores instead of official full-catalog metrics
+    remaining_work:
+      - pin local checkout to pinned_commit
+      - record produced checkpoint path per domain
+      - verify same-candidate score coverage equals 1.0
+
+  llmesr:
+    paper_style_name: LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec
+    target_baseline_name: llmesr_official_qwen3_lora_sasrec
+    official_repo: https://github.com/Applied-Machine-Learning-Lab/LLM-ESR
+    pinned_commit: e5dc388c12509c88c65536ecd8d231325993d4ef
+    local_repo_env: LLMESR_REPO_DIR
+    local_repo_default: /home/ajifang/projects/LLM-ESR
+    current_status: partial_official_adapter_exists
+    existing_local_scripts:
+      - main_export_llmesr_same_candidate_task.py
+      - main_generate_llmesr_sentence_embeddings.py
+      - main_train_score_llmesr_upstream_adapter.py
+    official_modules_to_preserve:
+      - LLM-ESR handled data layout
+      - LLM-ESR sequential scoring architecture
+      - similar-user and item-embedding input contracts
+    required_protocol_changes:
+      - install same-candidate handled files
+      - replace item embeddings with Qwen3-8B LoRA encoder outputs
+      - export exact same-candidate scores only
+    remaining_work:
+      - pin local checkout to pinned_commit
+      - audit whether wrapper calls official classes without architecture drift
+      - verify score coverage equals 1.0
+
+  llmemb:
+    paper_style_name: LLMEmb-style Qwen3-8B Emb. + SASRec
+    target_baseline_name: llmemb_official_qwen3_lora
+    official_repo: https://github.com/Applied-Machine-Learning-Lab/LLMEmb
+    pinned_commit: 3458a5e225062e94b4f1a01e41f3ec82089f0407
+    local_repo_env: LLMEMB_REPO_DIR
+    local_repo_default: /home/ajifang/projects/LLMEmb
+    current_status: style_adapter_only
+    existing_local_scripts:
+      - main_train_llmemb_style_same_candidate.py
+    official_modules_to_preserve:
+      - official LLMEmb item embedding consumption
+      - official downstream sequential recommender module
+      - official training objective
+    required_protocol_changes:
+      - build official data adapter for same-candidate train/valid/test
+      - replace text embedding source with Qwen3-8B LoRA encoder
+      - add exact candidate score exporter
+    remaining_work:
+      - clone/pin official repo
+      - inspect official train/eval entrypoints
+      - implement official score adapter
+
+  rlmrec:
+    paper_style_name: RLMRec-style Qwen3-8B GraphCL
+    target_baseline_name: rlmrec_official_qwen3_lora_graphcl
+    official_repo: https://github.com/HKUDS/RLMRec
+    pinned_commit: 22413752246de3dee8ab0d509f7f7a8889080f95
+    local_repo_env: RLMREC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/RLMRec
+    current_status: style_adapter_only
+    existing_local_scripts:
+      - main_train_rlmrec_style_same_candidate.py
+    official_modules_to_preserve:
+      - official graph recommendation model
+      - official contrastive/self-supervised objective
+      - official LLM representation injection path
+    required_protocol_changes:
+      - build graph data from unified train interactions
+      - inject Qwen3-8B LoRA item representations
+      - export same-candidate scores for test candidate rows
+    remaining_work:
+      - clone/pin official repo
+      - inspect data format and training runner
+      - implement official score adapter
+
+  irllrec:
+    paper_style_name: IRLLRec-style Qwen3-8B IntentRep
+    target_baseline_name: irllrec_official_qwen3_lora_intent
+    official_repo: https://github.com/wangyu0627/IRLLRec
+    pinned_commit: ee8330b456e568f87869ec6c0c553c55d43fce6e
+    local_repo_env: IRLLREC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/IRLLRec
+    current_status: style_adapter_only
+    existing_local_scripts:
+      - main_train_irllrec_style_same_candidate.py
+    official_modules_to_preserve:
+      - official intent representation learning module
+      - official recommendation training objective
+      - official scoring head
+    required_protocol_changes:
+      - build official data adapter from same-candidate task package
+      - use Qwen3-8B LoRA item/text representations
+      - export exact candidate scores
+    remaining_work:
+      - clone/pin official repo
+      - inspect official intent construction
+      - implement official score adapter
+
+  setrec:
+    paper_style_name: SETRec-style Qwen3-8B Identifier
+    target_baseline_name: setrec_official_qwen3_lora_identifier
+    official_repo: https://github.com/Linxyhaha/SETRec
+    pinned_commit: 2ed9a75ad1ad3784c61bba3c68cbedbe3cfce2d7
+    local_repo_env: SETREC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/SETRec
+    current_status: style_adapter_only
+    existing_local_scripts:
+      - main_train_setrec_style_same_candidate.py
+    official_modules_to_preserve:
+      - official semantic identifier / set representation module
+      - official training objective
+      - official scoring head
+    required_protocol_changes:
+      - build official data adapter from same-candidate task package
+      - replace textual/LLM representation source with Qwen3-8B LoRA backbone
+      - export exact candidate scores
+    remaining_work:
+      - clone/pin official repo
+      - inspect official identifier generation and training runner
+      - implement official score adapter
