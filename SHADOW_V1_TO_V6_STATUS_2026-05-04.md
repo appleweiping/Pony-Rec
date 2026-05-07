@@ -117,3 +117,42 @@ For the next mainline step:
 5. Compare `shadow_v6` against week7.7 SRPD and structured-risk methods in a
    unified matrix before deciding whether it becomes a paper-facing method or
    remains a bridge/ablation.
+
+## 2026-05-06 Addendum: Relationship To Large-Scale Work
+
+The project later moved into a large-scale 10k/100neg same-candidate protocol
+for Books, Electronics, and Movies. This does not replace the shadow line.
+Instead, it creates the next clean protocol into which shadow can be migrated.
+
+Important clarification:
+
+- `light` in the earlier discussion refers to the old verbalized-confidence /
+  lightweight confidence-signal line, not LightGCN.
+- That old line showed weak and collapse-prone observations, so the project
+  moved to the more task-grounded `shadow` line.
+- `shadow_v1` to `shadow_v6` were built far enough to support signal screening
+  and a positive diagnostic bridge, but not far enough to count as a completed
+  trained paper-ready framework.
+
+Still missing before shadow promotion:
+
+```text
+validation-selected v6 gate / threshold sweep
+accept-revise-fallback controller
+generated-title verification pathway
+chosen/rejected or pair-weight training data construction
+Signal LoRA
+Decision / Generative LoRA
+large-scale 101-candidate evaluation under the new Week8 protocol
+```
+
+Future plan:
+
+```text
+Finish and inspect the external large-scale 10k/100neg run first. If the
+protocol is healthy, use the same selected users, same candidate rows, same
+valid/test split, and same metric/stat-test path for a large-scale shadow tier.
+The first shadow large-scale target should be shadow_v1 signal plus a
+validation-selected shadow_v6 bridge. Training variants should come only after
+that diagnostic tier is stable.
+```

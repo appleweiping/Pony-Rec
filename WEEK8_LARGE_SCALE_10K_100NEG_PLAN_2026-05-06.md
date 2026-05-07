@@ -3,6 +3,18 @@
 This is the next robustness gate after the six-paper baseline block and the
 fusion/external-only diagnostics.
 
+## Latest Handoff
+
+Before continuing in a new Codex chat, read:
+
+```text
+CODEX_HANDOFF_WEEK8_2026-05-06.md
+```
+
+That file records the completed six-paper baseline block, the fusion and
+external-only diagnostic conclusions, the active server run status, monitoring
+commands, and the immediate next checks.
+
 ## Why Expand
 
 Expanding Books/Electronics/Movies from 500 events to about 10k users is useful,
@@ -22,8 +34,9 @@ The real value is:
 Primary protocol:
 
 ```text
-Books/Electronics/Movies
-10,000 users per domain when enough eligible users exist
+Books/Electronics/Movies main large-scale block
+10,000 users per main domain when enough eligible users exist
+Beauty supplementary smaller-N block
 leave-one-out temporal split
 validation target = penultimate interaction
 test target = last interaction
@@ -31,8 +44,17 @@ test history = all interactions before the last target
 100 sampled negatives + 1 positive = 101 candidates
 same candidate rows for every baseline
 HR@10, NDCG@10, MRR, exposure metrics
-paired tests only within this large-scale protocol
+paired tests only within this 100neg protocol
 ```
+
+Beauty is included for protocol alignment, but it should be reported as:
+
+```text
+Beauty supplementary smaller-N same-candidate 100neg run
+```
+
+Do not describe Beauty as a 10k-user domain if fewer eligible users are
+available.
 
 Negative sampling:
 
@@ -110,17 +132,27 @@ SASRec
 GRU4Rec
 BERT4Rec
 LightGCN
+LLM2Rec-style Qwen3-8B Emb. + SASRec
+LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec
 LLMEmb-style Qwen3-8B Emb. + SASRec
 RLMRec-style Qwen3-8B GraphCL
 IRLLRec-style Qwen3-8B IntentRep
 SETRec-style Qwen3-8B Identifier
 ```
 
-Optional upstream LLM-ESR-style row:
+The six paper-project style rows are now included by default:
 
-```bash
-RUN_LLMESR_STYLE=1 bash scripts/run_week8_large_scale_10k_100neg.sh
+```text
+LLM2Rec-style
+LLM-ESR-style
+LLMEmb-style
+RLMRec-style
+IRLLRec-style
+SETRec-style
 ```
+
+Set `RUN_LLM2REC_STYLE=0` or `RUN_LLMESR_STYLE=0` only for a debugging pass,
+not for the main full-external result.
 
 Useful overrides:
 
@@ -135,30 +167,31 @@ QWEN3_MODEL=/home/ajifang/models/Qwen/Qwen3-8B bash scripts/run_week8_large_scal
 Main large-scale external-only table:
 
 ```text
-outputs/summary/external_only_baseline_comparison_week8_large10000_100neg.csv
-outputs/summary/external_only_baseline_comparison_week8_large10000_100neg.md
+outputs/summary/external_only_baseline_comparison_week8_fourdomain_100neg_full_external.csv
+outputs/summary/external_only_baseline_comparison_week8_fourdomain_100neg_full_external.md
 ```
 
 External-only phenomenon diagnostics:
 
 ```text
-outputs/summary/week8_large10000_100neg_external_only_phenomenon/external_only_oracle_summary.csv
-outputs/summary/week8_large10000_100neg_external_only_phenomenon/external_only_base_rank_bins.csv
-outputs/summary/week8_large10000_100neg_external_only_phenomenon/external_only_disagreement_bins.csv
-outputs/summary/week8_large10000_100neg_external_only_phenomenon/external_only_popularity_bins.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_only_phenomenon/external_only_oracle_summary.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_only_phenomenon/external_only_base_rank_bins.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_only_phenomenon/external_only_disagreement_bins.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_only_phenomenon/external_only_popularity_bins.csv
 ```
 
 External-only paired tests:
 
 ```text
-outputs/summary/week8_large10000_100neg_external_stat_tests/all_domains_significance_tests.csv
-outputs/summary/week8_large10000_100neg_external_stat_tests/all_domains_main_table_with_ci.csv
-outputs/summary/week8_large10000_100neg_external_stat_tests/input_manifest.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_stat_tests/all_domains_significance_tests.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_stat_tests/all_domains_main_table_with_ci.csv
+outputs/summary/week8_fourdomain_100neg_full_external_external_stat_tests/input_manifest.csv
 ```
 
 Per-domain runtime summaries:
 
 ```text
+outputs/summary/beauty_supplementary_smallerN_100neg_runtime_summary.json
 outputs/summary/books_large10000_100neg_runtime_summary.json
 outputs/summary/electronics_large10000_100neg_runtime_summary.json
 outputs/summary/movies_large10000_100neg_runtime_summary.json
@@ -167,6 +200,7 @@ outputs/summary/movies_large10000_100neg_runtime_summary.json
 Per-domain task packages:
 
 ```text
+outputs/baselines/external_tasks/beauty_supplementary_smallerN_100neg_test_same_candidate
 outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate
 outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate
 outputs/baselines/external_tasks/movies_large10000_100neg_test_same_candidate
@@ -191,6 +225,30 @@ For phenomenon evidence:
   phenomenon persists at larger scale.
 - Larger oracle gain in high-disagreement bins means external-method
   disagreement remains a usable uncertainty proxy.
+
+## Future Shadow Extension
+
+This external large-scale protocol is also the intended foundation for a later
+shadow large-scale tier.
+
+Do this only after the current external-only run is complete and healthy:
+
+```text
+large10000_100neg task packages
+-> shadow_v1 signal inference on the same candidate rows
+-> validation calibration
+-> validation-selected shadow_v6 gate / bridge
+-> test metrics and paired tests under the same 101-candidate protocol
+```
+
+Reason:
+
+- The old `light` verbalized-confidence line had weak/collapse-prone
+  observations, which motivated shadow.
+- The existing shadow_v6 result is a positive diagnostic bridge, not a finished
+  trained large-scale method.
+- A large-scale shadow tier would test whether the v1/v6 phenomenon survives
+  the harder Books/Electronics/Movies 10k/100neg protocol.
 
 ## If Runtime Is Too High
 

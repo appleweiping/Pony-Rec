@@ -117,6 +117,9 @@ def _build_pointwise_result_record(
 
     record = {
         "user_id": user_id,
+        "source_event_id": sample.get("source_event_id", ""),
+        "split_name": sample.get("split_name", ""),
+        "timestamp": sample.get("timestamp"),
         "target_item_id": target_item_id,
         "candidate_item_id": candidate.get("item_id", ""),
         "label": int(label),
@@ -153,6 +156,9 @@ def _build_shadow_pointwise_result_record(
 
     record = {
         "user_id": user_id,
+        "source_event_id": sample.get("source_event_id", ""),
+        "split_name": sample.get("split_name", ""),
+        "timestamp": sample.get("timestamp"),
         "target_item_id": target_item_id,
         "candidate_item_id": candidate.get("item_id", ""),
         "label": int(label),
