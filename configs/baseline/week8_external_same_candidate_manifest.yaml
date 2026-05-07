@@ -1,3 +1,10 @@
+legacy_scope: paper_style_supplementary_same_candidate_block
+official_external_baseline_reference: configs/official_external_baselines.yaml
+note: >
+  This manifest records the older paper-style same-candidate block used for
+  supplementary sanity checks. It is not the authoritative contract for the
+  official external-baseline tier.
+
 status_label: same_schema_external_baseline
 task: candidate_ranking
 prediction_schema: rank_predictions_jsonl

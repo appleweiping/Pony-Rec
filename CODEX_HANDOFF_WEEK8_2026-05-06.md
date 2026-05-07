@@ -9,6 +9,10 @@ The small/medium same-candidate proof block is complete:
 
 - Four classical same-candidate baselines are available.
 - Six senior-recommended LLM-rec paper-project style baselines are available.
+- The official external-baseline upgrade contract is now explicit: final
+  official rows must use pinned upstream implementations, the unified Qwen3-8B
+  base model, each baseline's official LoRA/adapter or representation-training
+  algorithm, and the unchanged same-candidate score schema.
 - Ours + external rank-fusion diagnostic is available.
 - External-only phenomenon diagnostic is available.
 
@@ -21,6 +25,20 @@ or explain strong external LLM-rec baselines under the same-candidate protocol.
 
 Do not claim a universal standalone SOTA win. The external baselines are strong,
 especially IRLLRec-style and RLMRec-style.
+
+Do not relabel the current `*_style_*` rows as official reproductions. They are
+paper-style same-candidate adaptations until the official upgrade checklist in
+`OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md` is complete.
+
+Official rows must keep this schema unchanged:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+The candidate protocol, metric schema, importer, coverage audit, and paired-test
+path stay the same; only the implementation standard rises to official or
+official-code-level adapters.
 
 ## Completed Six-Paper External Baseline Block
 
@@ -143,6 +161,16 @@ This aligns the large-scale paper-project block with the earlier six-paper
 external baseline set while keeping four classical rows for context. Report
 Beauty separately as supplementary smaller-N, not as a 10k domain.
 
+Official-baseline interpretation:
+
+```text
+The large-scale `*_style_*` rows are still paper-style adapted baselines. The
+next official external-baseline tier should reuse the same candidate rows and
+output schema, but train/score through pinned official repositories with the
+unified Qwen3-8B base model and each baseline's official adapter or
+representation-learning algorithm retained.
+```
+
 Main script:
 
 ```text
@@ -166,6 +194,48 @@ outputs/summary/week8_fourdomain_100neg_full_external_external_stat_tests/
 
 Do not directly compare this 101-candidate table against Week7.7 six-candidate
 direct/SRPD rows without explicitly stating the protocol difference.
+
+## Official External Baseline Upgrade Status
+
+Read this before editing external-baseline code:
+
+```text
+OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
+configs/official_external_baselines.yaml
+```
+
+The YAML is the implementation contract and should not be edited casually. The
+current target rows are:
+
+| method | current row family | target official row |
+| --- | --- | --- |
+| LLM2Rec | `llm2rec_style_qwen3_sasrec` | `llm2rec_official_qwen3_lora_sasrec` |
+| LLM-ESR | `llmesr_style_qwen3_sasrec` | `llmesr_official_qwen3_lora_sasrec` |
+| LLMEmb | `llmemb_style_qwen3_sasrec` | `llmemb_official_qwen3_lora` |
+| RLMRec | `rlmrec_style_qwen3_graphcl` | `rlmrec_official_qwen3_lora_graphcl` |
+| IRLLRec | `irllrec_style_qwen3_intent` | `irllrec_official_qwen3_lora_intent` |
+| SETRec | `setrec_style_qwen3_identifier` | `setrec_official_qwen3_lora_identifier` |
+
+Official upgrade checklist:
+
+```text
+[ ] audit/pin official local repo checkout
+[ ] identify official training/scoring entry points
+[ ] preserve official algorithm, loss/objective, adapter or representation step,
+    and scoring head
+[ ] install the same-candidate task package in the official repo's native format
+[ ] use unified Qwen3-8B base model for text/LLM representations
+[ ] train or retain the official method-specific LoRA/adapter/representation
+    artifact
+[ ] select checkpoints on validation only
+[ ] export exact source_event_id,user_id,item_id,score CSVs
+[ ] import through main_import_same_candidate_baseline_scores.py
+[ ] verify score coverage and paired-test inputs
+[ ] write provenance with repo, commit, checkpoint, adapter, and score paths
+```
+
+Do LLM2Rec and LLM-ESR first because partial official adapter paths already
+exist; then add LLMEmb, RLMRec, IRLLRec, and SETRec.
 
 ## Shadow Line Status And Future Large-Scale Tier
 

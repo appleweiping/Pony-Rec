@@ -16,6 +16,17 @@ classical baselines + external paper-project style baselines
 external-only comparison, phenomenon diagnostics, paired tests
 ```
 
+In parallel with documentation/planning only, keep the official-baseline target
+clear:
+
+```text
+The final official external baseline tier reuses this same-candidate protocol,
+but replaces paper-style local approximations with pinned official or
+official-code-level adapters. Those adapters use the unified Qwen3-8B base
+model, retain each baseline's official LoRA/adapter or representation-learning
+algorithm, and emit the unchanged source_event_id,user_id,item_id,score schema.
+```
+
 The command currently being run on the server is:
 
 ```bash
@@ -25,6 +36,10 @@ bash scripts/run_week8_large_scale_10k_100neg.sh
 This run does not include shadow, old light, LoRA, or generated-title
 verification. It creates the protocol foundation they should later use.
 
+It also does not yet constitute the official external-baseline tier; the
+official upgrade is tracked separately in
+`OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md`.
+
 ## Why This Order
 
 Do not start by training a large LoRA stack before the 101-candidate protocol is
@@ -32,10 +47,12 @@ validated. The safer top-conference path is:
 
 ```text
 1. Validate the large-scale same-candidate protocol.
-2. Add large-scale shadow/light diagnostics under the exact same protocol.
-3. Select gates and teachers on validation, not test.
-4. Only then train Signal LoRA and Decision/Generative LoRA.
-5. Move from candidate ranking to catalog-grounded generated-title verification.
+2. Upgrade external LLM-rec baselines from paper-style rows to official or
+   official-code-level same-candidate rows when making official baseline claims.
+3. Add large-scale shadow/light diagnostics under the exact same protocol.
+4. Select gates and teachers on validation, not test.
+5. Only then train Signal LoRA and Decision/Generative LoRA.
+6. Move from candidate ranking to catalog-grounded generated-title verification.
 ```
 
 This keeps the work original and avoids stitching unrelated baselines together.
@@ -45,6 +62,7 @@ This keeps the work original and avoids stitching unrelated baselines together.
 | line | role | status |
 | --- | --- | --- |
 | external large-scale | robustness gate and strong baseline map | running |
+| official external upgrade | final official baseline standard | planned/contract written |
 | old light/verbalized confidence | negative-control / precursor observation | future optional large-scale ablation |
 | shadow_v1 | task-grounded uncertainty signal | future large-scale diagnostic |
 | shadow_v6 | validation-selected signal-to-decision gate | future large-scale diagnostic |
@@ -306,6 +324,32 @@ outputs/summary/week8_*_commands.sh
 
 Historical root markdown files can later be moved into `docs/archive/` only if
 all references are updated and no active server instructions point to old paths.
+
+## Official Baseline Next Steps
+
+Before spending heavy training time on future framework LoRAs, make the
+external baseline status unambiguous:
+
+```text
+[ ] keep configs/official_external_baselines.yaml unchanged unless the contract changes
+[ ] audit pinned official checkouts
+[ ] complete LLM2Rec official adapter/scorer
+[ ] complete LLM-ESR official adapter/scorer
+[ ] implement LLMEmb official adapter/scorer
+[ ] implement RLMRec official adapter/scorer
+[ ] implement IRLLRec official adapter/scorer
+[ ] implement SETRec official adapter/scorer
+[ ] export exact source_event_id,user_id,item_id,score files
+[ ] import with main_import_same_candidate_baseline_scores.py
+[ ] verify coverage, provenance, metrics, and paired-test inputs
+[ ] rebuild official comparison using only *_official_qwen3_lora_* rows
+```
+
+The official baseline upgrade does not change the shadow/light/LoRA roadmap's
+candidate rows or score schema. It only changes how external baseline scores
+are produced: from local paper-style approximations to pinned official
+algorithms with the shared Qwen3-8B base model and method-appropriate
+LoRA/adapter artifacts.
 
 ## Setting References
 

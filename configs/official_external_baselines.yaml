@@ -19,18 +19,35 @@ unified_protocol:
     - head_exposure_ratio@10
     - longtail_coverage@10
 backbone_policy:
-  name: Qwen3-8B LoRA
+  name: Unified Qwen3-8B base with official per-baseline LoRA/adapter
   base_model_path: /home/ajifang/models/Qwen/Qwen3-8B
-  lora_adapter_env: QWEN3_LORA_ADAPTER
+  base_model_family: Qwen3-8B
+  adapter_policy: train_and_retain_per_official_algorithm
   replacement_rule: >
-    Whenever the official baseline uses an LLM/text encoder, replace that
-    encoder with the same Qwen3-8B LoRA encoder. Preserve the recommender
-    architecture, training objective, and scoring module unless a change is
-    required to consume the unified same-candidate protocol.
+    Whenever the official baseline uses an LLM/text encoder or LLM-derived
+    representation source, use the same Qwen3-8B base model. Train, load, and
+    retain LoRA/adapters or downstream checkpoints according to that baseline's
+    official algorithm. Preserve the recommender architecture, training
+    objective, and scoring module unless a change is required to consume the
+    unified same-candidate protocol.
   score_rule: >
     Full-catalog metrics from the official repository are not imported. Every
     baseline must emit exact candidate scores using the shared schema, then use
     the unified importer and paired tests.
+  required_adapter_checkpoint_provenance:
+    - base_model_path
+    - official_repo
+    - official_repo_commit
+    - local_repo_env
+    - resolved_local_repo_path
+    - official_training_or_adaptation_entrypoint
+    - adapter_or_checkpoint_path
+    - adapter_or_checkpoint_commit_or_digest
+    - adapter_or_checkpoint_training_inputs
+    - adapter_or_checkpoint_hyperparameters
+    - adapter_or_checkpoint_created_at
+    - same_candidate_task_sources
+    - score_output_path
 
 official_baselines:
   llm2rec:
@@ -40,6 +57,27 @@ official_baselines:
     pinned_commit: 73b481f710f67166ab958f4985d27b27fb410871
     local_repo_env: LLM2REC_REPO_DIR
     local_repo_default: /home/ajifang/projects/LLM2Rec
+    official_code_provenance:
+      repo_url: https://github.com/HappyPointer/LLM2Rec
+      repo_path: HappyPointer/LLM2Rec
+      commit: 73b481f710f67166ab958f4985d27b27fb410871
+      local_checkout_env: LLM2REC_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/LLM2Rec
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_llm2rec_sasrec_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_or_wrapped_llm2rec_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - Qwen3-8B item/text representation artifacts
+      hyperparameter_record: official_llm2rec_sasrec_hyperparameters
+    official_code_adaptation_notes:
+      - keep LLM2Rec seqrec SASRec classes and loss path authoritative
+      - adapt only data installation, Qwen3-8B representation generation, and candidate-score export
+      - record any wrapper script that bridges same-candidate data into official data/<dataset_alias>
     current_status: partial_official_adapter_exists
     existing_local_scripts:
       - main_export_llm2rec_same_candidate_task.py
@@ -52,7 +90,7 @@ official_baselines:
       - item embedding input contract
     required_protocol_changes:
       - install same-candidate data under LLM2Rec data/<dataset_alias>
-      - replace item text embedding source with Qwen3-8B LoRA encoder
+      - use unified Qwen3-8B base for item text representations
       - export exact same-candidate scores instead of official full-catalog metrics
     remaining_work:
       - pin local checkout to pinned_commit
@@ -66,6 +104,28 @@ official_baselines:
     pinned_commit: e5dc388c12509c88c65536ecd8d231325993d4ef
     local_repo_env: LLMESR_REPO_DIR
     local_repo_default: /home/ajifang/projects/LLM-ESR
+    official_code_provenance:
+      repo_url: https://github.com/Applied-Machine-Learning-Lab/LLM-ESR
+      repo_path: Applied-Machine-Learning-Lab/LLM-ESR
+      commit: e5dc388c12509c88c65536ecd8d231325993d4ef
+      local_checkout_env: LLMESR_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/LLM-ESR
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_llmesr_sequential_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_or_wrapped_llmesr_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - Qwen3-8B item representation artifacts
+        - official similar-user artifacts
+      hyperparameter_record: official_llmesr_hyperparameters
+    official_code_adaptation_notes:
+      - keep LLM-ESR handled-file layout and sequential scoring architecture authoritative
+      - adapt only handled-file generation, Qwen3-8B representation injection, and candidate-score export
+      - record whether wrapper execution imports official classes directly or invokes official scripts
     current_status: partial_official_adapter_exists
     existing_local_scripts:
       - main_export_llmesr_same_candidate_task.py
@@ -77,7 +137,7 @@ official_baselines:
       - similar-user and item-embedding input contracts
     required_protocol_changes:
       - install same-candidate handled files
-      - replace item embeddings with Qwen3-8B LoRA encoder outputs
+      - use unified Qwen3-8B base for item embeddings consumed by official code
       - export exact same-candidate scores only
     remaining_work:
       - pin local checkout to pinned_commit
@@ -91,6 +151,27 @@ official_baselines:
     pinned_commit: 3458a5e225062e94b4f1a01e41f3ec82089f0407
     local_repo_env: LLMEMB_REPO_DIR
     local_repo_default: /home/ajifang/projects/LLMEmb
+    official_code_provenance:
+      repo_url: https://github.com/Applied-Machine-Learning-Lab/LLMEmb
+      repo_path: Applied-Machine-Learning-Lab/LLMEmb
+      commit: 3458a5e225062e94b4f1a01e41f3ec82089f0407
+      local_checkout_env: LLMEMB_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/LLMEmb
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_llmemb_downstream_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_llmemb_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - Qwen3-8B text embedding artifacts
+      hyperparameter_record: official_llmemb_hyperparameters
+    official_code_adaptation_notes:
+      - replace style adapter with official LLMEmb train/eval entrypoints before final import
+      - keep official item-embedding consumption and downstream sequential recommender authoritative
+      - add only same-candidate data adapter and exact candidate-score exporter around official code
     current_status: style_adapter_only
     existing_local_scripts:
       - main_train_llmemb_style_same_candidate.py
@@ -100,7 +181,7 @@ official_baselines:
       - official training objective
     required_protocol_changes:
       - build official data adapter for same-candidate train/valid/test
-      - replace text embedding source with Qwen3-8B LoRA encoder
+      - use unified Qwen3-8B base for text embedding source
       - add exact candidate score exporter
     remaining_work:
       - clone/pin official repo
@@ -114,6 +195,28 @@ official_baselines:
     pinned_commit: 22413752246de3dee8ab0d509f7f7a8889080f95
     local_repo_env: RLMREC_REPO_DIR
     local_repo_default: /home/ajifang/projects/RLMRec
+    official_code_provenance:
+      repo_url: https://github.com/HKUDS/RLMRec
+      repo_path: HKUDS/RLMRec
+      commit: 22413752246de3dee8ab0d509f7f7a8889080f95
+      local_checkout_env: RLMREC_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/RLMRec
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_rlmrec_graph_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_rlmrec_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - graph data derived from unified train interactions
+        - Qwen3-8B representation artifacts
+      hyperparameter_record: official_rlmrec_hyperparameters
+    official_code_adaptation_notes:
+      - replace style adapter with official RLMRec graph training runner before final import
+      - keep official graph model, contrastive objective, and LLM representation injection path authoritative
+      - adapt only graph data construction from unified train interactions and candidate-score export
     current_status: style_adapter_only
     existing_local_scripts:
       - main_train_rlmrec_style_same_candidate.py
@@ -123,7 +226,7 @@ official_baselines:
       - official LLM representation injection path
     required_protocol_changes:
       - build graph data from unified train interactions
-      - inject Qwen3-8B LoRA item representations
+      - inject unified Qwen3-8B item representations through the official path
       - export same-candidate scores for test candidate rows
     remaining_work:
       - clone/pin official repo
@@ -137,6 +240,28 @@ official_baselines:
     pinned_commit: ee8330b456e568f87869ec6c0c553c55d43fce6e
     local_repo_env: IRLLREC_REPO_DIR
     local_repo_default: /home/ajifang/projects/IRLLRec
+    official_code_provenance:
+      repo_url: https://github.com/wangyu0627/IRLLRec
+      repo_path: wangyu0627/IRLLRec
+      commit: ee8330b456e568f87869ec6c0c553c55d43fce6e
+      local_checkout_env: IRLLREC_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/IRLLRec
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_irllrec_intent_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_irllrec_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - official intent construction artifacts
+        - Qwen3-8B item/text representation artifacts
+      hyperparameter_record: official_irllrec_hyperparameters
+    official_code_adaptation_notes:
+      - replace style adapter with official IRLLRec intent construction and training runner before final import
+      - keep official intent representation learning module, recommendation objective, and scoring head authoritative
+      - adapt only same-candidate data conversion, Qwen3-8B representation source, and candidate-score export
     current_status: style_adapter_only
     existing_local_scripts:
       - main_train_irllrec_style_same_candidate.py
@@ -146,7 +271,7 @@ official_baselines:
       - official scoring head
     required_protocol_changes:
       - build official data adapter from same-candidate task package
-      - use Qwen3-8B LoRA item/text representations
+      - use unified Qwen3-8B base for item/text representations
       - export exact candidate scores
     remaining_work:
       - clone/pin official repo
@@ -160,6 +285,28 @@ official_baselines:
     pinned_commit: 2ed9a75ad1ad3784c61bba3c68cbedbe3cfce2d7
     local_repo_env: SETREC_REPO_DIR
     local_repo_default: /home/ajifang/projects/SETRec
+    official_code_provenance:
+      repo_url: https://github.com/Linxyhaha/SETRec
+      repo_path: Linxyhaha/SETRec
+      commit: 2ed9a75ad1ad3784c61bba3c68cbedbe3cfce2d7
+      local_checkout_env: SETREC_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/SETRec
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_setrec_identifier_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_setrec_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - official semantic identifier artifacts
+        - Qwen3-8B representation artifacts
+      hyperparameter_record: official_setrec_hyperparameters
+    official_code_adaptation_notes:
+      - replace style adapter with official SETRec identifier generation and training runner before final import
+      - keep official semantic identifier or set representation module, objective, and scoring head authoritative
+      - adapt only same-candidate data conversion, Qwen3-8B representation source, and candidate-score export
     current_status: style_adapter_only
     existing_local_scripts:
       - main_train_setrec_style_same_candidate.py
@@ -169,7 +316,7 @@ official_baselines:
       - official scoring head
     required_protocol_changes:
       - build official data adapter from same-candidate task package
-      - replace textual/LLM representation source with Qwen3-8B LoRA backbone
+      - use unified Qwen3-8B base for textual/LLM representation source
       - export exact candidate scores
     remaining_work:
       - clone/pin official repo

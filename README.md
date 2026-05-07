@@ -67,6 +67,8 @@ The repository includes:
 - C-CRP shadow method implementation and ablations.
 - Generative-title bridge status tracking, explicitly outside the primary
   claim until fully completed.
+- Official external-baseline upgrade contract for adapting pinned upstream
+  LLM-rec baselines under the unchanged same-candidate protocol.
 - Artifact documentation, smoke tests, and reproduction scripts.
 
 ## Project Tree
@@ -77,6 +79,7 @@ The repository includes:
 |-- requirements.txt
 |-- environment.yml
 |-- results_manifest.yaml
+|-- OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
 |-- configs/
 |   |-- baseline/                     # literature baseline configs
 |   |-- baseline_reliability/         # reliability proxy manifest
@@ -85,9 +88,11 @@ The repository includes:
 |   |-- exp/                          # experiment configs
 |   |-- lora/                         # local LoRA training configs
 |   |-- model/                        # API/local model configs
+|   |-- official_external_baselines.yaml  # pinned official baseline contract
 |   |-- shadow/                       # shadow/C-CRP runtime configs
 |   |-- srpd/                         # SRPD training data configs
-|   `-- task/                         # pointwise/pairwise/ranking task configs
+|   |-- task/                         # pointwise/pairwise/ranking task configs
+|   `-- week8_large_scale_future_framework.yaml  # future shadow/light/LoRA scaffold config
 |-- data/
 |   `-- processed/                    # ignored by git; local processed data
 |-- docs/
@@ -102,11 +107,16 @@ The repository includes:
 |   |-- experiments.md
 |   `-- tables.md
 |-- outputs/
+|   |-- baselines/                    # ignored; external task packages/scores
 |   `-- summary/                      # ignored except .gitkeep; generated tables
 |-- prompts/                          # LLM prompt templates
 |-- scripts/
 |   |-- reproduce_smoke_test.sh
 |   |-- reproduce_main_tables.sh
+|   |-- run_week8_large_scale_10k_100neg.sh
+|   |-- run_week8_shadow_large_scale_diagnostic.sh
+|   |-- run_week8_light_large_scale_ablation.sh
+|   |-- run_week8_generated_title_verification_scaffold.sh
 |   `-- run_*.sh
 |-- src/
 |   |-- analysis/                     # aggregation, plotting, paper table export
@@ -134,11 +144,45 @@ The repository includes:
 |-- main_rerank.py
 |-- main_eval_rank.py
 |-- main_audit_candidate_protocol.py
+|-- main_audit_official_external_repos.py
 |-- main_baseline_reliability_audit.py
+|-- main_make_official_external_adapter_plan.py
+|-- main_reuse_llmesr_embeddings_for_llm2rec.py
+|-- main_make_official_external_adapter_plan.py
+|-- main_export_llm2rec_same_candidate_task.py
+|-- main_export_llmesr_same_candidate_task.py
+|-- main_import_same_candidate_baseline_scores.py
+|-- main_build_external_only_baseline_comparison.py
 |-- main_stat_tests.py
 |-- main_shadow_ccrp_eval.py
 `-- main_generative_title_bridge_status.py
 ```
+
+## Working File Map
+
+The repository is intentionally organized around protocols rather than one
+monolithic training entry point.
+
+- `configs/official_external_baselines.yaml` is the machine-readable contract
+  for pinned official external baselines. It defines the target baseline names,
+  upstream repositories, pinned commits, shared Qwen3-8B base-model path,
+  LoRA/adapter policy, and unchanged score schema.
+- `main_audit_official_external_repos.py` and
+  `main_make_official_external_adapter_plan.py` support the official-upgrade
+  workflow before heavy training starts.
+- `main_export_*_same_candidate_task.py` scripts materialize unified
+  same-candidate task packages in external-repository-friendly formats.
+- `main_train_*_same_candidate.py` scripts train local classical or
+  paper-style baselines under the shared candidate protocol.
+- `main_import_same_candidate_baseline_scores.py` is the common ingestion
+  gate for all baseline scores, including official external rows.
+- `main_build_external_only_baseline_comparison.py`,
+  `main_run_week8_external_only_phenomenon_diagnostics.py`, and
+  `main_run_week8_external_paired_stat_tests.py` build paper-facing comparison,
+  complementarity diagnostics, and paired tests from imported scores.
+- `PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md` is the human navigation map
+  for active, future, and historical files. Prefer updating the index before
+  moving root scripts or markdown notes.
 
 ## Method Overview
 
@@ -235,6 +279,31 @@ Baselines are divided into four groups:
 
 Internal SRPD and shadow variants are ablations, not substitutes for external
 baselines.
+
+### Official external-baseline standard
+
+The final external LLM-rec baseline standard is stricter than the current
+paper-style adapted rows:
+
+```text
+pinned official or official-code-level implementation
++ official algorithm, loss, scoring head, and train/select procedure preserved
++ unified Qwen3-8B base model for LLM/text representations
++ LoRA/adapter trained and retained according to that baseline's official
+  algorithm when the official method uses one
++ unchanged same-candidate train/valid/test rows
++ unchanged score schema: source_event_id,user_id,item_id,score
++ unified importer, metrics, coverage audit, and paired tests
+```
+
+Full-catalog metrics reported by an upstream repository are related-work or
+sanity-check context only. Main same-candidate tables must use exact candidate
+scores imported through `main_import_same_candidate_baseline_scores.py`.
+
+The current `*_style_*` rows remain useful paper-style same-candidate
+adaptations, but they should not be called official reproductions until the
+pinned official baseline checklist is complete. See
+[OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md](OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md).
 
 Score-derived quantities are audited as reliability proxies, not automatically
 treated as confidence. ECE and Brier are valid only for relevance-calibratable
@@ -436,6 +505,29 @@ bash scripts/reproduce_main_tables.sh
 
 On Windows without Bash, run the Python commands listed in
 [docs/reproduction.md](docs/reproduction.md).
+
+## Next-Step Checklist
+
+Immediate repository priorities:
+
+- Keep `configs/official_external_baselines.yaml` fixed unless the official
+  baseline contract itself changes.
+- Audit local official checkouts against pinned commits before adapting code.
+- For each official baseline, write a provenance record containing upstream
+  URL, pinned commit, local checkout path, preserved official modules, protocol
+  changes, Qwen3-8B base-model/LoRA source, checkpoint or adapter path, and
+  score coverage.
+- Upgrade LLM2Rec and LLM-ESR first because partial official adapter paths
+  already exist.
+- Add official adapters for LLMEmb, RLMRec, IRLLRec, and SETRec by preserving
+  each method's algorithm and only replacing the LLM/text representation source
+  with the shared Qwen3-8B base plus the method-appropriate LoRA/adapter path.
+- Emit only `source_event_id,user_id,item_id,score` candidate-score CSVs for
+  the main protocol, then import them through the shared importer.
+- Rebuild comparison tables using `*_official_qwen3_lora_*` rows for official
+  baseline claims; keep `*_style_*` rows labeled as paper-style supplementary
+  checks.
+- Run coverage audits and paired tests before making winner claims.
 
 ## Key Outputs
 

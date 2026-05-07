@@ -26,6 +26,33 @@ main_run_week8_external_only_phenomenon_diagnostics.py
 main_run_week8_external_paired_stat_tests.py
 ```
 
+Official external-baseline upgrade helpers:
+
+```text
+configs/official_external_baselines.yaml
+OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
+main_audit_official_external_repos.py
+main_make_official_external_adapter_plan.py
+main_import_same_candidate_baseline_scores.py
+```
+
+Official upgrade standard:
+
+```text
+pinned official or official-code-level implementation
++ official algorithm / loss / scoring head preserved
++ unified Qwen3-8B base model for text or LLM representations
++ LoRA, adapter, semantic identifier, intent representation, graph contrastive
+  module, or embedding artifact trained and retained according to that
+  baseline's official algorithm
++ unchanged same-candidate task rows
++ unchanged score schema: source_event_id,user_id,item_id,score
++ shared importer, score coverage audit, metrics, and paired tests
+```
+
+Do not edit `configs/official_external_baselines.yaml` unless the contract
+itself changes.
+
 Current handoff and plans:
 
 ```text
@@ -165,6 +192,51 @@ story should emphasize complementarity and protocol rigor rather than a simple
 standalone win.
 ```
 
+Current row family:
+
+```text
+llm2rec_style_qwen3_sasrec
+llmesr_style_qwen3_sasrec
+llmemb_style_qwen3_sasrec
+rlmrec_style_qwen3_graphcl
+irllrec_style_qwen3_intent
+setrec_style_qwen3_identifier
+```
+
+These are paper-style adapted baselines, not official reproductions. The target
+official family is:
+
+```text
+llm2rec_official_qwen3_lora_sasrec
+llmesr_official_qwen3_lora_sasrec
+llmemb_official_qwen3_lora
+rlmrec_official_qwen3_lora_graphcl
+irllrec_official_qwen3_lora_intent
+setrec_official_qwen3_lora_identifier
+```
+
+Per-method file map:
+
+| method | current local scripts | official-upgrade focus |
+| --- | --- | --- |
+| LLM2Rec | `main_export_llm2rec_same_candidate_task.py`, `main_prepare_llm2rec_upstream_adapter.py`, `main_generate_llm2rec_sentence_embeddings.py`, `main_score_llm2rec_same_candidate_adapter.py` | pin upstream checkout, preserve official SASRec path, verify score coverage |
+| LLM-ESR | `main_export_llmesr_same_candidate_task.py`, `main_generate_llmesr_sentence_embeddings.py`, `main_train_score_llmesr_upstream_adapter.py` | audit official class usage, preserve handled-data/scoring architecture |
+| LLMEmb | `main_train_llmemb_style_same_candidate.py` | replace style adapter with official repo data/training/scoring bridge |
+| RLMRec | `main_train_rlmrec_style_same_candidate.py` | build official graph data, preserve GraphCL/objective, export candidate scores |
+| IRLLRec | `main_train_irllrec_style_same_candidate.py` | preserve official intent representation construction and scoring head |
+| SETRec | `main_train_setrec_style_same_candidate.py` | preserve semantic identifier/set representation algorithm and scoring head |
+
+Shared downstream files:
+
+```text
+main_import_same_candidate_baseline_scores.py
+main_build_external_only_baseline_comparison.py
+main_run_week8_external_only_phenomenon_diagnostics.py
+main_run_week8_external_paired_stat_tests.py
+outputs/baselines/external_tasks/
+outputs/summary/
+```
+
 ## Historical/Audit Docs In Root
 
 These root markdown files are useful but can later move to `docs/archive/` after
@@ -190,10 +262,11 @@ Use this order:
 
 ```text
 1. CODEX_HANDOFF_WEEK8_2026-05-06.md
-2. WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
-3. WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md
-4. PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md
-5. SHADOW_V1_TO_V6_STATUS_2026-05-04.md
+2. OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
+3. WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
+4. WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md
+5. PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md
+6. SHADOW_V1_TO_V6_STATUS_2026-05-04.md
 ```
 
 Then check the active server log before launching any new heavy run.

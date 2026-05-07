@@ -125,7 +125,7 @@ This command builds Books/Electronics/Movies task packages, generates Qwen3 item
 embeddings, trains/imports completed same-candidate rows, audits score coverage,
 and writes summary tables.
 
-Default methods:
+Default methods for the current paper-style sanity block:
 
 ```text
 SASRec
@@ -140,7 +140,8 @@ IRLLRec-style Qwen3-8B IntentRep
 SETRec-style Qwen3-8B Identifier
 ```
 
-The six paper-project style rows are now included by default:
+The six paper-style rows are now included by default for the current
+supplementary block:
 
 ```text
 LLM2Rec-style
@@ -152,7 +153,11 @@ SETRec-style
 ```
 
 Set `RUN_LLM2REC_STYLE=0` or `RUN_LLMESR_STYLE=0` only for a debugging pass,
-not for the main full-external result.
+not for the current paper-style supplementary block.
+
+Official external baselines are tracked separately under
+`OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md` and
+`configs/official_external_baselines.yaml`.
 
 Useful overrides:
 

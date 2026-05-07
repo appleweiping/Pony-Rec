@@ -1,7 +1,7 @@
 # Week8 Fusion and External-Only Contribution Update - 2026-05-06
 
 This note updates the current conclusion after adding six senior-recommended
-LLM-rec paper-project same-schema baselines, the ours+external rank-fusion
+LLM-rec paper-style same-schema baselines, the ours+external rank-fusion
 diagnostic, and the external-only phenomenon diagnostic.
 
 ## Current Conclusion
@@ -14,7 +14,7 @@ Our framework contributes a complementary risk/decision signal that can improve
 or explain strong external LLM-rec baselines under the same-candidate protocol.
 ```
 
-The six-paper external block is now strong enough that the story should move
+The six-paper paper-style external block is now strong enough that the story should move
 from "ours simply beats baselines" to:
 
 - broad same-schema baseline coverage,
@@ -22,9 +22,9 @@ from "ours simply beats baselines" to:
 - event-level uncertainty/complementarity phenomenon,
 - larger-scale validation under a harder sampled-ranking protocol.
 
-## Six-Paper External Baseline Readout
+## Six-Paper Paper-Style Baseline Readout
 
-Completed same-candidate external paper-project baselines:
+Completed same-candidate external paper-style baselines:
 
 ```text
 LLM2Rec-style Qwen3-8B Emb. + SASRec
@@ -44,8 +44,9 @@ Strongest observed paper-project rows:
 | electronics | RLMRec-style Qwen3-8B GraphCL | 0.628100 |
 | movies | IRLLRec-style Qwen3-8B IntentRep | 0.707149 |
 
-This means the external SOTA-style baselines are genuinely competitive. Avoid
-claiming a clean standalone win for our framework across all domains.
+This means the external paper-style baselines are genuinely competitive. Avoid
+claiming a clean standalone win for our framework across all domains, and do
+not label these rows as official external reproductions.
 
 ## Ours + External Fusion Diagnostic
 

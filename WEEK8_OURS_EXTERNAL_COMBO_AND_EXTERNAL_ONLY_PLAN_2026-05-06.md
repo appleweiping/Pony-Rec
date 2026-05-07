@@ -1,11 +1,11 @@
 # Week8 Ours + External Combo and External-Only Diagnostics Plan - 2026-05-06
 
-This note records two follow-up experiments after the six-paper external
-baseline block:
+This note records two follow-up experiments after the six-paper paper-style
+external baseline block:
 
 ```text
 4 classical same-candidate baselines
-6 senior-recommended LLM-rec paper-project same-schema baselines
+6 senior-recommended LLM-rec paper-style same-schema baselines
 ```
 
 ## Question 1: Ours + Their Method
@@ -26,7 +26,7 @@ main_run_week8_ours_external_rank_fusion.py
 Protocol:
 
 - Load our Week7.7 `structured_risk` and SRPD-best predictions.
-- Load completed external same-candidate paper-project predictions from
+- Load completed external same-candidate paper-style predictions from
   `same_candidate_external_baseline_summary.csv`.
 - Fuse rankings with normalized Borda rank scores:
   `combined = ours_weight * ours_rank_score + (1 - ours_weight) * external_rank_score`.
@@ -89,7 +89,7 @@ Protocol:
   event bins, keeping this diagnostic external-only.
 - Optionally use `--base_reference direct` if the desired question is relative
   to the Week7.7 direct base ranking.
-- Analyze the six external paper-project baselines by:
+- Analyze the six external paper-style baselines by:
   - best single external method,
   - external-only per-event oracle,
   - base-rank bins,
@@ -128,7 +128,7 @@ What to look for:
 Safe wording:
 
 > Without using our structured-risk/SRPD method as a candidate, the external
-> paper-project baselines still show event-level complementarity: the
+> paper-style baselines still show event-level complementarity: the
 > external-only oracle is observed higher than the best single external method,
 > especially in harder base/disagreement bins.
 
