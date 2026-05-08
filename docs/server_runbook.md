@@ -17,8 +17,8 @@ Read these files before launching heavy work:
 AGENTS.md
 docs/milestones/README.md
 docs/top_conference_review_gate.md
-CODEX_HANDOFF_WEEK8_2026-05-06.md
-WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
+docs/archive/legacy_root_reports/CODEX_HANDOFF_WEEK8_2026-05-06.md
+docs/archive/legacy_root_reports/WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
 OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
 ```
 
@@ -134,7 +134,7 @@ python main_run_official_same_candidate_adapter.py \
   --allow_blocked_exit_zero
 ```
 
-## LLM2Rec Four-Domain Official Run
+## LLM2Rec Single-Domain Production Loop
 
 LLM2Rec is the first official-code-level adapter wired for execution. Its run
 stage is not a toy scorer: it exports the same-candidate task into LLM2Rec's
@@ -150,14 +150,102 @@ records the operation in provenance; scoring injects the same external Qwen3
 `.npy` table before loading the model. Pass `--llm2rec_keep_full_checkpoint`
 only when you intentionally want the much larger original checkpoint.
 
-First regenerate the four-domain plan:
+Large domains are storage-heavy. The default production policy is one domain at
+a time:
+
+```text
+run one domain
+-> verify implementation_status=official_completed, blockers=[], audit_ok=True
+-> package the evidence artifact
+-> copy it to local storage with scp
+-> verify the local archive exists
+-> delete only documented server-side intermediates
+-> start the next domain
+```
+
+The completed domain package should include the score CSV, fairness provenance,
+score audit, run summary, compact checkpoint or checkpoint manifest, Qwen3 item
+embedding metadata/path/digest, and the command/log needed to reproduce the run.
+
+Single-domain command template:
 
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6
-python main_make_official_external_adapter_plan.py --methods llm2rec --plan_stage run
+DOMAIN=books
+EXP=books_large10000_100neg
+mkdir -p outputs/summary/logs
+LOG=outputs/summary/logs/week8_llm2rec_official_${DOMAIN}_$(date +%F_%H%M%S).log
+PID=outputs/summary/logs/week8_llm2rec_official_${DOMAIN}.pid
+nohup python main_run_llm2rec_official_same_candidate_adapter.py \
+  --stage run \
+  --domain "$DOMAIN" \
+  --task_dir "outputs/baselines/external_tasks/${EXP}_test_same_candidate" \
+  --valid_task_dir "outputs/baselines/external_tasks/${EXP}_valid_same_candidate" \
+  --output_scores_path "outputs/baselines/official_adapters/${EXP}_llm2rec_official/llm2rec_official_scores.csv" \
+  --provenance_output_path "outputs/baselines/official_adapters/${EXP}_llm2rec_official/fairness_provenance.json" \
+  --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 \
+  --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation \
+  --backbone_path /home/ajifang/models/Qwen/Qwen3-8B \
+  --llm_adaptation_mode frozen_base_embedding \
+  --hparam_policy official_default_or_recommended \
+  --embedding_backend hf_mean_pool \
+  --embedding_max_length 128 \
+  --hf_device_map auto > "$LOG" 2>&1 &
+echo $! > "$PID"
+disown
+echo "log=$LOG"
+echo "pid_file=$PID"
 ```
 
-For LLM2Rec only, a direct four-domain launch is:
+Monitor:
+
+```bash
+tail -f "$LOG"
+ps -p $(cat "$PID") -o pid=,etime=,stat=,cmd=
+```
+
+Package after the domain completes:
+
+```bash
+DOMAIN=books
+EXP=books_large10000_100neg
+STAMP=$(date +%F_%H%M%S)
+mkdir -p outputs/exports
+tar -czf "outputs/exports/llm2rec_${DOMAIN}_official_qwen3base_${STAMP}.tar.gz" \
+  "outputs/baselines/official_adapters/${EXP}_llm2rec_official" \
+  "outputs/baselines/paper_adapters/${EXP}_llm2rec_official_adapter" \
+  "/home/ajifang/projects/LLM2Rec/item_info/BooksLarge10000_100Neg"
+sha256sum "outputs/exports/llm2rec_${DOMAIN}_official_qwen3base_${STAMP}.tar.gz"
+```
+
+Copy that archive from the local machine, then confirm the local file exists
+before deleting server intermediates:
+
+```powershell
+scp pony-rec-gpu:~/projects/pony-rec-rescue-shadow-v6/outputs/exports/llm2rec_books_official_qwen3base_<STAMP>.tar.gz .
+Get-Item .\llm2rec_books_official_qwen3base_<STAMP>.tar.gz
+```
+
+Only after local confirmation, clean the completed domain on the server:
+
+```bash
+DOMAIN=books
+EXP=books_large10000_100neg
+rm -rf "outputs/baselines/official_adapters/${EXP}_llm2rec_official"
+rm -rf "outputs/baselines/paper_adapters/${EXP}_llm2rec_official_adapter"
+rm -rf /home/ajifang/projects/LLM2Rec/item_info/BooksLarge10000_100Neg
+df -h /
+```
+
+Do not delete final scores, provenance, audits, compact checkpoints, or Qwen3
+embedding artifacts before the archive has been copied off the server and
+confirmed by the user.
+
+## LLM2Rec Four-Domain Convenience Wrapper
+
+The four-domain wrapper is not the default production path on storage-limited
+servers. Use it only when disk space is sufficient and the user explicitly wants
+one batch job:
 
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6
@@ -169,13 +257,6 @@ echo $! > "$PID"
 disown
 echo "log=$LOG"
 echo "pid_file=$PID"
-```
-
-Monitor with:
-
-```bash
-tail -f "$LOG"
-ps -p $(cat "$PID") -o pid=,etime=,cmd=
 ```
 
 Only after each domain writes `implementation_status=official_completed`,
@@ -201,11 +282,11 @@ be reused unless `--force_embeddings` is passed.
 These remain in the tree for history and compatibility, but they are not the
 preferred first-read files:
 
-- `CODEX_HANDOFF_WEEK8_2026-05-06.md`
-- `WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
-- `WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md`
-- `WEEK8_FUSION_EXTERNAL_ONLY_CONTRIBUTION_UPDATE_2026-05-06.md`
-- `WEEK8_OURS_EXTERNAL_COMBO_AND_EXTERNAL_ONLY_PLAN_2026-05-06.md`
+- `docs/archive/legacy_root_reports/CODEX_HANDOFF_WEEK8_2026-05-06.md`
+- `docs/archive/legacy_root_reports/WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
+- `docs/archive/legacy_root_reports/WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md`
+- `docs/archive/legacy_root_reports/WEEK8_FUSION_EXTERNAL_ONLY_CONTRIBUTION_UPDATE_2026-05-06.md`
+- `docs/archive/legacy_root_reports/WEEK8_OURS_EXTERNAL_COMBO_AND_EXTERNAL_ONLY_PLAN_2026-05-06.md`
 
 Use them only when you need historical detail for that specific stage.
 

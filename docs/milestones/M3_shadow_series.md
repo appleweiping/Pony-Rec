@@ -45,8 +45,8 @@ extension until evaluated under the shared same-candidate protocol.
 
 ## Related Files
 
-- `SHADOW_V1_TO_V6_STATUS_2026-05-04.md`
-- `SHADOW_V6_SERVER_DIAGNOSTIC_2026-05-04.md`
+- `docs/archive/legacy_root_reports/SHADOW_V1_TO_V6_STATUS_2026-05-04.md`
+- `docs/archive/legacy_root_reports/SHADOW_V6_SERVER_DIAGNOSTIC_2026-05-04.md`
 - `docs/week7_9_shadow_observation_report.md`
 - `docs/shadow_method.md`
 - `src/shadow/`

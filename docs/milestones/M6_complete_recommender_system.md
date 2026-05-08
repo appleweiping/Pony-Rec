@@ -48,7 +48,7 @@ and artifact-level provenance.
 
 ## Related Files
 
-- `WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
+- `docs/archive/legacy_root_reports/WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
 - `configs/week8_large_scale_future_framework.yaml`
 - `configs/week8_future_lora/`
 - `main_build_week8_same_candidate_pointwise_inputs.py`

@@ -36,5 +36,5 @@ Use this milestone to explain why the project moved toward Shadow and C-CRP:
 - `main_calibrate.py`
 - `src/uncertainty/verbalized_confidence.py`
 - `prompts/pointwise_yesno.txt`
-- `WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
+- `docs/archive/legacy_root_reports/WEEK8_FUTURE_FRAMEWORK_ROADMAP_2026-05-06.md`
 

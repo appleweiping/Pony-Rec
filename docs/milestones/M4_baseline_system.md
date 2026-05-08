@@ -58,4 +58,4 @@ the provenance checklist passes.
 - `main_make_official_external_adapter_plan.py`
 - `main_import_same_candidate_baseline_scores.py`
 - `main_build_external_only_baseline_comparison.py`
-- `BASELINE_PAPER_AUDIT_2026-05-04.md`
+- `docs/archive/legacy_root_reports/BASELINE_PAPER_AUDIT_2026-05-04.md`

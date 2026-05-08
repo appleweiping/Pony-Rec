@@ -238,3 +238,5 @@ docs.zip
 !/docs/top_conference_review_gate.md
 !/docs/milestones/
 !/docs/milestones/**
+!/docs/archive/
+!/docs/archive/**

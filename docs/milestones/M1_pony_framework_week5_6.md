@@ -40,6 +40,6 @@ confidence observation into a controlled candidate-ranking decision layer.
 - `docs/candidate_protocol.md`
 - `docs/calibration_protocol.md`
 - `docs/from_teacher_line_to_srpd_bridge.md`
-- `UNIFIED_METHOD_MATRIX_INTERPRETATION_2026-05-04.md`
-- `WEEK8_UNIFIED_METHOD_AND_BASELINE_PLAN_2026-05-04.md`
+- `docs/archive/legacy_root_reports/UNIFIED_METHOD_MATRIX_INTERPRETATION_2026-05-04.md`
+- `docs/archive/legacy_root_reports/WEEK8_UNIFIED_METHOD_AND_BASELINE_PLAN_2026-05-04.md`
 

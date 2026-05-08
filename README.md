@@ -45,6 +45,9 @@ Canonical navigation starts here:
 
 Legacy Week8 logs and plans remain in the tree for history, but they are not
 the preferred starting point anymore. Use the canonical docs above first.
+Older root-level reports have been moved to
+`docs/archive/legacy_root_reports/` so the project root stays focused on the
+current contract, code, and entry points.
 
 Future agents should not rely on chat memory. If the working direction,
 baseline status, command surface, or table eligibility changes, update the

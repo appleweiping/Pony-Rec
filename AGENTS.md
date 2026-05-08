@@ -169,6 +169,16 @@ If a long job is needed, use `nohup` or the runbook pattern. Record the log path
 and PID path. The user will paste logs or errors; update code/docs and push
 fixes as needed.
 
+For storage-heavy official baselines, especially LLM2Rec on large domains,
+default to a single-domain production loop rather than launching every domain
+at once. The loop is: run one method-domain row, verify unblocked provenance
+and exact score coverage, package the minimal evidence artifact, have the user
+copy it off the server and confirm it exists locally, then clean only the
+documented intermediate files before starting the next domain. Do not recommend
+deleting final scores, provenance, audits, compact checkpoints, or external
+embedding artifacts unless they have been archived and the user confirms the
+archive.
+
 ## GitHub And Documentation Hygiene
 
 After meaningful code/config/doc changes:

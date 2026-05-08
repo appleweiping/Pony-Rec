@@ -41,5 +41,5 @@ SOTA, or official external-baseline superiority.
 - `docs/April 24th evidence posterior full Beauty Day2 report.md`
 - `docs/April 24th evidence posterior full Beauty expansion plan.md`
 - `docs/April 25th evidence posterior Day6 to Day7 handoff report.md`
-- `part5_artifact_map.md`
+- `docs/archive/legacy_root_reports/part5_artifact_map.md`
 

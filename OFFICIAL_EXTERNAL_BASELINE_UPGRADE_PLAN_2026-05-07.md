@@ -134,6 +134,9 @@ On large domains, the official SASRec checkpoint is compacted after training by
 externalizing the duplicated frozen item embedding table; provenance records
 the compact checkpoint and the external Qwen3 embedding `.npy` used by the
 scorer.
+The execution and archive unit is a single method-domain row. Four-domain
+completion is a summary state after all four method-domain rows have completed,
+not a requirement to run all domains in one server job.
 
 ## Pinned Official Sources
 
