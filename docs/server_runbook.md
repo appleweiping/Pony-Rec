@@ -66,26 +66,34 @@ kill $(cat outputs/summary/logs/week8_fourdomain_100neg_full_external.pid)
 
 ```bash
 python main_audit_official_external_repos.py
+python main_audit_official_fairness_policy.py
 python main_make_official_external_adapter_plan.py
 ```
 
 Do not import official-baseline rows into main comparison tables until:
 
 ```text
+comparison variant recorded
+implementation_status=official_completed for main-table official rows
 official repo commit pinned
 official training/scoring entrypoint recorded
 Qwen3-8B base path recorded
+method-declared adaptation mode recorded
+baseline hyperparameter source and overrides recorded
 method-specific adapter/checkpoint path recorded
 source_event_id,user_id,item_id,score score file emitted
-score coverage verified
+exact score-key coverage verified
+finite numeric scores verified
 paired-test inputs generated
 ```
 
 ## Output Interpretation
 
 - `*_style_*` rows are paper-style supplementary diagnostics.
-- `*_official_qwen3_lora_*` rows are the target official external-baseline
+- `*_official_qwen3base_*` rows are the target official external-baseline
   family.
+- Full fine-tuning and retuned-baseline variants are supplementary/sensitivity
+  rows unless a new experiment-wide policy is explicitly declared.
 - Beauty is supplementary smaller-N unless the eligible user count reaches the
   main-domain target.
 - Week7.7 compact six-candidate results and Week8 101-candidate results must

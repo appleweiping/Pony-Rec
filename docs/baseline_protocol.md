@@ -17,6 +17,63 @@ same schema:
 Internal SRPD/shadow variants are ablations, not substitutes for external
 baselines.
 
+## Standardized external-baseline comparison policy
+
+Different papers use different comparison conventions. We keep the policy
+explicit instead of claiming a single absolute notion of fairness.
+
+Common acceptable modes:
+
+1. Run each official implementation with its original backbone and default
+   settings, changing only the data interface.
+2. Reuse a prior work's dataset/protocol and compare against its reported
+   baseline block.
+3. Use official implementations but standardize the LLM/text backbone to one
+   model, then run each method's official/default training recipe.
+4. Validation-tune every baseline and our method under an equal tuning budget.
+
+The primary paper policy is mode 3:
+
+```text
+official or official-code-level source implementation
++ our same-candidate dataset/protocol
++ shared Qwen3-8B base model for all LLM/text components
++ frozen Qwen3-8B base except method-declared adapter or representation module
++ baseline official default or recommended hyperparameters
++ our hyperparameters selected on validation only or fixed before test
++ shared score schema: source_event_id,user_id,item_id,score
+```
+
+This is the standard controlled academic comparison used for the main external
+baseline table. Full fine-tuning of Qwen3-8B, original-backbone runs, and fully
+retuned-baseline sensitivity studies can appear only as explicitly labeled
+supplementary tables.
+
+The canonical primary comparison variant is:
+
+```text
+official_code_qwen3base_default_hparams_declared_adaptation
+```
+
+For official main-table rows, the score file must exactly match the candidate
+rows: unique `source_event_id,user_id,item_id` keys, no missing candidate
+scores, no extra score keys, and finite numeric `score` values. Scores may use
+any method-native scale as long as they are orderable within each event; ties
+are broken by stable candidate order after descending score. Candidate order
+cannot be used as an implicit score.
+
+Beauty rows are supplementary smaller-N same-candidate 100neg rows unless the
+eligible user count reaches the main 10k-domain target. Beauty pilot or adapter
+checks do not enter the main four-domain table.
+
+Implementation status is table-gating metadata:
+
+```text
+style_adapter_only -> supplementary only
+partial_official_adapter_exists -> not main-table eligible
+official_completed -> eligible only if provenance, score coverage, and paired-test inputs pass
+```
+
 ## Reliability proxy audit
 
 The old "baseline confidence formulation audit" is renamed:

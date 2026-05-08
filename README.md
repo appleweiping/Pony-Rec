@@ -206,10 +206,13 @@ monolithic training entry point.
 - `configs/official_external_baselines.yaml` is the machine-readable contract
   for pinned official external baselines. It defines the target baseline names,
   upstream repositories, pinned commits, shared Qwen3-8B base-model path,
-  LoRA/adapter policy, and unchanged score schema.
+  per-method adaptation policy, fairness provenance fields, and unchanged score
+  schema.
 - `main_audit_official_external_repos.py` and
-  `main_make_official_external_adapter_plan.py` support the official-upgrade
-  workflow before heavy training starts.
+  `main_audit_official_fairness_policy.py` check official checkout pins and the
+  standardized comparison contract before heavy training starts.
+- `main_make_official_external_adapter_plan.py` generates the four-domain x
+  six-method official adapter command plan with fairness provenance arguments.
 - `main_project_readiness_check.py` is the lightweight post-pull sanity check
   for the canonical milestone/reviewer/server-runbook layer.
 - `main_export_*_same_candidate_task.py` scripts materialize unified
@@ -334,12 +337,27 @@ paper-style adapted rows:
 pinned official or official-code-level implementation
 + official algorithm, loss, scoring head, and train/select procedure preserved
 + unified Qwen3-8B base model for LLM/text representations
-+ LoRA/adapter trained and retained according to that baseline's official
-  algorithm when the official method uses one
++ frozen Qwen3-8B base except method-declared adapter, identifier,
+  representation learner, graph/intent module, or downstream checkpoint
++ baseline official default/recommended hyperparameters in the primary table
++ our method hyperparameters selected on validation only or fixed before test
 + unchanged same-candidate train/valid/test rows
 + unchanged score schema: source_event_id,user_id,item_id,score
 + unified importer, metrics, coverage audit, and paired tests
 ```
+
+Primary external-baseline tables should use the comparison variant
+`official_code_qwen3base_default_hparams_declared_adaptation`. Full fine-tuning
+and fully retuned baseline tables are separate supplementary/sensitivity
+variants; they must not be mixed with the primary standardized-backbone
+default-hyperparameter table. Official main-table rows also require
+`implementation_status=official_completed`, exact score coverage, and fairness
+provenance.
+
+For official main-table imports, the score file is an exact key contract:
+unique `source_event_id,user_id,item_id` rows, no missing candidate scores, no
+extra score keys, and finite numeric scores. Method-native score scales are
+allowed; the shared importer applies one ranking/evaluation path.
 
 Full-catalog metrics reported by an upstream repository are related-work or
 sanity-check context only. Main same-candidate tables must use exact candidate
@@ -560,16 +578,18 @@ Immediate repository priorities:
 - Audit local official checkouts against pinned commits before adapting code.
 - For each official baseline, write a provenance record containing upstream
   URL, pinned commit, local checkout path, preserved official modules, protocol
-  changes, Qwen3-8B base-model/LoRA source, checkpoint or adapter path, and
-  score coverage.
+  changes, Qwen3-8B base-model source, method-declared adapter or
+  representation artifact path, default-hyperparameter source, checkpoint path,
+  and score coverage.
 - Upgrade LLM2Rec and LLM-ESR first because partial official adapter paths
   already exist.
 - Add official adapters for LLMEmb, RLMRec, IRLLRec, and SETRec by preserving
   each method's algorithm and only replacing the LLM/text representation source
-  with the shared Qwen3-8B base plus the method-appropriate LoRA/adapter path.
+  with the shared Qwen3-8B base plus the method-appropriate adapter or
+  representation artifact path.
 - Emit only `source_event_id,user_id,item_id,score` candidate-score CSVs for
   the main protocol, then import them through the shared importer.
-- Rebuild comparison tables using `*_official_qwen3_lora_*` rows for official
+- Rebuild comparison tables using `*_official_qwen3base_*` rows for official
   baseline claims; keep `*_style_*` rows labeled as paper-style supplementary
   checks.
 - Run coverage audits and paired tests before making winner claims.

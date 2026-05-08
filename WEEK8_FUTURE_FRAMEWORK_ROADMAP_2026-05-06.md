@@ -353,7 +353,7 @@ external baseline status unambiguous:
 [ ] export exact source_event_id,user_id,item_id,score files
 [ ] import with main_import_same_candidate_baseline_scores.py
 [ ] verify coverage, provenance, metrics, and paired-test inputs
-[ ] rebuild official comparison using only *_official_qwen3_lora_* rows
+[ ] rebuild official comparison using only *_official_qwen3base_* rows
 ```
 
 The official baseline upgrade does not change the shadow/light/LoRA roadmap's

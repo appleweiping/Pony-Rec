@@ -37,10 +37,22 @@ def _repo_status(name: str, cfg: dict[str, Any]) -> dict[str, Any]:
     env_name = str(cfg.get("local_repo_env", "")).strip()
     repo_dir = Path(os.environ.get(env_name, str(cfg.get("local_repo_default", "")))).expanduser()
     pinned = str(cfg.get("pinned_commit", "")).strip()
+    fairness_contract = cfg.get("fairness_contract", {}) or {}
     row: dict[str, Any] = {
         "method": name,
         "target_baseline_name": cfg.get("target_baseline_name", ""),
         "official_repo": cfg.get("official_repo", ""),
+        "comparison_tier": fairness_contract.get("comparison_tier", ""),
+        "backbone_family": fairness_contract.get("backbone_family", ""),
+        "hparam_policy": fairness_contract.get("hparam_policy", ""),
+        "extra_baseline_tuning_allowed": fairness_contract.get("extra_baseline_tuning_allowed", ""),
+        "fairness_contract_present": bool(fairness_contract),
+        "fairness_contract_ok": bool(
+            fairness_contract
+            and fairness_contract.get("backbone_family") == "Qwen3-8B"
+            and fairness_contract.get("hparam_policy") == "official_default_or_recommended"
+            and fairness_contract.get("extra_baseline_tuning_allowed") is False
+        ),
         "local_repo_env": env_name,
         "local_repo_dir": str(repo_dir),
         "pinned_commit": pinned,
@@ -84,6 +96,12 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "method",
         "target_baseline_name",
         "official_repo",
+        "comparison_tier",
+        "backbone_family",
+        "hparam_policy",
+        "extra_baseline_tuning_allowed",
+        "fairness_contract_present",
+        "fairness_contract_ok",
         "local_repo_env",
         "local_repo_dir",
         "pinned_commit",

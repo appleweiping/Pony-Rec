@@ -236,12 +236,12 @@ These are paper-style adapted baselines, not official reproductions. The target
 official family is:
 
 ```text
-llm2rec_official_qwen3_lora_sasrec
-llmesr_official_qwen3_lora_sasrec
-llmemb_official_qwen3_lora
-rlmrec_official_qwen3_lora_graphcl
-irllrec_official_qwen3_lora_intent
-setrec_official_qwen3_lora_identifier
+llm2rec_official_qwen3base_sasrec
+llmesr_official_qwen3base_sasrec
+llmemb_official_qwen3base
+rlmrec_official_qwen3base_graphcl
+irllrec_official_qwen3base_intent
+setrec_official_qwen3base_identifier
 ```
 
 Per-method file map:

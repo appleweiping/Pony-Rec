@@ -228,12 +228,12 @@ current target rows are:
 
 | method | current row family | target official row |
 | --- | --- | --- |
-| LLM2Rec | `llm2rec_style_qwen3_sasrec` | `llm2rec_official_qwen3_lora_sasrec` |
-| LLM-ESR | `llmesr_style_qwen3_sasrec` | `llmesr_official_qwen3_lora_sasrec` |
-| LLMEmb | `llmemb_style_qwen3_sasrec` | `llmemb_official_qwen3_lora` |
-| RLMRec | `rlmrec_style_qwen3_graphcl` | `rlmrec_official_qwen3_lora_graphcl` |
-| IRLLRec | `irllrec_style_qwen3_intent` | `irllrec_official_qwen3_lora_intent` |
-| SETRec | `setrec_style_qwen3_identifier` | `setrec_official_qwen3_lora_identifier` |
+| LLM2Rec | `llm2rec_style_qwen3_sasrec` | `llm2rec_official_qwen3base_sasrec` |
+| LLM-ESR | `llmesr_style_qwen3_sasrec` | `llmesr_official_qwen3base_sasrec` |
+| LLMEmb | `llmemb_style_qwen3_sasrec` | `llmemb_official_qwen3base` |
+| RLMRec | `rlmrec_style_qwen3_graphcl` | `rlmrec_official_qwen3base_graphcl` |
+| IRLLRec | `irllrec_style_qwen3_intent` | `irllrec_official_qwen3base_intent` |
+| SETRec | `setrec_style_qwen3_identifier` | `setrec_official_qwen3base_identifier` |
 
 Official upgrade checklist:
 

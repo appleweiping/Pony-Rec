@@ -1,10 +1,106 @@
-protocol_name: week8_official_external_same_candidate_qwen3_lora
+protocol_name: week8_official_external_same_candidate_qwen3base
 status: implementation_contract
 output_score_schema:
   - source_event_id
   - user_id
   - item_id
   - score
+score_file_contract:
+  key_columns:
+    - source_event_id
+    - user_id
+    - item_id
+  score_column: score
+  required_key_set: exact_match_to_candidate_rows
+  duplicate_keys_allowed: false
+  missing_candidate_scores_allowed_in_primary_table: false
+  extra_score_keys_allowed_in_primary_table: false
+  score_value_rule: finite_numeric
+  score_scale_rule: arbitrary_scale_but_orderable_within_event
+  tie_break_rule: stable_candidate_order_after_score_descending
+  candidate_order_as_score_allowed: false
+fairness_policy:
+  policy_id: official_code_qwen3base_default_hparams_declared_adaptation_v1
+  policy_version: 2026-05-08
+  name: standardized_backbone_default_baseline_hyperparameters
+  primary_table_variant: official_code_qwen3base_default_hparams_declared_adaptation
+  summary: >
+    Main external-baseline comparisons use each method's official code or
+    official-code-level implementation, adapt only the data interface and
+    LLM/text backbone, and standardize the base model to Qwen3-8B.
+    LoRA, official adapters, full fine-tuning checkpoints, or representation
+    learners are declared per table and retained only when they are part of the
+    compared baseline's official algorithm or the declared experiment variant.
+    Baselines use their official default or recommended hyperparameters unless
+    a paper-specific setting is required to consume the unified protocol. Our
+    framework may select its own gates, weights, and hyperparameters on
+    validation only. The experiment-wide adaptation mode is declared for every
+    table; LoRA and full fine-tuning rows are not silently mixed.
+  baseline_hyperparameter_policy: official_default_or_recommended
+  our_hyperparameter_policy: validation_selected_or_fixed_before_test
+  official_code_required: true
+  unified_backbone_required: true
+  unified_backbone_family: Qwen3-8B
+  unified_backbone_path: /home/ajifang/models/Qwen/Qwen3-8B
+  baseline_extra_tuning_allowed_in_primary_table: false
+  validation_only_model_selection: true
+  test_set_model_selection_allowed: false
+  import_full_catalog_metrics_allowed: false
+  score_schema:
+    - source_event_id
+    - user_id
+    - item_id
+    - score
+  tuning_budget_policy: >
+    The primary table does not tune every baseline to a new optimum on our
+    split. If baseline retuning is performed, report it as a stronger
+    sensitivity or robustness variant with provenance.
+  finetuning_policy:
+    primary: declared_experiment_wide_adaptation_mode
+    primary_table_base_model_update_policy: frozen_base_except_method_declared_adapter_or_representation_module
+    full_finetune_allowed: optional_separate_variant_only
+    no_mixed_lora_full_finetune_main_table: true
+  allowed_comparison_variants:
+    - official_code_original_backbone_default_hparams_supplementary
+    - official_code_qwen3base_default_hparams_declared_adaptation
+    - official_code_qwen3_8b_full_finetune_default_hparams_supplementary
+    - official_code_qwen3base_retuned_baselines_sensitivity
+  required_setting_fields:
+    - fairness_policy_id
+    - comparison_variant
+    - comparison_tier
+    - backbone_model_family
+    - backbone_model_path
+    - llm_adaptation_mode
+    - baseline_hyperparameter_source
+    - baseline_hyperparameter_overrides
+    - our_hyperparameter_selection_rule
+    - validation_selection_metric
+    - test_selection_forbidden
+    - score_schema
+  required_fairness_provenance:
+    - fairness_policy_id
+    - comparison_variant
+    - comparison_tier
+    - official_code_required
+    - official_repo
+    - official_repo_commit
+    - official_entrypoint
+    - baseline_hyperparameter_source
+    - baseline_hyperparameter_overrides
+    - baseline_extra_tuning_allowed
+    - backbone_model_family
+    - backbone_model_path
+    - llm_adaptation_mode
+    - adapter_or_checkpoint_path
+    - trainable_parameter_count
+    - total_parameter_count
+    - validation_selection_metric
+    - test_set_model_selection_allowed
+    - same_candidate_task_sources
+    - score_output_path
+    - score_schema
+    - score_coverage_rate
 unified_protocol:
   train_source: outputs/baselines/external_tasks/<exp_prefix>_test_same_candidate/train_interactions.csv
   valid_source: outputs/baselines/external_tasks/<exp_prefix>_valid_same_candidate/ranking_valid.jsonl
@@ -19,14 +115,15 @@ unified_protocol:
     - head_exposure_ratio@10
     - longtail_coverage@10
 backbone_policy:
-  name: Unified Qwen3-8B base with official per-baseline LoRA/adapter
+  name: Unified Qwen3-8B base with declared per-baseline adaptation mode
   base_model_path: /home/ajifang/models/Qwen/Qwen3-8B
   base_model_family: Qwen3-8B
+  base_model_update_policy: frozen_base_except_method_declared_adapter_or_representation_module
   adapter_policy: train_and_retain_per_official_algorithm
   replacement_rule: >
     Whenever the official baseline uses an LLM/text encoder or LLM-derived
     representation source, use the same Qwen3-8B base model. Train, load, and
-    retain LoRA/adapters or downstream checkpoints according to that baseline's
+    retain LoRA/adapters, full-finetune checkpoints, or downstream artifacts according to that baseline's
     official algorithm. Preserve the recommender architecture, training
     objective, and scoring module unless a change is required to consume the
     unified same-candidate protocol.
@@ -35,7 +132,12 @@ backbone_policy:
     baseline must emit exact candidate scores using the shared schema, then use
     the unified importer and paired tests.
   required_adapter_checkpoint_provenance:
+    - comparison_variant
     - base_model_path
+    - llm_adaptation_mode
+    - baseline_hyperparameter_source
+    - baseline_hyperparameter_overrides
+    - validation_selection_metric
     - official_repo
     - official_repo_commit
     - local_repo_env
@@ -52,7 +154,29 @@ backbone_policy:
 official_baselines:
   llm2rec:
     paper_style_name: LLM2Rec-style Qwen3-8B Emb. + SASRec
-    target_baseline_name: llm2rec_official_qwen3_lora_sasrec
+    target_baseline_name: llm2rec_official_qwen3base_sasrec
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - official_adapter
+        - lora
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_adapter_or_lora_training_when_part_of_method
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - architecture_rewrite
+        - loss_rewrite
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
     official_repo: https://github.com/HappyPointer/LLM2Rec
     pinned_commit: 73b481f710f67166ab958f4985d27b27fb410871
     local_repo_env: LLM2REC_REPO_DIR
@@ -74,6 +198,10 @@ official_baselines:
         - unified valid_source
         - Qwen3-8B item/text representation artifacts
       hyperparameter_record: official_llm2rec_sasrec_hyperparameters
+      default_hparam_source_file_or_url: to_be_recorded_from_pinned_official_repo
+      baseline_hyperparameter_overrides: none_unless_protocol_bridge_requires_documented_override
+      override_reason: none
+      validation_tuned: false
     official_code_adaptation_notes:
       - keep LLM2Rec seqrec SASRec classes and loss path authoritative
       - adapt only data installation, Qwen3-8B representation generation, and candidate-score export
@@ -99,7 +227,29 @@ official_baselines:
 
   llmesr:
     paper_style_name: LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec
-    target_baseline_name: llmesr_official_qwen3_lora_sasrec
+    target_baseline_name: llmesr_official_qwen3base_sasrec
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - official_adapter
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_representation_artifact_generation
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - architecture_rewrite
+        - loss_rewrite
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
     official_repo: https://github.com/Applied-Machine-Learning-Lab/LLM-ESR
     pinned_commit: e5dc388c12509c88c65536ecd8d231325993d4ef
     local_repo_env: LLMESR_REPO_DIR
@@ -122,6 +272,10 @@ official_baselines:
         - Qwen3-8B item representation artifacts
         - official similar-user artifacts
       hyperparameter_record: official_llmesr_hyperparameters
+      default_hparam_source_file_or_url: to_be_recorded_from_pinned_official_repo
+      baseline_hyperparameter_overrides: none_unless_protocol_bridge_requires_documented_override
+      override_reason: none
+      validation_tuned: false
     official_code_adaptation_notes:
       - keep LLM-ESR handled-file layout and sequential scoring architecture authoritative
       - adapt only handled-file generation, Qwen3-8B representation injection, and candidate-score export
@@ -146,7 +300,29 @@ official_baselines:
 
   llmemb:
     paper_style_name: LLMEmb-style Qwen3-8B Emb. + SASRec
-    target_baseline_name: llmemb_official_qwen3_lora
+    target_baseline_name: llmemb_official_qwen3base
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - official_adapter
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_embedding_artifact_generation
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - architecture_rewrite
+        - loss_rewrite
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
     official_repo: https://github.com/Applied-Machine-Learning-Lab/LLMEmb
     pinned_commit: 3458a5e225062e94b4f1a01e41f3ec82089f0407
     local_repo_env: LLMEMB_REPO_DIR
@@ -168,6 +344,10 @@ official_baselines:
         - unified valid_source
         - Qwen3-8B text embedding artifacts
       hyperparameter_record: official_llmemb_hyperparameters
+      default_hparam_source_file_or_url: to_be_recorded_from_pinned_official_repo
+      baseline_hyperparameter_overrides: none_unless_protocol_bridge_requires_documented_override
+      override_reason: none
+      validation_tuned: false
     official_code_adaptation_notes:
       - replace style adapter with official LLMEmb train/eval entrypoints before final import
       - keep official item-embedding consumption and downstream sequential recommender authoritative
@@ -190,7 +370,28 @@ official_baselines:
 
   rlmrec:
     paper_style_name: RLMRec-style Qwen3-8B GraphCL
-    target_baseline_name: rlmrec_official_qwen3_lora_graphcl
+    target_baseline_name: rlmrec_official_qwen3base_graphcl
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - graph_data_construction_from_unified_train
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - architecture_rewrite
+        - contrastive_objective_rewrite
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
     official_repo: https://github.com/HKUDS/RLMRec
     pinned_commit: 22413752246de3dee8ab0d509f7f7a8889080f95
     local_repo_env: RLMREC_REPO_DIR
@@ -213,6 +414,10 @@ official_baselines:
         - graph data derived from unified train interactions
         - Qwen3-8B representation artifacts
       hyperparameter_record: official_rlmrec_hyperparameters
+      default_hparam_source_file_or_url: to_be_recorded_from_pinned_official_repo
+      baseline_hyperparameter_overrides: none_unless_protocol_bridge_requires_documented_override
+      override_reason: none
+      validation_tuned: false
     official_code_adaptation_notes:
       - replace style adapter with official RLMRec graph training runner before final import
       - keep official graph model, contrastive objective, and LLM representation injection path authoritative
@@ -235,7 +440,29 @@ official_baselines:
 
   irllrec:
     paper_style_name: IRLLRec-style Qwen3-8B IntentRep
-    target_baseline_name: irllrec_official_qwen3_lora_intent
+    target_baseline_name: irllrec_official_qwen3base_intent
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - official_adapter
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_intent_artifact_generation
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - architecture_rewrite
+        - intent_objective_rewrite
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
     official_repo: https://github.com/wangyu0627/IRLLRec
     pinned_commit: ee8330b456e568f87869ec6c0c553c55d43fce6e
     local_repo_env: IRLLREC_REPO_DIR
@@ -258,6 +485,10 @@ official_baselines:
         - official intent construction artifacts
         - Qwen3-8B item/text representation artifacts
       hyperparameter_record: official_irllrec_hyperparameters
+      default_hparam_source_file_or_url: to_be_recorded_from_pinned_official_repo
+      baseline_hyperparameter_overrides: none_unless_protocol_bridge_requires_documented_override
+      override_reason: none
+      validation_tuned: false
     official_code_adaptation_notes:
       - replace style adapter with official IRLLRec intent construction and training runner before final import
       - keep official intent representation learning module, recommendation objective, and scoring head authoritative
@@ -280,7 +511,29 @@ official_baselines:
 
   setrec:
     paper_style_name: SETRec-style Qwen3-8B Identifier
-    target_baseline_name: setrec_official_qwen3_lora_identifier
+    target_baseline_name: setrec_official_qwen3base_identifier
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - official_adapter
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_identifier_artifact_generation
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - architecture_rewrite
+        - identifier_objective_rewrite
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
     official_repo: https://github.com/Linxyhaha/SETRec
     pinned_commit: 2ed9a75ad1ad3784c61bba3c68cbedbe3cfce2d7
     local_repo_env: SETREC_REPO_DIR
@@ -303,6 +556,10 @@ official_baselines:
         - official semantic identifier artifacts
         - Qwen3-8B representation artifacts
       hyperparameter_record: official_setrec_hyperparameters
+      default_hparam_source_file_or_url: to_be_recorded_from_pinned_official_repo
+      baseline_hyperparameter_overrides: none_unless_protocol_bridge_requires_documented_override
+      override_reason: none
+      validation_tuned: false
     official_code_adaptation_notes:
       - replace style adapter with official SETRec identifier generation and training runner before final import
       - keep official semantic identifier or set representation module, objective, and scoring head authoritative

@@ -46,13 +46,22 @@ def _runner_name(method: str) -> str:
 
 def _plan_rows(cfg: dict[str, Any], domains: list[str]) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
+    policy = cfg.get("fairness_policy", {}) or {}
+    backbone = cfg.get("backbone_policy", {}) or {}
+    policy_id = str(policy.get("policy_id", ""))
+    comparison_variant = str(policy.get("primary_table_variant", ""))
+    backbone_path = str(policy.get("unified_backbone_path") or backbone.get("base_model_path") or "")
+    backbone_family = str(policy.get("unified_backbone_family") or backbone.get("base_model_family") or "")
     for method, method_cfg in (cfg.get("official_baselines") or {}).items():
         target_name = str(method_cfg["target_baseline_name"])
+        contract = method_cfg.get("fairness_contract", {}) or {}
         for domain in domains:
             exp = _exp_prefix(domain)
             task = f"outputs/baselines/external_tasks/{exp}_test_same_candidate"
             ranking = f"{task}/ranking_test.jsonl"
-            scores = f"outputs/baselines/official_adapters/{exp}_{method}_official/{method}_official_scores.csv"
+            adapter_dir = f"outputs/baselines/official_adapters/{exp}_{method}_official"
+            scores = f"{adapter_dir}/{method}_official_scores.csv"
+            provenance = f"{adapter_dir}/fairness_provenance.json"
             imported_exp = f"{exp}_{target_name}_same_candidate"
             rows.append(
                 {
@@ -62,9 +71,17 @@ def _plan_rows(cfg: dict[str, Any], domains: list[str]) -> list[dict[str, str]]:
                     "task_dir": task,
                     "ranking_input_path": ranking,
                     "scores_path": scores,
+                    "provenance_path": provenance,
                     "imported_exp": imported_exp,
                     "target_baseline_name": target_name,
                     "dataset_name": _dataset(domain),
+                    "fairness_policy_id": policy_id,
+                    "comparison_variant": comparison_variant,
+                    "comparison_tier": str(contract.get("comparison_tier", "")),
+                    "backbone_family": backbone_family,
+                    "backbone_path": backbone_path,
+                    "hparam_policy": str(contract.get("hparam_policy", "")),
+                    "implementation_status": "official_completed",
                 }
             )
     return rows
@@ -94,6 +111,16 @@ def _commands(rows: list[dict[str, str]]) -> list[str]:
                         _q(row["domain"]),
                         "--output_scores_path",
                         _q(row["scores_path"]),
+                        "--fairness_policy_id",
+                        _q(row["fairness_policy_id"]),
+                        "--comparison_variant",
+                        _q(row["comparison_variant"]),
+                        "--backbone_path",
+                        _q(row["backbone_path"]),
+                        "--hparam_policy",
+                        _q(row["hparam_policy"]),
+                        "--provenance_output_path",
+                        _q(row["provenance_path"]),
                     ]
                 ),
                 " ".join(
@@ -120,6 +147,15 @@ def _commands(rows: list[dict[str, str]]) -> list[str]:
                         _q(row["scores_path"]),
                         "--status_label same_schema_external_baseline",
                         "--artifact_class completed_result",
+                        "--fairness_policy_id",
+                        _q(row["fairness_policy_id"]),
+                        "--comparison_variant",
+                        _q(row["comparison_variant"]),
+                        "--implementation_status",
+                        _q(row["implementation_status"]),
+                        "--provenance_path",
+                        _q(row["provenance_path"]),
+                        "--require_fairness_provenance",
                     ]
                 ),
                 "",

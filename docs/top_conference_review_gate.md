@@ -64,8 +64,14 @@ Before a claim enters the paper, answer these questions.
 - Paper-style LLM-rec rows labeled as supplementary?
 - Official-code-level rows used only after pinned repo, checkpoint, and score
   provenance are recorded?
-- Qwen3-8B used as the shared base model while LoRA/adapters follow each
-  baseline's official algorithm?
+- Qwen3-8B used as the shared base model while method-declared adapters or
+  representation artifacts follow each baseline's official algorithm?
+- Primary table uses baseline official default/recommended hyperparameters,
+  while our method uses validation-selected or pre-fixed hyperparameters?
+- Full fine-tuning and retuned-baseline rows kept out of the primary comparison
+  variant unless explicitly labeled as supplementary/sensitivity?
+- Official external rows require `implementation_status=official_completed`
+  and exact finite same-candidate score coverage?
 
 ### Protocol Rigor
 
@@ -78,6 +84,9 @@ candidate count
 negative sampling strategy and seed
 training command
 checkpoint or adapter path
+comparison variant
+finetuning mode
+baseline hyperparameter source and overrides
 score CSV path
 score schema
 metric script

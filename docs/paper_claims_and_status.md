@@ -64,7 +64,7 @@ The canonical milestone map lives in `docs/milestones/README.md`.
 
 The `*_style_*` LLM-rec rows are paper-style supplementary rows, not official
 reproductions. Official external-baseline claims require the
-`*_official_qwen3_lora_*` family plus provenance and score coverage.
+`*_official_qwen3base_*` family plus provenance and score coverage.
 
 ## Main table eligibility
 
@@ -73,6 +73,19 @@ A row can enter the main ranking table only if all are true:
 - `status_label == completed_result`
 - Same-schema data, prompt, candidate construction, and metric definitions are
   used.
+- External baseline rows follow the declared comparison variant, usually
+  `official_code_qwen3base_default_hparams_declared_adaptation`.
+- Official external rows require `implementation_status=official_completed`;
+  `style_adapter_only` and `partial_official_adapter_exists` rows stay
+  supplementary.
+- Baseline hyperparameters come from the official default/recommended setting,
+  unless an override is explicitly recorded for protocol compatibility.
+- Our method's gates, weights, and hyperparameters are selected on validation or
+  fixed before test.
+- Full-finetune and retuned-baseline variants are not mixed into the primary
+  main comparison table.
+- External score files have exact unique `source_event_id,user_id,item_id`
+  coverage with finite numeric scores.
 - Calibration method and C-CRP weights are selected on validation or fixed
   before test.
 - `calibration_split_metadata.csv` has zero user overlap unless the table is

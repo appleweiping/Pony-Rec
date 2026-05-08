@@ -27,12 +27,20 @@ For official external baselines:
 
 ```text
 unified Qwen3-8B base model
-LoRA/adapter or method-specific artifact trained and retained according to the
-baseline's official algorithm
+primary comparison variant = official code + Qwen3-8B base + declared
+adaptation mode + baseline official default or recommended hyperparameters
+frozen Qwen3-8B base except method-declared adapter or representation artifact
+trained and retained according to the baseline's official algorithm
 official repo URL and pinned commit recorded
 checkpoint / adapter / score provenance recorded
-score coverage audited before table import
+exact finite score coverage audited before table import
 ```
+
+Full fine-tuning and retuned-baseline comparisons are explicitly labeled
+supplementary/sensitivity variants. They must not be silently mixed with the
+primary standardized-backbone default-hyperparameter table. Official rows enter
+the main table only with `implementation_status=official_completed`, exact
+finite score coverage, and fairness provenance.
 
 ## Paper Role
 
@@ -46,8 +54,8 @@ the provenance checklist passes.
 - `configs/baseline/week8_external_same_candidate_manifest.yaml`
 - `OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md`
 - `main_audit_official_external_repos.py`
+- `main_audit_official_fairness_policy.py`
 - `main_make_official_external_adapter_plan.py`
 - `main_import_same_candidate_baseline_scores.py`
 - `main_build_external_only_baseline_comparison.py`
 - `BASELINE_PAPER_AUDIT_2026-05-04.md`
-
