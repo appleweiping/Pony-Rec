@@ -48,6 +48,11 @@ Rows with `design_only`, `proxy_only`, or `future_extension` must not enter the
 main result table. Rows from fallback internal validation splits are not main
 table eligible.
 
+Agent drift guard: every new experiment, baseline, model module, or generated
+table must receive a status label and milestone eligibility before it is
+described as evidence. If a future agent cannot prove eligibility from
+provenance and audits, the row is diagnostic or supplementary.
+
 ## Milestone claim eligibility
 
 The canonical milestone map lives in `docs/milestones/README.md`.
@@ -66,6 +71,10 @@ The `*_style_*` LLM-rec rows are paper-style supplementary rows, not official
 reproductions. Official external-baseline claims require the
 `*_official_qwen3base_*` family plus provenance and score coverage.
 
+Internal Shadow/Light/LoRA ablations cannot substitute for missing external
+baselines. If official external rows are unfinished, the paper wording must
+state the baseline gap and keep those rows out of main official claims.
+
 ## Main table eligibility
 
 A row can enter the main ranking table only if all are true:
@@ -78,6 +87,9 @@ A row can enter the main ranking table only if all are true:
 - Official external rows require `implementation_status=official_completed`;
   `style_adapter_only` and `partial_official_adapter_exists` rows stay
   supplementary.
+- Runner or plan filenames containing `official` are not enough. The row must
+  have unblocked provenance from the pinned official repo and pass score/import
+  gates.
 - Baseline hyperparameters come from the official default/recommended setting,
   unless an override is explicitly recorded for protocol compatibility.
 - Our method's gates, weights, and hyperparameters are selected on validation or

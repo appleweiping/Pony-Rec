@@ -61,6 +61,10 @@ Before a claim enters the paper, answer these questions.
 ### Baselines
 
 - Classical baselines complete and fairly tuned?
+- Does the baseline block follow the senior-advice policy: official/default
+  baselines first, method variants second?
+- Is any strong baseline absent, and if so is the reason documented instead of
+  hidden?
 - Paper-style LLM-rec rows labeled as supplementary?
 - Official-code-level rows used only after pinned repo, checkpoint, and score
   provenance are recorded?
@@ -117,5 +121,11 @@ At least one main paper should make these boundaries visible:
 | official baselines unfinished | label paper-style rows as supplementary or finish official adapters |
 | mixed protocols | keep protocol, candidate count, N, and status in every evidence table |
 | weak reproducibility | maintain server runbook, provenance, git commit, and output manifests |
+| agent drift / undocumented server state / unpushed changes | use `AGENTS.md`, paste-back logs, readiness checks, and push code/config/doc updates |
 | test-selected fusion | label as diagnostic unless validation-selected |
 | Beauty N mismatch | report Beauty as supplementary smaller-N |
+
+Before submission-facing work, run a reviewer-agent pass that reads
+`AGENTS.md`, `docs/paper_claims_and_status.md`, and this file. The reviewer
+agent should explicitly check for toy substitutes, unpushed command changes,
+unfinished official baselines, and claims that outrun the completed evidence.

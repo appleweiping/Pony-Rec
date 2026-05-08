@@ -1,5 +1,9 @@
 # Week8 Fusion and External-Only Contribution Update - 2026-05-06
 
+Legacy update note: this is historical context, not the current source of truth.
+Future agents should start from `AGENTS.md`, `README.md`,
+`docs/paper_claims_and_status.md`, and `docs/server_runbook.md`.
+
 This note updates the current conclusion after adding six senior-recommended
 LLM-rec paper-style same-schema baselines, the ours+external rank-fusion
 diagnostic, and the external-only phenomenon diagnostic.

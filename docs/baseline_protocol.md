@@ -22,6 +22,11 @@ baselines.
 Different papers use different comparison conventions. We keep the policy
 explicit instead of claiming a single absolute notion of fairness.
 
+Future agents must also follow the official-baseline guardrails in
+`AGENTS.md`: wrapper names, plan rows, and `official` filenames are not
+evidence unless provenance, exact score coverage, import, and paired-test gates
+pass.
+
 Common acceptable modes:
 
 1. Run each official implementation with its original backbone and default

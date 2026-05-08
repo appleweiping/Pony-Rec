@@ -1,5 +1,9 @@
 # Week8 Large-Scale 10k/100Neg Same-Candidate Plan - 2026-05-06
 
+Legacy plan note: this records an earlier robustness-gate plan. Future agents
+should start from `AGENTS.md`, `README.md`, `docs/milestones/README.md`, and
+`docs/server_runbook.md` before using this file.
+
 This is the next robustness gate after the six-paper baseline block and the
 fusion/external-only diagnostics.
 

@@ -32,6 +32,10 @@ Week1-4 / pony12 observation
 
 Canonical navigation starts here:
 
+- [AGENTS.md](AGENTS.md) is the required first-read contract for future
+  Codex/agent work: project direction, senior baseline advice, non-toy
+  experiment standards, multi-agent collaboration, server paste-back protocol,
+  and GitHub push hygiene.
 - [docs/milestones/README.md](docs/milestones/README.md) defines the M0-M6
   milestone map, evidence levels, and agent roles.
 - [docs/top_conference_review_gate.md](docs/top_conference_review_gate.md)
@@ -41,6 +45,10 @@ Canonical navigation starts here:
 
 Legacy Week8 logs and plans remain in the tree for history, but they are not
 the preferred starting point anymore. Use the canonical docs above first.
+
+Future agents should not rely on chat memory. If the working direction,
+baseline status, command surface, or table eligibility changes, update the
+canonical docs and push the change after smoke/readiness checks.
 
 The current defended spine is:
 

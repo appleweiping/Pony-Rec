@@ -78,3 +78,22 @@ Use these roles in future multi-agent work:
 | Literature Scout | top-conference sources, related work, protocol expectations |
 | Reviewer Agent | overclaim audit, fairness audit, ablations, statistical validity |
 
+## Multi-Agent Handoff Rules
+
+For broad research or implementation tasks, use multi-agent collaboration.
+Every agent handoff should state:
+
+- current milestone and files inspected;
+- whether the work affects a main claim, supplementary evidence, or diagnostic
+  evidence;
+- blockers and server commands needed next;
+- output/provenance paths;
+- whether a result is eligible for a main table.
+
+The Reviewer Agent can veto overclaims, toy shortcuts, and baseline rows that
+do not pass the fairness/provenance gates. The Server Runner reports commands,
+logs, PIDs, output paths, and failures; it does not change claim boundaries.
+
+Root-level [AGENTS.md](../../AGENTS.md) is the operating contract for future
+agents. If a milestone status changes, update this file and the relevant M-file
+rather than relying on a chat handoff.

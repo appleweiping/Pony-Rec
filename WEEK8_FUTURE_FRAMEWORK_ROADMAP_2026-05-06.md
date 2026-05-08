@@ -1,5 +1,9 @@
 # Week8 Future Framework Roadmap - 2026-05-06
 
+Legacy roadmap note: keep this as historical planning context. The current
+agent contract and source of truth are `AGENTS.md`, `README.md`,
+`docs/milestones/README.md`, and `docs/paper_claims_and_status.md`.
+
 This note keeps the post-large-scale plan explicit so later Codex chats do not
 forget the shadow/light/LoRA/generated-title direction.
 

@@ -1,7 +1,10 @@
 # Codex Handoff - Week8 Large-Scale and External Baselines - 2026-05-06
 
-This file is the current working handoff for the next Codex chat. Read this
-first before changing scripts or rerunning experiments.
+Legacy note: this file is retained for historical context. Future agents should
+not start here and should not treat it as the current source of truth. Start
+from `AGENTS.md`, `README.md`, `docs/milestones/README.md`,
+`docs/paper_claims_and_status.md`, `docs/top_conference_review_gate.md`, and
+`docs/server_runbook.md`.
 
 ## Canonical First-Read Files
 

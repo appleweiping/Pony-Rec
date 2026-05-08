@@ -12,6 +12,7 @@ from src.utils.exp_io import load_yaml
 
 
 REQUIRED_FILES = [
+    "AGENTS.md",
     "README.md",
     "docs/milestones/README.md",
     "docs/milestones/M0_week1_4_pony12_observation.md",
@@ -50,10 +51,18 @@ REQUIRED_FILES = [
 ]
 
 REQUIRED_TEXT = {
+    "AGENTS.md": [
+        "Senior Baseline Advice",
+        "Official External Baseline Guardrails",
+        "Multi-Agent Collaboration",
+        "Server Collaboration",
+        "GitHub And Documentation Hygiene",
+    ],
     "docs/milestones/README.md": [
         "M0 Week1-4 / pony12 observation",
         "M6 Complete recommendation-system roadmap",
         "Milestone Architect",
+        "Multi-Agent Handoff Rules",
     ],
     "docs/top_conference_review_gate.md": [
         "RecSys",
@@ -65,6 +74,7 @@ REQUIRED_TEXT = {
         "python main_project_readiness_check.py",
         "*_official_qwen3base_*",
         "--plan_stage run",
+        "Paste-back template",
     ],
     "docs/paper_claims_and_status.md": [
         "Milestone claim eligibility",

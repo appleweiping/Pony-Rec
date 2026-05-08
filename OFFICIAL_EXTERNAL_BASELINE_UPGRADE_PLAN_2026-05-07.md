@@ -6,6 +6,11 @@ change is the standard of evidence, not the candidate protocol or result schema:
 all final rows use the same train/valid/test candidate packages and the same
 `source_event_id,user_id,item_id,score` score import path.
 
+For future agents, root-level `AGENTS.md` is binding. In particular, an
+`official` runner name, wrapper, or adapter plan row is not evidence by itself;
+only unblocked provenance plus exact score/import/stat-test gates can upgrade a
+row to `official_completed`.
+
 ## Target Standard
 
 Final paper-facing external baselines should satisfy:

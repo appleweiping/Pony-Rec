@@ -14,12 +14,17 @@ python main_project_readiness_check.py
 Read these files before launching heavy work:
 
 ```text
+AGENTS.md
 docs/milestones/README.md
 docs/top_conference_review_gate.md
 CODEX_HANDOFF_WEEK8_2026-05-06.md
 WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
 OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
 ```
+
+The agent normally cannot see this server. Do not assume server state from
+local files. Paste back command outputs when something is run, especially logs,
+PIDs, audit summaries, and missing-file errors.
 
 ## Current Priority Order
 
@@ -55,6 +60,20 @@ Monitor:
 tail -f "$LOG"
 ps -p $(cat outputs/summary/logs/week8_fourdomain_100neg_full_external.pid) -o pid=,etime=,cmd=
 ```
+
+Paste-back template for the user:
+
+```bash
+git status --short --branch
+echo "LOG=$LOG"
+tail -n 80 "$LOG"
+ps -p $(cat outputs/summary/logs/week8_fourdomain_100neg_full_external.pid) -o pid=,etime=,cmd=
+ls -lh outputs/summary outputs/baselines 2>/dev/null | head -80
+```
+
+If a command fails, paste the full traceback plus the command that produced it.
+The next agent should patch locally, push to GitHub, and give a `git pull
+--ff-only` recovery command.
 
 Stop:
 
@@ -139,3 +158,21 @@ preferred first-read files:
 - `WEEK8_OURS_EXTERNAL_COMBO_AND_EXTERNAL_ONLY_PLAN_2026-05-06.md`
 
 Use them only when you need historical detail for that specific stage.
+
+## GitHub Push Convention
+
+After code/config/doc changes that affect server commands or project status:
+
+```bash
+python main_project_readiness_check.py
+python main_audit_official_fairness_policy.py
+git status --short
+git add <related files only>
+git commit -m "<milestone/status message>"
+git push origin main
+```
+
+Do not push bulk `outputs/`, raw logs, model weights, local datasets, or keys.
+Push source, configs, provenance schemas, manifests, and concise docs. If a
+server artifact is too large or ignored by git, record its path and regeneration
+command in the final answer or runbook.
