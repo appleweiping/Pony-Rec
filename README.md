@@ -118,6 +118,9 @@ The repository includes:
   the shared score gate.
 - SRPD trainable-framework tooling with leakage audit hooks, sample-weighted
   LoRA loss support, and exact-score export for internal ablation rows.
+- Fail-fast SRPD formal large-domain templates that require validation-side
+  teachers, reject test-derived teacher paths, require weighted loss, and default
+  to `same_schema_internal_ablation`.
 - Generative-title bridge status tracking, explicitly outside the primary
   claim until fully completed.
 - Official external-baseline upgrade contract for adapting pinned upstream

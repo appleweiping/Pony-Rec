@@ -458,6 +458,94 @@ def _run_actual_training(
     tokenizer.save_pretrained(str(ctx.adapter_output_dir))
 
 
+def _contains_test_marker(path: str | Path | None) -> bool:
+    if not path:
+        return False
+    lowered = str(path).replace("\\", "/").lower()
+    return any(marker in lowered for marker in ("/test", "_test", "test_", "ranking_test", "candidate_test"))
+
+
+def _validate_formal_srpd_training_policy(config: dict[str, Any], ctx: TrainingRunContext) -> None:
+    policy = config.get("formal_policy", {}) or {}
+    if not bool(policy.get("enabled", False)):
+        return
+
+    if str(ctx.method_family).upper() != "SRPD":
+        raise ValueError("formal_policy.enabled is currently supported only for method_family=SRPD.")
+
+    for key, path in {
+        "train_input_path": ctx.train_input_path,
+        "valid_input_path": ctx.valid_input_path,
+        "eval_input_path": ctx.eval_input_path,
+    }.items():
+        if not path.exists():
+            raise FileNotFoundError(f"Formal SRPD training requires existing {key}: {path}")
+
+    if _contains_test_marker(ctx.train_input_path) or _contains_test_marker(ctx.valid_input_path):
+        raise ValueError(
+            "Formal SRPD refuses train/valid input paths that look test-derived: "
+            f"train={ctx.train_input_path}, valid={ctx.valid_input_path}"
+        )
+
+    teacher_cfg = config.get("support_signals", {}).get("structured_risk_teacher_data_config", "")
+    if bool(policy.get("require_teacher_data_config", True)) and not teacher_cfg:
+        raise ValueError("Formal SRPD requires support_signals.structured_risk_teacher_data_config.")
+
+    if teacher_cfg:
+        teacher_config_path = Path(str(teacher_cfg))
+        if not teacher_config_path.exists():
+            raise FileNotFoundError(f"Formal SRPD teacher data config not found: {teacher_config_path}")
+        teacher_config = load_yaml(teacher_config_path)
+        teacher_policy = teacher_config.get("formal_policy", {}) or {}
+        if not bool(teacher_policy.get("enabled", False)):
+            raise ValueError("Formal SRPD teacher data config must also enable formal_policy.")
+        if str(teacher_policy.get("default_status_label", "same_schema_internal_ablation")) != "same_schema_internal_ablation":
+            raise ValueError("Formal SRPD teacher data config must default to same_schema_internal_ablation.")
+        for key in ("base_input_path", "structured_risk_teacher_path"):
+            teacher_path = Path(str(teacher_config.get(key, "")))
+            if not teacher_path.exists():
+                raise FileNotFoundError(f"Formal SRPD teacher config requires existing {key}: {teacher_path}")
+            if _contains_test_marker(teacher_path):
+                raise ValueError(f"Formal SRPD refuses test-derived teacher config path for {key}: {teacher_path}")
+        expected_outputs = {
+            "train_input_path": Path(str(teacher_config.get("output_train_path", ""))),
+            "valid_input_path": Path(str(teacher_config.get("output_valid_path", ""))),
+        }
+        actual_outputs = {
+            "train_input_path": ctx.train_input_path,
+            "valid_input_path": ctx.valid_input_path,
+        }
+        mismatched_outputs = {
+            key: {"expected": str(expected_outputs[key]), "actual": str(actual_outputs[key])}
+            for key in expected_outputs
+            if expected_outputs[key] != actual_outputs[key]
+        }
+        if mismatched_outputs:
+            raise ValueError(
+                "Formal SRPD train/valid inputs must match the teacher data config outputs: "
+                f"{mismatched_outputs}"
+            )
+        leakage_audit_value = str(teacher_config.get("leakage_audit_path", "")).strip()
+        if not leakage_audit_value:
+            raise ValueError("Formal SRPD teacher data config must declare leakage_audit_path.")
+        leakage_audit_path = Path(leakage_audit_value)
+        if not leakage_audit_path.exists():
+            raise FileNotFoundError(
+                "Formal SRPD training requires a completed leakage audit from data build: "
+                f"{leakage_audit_path}"
+            )
+        with leakage_audit_path.open("r", encoding="utf-8") as fh:
+            leakage_audit = json.load(fh)
+        if leakage_audit.get("leakage_status") != "passed":
+            raise ValueError(f"Formal SRPD leakage audit did not pass: {leakage_audit}")
+
+    if bool(policy.get("require_weighted_loss", True)) and not bool(ctx.training_cfg.get("use_sample_weights", False)):
+        raise ValueError("Formal SRPD requires training.use_sample_weights=true.")
+
+    if str(policy.get("default_status_label", "same_schema_internal_ablation")) != "same_schema_internal_ablation":
+        raise ValueError("Formal SRPD default_status_label must remain same_schema_internal_ablation.")
+
+
 def run_lora_rank_training(
     config_path: str | Path,
     *,
@@ -468,6 +556,7 @@ def run_lora_rank_training(
 ) -> dict[str, Any]:
     config = load_yaml(config_path)
     ctx = build_training_run_context(config)
+    _validate_formal_srpd_training_policy(config, ctx)
     _ensure_run_dirs(ctx)
 
     training_cfg = ctx.training_cfg

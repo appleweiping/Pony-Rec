@@ -106,6 +106,7 @@ main_build_week8_same_candidate_pointwise_inputs.py
 main_run_week8_shadow_v6_gate_sweep.py
 main_select_ccrp_variant_on_valid.py
 main_export_srpd_scores_from_predictions.py
+main_make_srpd_formal_commands.py
 main_build_week8_generated_title_verification_scaffold.py
 main_make_week8_future_framework_commands.py
 main_build_week8_lora_framework_scaffold.py
@@ -195,6 +196,7 @@ main_compare_srpd_frameworks.py
 main_compare_framework.py
 main_rank_rerank.py
 main_export_srpd_scores_from_predictions.py
+main_make_srpd_formal_commands.py
 src/training/
 src/methods/uncertainty_ranker.py
 configs/srpd/
@@ -208,6 +210,10 @@ SRPD is the trainable framework/ablation line. Formal SRPD rows require
 leakage-clean teacher data, weighted loss when sample weights are claimed,
 exact score export, and import as same_schema_internal_ablation unless native
 candidate scores and all main gates are complete.
+Formal large10000_100neg templates are available under
+`configs/srpd/*_large10000_100neg_srpd_v6_formal.yaml` and
+`configs/lora/*_large10000_100neg_srpd_v6_formal.yaml`; they intentionally fail
+if validation-side teacher files are missing or test-derived paths are used.
 ```
 
 ## External LLM-Rec Baselines

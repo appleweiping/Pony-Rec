@@ -68,6 +68,13 @@ def normalize_artifact_class(status_label: str, artifact_class: str) -> str:
     return artifact
 
 
+def comparison_scope_for_status(status_label: str) -> str:
+    status = str(status_label or "").strip()
+    if status.startswith("same_schema_internal_"):
+        return "week8_same_candidate_internal_method"
+    return "week8_same_candidate_external_baseline"
+
+
 def _text(value: Any) -> str:
     if value is None:
         return ""
@@ -312,7 +319,7 @@ def main() -> None:
     result_row = {
         "baseline_name": args.baseline_name,
         "domain": args.domain,
-        "comparison_scope": "week8_same_candidate_external_baseline",
+        "comparison_scope": comparison_scope_for_status(args.status_label),
         "task": "candidate_ranking",
         "status_label": args.status_label,
         "artifact_class": artifact_class,

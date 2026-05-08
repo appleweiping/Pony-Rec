@@ -249,6 +249,52 @@ def _load_event_ids(path: str | Path | None) -> set[str]:
     return _event_ids(load_jsonl(source))
 
 
+def _contains_test_marker(path: str | Path | None) -> bool:
+    if not path:
+        return False
+    lowered = str(path).replace("\\", "/").lower()
+    markers = ("/test", "_test", "test_", "ranking_test", "candidate_test")
+    return any(marker in lowered for marker in markers)
+
+
+def _validate_formal_srpd_policy(config: dict[str, Any]) -> None:
+    policy = config.get("formal_policy", {}) or {}
+    if not bool(policy.get("enabled", False)):
+        return
+
+    if str(policy.get("default_status_label", "same_schema_internal_ablation")) != "same_schema_internal_ablation":
+        raise ValueError("Formal SRPD default_status_label must remain same_schema_internal_ablation.")
+
+    required_paths = ["base_input_path", "structured_risk_teacher_path"]
+    missing = [key for key in required_paths if not str(config.get(key, "")).strip()]
+    if missing:
+        raise ValueError(f"Formal SRPD requires explicit train/valid teacher inputs; missing={missing}")
+
+    if bool(policy.get("require_train_valid_teacher", True)):
+        for key in required_paths:
+            path = Path(str(config[key]))
+            if not path.exists():
+                raise FileNotFoundError(
+                    f"Formal SRPD requires an existing non-test teacher/input file for {key}: {path}"
+                )
+
+    if bool(policy.get("forbid_test_teacher_paths", True)):
+        forbidden = [
+            (key, str(config.get(key, "")))
+            for key in ("base_input_path", "structured_risk_teacher_path", "pairwise_preference_path")
+            if _contains_test_marker(config.get(key))
+        ]
+        if forbidden:
+            raise ValueError(
+                "Formal SRPD refuses test-derived teacher/input paths. "
+                f"Forbidden paths: {forbidden}"
+            )
+
+    leakage_cfg = config.get("leakage_audit", {}) or {}
+    if bool(policy.get("require_leakage_audit", True)) and not leakage_cfg.get("eval_input_path"):
+        raise ValueError("Formal SRPD requires leakage_audit.eval_input_path for the final held-out eval events.")
+
+
 def _audit_srpd_leakage(
     *,
     train_rows: list[dict[str, Any]],
@@ -448,6 +494,7 @@ def _build_dpo_style_preferences(
 
 def build_srpd_rank_data(config_path: str | Path) -> dict[str, Any]:
     config = _load_yaml_config(config_path)
+    _validate_formal_srpd_policy(config)
     stage = str(config.get("srpd_stage", "v1")).strip().lower()
     if stage not in {"v1", "v2", "v3", "v4", "v5", "v6"}:
         raise ValueError(f"Unsupported srpd_stage: {stage}")

@@ -1,0 +1,92 @@
+run_name: electronics_large10000_100neg_srpd_v6_formal
+domain: electronics
+task: candidate_ranking
+method_family: SRPD
+method_variant: SRPD-v6_formal_gap_gated_preference_sft
+model_name: qwen3_8b_local
+base_model_config: configs/model/qwen3_8b_local.yaml
+prompt_path: prompts/candidate_ranking.txt
+
+formal_policy:
+  enabled: true
+  require_teacher_data_config: true
+  require_weighted_loss: true
+  default_status_label: same_schema_internal_ablation
+
+train_input_path: outputs/summary/week8_srpd_formal_data/electronics/train.jsonl
+valid_input_path: outputs/summary/week8_srpd_formal_data/electronics/valid.jsonl
+eval_input_path: outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/ranking_test.jsonl
+
+adapter_output_dir: artifacts/adapters/electronics_large10000_100neg_srpd_v6_formal
+framework_output_dir: outputs/electronics_large10000_100neg_srpd_v6_formal
+logs_dir: artifacts/logs/electronics_large10000_100neg_srpd_v6_formal
+output_root: outputs
+
+topk: 10
+seed: 20260506
+
+model:
+  model_name_or_path: /home/ajifang/models/Qwen/Qwen3-8B
+  tokenizer_name_or_path: /home/ajifang/models/Qwen/Qwen3-8B
+  device: cuda
+  device_map: auto
+  dtype: bfloat16
+  local_files_only: true
+  trust_remote_code: true
+
+training:
+  dry_run: false
+  use_sample_weights: true
+  num_train_epochs: 2.0
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 0.00008
+  warmup_ratio: 0.05
+  max_seq_length: 1024
+  logging_steps: 10
+  save_strategy: "no"
+  eval_strategy: "epoch"
+  gradient_checkpointing: true
+  bf16: true
+  fp16: false
+  include_reason: false
+  preference_sft:
+    enabled: true
+    include_ranking_examples: true
+    prompt_path: prompts/pairwise_preference.txt
+    max_pairs_per_sample: 4
+    include_reason: false
+  bias: none
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+evaluation:
+  framework_exp_name: electronics_large10000_100neg_srpd_v6_formal
+  run_inference_after_train: true
+  batch_size: 4
+  max_new_tokens: 96
+  status_label: same_schema_internal_ablation
+  artifact_class: completed_result
+
+support_signals:
+  structured_risk_teacher_data_config: configs/srpd/electronics_large10000_100neg_srpd_v6_formal.yaml
+
+summary:
+  train_status_path: outputs/summary/week8_srpd_formal/electronics_train_status.csv
+  framework_compare_path: outputs/summary/week8_srpd_formal/electronics_framework_compare.csv
+  framework_compare_markdown_path: outputs/summary/week8_srpd_formal/electronics_framework_compare.md
+  startup_check_path: outputs/summary/week8_srpd_formal/electronics_startup_check.json
+  dataset_preview_path: outputs/summary/week8_srpd_formal/electronics_dataset_preview.csv
+  training_summary_path: artifacts/logs/electronics_large10000_100neg_srpd_v6_formal/training_summary.csv
+  framework_manifest_path: outputs/electronics_large10000_100neg_srpd_v6_formal/framework_run_manifest.json
+  framework_metrics_path: outputs/electronics_large10000_100neg_srpd_v6_formal/tables/ranking_metrics.csv

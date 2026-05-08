@@ -72,6 +72,9 @@ paired-test gates pass.
 - `docs/shadow_method.md`
 - `main_select_ccrp_variant_on_valid.py`
 - `main_export_srpd_scores_from_predictions.py`
+- `main_make_srpd_formal_commands.py`
+- `configs/srpd/*_large10000_100neg_srpd_v6_formal.yaml`
+- `configs/lora/*_large10000_100neg_srpd_v6_formal.yaml`
 - `src/shadow/`
 - `prompts/shadow_v1_relevance_probability.txt`
 - `prompts/shadow_v6_signal_to_decision.txt`
