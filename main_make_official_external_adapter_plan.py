@@ -13,6 +13,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate official external adapter implementation plan commands.")
     parser.add_argument("--config", default="configs/official_external_baselines.yaml")
     parser.add_argument("--domains", default="beauty,books,electronics,movies")
+    parser.add_argument(
+        "--methods",
+        default="",
+        help="Optional comma-separated method subset, for example llm2rec.",
+    )
     parser.add_argument("--output_path", default="outputs/summary/official_external_adapter_plan.sh")
     parser.add_argument(
         "--plan_stage",
@@ -42,15 +47,31 @@ def _dataset(domain: str) -> str:
     }[domain]
 
 
+def _valid_task(domain: str) -> str:
+    exp = _exp_prefix(domain)
+    return f"outputs/baselines/external_tasks/{exp}_valid_same_candidate"
+
+
 def _parse_domains(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _parse_methods(value: str, cfg: dict[str, Any]) -> list[str]:
+    available = list((cfg.get("official_baselines") or {}).keys())
+    selected = [item.strip() for item in value.split(",") if item.strip()]
+    if not selected:
+        return available
+    missing = [item for item in selected if item not in available]
+    if missing:
+        raise ValueError(f"Unknown methods in --methods: {', '.join(missing)}")
+    return selected
 
 
 def _runner_name(method: str) -> str:
     return f"main_run_{method}_official_same_candidate_adapter.py"
 
 
-def _plan_rows(cfg: dict[str, Any], domains: list[str], *, plan_stage: str) -> list[dict[str, str]]:
+def _plan_rows(cfg: dict[str, Any], domains: list[str], methods: list[str], *, plan_stage: str) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     policy = cfg.get("fairness_policy", {}) or {}
     backbone = cfg.get("backbone_policy", {}) or {}
@@ -58,7 +79,9 @@ def _plan_rows(cfg: dict[str, Any], domains: list[str], *, plan_stage: str) -> l
     comparison_variant = str(policy.get("primary_table_variant", ""))
     backbone_path = str(policy.get("unified_backbone_path") or backbone.get("base_model_path") or "")
     backbone_family = str(policy.get("unified_backbone_family") or backbone.get("base_model_family") or "")
-    for method, method_cfg in (cfg.get("official_baselines") or {}).items():
+    official_baselines = cfg.get("official_baselines") or {}
+    for method in methods:
+        method_cfg = official_baselines[method]
         target_name = str(method_cfg["target_baseline_name"])
         contract = method_cfg.get("fairness_contract", {}) or {}
         for domain in domains:
@@ -105,34 +128,47 @@ def _commands(rows: list[dict[str, str]], *, plan_stage: str) -> list[str]:
         "",
     ]
     for row in rows:
+        runner_command = [
+            "python",
+            row["runner"],
+            "--stage",
+            _q(row["plan_stage"]),
+            "--task_dir",
+            _q(row["task_dir"]),
+            "--valid_task_dir",
+            _q(_valid_task(row["domain"])),
+            "--domain",
+            _q(row["domain"]),
+            "--output_scores_path",
+            _q(row["scores_path"]),
+            "--fairness_policy_id",
+            _q(row["fairness_policy_id"]),
+            "--comparison_variant",
+            _q(row["comparison_variant"]),
+            "--backbone_path",
+            _q(row["backbone_path"]),
+            "--hparam_policy",
+            _q(row["hparam_policy"]),
+            "--provenance_output_path",
+            _q(row["provenance_path"]),
+        ]
+        if row["method"] == "llm2rec":
+            runner_command.extend(
+                [
+                    "--embedding_backend",
+                    "hf_mean_pool",
+                    "--embedding_max_length",
+                    "128",
+                    "--hf_device_map",
+                    "auto",
+                ]
+            )
+        if plan_stage == "inspect":
+            runner_command.append("--allow_blocked_exit_zero")
         commands.extend(
             [
                 f"# {row['domain']} / {row['method']}",
-                " ".join(
-                    [
-                        "python",
-                        row["runner"],
-                        "--stage",
-                        _q(row["plan_stage"]),
-                        "--task_dir",
-                        _q(row["task_dir"]),
-                        "--domain",
-                        _q(row["domain"]),
-                        "--output_scores_path",
-                        _q(row["scores_path"]),
-                        "--fairness_policy_id",
-                        _q(row["fairness_policy_id"]),
-                        "--comparison_variant",
-                        _q(row["comparison_variant"]),
-                        "--backbone_path",
-                        _q(row["backbone_path"]),
-                        "--hparam_policy",
-                        _q(row["hparam_policy"]),
-                        "--provenance_output_path",
-                        _q(row["provenance_path"]),
-                        "--allow_blocked_exit_zero" if plan_stage == "inspect" else "",
-                    ]
-                ),
+                " ".join(runner_command),
                 "",
             ]
         )
@@ -183,7 +219,7 @@ def _commands(rows: list[dict[str, str]], *, plan_stage: str) -> list[str]:
 def main() -> None:
     args = parse_args()
     cfg = load_yaml(args.config)
-    rows = _plan_rows(cfg, _parse_domains(args.domains), plan_stage=args.plan_stage)
+    rows = _plan_rows(cfg, _parse_domains(args.domains), _parse_methods(args.methods, cfg), plan_stage=args.plan_stage)
     output_path = Path(args.output_path).expanduser()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text("\n".join(_commands(rows, plan_stage=args.plan_stage)) + "\n", encoding="utf-8")

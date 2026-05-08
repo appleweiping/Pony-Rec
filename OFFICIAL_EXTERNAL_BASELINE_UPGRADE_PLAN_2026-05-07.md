@@ -123,6 +123,14 @@ Future label after this plan is completed:
 official-code-level same-candidate adapted baselines
 ```
 
+LLM2Rec now has an execution runner in the unified official adapter stack. It
+still becomes paper-facing only per domain after the server run produces
+`implementation_status=official_completed`, an unblocked provenance file, and a
+passing exact score audit. The runner preserves the official LLM2Rec
+`evaluate_with_seqrec.py` / `seqrec.runner.Runner` SASRec training route and
+uses local bridge code only for data installation, Qwen3-8B item embedding
+generation, and exact same-candidate score export.
+
 ## Pinned Official Sources
 
 The implementation contract is machine-readable in:

@@ -134,6 +134,49 @@ python main_run_official_same_candidate_adapter.py \
   --allow_blocked_exit_zero
 ```
 
+## LLM2Rec Four-Domain Official Run
+
+LLM2Rec is the first official-code-level adapter wired for execution. Its run
+stage is not a toy scorer: it exports the same-candidate task into LLM2Rec's
+native `data/<alias>/downstream` layout, patches the pinned official checkout's
+dataset maps, generates Qwen3-8B item text embeddings, invokes the official
+`evaluate_with_seqrec.py` / `seqrec.runner.Runner` SASRec training path, then
+exports exact same-candidate scores with the shared schema.
+
+First regenerate the four-domain plan:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python main_make_official_external_adapter_plan.py --methods llm2rec --plan_stage run
+```
+
+For LLM2Rec only, a direct four-domain launch is:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+mkdir -p outputs/summary/logs
+LOG=outputs/summary/logs/week8_llm2rec_official_fourdomain_$(date +%F_%H%M%S).log
+PID=outputs/summary/logs/week8_llm2rec_official_fourdomain.pid
+nohup bash scripts/run_week8_llm2rec_official_fourdomain.sh > "$LOG" 2>&1 &
+echo $! > "$PID"
+disown
+echo "log=$LOG"
+echo "pid_file=$PID"
+```
+
+Monitor with:
+
+```bash
+tail -f "$LOG"
+ps -p $(cat "$PID") -o pid=,etime=,cmd=
+```
+
+Only after each domain writes `implementation_status=official_completed`,
+`blockers=[]`, and the score audit prints `audit_ok=True`, import its row into
+the same-candidate summary table. Failed domains can be rerun after fixing the
+reported blocker; the adapter package and embeddings are deterministic and can
+be reused unless `--force_embeddings` is passed.
+
 ## Output Interpretation
 
 - `*_style_*` rows are paper-style supplementary diagnostics.

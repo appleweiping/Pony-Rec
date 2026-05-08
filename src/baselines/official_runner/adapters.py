@@ -11,14 +11,11 @@ from src.baselines.official_runner.contract import (
     resolve_repo_dir_text,
     text,
 )
+from src.baselines.official_runner.llm2rec import run_llm2rec_official
 
 
 METHOD_BLOCKERS = {
-    "llm2rec": [
-        "missing_official_training_wrapper_for_seqrec_checkpoint",
-        "need_checkpoint_path_from_pinned_llm2rec_training",
-        "need_qwen3_item_embedding_path_from_declared_embedding_stage",
-    ],
+    "llm2rec": [],
     "llmesr": [
         "need_official_entrypoint_audit_for_pinned_llmesr_repo",
         "need_default_hparam_source_from_pinned_llmesr_repo",
@@ -86,9 +83,11 @@ def inspect_official_adapter(
         official_entrypoint=OFFICIAL_ENTRYPOINT_HINTS.get(args.method, "to_be_inspected"),
         score_coverage_rate=None,
         extra={
-            "runner_support_level": "inspect_scaffold",
+            "runner_support_level": "official_llm2rec_qwen3base_sasrec" if args.method == "llm2rec" else "inspect_scaffold",
             "runner_note": (
-                "This provenance scaffold intentionally does not mark the row official_completed. "
+                "LLM2Rec run support is implemented, but inspect stage never marks a row official_completed."
+                if args.method == "llm2rec"
+                else "This provenance scaffold intentionally does not mark the row official_completed. "
                 "Implement the method adapter against the pinned official repo before importing main-table scores."
             ),
         },
@@ -96,6 +95,8 @@ def inspect_official_adapter(
 
 
 def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], method_cfg: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
+    if args.method == "llm2rec":
+        return run_llm2rec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"

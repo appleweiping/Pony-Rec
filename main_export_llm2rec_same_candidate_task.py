@@ -17,6 +17,15 @@ def parse_args() -> argparse.Namespace:
         )
     )
     parser.add_argument("--task_dir", required=True, help="Directory exported by main_export_same_candidate_baseline_task.py.")
+    parser.add_argument(
+        "--valid_task_dir",
+        default="",
+        help=(
+            "Optional validation same-candidate task directory. When provided, "
+            "LLM2Rec val_data.txt is built from its positive events while "
+            "test_data.txt remains built from --task_dir."
+        ),
+    )
     parser.add_argument("--exp_name", default=None)
     parser.add_argument("--output_root", default="outputs")
     parser.add_argument("--dataset_alias", default="PonySameCandidate")
@@ -78,11 +87,15 @@ def _source_event_id(row: dict[str, str]) -> str:
 def _build_user_item_maps(
     train_rows: list[dict[str, str]],
     candidate_rows: list[dict[str, str]],
+    valid_candidate_rows: list[dict[str, str]] | None = None,
 ) -> tuple[dict[str, int], dict[str, int]]:
     user_ids = {_text(row.get("user_id")) for row in train_rows}
     user_ids.update(_text(row.get("user_id")) for row in candidate_rows)
     item_ids = {_text(row.get("item_id")) for row in train_rows}
     item_ids.update(_text(row.get("item_id")) for row in candidate_rows)
+    if valid_candidate_rows:
+        user_ids.update(_text(row.get("user_id")) for row in valid_candidate_rows)
+        item_ids.update(_text(row.get("item_id")) for row in valid_candidate_rows)
 
     user_ids.discard("")
     item_ids.discard("")
@@ -201,8 +214,17 @@ def _load_item_metadata(task_dir: Path) -> dict[str, dict[str, str]]:
 def _merge_item_catalogs(
     candidate_rows: list[dict[str, str]],
     item_metadata: dict[str, dict[str, str]] | None = None,
+    extra_candidate_rows: list[dict[str, str]] | None = None,
 ) -> dict[str, dict[str, str]]:
     catalog = _item_catalog_from_rows(candidate_rows)
+    if extra_candidate_rows:
+        extra_catalog = _item_catalog_from_rows(extra_candidate_rows)
+        for item_id, info in extra_catalog.items():
+            current = catalog.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
+            if info.get("candidate_title") and not current["candidate_title"]:
+                current["candidate_title"] = info["candidate_title"]
+            if info.get("candidate_text") and not current["candidate_text"]:
+                current["candidate_text"] = info["candidate_text"]
     if item_metadata:
         for item_id, info in item_metadata.items():
             current = catalog.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
@@ -218,8 +240,9 @@ def _item_text_seed_rows(
     item_to_idx: dict[str, int],
     *,
     item_metadata: dict[str, dict[str, str]] | None = None,
+    extra_candidate_rows: list[dict[str, str]] | None = None,
 ) -> list[dict[str, Any]]:
-    catalog = _merge_item_catalogs(candidate_rows, item_metadata)
+    catalog = _merge_item_catalogs(candidate_rows, item_metadata, extra_candidate_rows=extra_candidate_rows)
     rows = []
     for item_id, item_idx in sorted(item_to_idx.items(), key=lambda pair: pair[1]):
         info = catalog.get(item_id, {})
@@ -245,8 +268,9 @@ def _item_titles_payload(
     item_to_idx: dict[str, int],
     *,
     item_metadata: dict[str, dict[str, str]] | None = None,
+    extra_candidate_rows: list[dict[str, str]] | None = None,
 ) -> dict[str, str]:
-    catalog = _merge_item_catalogs(candidate_rows, item_metadata)
+    catalog = _merge_item_catalogs(candidate_rows, item_metadata, extra_candidate_rows=extra_candidate_rows)
     return {
         str(item_idx): _text(catalog.get(item_id, {}).get("candidate_title")) or item_id
         for item_id, item_idx in sorted(item_to_idx.items(), key=lambda pair: pair[1])
@@ -279,6 +303,7 @@ def export_llm2rec_package(
     exp_name: str,
     output_root: Path,
     dataset_alias: str = "PonySameCandidate",
+    valid_task_dir: Path | None = None,
 ) -> dict[str, Any]:
     train_path = task_dir / "train_interactions.csv"
     candidate_path = task_dir / "candidate_items.csv"
@@ -293,26 +318,45 @@ def export_llm2rec_package(
 
     train_rows = _read_csv(train_path)
     candidate_rows = _read_csv(candidate_path)
+    valid_candidate_rows: list[dict[str, str]] | None = None
+    valid_candidate_path = None
+    if valid_task_dir is not None:
+        valid_candidate_path = valid_task_dir / "candidate_items.csv"
+        if not valid_candidate_path.exists():
+            raise FileNotFoundError(f"validation candidate_items.csv not found: {valid_candidate_path}")
+        valid_candidate_rows = _read_csv(valid_candidate_path)
     item_metadata = _load_item_metadata(task_dir)
-    user_to_idx, item_to_idx = _build_user_item_maps(train_rows, candidate_rows)
+    user_to_idx, item_to_idx = _build_user_item_maps(train_rows, candidate_rows, valid_candidate_rows)
     train_sequences = _group_train_sequences(train_rows, user_to_idx, item_to_idx)
     event_rows, event_index_by_source = _candidate_event_rows(candidate_rows, train_sequences, user_to_idx, item_to_idx)
+    valid_event_rows = event_rows
+    if valid_candidate_rows is not None:
+        valid_event_rows, _ = _candidate_event_rows(valid_candidate_rows, train_sequences, user_to_idx, item_to_idx)
     mapped_candidates = _candidate_mapped_rows(candidate_rows, user_to_idx, item_to_idx, event_index_by_source)
 
     train_seq_rows = [seq for _, seq in sorted(train_sequences.items()) if len(seq) >= 2]
+    valid_seq_rows = [
+        [int(part) for part in row["sequence_with_label"].split()]
+        for row in sorted(valid_event_rows, key=lambda item: int(item["llm2rec_test_row_idx"]))
+    ]
     test_seq_rows = [
         [int(part) for part in row["sequence_with_label"].split()]
         for row in sorted(event_rows, key=lambda item: int(item["llm2rec_test_row_idx"]))
     ]
     all_item_marker_rows = [[item_idx] for item_idx in range(1, len(item_to_idx) + 1)]
-    data_rows = [*train_seq_rows, *test_seq_rows, *all_item_marker_rows]
+    data_rows = [*train_seq_rows, *valid_seq_rows, *test_seq_rows, *all_item_marker_rows]
 
     data_count = _write_sequence_lines(data_rows, llm2rec_data_dir / "data.txt")
     train_count = _write_sequence_lines(train_seq_rows, llm2rec_data_dir / "train_data.txt")
-    valid_count = _write_sequence_lines(test_seq_rows, llm2rec_data_dir / "val_data.txt")
+    valid_count = _write_sequence_lines(valid_seq_rows, llm2rec_data_dir / "val_data.txt")
     test_count = _write_sequence_lines(test_seq_rows, llm2rec_data_dir / "test_data.txt")
     _write_json(
-        _item_titles_payload(candidate_rows, item_to_idx, item_metadata=item_metadata),
+        _item_titles_payload(
+            candidate_rows,
+            item_to_idx,
+            item_metadata=item_metadata,
+            extra_candidate_rows=valid_candidate_rows,
+        ),
         llm2rec_data_dir / "item_titles.json",
     )
 
@@ -329,7 +373,12 @@ def export_llm2rec_package(
     _write_csv(_user_map_rows(user_to_idx), output_dir / "user_id_map.csv", ["user_id", "llm2rec_user_idx"])
     _write_csv(_item_map_rows(item_to_idx), output_dir / "item_id_map.csv", ["item_id", "llm2rec_item_idx"])
     _write_csv(
-        _item_text_seed_rows(candidate_rows, item_to_idx, item_metadata=item_metadata),
+        _item_text_seed_rows(
+            candidate_rows,
+            item_to_idx,
+            item_metadata=item_metadata,
+            extra_candidate_rows=valid_candidate_rows,
+        ),
         output_dir / "item_text_seed.csv",
         ["item_id", "llm2rec_item_idx", "candidate_title", "embedding_text", "title_source"],
     )
@@ -348,6 +397,7 @@ def export_llm2rec_package(
         "artifact_class": "adapter_package",
         "upstream_repo": "https://github.com/HappyPointer/LLM2Rec",
         "source_task_dir": str(task_dir),
+        "source_valid_task_dir": str(valid_task_dir) if valid_task_dir is not None else "",
         "source_metadata": source_metadata,
         "dataset_alias": dataset_alias,
         "llm2rec_data_dir": str(llm2rec_data_dir),
@@ -371,6 +421,9 @@ def export_llm2rec_package(
         "test_sequence_rows": test_count,
         "candidate_events": len(event_rows),
         "candidate_rows": len(candidate_rows),
+        "valid_candidate_events": len(valid_event_rows),
+        "valid_candidate_rows": len(valid_candidate_rows or candidate_rows),
+        "valid_candidate_items_path": str(valid_candidate_path) if valid_candidate_path else "",
         "required_score_schema": ["source_event_id", "user_id", "item_id", "score"],
         "upstream_adapter_blockers": [
             "LLM2Rec hard-codes dataset aliases and source_dict paths; wrapper must register dataset_alias and llm2rec_data_dir.",
@@ -404,6 +457,7 @@ def main() -> None:
         exp_name=exp_name,
         output_root=Path(args.output_root).expanduser(),
         dataset_alias=args.dataset_alias,
+        valid_task_dir=Path(args.valid_task_dir).expanduser() if args.valid_task_dir else None,
     )
     print(f"Saved LLM2Rec adapter package: {Path(metadata['candidate_items_mapped_path']).parent}")
     print(

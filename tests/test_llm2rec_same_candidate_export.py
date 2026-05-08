@@ -182,3 +182,86 @@ def test_llm2rec_sentence_embedding_generator_writes_padded_upstream_npy(tmp_pat
     upstream_path = repo_dir / "item_info" / "beauty_same_candidate" / "pony_qwen3_8b_title_item_embs.npy"
     assert upstream_path.exists()
     assert np.load(upstream_path).shape == (5, 8)
+
+
+def test_llm2rec_export_uses_separate_validation_task(tmp_path):
+    task_dir = tmp_path / "books_test_same_candidate"
+    valid_task_dir = tmp_path / "books_valid_same_candidate"
+    _write_csv(
+        task_dir / "train_interactions.csv",
+        [
+            {"user_id": "u1", "item_id": "i1", "timestamp": 1, "sequence_index": 0},
+            {"user_id": "u1", "item_id": "i2", "timestamp": 2, "sequence_index": 1},
+        ],
+        ["user_id", "item_id", "timestamp", "sequence_index"],
+    )
+    rows = [
+        {
+            "source_event_id": "u1::4",
+            "user_id": "u1",
+            "timestamp": 4,
+            "candidate_index": 0,
+            "item_id": "i3",
+            "label": 1,
+            "is_positive": 1,
+            "candidate_title": "Test Positive",
+        },
+        {
+            "source_event_id": "u1::4",
+            "user_id": "u1",
+            "timestamp": 4,
+            "candidate_index": 1,
+            "item_id": "i4",
+            "label": 0,
+            "is_positive": 0,
+            "candidate_title": "Test Negative",
+        },
+    ]
+    valid_rows = [
+        {
+            "source_event_id": "u1::3",
+            "user_id": "u1",
+            "timestamp": 3,
+            "candidate_index": 0,
+            "item_id": "i5",
+            "label": 1,
+            "is_positive": 1,
+            "candidate_title": "Valid Positive",
+        },
+        {
+            "source_event_id": "u1::3",
+            "user_id": "u1",
+            "timestamp": 3,
+            "candidate_index": 1,
+            "item_id": "i6",
+            "label": 0,
+            "is_positive": 0,
+            "candidate_title": "Valid Negative",
+        },
+    ]
+    fieldnames = [
+        "source_event_id",
+        "user_id",
+        "timestamp",
+        "candidate_index",
+        "item_id",
+        "label",
+        "is_positive",
+        "candidate_title",
+    ]
+    _write_csv(task_dir / "candidate_items.csv", rows, fieldnames)
+    _write_csv(valid_task_dir / "candidate_items.csv", valid_rows, fieldnames)
+
+    metadata = export_llm2rec_package(
+        task_dir,
+        exp_name="books_llm2rec_adapter",
+        output_root=tmp_path / "outputs",
+        dataset_alias="BooksSameCandidate",
+        valid_task_dir=valid_task_dir,
+    )
+
+    data_dir = tmp_path / "outputs" / "baselines" / "paper_adapters" / "books_llm2rec_adapter" / "llm2rec" / "data" / "BooksSameCandidate" / "downstream"
+    assert metadata["valid_candidate_rows"] == 2
+    assert metadata["candidate_rows"] == 2
+    assert (data_dir / "val_data.txt").read_text(encoding="utf-8").strip().endswith("5")
+    assert (data_dir / "test_data.txt").read_text(encoding="utf-8").strip().endswith("3")
