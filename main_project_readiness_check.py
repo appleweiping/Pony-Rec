@@ -38,6 +38,13 @@ REQUIRED_FILES = [
     "main_audit_official_external_repos.py",
     "main_audit_official_fairness_policy.py",
     "main_make_official_external_adapter_plan.py",
+    "main_run_official_same_candidate_adapter.py",
+    "main_run_llm2rec_official_same_candidate_adapter.py",
+    "main_run_llmesr_official_same_candidate_adapter.py",
+    "main_run_llmemb_official_same_candidate_adapter.py",
+    "main_run_rlmrec_official_same_candidate_adapter.py",
+    "main_run_irllrec_official_same_candidate_adapter.py",
+    "main_run_setrec_official_same_candidate_adapter.py",
     "main_import_same_candidate_baseline_scores.py",
     "main_project_bootstrap.py",
 ]
@@ -57,6 +64,7 @@ REQUIRED_TEXT = {
         "git pull --ff-only",
         "python main_project_readiness_check.py",
         "*_official_qwen3base_*",
+        "--plan_stage run",
     ],
     "docs/paper_claims_and_status.md": [
         "Milestone claim eligibility",

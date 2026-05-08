@@ -213,6 +213,12 @@ monolithic training entry point.
   standardized comparison contract before heavy training starts.
 - `main_make_official_external_adapter_plan.py` generates the four-domain x
   six-method official adapter command plan with fairness provenance arguments.
+  Its default `inspect` stage writes blocker/provenance reports; `--plan_stage
+  run` should be used only after a method adapter has a real official-code
+  implementation.
+- `main_run_official_same_candidate_adapter.py` is the unified official runner
+  entry point. The six `main_run_<method>_official_same_candidate_adapter.py`
+  files are thin wrappers for the plan generator.
 - `main_project_readiness_check.py` is the lightweight post-pull sanity check
   for the canonical milestone/reviewer/server-runbook layer.
 - `main_export_*_same_candidate_task.py` scripts materialize unified
@@ -583,6 +589,10 @@ Immediate repository priorities:
   and score coverage.
 - Upgrade LLM2Rec and LLM-ESR first because partial official adapter paths
   already exist.
+- Use the official runner in `inspect` stage first; it records blockers without
+  importing scores. A row becomes main-table eligible only after the method
+  adapter emits exact scores, writes passing provenance, and can run under
+  `--plan_stage run`.
 - Add official adapters for LLMEmb, RLMRec, IRLLRec, and SETRec by preserving
   each method's algorithm and only replacing the LLM/text representation source
   with the shared Qwen3-8B base plus the method-appropriate adapter or

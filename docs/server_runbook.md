@@ -70,6 +70,18 @@ python main_audit_official_fairness_policy.py
 python main_make_official_external_adapter_plan.py
 ```
 
+The default adapter plan is `inspect` stage. It writes provenance and blocker
+reports for all 24 domain/method rows, but it does not import scores. This is
+intentional: rows must not become `official_completed` until a method adapter
+actually calls the pinned official implementation and emits exact candidate
+scores.
+
+Use run stage only after the target method adapter is implemented:
+
+```bash
+python main_make_official_external_adapter_plan.py --plan_stage run
+```
+
 Do not import official-baseline rows into main comparison tables until:
 
 ```text
@@ -85,6 +97,22 @@ source_event_id,user_id,item_id,score score file emitted
 exact score-key coverage verified
 finite numeric scores verified
 paired-test inputs generated
+```
+
+The unified runner entry point is:
+
+```bash
+python main_run_official_same_candidate_adapter.py \
+  --method llm2rec \
+  --stage inspect \
+  --domain books \
+  --task_dir outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate \
+  --output_scores_path outputs/baselines/official_adapters/books_large10000_100neg_llm2rec_official/llm2rec_official_scores.csv \
+  --provenance_output_path outputs/baselines/official_adapters/books_large10000_100neg_llm2rec_official/fairness_provenance.json \
+  --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 \
+  --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation \
+  --backbone_path /home/ajifang/models/Qwen/Qwen3-8B \
+  --allow_blocked_exit_zero
 ```
 
 ## Output Interpretation
