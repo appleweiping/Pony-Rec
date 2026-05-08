@@ -48,7 +48,7 @@ def _audit_config(cfg: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, A
     policy = cfg.get("fairness_policy", {}) or {}
     top_row = {
         "policy_id": policy.get("policy_id", ""),
-        "policy_version": policy.get("policy_version", ""),
+        "policy_version": _text(policy.get("policy_version", "")),
         "primary_table_variant": policy.get("primary_table_variant", ""),
         "official_code_required": policy.get("official_code_required", ""),
         "unified_backbone_required": policy.get("unified_backbone_required", ""),
@@ -215,6 +215,7 @@ def main() -> int:
             },
             indent=2,
             ensure_ascii=False,
+            default=str,
         )
         + "\n",
         encoding="utf-8",
