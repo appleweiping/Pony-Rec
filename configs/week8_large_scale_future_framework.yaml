@@ -31,9 +31,15 @@ shadow:
   pointwise_output_dir: outputs/summary/week8_large10000_100neg_shadow_inputs
   command_output_path: outputs/summary/week8_large10000_100neg_shadow_commands.sh
   gate_sweep_output_dir: outputs/summary/week8_large10000_100neg_shadow_v6_gate_sweep
+  ccrp_formal_output_dir: outputs/summary/week8_large10000_100neg_ccrp_formal
   gate_thresholds: [0.05, 0.1, 0.15, 0.2, 0.3]
   uncertainty_thresholds: [0.5, 0.6, 0.65, 0.7, 0.8]
   anchor_conflict_penalties: [0.25, 0.5, 0.75]
+  ccrp_score_modes: [confidence_only, evidence_only, confidence_plus_evidence, full]
+  ccrp_ablations: [full, without_calibration_gap, without_evidence_support, without_counterevidence, without_risk_penalty]
+  ccrp_etas: [0.5, 1.0, 2.0]
+  ccrp_confidence_weights: [0.5, 0.7, 0.9]
+  ccrp_selection_metric: NDCG@10
   default_anchor_mode: direct_llm_rank
   artifact_class: diagnostic
 

@@ -237,6 +237,11 @@ def main() -> None:
     )
 
     artifact_class = normalize_artifact_class(args.status_label, args.artifact_class)
+    strict_same_schema_statuses = {
+        "same_schema_external_baseline",
+        "same_schema_internal_method",
+        "same_schema_internal_ablation",
+    }
     if args.status_label == "same_schema_external_baseline" and "scaffold" in artifact_class:
         raise ValueError(
             "Refusing to import a scaffold artifact as same_schema_external_baseline. "
@@ -282,12 +287,12 @@ def main() -> None:
 
     coverage = float(score_summary.get("score_coverage_rate", 0.0))
     if (
-        args.status_label == "same_schema_external_baseline"
+        args.status_label in strict_same_schema_statuses
         and not args.allow_partial_scores
         and coverage + 1.0e-12 < args.min_score_coverage
     ):
         raise ValueError(
-            "Refusing to write same_schema_external_baseline with partial score coverage: "
+            f"Refusing to write {args.status_label} with partial score coverage: "
             f"score_coverage_rate={coverage:.6f}, required>={args.min_score_coverage:.6f}, "
             f"matched_candidates={score_summary.get('matched_candidates')}, "
             f"total_candidates={score_summary.get('total_candidates')}, "

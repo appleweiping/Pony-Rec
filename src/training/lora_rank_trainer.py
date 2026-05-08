@@ -120,6 +120,7 @@ def _examples_to_records(examples: list[RankSupervisedExample]) -> list[dict[str
             "target_text": example.target_text,
             "positive_item_id": example.positive_item_id,
             "candidate_item_ids": example.candidate_item_ids,
+            "sample_weight": example.sample_weight,
         }
         for example in examples
     ]
@@ -160,7 +161,7 @@ def _build_training_dataset(
         labels = full_ids[:]
         prompt_length = min(len(prompt_ids), len(labels))
         labels[:prompt_length] = [-100] * prompt_length
-        records.append({"input_ids": full_ids, "labels": labels})
+        records.append({"input_ids": full_ids, "labels": labels, "sample_weight": float(example.sample_weight)})
 
     dataset = Dataset.from_list(records)
 
@@ -173,6 +174,53 @@ def _build_training_dataset(
     # that breaks Hugging Face Datasets' torch formatter, while the Transformers
     # data collator can tensorize these text-only records directly.
     return dataset
+
+
+def _trainer_with_optional_weighted_loss(base_trainer_cls, *, use_sample_weights: bool):
+    if not use_sample_weights:
+        return base_trainer_cls
+
+    class WeightedLossTrainer(base_trainer_cls):
+        def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
+            sample_weight = inputs.pop("sample_weight", None)
+            if sample_weight is None:
+                kwargs = {"return_outputs": return_outputs}
+                if "num_items_in_batch" in inspect.signature(super().compute_loss).parameters:
+                    kwargs["num_items_in_batch"] = num_items_in_batch
+                return super().compute_loss(model, inputs, **kwargs)
+
+            labels = inputs.get("labels")
+            outputs = model(**inputs)
+            logits = outputs.get("logits") if isinstance(outputs, dict) else outputs.logits
+
+            import torch
+
+            shift_logits = logits[..., :-1, :].contiguous()
+            shift_labels = labels[..., 1:].contiguous()
+            loss_fct = torch.nn.CrossEntropyLoss(reduction="none")
+            token_loss = loss_fct(
+                shift_logits.view(-1, shift_logits.size(-1)),
+                shift_labels.view(-1),
+            ).view(shift_labels.size())
+            token_mask = (shift_labels != -100).float()
+            example_loss = (token_loss * token_mask).sum(dim=1) / token_mask.sum(dim=1).clamp_min(1.0)
+            weights = sample_weight.to(example_loss.device).float()
+            loss = (example_loss * weights).sum() / weights.sum().clamp_min(1.0)
+            return (loss, outputs) if return_outputs else loss
+
+    return WeightedLossTrainer
+
+
+def _collator_with_sample_weight(base_collator):
+    def collate(features):
+        import torch
+
+        weights = [float(feature.pop("sample_weight", 1.0)) for feature in features]
+        batch = base_collator(features)
+        batch["sample_weight"] = torch.tensor(weights, dtype=torch.float32)
+        return batch
+
+    return collate
 
 
 def _build_training_arguments(training_arguments_cls, ctx: TrainingRunContext):
@@ -392,12 +440,18 @@ def _run_actual_training(
 
     training_args = _build_training_arguments(TrainingArguments, ctx)
 
-    trainer = Trainer(
+    use_sample_weights = bool(ctx.training_cfg.get("use_sample_weights", False))
+    trainer_cls = _trainer_with_optional_weighted_loss(
+        Trainer,
+        use_sample_weights=use_sample_weights,
+    )
+    collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model, padding=True)
+    trainer = trainer_cls(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=valid_dataset,
-        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model, padding=True),
+        data_collator=_collator_with_sample_weight(collator) if use_sample_weights else collator,
     )
     trainer.train()
     trainer.save_model(str(ctx.adapter_output_dir))

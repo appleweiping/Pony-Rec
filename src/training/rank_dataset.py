@@ -18,6 +18,7 @@ class RankSupervisedExample:
     target_text: str
     positive_item_id: str
     candidate_item_ids: list[str]
+    sample_weight: float = 1.0
 
 
 def load_rank_samples(path: str | Path, max_samples: int | None = None) -> list[dict[str, Any]]:
@@ -85,14 +86,48 @@ def _build_target_text(
     include_reason: bool,
 ) -> str:
     ranked_item_ids = _normalize_target_ranking(sample, topk=topk)
+    confidence = _safe_confidence_from_sample(sample)
     payload: dict[str, Any] = {
         "ranked_item_ids": ranked_item_ids,
         "topk_item_ids": ranked_item_ids,
-        "confidence": 1.0,
+        "confidence": confidence,
     }
     if include_reason:
         payload["reason"] = "The positive item should appear before other candidates in the supervised target ranking."
     return json.dumps(payload, ensure_ascii=False)
+
+
+def _safe_confidence_from_sample(sample: dict[str, Any]) -> float:
+    """Use bounded teacher reliability instead of training every target as 1.0."""
+
+    for key in ("srpd_teacher_confidence", "srpd_target_confidence", "confidence"):
+        if key not in sample:
+            continue
+        try:
+            value = float(sample[key])
+        except Exception:
+            continue
+        if value == value:
+            return max(0.05, min(0.95, value))
+
+    uncertainty = sample.get("srpd_mean_effective_uncertainty", sample.get("srpd_mean_uncertainty"))
+    try:
+        uncertainty_value = float(uncertainty)
+    except Exception:
+        return 0.75
+    if uncertainty_value != uncertainty_value:
+        return 0.75
+    return max(0.05, min(0.95, 1.0 - uncertainty_value))
+
+
+def _safe_sample_weight(sample: dict[str, Any], default: float = 1.0) -> float:
+    try:
+        weight = float(sample.get("srpd_sample_weight", default))
+    except Exception:
+        weight = default
+    if weight != weight or weight <= 0:
+        weight = default
+    return max(0.05, min(10.0, weight))
 
 
 def build_rank_supervised_examples(
@@ -117,6 +152,7 @@ def build_rank_supervised_examples(
                 target_text=target_text,
                 positive_item_id=str(sample.get("positive_item_id", "")),
                 candidate_item_ids=candidate_item_ids,
+                sample_weight=_safe_sample_weight(sample),
             )
         )
     return examples
@@ -185,6 +221,7 @@ def build_rank_preference_examples(
                     target_text=target_text,
                     positive_item_id=str(sample.get("positive_item_id", "")),
                     candidate_item_ids=[chosen, rejected],
+                    sample_weight=_safe_sample_weight(pair, default=float(pair.get("preference_weight", 1.0) or 1.0)),
                 )
             )
     return examples

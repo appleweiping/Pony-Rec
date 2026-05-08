@@ -175,7 +175,33 @@ def build_shadow_commands(cfg: dict[str, Any], domains: list[str], *, max_events
                     "--gate_thresholds", _q(_csv(shadow_cfg["gate_thresholds"])),
                     "--uncertainty_thresholds", _q(_csv(shadow_cfg["uncertainty_thresholds"])),
                     "--anchor_conflict_penalties", _q(_csv(shadow_cfg["anchor_conflict_penalties"])),
-                    "--artifact_class", _q(shadow_cfg.get("artifact_class", "diagnostic")),
+                    "--artifact_class", "diagnostic",
+                ]
+            )
+        )
+        ccrp_dir = _p(shadow_cfg.get("ccrp_formal_output_dir", "outputs/summary/week8_large10000_100neg_ccrp_formal"), domain)
+        commands.append(
+            " ".join(
+                [
+                    "python main_select_ccrp_variant_on_valid.py",
+                    "--domain", _q(domain),
+                    "--valid_ranking_path", _q(valid_rank),
+                    "--test_ranking_path", _q(test_rank),
+                    "--valid_candidate_items_path", _q(_p(domain_cfg["task_valid_dir"], "candidate_items.csv")),
+                    "--test_candidate_items_path", _q(_p(domain_cfg["task_test_dir"], "candidate_items.csv")),
+                    "--valid_signal_path", _q(_p(output_root, exp_name, "calibrated", "valid_calibrated.jsonl")),
+                    "--test_signal_path", _q(_p(output_root, exp_name, "calibrated", "test_calibrated.jsonl")),
+                    "--output_dir", _q(ccrp_dir),
+                    "--score_modes", _q(_csv(shadow_cfg.get("ccrp_score_modes", ["confidence_only", "evidence_only", "confidence_plus_evidence", "full"]))),
+                    "--ablations", _q(_csv(shadow_cfg.get("ccrp_ablations", ["full"]))),
+                    "--etas", _q(_csv(shadow_cfg.get("ccrp_etas", [1.0]))),
+                    "--confidence_weights", _q(_csv(shadow_cfg.get("ccrp_confidence_weights", [0.7]))),
+                    "--selection_metric", _q(shadow_cfg.get("ccrp_selection_metric", "NDCG@10")),
+                    "--baseline_name", _q(f"{domain}_ccrp_formal_selected"),
+                    "--import_exp_name", _q(f"{domain}_ccrp_formal_selected_same_candidate"),
+                    "--status_label", "same_schema_internal_method",
+                    "--artifact_class", "completed_result",
+                    "--import_scores",
                 ]
             )
         )

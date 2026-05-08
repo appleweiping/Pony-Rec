@@ -22,6 +22,11 @@ not a generic recommender system.
 3. Decision: risk-adjusted candidate ranking/reranking evaluated with utility,
    calibration, coverage, exposure, robustness, and paired statistical tests.
 
+C-CRP is the main internal method line. SRPD is the trainable
+framework/ablation line and becomes paper-facing only after leakage-clean
+teacher generation, weighted-loss training when claimed, exact same-candidate
+score export, and paired-test gates pass.
+
 ## Not primary claims unless completed
 
 - Generative title recommendation.
@@ -29,6 +34,8 @@ not a generic recommender system.
 - Universal cross-domain winner.
 - LoRA distillation as main novelty.
 - Shadow v2-v6 as independent main methods.
+- SRPD as a main-method substitute for external baselines unless its formal
+  train/eval gates are completed.
 - Proxy comparisons against reported numbers from incompatible protocols.
 
 ## Status labels
@@ -87,6 +94,10 @@ A row can enter the main ranking table only if all are true:
 - Official external rows require `implementation_status=official_completed`;
   `style_adapter_only` and `partial_official_adapter_exists` rows stay
   supplementary.
+- Internal formal rows require exact score export and import. C-CRP uses
+  `status_label=same_schema_internal_method`; SRPD uses
+  `status_label=same_schema_internal_ablation` unless all trainable-framework
+  gates are satisfied.
 - Runner or plan filenames containing `official` are not enough. The row must
   have unblocked provenance from the pinned official repo and pass score/import
   gates.

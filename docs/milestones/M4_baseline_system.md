@@ -12,6 +12,7 @@ project from comparing incompatible reported numbers or mixing protocols.
 | classical same-candidate | SASRec, GRU4Rec, BERT4Rec, LightGCN | local trainers available |
 | paper-style LLM-rec | LLM2Rec-style, LLM-ESR-style, LLMEmb-style, RLMRec-style, IRLLRec-style, SETRec-style | supplementary sanity block |
 | official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | contract written, adapters unfinished |
+| internal formal methods | C-CRP, SRPD | must use same score schema/importer before table claims |
 
 ## Non-Negotiable Contract
 
@@ -22,6 +23,17 @@ same metric importer
 same score schema: source_event_id,user_id,item_id,score
 same paired-test unit
 ```
+
+Internal method rows are held to the same score gate:
+
+```text
+C-CRP -> status_label=same_schema_internal_method
+SRPD  -> status_label=same_schema_internal_ablation unless leakage-clean
+         train/eval, weighted loss, and native candidate scores are complete
+```
+
+C-CRP is the main method. SRPD is our trainable framework/ablation line; it
+does not substitute for external baselines.
 
 For official external baselines:
 
@@ -57,5 +69,7 @@ the provenance checklist passes.
 - `main_audit_official_fairness_policy.py`
 - `main_make_official_external_adapter_plan.py`
 - `main_import_same_candidate_baseline_scores.py`
+- `main_select_ccrp_variant_on_valid.py`
+- `main_export_srpd_scores_from_predictions.py`
 - `main_build_external_only_baseline_comparison.py`
 - `docs/archive/legacy_root_reports/BASELINE_PAPER_AUDIT_2026-05-04.md`

@@ -113,6 +113,11 @@ The repository includes:
   mislabeled as confidence.
 - Paired bootstrap and permutation tests with Holm correction.
 - C-CRP shadow method implementation and ablations.
+- Formal C-CRP internal-method selector/exporter that selects mode and weights
+  on validation only, emits exact same-candidate score CSVs, and imports through
+  the shared score gate.
+- SRPD trainable-framework tooling with leakage audit hooks, sample-weighted
+  LoRA loss support, and exact-score export for internal ablation rows.
 - Generative-title bridge status tracking, explicitly outside the primary
   claim until fully completed.
 - Official external-baseline upgrade contract for adapting pinned upstream
@@ -287,8 +292,9 @@ See [docs/calibration_protocol.md](docs/calibration_protocol.md).
 
 ### 3. C-CRP: Calibrated Candidate Relevance Posterior
 
-C-CRP is the main task-grounded uncertainty method. It uses a calibrated
-candidate relevance posterior and defines uncertainty as:
+C-CRP is the main task-grounded uncertainty method. SRPD is the trainable
+framework/ablation line, not a substitute for external baselines. C-CRP uses a
+calibrated candidate relevance posterior and defines uncertainty as:
 
 ```text
 U = alpha * U_boundary
@@ -312,6 +318,11 @@ score = p_cal * (1 - U)^eta
 
 Default fixed weights are `alpha=0.5`, `beta=0.3`, `gamma=0.2`. Any learned or
 selected weights must be chosen on validation only.
+
+The formal C-CRP track evaluates `confidence_only`, `evidence_only`, and
+`confidence_plus_evidence` variants by exporting exact
+`source_event_id,user_id,item_id,score` rows and importing them through the
+same candidate-score gate used by baselines.
 
 See [docs/shadow_method.md](docs/shadow_method.md).
 

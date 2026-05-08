@@ -277,6 +277,83 @@ be reused unless `--force_embeddings` is passed.
 - Week7.7 compact six-candidate results and Week8 101-candidate results must
   not be mixed as direct row-level comparisons.
 
+## C-CRP And SRPD Formal Internal Methods
+
+C-CRP and SRPD are our internal method lines, but they still use the same
+candidate-score gate as external baselines. Do not call a prompt-only Shadow
+run, a local C-CRP CSV, or an SRPD training artifact paper-facing until it has
+exact score coverage and an imported same-candidate summary.
+
+C-CRP production flow:
+
+```text
+build pointwise shadow rows
+-> run Qwen3-8B shadow_v1 on valid/test
+-> calibrate on valid only
+-> select C-CRP mode/weights/eta/ablation on valid only
+-> export test source_event_id,user_id,item_id,score
+-> import with status_label=same_schema_internal_method
+```
+
+Generate and run the server command script:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python main_make_week8_future_framework_commands.py \
+  --stage shadow \
+  --domains books,electronics,movies \
+  --output_path outputs/summary/week8_large10000_100neg_ccrp_shadow_commands.sh
+
+mkdir -p outputs/summary/logs
+LOG=outputs/summary/logs/week8_ccrp_formal_$(date +%F_%H%M%S).log
+PID=outputs/summary/logs/week8_ccrp_formal.pid
+nohup bash outputs/summary/week8_large10000_100neg_ccrp_shadow_commands.sh > "$LOG" 2>&1 &
+echo $! > "$PID"
+disown
+echo "log=$LOG"
+echo "pid_file=$PID"
+```
+
+Monitor:
+
+```bash
+tail -f "$LOG"
+ps -p $(cat "$PID") -o pid=,etime=,stat=,cmd=
+```
+
+SRPD production flow is stricter because it is trainable:
+
+```text
+teacher data must come from train/valid-compatible sources
+-> leakage audit must pass against final eval events
+-> sample weights must be enabled if the variant claims weighting
+-> LoRA train/eval
+-> export exact candidate scores
+-> import as same_schema_internal_ablation unless native candidate scores and
+   all main gates are complete
+```
+
+If SRPD predictions are already available, export/import them with:
+
+```bash
+python main_export_srpd_scores_from_predictions.py \
+  --ranking_input_path outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl \
+  --candidate_items_path outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --prediction_path outputs/books_srpd_formal/predictions/rank_predictions.jsonl \
+  --output_scores_path outputs/summary/week8_srpd_formal/books/srpd_scores.csv \
+  --provenance_output_path outputs/summary/week8_srpd_formal/books/srpd_internal_provenance.json \
+  --method_variant SRPD-formal
+
+python main_import_same_candidate_baseline_scores.py \
+  --baseline_name books_srpd_formal \
+  --exp_name books_srpd_formal_same_candidate \
+  --domain books \
+  --ranking_input_path outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl \
+  --scores_path outputs/summary/week8_srpd_formal/books/srpd_scores.csv \
+  --status_label same_schema_internal_ablation \
+  --artifact_class completed_result
+```
+
 ## Legacy Entry Points
 
 These remain in the tree for history and compatibility, but they are not the

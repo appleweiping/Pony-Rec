@@ -19,15 +19,35 @@ shadow_v6 signal-to-decision bridge
 
 ## Current Interpretation
 
-Shadow v1/v6 have positive diagnostic evidence, but the complete trained
-large-scale Shadow system is not done yet.
+Shadow v1/v6 have positive diagnostic evidence. The formal internal method
+track now treats C-CRP as the main task-grounded uncertainty method and SRPD as
+the trainable framework/ablation line.
+
+The formal C-CRP track is:
+
+```text
+Qwen3-8B pointwise shadow observation
+-> validation-only calibration
+-> validation-only C-CRP mode/weight/eta/ablation selection
+-> exact same-candidate score export
+-> unified importer and paired-test gate
+```
+
+The three paper-facing C-CRP score families are:
+
+```text
+confidence_only              # calibrated confidence / SRPD-facing confidence baseline
+evidence_only                # evidence support minus counterevidence
+confidence_plus_evidence     # calibrated confidence combined with evidence, with risk penalty
+```
 
 Main missing pieces before a full Shadow-system claim:
 
-- large-scale 101-candidate Shadow v1 inference;
-- validation-selected shadow_v6 gate;
-- accept/revise/fallback controller;
-- Signal LoRA and Decision LoRA training;
+- large-scale 101-candidate Shadow v1 inference for all target domains;
+- validation-selected C-CRP configuration and imported exact score rows;
+- confidence-collapse diagnostics for confidence-only variants;
+- validation-selected shadow_v6 gate if the bridge is claimed;
+- SRPD leakage-clean teacher generation and weighted-loss training if SRPD is claimed;
 - exact same-candidate score export and paired tests.
 
 ## Paper Role
@@ -38,9 +58,10 @@ unless the missing large-scale protocol items are completed.
 Safe wording:
 
 ```text
-Shadow is a task-grounded uncertainty signal family with positive diagnostic
-evidence. The full trained Shadow recommendation system remains a staged
-extension until evaluated under the shared same-candidate protocol.
+C-CRP is our formal task-grounded uncertainty method under the controlled
+same-candidate protocol. SRPD is our trainable framework/ablation line and
+becomes paper-facing only after leakage, weighted-loss, exact-score export, and
+paired-test gates pass.
 ```
 
 ## Related Files
@@ -49,6 +70,8 @@ extension until evaluated under the shared same-candidate protocol.
 - `docs/archive/legacy_root_reports/SHADOW_V6_SERVER_DIAGNOSTIC_2026-05-04.md`
 - `docs/week7_9_shadow_observation_report.md`
 - `docs/shadow_method.md`
+- `main_select_ccrp_variant_on_valid.py`
+- `main_export_srpd_scores_from_predictions.py`
 - `src/shadow/`
 - `prompts/shadow_v1_relevance_probability.txt`
 - `prompts/shadow_v6_signal_to_decision.txt`

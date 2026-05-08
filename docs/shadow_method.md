@@ -28,6 +28,27 @@ The risk-adjusted ranking score is:
 score = p_cal * (1 - U)^eta
 ```
 
+## Formal Method Variants
+
+The formal internal method track evaluates three score families under the same
+candidate rows and importer used by external baselines:
+
+| variant | score source | paper role |
+| --- | --- | --- |
+| `confidence_only` | calibrated relevance probability | confidence baseline; must pass confidence-collapse diagnostics |
+| `evidence_only` | `clamp(evidence_support - counterevidence_strength, 0, 1)` | evidence-only C-CRP ablation |
+| `confidence_plus_evidence` / `full` | calibrated probability plus evidence with C-CRP uncertainty penalty | main C-CRP candidate |
+
+Mode, weights, `eta`, and ablations must be fixed before test or selected on
+validation only. The selected test row must be exported as:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+and imported through `main_import_same_candidate_baseline_scores.py` with
+`status_label=same_schema_internal_method`.
+
 ## Weight rule
 
 `alpha`, `beta`, and `gamma` must be fixed before test or selected on
@@ -51,16 +72,20 @@ The main method table may include these ablations:
 ## Entry point
 
 ```bash
-python main_shadow_ccrp_eval.py \
-  --input_path outputs/beauty_shadow/predictions/test_raw.jsonl \
-  --output_dir outputs/summary/shadow_ccrp \
-  --ablation full \
-  --status_label completed_result
+python main_select_ccrp_variant_on_valid.py \
+  --domain books \
+  --valid_ranking_path outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
+  --test_ranking_path outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl \
+  --valid_candidate_items_path outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/candidate_items.csv \
+  --test_candidate_items_path outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --valid_signal_path outputs/books_large10000_100neg_qwen3_shadow_v1/calibrated/valid_calibrated.jsonl \
+  --test_signal_path outputs/books_large10000_100neg_qwen3_shadow_v1/calibrated/test_calibrated.jsonl \
+  --output_dir outputs/summary/week8_large10000_100neg_ccrp_formal/books \
+  --import_scores
 ```
 
-Prompt-only shadow diagnostics are not ranking main-table evidence. Use
-`--prompt_only true` or a non-completed status label when only the signal
-parser has been exercised.
+`main_shadow_ccrp_eval.py` remains useful for local diagnostics. Prompt-only
+shadow diagnostics are not ranking main-table evidence.
 
 ## Outputs
 
@@ -68,3 +93,7 @@ parser has been exercised.
 - C-CRP diagnostic summary
 - risk-coverage curve
 - optional ranked records when pointwise candidate rows are available
+- selected validation config
+- exact same-candidate score CSV
+- internal provenance JSON
+- imported same-candidate summary when `--import_scores` is used

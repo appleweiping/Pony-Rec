@@ -234,6 +234,63 @@ def _split_records(records: list[dict[str, Any]], train_ratio: float) -> tuple[l
     return records[:split_idx], records[split_idx:]
 
 
+def _event_ids(rows: list[dict[str, Any]]) -> set[str]:
+    return {str(row.get("source_event_id", "")).strip() for row in rows if str(row.get("source_event_id", "")).strip()}
+
+
+def _load_event_ids(path: str | Path | None) -> set[str]:
+    if not path:
+        return set()
+    source = Path(path)
+    if not source.exists():
+        raise FileNotFoundError(f"SRPD leakage audit file not found: {source}")
+    if source.suffix.lower() == ".csv":
+        return {str(row.get("source_event_id", "")).strip() for row in _read_csv_rows(source) if str(row.get("source_event_id", "")).strip()}
+    return _event_ids(load_jsonl(source))
+
+
+def _audit_srpd_leakage(
+    *,
+    train_rows: list[dict[str, Any]],
+    valid_rows: list[dict[str, Any]],
+    eval_input_path: str | Path | None,
+    forbidden_event_path: str | Path | None,
+    allow_overlap: bool,
+) -> dict[str, Any]:
+    train_ids = _event_ids(train_rows)
+    valid_ids = _event_ids(valid_rows)
+    eval_ids = _load_event_ids(eval_input_path)
+    forbidden_ids = _load_event_ids(forbidden_event_path)
+    train_valid_overlap = train_ids & valid_ids
+    train_eval_overlap = train_ids & eval_ids
+    valid_eval_overlap = valid_ids & eval_ids
+    train_forbidden_overlap = train_ids & forbidden_ids
+    valid_forbidden_overlap = valid_ids & forbidden_ids
+    audit = {
+        "train_event_count": len(train_ids),
+        "valid_event_count": len(valid_ids),
+        "eval_event_count": len(eval_ids),
+        "forbidden_event_count": len(forbidden_ids),
+        "train_valid_overlap": len(train_valid_overlap),
+        "train_eval_overlap": len(train_eval_overlap),
+        "valid_eval_overlap": len(valid_eval_overlap),
+        "train_forbidden_overlap": len(train_forbidden_overlap),
+        "valid_forbidden_overlap": len(valid_forbidden_overlap),
+        "allow_overlap": bool(allow_overlap),
+    }
+    leak_count = (
+        audit["train_valid_overlap"]
+        + audit["train_eval_overlap"]
+        + audit["valid_eval_overlap"]
+        + audit["train_forbidden_overlap"]
+        + audit["valid_forbidden_overlap"]
+    )
+    audit["leakage_status"] = "leakage_allowed" if leak_count and allow_overlap else ("blocked_leakage_detected" if leak_count else "passed")
+    if leak_count and not allow_overlap:
+        raise ValueError(f"SRPD leakage audit failed: {audit}")
+    return audit
+
+
 def _positive_position(ranked_item_ids: list[str], positive_item_id: str) -> int:
     if not positive_item_id:
         return len(ranked_item_ids) + 1
@@ -487,6 +544,14 @@ def build_srpd_rank_data(config_path: str | Path) -> dict[str, Any]:
         records.append(record)
 
     train_rows, valid_rows = _split_records(records, float(config.get("train_ratio", 0.8)))
+    leakage_cfg = config.get("leakage_audit", {}) or {}
+    leakage_audit = _audit_srpd_leakage(
+        train_rows=train_rows,
+        valid_rows=valid_rows,
+        eval_input_path=leakage_cfg.get("eval_input_path"),
+        forbidden_event_path=leakage_cfg.get("forbidden_event_path"),
+        allow_overlap=bool(leakage_cfg.get("allow_overlap", False)),
+    )
     output_train_path = Path(str(config["output_train_path"]))
     output_valid_path = Path(str(config["output_valid_path"]))
     save_jsonl(train_rows, output_train_path)
@@ -495,6 +560,8 @@ def build_srpd_rank_data(config_path: str | Path) -> dict[str, Any]:
     total_pairwise = sum(int(row.get("srpd_pairwise_preference_count", 0)) for row in records)
     total_dpo_style = sum(int(row.get("srpd_dpo_style_preference_count", 0)) for row in records)
     avg_weight = sum(float(row.get("srpd_sample_weight", 0.0)) for row in records) / max(len(records), 1)
+    summary_path = Path(str(config.get("summary_path", f"outputs/summary/week7_6_srpd_{stage}_data_summary.csv")))
+    leakage_audit_path = Path(str(config.get("leakage_audit_path", summary_path.with_name(summary_path.stem + "_leakage_audit.json"))))
     summary = {
         "run_name": str(config.get("run_name", f"qwen3_rank_beauty_srpd_{stage}")),
         "srpd_stage": stage,
@@ -513,13 +580,16 @@ def build_srpd_rank_data(config_path: str | Path) -> dict[str, Any]:
         "avg_sample_weight": round(avg_weight, 6),
         "avg_pairwise_preferences": round(total_pairwise / max(len(records), 1), 6),
         "avg_dpo_style_preferences": round(total_dpo_style / max(len(records), 1), 6),
+        **leakage_audit,
         "output_train_path": str(output_train_path),
         "output_valid_path": str(output_valid_path),
+        "leakage_audit_path": str(leakage_audit_path),
         "status": "srpd_teacher_data_ready" if records else "no_matched_teacher_rows",
         "notes": str(config.get("notes", "")),
     }
 
-    summary_path = Path(str(config.get("summary_path", f"outputs/summary/week7_6_srpd_{stage}_data_summary.csv")))
+    leakage_audit_path.parent.mkdir(parents=True, exist_ok=True)
+    leakage_audit_path.write_text(json.dumps(leakage_audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     _write_csv([summary], summary_path)
     markdown_path = Path(str(config.get("markdown_path", f"outputs/summary/week7_6_srpd_{stage}_data_summary.md")))
     markdown_path.parent.mkdir(parents=True, exist_ok=True)

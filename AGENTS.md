@@ -74,6 +74,18 @@ checkpoint required by that baseline's official algorithm. Full fine-tuning,
 original-backbone, and retuned-baseline rows are supplementary/sensitivity
 variants unless a new experiment-wide policy is declared.
 
+Senior-recommended paper projects and top-conference repositories may be read
+carefully as protocol and baseline-design references, but they are not a parts
+library for our method. It is acceptable to borrow high-level evidence
+discipline: pinned official implementations, same-candidate score export,
+provenance fields, default-hyperparameter policy, validation-only selection,
+and paired-test gates. Do not stitch together, rename, or silently transplant
+another paper's architecture, loss, identifier system, intent module, graph
+objective, adapter, scoring head, or training recipe into C-CRP or SRPD. If an
+external method is run, it remains an external baseline with its own provenance
+and status label; if our method changes, the change must be motivated by our
+uncertainty claim and ablated under the same protocol.
+
 ## Non-Toy Experiment Standard
 
 Do not replace hard baseline work with toy shortcuts. A result is not
@@ -178,6 +190,16 @@ documented intermediate files before starting the next domain. Do not recommend
 deleting final scores, provenance, audits, compact checkpoints, or external
 embedding artifacts unless they have been archived and the user confirms the
 archive.
+
+For our formal methods, C-CRP and SRPD must also pass same-candidate gates
+before any table claim. C-CRP is the main task-grounded uncertainty method:
+select score mode, weights, eta, and ablations on validation only, export exact
+`source_event_id,user_id,item_id,score` rows, then import as
+`same_schema_internal_method`. SRPD is a trainable framework/ablation line:
+teacher data must not be derived from final test events, leakage audits must
+pass, sample weights must enter the loss when claimed, and rank-order fallback
+scores must be labeled as internal ablation evidence rather than external
+baseline-equivalent native scores.
 
 ## GitHub And Documentation Hygiene
 

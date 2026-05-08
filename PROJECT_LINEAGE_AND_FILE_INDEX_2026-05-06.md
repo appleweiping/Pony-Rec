@@ -104,6 +104,8 @@ Scripts:
 ```text
 main_build_week8_same_candidate_pointwise_inputs.py
 main_run_week8_shadow_v6_gate_sweep.py
+main_select_ccrp_variant_on_valid.py
+main_export_srpd_scores_from_predictions.py
 main_build_week8_generated_title_verification_scaffold.py
 main_make_week8_future_framework_commands.py
 main_build_week8_lora_framework_scaffold.py
@@ -134,6 +136,7 @@ main_eval_shadow.py
 main_calibrate_shadow.py
 main_build_shadow_v6_bridge.py
 main_summarize_shadow_v1_to_v6.py
+main_select_ccrp_variant_on_valid.py
 src/shadow/
 prompts/shadow_v1_relevance_probability.txt
 prompts/shadow_v2_topk_inclusion_probability.txt
@@ -157,6 +160,9 @@ Current interpretation:
 ```text
 shadow_v1/v6 has positive diagnostic evidence, but is not yet a completed
 trained large-scale method.
+C-CRP is the formal internal method track when it selects configuration on
+validation, exports exact same-candidate scores, and imports as
+same_schema_internal_method.
 ```
 
 ## Light / Verbalized Confidence Line
@@ -188,6 +194,7 @@ main_lora_train_rank.py
 main_compare_srpd_frameworks.py
 main_compare_framework.py
 main_rank_rerank.py
+main_export_srpd_scores_from_predictions.py
 src/training/
 src/methods/uncertainty_ranker.py
 configs/srpd/
@@ -197,8 +204,10 @@ configs/lora/
 Status:
 
 ```text
-Small/medium same-candidate paper-ready block is strong. Large-scale SRPD is
-optional after external large-scale and shadow diagnostic priorities.
+SRPD is the trainable framework/ablation line. Formal SRPD rows require
+leakage-clean teacher data, weighted loss when sample weights are claimed,
+exact score export, and import as same_schema_internal_ablation unless native
+candidate scores and all main gates are complete.
 ```
 
 ## External LLM-Rec Baselines
