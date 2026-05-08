@@ -143,6 +143,13 @@ dataset maps, generates Qwen3-8B item text embeddings, invokes the official
 `evaluate_with_seqrec.py` / `seqrec.runner.Runner` SASRec training path, then
 exports exact same-candidate scores with the shared schema.
 
+For large domains, the official LLM2Rec SASRec state dict includes a duplicate
+copy of the precomputed item embedding table. The runner compacts the checkpoint
+after official training by removing that duplicated `item_embedding.weight` and
+records the operation in provenance; scoring injects the same external Qwen3
+`.npy` table before loading the model. Pass `--llm2rec_keep_full_checkpoint`
+only when you intentionally want the much larger original checkpoint.
+
 First regenerate the four-domain plan:
 
 ```bash

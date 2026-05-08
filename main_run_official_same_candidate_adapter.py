@@ -51,6 +51,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--llm2rec_item_embedding_path", default="")
     parser.add_argument("--llm2rec_link_mode", choices=["copy", "symlink"], default="copy")
     parser.add_argument("--llm2rec_skip_patch", action="store_true")
+    parser.add_argument("--llm2rec_keep_full_checkpoint", action="store_true")
     parser.add_argument("--llm2rec_ckpt_dir", default="")
     parser.add_argument("--llm2rec_log_dir", default="")
     parser.add_argument("--llm2rec_tensorboard_log_dir", default="")

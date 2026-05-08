@@ -130,6 +130,10 @@ passing exact score audit. The runner preserves the official LLM2Rec
 `evaluate_with_seqrec.py` / `seqrec.runner.Runner` SASRec training route and
 uses local bridge code only for data installation, Qwen3-8B item embedding
 generation, and exact same-candidate score export.
+On large domains, the official SASRec checkpoint is compacted after training by
+externalizing the duplicated frozen item embedding table; provenance records
+the compact checkpoint and the external Qwen3 embedding `.npy` used by the
+scorer.
 
 ## Pinned Official Sources
 

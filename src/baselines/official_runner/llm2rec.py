@@ -253,6 +253,71 @@ def _train_with_official_entrypoint(
     return summary
 
 
+def _compact_llm2rec_checkpoint(
+    checkpoint_path: Path,
+    *,
+    keep_full_checkpoint: bool,
+) -> dict[str, Any]:
+    if keep_full_checkpoint or not checkpoint_path.exists():
+        return {
+            "status": "kept_full_checkpoint",
+            "full_checkpoint_path": str(checkpoint_path),
+            "compact_checkpoint_path": "",
+            "removed_keys": [],
+            "full_checkpoint_removed": False,
+        }
+    import torch
+
+    payload = torch.load(checkpoint_path, map_location="cpu")
+    state_dict = payload.get("state_dict") if isinstance(payload, dict) and isinstance(payload.get("state_dict"), dict) else payload
+    if not isinstance(state_dict, dict):
+        return {
+            "status": "unsupported_checkpoint_payload",
+            "full_checkpoint_path": str(checkpoint_path),
+            "compact_checkpoint_path": "",
+            "removed_keys": [],
+            "full_checkpoint_removed": False,
+        }
+    remove_keys = [
+        key
+        for key, value in list(state_dict.items())
+        if key.endswith("item_embedding.weight") and hasattr(value, "ndim") and getattr(value, "ndim", 0) == 2
+    ]
+    if not remove_keys:
+        return {
+            "status": "no_large_item_embedding_key_found",
+            "full_checkpoint_path": str(checkpoint_path),
+            "compact_checkpoint_path": str(checkpoint_path),
+            "removed_keys": [],
+            "full_checkpoint_removed": False,
+        }
+    compact_path = checkpoint_path.with_name(f"{checkpoint_path.stem}.compact_no_item_embedding{checkpoint_path.suffix}")
+    for key in remove_keys:
+        state_dict.pop(key, None)
+    if isinstance(payload, dict) and isinstance(payload.get("state_dict"), dict):
+        payload["state_dict"] = state_dict
+        torch.save(payload, compact_path)
+    else:
+        torch.save(state_dict, compact_path)
+    full_size = checkpoint_path.stat().st_size
+    compact_size = compact_path.stat().st_size
+    checkpoint_path.unlink()
+    return {
+        "status": "compacted_externalized_item_embedding",
+        "full_checkpoint_path": str(checkpoint_path),
+        "compact_checkpoint_path": str(compact_path),
+        "removed_keys": remove_keys,
+        "full_checkpoint_size_bytes": full_size,
+        "compact_checkpoint_size_bytes": compact_size,
+        "full_checkpoint_removed": True,
+        "note": (
+            "The official LLM2Rec training path saved the frozen/precomputed item embedding table inside the "
+            "SASRec checkpoint. The compact checkpoint removes that duplicated table and the scorer injects "
+            "the same external Qwen3 item embedding .npy before loading the model."
+        ),
+    }
+
+
 def run_llm2rec_official(
     *,
     args: argparse.Namespace,
@@ -279,6 +344,7 @@ def run_llm2rec_official(
     prepare_summary: dict[str, Any] = {}
     embedding_summary: dict[str, Any] = {}
     training_summary: dict[str, Any] = {}
+    checkpoint_compaction_summary: dict[str, Any] = {}
     scoring_summary: dict[str, Any] = {}
     score_audit: dict[str, Any] = {}
 
@@ -350,6 +416,18 @@ def run_llm2rec_official(
 
     checkpoint_path = Path(text(training_summary.get("checkpoint_path"))).expanduser() if training_summary.get("checkpoint_path") else Path()
     if not blockers and checkpoint_path.exists():
+        checkpoint_compaction_summary = _compact_llm2rec_checkpoint(
+            checkpoint_path,
+            keep_full_checkpoint=bool(getattr(args, "llm2rec_keep_full_checkpoint", False)),
+        )
+        compact_path = text(checkpoint_compaction_summary.get("compact_checkpoint_path"))
+        if compact_path:
+            checkpoint_path = Path(compact_path).expanduser()
+            training_summary["checkpoint_path"] = str(checkpoint_path)
+        if not checkpoint_path.exists():
+            blockers.append(f"llm2rec_compact_checkpoint_missing:{checkpoint_path}")
+
+    if not blockers and checkpoint_path.exists():
         scoring_summary = score_adapter(
             adapter_dir,
             llm2rec_repo_dir=repo_dir,
@@ -379,6 +457,7 @@ def run_llm2rec_official(
         "prepare_summary": prepare_summary,
         "embedding_summary": embedding_summary,
         "training_summary": training_summary,
+        "checkpoint_compaction_summary": checkpoint_compaction_summary,
         "scoring_summary": scoring_summary,
         "score_audit": score_audit,
         "blockers": blockers,
@@ -416,6 +495,7 @@ def run_llm2rec_official(
             "adapter_or_checkpoint_path": text(training_summary.get("checkpoint_path")),
             "adapter_or_checkpoint_sha256": sha256_file(training_summary.get("checkpoint_path") or ""),
             "adapter_or_checkpoint_kind": "official_llm2rec_sasrec_checkpoint",
+            "checkpoint_compaction_summary": checkpoint_compaction_summary,
             "same_candidate_score_audit": score_audit,
             "same_candidate_score_audit_path": str(score_audit_path),
             "run_summary_path": str(run_summary_path),

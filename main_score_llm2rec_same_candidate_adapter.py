@@ -159,6 +159,32 @@ def _load_state_dict(checkpoint_path: Path, *, device: Any) -> dict[str, Any]:
     return cleaned
 
 
+def _load_state_dict_with_external_item_embedding(
+    checkpoint_path: Path,
+    *,
+    device: Any,
+    expected_items: int,
+    item_embeddings: Any,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    state_dict = _load_state_dict(checkpoint_path, device=device)
+    missing_large_keys = [
+        key
+        for key in ("item_embedding.weight", "model.item_embedding.weight")
+        if key not in state_dict
+    ]
+    injected_keys: list[str] = []
+    if "item_embedding.weight" not in state_dict:
+        torch = _torch()
+        state_dict["item_embedding.weight"] = torch.tensor(item_embeddings, dtype=torch.float32, device=device)
+        injected_keys.append("item_embedding.weight")
+    return state_dict, {
+        "external_item_embedding_injected_keys": injected_keys,
+        "checkpoint_missing_externalized_item_embedding_keys": missing_large_keys,
+        "external_item_embedding_rows": int(item_embeddings.shape[0]),
+        "external_item_embedding_expected_rows": int(expected_items + 1),
+    }
+
+
 def _load_upstream_model(
     *,
     llm2rec_repo_dir: Path,
@@ -178,12 +204,18 @@ def _load_upstream_model(
     model_cls = {"SASRec": SASRec, "GRU4Rec": GRU4Rec}[model_name]
     pretrained = torch.tensor(item_embeddings, dtype=torch.float32, device=device)
     model = model_cls(config, pretrained).to(device)
-    state_dict = _load_state_dict(checkpoint_path, device=device)
+    state_dict, external_info = _load_state_dict_with_external_item_embedding(
+        checkpoint_path,
+        device=device,
+        expected_items=int(config["item_num"]),
+        item_embeddings=item_embeddings,
+    )
     load_result = model.load_state_dict(state_dict, strict=not allow_partial_checkpoint)
     model.eval()
     return model, {
         "missing_checkpoint_keys": list(getattr(load_result, "missing_keys", [])),
         "unexpected_checkpoint_keys": list(getattr(load_result, "unexpected_keys", [])),
+        **external_info,
     }
 
 
