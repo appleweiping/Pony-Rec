@@ -52,6 +52,11 @@ Rows are eligible for the unified method matrix only when:
 - candidate protocol audit and significance testing are run before winner
   wording
 
+For new baseline work, the default reporting block should include
+`HR@5`, `NDCG@5`, `HR@10`, `NDCG@10`, `MRR`, `coverage@5`, `coverage@10`, and
+`coverage@20` when available. Keep `@20` in extended tables so later baseline
+additions can be checked beyond the top-10 slice.
+
 ### `unified_method_matrix_week77_shadow_external.csv`
 
 Use this as the current paper-facing bridge table for Week7.7 methods,

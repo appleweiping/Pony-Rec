@@ -327,6 +327,13 @@ The remaining official external LLM-rec baselines after LLM2Rec/LLM-ESR are
 LLMEmb, RLMRec, IRLLRec, and SETRec. Run the official adapter audit/plan first;
 methods without run-stage support will stay blocked by provenance.
 
+For baseline comparison tables, keep the main reading order at
+`NDCG@5`, `NDCG@10`, `HR@5`, `HR@10`, then use `@20` as the extended-check
+column when the exporter provides it. The working target for the official
+external block is eight baselines, not six: the current six are the floor, and
+two additional current-year recommendation baselines from DBLP/GitHub should be
+added as separate official-code-level rows when they are ready.
+
 ## Output Interpretation
 
 - `*_style_*` rows are paper-style supplementary diagnostics.

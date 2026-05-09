@@ -30,6 +30,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source_event_col", default="source_event_id")
     parser.add_argument("--missing_score", type=float, default=-1.0e12)
     parser.add_argument("--k", type=int, default=10)
+    parser.add_argument(
+        "--ks",
+        default="5,10,20",
+        help="Optional comma-separated metric cutoffs to export alongside the primary --k summary.",
+    )
     parser.add_argument("--artifact_class", default="completed_result")
     parser.add_argument("--status_label", default="same_schema_external_baseline")
     parser.add_argument("--min_score_coverage", type=float, default=1.0)
@@ -135,6 +140,26 @@ def _as_schema(value: Any) -> list[str]:
     if isinstance(value, list):
         return [str(item).strip() for item in value]
     return []
+
+
+def _parse_ks(value: Any, fallback_k: int) -> list[int]:
+    if isinstance(value, str):
+        values = [item.strip() for item in value.split(",") if item.strip()]
+    elif isinstance(value, (list, tuple)):
+        values = [str(item).strip() for item in value if str(item).strip()]
+    else:
+        values = []
+    parsed: list[int] = []
+    for item in values:
+        try:
+            metric_k = int(item)
+        except Exception:
+            continue
+        if metric_k > 0 and metric_k not in parsed:
+            parsed.append(metric_k)
+    if fallback_k > 0 and fallback_k not in parsed:
+        parsed.append(fallback_k)
+    return sorted(parsed)
 
 
 def _is_official_main_row(args: argparse.Namespace, artifact_class: str) -> bool:
@@ -303,6 +328,7 @@ def main() -> None:
     paths = ensure_exp_dirs(args.exp_name, args.output_root)
     ranking_samples = load_jsonl(args.ranking_input_path)
     score_rows = load_score_rows(args.scores_path)
+    ks = _parse_ks(args.ks, args.k)
     official_main_row = _is_official_main_row(args, artifact_class)
     provenance_summary: dict[str, Any] = {
         "fairness_policy_id": args.fairness_policy_id,
@@ -325,6 +351,7 @@ def main() -> None:
             score_col=args.score_col,
         )
 
+    export_topk_k = max(ks) if ks else args.k
     predictions, score_summary = build_predictions_from_external_scores(
         ranking_samples,
         score_rows,
@@ -334,7 +361,7 @@ def main() -> None:
         score_col=args.score_col,
         source_event_col=args.source_event_col,
         missing_score=args.missing_score,
-        k=args.k,
+        k=export_topk_k,
     )
     score_summary["score_rows_loaded"] = len(score_rows)
 
@@ -359,7 +386,7 @@ def main() -> None:
     import pandas as pd
 
     eval_df = build_ranking_eval_frame(pd.DataFrame(predictions))
-    metrics = compute_ranking_task_metrics(eval_df, k=args.k)
+    metrics = compute_ranking_task_metrics(eval_df, k=args.k, ks=ks)
     exposure_df = compute_ranking_exposure_distribution(eval_df, k=args.k)
 
     result_row = {

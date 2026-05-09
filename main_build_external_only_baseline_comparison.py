@@ -25,10 +25,16 @@ OUTPUT_FIELDS = [
     "display_method",
     "method",
     "sample_count",
+    "HR@5",
+    "NDCG@5",
     "HR@10",
     "NDCG@10",
+    "HR@20",
+    "NDCG@20",
     "MRR",
+    "coverage@5",
     "coverage@10",
+    "coverage@20",
     "head_exposure_ratio@10",
     "longtail_coverage@10",
     "status_label",
@@ -123,10 +129,16 @@ def build_external_only_rows(
                 "display_method": _method_label(method),
                 "method": method,
                 "sample_count": record.get("sample_count", ""),
+                "HR@5": record.get("HR@5", ""),
+                "NDCG@5": record.get("NDCG@5", ""),
                 "HR@10": record.get("HR@10", ""),
                 "NDCG@10": record.get("NDCG@10", ""),
+                "HR@20": record.get("HR@20", ""),
+                "NDCG@20": record.get("NDCG@20", ""),
                 "MRR": record.get("MRR", ""),
+                "coverage@5": record.get("coverage@5", ""),
                 "coverage@10": record.get("coverage@10", ""),
+                "coverage@20": record.get("coverage@20", ""),
                 "head_exposure_ratio@10": record.get("head_exposure_ratio@10", ""),
                 "longtail_coverage@10": record.get("longtail_coverage@10", ""),
                 "status_label": record.get("status_label", ""),
@@ -151,10 +163,16 @@ def _to_markdown(rows: list[dict[str, Any]]) -> str:
         "domain",
         "display_method",
         "sample_count",
+        "HR@5",
+        "NDCG@5",
         "HR@10",
         "NDCG@10",
+        "HR@20",
+        "NDCG@20",
         "MRR",
+        "coverage@5",
         "coverage@10",
+        "coverage@20",
         "artifact_class",
     ]
     lines = [
@@ -165,7 +183,7 @@ def _to_markdown(rows: list[dict[str, Any]]) -> str:
         values = []
         for field in fields:
             value = row.get(field, "")
-            if field in {"HR@10", "NDCG@10", "MRR", "coverage@10"}:
+            if field in {"HR@5", "NDCG@5", "HR@10", "NDCG@10", "HR@20", "NDCG@20", "MRR", "coverage@5", "coverage@10", "coverage@20"}:
                 value = _fmt_metric(value)
             values.append(str(value).replace("\n", " "))
         lines.append("| " + " | ".join(values) + " |")

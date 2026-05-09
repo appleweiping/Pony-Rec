@@ -75,80 +75,91 @@ def compute_ranking_task_metrics(
     ranking_eval_df: pd.DataFrame,
     *,
     k: int = 10,
+    ks: tuple[int, ...] | list[int] | None = None,
 ) -> dict[str, float]:
+    ks_set = {int(k)}
+    if ks is not None:
+        ks_set.update(int(value) for value in ks if int(value) > 0)
+    ks_list = sorted(ks_set)
+
     if ranking_eval_df.empty:
-        return {
+        metrics: dict[str, float] = {
             "sample_count": 0,
             "parse_success_rate": float("nan"),
             "avg_latency": float("nan"),
             "avg_confidence": float("nan"),
             "avg_candidates": float("nan"),
-            f"HR@{k}": float("nan"),
-            f"NDCG@{k}": float("nan"),
             "MRR": float("nan"),
-            f"coverage@{k}": float("nan"),
-            f"head_exposure_ratio@{k}": float("nan"),
-            f"longtail_coverage@{k}": float("nan"),
             "out_of_candidate_rate": float("nan"),
         }
+        for kk in ks_list:
+            metrics[f"HR@{kk}"] = float("nan")
+            metrics[f"NDCG@{kk}"] = float("nan")
+            metrics[f"coverage@{kk}"] = float("nan")
+            metrics[f"head_exposure_ratio@{kk}"] = float("nan")
+            metrics[f"longtail_coverage@{kk}"] = float("nan")
+        return metrics
 
     df = ranking_eval_df.copy()
-
-    topk_hits = (df["positive_rank"] <= k).astype(float)
-    ndcg = df["positive_rank"].apply(lambda rank: float(1.0 / np.log2(rank + 1)) if rank <= k else 0.0)
     mrr = df["positive_rank"].apply(lambda rank: float(1.0 / rank) if rank > 0 else 0.0)
 
-    exposed_rows: list[dict[str, str]] = []
-    all_tail_items: set[str] = set()
-    all_candidate_items: set[str] = set()
-    exposed_topk_items: set[str] = set()
-    exposed_tail_items: set[str] = set()
-
-    for record in df.to_dict(orient="records"):
-        candidate_ids = _normalize_item_list(record.get("candidate_item_ids"))
-        candidate_groups = _normalize_item_list(record.get("candidate_popularity_groups"))
-        topk_ids = _normalize_item_list(record.get("topk_item_ids"))
-        topk_groups = _normalize_item_list(record.get("topk_popularity_groups"))
-
-        all_candidate_items.update(candidate_ids)
-        for idx, item_id in enumerate(candidate_ids):
-            popularity = candidate_groups[idx] if idx < len(candidate_groups) else "unknown"
-            popularity = str(popularity).strip().lower()
-            if popularity == "tail":
-                all_tail_items.add(item_id)
-
-        for idx, item_id in enumerate(topk_ids):
-            popularity = topk_groups[idx] if idx < len(topk_groups) else "unknown"
-            popularity = str(popularity).strip().lower()
-            exposed_rows.append({"item_id": str(item_id), "popularity_group": popularity})
-            exposed_topk_items.add(str(item_id))
-            if popularity == "tail":
-                exposed_tail_items.add(str(item_id))
-
-    exposed_df = pd.DataFrame(exposed_rows)
-
-    if exposed_df.empty:
-        head_exposure_ratio = float("nan")
-    else:
-        head_exposure_ratio = float((exposed_df["popularity_group"] == "head").mean())
-
-    coverage = float(len(exposed_topk_items) / len(all_candidate_items)) if all_candidate_items else float("nan")
-    longtail_coverage = float(len(exposed_tail_items) / len(all_tail_items)) if all_tail_items else 0.0
-
-    return {
+    metrics: dict[str, float] = {
         "sample_count": int(len(df)),
         "parse_success_rate": float(df["parse_success"].mean()),
         "avg_latency": float(df["latency"].mean()),
         "avg_confidence": float(df["confidence"].mean()),
         "avg_candidates": float(df["num_candidates"].mean()),
-        f"HR@{k}": float(topk_hits.mean()),
-        f"NDCG@{k}": float(ndcg.mean()),
         "MRR": float(mrr.mean()),
-        f"coverage@{k}": coverage,
-        f"head_exposure_ratio@{k}": head_exposure_ratio,
-        f"longtail_coverage@{k}": longtail_coverage,
         "out_of_candidate_rate": float(df["contains_out_of_candidate_item"].mean()),
     }
+
+    records = df.to_dict(orient="records")
+    for kk in ks_list:
+        topk_hits = (df["positive_rank"] <= kk).astype(float)
+        ndcg = df["positive_rank"].apply(lambda rank, cutoff=kk: float(1.0 / np.log2(rank + 1)) if rank <= cutoff else 0.0)
+        exposed_rows: list[dict[str, str]] = []
+        all_tail_items: set[str] = set()
+        all_candidate_items: set[str] = set()
+        exposed_topk_items: set[str] = set()
+        exposed_tail_items: set[str] = set()
+
+        for record in records:
+            candidate_ids = _normalize_item_list(record.get("candidate_item_ids"))
+            candidate_groups = _normalize_item_list(record.get("candidate_popularity_groups"))
+            topk_ids = _normalize_item_list(record.get("topk_item_ids"))[:kk]
+            topk_groups = _normalize_item_list(record.get("topk_popularity_groups"))[:kk]
+
+            all_candidate_items.update(candidate_ids)
+            for idx, item_id in enumerate(candidate_ids):
+                popularity = candidate_groups[idx] if idx < len(candidate_groups) else "unknown"
+                popularity = str(popularity).strip().lower()
+                if popularity == "tail":
+                    all_tail_items.add(item_id)
+
+            for idx, item_id in enumerate(topk_ids):
+                popularity = topk_groups[idx] if idx < len(topk_groups) else "unknown"
+                popularity = str(popularity).strip().lower()
+                exposed_rows.append({"item_id": str(item_id), "popularity_group": popularity})
+                exposed_topk_items.add(str(item_id))
+                if popularity == "tail":
+                    exposed_tail_items.add(str(item_id))
+
+        exposed_df = pd.DataFrame(exposed_rows)
+        if exposed_df.empty:
+            head_exposure_ratio = float("nan")
+        else:
+            head_exposure_ratio = float((exposed_df["popularity_group"] == "head").mean())
+
+        coverage = float(len(exposed_topk_items) / len(all_candidate_items)) if all_candidate_items else float("nan")
+        longtail_coverage = float(len(exposed_tail_items) / len(all_tail_items)) if all_tail_items else 0.0
+
+        metrics[f"HR@{kk}"] = float(topk_hits.mean())
+        metrics[f"NDCG@{kk}"] = float(ndcg.mean())
+        metrics[f"coverage@{kk}"] = coverage
+        metrics[f"head_exposure_ratio@{kk}"] = head_exposure_ratio
+        metrics[f"longtail_coverage@{kk}"] = longtail_coverage
+
+    return metrics
 
 
 def compute_ranking_exposure_distribution(

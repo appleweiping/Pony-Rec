@@ -85,6 +85,14 @@ pending until server rows pass `official_completed`, `blockers=[]`, and exact
 score coverage. The remaining methods without run-stage support are LLMEmb,
 RLMRec, IRLLRec, and SETRec.
 
+For comparison reporting, prefer `NDCG@5`, `NDCG@10`, `HR@5`, and `HR@10` in
+the main baseline view. Keep `@20` columns in the extended tables when they are
+available, because they help show whether gains hold beyond the top-10 slice.
+The current official baseline block is a floor, not the final width target: six
+official-code-level LLM-rec baselines are now the minimum, and the working goal
+is to reach eight by adding two more current-year recommendation baselines from
+DBLP/GitHub.
+
 ## Related Files
 
 - `configs/official_external_baselines.yaml`
