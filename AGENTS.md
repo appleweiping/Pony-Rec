@@ -23,6 +23,13 @@ For baseline or experiment implementation, also read:
 Legacy Week8 handoff/roadmap files are historical context only. Do not start
 from them, and do not treat their roadmap items as completed evidence.
 
+For any complex task, the agent must also do a short discovery pass before
+acting: use `rg` to find the most relevant local docs, configs, scripts, and
+prior summaries for the requested task, then decide which extra files to read.
+The default extra reads should cover four needs: project route, task plan,
+implementation details, and execution/evidence rules. Do not rely only on the
+fixed first-read list when the task clearly touches a narrower subsystem.
+
 ## Project Direction
 
 The project is not a toy demo and not a loose collection of scripts. The
@@ -142,11 +149,27 @@ Small smoke tests are useful for code health, but they are never main evidence.
 
 ## Multi-Agent Collaboration
 
-Use multi-agent work for broad research/engineering tasks. At minimum:
+Use multi-agent work for broad or complex research/engineering tasks by
+default. A task is complex if it touches claims, baselines, experiments,
+server runs, paper readiness, method design, major refactors, or any result
+that could affect a table. At minimum:
 
 - one implementation/engineering agent;
 - one literature/protocol scout when claims or baselines are involved;
 - one reviewer/auditor agent for overclaim, fairness, and table eligibility.
+
+The literature/protocol scout should compare this project against multiple
+top-conference papers or official projects, not just one or two convenient
+examples. It may read senior-recommended projects and other RecSys/SIGIR/WSDM/
+KDD/NeurIPS-style work carefully, but only for rigor, protocol, and design
+expectations; it must not recommend stitching or copying another method into
+ours.
+
+The reviewer/auditor should behave like a top-conference reviewer. It should
+challenge rigor, novelty, technical depth, ablation completeness, baseline
+coverage, leakage risk, table eligibility, and whether the claim is still too
+broad. Reviewer objections remain blockers until addressed, downgraded, or
+explicitly documented as accepted limitations.
 
 Each sub-agent handoff should report:
 
@@ -159,6 +182,18 @@ Each sub-agent handoff should report:
 
 Reviewer/auditor findings can veto wording and table inclusion. Do not average
 away a serious reviewer objection.
+
+Every substantial final report must include both what changed or was learned
+and a concrete next-step plan. The plan must name the next server command,
+code/doc action, audit, or stopping condition. If no further experiment is
+needed, say so and explain why.
+
+Agents must keep an explicit project/experiment endgame. Do not create an
+infinite chain of "next steps." When results, baselines, ablations, audits,
+paired tests, provenance, and reviewer objections are complete enough for the
+current defended claim, tell the user that the experiment phase is basically
+closed and the project should move to writing. If important gates remain,
+state the minimum remaining gates, not an open-ended wishlist.
 
 ## Server Collaboration
 

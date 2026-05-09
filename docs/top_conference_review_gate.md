@@ -40,6 +40,13 @@ Most natural venues:
 
 Before a claim enters the paper, answer these questions.
 
+For complex work, run this as a multi-agent review: implementation/engineering,
+literature/protocol scout, and top-conference reviewer/auditor. The literature
+pass should compare against multiple relevant top-conference papers or official
+projects, using them to calibrate rigor, novelty, technical depth, ablation
+coverage, and reproducibility expectations. It must not turn those papers into
+a parts library for C-CRP or SRPD.
+
 ### Scope
 
 - Is this a completed result, a supplementary diagnostic, or a roadmap item?
@@ -112,6 +119,29 @@ At least one main paper should make these boundaries visible:
 - small-domain vs four-domain behavior;
 - compact six-candidate vs 100neg protocol separation;
 - official vs paper-style external-baseline status.
+
+### Endgame Gate
+
+Before asking for more experiments, decide whether the experiment phase should
+stop. It is reasonable to move from experiments to writing when all are true
+for the defended claim:
+
+- the claim is scoped to controlled same-candidate candidate ranking/reranking;
+- core internal method rows have validation-only selection, exact score export,
+  same-schema import, paired tests, and ablation coverage;
+- the required baseline block has either completed official-code-level rows or
+  explicitly documented limitations/supplementary status;
+- four-domain or declared-domain robustness is complete enough for the stated
+  claim, with Beauty smaller-N labeled if used;
+- leakage, candidate protocol, score coverage, provenance, and reproducibility
+  audits pass;
+- a top-conference reviewer/auditor has no unresolved major objection about
+  fairness, novelty, technical depth, or overclaiming.
+
+If these gates pass, tell the user the project is ready to enter paper writing
+and artifact packaging rather than continuing to add new experiments. If they
+do not pass, report the minimum remaining gates and avoid open-ended
+"one more baseline" drift.
 
 ## Likely Reviewer Objections
 
