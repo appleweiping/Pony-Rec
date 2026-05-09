@@ -86,7 +86,10 @@ state the baseline gap and keep those rows out of main official claims.
 
 A row can enter the main ranking table only if all are true:
 
-- `status_label == completed_result`
+- `artifact_class == completed_result`
+- `status_label` matches the row type, for example
+  `same_schema_external_baseline`, `same_schema_internal_method`, or a
+  documented completed ablation label.
 - Same-schema data, prompt, candidate construction, and metric definitions are
   used.
 - External baseline rows follow the declared comparison variant, usually
@@ -98,6 +101,11 @@ A row can enter the main ranking table only if all are true:
   `status_label=same_schema_internal_method`; SRPD uses
   `status_label=same_schema_internal_ablation` unless all trainable-framework
   gates are satisfied.
+- C-CRP formal rows must include validation-only selection provenance, input
+  hashes, exact score coverage, and score-degeneracy audit output.
+- SRPD rows that use rank-order fallback scores are internal ablations only;
+  they must not be presented as native trainable scorer results or promoted to
+  the main method table.
 - Runner or plan filenames containing `official` are not enough. The row must
   have unblocked provenance from the pinned official repo and pass score/import
   gates.

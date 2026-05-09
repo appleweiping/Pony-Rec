@@ -38,6 +38,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--implementation_status", default="")
     parser.add_argument("--provenance_path", default="")
     parser.add_argument(
+        "--method_provenance_path",
+        default="",
+        help="Optional internal-method provenance whose effective status/artifact guard must match import labels.",
+    )
+    parser.add_argument(
         "--require_fairness_provenance",
         action="store_true",
         help="Require and validate official-baseline fairness provenance before import.",
@@ -66,6 +71,41 @@ def normalize_artifact_class(status_label: str, artifact_class: str) -> str:
     if "scaffold" in status and artifact == "completed_result":
         return "adapter_scaffold_score"
     return artifact
+
+
+def _normalize_labels_from_method_provenance(
+    *,
+    status_label: str,
+    artifact_class: str,
+    method_provenance_path: str,
+) -> tuple[str, str, dict[str, Any]]:
+    if not method_provenance_path:
+        return status_label, artifact_class, {}
+    path = Path(method_provenance_path).expanduser()
+    if not path.exists():
+        raise FileNotFoundError(f"Method provenance file not found: {path}")
+    provenance = _load_json(path)
+    effective_status = _text(provenance.get("status_label")) or status_label
+    effective_artifact = _text(provenance.get("artifact_class")) or artifact_class
+    requested_status = _text(provenance.get("requested_status_label"))
+    requested_artifact = _text(provenance.get("requested_artifact_class"))
+    if requested_status and requested_status != _text(status_label):
+        raise ValueError(
+            "Import status_label does not match method provenance request: "
+            f"import={status_label}, provenance_requested={requested_status}"
+        )
+    if requested_artifact and requested_artifact != _text(artifact_class):
+        raise ValueError(
+            "Import artifact_class does not match method provenance request: "
+            f"import={artifact_class}, provenance_requested={requested_artifact}"
+        )
+    summary = {
+        "method_provenance_path": str(path),
+        "method_provenance_checked": True,
+        "requested_status_label": requested_status or status_label,
+        "requested_artifact_class": requested_artifact or artifact_class,
+    }
+    return effective_status, effective_artifact, summary
 
 
 def comparison_scope_for_status(status_label: str) -> str:
@@ -243,13 +283,18 @@ def main() -> None:
         compute_ranking_task_metrics,
     )
 
-    artifact_class = normalize_artifact_class(args.status_label, args.artifact_class)
+    status_label, requested_artifact_class, method_provenance_summary = _normalize_labels_from_method_provenance(
+        status_label=args.status_label,
+        artifact_class=args.artifact_class,
+        method_provenance_path=args.method_provenance_path,
+    )
+    artifact_class = normalize_artifact_class(status_label, requested_artifact_class)
     strict_same_schema_statuses = {
         "same_schema_external_baseline",
         "same_schema_internal_method",
         "same_schema_internal_ablation",
     }
-    if args.status_label == "same_schema_external_baseline" and "scaffold" in artifact_class:
+    if status_label == "same_schema_external_baseline" and "scaffold" in artifact_class:
         raise ValueError(
             "Refusing to import a scaffold artifact as same_schema_external_baseline. "
             "Use a non-main status_label such as llmesr_adapter_scaffold_score."
@@ -265,6 +310,7 @@ def main() -> None:
         "implementation_status": args.implementation_status,
         "provenance_path": args.provenance_path,
         "official_fairness_checked": False,
+        **method_provenance_summary,
     }
     exact_score_audit: dict[str, Any] = {}
 
@@ -294,12 +340,12 @@ def main() -> None:
 
     coverage = float(score_summary.get("score_coverage_rate", 0.0))
     if (
-        args.status_label in strict_same_schema_statuses
+        status_label in strict_same_schema_statuses
         and not args.allow_partial_scores
         and coverage + 1.0e-12 < args.min_score_coverage
     ):
         raise ValueError(
-            f"Refusing to write {args.status_label} with partial score coverage: "
+            f"Refusing to write {status_label} with partial score coverage: "
             f"score_coverage_rate={coverage:.6f}, required>={args.min_score_coverage:.6f}, "
             f"matched_candidates={score_summary.get('matched_candidates')}, "
             f"total_candidates={score_summary.get('total_candidates')}, "
@@ -319,9 +365,9 @@ def main() -> None:
     result_row = {
         "baseline_name": args.baseline_name,
         "domain": args.domain,
-        "comparison_scope": comparison_scope_for_status(args.status_label),
+        "comparison_scope": comparison_scope_for_status(status_label),
         "task": "candidate_ranking",
-        "status_label": args.status_label,
+        "status_label": status_label,
         "artifact_class": artifact_class,
         "ranking_input_path": str(args.ranking_input_path),
         "scores_path": str(args.scores_path),

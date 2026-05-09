@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 
 from src.baselines.internal_scores import (
+    audit_score_degeneracy,
     audit_score_rows_against_candidates,
     finite_float,
     read_csv_rows,
@@ -23,7 +24,7 @@ def _rank_score(rank_index: int, count: int) -> float:
     return float((count - rank_index) / count)
 
 
-def _score_from_prediction(record: dict[str, Any], item_id: str, rank_lookup: dict[str, int], count: int) -> float:
+def _native_score_from_prediction(record: dict[str, Any], item_id: str) -> float | None:
     candidate_scores = record.get("candidate_scores")
     if isinstance(candidate_scores, dict):
         value = candidate_scores.get(item_id)
@@ -33,6 +34,13 @@ def _score_from_prediction(record: dict[str, Any], item_id: str, rank_lookup: di
                     return finite_float(value[key])
         if value is not None and not isinstance(value, (list, tuple, dict)):
             return finite_float(value)
+    return None
+
+
+def _score_from_prediction(record: dict[str, Any], item_id: str, rank_lookup: dict[str, int], count: int) -> float:
+    native_score = _native_score_from_prediction(record, item_id)
+    if native_score is not None:
+        return native_score
     return _rank_score(rank_lookup.get(item_id, count), count)
 
 
@@ -46,6 +54,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--method_variant", default="SRPD")
     parser.add_argument("--status_label", default="same_schema_internal_ablation")
     parser.add_argument("--artifact_class", default="completed_result")
+    parser.add_argument(
+        "--require_native_candidate_scores",
+        action="store_true",
+        help="Fail if any event falls back to rank-order scores instead of parsed candidate_scores.",
+    )
     return parser.parse_args()
 
 
@@ -55,7 +68,8 @@ def main() -> None:
     predictions = load_jsonl(args.prediction_path)
     by_event = {text(row.get("source_event_id")): row for row in predictions if text(row.get("source_event_id"))}
     score_rows: list[dict[str, Any]] = []
-    used_rank_fallback = 0
+    rank_fallback_rows = 0
+    rank_fallback_event_ids: set[str] = set()
     for candidate in candidate_rows:
         event_id = text(candidate.get("source_event_id"))
         user_id = text(candidate.get("user_id"))
@@ -67,26 +81,54 @@ def main() -> None:
             ranked = [text(item) for item in prediction.get("pred_ranked_item_ids", []) if text(item)]
             rank_lookup = {item: idx for idx, item in enumerate(ranked)}
             count = len(ranked) or len(prediction.get("candidate_item_ids", []))
-            score = _score_from_prediction(prediction, item_id, rank_lookup, count)
-            used_rank_fallback += int(not isinstance(prediction.get("candidate_scores"), dict))
+            native_score = _native_score_from_prediction(prediction, item_id)
+            if native_score is None:
+                score = _rank_score(rank_lookup.get(item_id, count), count)
+                rank_fallback_rows += 1
+                rank_fallback_event_ids.add(event_id)
+            else:
+                score = native_score
         score_rows.append({"source_event_id": event_id, "user_id": user_id, "item_id": item_id, "score": score})
 
     audit = audit_score_rows_against_candidates(candidate_rows=candidate_rows, score_rows=score_rows)
     if not audit["audit_ok"]:
         raise ValueError(f"SRPD score coverage audit failed: {audit}")
+    degeneracy_audit = audit_score_degeneracy(score_rows)
+    if not degeneracy_audit["degeneracy_audit_ok"]:
+        raise ValueError(f"SRPD score degeneracy audit failed: {degeneracy_audit}")
+    effective_artifact_class = args.artifact_class
+    effective_status_label = args.status_label
+    fallback_policy = "native_candidate_scores"
+    if rank_fallback_rows:
+        fallback_policy = "rank_order_fallback_internal_ablation_only"
+        if args.require_native_candidate_scores:
+            raise ValueError(
+                "SRPD native score export required, but rank-order fallback was used: "
+                f"rank_order_fallback_rows={rank_fallback_rows}, "
+                f"rank_order_fallback_events={len(rank_fallback_event_ids)}"
+            )
+        if effective_artifact_class == "completed_result":
+            effective_artifact_class = "internal_ablation_rank_fallback"
+        if effective_status_label == "same_schema_internal_method":
+            effective_status_label = "same_schema_internal_ablation"
     score_summary = write_score_rows(score_rows, args.output_scores_path)
     provenance = {
         "method": "srpd",
         "method_variant": args.method_variant,
-        "status_label": args.status_label,
-        "artifact_class": args.artifact_class,
+        "status_label": effective_status_label,
+        "requested_status_label": args.status_label,
+        "artifact_class": effective_artifact_class,
+        "requested_artifact_class": args.artifact_class,
         "ranking_input_path": args.ranking_input_path,
         "candidate_items_path": args.candidate_items_path,
         "prediction_path": args.prediction_path,
         "score_source": "parsed_candidate_scores_or_rank_order_fallback",
-        "rank_order_fallback_events": used_rank_fallback,
+        "rank_order_fallback_rows": rank_fallback_rows,
+        "rank_order_fallback_events": len(rank_fallback_event_ids),
+        "rank_order_fallback_policy": fallback_policy,
         **score_summary,
         **audit,
+        **degeneracy_audit,
     }
     write_json(provenance, args.provenance_output_path)
     pd.DataFrame([provenance]).to_csv(Path(args.provenance_output_path).with_suffix(".csv"), index=False)

@@ -49,6 +49,13 @@ source_event_id,user_id,item_id,score
 and imported through `main_import_same_candidate_baseline_scores.py` with
 `status_label=same_schema_internal_method`.
 
+The formal selector records the full validation grid, selected weights, ranking
+input hashes, signal hashes, candidate hashes, exact score coverage, and a
+score-degeneracy audit. A C-CRP row is not paper-facing if the exported score
+file has constant or near-tie-only scores for candidate events, exceeds the
+declared tie-pair threshold, or if the selected configuration was chosen from
+test behavior.
+
 ## Weight rule
 
 `alpha`, `beta`, and `gamma` must be fixed before test or selected on
@@ -59,6 +66,10 @@ alpha = 0.5
 beta  = 0.3
 gamma = 0.2
 ```
+
+Additional weight triples may be searched only through the validation selector
+and must be recorded in `valid_ccrp_sweep.csv` and
+`ccrp_internal_provenance.json`.
 
 ## Required ablations
 

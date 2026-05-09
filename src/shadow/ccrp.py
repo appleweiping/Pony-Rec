@@ -47,6 +47,17 @@ CCRP_SCORE_MODES = {
 }
 
 
+def apply_ablation_to_weights(weights: CcrpWeights, ablation: str) -> CcrpWeights:
+    """Keep ablation labels faithful even when weights are grid-searched."""
+
+    ablation = str(ablation or "full").strip().lower()
+    if ablation == "without_calibration_gap":
+        return CcrpWeights(weights.boundary, 0.0, weights.evidence).normalized()
+    if ablation == "without_evidence_support":
+        return CcrpWeights(weights.boundary, weights.calibration_gap, 0.0).normalized()
+    return weights.normalized()
+
+
 def compute_ccrp_record(
     record: dict[str, Any],
     *,
@@ -64,7 +75,7 @@ def compute_ccrp_record(
     data before test evaluation.
     """
 
-    weights = (weights or CCRP_ABLATIONS.get(ablation, CCRP_ABLATIONS["full"])).normalized()
+    weights = apply_ablation_to_weights(weights or CCRP_ABLATIONS.get(ablation, CCRP_ABLATIONS["full"]), ablation)
     raw_probability = clamp01(
         record.get(
             "relevance_probability",

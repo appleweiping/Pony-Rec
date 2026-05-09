@@ -361,6 +361,7 @@ python main_import_same_candidate_baseline_scores.py \
   --domain books \
   --ranking_input_path outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --scores_path outputs/summary/week8_srpd_formal/books/srpd_scores.csv \
+  --method_provenance_path outputs/summary/week8_srpd_formal/books/srpd_internal_provenance.json \
   --status_label same_schema_internal_ablation \
   --artifact_class completed_result
 ```

@@ -99,3 +99,50 @@ def audit_score_rows_against_candidates(
         "audit_ok": not (missing or extra or duplicate_score_keys or invalid_scores or blank_keys)
         and len(score_rows) == len(candidate_rows),
     }
+
+
+def audit_score_degeneracy(
+    score_rows: list[dict[str, Any]],
+    *,
+    precision: int = 12,
+    max_tie_pair_rate: float = 0.98,
+) -> dict[str, Any]:
+    by_event: dict[str, list[float]] = {}
+    for row in score_rows:
+        event_id = text(row.get("source_event_id"))
+        if not event_id:
+            continue
+        score = finite_float(row.get("score"), default=float("nan"))
+        if math.isfinite(score):
+            by_event.setdefault(event_id, []).append(score)
+
+    event_count = len(by_event)
+    constant_event_count = 0
+    tie_pair_count = 0
+    total_pair_count = 0
+    unique_counts: list[int] = []
+    for scores in by_event.values():
+        rounded = [round(score, precision) for score in scores]
+        unique_values = set(rounded)
+        unique_counts.append(len(unique_values))
+        constant_event_count += int(len(scores) > 1 and len(unique_values) <= 1)
+        counts: dict[float, int] = {}
+        for value in rounded:
+            counts[value] = counts.get(value, 0) + 1
+        total_pair_count += max(0, len(scores) * (len(scores) - 1) // 2)
+        tie_pair_count += sum(max(0, count * (count - 1) // 2) for count in counts.values())
+
+    tie_pair_rate = tie_pair_count / total_pair_count if total_pair_count else 0.0
+    degeneracy_audit_ok = event_count > 0 and constant_event_count == 0 and tie_pair_rate <= max_tie_pair_rate
+    return {
+        "score_degeneracy_event_count": event_count,
+        "constant_score_event_count": constant_event_count,
+        "constant_score_event_rate": constant_event_count / event_count if event_count else 0.0,
+        "mean_unique_scores_per_event": sum(unique_counts) / event_count if event_count else 0.0,
+        "min_unique_scores_per_event": min(unique_counts) if unique_counts else 0,
+        "tie_pair_count": tie_pair_count,
+        "total_score_pair_count": total_pair_count,
+        "tie_pair_rate": tie_pair_rate,
+        "max_tie_pair_rate": max_tie_pair_rate,
+        "degeneracy_audit_ok": degeneracy_audit_ok,
+    }

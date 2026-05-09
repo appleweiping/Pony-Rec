@@ -83,6 +83,7 @@ def build_commands(domains: list[str], *, stage: str, startup_check_only: bool) 
                         "--domain", _q(domain),
                         "--ranking_input_path", _q(_p(task_test, "ranking_test.jsonl")),
                         "--scores_path", _q(_p(scores_dir, "srpd_scores.csv")),
+                        "--method_provenance_path", _q(_p(scores_dir, "srpd_internal_provenance.json")),
                         "--status_label", "same_schema_internal_ablation",
                         "--artifact_class", "completed_result",
                     ]

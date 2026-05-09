@@ -188,6 +188,7 @@ tb_logs/
 *.pt
 *.pth
 *.ckpt
+*.tar.gz
 
 # =========================
 # Papers / reports / local docs
