@@ -156,6 +156,7 @@ a time:
 ```text
 run one domain
 -> verify implementation_status=official_completed, blockers=[], audit_ok=True
+-> import the row with --ks 5,10,20 and rebuild the comparison table
 -> package the evidence artifact
 -> copy it to local storage with scp
 -> verify the local archive exists
@@ -171,9 +172,14 @@ same-candidate imports included in a method-level summary table. If the runner
 prints `run_stage_not_implemented_for_method`, stop and implement the pinned
 official adapter before launching expensive jobs.
 
-The completed domain package should include the score CSV, fairness provenance,
-score audit, run summary, compact checkpoint or checkpoint manifest, Qwen3 item
-embedding metadata/path/digest, and the command/log needed to reproduce the run.
+For LLM-rec official large domains, use the completed LLM2Rec large-domain
+packages as the default archive standard. The lightweight evidence package must
+include the score CSV, fairness provenance, score audit, run summary,
+training/server log, imported same-candidate predictions/tables, comparison
+summary tables, and checkpoint/embedding sha256 manifests when the checkpoint
+or embedding file is too large to archive immediately. Do not build a huge
+checkpoint tarball by default. Full checkpoints can be archived separately only
+when time and storage allow.
 
 Single-domain command template:
 
@@ -212,26 +218,59 @@ tail -f "$LOG"
 ps -p $(cat "$PID") -o pid=,etime=,stat=,cmd=
 ```
 
-Package after the domain completes:
+Package after the domain completes. Prefer this lightweight evidence package on
+large domains:
 
 ```bash
 DOMAIN=books
 EXP=books_large10000_100neg
+BASE=llm2rec_official_qwen3base_sasrec
+OUTDIR="outputs/baselines/official_adapters/${EXP}_llm2rec_official"
+LOG=$(ls -t outputs/summary/logs/week8_llm2rec_official_${DOMAIN}_*.log 2>/dev/null | head -1)
 STAMP=$(date +%F_%H%M%S)
 mkdir -p outputs/exports
-tar -czf "outputs/exports/llm2rec_${DOMAIN}_official_qwen3base_${STAMP}.tar.gz" \
-  "outputs/baselines/official_adapters/${EXP}_llm2rec_official" \
-  "outputs/baselines/paper_adapters/${EXP}_llm2rec_official_adapter" \
-  "/home/ajifang/projects/LLM2Rec/item_info/BooksLarge10000_100Neg"
-sha256sum "outputs/exports/llm2rec_${DOMAIN}_official_qwen3base_${STAMP}.tar.gz"
+
+find "$OUTDIR" -maxdepth 3 -type f \( -name "*.pt" -o -name "*.pth" \) -print0 \
+  | xargs -0 -r sha256sum > "${OUTDIR}/checkpoint_manifest.sha256"
+ADAPTER_DIR="outputs/baselines/paper_adapters/${EXP}_llm2rec_official_adapter"
+if [ -d "$ADAPTER_DIR" ]; then
+  find "$ADAPTER_DIR" -maxdepth 3 -type f \( -name "*.npy" -o -name "*.pkl" \) -print0 \
+    | xargs -0 -r sha256sum > "${OUTDIR}/embedding_manifest.sha256"
+else
+  echo "missing_adapter_dir $ADAPTER_DIR" > "${OUTDIR}/embedding_manifest.sha256"
+fi
+
+FILES=(
+  "${OUTDIR}/fairness_provenance.json"
+  "${OUTDIR}/llm2rec_official_score_audit.json"
+  "${OUTDIR}/llm2rec_official_run_summary.json"
+  "${OUTDIR}/llm2rec_official_scores.csv"
+  "${OUTDIR}/checkpoint_manifest.sha256"
+  "${OUTDIR}/embedding_manifest.sha256"
+  "outputs/${EXP}_${BASE}_same_candidate"
+  "outputs/summary/week8_official_external_qwen3base_multik_comparison.csv"
+  "outputs/summary/week8_official_external_qwen3base_multik_comparison.md"
+)
+[ -n "$LOG" ] && [ -f "$LOG" ] && FILES+=("$LOG")
+for f in \
+  "${ADAPTER_DIR}/adapter_metadata.json" \
+  "${ADAPTER_DIR}/llm2rec_embedding_metadata.json" \
+  "${ADAPTER_DIR}/llm2rec_upstream_prepare_summary.json"
+do
+  [ -f "$f" ] && FILES+=("$f")
+done
+
+tar -czf "outputs/exports/llm2rec_${DOMAIN}_official_qwen3base_evidence_${STAMP}.tar.gz" \
+  "${FILES[@]}"
+sha256sum "outputs/exports/llm2rec_${DOMAIN}_official_qwen3base_evidence_${STAMP}.tar.gz"
 ```
 
 Copy that archive from the local machine, then confirm the local file exists
 before deleting server intermediates:
 
 ```powershell
-scp pony-rec-gpu:~/projects/pony-rec-rescue-shadow-v6/outputs/exports/llm2rec_books_official_qwen3base_<STAMP>.tar.gz .
-Get-Item .\llm2rec_books_official_qwen3base_<STAMP>.tar.gz
+scp pony-rec-gpu:~/projects/pony-rec-rescue-shadow-v6/outputs/exports/llm2rec_books_official_qwen3base_evidence_<STAMP>.tar.gz .
+Get-Item .\llm2rec_books_official_qwen3base_evidence_<STAMP>.tar.gz
 ```
 
 Only after local confirmation, clean the completed domain on the server:
@@ -245,9 +284,11 @@ rm -rf /home/ajifang/projects/LLM2Rec/item_info/BooksLarge10000_100Neg
 df -h /
 ```
 
-Do not delete final scores, provenance, audits, compact checkpoints, or Qwen3
-embedding artifacts before the archive has been copied off the server and
-confirmed by the user.
+Do not delete final scores, provenance, audits, compact checkpoints, Qwen3
+embedding artifacts, or method checkpoints before the evidence archive has
+been copied off the server and confirmed by the user. If the archive check
+prints `gzip: unexpected end of file` or `tar: unexpected EOF`, delete only the
+bad archive and keep all domain outputs.
 
 ## LLM2Rec Four-Domain Convenience Wrapper
 
@@ -322,6 +363,63 @@ disown
 echo "log=$LOG"
 echo "pid_file=$PID"
 ```
+
+LLM-ESR follows the same one-domain archive-and-clean loop as LLM2Rec. Its
+large-domain checkpoints can be several GB, so the default archive is a light
+evidence package plus a model sha256 manifest. After the run and score audit
+complete, import the domain with `--ks 5,10,20`, rebuild
+`week8_official_external_qwen3base_multik_comparison`, then package:
+
+```bash
+DOMAIN=books
+EXP=books_large10000_100neg
+BASE=llmesr_official_qwen3base_sasrec
+OUTDIR="outputs/baselines/official_adapters/${EXP}_llmesr_official"
+LOG=$(ls -t outputs/summary/logs/week8_llmesr_official_${DOMAIN}_*.log 2>/dev/null | head -1)
+STAMP=$(date +%F_%H%M%S)
+mkdir -p outputs/exports
+
+if [ -f "${OUTDIR}/llmesr_official_model.pt" ]; then
+  sha256sum "${OUTDIR}/llmesr_official_model.pt" > "${OUTDIR}/llmesr_official_model.pt.sha256"
+else
+  echo "missing_model ${OUTDIR}/llmesr_official_model.pt" > "${OUTDIR}/llmesr_official_model.pt.sha256"
+fi
+
+FILES=(
+  "${OUTDIR}/fairness_provenance.json"
+  "${OUTDIR}/llmesr_official_run_summary.json"
+  "${OUTDIR}/llmesr_official_score_audit.json"
+  "${OUTDIR}/llmesr_official_scores.csv"
+  "${OUTDIR}/llmesr_official_model.pt.sha256"
+  "outputs/${EXP}_${BASE}_same_candidate"
+  "outputs/summary/week8_official_external_qwen3base_multik_comparison.csv"
+  "outputs/summary/week8_official_external_qwen3base_multik_comparison.md"
+)
+[ -n "$LOG" ] && [ -f "$LOG" ] && FILES+=("$LOG")
+
+tar -czf "outputs/exports/llmesr_${DOMAIN}_official_qwen3base_evidence_${STAMP}.tar.gz" \
+  "${FILES[@]}"
+sha256sum "outputs/exports/llmesr_${DOMAIN}_official_qwen3base_evidence_${STAMP}.tar.gz"
+ls -lh "outputs/exports/llmesr_${DOMAIN}_official_qwen3base_evidence_${STAMP}.tar.gz"
+```
+
+Copy the archive to local storage and verify it before deleting any server
+intermediates. Only after confirmation, clean the completed LLM-ESR domain:
+
+```bash
+DOMAIN=books
+EXP=books_large10000_100neg
+BASE=llmesr_official_qwen3base_sasrec
+rm -rf "outputs/baselines/official_adapters/${EXP}_llmesr_official"
+rm -rf "outputs/baselines/paper_adapters/${EXP}_llmesr_official_adapter"
+rm -rf "outputs/${EXP}_${BASE}_same_candidate"
+df -h /
+```
+
+Keep this sequence domain-by-domain. Do not start cleanup for a domain whose
+evidence archive has not been confirmed locally, and do not let a slow full
+checkpoint archive block the next domain unless the user explicitly asks for
+full checkpoint preservation.
 
 The remaining official external LLM-rec baselines after LLM2Rec/LLM-ESR are
 LLMEmb, RLMRec, IRLLRec, and SETRec. Run the official adapter audit/plan first;

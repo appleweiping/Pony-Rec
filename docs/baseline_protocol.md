@@ -79,6 +79,17 @@ partial_official_adapter_exists -> not main-table eligible
 official_completed -> eligible only if provenance, score coverage, and paired-test inputs pass
 ```
 
+For storage-heavy official LLM-rec baselines, execute and archive one
+method-domain row at a time. The completed LLM2Rec large-domain evidence
+packages are the template: keep the score CSV, fairness provenance, score
+audit, run summary, training/server log, imported prediction/table outputs,
+comparison summaries, and checkpoint/embedding sha256 manifests in a
+lightweight archive. Full checkpoints are optional separate preservation
+artifacts; they should not block the next domain unless the user explicitly
+asks for full model backup. Server-side intermediates can be deleted only after
+the corresponding evidence archive has been copied off the server and confirmed
+locally.
+
 ## Reliability proxy audit
 
 The old "baseline confidence formulation audit" is renamed:

@@ -136,7 +136,23 @@ the compact checkpoint and the external Qwen3 embedding `.npy` used by the
 scorer.
 The execution and archive unit is a single method-domain row. Four-domain
 completion is a summary state after all four method-domain rows have completed,
-not a requirement to run all domains in one server job.
+not a requirement to run all domains in one server job. For storage-heavy
+official baselines, the archival unit is also one method-domain row: finish the
+domain, verify `implementation_status=official_completed`, `blockers=[]`, exact
+score coverage, import the multi-k metrics, package a lightweight evidence
+archive, copy it off the server, confirm the local file, and only then clean
+documented server intermediates before launching the next domain.
+
+The lightweight evidence archive follows the completed LLM2Rec large-domain
+standard. It preserves `fairness_provenance.json`, score audit, run summary,
+score CSV, training/server log, imported same-candidate predictions/tables,
+comparison summaries, and checkpoint or embedding sha256 manifests. Large model
+checkpoints and full embedding matrices are not included by default unless the
+user explicitly chooses full artifact preservation; record their hashes and
+storage decision in provenance or the run summary. Never delete server-side
+scores, provenance, audits, compact checkpoints, embeddings, or method
+checkpoints before the corresponding evidence archive has been copied and
+confirmed locally.
 
 ## Pinned Official Sources
 
