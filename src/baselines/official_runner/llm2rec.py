@@ -405,14 +405,29 @@ def run_llm2rec_official(
 
     if not blockers:
         training_config = _training_config(args, dataset_alias=dataset_alias, item_embedding_path=item_embedding_path, repo_dir=repo_dir)
-        training_summary = _train_with_official_entrypoint(
-            repo_dir=repo_dir,
-            config=training_config,
-            log_path=training_log_path,
-            dry_run=dry_run,
-        )
-        if training_summary.get("status") != "completed":
-            blockers.append(text(training_summary.get("blocker")) or text(training_summary.get("status")) or "llm2rec_official_training_incomplete")
+        existing_checkpoint_arg = text(getattr(args, "adapter_or_checkpoint_path", ""))
+        existing_checkpoint = Path(existing_checkpoint_arg).expanduser() if existing_checkpoint_arg else Path()
+        if existing_checkpoint_arg:
+            if existing_checkpoint.exists():
+                training_summary = {
+                    "status": "completed",
+                    "checkpoint_path": str(existing_checkpoint),
+                    "official_training_config": training_config,
+                    "official_training_log_path": str(training_log_path),
+                    "reused_existing_checkpoint": True,
+                    "note": "Reused --adapter_or_checkpoint_path; official training was not rerun in this recovery pass.",
+                }
+            else:
+                blockers.append(f"missing_adapter_or_checkpoint_path:{existing_checkpoint}")
+        else:
+            training_summary = _train_with_official_entrypoint(
+                repo_dir=repo_dir,
+                config=training_config,
+                log_path=training_log_path,
+                dry_run=dry_run,
+            )
+            if training_summary.get("status") != "completed":
+                blockers.append(text(training_summary.get("blocker")) or text(training_summary.get("status")) or "llm2rec_official_training_incomplete")
 
     checkpoint_path = Path(text(training_summary.get("checkpoint_path"))).expanduser() if training_summary.get("checkpoint_path") else Path()
     if not blockers and checkpoint_path.exists():

@@ -167,22 +167,53 @@ def _load_state_dict_with_external_item_embedding(
     item_embeddings: Any,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     state_dict = _load_state_dict(checkpoint_path, device=device)
-    missing_large_keys = [
+    checkpoint_embedding_keys = [
         key
         for key in ("item_embedding.weight", "model.item_embedding.weight")
-        if key not in state_dict
+        if key in state_dict
     ]
-    injected_keys: list[str] = []
-    if "item_embedding.weight" not in state_dict:
-        torch = _torch()
-        state_dict["item_embedding.weight"] = torch.tensor(item_embeddings, dtype=torch.float32, device=device)
-        injected_keys.append("item_embedding.weight")
     return state_dict, {
-        "external_item_embedding_injected_keys": injected_keys,
-        "checkpoint_missing_externalized_item_embedding_keys": missing_large_keys,
+        "checkpoint_item_embedding_keys": checkpoint_embedding_keys,
+        "checkpoint_missing_externalized_item_embedding_keys": [
+            key
+            for key in ("item_embedding.weight", "model.item_embedding.weight")
+            if key not in state_dict
+        ],
         "external_item_embedding_rows": int(item_embeddings.shape[0]),
         "external_item_embedding_expected_rows": int(expected_items + 1),
     }
+
+
+def _filter_checkpoint_keys_for_model(
+    state_dict: dict[str, Any],
+    model: Any,
+    *,
+    item_embeddings: Any,
+    device: Any,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    model_keys = set(model.state_dict().keys())
+    allowed_external_keys = {"item_embedding.weight", "model.item_embedding.weight"}
+    injected_keys: list[str] = []
+    if "item_embedding.weight" in model_keys and "item_embedding.weight" not in state_dict:
+        state_dict["item_embedding.weight"] = _torch().tensor(item_embeddings, dtype=_torch().float32, device=device)
+        injected_keys.append("item_embedding.weight")
+    dropped_external_keys = sorted(key for key in state_dict if key in allowed_external_keys and key not in model_keys)
+    unexpected_keys = sorted(key for key in state_dict if key not in model_keys and key not in allowed_external_keys)
+    if unexpected_keys:
+        raise RuntimeError(
+            "LLM2Rec checkpoint has unexpected non-embedding keys. "
+            f"Refusing to silently load a mismatched checkpoint: {unexpected_keys[:20]}"
+        )
+    return (
+        {key: value for key, value in state_dict.items() if key in model_keys},
+        {
+            "dropped_external_item_embedding_keys": dropped_external_keys,
+            "external_item_embedding_injected_keys": injected_keys,
+            "model_accepts_item_embedding_weight": "item_embedding.weight" in model_keys,
+            "model_state_key_count": len(model_keys),
+            "checkpoint_state_key_count_before_filter": len(state_dict),
+        },
+    )
 
 
 def _load_upstream_model(
@@ -210,12 +241,19 @@ def _load_upstream_model(
         expected_items=int(config["item_num"]),
         item_embeddings=item_embeddings,
     )
+    state_dict, filter_info = _filter_checkpoint_keys_for_model(
+        state_dict,
+        model,
+        item_embeddings=item_embeddings,
+        device=device,
+    )
     load_result = model.load_state_dict(state_dict, strict=not allow_partial_checkpoint)
     model.eval()
     return model, {
         "missing_checkpoint_keys": list(getattr(load_result, "missing_keys", [])),
         "unexpected_checkpoint_keys": list(getattr(load_result, "unexpected_keys", [])),
         **external_info,
+        **filter_info,
     }
 
 
