@@ -48,6 +48,21 @@ OUTPUT_FIELDS = [
     "source_file",
 ]
 
+METRIC_FIELDS = [
+    "HR@5",
+    "NDCG@5",
+    "HR@10",
+    "NDCG@10",
+    "HR@20",
+    "NDCG@20",
+    "MRR",
+    "coverage@5",
+    "coverage@10",
+    "coverage@20",
+    "head_exposure_ratio@10",
+    "longtail_coverage@10",
+]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -116,6 +131,12 @@ def _method_label(method: str) -> str:
     }.get(method, method)
 
 
+def _metric_completeness(row: dict[str, Any]) -> tuple[int, int]:
+    populated = sum(1 for field in METRIC_FIELDS if str(row.get(field, "")).strip())
+    source_specificity = 1 if "large10000_100neg" in str(row.get("source_file", "")) or "supplementary_smallerN_100neg" in str(row.get("source_file", "")) else 0
+    return populated, source_specificity
+
+
 def build_external_only_rows(
     *,
     external_summary_glob: str,
@@ -157,7 +178,10 @@ def build_external_only_rows(
                 "artifact_class": record.get("artifact_class", ""),
                 "source_file": str(path),
             }
-            rows_by_domain_method[(domain, method)] = row
+            key = (domain, method)
+            current = rows_by_domain_method.get(key)
+            if current is None or _metric_completeness(row) >= _metric_completeness(current):
+                rows_by_domain_method[key] = row
 
     output: list[dict[str, Any]] = []
     for domain in domains:

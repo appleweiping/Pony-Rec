@@ -118,3 +118,47 @@ def test_external_only_comparison_includes_official_methods_by_default(tmp_path)
     assert rows[0]["method"] == "llm2rec_official_qwen3base_sasrec"
     assert rows[0]["display_method"] == "LLM2Rec official Qwen3-8B + SASRec"
     assert rows[0]["NDCG@20"] == "0.4"
+
+
+def test_external_only_comparison_prefers_more_complete_duplicate_summary(tmp_path):
+    old_path = tmp_path / "outputs" / "books_llm2rec_old" / "tables" / "same_candidate_external_baseline_summary.csv"
+    new_path = (
+        tmp_path
+        / "outputs"
+        / "books_large10000_100neg_llm2rec_official_qwen3base_sasrec_same_candidate"
+        / "tables"
+        / "same_candidate_external_baseline_summary.csv"
+    )
+    base_row = {
+        "baseline_name": "llm2rec_official_qwen3base_sasrec",
+        "domain": "books",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "sample_count": "10",
+        "HR@10": "0.5",
+        "NDCG@10": "0.35",
+        "MRR": "0.2",
+        "coverage@10": "0.8",
+    }
+    complete_row = {
+        **base_row,
+        "HR@5": "0.4",
+        "NDCG@5": "0.3",
+        "HR@20": "0.6",
+        "NDCG@20": "0.4",
+        "coverage@5": "0.7",
+        "coverage@20": "0.9",
+    }
+    _write_summary(new_path, [complete_row])
+    _write_summary(old_path, [base_row])
+
+    rows = build_external_only_rows(
+        external_summary_glob=str(tmp_path / "outputs" / "*" / "tables" / "same_candidate_external_baseline_summary.csv"),
+        domains=["books"],
+        methods=["llm2rec_official_qwen3base_sasrec"],
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["HR@5"] == "0.4"
+    assert rows[0]["NDCG@20"] == "0.4"
+    assert "large10000_100neg" in rows[0]["source_file"]
