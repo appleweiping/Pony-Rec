@@ -152,7 +152,7 @@ def _commands(rows: list[dict[str, str]], *, plan_stage: str) -> list[str]:
             "--provenance_output_path",
             _q(row["provenance_path"]),
         ]
-        if row["method"] == "llm2rec":
+        if row["method"] in {"llm2rec", "llmesr"}:
             runner_command.extend(
                 [
                     "--embedding_backend",

@@ -292,7 +292,7 @@ official_baselines:
       - keep LLM-ESR handled-file layout and sequential scoring architecture authoritative
       - adapt only handled-file generation, Qwen3-8B representation injection, and candidate-score export
       - record whether wrapper execution imports official classes directly or invokes official scripts
-    current_status: partial_official_adapter_exists
+    current_status: official_run_stage_support_implemented_pending_results
     existing_local_scripts:
       - main_export_llmesr_same_candidate_task.py
       - main_generate_llmesr_sentence_embeddings.py
@@ -306,9 +306,9 @@ official_baselines:
       - use unified Qwen3-8B base for item embeddings consumed by official code
       - export exact same-candidate scores only
     remaining_work:
-      - pin local checkout to pinned_commit
-      - audit whether wrapper calls official classes without architecture drift
-      - verify score coverage equals 1.0
+      - run one domain through the unified official runner on the pinned server checkout
+      - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
+      - import completed scores and package/copy evidence before cleaning server intermediates
 
   llmemb:
     paper_style_name: LLMEmb-style Qwen3-8B Emb. + SASRec

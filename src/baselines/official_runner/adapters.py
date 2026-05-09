@@ -12,15 +12,12 @@ from src.baselines.official_runner.contract import (
     text,
 )
 from src.baselines.official_runner.llm2rec import run_llm2rec_official
+from src.baselines.official_runner.llmesr import run_llmesr_official
 
 
 METHOD_BLOCKERS = {
     "llm2rec": [],
-    "llmesr": [
-        "need_official_entrypoint_audit_for_pinned_llmesr_repo",
-        "need_default_hparam_source_from_pinned_llmesr_repo",
-        "need_llmesr_upstream_wrapper_relabelled_from_style_to_official_after_audit",
-    ],
+    "llmesr": [],
     "llmemb": [
         "need_official_llmemb_data_adapter",
         "need_official_llmemb_training_entrypoint",
@@ -83,10 +80,18 @@ def inspect_official_adapter(
         official_entrypoint=OFFICIAL_ENTRYPOINT_HINTS.get(args.method, "to_be_inspected"),
         score_coverage_rate=None,
         extra={
-            "runner_support_level": "official_llm2rec_qwen3base_sasrec" if args.method == "llm2rec" else "inspect_scaffold",
+            "runner_support_level": (
+                "official_llm2rec_qwen3base_sasrec"
+                if args.method == "llm2rec"
+                else "official_llmesr_qwen3base_sasrec"
+                if args.method == "llmesr"
+                else "inspect_scaffold"
+            ),
             "runner_note": (
                 "LLM2Rec run support is implemented, but inspect stage never marks a row official_completed."
                 if args.method == "llm2rec"
+                else "LLM-ESR run support is implemented, but inspect stage never marks a row official_completed."
+                if args.method == "llmesr"
                 else "This provenance scaffold intentionally does not mark the row official_completed. "
                 "Implement the method adapter against the pinned official repo before importing main-table scores."
             ),
@@ -97,6 +102,8 @@ def inspect_official_adapter(
 def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], method_cfg: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
     if args.method == "llm2rec":
         return run_llm2rec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
+    if args.method == "llmesr":
+        return run_llmesr_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"

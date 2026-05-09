@@ -37,8 +37,10 @@ def write_json(payload: dict[str, Any], path: str | Path) -> None:
 
 
 def sha256_file(path: str | Path) -> str:
+    if not text(path):
+        return ""
     file_path = Path(path).expanduser()
-    if not file_path.exists():
+    if not file_path.exists() or not file_path.is_file():
         return ""
     digest = hashlib.sha256()
     with file_path.open("rb") as fh:

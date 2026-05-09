@@ -285,9 +285,47 @@ summary:
   outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.md
 ```
 
-The remaining official external LLM-rec baselines are LLM-ESR, LLMEmb, RLMRec,
-IRLLRec, and SETRec. Run the official adapter audit/plan first; as of this
-status note, only LLM2Rec has implemented run-stage support.
+LLM-ESR also has run-stage support wired in the unified runner. It imports the
+pinned repo's `models.LLMESR.LLMESR_SASRec` class and preserves the official
+SASRec-style architecture/loss/predict path while local code only adapts the
+same-candidate handled files, Qwen3 item embeddings, and exact score export.
+As with LLM2Rec, it is not a completed result until a server run writes
+`implementation_status=official_completed`, `blockers=[]`, and exact score
+coverage.
+
+LLM-ESR single-domain smoke/production template:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+DOMAIN=beauty
+EXP=beauty_supplementary_smallerN_100neg
+mkdir -p outputs/summary/logs
+LOG=outputs/summary/logs/week8_llmesr_official_${DOMAIN}_$(date +%F_%H%M%S).log
+PID=outputs/summary/logs/week8_llmesr_official_${DOMAIN}.pid
+nohup python main_run_llmesr_official_same_candidate_adapter.py \
+  --stage run \
+  --domain "$DOMAIN" \
+  --task_dir "outputs/baselines/external_tasks/${EXP}_test_same_candidate" \
+  --valid_task_dir "outputs/baselines/external_tasks/${EXP}_valid_same_candidate" \
+  --output_scores_path "outputs/baselines/official_adapters/${EXP}_llmesr_official/llmesr_official_scores.csv" \
+  --provenance_output_path "outputs/baselines/official_adapters/${EXP}_llmesr_official/fairness_provenance.json" \
+  --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 \
+  --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation \
+  --backbone_path /home/ajifang/models/Qwen/Qwen3-8B \
+  --llm_adaptation_mode frozen_base_embedding \
+  --hparam_policy official_default_or_recommended \
+  --embedding_backend hf_mean_pool \
+  --embedding_max_length 128 \
+  --hf_device_map auto > "$LOG" 2>&1 &
+echo $! > "$PID"
+disown
+echo "log=$LOG"
+echo "pid_file=$PID"
+```
+
+The remaining official external LLM-rec baselines after LLM2Rec/LLM-ESR are
+LLMEmb, RLMRec, IRLLRec, and SETRec. Run the official adapter audit/plan first;
+methods without run-stage support will stay blocked by provenance.
 
 ## Output Interpretation
 

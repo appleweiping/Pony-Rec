@@ -271,9 +271,14 @@ Remaining blockers:
     path.write_text(text, encoding="utf-8")
 
 
-def main() -> None:
-    args = parse_args()
-    task_dir = Path(args.task_dir).expanduser()
+def export_llmesr_package(
+    task_dir: Path,
+    *,
+    exp_name: str | None = None,
+    output_root: Path | str = "outputs",
+    top_sim_users: int = 100,
+) -> dict[str, Any]:
+    task_dir = Path(task_dir).expanduser()
     train_path = task_dir / "train_interactions.csv"
     candidate_path = task_dir / "candidate_items.csv"
     metadata_path = task_dir / "metadata.json"
@@ -282,8 +287,8 @@ def main() -> None:
     if not candidate_path.exists():
         raise FileNotFoundError(f"candidate_items.csv not found: {candidate_path}")
 
-    exp_name = args.exp_name or f"{task_dir.name}_llmesr_adapter"
-    output_dir = Path(args.output_root).expanduser() / "baselines" / "paper_adapters" / exp_name
+    exp_name = exp_name or f"{task_dir.name}_llmesr_adapter"
+    output_dir = Path(output_root).expanduser() / "baselines" / "paper_adapters" / exp_name
     handled_dir = output_dir / "llm_esr" / "handled"
 
     train_rows = _read_csv(train_path)
@@ -310,7 +315,7 @@ def main() -> None:
         ["item_id", "llmesr_item_idx", "candidate_title", "embedding_text", "title_source"],
     )
     sim_paths = _write_sim_users(
-        _similar_users_by_jaccard(train_sequences, top_k=args.top_sim_users),
+        _similar_users_by_jaccard(train_sequences, top_k=top_sim_users),
         handled_dir,
     )
 
@@ -354,9 +359,28 @@ def main() -> None:
     }
     _write_json(metadata, output_dir / "adapter_metadata.json")
     _write_readme(output_dir / "README.md", metadata)
+    return metadata
+
+
+def main() -> None:
+    args = parse_args()
+    metadata = export_llmesr_package(
+        Path(args.task_dir).expanduser(),
+        exp_name=args.exp_name,
+        output_root=args.output_root,
+        top_sim_users=args.top_sim_users,
+    )
+    output_dir = Path(metadata["llmesr_handled_dir"]).parent.parent
 
     print(f"Saved LLM-ESR adapter package: {output_dir}")
-    print(f"users={len(user_to_idx)} items={len(item_to_idx)} train_rows={len(train_rows)} candidate_rows={len(candidate_rows)}")
+    print(
+        "users={users} items={items} train_rows={train_rows} candidate_rows={candidate_rows}".format(
+            users=metadata["users"],
+            items=metadata["items"],
+            train_rows=metadata["train_interaction_rows"],
+            candidate_rows=metadata["candidate_rows"],
+        )
+    )
     print(f"status=adapter_package_only")
 
 

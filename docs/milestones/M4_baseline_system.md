@@ -11,7 +11,7 @@ project from comparing incompatible reported numbers or mixing protocols.
 | --- | --- | --- |
 | classical same-candidate | SASRec, GRU4Rec, BERT4Rec, LightGCN | local trainers available |
 | paper-style LLM-rec | LLM2Rec-style, LLM-ESR-style, LLMEmb-style, RLMRec-style, IRLLRec-style, SETRec-style | supplementary sanity block |
-| official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | LLM2Rec completed/imported across declared four-domain protocol; remaining five need official run-stage adapters |
+| official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | LLM2Rec completed/imported across declared four-domain protocol; LLM-ESR run-stage support implemented pending server results; remaining four need official run-stage adapters |
 | internal formal methods | C-CRP, SRPD | must use same score schema/importer before table claims |
 
 ## Non-Negotiable Contract
@@ -80,8 +80,10 @@ The production pattern is now fixed for the remaining official baselines:
 single-domain run, provenance/coverage audit, minimal evidence package copied
 off server, documented intermediate cleanup, same-candidate import, then
 method-level summary. A baseline is not complete until all declared domains are
-imported and summarized. The remaining five official external LLM-rec baselines
-are LLM-ESR, LLMEmb, RLMRec, IRLLRec, and SETRec.
+imported and summarized. LLM-ESR is the next runner-enabled method, but remains
+pending until server rows pass `official_completed`, `blockers=[]`, and exact
+score coverage. The remaining methods without run-stage support are LLMEmb,
+RLMRec, IRLLRec, and SETRec.
 
 ## Related Files
 
