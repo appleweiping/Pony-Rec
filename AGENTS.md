@@ -226,6 +226,15 @@ deleting final scores, provenance, audits, compact checkpoints, or external
 embedding artifacts unless they have been archived and the user confirms the
 archive.
 
+Use the completed LLM2Rec official four-domain run as the template for future
+official external baselines. A baseline is not complete when one domain finishes
+or when a raw score file exists. It is complete only after every declared domain
+has `implementation_status=official_completed`, `blockers=[]`, exact score
+coverage, local evidence backup, cleaned server intermediates, imported
+same-candidate summaries, and a four-domain summary table. If a method's run
+stage still returns `run_stage_not_implemented_for_method`, stop and implement
+the official-code adapter first; do not substitute style/scaffold rows.
+
 For our formal methods, C-CRP and SRPD must also pass same-candidate gates
 before any table claim. C-CRP is the main task-grounded uncertainty method:
 select score mode, weights, eta, and ablations on validation only, export exact

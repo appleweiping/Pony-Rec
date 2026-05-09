@@ -11,7 +11,7 @@ project from comparing incompatible reported numbers or mixing protocols.
 | --- | --- | --- |
 | classical same-candidate | SASRec, GRU4Rec, BERT4Rec, LightGCN | local trainers available |
 | paper-style LLM-rec | LLM2Rec-style, LLM-ESR-style, LLMEmb-style, RLMRec-style, IRLLRec-style, SETRec-style | supplementary sanity block |
-| official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | contract written, adapters unfinished |
+| official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | LLM2Rec completed/imported across declared four-domain protocol; remaining five need official run-stage adapters |
 | internal formal methods | C-CRP, SRPD | must use same score schema/importer before table claims |
 
 ## Non-Negotiable Contract
@@ -59,6 +59,29 @@ finite score coverage, and fairness provenance.
 Use paper-style baselines as supplementary controlled adaptations. Use
 official-code-level rows for final official external-baseline claims only after
 the provenance checklist passes.
+
+## Current Official Baseline Status
+
+As of 2026-05-09, LLM2Rec is the first completed official-code-level external
+LLM-rec baseline under the declared Qwen3-8B same-candidate protocol:
+
+```text
+LLM2Rec official qwen3base SASRec
+-> beauty supplementary smaller-N completed/imported
+-> books large10000 100neg completed/imported
+-> electronics large10000 100neg completed/imported
+-> movies large10000 100neg completed/imported
+-> summary:
+   outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.csv
+   outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.md
+```
+
+The production pattern is now fixed for the remaining official baselines:
+single-domain run, provenance/coverage audit, minimal evidence package copied
+off server, documented intermediate cleanup, same-candidate import, then
+method-level summary. A baseline is not complete until all declared domains are
+imported and summarized. The remaining five official external LLM-rec baselines
+are LLM-ESR, LLMEmb, RLMRec, IRLLRec, and SETRec.
 
 ## Related Files
 

@@ -163,6 +163,14 @@ run one domain
 -> start the next domain
 ```
 
+This is also the template for future official external baselines. Do not call a
+baseline complete after a single raw score file. A method-level official
+baseline is complete only after all declared domains have unblocked provenance,
+exact score coverage, local evidence backup, server intermediates cleaned, and
+same-candidate imports included in a method-level summary table. If the runner
+prints `run_stage_not_implemented_for_method`, stop and implement the pinned
+official adapter before launching expensive jobs.
+
 The completed domain package should include the score CSV, fairness provenance,
 score audit, run summary, compact checkpoint or checkpoint manifest, Qwen3 item
 embedding metadata/path/digest, and the command/log needed to reproduce the run.
@@ -264,6 +272,22 @@ Only after each domain writes `implementation_status=official_completed`,
 the same-candidate summary table. Failed domains can be rerun after fixing the
 reported blocker; the adapter package and embeddings are deterministic and can
 be reused unless `--force_embeddings` is passed.
+
+LLM2Rec official Qwen3-base status as of 2026-05-09:
+
+```text
+beauty supplementary smaller-N: completed/imported
+books large10000 100neg: completed/imported
+electronics large10000 100neg: completed/imported
+movies large10000 100neg: completed/imported
+summary:
+  outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.csv
+  outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.md
+```
+
+The remaining official external LLM-rec baselines are LLM-ESR, LLMEmb, RLMRec,
+IRLLRec, and SETRec. Run the official adapter audit/plan first; as of this
+status note, only LLM2Rec has implemented run-stage support.
 
 ## Output Interpretation
 

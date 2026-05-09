@@ -206,7 +206,7 @@ official_baselines:
       - keep LLM2Rec seqrec SASRec classes and loss path authoritative
       - adapt only data installation, Qwen3-8B representation generation, and candidate-score export
       - record any wrapper script that bridges same-candidate data into official data/<dataset_alias>
-    current_status: partial_official_adapter_exists
+    current_status: official_completed_declared_domains
     existing_local_scripts:
       - main_export_llm2rec_same_candidate_task.py
       - main_prepare_llm2rec_upstream_adapter.py
@@ -220,10 +220,22 @@ official_baselines:
       - install same-candidate data under LLM2Rec data/<dataset_alias>
       - use unified Qwen3-8B base for item text representations
       - export exact same-candidate scores instead of official full-catalog metrics
+    completed_evidence:
+      summary_csv: outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.csv
+      summary_markdown: outputs/summary/week8_llm2rec_official_qwen3base_fourdomain_summary.md
+      domains:
+        - beauty_supplementary_smallerN_100neg
+        - books_large10000_100neg
+        - electronics_large10000_100neg
+        - movies_large10000_100neg
+      evidence_status:
+        - implementation_status=official_completed
+        - blockers=[]
+        - score_coverage_rate=1.0
+        - imported_same_candidate_metrics
     remaining_work:
-      - pin local checkout to pinned_commit
-      - record produced checkpoint path per domain
-      - verify same-candidate score coverage equals 1.0
+      - keep beauty labelled supplementary_smallerN in paper tables
+      - rerun only if the official fairness policy or same-candidate task package changes
 
   llmesr:
     paper_style_name: LLM-ESR-style Qwen3-8B Emb. + LLMESR-SASRec
