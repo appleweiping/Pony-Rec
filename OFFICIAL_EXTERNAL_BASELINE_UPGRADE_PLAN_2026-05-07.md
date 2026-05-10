@@ -152,7 +152,12 @@ user explicitly chooses full artifact preservation; record their hashes and
 storage decision in provenance or the run summary. Never delete server-side
 scores, provenance, audits, compact checkpoints, embeddings, or method
 checkpoints before the corresponding evidence archive has been copied and
-confirmed locally.
+confirmed locally. Also keep each imported
+`outputs/*_same_candidate/tables/same_candidate_external_baseline_summary.csv`
+available until final method-level and cross-baseline comparison tables are
+rebuilt and archived. A completed domain such as Beauty must not be absent from
+a baseline comparison merely because its imported summary was cleaned or lives
+only in a local archive.
 
 ## Pinned Official Sources
 

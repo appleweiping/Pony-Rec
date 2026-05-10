@@ -231,7 +231,10 @@ delete the checkpoint only according to the documented storage decision. Do not
 recommend deleting final scores, provenance, audits, compact checkpoints,
 external embedding artifacts, or method checkpoints unless the corresponding
 evidence archive has been copied off the server and the user confirms the
-archive.
+archive. Do not delete imported `outputs/*_same_candidate/tables/` summaries
+needed by comparison builders until the method-level and final cross-baseline
+tables have been rebuilt and archived; otherwise completed domains will drop
+out of later comparison tables.
 
 Use the completed LLM2Rec official four-domain run as the template for future
 official external baselines. A baseline is not complete when one domain finishes

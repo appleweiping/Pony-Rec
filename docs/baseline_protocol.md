@@ -88,7 +88,9 @@ lightweight archive. Full checkpoints are optional separate preservation
 artifacts; they should not block the next domain unless the user explicitly
 asks for full model backup. Server-side intermediates can be deleted only after
 the corresponding evidence archive has been copied off the server and confirmed
-locally.
+locally. Keep imported `outputs/*_same_candidate/tables/` summaries available
+until final comparison tables are rebuilt and archived; otherwise completed
+domains can silently disappear from method-level tables.
 
 ## Reliability proxy audit
 

@@ -160,7 +160,7 @@ run one domain
 -> package the evidence artifact
 -> copy it to local storage with scp
 -> verify the local archive exists
--> delete only documented server-side intermediates
+-> delete only documented server-side intermediates, not imported summary tables
 -> start the next domain
 ```
 
@@ -180,6 +180,14 @@ summary tables, and checkpoint/embedding sha256 manifests when the checkpoint
 or embedding file is too large to archive immediately. Do not build a huge
 checkpoint tarball by default. Full checkpoints can be archived separately only
 when time and storage allow.
+
+Important: comparison tables are rebuilt from imported
+`outputs/*_same_candidate/tables/same_candidate_external_baseline_summary.csv`
+files. After a domain is imported, keep that `tables/` summary available until
+the method-level and final cross-baseline comparison tables have been rebuilt
+and archived. If storage is tight, delete predictions or large model/adapter
+intermediates first, but do not remove the imported summary directory in a way
+that makes a completed domain disappear from later comparisons.
 
 Single-domain command template:
 
@@ -412,14 +420,20 @@ EXP=books_large10000_100neg
 BASE=llmesr_official_qwen3base_sasrec
 rm -rf "outputs/baselines/official_adapters/${EXP}_llmesr_official"
 rm -rf "outputs/baselines/paper_adapters/${EXP}_llmesr_official_adapter"
-rm -rf "outputs/${EXP}_${BASE}_same_candidate"
+# Keep outputs/${EXP}_${BASE}_same_candidate/tables/ so comparison builders
+# continue to include this completed domain. If space is tight, prune only
+# large/non-table files after confirming the archive:
+find "outputs/${EXP}_${BASE}_same_candidate" -mindepth 1 -maxdepth 1 ! -name tables -exec rm -rf {} +
 df -h /
 ```
 
 Keep this sequence domain-by-domain. Do not start cleanup for a domain whose
 evidence archive has not been confirmed locally, and do not let a slow full
 checkpoint archive block the next domain unless the user explicitly asks for
-full checkpoint preservation.
+full checkpoint preservation. Beauty must be restored or retained in the same
+way as the large domains; do not publish a method-level comparison table where
+an official baseline is missing a completed domain because its imported summary
+was cleaned or left only in a local archive.
 
 The remaining official external LLM-rec baselines after LLM2Rec/LLM-ESR are
 LLMEmb, RLMRec, IRLLRec, and SETRec. Run the official adapter audit/plan first;
