@@ -361,12 +361,15 @@ official_baselines:
       override_reason: none
       validation_tuned: false
     official_code_adaptation_notes:
-      - replace style adapter with official LLMEmb train/eval entrypoints before final import
+      - official runner imports pinned models.SASRec.SASRec_seq and models.LLMEmb.LLMEmbSASRec
+      - SASRec_seq first produces itm_emb_sasrec.pkl for the official LLMEmb alignment loss
       - keep official item-embedding consumption and downstream sequential recommender authoritative
       - add only same-candidate data adapter and exact candidate-score exporter around official code
-    current_status: style_adapter_only
+    current_status: official_run_stage_support_implemented_pending_results
     existing_local_scripts:
       - main_train_llmemb_style_same_candidate.py
+      - main_train_score_llmemb_upstream_adapter.py
+      - main_run_llmemb_official_same_candidate_adapter.py
     official_modules_to_preserve:
       - official LLMEmb item embedding consumption
       - official downstream sequential recommender module
@@ -376,9 +379,10 @@ official_baselines:
       - use unified Qwen3-8B base for text embedding source
       - add exact candidate score exporter
     remaining_work:
-      - clone/pin official repo
-      - inspect official train/eval entrypoints
-      - implement official score adapter
+      - run one domain through the unified official runner on the pinned server checkout
+      - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
+      - import completed scores and package/copy evidence before cleaning server intermediates
+      - repeat the validated loop for the remaining declared domains
 
   rlmrec:
     paper_style_name: RLMRec-style Qwen3-8B GraphCL

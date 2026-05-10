@@ -102,9 +102,9 @@ not yet a six-method official reproduction suite.
 
 | baseline | current state | official upgrade status |
 | --- | --- | --- |
-| LLM2Rec | upstream adapter/scorer exists | closest to official-code adaptation |
-| LLM-ESR | upstream handled-data adapter/scorer exists | close, needs commit-pinned audit |
-| LLMEmb | local paper-style implementation | needs official repo adapter |
+| LLM2Rec | official-code runner completed/imported | four declared domains completed |
+| LLM-ESR | official-code runner completed/imported | four declared domains completed |
+| LLMEmb | official-code runner implemented locally | pending server domain validation/import |
 | RLMRec | local paper-style implementation | needs official repo adapter |
 | IRLLRec | local paper-style implementation | needs official repo adapter |
 | SETRec | local paper-style implementation | needs official repo adapter |
@@ -255,7 +255,8 @@ Recommended sequence:
    already close.
 6. Finish LLM-ESR official-code adaptation because the handled-data adapter is
    already close.
-7. Implement LLMEmb official adapter.
+7. Validate the LLMEmb official runner one domain at a time and import only
+   rows with `official_completed`, `blockers=[]`, and exact score coverage.
 8. Implement RLMRec official adapter.
 9. Implement IRLLRec official adapter.
 10. Implement SETRec official adapter.
