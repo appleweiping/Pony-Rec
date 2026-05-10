@@ -318,6 +318,7 @@ def run_rlmrec_official(
             "qwen3_item_embedding_path": text(embedding_summary.get("itm_emb_path")),
             "qwen3_item_embedding_sha256": sha256_file(embedding_summary.get("itm_emb_path") or ""),
             "official_rlmrec_data_dir": text(training_summary.get("official_data_dir")),
+            "official_rlmrec_storage_policy": "semantic_embeddings_loaded_via_config_not_duplicated",
             "adapter_or_checkpoint_path": text(training_summary.get("checkpoint_path")),
             "adapter_or_checkpoint_sha256": sha256_file(training_summary.get("checkpoint_path") or ""),
             "adapter_or_checkpoint_kind": "official_rlmrec_graph_checkpoint",

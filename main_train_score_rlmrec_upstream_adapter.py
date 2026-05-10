@@ -159,7 +159,7 @@ def _candidate_groups(path: Path) -> list[dict[str, Any]]:
     return events
 
 
-def _load_item_embeddings(adapter_dir: Path, np: Any) -> Any:
+def _load_item_embeddings(adapter_dir: Path, np: Any) -> tuple[Any, Path]:
     path = adapter_dir / "llm_esr" / "handled" / "itm_emb_np.pkl"
     if not path.exists():
         raise FileNotFoundError(f"RLMRec requires Qwen item embeddings at {path}")
@@ -168,7 +168,7 @@ def _load_item_embeddings(adapter_dir: Path, np: Any) -> Any:
     matrix = np.asarray(matrix, dtype=np.float32)
     if matrix.ndim != 2:
         raise ValueError(f"Expected 2D item embedding matrix, got shape={matrix.shape}")
-    return matrix
+    return matrix, path
 
 
 def _build_user_embeddings(*, sequences: dict[int, list[int]], item_embeddings: Any, user_count: int, np: Any) -> tuple[Any, dict[str, Any]]:
@@ -213,18 +213,37 @@ def _make_sparse_mats(
     return trn_mat, empty, empty, sorted(set(pairs))
 
 
-def _write_official_data_artifacts(adapter_dir: Path, *, trn_mat: Any, val_mat: Any, tst_mat: Any, user_emb: Any, item_emb: Any) -> Path:
+def _write_official_data_artifacts(
+    adapter_dir: Path,
+    *,
+    trn_mat: Any,
+    val_mat: Any,
+    tst_mat: Any,
+    user_emb: Any,
+    item_emb: Any,
+    item_embedding_source_path: Path,
+) -> Path:
     out_dir = adapter_dir / "rlmrec" / "handled"
     out_dir.mkdir(parents=True, exist_ok=True)
     for name, payload in {
         "trn_mat.pkl": trn_mat,
         "val_mat.pkl": val_mat,
         "tst_mat.pkl": tst_mat,
-        "usr_emb_np.pkl": user_emb,
-        "itm_emb_np.pkl": item_emb,
     }.items():
         with (out_dir / name).open("wb") as fh:
             pickle.dump(payload, fh)
+    manifest = {
+        "storage_policy": "semantic_embeddings_loaded_via_config_not_duplicated",
+        "reason": "large-domain Qwen item embeddings can be several GB; duplicating them can exhaust server storage",
+        "user_embedding_source": "train_history_mean_of_qwen_item_embeddings",
+        "user_embedding_shape": list(user_emb.shape),
+        "item_embedding_source_path": str(item_embedding_source_path),
+        "item_embedding_shape": list(item_emb.shape),
+    }
+    (out_dir / "semantic_embedding_manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     return out_dir
 
 
@@ -426,7 +445,7 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
     checkpoint_path = Path(args.checkpoint_path).expanduser().resolve() if args.checkpoint_path else adapter_dir / "rlmrec_official_model.pt"
 
     sequences = _load_interactions(adapter_dir / "llm_esr" / "handled" / "inter.txt")
-    item_emb = _load_item_embeddings(adapter_dir, np)
+    item_emb, item_embedding_source_path = _load_item_embeddings(adapter_dir, np)
     if item_emb.shape[0] != item_count:
         raise ValueError(f"item embeddings rows={item_emb.shape[0]} but adapter metadata items={item_count}")
     user_emb, user_embedding_summary = _build_user_embeddings(sequences=sequences, item_embeddings=item_emb, user_count=user_count, np=np)
@@ -439,7 +458,15 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
     positives: dict[int, set[int]] = {}
     for user_idx, item_idx in train_pairs:
         positives.setdefault(user_idx, set()).add(item_idx)
-    handled_dir = _write_official_data_artifacts(adapter_dir, trn_mat=trn_mat, val_mat=val_mat, tst_mat=tst_mat, user_emb=user_emb, item_emb=item_emb)
+    handled_dir = _write_official_data_artifacts(
+        adapter_dir,
+        trn_mat=trn_mat,
+        val_mat=val_mat,
+        tst_mat=tst_mat,
+        user_emb=user_emb,
+        item_emb=item_emb,
+        item_embedding_source_path=item_embedding_source_path,
+    )
     device = _resolve_device(args.device, torch)
     if device.type != "cuda":
         raise RuntimeError("Pinned RLMRec plus models call .cuda(); run this official adapter on a CUDA device.")
