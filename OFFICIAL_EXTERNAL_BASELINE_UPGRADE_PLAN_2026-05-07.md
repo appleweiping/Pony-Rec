@@ -104,8 +104,8 @@ not yet a six-method official reproduction suite.
 | --- | --- | --- |
 | LLM2Rec | official-code runner completed/imported | four declared domains completed |
 | LLM-ESR | official-code runner completed/imported | four declared domains completed |
-| LLMEmb | official-code runner implemented locally | pending server domain validation/import |
-| RLMRec | local paper-style implementation | needs official repo adapter |
+| LLMEmb | official-code runner completed/imported | four declared domains completed |
+| RLMRec | official-code runner implemented locally | pending server domain validation/import |
 | IRLLRec | local paper-style implementation | needs official repo adapter |
 | SETRec | local paper-style implementation | needs official repo adapter |
 
@@ -257,7 +257,8 @@ Recommended sequence:
    already close.
 7. Validate the LLMEmb official runner one domain at a time and import only
    rows with `official_completed`, `blockers=[]`, and exact score coverage.
-8. Implement RLMRec official adapter.
+8. Validate the RLMRec official runner one domain at a time and import only
+   rows with `official_completed`, `blockers=[]`, and exact score coverage.
 9. Implement IRLLRec official adapter.
 10. Implement SETRec official adapter.
 11. For each method/domain, export exact score CSVs and import them through the

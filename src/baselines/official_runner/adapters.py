@@ -14,17 +14,14 @@ from src.baselines.official_runner.contract import (
 from src.baselines.official_runner.llm2rec import run_llm2rec_official
 from src.baselines.official_runner.llmemb import run_llmemb_official
 from src.baselines.official_runner.llmesr import run_llmesr_official
+from src.baselines.official_runner.rlmrec import run_rlmrec_official
 
 
 METHOD_BLOCKERS = {
     "llm2rec": [],
     "llmesr": [],
     "llmemb": [],
-    "rlmrec": [
-        "need_official_rlmrec_graph_data_adapter",
-        "need_official_rlmrec_training_entrypoint",
-        "need_official_rlmrec_same_candidate_score_exporter",
-    ],
+    "rlmrec": [],
     "irllrec": [
         "need_official_irllrec_intent_data_adapter",
         "need_official_irllrec_training_entrypoint",
@@ -84,6 +81,8 @@ def inspect_official_adapter(
                 if args.method == "llmesr"
                 else "official_llmemb_qwen3base_sasrec"
                 if args.method == "llmemb"
+                else "official_rlmrec_qwen3base_simgcl_plus"
+                if args.method == "rlmrec"
                 else "inspect_scaffold"
             ),
             "runner_note": (
@@ -93,6 +92,8 @@ def inspect_official_adapter(
                 if args.method == "llmesr"
                 else "LLMEmb run support is implemented, but inspect stage never marks a row official_completed."
                 if args.method == "llmemb"
+                else "RLMRec run support is implemented, but inspect stage never marks a row official_completed."
+                if args.method == "rlmrec"
                 else "This provenance scaffold intentionally does not mark the row official_completed. "
                 "Implement the method adapter against the pinned official repo before importing main-table scores."
             ),
@@ -107,6 +108,8 @@ def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], metho
         return run_llmesr_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     if args.method == "llmemb":
         return run_llmemb_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
+    if args.method == "rlmrec":
+        return run_rlmrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"

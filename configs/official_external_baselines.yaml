@@ -435,12 +435,14 @@ official_baselines:
       override_reason: none
       validation_tuned: false
     official_code_adaptation_notes:
-      - replace style adapter with official RLMRec graph training runner before final import
-      - keep official graph model, contrastive objective, and LLM representation injection path authoritative
+      - official runner imports pinned encoder.models.general_cf.simgcl_plus.SimGCL_plus
+      - keep official BPR, graph contrastive, and semantic alignment losses authoritative
       - adapt only graph data construction from unified train interactions and candidate-score export
-    current_status: style_adapter_only
+    current_status: official_run_stage_support_implemented_pending_results
     existing_local_scripts:
       - main_train_rlmrec_style_same_candidate.py
+      - main_train_score_rlmrec_upstream_adapter.py
+      - main_run_rlmrec_official_same_candidate_adapter.py
     official_modules_to_preserve:
       - official graph recommendation model
       - official contrastive/self-supervised objective
@@ -450,9 +452,10 @@ official_baselines:
       - inject unified Qwen3-8B item representations through the official path
       - export same-candidate scores for test candidate rows
     remaining_work:
-      - clone/pin official repo
-      - inspect data format and training runner
-      - implement official score adapter
+      - run one domain through the unified official runner on the pinned server checkout
+      - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
+      - import completed scores and package/copy evidence before cleaning server intermediates
+      - repeat the validated loop for the remaining declared domains
 
   irllrec:
     paper_style_name: IRLLRec-style Qwen3-8B IntentRep

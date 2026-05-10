@@ -96,6 +96,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--llmemb_no_freeze_emb", dest="llmemb_freeze_emb", action="store_false")
     parser.set_defaults(llmemb_freeze_emb=True)
     parser.add_argument("--llmemb_log_every", type=int, default=5)
+    parser.add_argument("--rlmrec_adapter_exp_name", default="")
+    parser.add_argument("--rlmrec_adapter_dir", default="")
+    parser.add_argument("--rlmrec_epochs", type=int, default=3000)
+    parser.add_argument("--rlmrec_train_batch_size", type=int, default=4096)
+    parser.add_argument("--rlmrec_lr", type=float, default=0.001)
+    parser.add_argument("--rlmrec_weight_decay", type=float, default=0.0)
+    parser.add_argument("--rlmrec_embedding_size", type=int, default=32)
+    parser.add_argument("--rlmrec_layer_num", type=int, default=3)
+    parser.add_argument("--rlmrec_reg_weight", type=float, default=1.0e-5)
+    parser.add_argument("--rlmrec_cl_weight", type=float, default=1.0e-1)
+    parser.add_argument("--rlmrec_cl_temperature", type=float, default=0.2)
+    parser.add_argument("--rlmrec_kd_weight", type=float, default=1.0e-2)
+    parser.add_argument("--rlmrec_kd_temperature", type=float, default=0.2)
+    parser.add_argument("--rlmrec_eps", type=float, default=0.9)
+    parser.add_argument("--rlmrec_keep_rate", type=float, default=1.0)
+    parser.add_argument("--rlmrec_log_every", type=int, default=10)
     parser.add_argument(
         "--allow_blocked_exit_zero",
         action="store_true",

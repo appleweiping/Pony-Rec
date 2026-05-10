@@ -435,13 +435,13 @@ way as the large domains; do not publish a method-level comparison table where
 an official baseline is missing a completed domain because its imported summary
 was cleaned or left only in a local archive.
 
-The next official external LLM-rec baseline after LLM2Rec/LLM-ESR is LLMEmb.
-Its runner imports the pinned repo's `models.SASRec.SASRec_seq` and
-`models.LLMEmb.LLMEmbSASRec`: SASRec first produces `itm_emb_sasrec.pkl`, then
-LLMEmb trains with the official alignment loss and exports exact same-candidate
-scores. Use the same one-domain archive-and-clean loop. RLMRec, IRLLRec, and
-SETRec still need official run-stage adapters; run the official adapter
-audit/plan first and do not import blocked scaffold rows.
+The next official external LLM-rec baseline after LLM2Rec/LLM-ESR/LLMEmb is
+RLMRec. Its runner imports the pinned repo's
+`encoder.models.general_cf.simgcl_plus.SimGCL_plus` and preserves the official
+BPR, graph contrastive, and semantic alignment losses. Use the same one-domain
+archive-and-clean loop. IRLLRec and SETRec still need official run-stage
+adapters; run the official adapter audit/plan first and do not import blocked
+scaffold rows.
 
 For baseline comparison tables, keep the main reading order at
 `NDCG@5`, `NDCG@10`, `HR@5`, `HR@10`, then use `@20` as the extended-check

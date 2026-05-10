@@ -11,7 +11,7 @@ project from comparing incompatible reported numbers or mixing protocols.
 | --- | --- | --- |
 | classical same-candidate | SASRec, GRU4Rec, BERT4Rec, LightGCN | local trainers available |
 | paper-style LLM-rec | LLM2Rec-style, LLM-ESR-style, LLMEmb-style, RLMRec-style, IRLLRec-style, SETRec-style | supplementary sanity block |
-| official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | LLM2Rec and LLM-ESR completed/imported across declared four-domain protocol; LLMEmb run-stage support implemented pending server validation; remaining three need official run-stage adapters |
+| official-code-level LLM-rec | pinned LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, SETRec | LLM2Rec, LLM-ESR, and LLMEmb completed/imported across declared four-domain protocol; RLMRec run-stage support implemented pending server validation; remaining two need official run-stage adapters |
 | internal formal methods | C-CRP, SRPD | must use same score schema/importer before table claims |
 
 ## Non-Negotiable Contract
@@ -80,10 +80,10 @@ The production pattern is now fixed for the remaining official baselines:
 single-domain run, provenance/coverage audit, minimal evidence package copied
 off server, documented intermediate cleanup, same-candidate import, then
 method-level summary. A baseline is not complete until all declared domains are
-imported and summarized. LLM-ESR has now followed that path across the declared
-domains. LLMEmb is the next runner-enabled method, pending server rows with
-`official_completed`, `blockers=[]`, and exact score coverage. The remaining
-methods without run-stage support are RLMRec, IRLLRec, and SETRec.
+imported and summarized. LLM-ESR and LLMEmb have now followed that path across
+the declared domains. RLMRec is the next runner-enabled method, pending server
+rows with `official_completed`, `blockers=[]`, and exact score coverage. The
+remaining methods without run-stage support are IRLLRec and SETRec.
 
 For comparison reporting, prefer `NDCG@5`, `NDCG@10`, `HR@5`, and `HR@10` in
 the main baseline view. Keep `@20` columns in the extended tables when they are
