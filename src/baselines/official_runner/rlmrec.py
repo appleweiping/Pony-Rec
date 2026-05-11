@@ -280,8 +280,27 @@ def run_rlmrec_official(
     embedding_summary: dict[str, Any] = {}
     training_summary: dict[str, Any] = {}
     score_audit: dict[str, Any] = {}
+    reuse_existing_scores = bool(getattr(args, "rlmrec_reuse_existing_scores", False))
 
-    if not blockers:
+    if reuse_existing_scores:
+        output_scores_path = Path(args.output_scores_path).expanduser()
+        embedding_summary = {"status": "skipped_embedding_generation_reused_existing_scores"}
+        if not output_scores_path.exists():
+            blockers.append(f"rlmrec_reuse_existing_scores_missing_score_file:{output_scores_path}")
+        elif not blockers:
+            score_audit = _score_audit(Path(args.task_dir).expanduser() / "candidate_items.csv", output_scores_path)
+            _write_json(score_audit, score_audit_path)
+            if not score_audit.get("audit_ok"):
+                blockers.append("rlmrec_existing_same_candidate_score_audit_failed")
+            else:
+                training_summary = _existing_score_training_summary(
+                    args=args,
+                    adapter_dir=adapter_dir,
+                    official_dir=official_dir,
+                    score_audit=score_audit,
+                )
+
+    if not reuse_existing_scores and not blockers:
         adapter_metadata = export_llmesr_package(
             Path(args.task_dir).expanduser(),
             exp_name=_adapter_exp_name(args),
@@ -292,7 +311,7 @@ def run_rlmrec_official(
         if not adapter_audit.get("ready_for_embedding_generation"):
             blockers.append("rlmrec_adapter_audit_not_ready_for_embedding_generation")
 
-    if not blockers:
+    if not reuse_existing_scores and not blockers:
         if adapter_audit.get("ready_for_scoring") and not bool(getattr(args, "force_embeddings", False)):
             embedding_summary = {
                 "status": "reused_existing_rlmrec_item_embeddings",
@@ -316,21 +335,8 @@ def run_rlmrec_official(
         if not (adapter_dir / "llm_esr" / "handled" / "itm_emb_np.pkl").exists():
             blockers.append("rlmrec_missing_qwen_item_embeddings")
 
-    if not blockers:
-        output_scores_path = Path(args.output_scores_path).expanduser()
-        if bool(getattr(args, "rlmrec_reuse_existing_scores", False)) and output_scores_path.exists():
-            score_audit = _score_audit(Path(args.task_dir).expanduser() / "candidate_items.csv", output_scores_path)
-            _write_json(score_audit, score_audit_path)
-            if not score_audit.get("audit_ok"):
-                blockers.append("rlmrec_existing_same_candidate_score_audit_failed")
-            else:
-                training_summary = _existing_score_training_summary(
-                    args=args,
-                    adapter_dir=adapter_dir,
-                    official_dir=official_dir,
-                    score_audit=score_audit,
-                )
-        elif bool(getattr(args, "dry_run", False)):
+    if not reuse_existing_scores and not blockers:
+        if bool(getattr(args, "dry_run", False)):
             training_summary = {"status": "dry_run_planned"}
             blockers.append("dry_run_no_rlmrec_training_or_scores")
         else:
