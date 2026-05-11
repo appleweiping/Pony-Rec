@@ -323,6 +323,22 @@ def _official_configs(args: argparse.Namespace, *, user_count: int, item_count: 
     }
 
 
+def _checkpoint_config_summary(configs: dict[str, Any], *, item_embedding_source_path: Path) -> dict[str, Any]:
+    summary: dict[str, Any] = {}
+    for key, value in configs.items():
+        if key in {"usrprf_embeds", "itmprf_embeds"}:
+            summary[key] = {
+                "externalized": True,
+                "shape": list(getattr(value, "shape", [])),
+                "dtype": str(getattr(value, "dtype", "")),
+            }
+        else:
+            summary[key] = value
+    summary["itmprf_embeds"]["source_path"] = str(item_embedding_source_path)
+    summary["usrprf_embeds"]["source"] = "derived_from_train_history_item_embeddings"
+    return summary
+
+
 def _import_official_model(repo_dir: Path, configs: dict[str, Any]) -> Any:
     encoder_dir = repo_dir / "encoder"
     if not encoder_dir.exists():
@@ -499,10 +515,14 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
             {
                 "state_dict": model.state_dict(),
                 "args": vars(args),
-                "configs": configs,
+                "configs": _checkpoint_config_summary(
+                    configs,
+                    item_embedding_source_path=item_embedding_source_path,
+                ),
                 "summary": score_summary,
             },
             checkpoint_path,
+            pickle_protocol=4,
         )
 
     trainable_params = sum(param.numel() for param in model.parameters() if param.requires_grad)

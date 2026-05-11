@@ -204,6 +204,57 @@ def _train_args(args: argparse.Namespace, *, adapter_dir: Path, repo_dir: Path, 
     )
 
 
+def _existing_score_training_summary(
+    *,
+    args: argparse.Namespace,
+    adapter_dir: Path,
+    official_dir: Path,
+    score_audit: dict[str, Any],
+) -> dict[str, Any]:
+    metadata_path = adapter_dir / "adapter_metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.exists() else {}
+    hparams = _official_hparams(args)
+    checkpoint_arg = text(getattr(args, "adapter_or_checkpoint_path", ""))
+    checkpoint_path = Path(checkpoint_arg).expanduser() if checkpoint_arg else official_dir / "rlmrec_official_model.pt"
+    return {
+        "status": "reused_existing_scores_after_post_scoring_failure",
+        "recovery_mode": "rlmrec_reuse_existing_scores",
+        "recovery_reason": (
+            "Existing exact same-candidate scores were audited after an earlier run "
+            "completed training/scoring but failed while serializing the large checkpoint."
+        ),
+        "adapter_dir": str(adapter_dir),
+        "baseline_name": "rlmrec_official_qwen3base_graphcl",
+        "artifact_class": "official_rlmrec_same_candidate_score",
+        "official_result_gate": "provenance_coverage_and_import_required",
+        "upstream_repo": "https://github.com/HKUDS/RLMRec",
+        "official_model_class": "encoder.models.general_cf.simgcl_plus.SimGCL_plus",
+        "users": int(metadata.get("users", 0) or 0),
+        "items": int(metadata.get("items", 0) or 0),
+        "epochs": hparams["epochs"],
+        "batch_size": hparams["batch_size"],
+        "lr": hparams["lr"],
+        "embedding_size": hparams["embedding_size"],
+        "layer_num": hparams["layer_num"],
+        "cl_weight": hparams["cl_weight"],
+        "kd_weight": hparams["kd_weight"],
+        "seed": hparams["seed"],
+        "trainable_params": None,
+        "final_train_loss": None,
+        "official_data_dir": str(adapter_dir / "rlmrec" / "handled"),
+        "checkpoint_path": str(checkpoint_path) if checkpoint_path.exists() else "",
+        "checkpoint_storage_decision": "not_required_for_same_candidate_evidence_recovery",
+        "score_coverage_rate": score_audit.get("score_coverage_rate"),
+        "scored_rows": score_audit.get("score_rows"),
+        "candidate_rows": score_audit.get("candidate_rows"),
+        "output_scores_path": str(Path(args.output_scores_path).expanduser()),
+        "note": (
+            "Recovered from an existing score CSV after post-scoring checkpoint serialization failed. "
+            "The score file still passes the exact same-candidate audit before provenance is marked complete."
+        ),
+    }
+
+
 def run_rlmrec_official(
     *,
     args: argparse.Namespace,
@@ -266,7 +317,20 @@ def run_rlmrec_official(
             blockers.append("rlmrec_missing_qwen_item_embeddings")
 
     if not blockers:
-        if bool(getattr(args, "dry_run", False)):
+        output_scores_path = Path(args.output_scores_path).expanduser()
+        if bool(getattr(args, "rlmrec_reuse_existing_scores", False)) and output_scores_path.exists():
+            score_audit = _score_audit(Path(args.task_dir).expanduser() / "candidate_items.csv", output_scores_path)
+            _write_json(score_audit, score_audit_path)
+            if not score_audit.get("audit_ok"):
+                blockers.append("rlmrec_existing_same_candidate_score_audit_failed")
+            else:
+                training_summary = _existing_score_training_summary(
+                    args=args,
+                    adapter_dir=adapter_dir,
+                    official_dir=official_dir,
+                    score_audit=score_audit,
+                )
+        elif bool(getattr(args, "dry_run", False)):
             training_summary = {"status": "dry_run_planned"}
             blockers.append("dry_run_no_rlmrec_training_or_scores")
         else:

@@ -113,6 +113,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rlmrec_keep_rate", type=float, default=1.0)
     parser.add_argument("--rlmrec_log_every", type=int, default=10)
     parser.add_argument(
+        "--rlmrec_reuse_existing_scores",
+        action="store_true",
+        help="For recovery after a post-scoring failure, audit and import an existing exact RLMRec score CSV without retraining.",
+    )
+    parser.add_argument(
         "--allow_blocked_exit_zero",
         action="store_true",
         help="Return success for inspect/blocker reports. Run stage still returns non-zero when blocked.",
