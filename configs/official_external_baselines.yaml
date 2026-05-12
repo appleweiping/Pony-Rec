@@ -512,6 +512,7 @@ official_baselines:
       - official IRLLRec LightGCN_int runner implemented; server validation still required before final import
       - keep official intent representation learning module, recommendation objective, and scoring head authoritative
       - adapt only same-candidate data conversion, Qwen3-8B representation source, and candidate-score export
+      - large-domain scalability bridge caps the official all-node ssl_con_loss and records the cap in provenance
     current_status: official_run_stage_support_implemented_pending_results
     existing_local_scripts:
       - main_train_irllrec_style_same_candidate.py

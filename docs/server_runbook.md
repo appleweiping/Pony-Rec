@@ -442,7 +442,11 @@ BPR, graph contrastive, and semantic alignment losses. IRLLRec imports the
 pinned repo's `encoder.models.general_cf.lightgcn_int.LightGCN_int` and
 preserves the official BPR, semantic alignment, and intent representation
 losses while supplying same-candidate graph data, Qwen3 item embeddings, and
-Qwen3-PCA64 intent artifacts. Use the same one-domain archive-and-clean loop.
+Qwen3-PCA64 intent artifacts. On large domains, IRLLRec's official
+`ssl_con_loss` would materialize an all-node N x N matrix; the runner applies a
+documented deterministic node cap (`--irllrec_ssl_con_max_nodes`, default
+4096) for that term and records the bridge in provenance. Use the same
+one-domain archive-and-clean loop.
 SETRec still needs an official run-stage adapter; run the official adapter
 audit/plan first and do not import blocked scaffold rows.
 

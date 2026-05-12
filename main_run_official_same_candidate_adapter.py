@@ -133,6 +133,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--irllrec_kd_int_temperature", type=float, default=0.2)
     parser.add_argument("--irllrec_kd_int_weight_2", type=float, default=1.0e-7)
     parser.add_argument("--irllrec_kd_int_weight_3", type=float, default=1.0e-7)
+    parser.add_argument("--irllrec_ssl_con_max_nodes", type=int, default=4096)
     parser.add_argument("--irllrec_keep_rate", type=float, default=1.0)
     parser.add_argument("--irllrec_log_every", type=int, default=10)
     parser.add_argument(

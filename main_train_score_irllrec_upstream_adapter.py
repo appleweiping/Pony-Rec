@@ -40,6 +40,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--kd_int_weight_2", type=float, default=1.0e-7)
     parser.add_argument("--kd_int_weight_3", type=float, default=1.0e-7)
     parser.add_argument("--intent_num", type=int, default=128)
+    parser.add_argument(
+        "--ssl_con_max_nodes",
+        type=int,
+        default=4096,
+        help=(
+            "Maximum nodes used by IRLLRec's all-node ssl_con_loss bridge. "
+            "The pinned official implementation forms an N x N matrix; large "
+            "same-candidate domains exceed GPU memory without this deterministic cap."
+        ),
+    )
     parser.add_argument("--keep_rate", type=float, default=1.0)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--seed", type=int, default=2023)
@@ -400,7 +410,34 @@ def _checkpoint_config_summary(
     return summary
 
 
-def _import_official_model(repo_dir: Path, configs: dict[str, Any]) -> Any:
+def _patch_ssl_con_loss(module: Any, *, max_nodes: int) -> dict[str, Any]:
+    original = getattr(module, "ssl_con_loss", None)
+    if original is None:
+        return {"ssl_con_loss_patch": "not_found"}
+
+    def capped_ssl_con_loss(x: Any, y: Any, temp: float = 1.0) -> Any:
+        node_count = int(x.shape[0])
+        if max_nodes <= 0:
+            return x.new_zeros(())
+        if node_count <= max_nodes:
+            return original(x, y, temp)
+        if max_nodes == 1:
+            indices = [0]
+        else:
+            step = (node_count - 1) / (max_nodes - 1)
+            indices = [int(round(i * step)) for i in range(max_nodes)]
+        idx = x.new_tensor(indices).long()
+        return original(x.index_select(0, idx), y.index_select(0, idx), temp)
+
+    module.ssl_con_loss = capped_ssl_con_loss
+    return {
+        "ssl_con_loss_patch": "deterministic_node_cap",
+        "ssl_con_max_nodes": int(max_nodes),
+        "reason": "official all-node contrastive term materializes an N x N matrix and OOMs on large same-candidate domains",
+    }
+
+
+def _import_official_model(repo_dir: Path, configs: dict[str, Any], *, ssl_con_max_nodes: int) -> tuple[Any, dict[str, Any]]:
     encoder_dir = repo_dir / "encoder"
     if not encoder_dir.exists():
         raise FileNotFoundError(f"IRLLRec encoder directory not found: {encoder_dir}")
@@ -413,7 +450,7 @@ def _import_official_model(repo_dir: Path, configs: dict[str, Any]) -> Any:
     sys.path.insert(0, str(encoder_dir))
     module_name = "models.general_cf.lightgcn_int"
     module = __import__(module_name, fromlist=["LightGCN_int"])
-    return getattr(module, "LightGCN_int")
+    return getattr(module, "LightGCN_int"), _patch_ssl_con_loss(module, max_nodes=ssl_con_max_nodes)
 
 
 class _DataHandler:
@@ -572,7 +609,11 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
         item_intent_emb=item_intent_emb,
         device=device,
     )
-    LightGCNInt = _import_official_model(repo_dir, configs)
+    LightGCNInt, scalability_summary = _import_official_model(
+        repo_dir,
+        configs,
+        ssl_con_max_nodes=args.ssl_con_max_nodes,
+    )
     with _pushd(repo_dir):
         model = LightGCNInt(_DataHandler(torch_adj, trn_mat)).to(device)
         logs = _train_official_model(
@@ -633,6 +674,7 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
         "final_train_loss": logs[-1]["train_loss"] if logs else math.nan,
         "official_data_dir": str(handled_dir),
         "checkpoint_path": str(checkpoint_path),
+        "scalability_bridge": scalability_summary,
         **user_embedding_summary,
         **user_intent_embedding_summary,
         **score_summary,

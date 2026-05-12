@@ -7,7 +7,9 @@ import pickle
 from pathlib import Path
 
 import numpy as np
+import torch
 
+from main_train_score_irllrec_upstream_adapter import _patch_ssl_con_loss
 from src.baselines.official_runner.contract import resolve_method_config
 from src.baselines.official_runner.irllrec import run_irllrec_official
 
@@ -196,3 +198,23 @@ def test_irllrec_official_runner_blocks_hash_embeddings(tmp_path, monkeypatch):
     assert provenance["implementation_status"] == "official_blocked"
     assert "irllrec_official_requires_real_text_embeddings_not_deterministic_hash" in provenance["blockers"]
     assert provenance["score_coverage_rate"] is None
+
+
+def test_irllrec_ssl_con_loss_cap_uses_deterministic_subset():
+    class FakeModule:
+        calls: list[int] = []
+
+        @staticmethod
+        def ssl_con_loss(x, y, temp=1.0):
+            FakeModule.calls.append(int(x.shape[0]))
+            return (x * y).sum() * temp
+
+    summary = _patch_ssl_con_loss(FakeModule, max_nodes=4)
+    x = torch.arange(20, dtype=torch.float32).reshape(10, 2)
+    y = torch.ones_like(x)
+
+    loss = FakeModule.ssl_con_loss(x, y, temp=0.5)
+
+    assert summary["ssl_con_loss_patch"] == "deterministic_node_cap"
+    assert FakeModule.calls == [4]
+    assert torch.isfinite(loss)
