@@ -417,8 +417,9 @@ def _import_official_model(repo_dir: Path, configs: dict[str, Any]) -> Any:
 
 
 class _DataHandler:
-    def __init__(self, torch_adj: Any) -> None:
+    def __init__(self, torch_adj: Any, trn_mat: Any) -> None:
         self.torch_adj = torch_adj
+        self.trn_mat = trn_mat
 
 
 def _train_official_model(
@@ -573,7 +574,7 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
     )
     LightGCNInt = _import_official_model(repo_dir, configs)
     with _pushd(repo_dir):
-        model = LightGCNInt(_DataHandler(torch_adj)).to(device)
+        model = LightGCNInt(_DataHandler(torch_adj, trn_mat)).to(device)
         logs = _train_official_model(
             model=model,
             train_pairs=train_pairs,
