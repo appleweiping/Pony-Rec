@@ -106,7 +106,7 @@ not yet a six-method official reproduction suite.
 | LLM-ESR | official-code runner completed/imported | four declared domains completed |
 | LLMEmb | official-code runner completed/imported | four declared domains completed |
 | RLMRec | official-code runner implemented locally | pending server domain validation/import |
-| IRLLRec | local paper-style implementation | needs official repo adapter |
+| IRLLRec | official-code runner implemented locally | pending server domain validation/import |
 | SETRec | local paper-style implementation | needs official repo adapter |
 
 Do not label the current `*_style_*` rows as official reproductions.

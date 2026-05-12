@@ -117,6 +117,29 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="For recovery after a post-scoring failure, audit and import an existing exact RLMRec score CSV without retraining.",
     )
+    parser.add_argument("--irllrec_adapter_exp_name", default="")
+    parser.add_argument("--irllrec_adapter_dir", default="")
+    parser.add_argument("--irllrec_epochs", type=int, default=3000)
+    parser.add_argument("--irllrec_train_batch_size", type=int, default=4096)
+    parser.add_argument("--irllrec_lr", type=float, default=0.001)
+    parser.add_argument("--irllrec_weight_decay", type=float, default=0.0)
+    parser.add_argument("--irllrec_embedding_size", type=int, default=32)
+    parser.add_argument("--irllrec_intent_num", type=int, default=128)
+    parser.add_argument("--irllrec_layer_num", type=int, default=3)
+    parser.add_argument("--irllrec_reg_weight", type=float, default=1.0e-5)
+    parser.add_argument("--irllrec_kd_weight", type=float, default=1.0e-2)
+    parser.add_argument("--irllrec_kd_temperature", type=float, default=0.2)
+    parser.add_argument("--irllrec_kd_int_weight", type=float, default=2.0e-2)
+    parser.add_argument("--irllrec_kd_int_temperature", type=float, default=0.2)
+    parser.add_argument("--irllrec_kd_int_weight_2", type=float, default=1.0e-7)
+    parser.add_argument("--irllrec_kd_int_weight_3", type=float, default=1.0e-7)
+    parser.add_argument("--irllrec_keep_rate", type=float, default=1.0)
+    parser.add_argument("--irllrec_log_every", type=int, default=10)
+    parser.add_argument(
+        "--irllrec_reuse_existing_scores",
+        action="store_true",
+        help="For recovery after a post-scoring failure, audit and import an existing exact IRLLRec score CSV without retraining.",
+    )
     parser.add_argument(
         "--allow_blocked_exit_zero",
         action="store_true",
