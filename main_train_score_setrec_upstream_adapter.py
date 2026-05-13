@@ -312,6 +312,16 @@ def _import_official_model(repo_dir: Path) -> Any:
         pass
     module = __import__("model_qwen", fromlist=["Qwen4Rec"])
     q_module = sys.modules.get("Q_qwen")
+    if q_module is not None:
+        import torch
+        import torch.nn as nn
+
+        for name, value in {
+            "torch": torch,
+            "nn": nn,
+        }.items():
+            if not hasattr(q_module, name):
+                setattr(q_module, name, value)
     q_model = getattr(q_module, "QQwen2Model", None) if q_module is not None else None
     if q_model is not None and not getattr(q_model, "_pony_accepts_extra_init_kwargs", False):
         original_init = q_model.__init__

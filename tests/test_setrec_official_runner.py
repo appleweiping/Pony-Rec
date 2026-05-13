@@ -211,6 +211,8 @@ def test_setrec_official_import_patches_qwen_extra_init_kwargs(tmp_path, monkeyp
     (code_dir / "Q_qwen.py").write_text(
         "class QQwen2Model:\n"
         "    def __init__(self, config):\n"
+        "        self.torch_name = torch.__name__\n"
+        "        self.nn_name = nn.__name__\n"
         "        self.config = config\n",
         encoding="utf-8",
     )
@@ -228,3 +230,5 @@ def test_setrec_official_import_patches_qwen_extra_init_kwargs(tmp_path, monkeyp
     instance = QQwen2Model("config", load_in_8bit=True, device_map="auto")
     assert model_cls.__name__ == "Qwen4Rec"
     assert instance.config == "config"
+    assert instance.torch_name == "torch"
+    assert instance.nn_name == "torch.nn"
