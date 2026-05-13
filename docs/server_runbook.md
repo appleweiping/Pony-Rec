@@ -436,7 +436,7 @@ an official baseline is missing a completed domain because its imported summary
 was cleaned or left only in a local archive.
 
 The next official external LLM-rec baselines after LLM2Rec/LLM-ESR/LLMEmb are
-RLMRec and IRLLRec. RLMRec imports the pinned repo's
+RLMRec, IRLLRec, and SETRec. RLMRec imports the pinned repo's
 `encoder.models.general_cf.simgcl_plus.SimGCL_plus` and preserves the official
 BPR, graph contrastive, and semantic alignment losses. IRLLRec imports the
 pinned repo's `encoder.models.general_cf.lightgcn_int.LightGCN_int` and
@@ -445,10 +445,12 @@ losses while supplying same-candidate graph data, Qwen3 item embeddings, and
 Qwen3-PCA64 intent artifacts. On large domains, IRLLRec's official
 `ssl_con_loss` would materialize an all-node N x N matrix; the runner applies a
 documented deterministic node cap (`--irllrec_ssl_con_max_nodes`, default
-4096) for that term and records the bridge in provenance. Use the same
-one-domain archive-and-clean loop.
-SETRec still needs an official run-stage adapter; run the official adapter
-audit/plan first and do not import blocked scaffold rows.
+4096) for that term and records the bridge in provenance. SETRec imports the
+pinned repo's `code.model_qwen.Qwen4Rec` and preserves the official
+query-guided simultaneous decoding, LoRA path, CF token projection, semantic AE
+tokenizer, and item scoring path while supplying same-candidate dictionaries,
+Qwen3 item/semantic features, and exact score export. Use the same one-domain
+archive-and-clean loop. Do not import blocked scaffold rows.
 
 For baseline comparison tables, keep the main reading order at
 `NDCG@5`, `NDCG@10`, `HR@5`, `HR@10`, then use `@20` as the extended-check

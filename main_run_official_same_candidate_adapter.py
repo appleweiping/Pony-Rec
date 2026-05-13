@@ -141,6 +141,29 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="For recovery after a post-scoring failure, audit and import an existing exact IRLLRec score CSV without retraining.",
     )
+    parser.add_argument("--setrec_adapter_exp_name", default="")
+    parser.add_argument("--setrec_adapter_dir", default="")
+    parser.add_argument("--setrec_epochs", type=int, default=20)
+    parser.add_argument("--setrec_train_batch_size", type=int, default=512)
+    parser.add_argument("--setrec_micro_batch_size", type=int, default=64)
+    parser.add_argument("--setrec_lr", type=float, default=3.0e-4)
+    parser.add_argument("--setrec_max_len", type=int, default=50)
+    parser.add_argument("--setrec_val_set_size", type=int, default=2000)
+    parser.add_argument("--setrec_n_sem", type=int, default=4)
+    parser.add_argument("--setrec_n_cf", type=int, default=1)
+    parser.add_argument("--setrec_alpha", type=float, default=0.7)
+    parser.add_argument("--setrec_beta", type=float, default=0.1)
+    parser.add_argument("--setrec_ae_layers", default="512,256,128")
+    parser.add_argument("--setrec_dropout_prob", type=float, default=0.0)
+    parser.add_argument("--setrec_bn", action="store_true")
+    parser.add_argument("--setrec_loss_type", default="mse")
+    parser.add_argument("--setrec_sem_encoder", default="qwen")
+    parser.add_argument("--setrec_lora_r", type=int, default=8)
+    parser.add_argument("--setrec_lora_alpha", type=int, default=16)
+    parser.add_argument("--setrec_lora_dropout", type=float, default=0.02)
+    parser.add_argument("--setrec_lora_target_modules", default="q_proj,v_proj,o_proj")
+    parser.add_argument("--setrec_warmup_steps", type=int, default=100)
+    parser.add_argument("--setrec_lr_scheduler", default="cosine")
     parser.add_argument(
         "--allow_blocked_exit_zero",
         action="store_true",

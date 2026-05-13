@@ -513,7 +513,7 @@ official_baselines:
       - keep official intent representation learning module, recommendation objective, and scoring head authoritative
       - adapt only same-candidate data conversion, Qwen3-8B representation source, and candidate-score export
       - large-domain scalability bridge caps the official all-node ssl_con_loss and records the cap in provenance
-    current_status: official_run_stage_support_implemented_pending_results
+    current_status: official_completed_declared_domains
     existing_local_scripts:
       - main_train_irllrec_style_same_candidate.py
       - main_train_score_irllrec_upstream_adapter.py
@@ -526,9 +526,8 @@ official_baselines:
       - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
       - import completed scores and package/copy evidence before cleaning server intermediates
     remaining_work:
-      - clone/pin official repo
-      - inspect official intent construction
-      - implement official score adapter
+      - keep imported summary tables available until final comparison tables are rebuilt and archived
+      - rerun only if the official fairness policy or same-candidate task package changes
 
   setrec:
     paper_style_name: SETRec-style Qwen3-8B Identifier
@@ -582,12 +581,14 @@ official_baselines:
       override_reason: none
       validation_tuned: false
     official_code_adaptation_notes:
-      - replace style adapter with official SETRec identifier generation and training runner before final import
-      - keep official semantic identifier or set representation module, objective, and scoring head authoritative
+      - official SETRec Qwen4Rec runner implemented; server validation still required before final import
+      - keep official Qwen4Rec query-guided simultaneous decoding, LoRA path, CF token projection, semantic AE tokenizer, objective, and scoring head authoritative
       - adapt only same-candidate data conversion, Qwen3-8B representation source, and candidate-score export
-    current_status: style_adapter_only
+    current_status: official_run_stage_support_implemented_pending_results
     existing_local_scripts:
       - main_train_setrec_style_same_candidate.py
+      - main_train_score_setrec_upstream_adapter.py
+      - main_run_setrec_official_same_candidate_adapter.py
     official_modules_to_preserve:
       - official semantic identifier / set representation module
       - official training objective
@@ -597,6 +598,7 @@ official_baselines:
       - use unified Qwen3-8B base for textual/LLM representation source
       - export exact candidate scores
     remaining_work:
-      - clone/pin official repo
-      - inspect official identifier generation and training runner
-      - implement official score adapter
+      - run one domain through the unified official runner on the pinned server checkout
+      - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
+      - import completed scores and package/copy evidence before cleaning server intermediates
+      - repeat the validated loop for the remaining declared domains

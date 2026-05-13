@@ -16,6 +16,7 @@ from src.baselines.official_runner.llm2rec import run_llm2rec_official
 from src.baselines.official_runner.llmemb import run_llmemb_official
 from src.baselines.official_runner.llmesr import run_llmesr_official
 from src.baselines.official_runner.rlmrec import run_rlmrec_official
+from src.baselines.official_runner.setrec import run_setrec_official
 
 
 METHOD_BLOCKERS = {
@@ -24,11 +25,7 @@ METHOD_BLOCKERS = {
     "llmemb": [],
     "rlmrec": [],
     "irllrec": [],
-    "setrec": [
-        "need_official_setrec_identifier_data_adapter",
-        "need_official_setrec_training_entrypoint",
-        "need_official_setrec_same_candidate_score_exporter",
-    ],
+    "setrec": [],
 }
 
 
@@ -82,6 +79,8 @@ def inspect_official_adapter(
                 if args.method == "rlmrec"
                 else "official_irllrec_qwen3base_lightgcn_int"
                 if args.method == "irllrec"
+                else "official_setrec_qwen3base_identifier"
+                if args.method == "setrec"
                 else "inspect_scaffold"
             ),
             "runner_note": (
@@ -95,6 +94,8 @@ def inspect_official_adapter(
                 if args.method == "rlmrec"
                 else "IRLLRec run support is implemented, but inspect stage never marks a row official_completed."
                 if args.method == "irllrec"
+                else "SETRec run support is implemented, but inspect stage never marks a row official_completed."
+                if args.method == "setrec"
                 else "This provenance scaffold intentionally does not mark the row official_completed. "
                 "Implement the method adapter against the pinned official repo before importing main-table scores."
             ),
@@ -113,6 +114,8 @@ def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], metho
         return run_rlmrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     if args.method == "irllrec":
         return run_irllrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
+    if args.method == "setrec":
+        return run_setrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"
