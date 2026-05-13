@@ -278,7 +278,7 @@ def _import_official_model(repo_dir: Path) -> Any:
         from transformers.cache_utils import Cache, DynamicCache
         from transformers.modeling_attn_mask_utils import AttentionMaskConverter
         from transformers.modeling_outputs import BaseModelOutputWithPast
-        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer, Qwen2RMSNorm
+        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer, Qwen2RMSNorm, Qwen2RotaryEmbedding
         from transformers.utils import logging
 
         if not hasattr(peft, "prepare_model_for_int8_training") and hasattr(peft, "prepare_model_for_kbit_training"):
@@ -293,6 +293,7 @@ def _import_official_model(repo_dir: Path) -> Any:
             "Qwen2Config": Qwen2Config,
             "Qwen2DecoderLayer": Qwen2DecoderLayer,
             "Qwen2RMSNorm": Qwen2RMSNorm,
+            "Qwen2RotaryEmbedding": Qwen2RotaryEmbedding,
             "BaseModelOutputWithPast": BaseModelOutputWithPast,
             "Cache": Cache,
             "DynamicCache": DynamicCache,
@@ -324,11 +325,41 @@ def _import_official_model(repo_dir: Path) -> Any:
             if not hasattr(q_module, name):
                 setattr(q_module, name, value)
     q_model = getattr(q_module, "QQwen2Model", None) if q_module is not None else None
+    try:
+        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer, Qwen2RotaryEmbedding
+
+        if not getattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False):
+            original_layer_forward = Qwen2DecoderLayer.forward
+
+            def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
+                if layer_kwargs.get("position_embeddings") is None and layer_kwargs.get("position_ids") is not None:
+                    rotary = getattr(self, "_pony_rotary_emb", None)
+                    if rotary is None:
+                        config = getattr(getattr(self, "self_attn", None), "config", None)
+                        if config is not None:
+                            rotary = Qwen2RotaryEmbedding(config=config).to(hidden_states.device)
+                            setattr(self, "_pony_rotary_emb", rotary)
+                    if rotary is not None:
+                        layer_kwargs["position_embeddings"] = rotary(hidden_states, layer_kwargs["position_ids"])
+                return original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
+
+            Qwen2DecoderLayer.forward = _compat_layer_forward
+            Qwen2DecoderLayer._pony_accepts_missing_position_embeddings = True
+    except Exception:
+        pass
     if q_model is not None and not getattr(q_model, "_pony_accepts_extra_init_kwargs", False):
         original_init = q_model.__init__
 
         def _compat_init(self: Any, config: Any, *model_args: Any, **model_kwargs: Any) -> None:
-            return original_init(self, config)
+            original_init(self, config)
+            try:
+                from transformers.models.qwen2.modeling_qwen2 import Qwen2RotaryEmbedding
+
+                for layer in getattr(self, "layers", []):
+                    if not hasattr(layer, "_pony_rotary_emb"):
+                        layer._pony_rotary_emb = Qwen2RotaryEmbedding(config=config)
+            except Exception:
+                pass
 
         q_model.__init__ = _compat_init
         q_model._pony_accepts_extra_init_kwargs = True
