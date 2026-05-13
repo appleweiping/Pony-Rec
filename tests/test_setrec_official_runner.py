@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from main_train_score_setrec_upstream_adapter import _import_official_model, _make_training_arguments
+from main_train_score_setrec_upstream_adapter import _import_official_model, _make_training_arguments, _qwen2_rotary_from_layer
 from src.baselines.official_runner.contract import resolve_method_config
 from src.baselines.official_runner.setrec import run_setrec_official
 
@@ -267,3 +267,23 @@ def test_setrec_training_arguments_adapts_eval_strategy_name(tmp_path):
 
     assert captured["eval_strategy"] == "no"
     assert captured["per_device_train_batch_size"] == 7
+
+
+def test_setrec_rotary_compat_uses_actual_attention_head_dim():
+    import torch
+
+    class FakeAttention:
+        head_dim = 32
+        config = type("Config", (), {"rope_theta": 10000.0})()
+
+    class FakeLayer:
+        self_attn = FakeAttention()
+
+    hidden_states = torch.zeros((2, 5, 64), dtype=torch.float16)
+    position_ids = torch.arange(5).unsqueeze(0).repeat(2, 1)
+
+    cos, sin = _qwen2_rotary_from_layer(layer=FakeLayer(), hidden_states=hidden_states, position_ids=position_ids)
+
+    assert cos.shape == (2, 1, 5, 32)
+    assert sin.shape == (2, 1, 5, 32)
+    assert cos.dtype == torch.float16

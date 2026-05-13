@@ -333,14 +333,11 @@ def _import_official_model(repo_dir: Path) -> Any:
 
             def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
                 if layer_kwargs.get("position_embeddings") is None and layer_kwargs.get("position_ids") is not None:
-                    rotary = getattr(self, "_pony_rotary_emb", None)
-                    if rotary is None:
-                        config = getattr(getattr(self, "self_attn", None), "config", None)
-                        if config is not None:
-                            rotary = Qwen2RotaryEmbedding(config=config).to(hidden_states.device)
-                            setattr(self, "_pony_rotary_emb", rotary)
-                    if rotary is not None:
-                        layer_kwargs["position_embeddings"] = rotary(hidden_states, layer_kwargs["position_ids"])
+                    layer_kwargs["position_embeddings"] = _qwen2_rotary_from_layer(
+                        layer=self,
+                        hidden_states=hidden_states,
+                        position_ids=layer_kwargs["position_ids"],
+                    )
                 return original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
 
             Qwen2DecoderLayer.forward = _compat_layer_forward
@@ -364,6 +361,27 @@ def _import_official_model(repo_dir: Path) -> Any:
         q_model.__init__ = _compat_init
         q_model._pony_accepts_extra_init_kwargs = True
     return getattr(module, "Qwen4Rec")
+
+
+def _qwen2_rotary_from_layer(*, layer: Any, hidden_states: Any, position_ids: Any) -> tuple[Any, Any]:
+    import torch
+
+    attention = getattr(layer, "self_attn", None)
+    config = getattr(attention, "config", None)
+    head_dim = int(getattr(attention, "head_dim", 0) or 0)
+    if head_dim <= 0 and config is not None:
+        head_dim = int(getattr(config, "head_dim", 0) or (getattr(config, "hidden_size") // getattr(config, "num_attention_heads")))
+    if head_dim <= 0:
+        raise RuntimeError("Cannot infer Qwen2 rotary head_dim for SETRec compatibility shim.")
+
+    base = float(getattr(config, "rope_theta", 10000.0)) if config is not None else 10000.0
+    inv_freq = 1.0 / (base ** (torch.arange(0, head_dim, 2, device=hidden_states.device, dtype=torch.float32) / head_dim))
+    pos = position_ids.to(device=hidden_states.device, dtype=torch.float32)
+    freqs = torch.einsum("bi,j->bij", pos, inv_freq)
+    emb = torch.cat((freqs, freqs), dim=-1)
+    cos = emb.cos().to(dtype=hidden_states.dtype).unsqueeze(1)
+    sin = emb.sin().to(dtype=hidden_states.dtype).unsqueeze(1)
+    return cos, sin
 
 
 def _make_official_args(
