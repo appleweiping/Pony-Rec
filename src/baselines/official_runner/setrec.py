@@ -32,7 +32,9 @@ SETREC_HPARAM_SOURCE = (
     "pinned SETRec code/scripts/train_qwen.sh and code/parse_utils.py defaults "
     "(Qwen4Rec, n_cf=1, n_query=n_sem+1, lora_r=8, lora_alpha=16, "
     "target_modules=q_proj/v_proj/o_proj, batch_size=512, micro_batch_size=64, "
-    "epochs=20, lr=3e-4, warmup_steps=100)"
+    "epochs=20, lr=3e-4, warmup_steps=100). The unified Qwen3-8B runner keeps "
+    "the effective batch_size=512 and lowers per-device micro_batch_size to 4 "
+    "by default, using gradient accumulation as a memory bridge on 48GB GPUs."
 )
 
 
@@ -163,7 +165,7 @@ def _official_hparams(args: argparse.Namespace) -> dict[str, Any]:
         "model_name": "Qwen4Rec",
         "epochs": int(getattr(args, "setrec_epochs", 20)),
         "batch_size": int(getattr(args, "setrec_train_batch_size", 512)),
-        "micro_batch_size": int(getattr(args, "setrec_micro_batch_size", 64)),
+        "micro_batch_size": int(getattr(args, "setrec_micro_batch_size", 4)),
         "seed": int(getattr(args, "seed", 42)),
         "lr": float(getattr(args, "setrec_lr", 3.0e-4)),
         "max_len": int(getattr(args, "setrec_max_len", 50)),
@@ -318,6 +320,16 @@ def run_setrec_official(
     score_coverage_rate = score_audit.get("score_coverage_rate") if score_audit else None
     status = "official_completed" if not blockers and score_coverage_rate == 1.0 else "official_blocked"
     hparams = _official_hparams(args)
+    hparam_overrides = {}
+    if hparams["micro_batch_size"] != 64:
+        hparam_overrides["micro_batch_size"] = {
+            "official_default": 64,
+            "runner_value": hparams["micro_batch_size"],
+            "reason": (
+                "memory_bridge_for_unified_qwen3_8b_on_48gb_gpu; "
+                "effective batch_size remains 512 via gradient accumulation"
+            ),
+        }
     provenance = build_base_provenance(
         args=args,
         cfg=cfg,
@@ -335,7 +347,7 @@ def run_setrec_official(
             "official_training_or_adaptation_entrypoint": SETREC_OFFICIAL_ENTRYPOINT,
             "default_hparam_source_file_or_url": SETREC_HPARAM_SOURCE,
             "official_training_config": hparams,
-            "baseline_hyperparameter_overrides": {},
+            "baseline_hyperparameter_overrides": hparam_overrides,
             "qwen3_item_embedding_path": text(embedding_summary.get("itm_emb_path")),
             "qwen3_item_embedding_sha256": sha256_file(embedding_summary.get("itm_emb_path") or ""),
             "qwen3_semantic_embedding_path": text(embedding_summary.get("pca64_emb_path")),

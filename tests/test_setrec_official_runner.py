@@ -111,7 +111,7 @@ def _args(tmp_path: Path, *, task_dir: Path, repo_dir: Path, dry_run: bool = Fal
         setrec_adapter_dir="",
         setrec_epochs=20,
         setrec_train_batch_size=512,
-        setrec_micro_batch_size=64,
+        setrec_micro_batch_size=4,
         setrec_lr=3.0e-4,
         setrec_max_len=50,
         setrec_val_set_size=2000,
@@ -190,6 +190,9 @@ def test_setrec_official_runner_marks_completed_only_after_exact_scores(tmp_path
     assert provenance["score_coverage_rate"] == 1.0
     assert provenance["runner_support_level"] == "official_setrec_qwen3base_identifier"
     assert provenance["official_training_config"]["model_name"] == "Qwen4Rec"
+    assert provenance["official_training_config"]["batch_size"] == 512
+    assert provenance["official_training_config"]["micro_batch_size"] == 4
+    assert provenance["baseline_hyperparameter_overrides"]["micro_batch_size"]["official_default"] == 64
     assert provenance["same_candidate_score_audit"]["audit_ok"] is True
 
 

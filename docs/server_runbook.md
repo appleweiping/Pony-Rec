@@ -449,7 +449,11 @@ documented deterministic node cap (`--irllrec_ssl_con_max_nodes`, default
 pinned repo's `code.model_qwen.Qwen4Rec` and preserves the official
 query-guided simultaneous decoding, LoRA path, CF token projection, semantic AE
 tokenizer, and item scoring path while supplying same-candidate dictionaries,
-Qwen3 item/semantic features, and exact score export. Use the same one-domain
+Qwen3 item/semantic features, and exact score export. The official SETRec
+scripts use `micro_batch_size=64`, but the Qwen3-8B unified-backbone runner
+defaults to `--setrec_micro_batch_size 4` on 48GB GPUs and keeps the effective
+`batch_size=512` through gradient accumulation; provenance records this as a
+memory bridge rather than test-set tuning. Use the same one-domain
 archive-and-clean loop. Do not import blocked scaffold rows.
 
 For baseline comparison tables, keep the main reading order at
