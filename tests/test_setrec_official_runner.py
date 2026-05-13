@@ -8,7 +8,12 @@ from pathlib import Path
 
 import numpy as np
 
-from main_train_score_setrec_upstream_adapter import _import_official_model, _make_training_arguments, _qwen2_rotary_from_layer
+from main_train_score_setrec_upstream_adapter import (
+    _import_official_model,
+    _make_training_arguments,
+    _patch_qwen2_decoder_layer_compat,
+    _qwen2_rotary_from_layer,
+)
 from src.baselines.official_runner.contract import resolve_method_config
 from src.baselines.official_runner.setrec import run_setrec_official
 
@@ -287,3 +292,37 @@ def test_setrec_rotary_compat_uses_actual_attention_head_dim():
     assert cos.shape == (2, 1, 5, 32)
     assert sin.shape == (2, 1, 5, 32)
     assert cos.dtype == torch.float16
+
+
+def test_setrec_decoder_layer_wrapper_preserves_old_tuple_contract(monkeypatch):
+    import torch
+    from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer
+
+    original = Qwen2DecoderLayer.forward
+
+    def fake_forward(self, hidden_states, *args, **kwargs):
+        assert hidden_states.ndim == 3
+        assert kwargs["position_embeddings"][0].shape[-1] == 32
+        return hidden_states + 1
+
+    monkeypatch.setattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False, raising=False)
+    monkeypatch.setattr(Qwen2DecoderLayer, "forward", fake_forward)
+
+    _patch_qwen2_decoder_layer_compat()
+    wrapped = Qwen2DecoderLayer.forward
+
+    class FakeAttention:
+        head_dim = 32
+        config = type("Config", (), {"rope_theta": 10000.0})()
+
+    class FakeLayer:
+        self_attn = FakeAttention()
+
+    hidden = torch.zeros((2, 1, 5, 64), dtype=torch.float32)
+    position_ids = torch.arange(5).unsqueeze(0).repeat(2, 1)
+    out = wrapped(FakeLayer(), hidden, position_ids=position_ids)
+
+    assert isinstance(out, tuple)
+    assert out[0].shape == (2, 5, 64)
+
+    monkeypatch.setattr(Qwen2DecoderLayer, "forward", original)

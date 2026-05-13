@@ -325,25 +325,7 @@ def _import_official_model(repo_dir: Path) -> Any:
             if not hasattr(q_module, name):
                 setattr(q_module, name, value)
     q_model = getattr(q_module, "QQwen2Model", None) if q_module is not None else None
-    try:
-        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer, Qwen2RotaryEmbedding
-
-        if not getattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False):
-            original_layer_forward = Qwen2DecoderLayer.forward
-
-            def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
-                if layer_kwargs.get("position_embeddings") is None and layer_kwargs.get("position_ids") is not None:
-                    layer_kwargs["position_embeddings"] = _qwen2_rotary_from_layer(
-                        layer=self,
-                        hidden_states=hidden_states,
-                        position_ids=layer_kwargs["position_ids"],
-                    )
-                return original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
-
-            Qwen2DecoderLayer.forward = _compat_layer_forward
-            Qwen2DecoderLayer._pony_accepts_missing_position_embeddings = True
-    except Exception:
-        pass
+    _patch_qwen2_decoder_layer_compat()
     if q_model is not None and not getattr(q_model, "_pony_accepts_extra_init_kwargs", False):
         original_init = q_model.__init__
 
@@ -361,6 +343,49 @@ def _import_official_model(repo_dir: Path) -> Any:
         q_model.__init__ = _compat_init
         q_model._pony_accepts_extra_init_kwargs = True
     return getattr(module, "Qwen4Rec")
+
+
+def _patch_qwen2_decoder_layer_compat() -> None:
+    try:
+        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer
+
+        if getattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False):
+            return
+        original_layer_forward = Qwen2DecoderLayer.forward
+
+        def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
+            original_shape = None
+            if getattr(hidden_states, "ndim", 0) == 4:
+                original_shape = hidden_states.shape
+                hidden_states = hidden_states.reshape(
+                    original_shape[0],
+                    original_shape[1] * original_shape[2],
+                    original_shape[3],
+                )
+            if layer_kwargs.get("position_embeddings") is None and layer_kwargs.get("position_ids") is not None:
+                position_ids = layer_kwargs["position_ids"]
+                if original_shape is not None and getattr(position_ids, "ndim", 0) == 2 and position_ids.shape[-1] != hidden_states.shape[1]:
+                    repeat = hidden_states.shape[1] // max(int(position_ids.shape[-1]), 1)
+                    position_ids = position_ids.repeat_interleave(repeat, dim=-1)
+                    layer_kwargs["position_ids"] = position_ids
+                layer_kwargs["position_embeddings"] = _qwen2_rotary_from_layer(
+                    layer=self,
+                    hidden_states=hidden_states,
+                    position_ids=layer_kwargs["position_ids"],
+                )
+            output = original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
+            if isinstance(output, tuple):
+                return output
+            if getattr(output, "ndim", 0) == 4:
+                output = output.reshape(output.shape[0], output.shape[1] * output.shape[2], output.shape[3])
+            # SETRec's pinned QQwen2Model.forward expects the pre-v5
+            # decoder-layer tuple contract and reads layer_outputs[0].
+            return (output,)
+
+        Qwen2DecoderLayer.forward = _compat_layer_forward
+        Qwen2DecoderLayer._pony_accepts_missing_position_embeddings = True
+    except Exception:
+        pass
 
 
 def _qwen2_rotary_from_layer(*, layer: Any, hidden_states: Any, position_ids: Any) -> tuple[Any, Any]:
