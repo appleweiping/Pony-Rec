@@ -9,6 +9,7 @@ import pickle
 import random
 import shutil
 import sys
+import inspect
 from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
@@ -416,21 +417,11 @@ def _train_model_with_official_class(
     collator = SequentialCollator()
     model = Model(**model_kwargs)
     gradient_accumulation_steps = max(1, int(args.batch_size) // max(1, int(args.micro_batch_size)))
-    training_args = transformers.TrainingArguments(
-        per_device_train_batch_size=int(args.micro_batch_size),
+    training_args = _make_training_arguments(
+        transformers=transformers,
+        args=args,
+        checkpoint_dir=checkpoint_dir,
         gradient_accumulation_steps=gradient_accumulation_steps,
-        warmup_steps=int(args.warmup_steps),
-        num_train_epochs=int(args.epochs),
-        learning_rate=float(args.lr),
-        bf16=True,
-        logging_steps=20,
-        optim="adamw_torch",
-        evaluation_strategy="no",
-        save_strategy="no",
-        lr_scheduler_type=args.lr_scheduler,
-        output_dir=str(checkpoint_dir),
-        report_to="none",
-        save_safetensors=False,
     )
     trainer = transformers.Trainer(
         model=model,
@@ -455,6 +446,37 @@ def _train_model_with_official_class(
         "train_samples": len(dataset),
     }
     return model, logs, summary
+
+
+def _make_training_arguments(
+    *,
+    transformers: Any,
+    args: argparse.Namespace,
+    checkpoint_dir: Path,
+    gradient_accumulation_steps: int,
+) -> Any:
+    training_kwargs = {
+        "per_device_train_batch_size": int(args.micro_batch_size),
+        "gradient_accumulation_steps": gradient_accumulation_steps,
+        "warmup_steps": int(args.warmup_steps),
+        "num_train_epochs": int(args.epochs),
+        "learning_rate": float(args.lr),
+        "bf16": True,
+        "logging_steps": 20,
+        "optim": "adamw_torch",
+        "save_strategy": "no",
+        "lr_scheduler_type": args.lr_scheduler,
+        "output_dir": str(checkpoint_dir),
+        "report_to": "none",
+        "save_safetensors": False,
+    }
+    training_arg_params = set(inspect.signature(transformers.TrainingArguments.__init__).parameters)
+    if "evaluation_strategy" in training_arg_params:
+        training_kwargs["evaluation_strategy"] = "no"
+    elif "eval_strategy" in training_arg_params:
+        training_kwargs["eval_strategy"] = "no"
+    training_kwargs = {key: value for key, value in training_kwargs.items() if key in training_arg_params}
+    return transformers.TrainingArguments(**training_kwargs)
 
 
 def _score_candidates(

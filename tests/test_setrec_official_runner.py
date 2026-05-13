@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from main_train_score_setrec_upstream_adapter import _import_official_model
+from main_train_score_setrec_upstream_adapter import _import_official_model, _make_training_arguments
 from src.baselines.official_runner.contract import resolve_method_config
 from src.baselines.official_runner.setrec import run_setrec_official
 
@@ -232,3 +232,38 @@ def test_setrec_official_import_patches_qwen_extra_init_kwargs(tmp_path, monkeyp
     assert instance.config == "config"
     assert instance.torch_name == "torch"
     assert instance.nn_name == "torch.nn"
+
+
+def test_setrec_training_arguments_adapts_eval_strategy_name(tmp_path):
+    captured: dict[str, object] = {}
+
+    class FakeTrainingArguments:
+        def __init__(self, output_dir: str, eval_strategy: str = "", per_device_train_batch_size: int = 1) -> None:
+            captured.update(
+                {
+                    "output_dir": output_dir,
+                    "eval_strategy": eval_strategy,
+                    "per_device_train_batch_size": per_device_train_batch_size,
+                }
+            )
+
+    class FakeTransformers:
+        TrainingArguments = FakeTrainingArguments
+
+    args = argparse.Namespace(
+        micro_batch_size=7,
+        warmup_steps=100,
+        epochs=20,
+        lr=3.0e-4,
+        lr_scheduler="cosine",
+    )
+
+    _make_training_arguments(
+        transformers=FakeTransformers,
+        args=args,
+        checkpoint_dir=tmp_path / "ckpt",
+        gradient_accumulation_steps=3,
+    )
+
+    assert captured["eval_strategy"] == "no"
+    assert captured["per_device_train_batch_size"] == 7
