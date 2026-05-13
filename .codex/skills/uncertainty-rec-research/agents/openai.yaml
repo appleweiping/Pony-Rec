@@ -1,0 +1,4 @@
+interface:
+  display_name: "Uncertainty Rec Research"
+  short_description: "Work safely on the uncertainty recommendation research project."
+  default_prompt: "Use $uncertainty-rec-research to handle a task in the Task-Grounded Uncertainty recommendation project."
