@@ -273,17 +273,30 @@ def _import_official_model(repo_dir: Path) -> Any:
         from typing import List, Optional, Tuple, Union
 
         from transformers import Qwen2Config
+        from transformers.cache_utils import Cache, DynamicCache
+        from transformers.modeling_attn_mask_utils import AttentionMaskConverter
+        from transformers.modeling_outputs import BaseModelOutputWithPast
+        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer, Qwen2RMSNorm
+        from transformers.utils import logging
 
         # The pinned SETRec Q_qwen.py uses several type-annotation symbols
-        # without importing them. Python versions that eagerly evaluate
-        # annotations fail while importing the official module, so expose the
-        # missing names without editing the pinned checkout.
+        # and a few runtime helpers without importing them. Newer Python /
+        # Transformers combinations can fail while importing or calling the
+        # official module, so expose the missing names without editing the
+        # pinned checkout.
         for name, value in {
             "Qwen2Config": Qwen2Config,
+            "Qwen2DecoderLayer": Qwen2DecoderLayer,
+            "Qwen2RMSNorm": Qwen2RMSNorm,
+            "BaseModelOutputWithPast": BaseModelOutputWithPast,
+            "Cache": Cache,
+            "DynamicCache": DynamicCache,
+            "AttentionMaskConverter": AttentionMaskConverter,
             "Optional": Optional,
             "List": List,
             "Tuple": Tuple,
             "Union": Union,
+            "logger": logging.get_logger("transformers.models.qwen2.modeling_qwen2"),
         }.items():
             if not hasattr(builtins, name):
                 setattr(builtins, name, value)
