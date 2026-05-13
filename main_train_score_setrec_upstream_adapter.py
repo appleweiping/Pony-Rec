@@ -287,6 +287,10 @@ def _import_official_model(repo_dir: Path) -> Any:
         }.items():
             if not hasattr(builtins, name):
                 setattr(builtins, name, value)
+        if not hasattr(builtins, "add_start_docstrings_to_model_forward"):
+            setattr(builtins, "add_start_docstrings_to_model_forward", lambda *_args, **_kwargs: (lambda fn: fn))
+        if not hasattr(builtins, "QWEN2_INPUTS_DOCSTRING"):
+            setattr(builtins, "QWEN2_INPUTS_DOCSTRING", "")
     except Exception:
         pass
     module = __import__("model_qwen", fromlist=["Qwen4Rec"])
