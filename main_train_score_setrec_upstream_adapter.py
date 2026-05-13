@@ -347,51 +347,153 @@ def _import_official_model(repo_dir: Path) -> Any:
 
 def _patch_qwen2_decoder_layer_compat() -> None:
     try:
-        from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer
+        from transformers.models.qwen2.modeling_qwen2 import Qwen2Attention, Qwen2DecoderLayer
 
-        if getattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False):
-            return
-        original_layer_forward = Qwen2DecoderLayer.forward
+        if not getattr(Qwen2Attention, "_pony_accepts_setrec_hidden_rank", False):
+            original_attention_forward = Qwen2Attention.forward
 
-        def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
-            original_shape = None
-            if getattr(hidden_states, "ndim", 0) == 4:
-                original_shape = hidden_states.shape
-                hidden_states = hidden_states.reshape(
-                    original_shape[0],
-                    original_shape[1] * original_shape[2],
-                    original_shape[3],
-                )
-            if layer_kwargs.get("position_embeddings") is None and layer_kwargs.get("position_ids") is not None:
-                position_ids = layer_kwargs["position_ids"]
-                if original_shape is not None and getattr(position_ids, "ndim", 0) == 2 and position_ids.shape[-1] != hidden_states.shape[1]:
-                    repeat = hidden_states.shape[1] // max(int(position_ids.shape[-1]), 1)
-                    position_ids = position_ids.repeat_interleave(repeat, dim=-1)
-                    layer_kwargs["position_ids"] = position_ids
-                layer_kwargs["position_embeddings"] = _qwen2_rotary_from_layer(
+            def _compat_attention_forward(
+                self: Any,
+                hidden_states: Any,
+                position_embeddings: Any = None,
+                attention_mask: Any = None,
+                *attention_args: Any,
+                **attention_kwargs: Any,
+            ) -> Any:
+                hidden_states, _original_shape = _flatten_setrec_hidden_states(hidden_states)
+                position_ids = attention_kwargs.get("position_ids")
+                position_embeddings = _ensure_qwen2_position_embeddings(
                     layer=self,
                     hidden_states=hidden_states,
-                    position_ids=layer_kwargs["position_ids"],
+                    position_ids=position_ids,
+                    position_embeddings=position_embeddings,
                 )
-            output = original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
-            if isinstance(output, tuple):
-                return output
-            if getattr(output, "ndim", 0) == 4:
-                output = output.reshape(output.shape[0], output.shape[1] * output.shape[2], output.shape[3])
-            # SETRec's pinned QQwen2Model.forward expects the pre-v5
-            # decoder-layer tuple contract and reads layer_outputs[0].
-            return (output,)
+                attention_mask = _align_setrec_attention_mask(attention_mask, seq_len=int(hidden_states.shape[1]))
+                return original_attention_forward(
+                    self,
+                    hidden_states,
+                    position_embeddings,
+                    attention_mask,
+                    *attention_args,
+                    **attention_kwargs,
+                )
 
-        Qwen2DecoderLayer.forward = _compat_layer_forward
-        Qwen2DecoderLayer._pony_accepts_missing_position_embeddings = True
+            Qwen2Attention.forward = _compat_attention_forward
+            Qwen2Attention._pony_accepts_setrec_hidden_rank = True
+
+        if not getattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False):
+            original_layer_forward = Qwen2DecoderLayer.forward
+
+            def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
+                hidden_states, _original_shape = _flatten_setrec_hidden_states(hidden_states)
+                if layer_kwargs.get("position_ids") is not None:
+                    layer_kwargs["position_ids"] = _align_setrec_position_ids(
+                        layer_kwargs["position_ids"],
+                        batch_size=int(hidden_states.shape[0]),
+                        seq_len=int(hidden_states.shape[1]),
+                        device=hidden_states.device,
+                    )
+                layer_kwargs["position_embeddings"] = _ensure_qwen2_position_embeddings(
+                    layer=self,
+                    hidden_states=hidden_states,
+                    position_ids=layer_kwargs.get("position_ids"),
+                    position_embeddings=layer_kwargs.get("position_embeddings"),
+                )
+                if layer_kwargs.get("attention_mask") is not None:
+                    layer_kwargs["attention_mask"] = _align_setrec_attention_mask(
+                        layer_kwargs["attention_mask"],
+                        seq_len=int(hidden_states.shape[1]),
+                    )
+                output = original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
+                if isinstance(output, tuple):
+                    if output:
+                        first, _shape = _flatten_setrec_hidden_states(output[0])
+                        return (first, *output[1:])
+                    return output
+                output, _shape = _flatten_setrec_hidden_states(output)
+                # SETRec's pinned QQwen2Model.forward expects the pre-v5
+                # decoder-layer tuple contract and reads layer_outputs[0].
+                return (output,)
+
+            Qwen2DecoderLayer.forward = _compat_layer_forward
+            Qwen2DecoderLayer._pony_accepts_missing_position_embeddings = True
     except Exception:
         pass
+
+
+def _flatten_setrec_hidden_states(hidden_states: Any) -> tuple[Any, Any | None]:
+    if getattr(hidden_states, "ndim", 0) <= 3:
+        return hidden_states, None
+    original_shape = hidden_states.shape
+    seq_len = int(math.prod(int(dim) for dim in original_shape[1:-1]))
+    return hidden_states.reshape(int(original_shape[0]), seq_len, int(original_shape[-1])), original_shape
+
+
+def _align_setrec_position_ids(position_ids: Any, *, batch_size: int, seq_len: int, device: Any) -> Any:
+    import torch
+
+    if position_ids is None:
+        return torch.arange(seq_len, device=device, dtype=torch.long).unsqueeze(0).expand(batch_size, -1)
+    if getattr(position_ids, "ndim", 0) == 1:
+        position_ids = position_ids.unsqueeze(0).expand(batch_size, -1)
+    elif getattr(position_ids, "ndim", 0) > 2:
+        position_ids = position_ids.reshape(int(position_ids.shape[0]), -1)
+    if int(position_ids.shape[0]) == 1 and batch_size > 1:
+        position_ids = position_ids.expand(batch_size, -1)
+    if int(position_ids.shape[-1]) == seq_len:
+        return position_ids.to(device=device)
+    old_len = max(int(position_ids.shape[-1]), 1)
+    if seq_len % old_len == 0:
+        return position_ids.repeat_interleave(seq_len // old_len, dim=-1).to(device=device)
+    return torch.arange(seq_len, device=device, dtype=position_ids.dtype).unsqueeze(0).expand(batch_size, -1)
+
+
+def _qwen2_position_embedding_seq_len(position_embeddings: Any) -> int | None:
+    if not isinstance(position_embeddings, tuple) or not position_embeddings:
+        return None
+    cos = position_embeddings[0]
+    if getattr(cos, "ndim", 0) < 2:
+        return None
+    return int(cos.shape[-2])
+
+
+def _ensure_qwen2_position_embeddings(
+    *,
+    layer: Any,
+    hidden_states: Any,
+    position_ids: Any,
+    position_embeddings: Any,
+) -> tuple[Any, Any]:
+    seq_len = int(hidden_states.shape[1])
+    if _qwen2_position_embedding_seq_len(position_embeddings) == seq_len:
+        return position_embeddings
+    position_ids = _align_setrec_position_ids(
+        position_ids,
+        batch_size=int(hidden_states.shape[0]),
+        seq_len=seq_len,
+        device=hidden_states.device,
+    )
+    return _qwen2_rotary_from_layer(layer=layer, hidden_states=hidden_states, position_ids=position_ids)
+
+
+def _align_setrec_attention_mask(attention_mask: Any, *, seq_len: int) -> Any:
+    if attention_mask is None or getattr(attention_mask, "ndim", 0) < 2:
+        return attention_mask
+    if int(attention_mask.shape[-1]) == seq_len and (getattr(attention_mask, "ndim", 0) < 4 or int(attention_mask.shape[-2]) in {1, seq_len}):
+        return attention_mask
+    old_len = max(int(attention_mask.shape[-1]), 1)
+    if seq_len % old_len == 0:
+        repeat = seq_len // old_len
+        attention_mask = attention_mask.repeat_interleave(repeat, dim=-1)
+        if getattr(attention_mask, "ndim", 0) >= 4 and int(attention_mask.shape[-2]) not in {1, seq_len}:
+            attention_mask = attention_mask.repeat_interleave(repeat, dim=-2)
+    return attention_mask
 
 
 def _qwen2_rotary_from_layer(*, layer: Any, hidden_states: Any, position_ids: Any) -> tuple[Any, Any]:
     import torch
 
-    attention = getattr(layer, "self_attn", None)
+    attention = getattr(layer, "self_attn", None) or layer
     config = getattr(attention, "config", None)
     head_dim = int(getattr(attention, "head_dim", 0) or 0)
     if head_dim <= 0 and config is not None:
