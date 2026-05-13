@@ -311,6 +311,16 @@ def _import_official_model(repo_dir: Path) -> Any:
     except Exception:
         pass
     module = __import__("model_qwen", fromlist=["Qwen4Rec"])
+    q_module = sys.modules.get("Q_qwen")
+    q_model = getattr(q_module, "QQwen2Model", None) if q_module is not None else None
+    if q_model is not None and not getattr(q_model, "_pony_accepts_extra_init_kwargs", False):
+        original_init = q_model.__init__
+
+        def _compat_init(self: Any, config: Any, *model_args: Any, **model_kwargs: Any) -> None:
+            return original_init(self, config)
+
+        q_model.__init__ = _compat_init
+        q_model._pony_accepts_extra_init_kwargs = True
     return getattr(module, "Qwen4Rec")
 
 

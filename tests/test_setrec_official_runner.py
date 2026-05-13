@@ -8,6 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
+from main_train_score_setrec_upstream_adapter import _import_official_model
 from src.baselines.official_runner.contract import resolve_method_config
 from src.baselines.official_runner.setrec import run_setrec_official
 
@@ -202,3 +203,28 @@ def test_setrec_official_runner_blocks_hash_embeddings(tmp_path, monkeypatch):
     assert provenance["implementation_status"] == "official_blocked"
     assert "setrec_official_requires_real_text_embeddings_not_deterministic_hash" in provenance["blockers"]
     assert provenance["score_coverage_rate"] is None
+
+
+def test_setrec_official_import_patches_qwen_extra_init_kwargs(tmp_path, monkeypatch):
+    repo_dir = _make_repo(tmp_path)
+    code_dir = repo_dir / "code"
+    (code_dir / "Q_qwen.py").write_text(
+        "class QQwen2Model:\n"
+        "    def __init__(self, config):\n"
+        "        self.config = config\n",
+        encoding="utf-8",
+    )
+    (code_dir / "model_qwen.py").write_text(
+        "from Q_qwen import QQwen2Model\n"
+        "class Qwen4Rec:\n"
+        "    pass\n",
+        encoding="utf-8",
+    )
+    monkeypatch.syspath_prepend(str(code_dir))
+
+    model_cls = _import_official_model(repo_dir)
+    from Q_qwen import QQwen2Model
+
+    instance = QQwen2Model("config", load_in_8bit=True, device_map="auto")
+    assert model_cls.__name__ == "Qwen4Rec"
+    assert instance.config == "config"
