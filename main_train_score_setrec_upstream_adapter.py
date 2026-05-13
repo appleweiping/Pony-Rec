@@ -270,13 +270,23 @@ def _import_official_model(repo_dir: Path) -> Any:
         sys.path.insert(0, str(code_dir))
     try:
         import builtins
+        from typing import List, Optional, Tuple, Union
+
         from transformers import Qwen2Config
 
-        # The pinned SETRec Q_qwen.py annotates QQwen2Model.__init__ with
-        # Qwen2Config but does not import that name. In Python versions that
-        # eagerly evaluate annotations, importing the official module fails.
-        if not hasattr(builtins, "Qwen2Config"):
-            setattr(builtins, "Qwen2Config", Qwen2Config)
+        # The pinned SETRec Q_qwen.py uses several type-annotation symbols
+        # without importing them. Python versions that eagerly evaluate
+        # annotations fail while importing the official module, so expose the
+        # missing names without editing the pinned checkout.
+        for name, value in {
+            "Qwen2Config": Qwen2Config,
+            "Optional": Optional,
+            "List": List,
+            "Tuple": Tuple,
+            "Union": Union,
+        }.items():
+            if not hasattr(builtins, name):
+                setattr(builtins, name, value)
     except Exception:
         pass
     module = __import__("model_qwen", fromlist=["Qwen4Rec"])
