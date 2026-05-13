@@ -268,6 +268,17 @@ def _import_official_model(repo_dir: Path) -> Any:
         raise FileNotFoundError(f"SETRec model_qwen.py not found under {code_dir}")
     if str(code_dir) not in sys.path:
         sys.path.insert(0, str(code_dir))
+    try:
+        import builtins
+        from transformers import Qwen2Config
+
+        # The pinned SETRec Q_qwen.py annotates QQwen2Model.__init__ with
+        # Qwen2Config but does not import that name. In Python versions that
+        # eagerly evaluate annotations, importing the official module fails.
+        if not hasattr(builtins, "Qwen2Config"):
+            setattr(builtins, "Qwen2Config", Qwen2Config)
+    except Exception:
+        pass
     module = __import__("model_qwen", fromlist=["Qwen4Rec"])
     return getattr(module, "Qwen4Rec")
 
