@@ -272,12 +272,16 @@ def _import_official_model(repo_dir: Path) -> Any:
         import builtins
         from typing import List, Optional, Tuple, Union
 
+        import peft
         from transformers import Qwen2Config
         from transformers.cache_utils import Cache, DynamicCache
         from transformers.modeling_attn_mask_utils import AttentionMaskConverter
         from transformers.modeling_outputs import BaseModelOutputWithPast
         from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer, Qwen2RMSNorm
         from transformers.utils import logging
+
+        if not hasattr(peft, "prepare_model_for_int8_training") and hasattr(peft, "prepare_model_for_kbit_training"):
+            peft.prepare_model_for_int8_training = peft.prepare_model_for_kbit_training
 
         # The pinned SETRec Q_qwen.py uses several type-annotation symbols
         # and a few runtime helpers without importing them. Newer Python /
