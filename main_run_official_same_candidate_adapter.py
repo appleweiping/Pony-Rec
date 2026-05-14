@@ -164,6 +164,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--setrec_lora_target_modules", default="q_proj,v_proj,o_proj")
     parser.add_argument("--setrec_warmup_steps", type=int, default=100)
     parser.add_argument("--setrec_lr_scheduler", default="cosine")
+    parser.add_argument("--elmrec_adapter_exp_name", default="")
+    parser.add_argument("--elmrec_adapter_dir", default="")
+    parser.add_argument("--elmrec_epochs", type=int, default=100)
+    parser.add_argument("--elmrec_train_batch_size", type=int, default=64)
+    parser.add_argument("--elmrec_lr", type=float, default=1.0e-3)
+    parser.add_argument("--elmrec_alpha", type=float, default=6.0)
+    parser.add_argument("--elmrec_sigma", type=float, default=6.0)
+    parser.add_argument("--elmrec_graph_layers", type=int, default=4)
+    parser.add_argument("--elmrec_embedding_size", type=int, default=128)
+    parser.add_argument("--elmrec_reg_weight", type=float, default=1.0e-5)
+    parser.add_argument("--elmrec_log_every", type=int, default=5)
     parser.add_argument(
         "--allow_blocked_exit_zero",
         action="store_true",

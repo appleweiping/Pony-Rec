@@ -36,7 +36,10 @@ PIDs, audit summaries, and missing-file errors.
    only if that is the intended diagnostic.
 5. Audit official external repositories.
 6. Implement official adapters in order: LLM2Rec, LLM-ESR, LLMEmb, RLMRec,
-   IRLLRec, SETRec.
+   IRLLRec, then the replacement expansion baselines ELMRec, ProEx, and
+   ProMax. SETRec is currently blocked/replaced after repeated large-domain
+   upstream `tokenize_all` CUDA OOM failures and should not be included in the
+   main official block unless a future memory-stable run passes all gates.
 7. Run Shadow large-scale diagnostics only after the 100neg task packages are
    confirmed healthy.
 8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
@@ -436,7 +439,8 @@ an official baseline is missing a completed domain because its imported summary
 was cleaned or left only in a local archive.
 
 The next official external LLM-rec baselines after LLM2Rec/LLM-ESR/LLMEmb are
-RLMRec, IRLLRec, and SETRec. RLMRec imports the pinned repo's
+RLMRec, IRLLRec, and the replacement expansion baselines ELMRec, ProEx, and
+ProMax. RLMRec imports the pinned repo's
 `encoder.models.general_cf.simgcl_plus.SimGCL_plus` and preserves the official
 BPR, graph contrastive, and semantic alignment losses. IRLLRec imports the
 pinned repo's `encoder.models.general_cf.lightgcn_int.LightGCN_int` and
@@ -445,17 +449,55 @@ losses while supplying same-candidate graph data, Qwen3 item embeddings, and
 Qwen3-PCA64 intent artifacts. On large domains, IRLLRec's official
 `ssl_con_loss` would materialize an all-node N x N matrix; the runner applies a
 documented deterministic node cap (`--irllrec_ssl_con_max_nodes`, default
-4096) for that term and records the bridge in provenance. SETRec imports the
-pinned repo's `code.model_qwen.Qwen4Rec` and preserves the official
-query-guided simultaneous decoding, LoRA path, CF token projection, semantic AE
-tokenizer, and item scoring path while supplying same-candidate dictionaries,
-Qwen3 item/semantic features, and exact score export. The official SETRec
-scripts use `micro_batch_size=64`, but the Qwen3-8B unified-backbone runner
-defaults to `--setrec_micro_batch_size 1` on 48GB GPUs and keeps the effective
-`batch_size=512` through gradient accumulation plus Qwen gradient
-checkpointing; provenance records this as a memory bridge rather than test-set
-tuning. Use the same one-domain
-archive-and-clean loop. Do not import blocked scaffold rows.
+4096) for that term and records the bridge in provenance. ELMRec uses the
+pinned `WangXFng/ELMRec` repo and preserves its high-order LightGCN
+whole-word interaction bridge plus official Beauty sequential `alpha/sigma/L`
+defaults while replacing the T5 text backbone with the unified Qwen3-8B item
+representation bridge and exporting exact same-candidate scores. ProEx
+(KDD 2026) and ProMax (SIGIR 2026) are selected from the official ProRec
+repository as 2026 expansion baselines; their run-stage adapters are pending
+after ELMRec Beauty validation. SETRec remains `official_blocked_replaced` and
+any partial/failed SETRec outputs are not table eligible. Use the same
+one-domain archive-and-clean loop. Do not import blocked scaffold rows.
+
+ELMRec Beauty full-domain command:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+DOMAIN=beauty
+EXP=beauty_supplementary_smallerN_100neg
+mkdir -p outputs/summary/logs
+LOG=outputs/summary/logs/week8_elmrec_official_${DOMAIN}_$(date +%F_%H%M%S).log
+PID=outputs/summary/logs/week8_elmrec_official_${DOMAIN}.pid
+nohup python main_run_elmrec_official_same_candidate_adapter.py \
+  --stage run \
+  --domain "$DOMAIN" \
+  --task_dir "outputs/baselines/external_tasks/${EXP}_test_same_candidate" \
+  --valid_task_dir "outputs/baselines/external_tasks/${EXP}_valid_same_candidate" \
+  --output_scores_path "outputs/baselines/official_adapters/${EXP}_elmrec_official/elmrec_official_scores.csv" \
+  --provenance_output_path "outputs/baselines/official_adapters/${EXP}_elmrec_official/fairness_provenance.json" \
+  --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 \
+  --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation \
+  --backbone_path /home/ajifang/models/Qwen/Qwen3-8B \
+  --llm_adaptation_mode representation_learner \
+  --hparam_policy official_default_or_recommended \
+  --embedding_backend hf_mean_pool \
+  --embedding_batch_size 1 \
+  --embedding_max_length 64 \
+  --embedding_max_text_chars 512 \
+  --torch_dtype bfloat16 \
+  --hf_device_map auto \
+  --elmrec_epochs 100 \
+  --elmrec_train_batch_size 64 > "$LOG" 2>&1 &
+echo $! > "$PID"
+disown
+echo "log=$LOG"
+echo "pid_file=$PID"
+```
+
+After completion, import only if provenance reports
+`implementation_status=official_completed`, `blockers=[]`, and
+`score_coverage_rate=1.0`.
 
 For baseline comparison tables, keep the main reading order at
 `NDCG@5`, `NDCG@10`, `HR@5`, `HR@10`, then use `@20` as the extended-check

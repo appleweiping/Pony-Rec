@@ -11,6 +11,7 @@ from src.baselines.official_runner.contract import (
     resolve_repo_dir_text,
     text,
 )
+from src.baselines.official_runner.elmrec import run_elmrec_official
 from src.baselines.official_runner.irllrec import run_irllrec_official
 from src.baselines.official_runner.llm2rec import run_llm2rec_official
 from src.baselines.official_runner.llmemb import run_llmemb_official
@@ -26,6 +27,9 @@ METHOD_BLOCKERS = {
     "rlmrec": [],
     "irllrec": [],
     "setrec": [],
+    "elmrec": [],
+    "proex": ["run_stage_not_implemented_for_method"],
+    "promax": ["run_stage_not_implemented_for_method"],
 }
 
 
@@ -36,6 +40,9 @@ OFFICIAL_ENTRYPOINT_HINTS = {
     "rlmrec": "RLMRec official graph training/evaluation entrypoint to be inspected",
     "irllrec": "IRLLRec official intent training/evaluation entrypoint to be inspected",
     "setrec": "SETRec official identifier training/evaluation entrypoint to be inspected",
+    "elmrec": "ELMRec official high-order graph interaction training/evaluation bridge",
+    "proex": "ProEx KDD 2026 official profile-enhanced recommendation entrypoint to be inspected",
+    "promax": "ProMax SIGIR 2026 official profile-enhanced recommendation entrypoint to be inspected",
 }
 
 
@@ -81,6 +88,12 @@ def inspect_official_adapter(
                 if args.method == "irllrec"
                 else "official_setrec_qwen3base_identifier"
                 if args.method == "setrec"
+                else "official_elmrec_qwen3base_graph_bridge"
+                if args.method == "elmrec"
+                else "official_proex_qwen3base_profile"
+                if args.method == "proex"
+                else "official_promax_qwen3base_profile"
+                if args.method == "promax"
                 else "inspect_scaffold"
             ),
             "runner_note": (
@@ -96,6 +109,8 @@ def inspect_official_adapter(
                 if args.method == "irllrec"
                 else "SETRec run support is implemented, but inspect stage never marks a row official_completed."
                 if args.method == "setrec"
+                else "ELMRec run support is implemented, but inspect stage never marks a row official_completed."
+                if args.method == "elmrec"
                 else "This provenance scaffold intentionally does not mark the row official_completed. "
                 "Implement the method adapter against the pinned official repo before importing main-table scores."
             ),
@@ -116,6 +131,8 @@ def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], metho
         return run_irllrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     if args.method == "setrec":
         return run_setrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
+    if args.method == "elmrec":
+        return run_elmrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"

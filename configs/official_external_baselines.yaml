@@ -584,7 +584,7 @@ official_baselines:
       - official SETRec Qwen4Rec runner implemented; server validation still required before final import
       - keep official Qwen4Rec query-guided simultaneous decoding, LoRA path, CF token projection, semantic AE tokenizer, objective, and scoring head authoritative
       - adapt only same-candidate data conversion, Qwen3-8B representation source, and candidate-score export
-    current_status: official_run_stage_support_implemented_pending_results
+    current_status: official_blocked_replaced_by_elmrec_proex_promax
     existing_local_scripts:
       - main_train_setrec_style_same_candidate.py
       - main_train_score_setrec_upstream_adapter.py
@@ -598,7 +598,145 @@ official_baselines:
       - use unified Qwen3-8B base for textual/LLM representation source
       - export exact candidate scores
     remaining_work:
-      - run one domain through the unified official runner on the pinned server checkout
+      - do not include SETRec in the main official baseline block unless a future memory-stable official run passes all gates
+      - keep failed large-domain attempts labelled official_blocked with blocker setrec_upstream_tokenize_all_cuda_oom
+      - use ELMRec plus two 2026 official-code baselines as the replacement expansion path
+
+  elmrec:
+    paper_style_name: ELMRec high-order interaction aware LLM recommender
+    target_baseline_name: elmrec_official_qwen3base_graph
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_high_order_graph_interaction_bridge
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
+    official_repo: https://github.com/WangXFng/ELMRec
+    pinned_commit: b28c4f786d89fb8473ab358e12a882b30259f627
+    local_repo_env: ELMREC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/ELMRec
+    official_code_provenance:
+      repo_url: https://github.com/WangXFng/ELMRec
+      repo_path: WangXFng/ELMRec
+      commit: b28c4f786d89fb8473ab358e12a882b30259f627
+      local_checkout_env: ELMREC_REPO_DIR
+      local_checkout_default: /home/ajifang/projects/ELMRec
+    adapter_checkpoint_provenance:
+      record_required: true
+      adapter_or_checkpoint_kind: official_elmrec_qwen3_graph_bridge_checkpoint
+      path_record: produced_checkpoint_path_per_domain
+      digest_record: produced_checkpoint_digest_per_domain
+      training_entrypoint_record: official_or_wrapped_elmrec_training_entrypoint
+      training_inputs_record:
+        - unified train_source
+        - unified valid_source
+        - ELMRec high-order graph interaction bridge
+        - Qwen3-8B item representation artifacts
+      hyperparameter_record: official_elmrec_beauty_sequential_hyperparameters
+      default_hparam_source_file_or_url: pinned ELMRec README Table 9 and pretrain.py defaults
+      baseline_hyperparameter_overrides: qwen3_backbone_bridge_replaces_t5_text_backbone_under_unified_policy
+      override_reason: experiment-wide unified Qwen3-8B backbone policy
+      validation_tuned: false
+    official_code_adaptation_notes:
+      - official ELMRec uses a T5 text backbone; the unified-runner bridge replaces the text backbone with Qwen3-8B item representations
+      - preserve ELMRec high-order LightGCN whole-word interaction mechanism and official Beauty sequential alpha/sigma/L defaults
+      - adapt only same-candidate data conversion, Qwen3-8B representation source, BPR orderable candidate scorer, and exact score export
+    current_status: official_run_stage_support_implemented_pending_results
+    existing_local_scripts:
+      - main_train_score_elmrec_upstream_adapter.py
+      - main_run_elmrec_official_same_candidate_adapter.py
+    official_modules_to_preserve:
+      - official ELMRec data framing
+      - official high-order interaction awareness via LightGCN graph propagation
+      - official Beauty sequential alpha/sigma/L hyperparameters
+    required_protocol_changes:
+      - build same-candidate adapter from unified task package
+      - use unified Qwen3-8B base for item representations
+      - export exact same-candidate scores only
+    remaining_work:
+      - run Beauty full-domain through the unified official runner on the pinned server checkout
       - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
       - import completed scores and package/copy evidence before cleaning server intermediates
-      - repeat the validated loop for the remaining declared domains
+
+  proex:
+    paper_style_name: ProEx profile-enhanced LLM recommender
+    target_baseline_name: proex_official_qwen3base_profile
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - lora
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_profile_module_or_lora_when_part_of_method
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
+    official_repo: https://github.com/BlueGhostYi/ProRec
+    pinned_commit: 48a3a3d5075c1112c793b9bfc78de9a8b000ffe2
+    local_repo_env: PROREC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/ProRec
+    current_status: official_inspect_only_pending_adapter
+    official_code_adaptation_notes:
+      - KDD 2026 ProEx entry in the ProRec official repository
+      - inspect official training/profile generation entrypoints before run-stage implementation
+      - preserve official profile construction and scoring recipe while replacing LLM backbone with Qwen3-8B
+    remaining_work:
+      - implement official-code adapter after ELMRec Beauty is validated
+
+  promax:
+    paper_style_name: ProMax profile-enhanced LLM recommender
+    target_baseline_name: promax_official_qwen3base_profile
+    fairness_contract:
+      comparison_tier: official_code_qwen3base_default_hparams_declared_adaptation
+      official_code_required: true
+      backbone_replacement_required: true
+      backbone_family: Qwen3-8B
+      accepted_llm_adaptation_modes:
+        - frozen_base_embedding
+        - lora
+        - representation_learner
+      hparam_policy: official_default_or_recommended
+      extra_baseline_tuning_allowed: false
+      allowed_changes:
+        - dataset_adapter
+        - qwen3_8b_base_model_replacement
+        - official_profile_module_or_lora_when_part_of_method
+        - same_candidate_score_exporter
+      forbidden_changes:
+        - test_set_model_selection
+        - importing_full_catalog_metrics
+        - changing_candidate_set
+    official_repo: https://github.com/BlueGhostYi/ProRec
+    pinned_commit: 48a3a3d5075c1112c793b9bfc78de9a8b000ffe2
+    local_repo_env: PROREC_REPO_DIR
+    local_repo_default: /home/ajifang/projects/ProRec
+    current_status: official_inspect_only_pending_adapter
+    official_code_adaptation_notes:
+      - SIGIR 2026 ProMax entry in the ProRec official repository
+      - inspect official training/profile generation entrypoints before run-stage implementation
+      - preserve official profile construction and scoring recipe while replacing LLM backbone with Qwen3-8B
+    remaining_work:
+      - implement official-code adapter after ELMRec Beauty is validated
