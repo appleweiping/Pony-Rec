@@ -32,7 +32,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model_class", default="Qwen4Rec")
     parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--batch_size", type=int, default=512)
-    parser.add_argument("--micro_batch_size", type=int, default=64)
+    parser.add_argument("--micro_batch_size", type=int, default=1)
     parser.add_argument("--lr", type=float, default=3.0e-4)
     parser.add_argument("--max_len", type=int, default=50)
     parser.add_argument("--val_set_size", type=int, default=2000)
@@ -670,6 +670,9 @@ def _train_model_with_official_class(
     dataset = SequentialDataset(str(dataset_path) + os.sep, args.max_len, model_kwargs["n_query"], args.n_sem)
     collator = SequentialCollator()
     model = Model(**model_kwargs)
+    memory_summary = _enable_setrec_qwen_memory_saving(model)
+    if int(args.batch_size) % max(1, int(args.micro_batch_size)) != 0:
+        raise ValueError("SETRec batch_size must be divisible by micro_batch_size to preserve effective batch.")
     gradient_accumulation_steps = max(1, int(args.batch_size) // max(1, int(args.micro_batch_size)))
     training_args = _make_training_arguments(
         transformers=transformers,
@@ -698,8 +701,45 @@ def _train_model_with_official_class(
         if hasattr(train_output, "metrics")
         else "",
         "train_samples": len(dataset),
+        "effective_batch_size": int(args.batch_size),
+        "gradient_accumulation_steps": gradient_accumulation_steps,
+        **memory_summary,
     }
     return model, logs, summary
+
+
+def _enable_setrec_qwen_memory_saving(model: Any) -> dict[str, Any]:
+    qwen_model = getattr(model, "qwen_model", None)
+    base_model = getattr(qwen_model, "base_model", None)
+    inner_model = getattr(base_model, "model", None) or getattr(qwen_model, "model", None) or qwen_model
+    config = getattr(inner_model, "config", None) or getattr(qwen_model, "config", None)
+    if config is not None and hasattr(config, "use_cache"):
+        config.use_cache = False
+    for target in (qwen_model, base_model, inner_model):
+        if target is None:
+            continue
+        if hasattr(target, "enable_input_require_grads"):
+            try:
+                target.enable_input_require_grads()
+            except Exception:
+                pass
+        if hasattr(target, "gradient_checkpointing_enable"):
+            try:
+                target.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+            except TypeError:
+                target.gradient_checkpointing_enable()
+            except Exception:
+                pass
+    if hasattr(inner_model, "gradient_checkpointing"):
+        try:
+            inner_model.gradient_checkpointing = True
+        except Exception:
+            pass
+    return {
+        "qwen_use_cache": bool(getattr(config, "use_cache", False)) if config is not None else None,
+        "qwen_gradient_checkpointing": bool(getattr(inner_model, "gradient_checkpointing", False)),
+        "memory_bridge": "gradient_checkpointing_enabled_use_cache_disabled",
+    }
 
 
 def _make_training_arguments(

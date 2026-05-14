@@ -9,6 +9,7 @@ from pathlib import Path
 import numpy as np
 
 from main_train_score_setrec_upstream_adapter import (
+    _enable_setrec_qwen_memory_saving,
     _import_official_model,
     _make_training_arguments,
     _patch_qwen2_decoder_layer_compat,
@@ -112,7 +113,7 @@ def _args(tmp_path: Path, *, task_dir: Path, repo_dir: Path, dry_run: bool = Fal
         setrec_adapter_dir="",
         setrec_epochs=20,
         setrec_train_batch_size=512,
-        setrec_micro_batch_size=4,
+        setrec_micro_batch_size=1,
         setrec_lr=3.0e-4,
         setrec_max_len=50,
         setrec_val_set_size=2000,
@@ -192,8 +193,12 @@ def test_setrec_official_runner_marks_completed_only_after_exact_scores(tmp_path
     assert provenance["runner_support_level"] == "official_setrec_qwen3base_identifier"
     assert provenance["official_training_config"]["model_name"] == "Qwen4Rec"
     assert provenance["official_training_config"]["batch_size"] == 512
-    assert provenance["official_training_config"]["micro_batch_size"] == 4
+    assert provenance["official_training_config"]["micro_batch_size"] == 1
+    assert provenance["official_training_config"]["gradient_accumulation_steps"] == 512
+    assert provenance["official_training_config"]["effective_batch_size"] == 512
     assert provenance["baseline_hyperparameter_overrides"]["micro_batch_size"]["official_default"] == 64
+    assert provenance["baseline_hyperparameter_overrides"]["gradient_checkpointing"]["runner_value"] is True
+    assert provenance["baseline_hyperparameter_overrides"]["use_cache"]["runner_value"] is False
     assert provenance["same_candidate_score_audit"]["audit_ok"] is True
 
 
@@ -276,6 +281,44 @@ def test_setrec_training_arguments_adapts_eval_strategy_name(tmp_path):
 
     assert captured["eval_strategy"] == "no"
     assert captured["per_device_train_batch_size"] == 7
+
+
+def test_setrec_memory_bridge_enables_checkpointing_and_disables_cache():
+    class FakeConfig:
+        use_cache = True
+
+    class FakeInner:
+        config = FakeConfig()
+        gradient_checkpointing = False
+
+        def gradient_checkpointing_enable(self):
+            self.gradient_checkpointing = True
+
+        def enable_input_require_grads(self):
+            self.input_grads = True
+
+    class FakeBase:
+        def __init__(self):
+            self.model = FakeInner()
+
+        def gradient_checkpointing_enable(self):
+            self.enabled = True
+
+        def enable_input_require_grads(self):
+            self.input_grads = True
+
+    class FakeQwen:
+        def __init__(self):
+            self.base_model = FakeBase()
+
+    class FakeSetrec:
+        def __init__(self):
+            self.qwen_model = FakeQwen()
+
+    summary = _enable_setrec_qwen_memory_saving(FakeSetrec())
+
+    assert summary["qwen_use_cache"] is False
+    assert summary["qwen_gradient_checkpointing"] is True
 
 
 def test_setrec_rotary_compat_uses_actual_attention_head_dim():

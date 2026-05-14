@@ -33,8 +33,9 @@ SETREC_HPARAM_SOURCE = (
     "(Qwen4Rec, n_cf=1, n_query=n_sem+1, lora_r=8, lora_alpha=16, "
     "target_modules=q_proj/v_proj/o_proj, batch_size=512, micro_batch_size=64, "
     "epochs=20, lr=3e-4, warmup_steps=100). The unified Qwen3-8B runner keeps "
-    "the effective batch_size=512 and lowers per-device micro_batch_size to 4 "
-    "by default, using gradient accumulation as a memory bridge on 48GB GPUs."
+    "the effective batch_size=512 and lowers per-device micro_batch_size to 1 "
+    "by default, using gradient accumulation and gradient checkpointing as a "
+    "memory bridge on 48GB GPUs."
 )
 
 
@@ -165,7 +166,13 @@ def _official_hparams(args: argparse.Namespace) -> dict[str, Any]:
         "model_name": "Qwen4Rec",
         "epochs": int(getattr(args, "setrec_epochs", 20)),
         "batch_size": int(getattr(args, "setrec_train_batch_size", 512)),
-        "micro_batch_size": int(getattr(args, "setrec_micro_batch_size", 4)),
+        "micro_batch_size": int(getattr(args, "setrec_micro_batch_size", 1)),
+        "effective_batch_size": int(getattr(args, "setrec_train_batch_size", 512)),
+        "gradient_accumulation_steps": max(
+            1,
+            int(getattr(args, "setrec_train_batch_size", 512))
+            // max(1, int(getattr(args, "setrec_micro_batch_size", 1))),
+        ),
         "seed": int(getattr(args, "seed", 42)),
         "lr": float(getattr(args, "setrec_lr", 3.0e-4)),
         "max_len": int(getattr(args, "setrec_max_len", 50)),
@@ -327,9 +334,23 @@ def run_setrec_official(
             "runner_value": hparams["micro_batch_size"],
             "reason": (
                 "memory_bridge_for_unified_qwen3_8b_on_48gb_gpu; "
-                "effective batch_size remains 512 via gradient accumulation"
+                "effective batch_size remains 512 via gradient accumulation "
+                "and Qwen gradient checkpointing"
             ),
         }
+    hparam_overrides["gradient_checkpointing"] = {
+        "official_default": "not_declared",
+        "runner_value": True,
+        "reason": (
+            "memory_bridge_for_unified_qwen3_8b_on_48gb_gpu; preserves model "
+            "objective and effective batch while recomputing activations"
+        ),
+    }
+    hparam_overrides["use_cache"] = {
+        "official_default": False,
+        "runner_value": False,
+        "reason": "enforced to avoid storing generation KV cache during SETRec LoRA training",
+    }
     provenance = build_base_provenance(
         args=args,
         cfg=cfg,

@@ -145,7 +145,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--setrec_adapter_dir", default="")
     parser.add_argument("--setrec_epochs", type=int, default=20)
     parser.add_argument("--setrec_train_batch_size", type=int, default=512)
-    parser.add_argument("--setrec_micro_batch_size", type=int, default=4)
+    parser.add_argument("--setrec_micro_batch_size", type=int, default=1)
     parser.add_argument("--setrec_lr", type=float, default=3.0e-4)
     parser.add_argument("--setrec_max_len", type=int, default=50)
     parser.add_argument("--setrec_val_set_size", type=int, default=2000)
