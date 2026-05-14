@@ -12,6 +12,7 @@ from main_train_score_setrec_upstream_adapter import (
     _import_official_model,
     _make_training_arguments,
     _patch_qwen2_decoder_layer_compat,
+    _qwen2_attention_forward_compat,
     _qwen2_rotary_from_layer,
 )
 from src.baselines.official_runner.contract import resolve_method_config
@@ -292,8 +293,8 @@ def test_setrec_rotary_compat_uses_actual_attention_head_dim():
 
     cos, sin = _qwen2_rotary_from_layer(layer=FakeLayer(), hidden_states=hidden_states, position_ids=position_ids)
 
-    assert cos.shape == (2, 1, 5, 32)
-    assert sin.shape == (2, 1, 5, 32)
+    assert cos.shape == (2, 5, 32)
+    assert sin.shape == (2, 5, 32)
     assert cos.dtype == torch.float16
 
 
@@ -339,7 +340,7 @@ def test_setrec_decoder_layer_wrapper_flattens_higher_rank_hidden(monkeypatch):
 
     def fake_forward(self, hidden_states, *args, **kwargs):
         assert hidden_states.shape == (2, 15, 64)
-        assert kwargs["position_embeddings"][0].shape == (2, 1, 15, 32)
+        assert kwargs["position_embeddings"][0].shape == (2, 15, 32)
         return hidden_states + 1
 
     monkeypatch.setattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False, raising=False)
@@ -373,7 +374,7 @@ def test_setrec_attention_wrapper_flattens_direct_attention_path(monkeypatch):
 
     def fake_attention_forward(self, hidden_states, position_embeddings, attention_mask=None, *args, **kwargs):
         assert hidden_states.shape == (2, 15, 64)
-        assert position_embeddings[0].shape == (2, 1, 15, 32)
+        assert position_embeddings[0].shape == (2, 15, 32)
         return hidden_states + 1, None
 
     monkeypatch.setattr(Qwen2Attention, "_pony_accepts_setrec_hidden_rank", False, raising=False)
@@ -383,7 +384,16 @@ def test_setrec_attention_wrapper_flattens_direct_attention_path(monkeypatch):
     wrapped = Qwen2Attention.forward
 
     class FakeAttention:
+        q_proj = lambda self, value: value
+        k_proj = lambda self, value: value
+        v_proj = lambda self, value: value
+        o_proj = lambda self, value: value
         head_dim = 32
+        num_key_value_groups = 1
+        attention_dropout = 0.0
+        training = False
+        scaling = 32**-0.5
+        sliding_window = None
         config = type("Config", (), {"rope_theta": 10000.0})()
 
     hidden = torch.zeros((2, 3, 5, 64), dtype=torch.float32)
@@ -394,3 +404,49 @@ def test_setrec_attention_wrapper_flattens_direct_attention_path(monkeypatch):
     assert weights is None
 
     monkeypatch.setattr(Qwen2Attention, "forward", original)
+
+
+def test_setrec_attention_compat_flattens_high_rank_lora_projection():
+    import torch
+
+    class FakeProjection:
+        def __init__(self, heads: int, head_dim: int, *, high_rank: bool = True) -> None:
+            self.heads = heads
+            self.head_dim = head_dim
+            self.high_rank = high_rank
+
+        def __call__(self, hidden_states):
+            batch_size, seq_len, _hidden = hidden_states.shape
+            projected = torch.zeros((batch_size, seq_len, self.heads * self.head_dim), dtype=hidden_states.dtype)
+            if self.high_rank:
+                return projected.reshape(batch_size, 1, seq_len, self.heads * self.head_dim)
+            return projected
+
+    class FakeOutProjection:
+        def __call__(self, value):
+            return value
+
+    class FakeAttention:
+        q_proj = FakeProjection(heads=2, head_dim=32)
+        k_proj = FakeProjection(heads=2, head_dim=32)
+        v_proj = FakeProjection(heads=2, head_dim=32)
+        o_proj = FakeOutProjection()
+        head_dim = 32
+        attention_dropout = 0.0
+        training = False
+        scaling = 32**-0.5
+        sliding_window = None
+
+    hidden = torch.zeros((2, 15, 64), dtype=torch.float32)
+    cos = torch.ones((2, 15, 32), dtype=torch.float32)
+    sin = torch.zeros((2, 15, 32), dtype=torch.float32)
+
+    output, weights = _qwen2_attention_forward_compat(
+        attention=FakeAttention(),
+        hidden_states=hidden,
+        position_embeddings=(cos, sin),
+        attention_mask=None,
+    )
+
+    assert output.shape == (2, 15, 64)
+    assert weights is None

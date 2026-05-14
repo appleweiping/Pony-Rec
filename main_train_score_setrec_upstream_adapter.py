@@ -350,8 +350,6 @@ def _patch_qwen2_decoder_layer_compat() -> None:
         from transformers.models.qwen2.modeling_qwen2 import Qwen2Attention, Qwen2DecoderLayer
 
         if not getattr(Qwen2Attention, "_pony_accepts_setrec_hidden_rank", False):
-            original_attention_forward = Qwen2Attention.forward
-
             def _compat_attention_forward(
                 self: Any,
                 hidden_states: Any,
@@ -369,13 +367,11 @@ def _patch_qwen2_decoder_layer_compat() -> None:
                     position_embeddings=position_embeddings,
                 )
                 attention_mask = _align_setrec_attention_mask(attention_mask, seq_len=int(hidden_states.shape[1]))
-                return original_attention_forward(
-                    self,
-                    hidden_states,
-                    position_embeddings,
-                    attention_mask,
-                    *attention_args,
-                    **attention_kwargs,
+                return _qwen2_attention_forward_compat(
+                    attention=self,
+                    hidden_states=hidden_states,
+                    position_embeddings=position_embeddings,
+                    attention_mask=attention_mask,
                 )
 
             Qwen2Attention.forward = _compat_attention_forward
@@ -490,6 +486,88 @@ def _align_setrec_attention_mask(attention_mask: Any, *, seq_len: int) -> Any:
     return attention_mask
 
 
+def _qwen2_attention_forward_compat(
+    *,
+    attention: Any,
+    hidden_states: Any,
+    position_embeddings: tuple[Any, Any],
+    attention_mask: Any,
+) -> tuple[Any, None]:
+    import torch
+    from transformers.models.qwen2.modeling_qwen2 import apply_rotary_pos_emb, eager_attention_forward
+
+    batch_size = int(hidden_states.shape[0])
+    seq_len = int(hidden_states.shape[1])
+    head_dim = int(getattr(attention, "head_dim", 0) or 0)
+    if head_dim <= 0:
+        config = getattr(attention, "config", None)
+        head_dim = int(getattr(config, "hidden_size") // getattr(config, "num_attention_heads"))
+    num_heads = _qwen2_projection_heads(attention.q_proj(hidden_states), batch_size=batch_size, seq_len=seq_len, head_dim=head_dim)
+    num_kv_heads = _qwen2_projection_heads(attention.k_proj(hidden_states), batch_size=batch_size, seq_len=seq_len, head_dim=head_dim)
+
+    query_states = _qwen2_view_projection(
+        attention.q_proj(hidden_states),
+        batch_size=batch_size,
+        seq_len=seq_len,
+        num_heads=num_heads,
+        head_dim=head_dim,
+    )
+    key_states = _qwen2_view_projection(
+        attention.k_proj(hidden_states),
+        batch_size=batch_size,
+        seq_len=seq_len,
+        num_heads=num_kv_heads,
+        head_dim=head_dim,
+    )
+    value_states = _qwen2_view_projection(
+        attention.v_proj(hidden_states),
+        batch_size=batch_size,
+        seq_len=seq_len,
+        num_heads=num_kv_heads,
+        head_dim=head_dim,
+    )
+    cos, sin = position_embeddings
+    query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)
+
+    num_key_value_groups = max(1, num_heads // max(1, num_kv_heads))
+    setattr(attention, "num_key_value_groups", num_key_value_groups)
+    past_key_values = None
+    layer_idx = getattr(attention, "layer_idx", None)
+    if past_key_values is not None and layer_idx is not None:
+        key_states, value_states = past_key_values.update(key_states, value_states, layer_idx)
+
+    dropout = 0.0 if not getattr(attention, "training", False) else float(getattr(attention, "attention_dropout", 0.0))
+    scaling = float(getattr(attention, "scaling", head_dim**-0.5))
+    sliding_window = getattr(attention, "sliding_window", None)
+
+    attn_output, _attn_weights = eager_attention_forward(
+        attention,
+        query_states,
+        key_states,
+        value_states,
+        attention_mask,
+        dropout=dropout,
+        scaling=scaling,
+        sliding_window=sliding_window,
+    )
+    attn_output = attn_output.transpose(1, 2).contiguous().reshape(batch_size, seq_len, num_heads * head_dim)
+    attn_output = attention.o_proj(attn_output)
+    return attn_output, None
+
+
+def _qwen2_projection_heads(projected: Any, *, batch_size: int, seq_len: int, head_dim: int) -> int:
+    projected, _shape = _flatten_setrec_hidden_states(projected)
+    features = int(projected.shape[-1])
+    if features % head_dim != 0:
+        raise RuntimeError(f"Qwen2 projection features={features} is not divisible by head_dim={head_dim}.")
+    return features // head_dim
+
+
+def _qwen2_view_projection(projected: Any, *, batch_size: int, seq_len: int, num_heads: int, head_dim: int) -> Any:
+    projected, _shape = _flatten_setrec_hidden_states(projected)
+    return projected.reshape(batch_size, seq_len, num_heads, head_dim).transpose(1, 2).contiguous()
+
+
 def _qwen2_rotary_from_layer(*, layer: Any, hidden_states: Any, position_ids: Any) -> tuple[Any, Any]:
     import torch
 
@@ -506,8 +584,8 @@ def _qwen2_rotary_from_layer(*, layer: Any, hidden_states: Any, position_ids: An
     pos = position_ids.to(device=hidden_states.device, dtype=torch.float32)
     freqs = torch.einsum("bi,j->bij", pos, inv_freq)
     emb = torch.cat((freqs, freqs), dim=-1)
-    cos = emb.cos().to(dtype=hidden_states.dtype).unsqueeze(1)
-    sin = emb.sin().to(dtype=hidden_states.dtype).unsqueeze(1)
+    cos = emb.cos().to(dtype=hidden_states.dtype)
+    sin = emb.sin().to(dtype=hidden_states.dtype)
     return cos, sin
 
 
