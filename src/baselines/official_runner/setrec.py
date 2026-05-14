@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gc
 import json
 import math
 from pathlib import Path
@@ -30,7 +31,7 @@ SETREC_OFFICIAL_ENTRYPOINT = (
 )
 SETREC_HPARAM_SOURCE = (
     "pinned SETRec code/scripts/train_qwen.sh and code/parse_utils.py defaults "
-    "(Qwen4Rec, n_cf=1, n_query=n_sem+1, lora_r=8, lora_alpha=16, "
+    "(Qwen4Rec, n_sem=1, n_cf=1, n_query=n_sem+1, lora_r=8, lora_alpha=16, "
     "target_modules=q_proj/v_proj/o_proj, batch_size=512, micro_batch_size=64, "
     "epochs=20, lr=3e-4, warmup_steps=100). The unified Qwen3-8B runner keeps "
     "the effective batch_size=512 and lowers per-device micro_batch_size to 1 "
@@ -177,7 +178,7 @@ def _official_hparams(args: argparse.Namespace) -> dict[str, Any]:
         "lr": float(getattr(args, "setrec_lr", 3.0e-4)),
         "max_len": int(getattr(args, "setrec_max_len", 50)),
         "val_set_size": int(getattr(args, "setrec_val_set_size", 2000)),
-        "n_sem": int(getattr(args, "setrec_n_sem", 4)),
+        "n_sem": int(getattr(args, "setrec_n_sem", 1)),
         "n_cf": int(getattr(args, "setrec_n_cf", 1)),
         "alpha": float(getattr(args, "setrec_alpha", 0.7)),
         "beta": float(getattr(args, "setrec_beta", 0.1)),
@@ -231,6 +232,32 @@ def _train_args(args: argparse.Namespace, *, adapter_dir: Path, repo_dir: Path, 
     )
 
 
+def _clear_cuda_cache_between_setrec_stages() -> dict[str, Any]:
+    summary: dict[str, Any] = {"status": "attempted", "cuda_available": False}
+    gc.collect()
+    try:
+        import torch
+    except Exception as exc:
+        summary.update({"status": "torch_unavailable", "error": str(exc)})
+        return summary
+
+    if not torch.cuda.is_available():
+        summary["status"] = "cuda_unavailable"
+        return summary
+
+    summary["cuda_available"] = True
+    try:
+        summary["allocated_before_bytes"] = int(torch.cuda.memory_allocated())
+        summary["reserved_before_bytes"] = int(torch.cuda.memory_reserved())
+        torch.cuda.empty_cache()
+        summary["allocated_after_bytes"] = int(torch.cuda.memory_allocated())
+        summary["reserved_after_bytes"] = int(torch.cuda.memory_reserved())
+        summary["status"] = "cleared"
+    except Exception as exc:
+        summary.update({"status": "clear_failed", "error": str(exc)})
+    return summary
+
+
 def run_setrec_official(
     *,
     args: argparse.Namespace,
@@ -254,6 +281,7 @@ def run_setrec_official(
     adapter_metadata: dict[str, Any] = {}
     adapter_audit: dict[str, Any] = {}
     embedding_summary: dict[str, Any] = {}
+    memory_cleanup_summary: dict[str, Any] = {}
     training_summary: dict[str, Any] = {}
     score_audit: dict[str, Any] = {}
 
@@ -296,6 +324,7 @@ def run_setrec_official(
             blockers.append("setrec_missing_qwen_semantic_embeddings")
 
     if not blockers:
+        memory_cleanup_summary = _clear_cuda_cache_between_setrec_stages()
         if bool(getattr(args, "dry_run", False)):
             training_summary = {"status": "dry_run_planned"}
             blockers.append("dry_run_no_setrec_training_or_scores")
@@ -318,6 +347,7 @@ def run_setrec_official(
         "adapter_metadata": adapter_metadata,
         "adapter_audit": adapter_audit,
         "embedding_summary": embedding_summary,
+        "memory_cleanup_summary": memory_cleanup_summary,
         "training_summary": training_summary,
         "score_audit": score_audit,
         "blockers": blockers,
@@ -373,6 +403,7 @@ def run_setrec_official(
             "qwen3_item_embedding_sha256": sha256_file(embedding_summary.get("itm_emb_path") or ""),
             "qwen3_semantic_embedding_path": text(embedding_summary.get("pca64_emb_path")),
             "qwen3_semantic_embedding_sha256": sha256_file(embedding_summary.get("pca64_emb_path") or ""),
+            "setrec_memory_cleanup_between_embedding_and_training": memory_cleanup_summary,
             "official_setrec_data_dir": text(training_summary.get("official_data_dir")),
             "official_setrec_storage_policy": "same_candidate_dicts_and_qwen_embeddings_written_to_pinned_setrec_data_dir",
             "adapter_or_checkpoint_path": text(training_summary.get("checkpoint_path")),

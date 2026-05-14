@@ -149,7 +149,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--setrec_lr", type=float, default=3.0e-4)
     parser.add_argument("--setrec_max_len", type=int, default=50)
     parser.add_argument("--setrec_val_set_size", type=int, default=2000)
-    parser.add_argument("--setrec_n_sem", type=int, default=4)
+    parser.add_argument("--setrec_n_sem", type=int, default=1)
     parser.add_argument("--setrec_n_cf", type=int, default=1)
     parser.add_argument("--setrec_alpha", type=float, default=0.7)
     parser.add_argument("--setrec_beta", type=float, default=0.1)

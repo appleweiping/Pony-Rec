@@ -117,7 +117,7 @@ def _args(tmp_path: Path, *, task_dir: Path, repo_dir: Path, dry_run: bool = Fal
         setrec_lr=3.0e-4,
         setrec_max_len=50,
         setrec_val_set_size=2000,
-        setrec_n_sem=4,
+        setrec_n_sem=1,
         setrec_n_cf=1,
         setrec_alpha=0.7,
         setrec_beta=0.1,
@@ -194,6 +194,7 @@ def test_setrec_official_runner_marks_completed_only_after_exact_scores(tmp_path
     assert provenance["official_training_config"]["model_name"] == "Qwen4Rec"
     assert provenance["official_training_config"]["batch_size"] == 512
     assert provenance["official_training_config"]["micro_batch_size"] == 1
+    assert provenance["official_training_config"]["n_sem"] == 1
     assert provenance["official_training_config"]["gradient_accumulation_steps"] == 512
     assert provenance["official_training_config"]["effective_batch_size"] == 512
     assert provenance["baseline_hyperparameter_overrides"]["micro_batch_size"]["official_default"] == 64
