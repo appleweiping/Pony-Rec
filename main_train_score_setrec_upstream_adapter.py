@@ -381,6 +381,7 @@ def _patch_qwen2_decoder_layer_compat() -> None:
             original_layer_forward = Qwen2DecoderLayer.forward
 
             def _compat_layer_forward(self: Any, hidden_states: Any, *layer_args: Any, **layer_kwargs: Any) -> Any:
+                layer_kwargs = _normalize_qwen2_decoder_layer_args(layer_args, layer_kwargs)
                 hidden_states, _original_shape = _flatten_setrec_hidden_states(hidden_states)
                 if layer_kwargs.get("position_ids") is not None:
                     layer_kwargs["position_ids"] = _align_setrec_position_ids(
@@ -400,7 +401,7 @@ def _patch_qwen2_decoder_layer_compat() -> None:
                         layer_kwargs["attention_mask"],
                         seq_len=int(hidden_states.shape[1]),
                     )
-                output = original_layer_forward(self, hidden_states, *layer_args, **layer_kwargs)
+                output = original_layer_forward(self, hidden_states, **layer_kwargs)
                 if isinstance(output, tuple):
                     if output:
                         first, _shape = _flatten_setrec_hidden_states(output[0])
@@ -415,6 +416,25 @@ def _patch_qwen2_decoder_layer_compat() -> None:
             Qwen2DecoderLayer._pony_accepts_missing_position_embeddings = True
     except Exception:
         pass
+
+
+def _normalize_qwen2_decoder_layer_args(layer_args: tuple[Any, ...], layer_kwargs: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(layer_kwargs)
+    legacy_names = [
+        "attention_mask",
+        "position_ids",
+        "past_key_values",
+        "output_attentions",
+        "use_cache",
+    ]
+    for name, value in zip(legacy_names, layer_args):
+        if name not in normalized:
+            normalized[name] = value
+    if "past_key_value" in normalized and "past_key_values" not in normalized:
+        normalized["past_key_values"] = normalized.pop("past_key_value")
+    else:
+        normalized.pop("past_key_value", None)
+    return normalized
 
 
 def _flatten_setrec_hidden_states(hidden_states: Any) -> tuple[Any, Any | None]:

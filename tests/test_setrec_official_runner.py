@@ -409,6 +409,47 @@ def test_setrec_decoder_layer_wrapper_flattens_higher_rank_hidden(monkeypatch):
     monkeypatch.setattr(Qwen2DecoderLayer, "forward", original)
 
 
+def test_setrec_decoder_layer_wrapper_normalizes_legacy_checkpoint_args(monkeypatch):
+    import torch
+    from transformers.models.qwen2.modeling_qwen2 import Qwen2DecoderLayer
+
+    original = Qwen2DecoderLayer.forward
+
+    def fake_forward(self, hidden_states, **kwargs):
+        assert hidden_states.shape == (2, 5, 64)
+        assert "past_key_value" not in kwargs
+        assert kwargs["attention_mask"].shape == (2, 5)
+        assert kwargs["position_ids"].shape == (2, 5)
+        assert kwargs["past_key_values"] == "cache"
+        assert kwargs["output_attentions"] is False
+        assert kwargs["use_cache"] is False
+        assert kwargs["position_embeddings"][0].shape == (2, 5, 32)
+        return hidden_states + 1
+
+    monkeypatch.setattr(Qwen2DecoderLayer, "_pony_accepts_missing_position_embeddings", False, raising=False)
+    monkeypatch.setattr(Qwen2DecoderLayer, "forward", fake_forward)
+
+    _patch_qwen2_decoder_layer_compat()
+    wrapped = Qwen2DecoderLayer.forward
+
+    class FakeAttention:
+        head_dim = 32
+        config = type("Config", (), {"rope_theta": 10000.0})()
+
+    class FakeLayer:
+        self_attn = FakeAttention()
+
+    hidden = torch.zeros((2, 5, 64), dtype=torch.float32)
+    mask = torch.ones((2, 5), dtype=torch.float32)
+    position_ids = torch.arange(5).unsqueeze(0).repeat(2, 1)
+    out = wrapped(FakeLayer(), hidden, mask, position_ids, "cache", False, False)
+
+    assert isinstance(out, tuple)
+    assert out[0].shape == (2, 5, 64)
+
+    monkeypatch.setattr(Qwen2DecoderLayer, "forward", original)
+
+
 def test_setrec_attention_wrapper_flattens_direct_attention_path(monkeypatch):
     import torch
     from transformers.models.qwen2.modeling_qwen2 import Qwen2Attention
