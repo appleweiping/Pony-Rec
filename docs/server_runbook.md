@@ -455,10 +455,13 @@ whole-word interaction bridge plus official Beauty sequential `alpha/sigma/L`
 defaults while replacing the T5 text backbone with the unified Qwen3-8B item
 representation bridge and exporting exact same-candidate scores. ProEx
 (KDD 2026) and ProMax (SIGIR 2026) are selected from the official ProRec
-repository as 2026 expansion baselines; their run-stage adapters are pending
-after ELMRec Beauty validation. SETRec remains `official_blocked_replaced` and
-any partial/failed SETRec outputs are not table eligible. Use the same
-one-domain archive-and-clean loop. Do not import blocked scaffold rows.
+repository as 2026 expansion baselines. ProEx run-stage support is implemented
+through the pinned ProRec `LightGCN_proex` model while adapting only
+same-candidate graph data, Qwen3-derived profile arrays, and exact score
+export; ProMax remains inspect-only pending adapter implementation. SETRec
+remains `official_blocked_replaced` and any partial/failed SETRec outputs are
+not table eligible. Use the same one-domain archive-and-clean loop. Do not
+import blocked scaffold rows.
 
 ELMRec Beauty full-domain command:
 

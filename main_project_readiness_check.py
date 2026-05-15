@@ -50,6 +50,7 @@ REQUIRED_FILES = [
     "main_run_proex_official_same_candidate_adapter.py",
     "main_run_promax_official_same_candidate_adapter.py",
     "main_train_score_elmrec_upstream_adapter.py",
+    "main_train_score_proex_upstream_adapter.py",
     "main_import_same_candidate_baseline_scores.py",
     "main_project_bootstrap.py",
 ]

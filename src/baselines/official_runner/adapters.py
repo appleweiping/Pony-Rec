@@ -16,6 +16,7 @@ from src.baselines.official_runner.irllrec import run_irllrec_official
 from src.baselines.official_runner.llm2rec import run_llm2rec_official
 from src.baselines.official_runner.llmemb import run_llmemb_official
 from src.baselines.official_runner.llmesr import run_llmesr_official
+from src.baselines.official_runner.proex import run_proex_official
 from src.baselines.official_runner.rlmrec import run_rlmrec_official
 from src.baselines.official_runner.setrec import run_setrec_official
 
@@ -28,7 +29,7 @@ METHOD_BLOCKERS = {
     "irllrec": [],
     "setrec": [],
     "elmrec": [],
-    "proex": ["run_stage_not_implemented_for_method"],
+    "proex": [],
     "promax": ["run_stage_not_implemented_for_method"],
 }
 
@@ -133,6 +134,8 @@ def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], metho
         return run_setrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     if args.method == "elmrec":
         return run_elmrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
+    if args.method == "proex":
+        return run_proex_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"

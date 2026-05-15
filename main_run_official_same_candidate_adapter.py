@@ -175,6 +175,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--elmrec_embedding_size", type=int, default=128)
     parser.add_argument("--elmrec_reg_weight", type=float, default=1.0e-5)
     parser.add_argument("--elmrec_log_every", type=int, default=5)
+    parser.add_argument("--proex_adapter_exp_name", default="")
+    parser.add_argument("--proex_adapter_dir", default="")
+    parser.add_argument("--proex_epochs", type=int, default=3000)
+    parser.add_argument("--proex_train_batch_size", type=int, default=4096)
+    parser.add_argument("--proex_lr", type=float, default=1.0e-3)
+    parser.add_argument("--proex_weight_decay", type=float, default=0.0)
+    parser.add_argument("--proex_embedding_size", type=int, default=32)
+    parser.add_argument("--proex_layer_num", type=int, default=3)
+    parser.add_argument("--proex_reg_weight", type=float, default=1.0e-6)
+    parser.add_argument("--proex_num_envs", type=int, default=4)
+    parser.add_argument("--proex_inv_weight", type=float, default=10.0)
+    parser.add_argument("--proex_ex_weight", type=float, default=0.4)
+    parser.add_argument("--proex_alpha", type=float, default=0.1)
+    parser.add_argument("--proex_keep_rate", type=float, default=1.0)
+    parser.add_argument("--proex_log_every", type=int, default=10)
     parser.add_argument(
         "--allow_blocked_exit_zero",
         action="store_true",
