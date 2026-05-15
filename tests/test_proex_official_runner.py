@@ -7,7 +7,9 @@ import pickle
 from pathlib import Path
 
 import numpy as np
+import pytest
 
+from main_train_score_proex_upstream_adapter import _load_item_embeddings
 from src.baselines.official_runner.contract import resolve_method_config
 from src.baselines.official_runner.proex import run_proex_official
 
@@ -191,3 +193,42 @@ def test_proex_official_runner_blocks_hash_embeddings(tmp_path, monkeypatch):
     assert provenance["implementation_status"] == "official_blocked"
     assert "proex_official_requires_real_text_embeddings_not_deterministic_hash" in provenance["blockers"]
     assert provenance["score_coverage_rate"] is None
+
+
+def test_proex_profile_bridge_prefers_pca64_embeddings(tmp_path):
+    handled = tmp_path / "adapter" / "llm_esr" / "handled"
+    handled.mkdir(parents=True)
+    with (handled / "itm_emb_np.pkl").open("wb") as fh:
+        pickle.dump(np.ones((3, 4096), dtype=np.float32), fh)
+    with (handled / "pca64_itm_emb_np.pkl").open("wb") as fh:
+        pickle.dump(np.ones((3, 64), dtype=np.float32), fh)
+
+    matrix, source_path, metadata = _load_item_embeddings(tmp_path / "adapter", np)
+
+    assert matrix.shape == (3, 64)
+    assert source_path.name == "pca64_itm_emb_np.pkl"
+    assert metadata["qwen3_profile_embedding_source"] == "pca64_qwen3_item_embedding"
+    assert metadata["qwen3_profile_embedding_dim"] == 64
+
+
+def test_proex_profile_bridge_falls_back_to_full_embeddings(tmp_path):
+    handled = tmp_path / "adapter" / "llm_esr" / "handled"
+    handled.mkdir(parents=True)
+    with (handled / "itm_emb_np.pkl").open("wb") as fh:
+        pickle.dump(np.ones((3, 8), dtype=np.float32), fh)
+
+    matrix, source_path, metadata = _load_item_embeddings(tmp_path / "adapter", np)
+
+    assert matrix.shape == (3, 8)
+    assert source_path.name == "itm_emb_np.pkl"
+    assert metadata["qwen3_profile_embedding_source"] == "full_qwen3_item_embedding"
+
+
+def test_proex_profile_bridge_requires_full_embedding_artifact(tmp_path):
+    handled = tmp_path / "adapter" / "llm_esr" / "handled"
+    handled.mkdir(parents=True)
+    with (handled / "pca64_itm_emb_np.pkl").open("wb") as fh:
+        pickle.dump(np.ones((3, 64), dtype=np.float32), fh)
+
+    with pytest.raises(FileNotFoundError):
+        _load_item_embeddings(tmp_path / "adapter", np)

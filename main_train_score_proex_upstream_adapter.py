@@ -165,16 +165,37 @@ def _candidate_groups(path: Path) -> list[dict[str, Any]]:
     return events
 
 
-def _load_item_embeddings(adapter_dir: Path, np: Any) -> tuple[Any, Path]:
-    path = adapter_dir / "llm_esr" / "handled" / "itm_emb_np.pkl"
-    if not path.exists():
-        raise FileNotFoundError(f"ProEx requires Qwen item embeddings at {path}")
+def _load_pickle_matrix(path: Path, np: Any) -> Any:
     with path.open("rb") as fh:
         matrix = pickle.load(fh)
     matrix = np.asarray(matrix, dtype=np.float32)
     if matrix.ndim != 2:
         raise ValueError(f"Expected 2D item embedding matrix, got shape={matrix.shape}")
-    return matrix, path
+    return matrix
+
+
+def _load_item_embeddings(adapter_dir: Path, np: Any) -> tuple[Any, Path, dict[str, Any]]:
+    handled_dir = adapter_dir / "llm_esr" / "handled"
+    full_path = handled_dir / "itm_emb_np.pkl"
+    pca64_path = handled_dir / "pca64_itm_emb_np.pkl"
+    if not full_path.exists():
+        raise FileNotFoundError(f"ProEx requires Qwen item embeddings at {full_path}")
+
+    source_path = pca64_path if pca64_path.exists() else full_path
+    matrix = _load_pickle_matrix(source_path, np)
+    metadata = {
+        "qwen3_full_item_embedding_path": str(full_path),
+        "qwen3_profile_embedding_path": str(source_path),
+        "qwen3_profile_embedding_source": "pca64_qwen3_item_embedding" if source_path == pca64_path else "full_qwen3_item_embedding",
+        "qwen3_profile_embedding_dim": int(matrix.shape[1]),
+        "qwen3_profile_embedding_rows": int(matrix.shape[0]),
+        "qwen3_profile_embedding_reason": (
+            "Use the Qwen3-derived PCA64 item representation for ProEx profile arrays "
+            "when available so the pinned ProRec profile MLP can train on large domains "
+            "without materializing four 4096-dimensional full-catalog profile tensors."
+        ),
+    }
+    return matrix, source_path, metadata
 
 
 def _l2_normalize(matrix: Any, np: Any) -> Any:
@@ -588,7 +609,7 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
     checkpoint_path = Path(args.checkpoint_path).expanduser().resolve() if args.checkpoint_path else adapter_dir / "proex_official_model.pt"
 
     sequences = _load_interactions(adapter_dir / "llm_esr" / "handled" / "inter.txt")
-    item_emb, item_embedding_source_path = _load_item_embeddings(adapter_dir, np)
+    item_emb, item_embedding_source_path, item_embedding_metadata = _load_item_embeddings(adapter_dir, np)
     if item_emb.shape[0] != item_count:
         raise ValueError(f"item embeddings rows={item_emb.shape[0]} but adapter metadata items={item_count}")
     user_profiles, item_profiles, profile_manifest = _profile_views(
@@ -597,6 +618,7 @@ def train_and_score(args: argparse.Namespace) -> dict[str, Any]:
         user_count=user_count,
         np=np,
     )
+    profile_manifest = {**item_embedding_metadata, **profile_manifest}
     trn_mat, val_mat, tst_mat, train_pairs = _make_sparse_mats(
         sequences=sequences,
         user_count=user_count,
