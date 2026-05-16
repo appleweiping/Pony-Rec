@@ -16,6 +16,7 @@ from src.baselines.official_runner.irllrec import run_irllrec_official
 from src.baselines.official_runner.llm2rec import run_llm2rec_official
 from src.baselines.official_runner.llmemb import run_llmemb_official
 from src.baselines.official_runner.llmesr import run_llmesr_official
+from src.baselines.official_runner.promax import run_promax_official
 from src.baselines.official_runner.proex import run_proex_official
 from src.baselines.official_runner.rlmrec import run_rlmrec_official
 from src.baselines.official_runner.setrec import run_setrec_official
@@ -30,7 +31,7 @@ METHOD_BLOCKERS = {
     "setrec": [],
     "elmrec": [],
     "proex": [],
-    "promax": ["run_stage_not_implemented_for_method"],
+    "promax": [],
 }
 
 
@@ -43,7 +44,7 @@ OFFICIAL_ENTRYPOINT_HINTS = {
     "setrec": "SETRec official identifier training/evaluation entrypoint to be inspected",
     "elmrec": "ELMRec official high-order graph interaction training/evaluation bridge",
     "proex": "ProEx KDD 2026 official profile-enhanced recommendation entrypoint to be inspected",
-    "promax": "ProMax SIGIR 2026 official profile-enhanced recommendation entrypoint to be inspected",
+    "promax": "ProMax SIGIR 2026 official profile-enhanced recommendation entrypoint through pinned ProRec LightGCN_promax",
 }
 
 
@@ -136,6 +137,8 @@ def run_official_adapter(*, args: argparse.Namespace, cfg: dict[str, Any], metho
         return run_elmrec_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     if args.method == "proex":
         return run_proex_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
+    if args.method == "promax":
+        return run_promax_official(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance = inspect_official_adapter(args=args, cfg=cfg, method_cfg=method_cfg, contract=contract)
     provenance["stage"] = "run"
     provenance["implementation_status"] = "official_blocked"

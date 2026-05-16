@@ -458,7 +458,10 @@ representation bridge and exporting exact same-candidate scores. ProEx
 repository as 2026 expansion baselines. ProEx run-stage support is implemented
 through the pinned ProRec `LightGCN_proex` model while adapting only
 same-candidate graph data, Qwen3-derived profile arrays, and exact score
-export; ProMax remains inspect-only pending adapter implementation. SETRec
+export. ProMax run-stage support is implemented through the pinned ProRec
+`LightGCN_promax` model while preserving BPR, SDR, and S2DR losses; local code
+adapts only same-candidate graph data, Qwen3-derived profile arrays,
+Qwen3-profile-retrieval `new_trn_rag_mat.pkl`, and exact score export. SETRec
 remains `official_blocked_replaced` and any partial/failed SETRec outputs are
 not table eligible. Use the same one-domain archive-and-clean loop. Do not
 import blocked scaffold rows.
@@ -501,6 +504,44 @@ echo "pid_file=$PID"
 After completion, import only if provenance reports
 `implementation_status=official_completed`, `blockers=[]`, and
 `score_coverage_rate=1.0`.
+
+ProMax follows the same one-domain loop. Start with Beauty or a single large
+domain, then verify provenance, import, package, copy locally, and clean before
+the next domain:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+DOMAIN=beauty
+EXP=beauty_supplementary_smallerN_100neg
+mkdir -p outputs/summary/logs
+LOG=outputs/summary/logs/week8_promax_official_${DOMAIN}_$(date +%F_%H%M%S).log
+PID=outputs/summary/logs/week8_promax_official_${DOMAIN}.pid
+nohup python main_run_promax_official_same_candidate_adapter.py \
+  --stage run \
+  --domain "$DOMAIN" \
+  --task_dir "outputs/baselines/external_tasks/${EXP}_test_same_candidate" \
+  --valid_task_dir "outputs/baselines/external_tasks/${EXP}_valid_same_candidate" \
+  --output_scores_path "outputs/baselines/official_adapters/${EXP}_promax_official/promax_official_scores.csv" \
+  --provenance_output_path "outputs/baselines/official_adapters/${EXP}_promax_official/fairness_provenance.json" \
+  --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 \
+  --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation \
+  --backbone_path /home/ajifang/models/Qwen/Qwen3-8B \
+  --llm_adaptation_mode representation_learner \
+  --hparam_policy official_default_or_recommended \
+  --embedding_backend hf_mean_pool \
+  --embedding_batch_size 1 \
+  --embedding_max_length 64 \
+  --embedding_max_text_chars 512 \
+  --torch_dtype bfloat16 \
+  --hf_device_map auto \
+  --promax_epochs 3000 \
+  --promax_train_batch_size 4096 \
+  --promax_rag_topk 20 > "$LOG" 2>&1 &
+echo $! > "$PID"
+disown
+echo "log=$LOG"
+echo "pid_file=$PID"
+```
 
 For baseline comparison tables, keep the main reading order at
 `NDCG@5`, `NDCG@10`, `HR@5`, `HR@10`, then use `@20` as the extended-check

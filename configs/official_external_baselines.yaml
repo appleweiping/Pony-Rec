@@ -735,10 +735,12 @@ official_baselines:
     pinned_commit: 48a3a3d5075c1112c793b9bfc78de9a8b000ffe2
     local_repo_env: PROREC_REPO_DIR
     local_repo_default: /home/ajifang/projects/ProRec
-    current_status: official_inspect_only_pending_adapter
+    current_status: official_run_stage_support_implemented_pending_server_validation
     official_code_adaptation_notes:
       - SIGIR 2026 ProMax entry in the ProRec official repository
-      - inspect official training/profile generation entrypoints before run-stage implementation
-      - preserve official profile construction and scoring recipe while replacing LLM backbone with Qwen3-8B
+      - official runner imports pinned LightGCN_promax and preserves its BPR, SDR, and S2DR losses
+      - preserve official profile construction and scoring recipe while replacing LLM backbone and profile-retrieval graph with Qwen3-8B-derived artifacts
     remaining_work:
-      - implement official-code adapter after ELMRec Beauty is validated
+      - run one domain through the unified official runner on the pinned server checkout
+      - verify implementation_status=official_completed with blockers=[] and score_coverage_rate=1.0
+      - import completed scores and package/copy evidence before cleaning server intermediates
