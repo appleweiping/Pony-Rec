@@ -32,13 +32,10 @@ class PromptBuilder:
     @staticmethod
     def build_history_block(sample: dict[str, Any]) -> str:
         if "history_items" in sample and isinstance(sample["history_items"], list):
-            lines: list[str] = []
-            for idx, item in enumerate(sample["history_items"], start=1):
-                title = str(item.get("title", "")).strip()
-                meta = str(item.get("meta", "")).strip()
-                text = f"{title} | {meta}".strip(" |")
-                lines.append(f"{idx}. {text}" if text else f"{idx}. [EMPTY]")
-            return "\n".join(lines)
+            return "\n".join(
+                f"{idx}. {_stringify_history_item(item)}"
+                for idx, item in enumerate(sample["history_items"], start=1)
+            )
 
         if "history" in sample:
             history = sample["history"]
