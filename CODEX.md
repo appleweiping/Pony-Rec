@@ -1,0 +1,84 @@
+# CODEX.md
+
+Read `AGENTS.md` first. It is the authoritative operating contract for this repository.
+
+This file is the Codex (GPT-5.5) entry point for the Uncertainty project.
+
+## Quick Orientation
+
+- **Title**: Task-Grounded Uncertainty for LLM-based Recommendation
+- **Stage**: Between M4 (baseline system) and M5 (four-domain 100-neg validation)
+- **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
+- **Methods**: C-CRP (main), SRPD (ablation/supplementary)
+- **Baselines**: 9 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
+- **Server**: `pony-rec-gpu` (cannot access directly; user pastes commands/output)
+
+## Start Every Task
+
+1. Read `AGENTS.md` and `README.md`
+2. Read `docs/milestones/README.md` for current milestone position
+3. Read `docs/paper_claims_and_status.md` for frozen claims
+4. Read `docs/top_conference_review_gate.md` for reviewer gate
+5. Read `docs/server_runbook.md` for server execution patterns
+
+For complex tasks, run an `rg` discovery pass for the subsystem. Cover project route, task plan, implementation details, and execution/evidence rules.
+
+## Route By Task
+
+| Task Type | Extra Files to Read |
+|-----------|-------------------|
+| Claims, paper text, tables | `docs/paper_claims_and_status.md`, `docs/top_conference_review_gate.md`, relevant `docs/milestones/M*.md` |
+| Official external baselines | `docs/baseline_protocol.md`, `OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md`, `configs/official_external_baselines.yaml` |
+| C-CRP / Shadow / uncertainty | `docs/shadow_method.md`, `configs/shadow/*.yaml`, candidate-score importer/exporter scripts |
+| SRPD / LoRA training | `configs/srpd/`, `configs/lora/`, `docs/server_runbook.md` (leakage, teacher, weighted-loss gates) |
+| Server / long-running experiments | `docs/server_runbook.md` — do not guess server state |
+| Reviews / audits | Lead with risks, table eligibility, overclaiming, fairness, leakage, reproducibility |
+
+## Evidence Rules (Summary)
+
+- Keep the defended claim narrow. Do not expand into full-catalog SOTA, generative-title, LoRA distillation, or universal winner claims.
+- Main-table rows require: `completed_result`, valid status label, same train/valid/test discipline, exact same-candidate score coverage, finite scores, provenance, candidate audit, paired tests.
+- Official external baselines require: pinned official repo/commit, preserved official algorithm/loss/scoring head, Qwen3-8B policy provenance, `implementation_status=official_completed`, `blockers=[]`, exact score coverage, import, paired-test gates.
+- `style_adapter_only`, `partial_official_adapter_exists`, scaffold scorers = supplementary/blocked, NOT main-table.
+- When in doubt, downgrade the claim, not the evidence standard.
+
+## Server Workflow
+
+Give copy-paste commands, continue only from user's pasted output:
+
+```bash
+git status --short --branch
+python main_project_readiness_check.py
+python main_audit_official_fairness_policy.py
+python main_audit_official_external_repos.py
+tail -n 80 <LOG>
+ps -p $(cat <PID_FILE>) -o pid=,etime=,stat=,cmd=
+ls -lh <expected output paths>
+```
+
+For storage-heavy baselines: one method-domain production loop. Run → verify → import → package → confirm local copy → clean → next.
+
+## Codex Role in This Project
+
+- **Primary**: Task decomposition, parallel execution, server command generation, wiki/doc maintenance, comparison table builders
+- **Coordination**: Dispatch to Opus for architecture/security review, Sonnet for code review, OpenCode for long-running analysis
+- **Discipline**: Run readiness checks before pushing. Update canonical docs when plan/status/commands change. Stage only related files.
+
+## Change Discipline
+
+- Use `rg` and existing patterns before editing
+- Keep changes scoped to the requested subsystem
+- Do not push `outputs/`, raw logs, datasets, model weights, checkpoints, private keys
+- Update canonical docs when plan, status, command surface, or claim boundary changes
+- Run `python main_project_readiness_check.py` after meaningful changes
+
+## Final Handoff
+
+End substantial work with:
+- What changed or was learned
+- Files inspected or changed
+- Claim status and table eligibility
+- Blockers or missing evidence
+- Next server command, code/doc action, audit, or stopping condition
+
+When enough gates are complete, say the experiment phase is closed and the project should move to writing. When gates remain, name the minimum remaining gates, not an open-ended wishlist.
