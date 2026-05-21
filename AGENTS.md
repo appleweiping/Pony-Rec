@@ -278,3 +278,13 @@ changed. Use `rg` first, inspect existing patterns, preserve user changes, and
 avoid broad deletions unless they are explicitly requested and audited.
 
 When in doubt, downgrade the claim, not the evidence standard.
+
+## 强制记录规则（所有 agent 必须遵守）
+
+每完成一个阶段、一个 step、一次错误排除、一次贡献，都必须同时更新：
+1. 共享 memory (Vipin Knowledgebase memory/)
+2. 项目自身文档 (docs/paper_claims_and_status.md, docs/milestones/README.md)
+
+不是做完所有事再统一更新，而是每一步都更新。不写 = 违规。
+
+实验公平性：和 baseline 对比时，指标 @5/@10/@20、数据、用户数必须完全对齐。
