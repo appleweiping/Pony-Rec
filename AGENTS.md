@@ -294,3 +294,10 @@ When in doubt, downgrade the claim, not the evidence standard.
 不是做完所有事再统一更新，而是每一步都更新。不写 = 违规。
 
 实验公平性：和 baseline 对比时，指标 @5/@10/@20、数据、用户数必须完全对齐。
+
+## Git 工作流
+
+- 本地 (D:esearch\Uncertainty) 是主仓库，所有 commit/push 从本地发起
+- 服务器 (pony-rec-gpu) 只是实验场所，跑推理和训练，不做 commit/push
+- GitHub 更新用本地提交
+- 服务器产出通过 scp 或记录到文档同步回本地
