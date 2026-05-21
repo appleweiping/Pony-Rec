@@ -9,7 +9,12 @@ This file provides OpenCode-specific context for operating within the Uncertaint
 **Title**: Task-Grounded Uncertainty for LLM-based Recommendation
 **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 **Stage**: Between M4 (baseline system) and M5 (four-domain 100-neg validation)
-**Server**: `pony-rec-gpu` (SSH, password auth, cannot be accessed directly by agents)
+**Server**: `pony-rec-gpu` (SSH key-based auth, directly accessible by agents)
+- SSH command: `ssh pony-rec-gpu`
+- Host: `125.71.97.70:15302`, User: `ajifang`
+- GPU: NVIDIA RTX 4090 (49GB VRAM)
+- Server project path: `~/projects/pony-rec-rescue-shadow-v6`
+- Local project path: `D:\Research\Uncertainty`
 
 ## Methods
 
@@ -51,22 +56,24 @@ src/
 
 - Read and modify code, configs, docs
 - Run local Python scripts (preprocessing, analysis, comparison builders)
-- Generate server commands for the user to paste
+- **Directly execute commands on the GPU server via `ssh pony-rec-gpu "<command>"`**
+- Monitor running experiments, check logs, tail outputs on server
 - Audit results, provenance, and table eligibility
 - Build comparison tables from imported scores
 
 ### What OpenCode Cannot Do Here
 
-- Directly access the GPU server (SSH requires password)
-- Run training/inference (those happen on server)
 - Declare a baseline "official_completed" without full provenance audit
 
 ### Server Interaction Pattern
 
-1. OpenCode generates commands (with `nohup`, log paths, PID tracking)
-2. User pastes commands on server
-3. User pastes back output/logs
-4. OpenCode interprets results, updates docs, pushes fixes
+Agents now have direct SSH access to the server:
+```
+ssh pony-rec-gpu "<command>"
+```
+- Can run training/inference, monitor GPU, check logs, manage files directly
+- Use `nohup` for long-running tasks, track PIDs
+- Check progress: `wc -l` on output files, `nvidia-smi`, `ps aux | grep python`
 
 ### Evidence Discipline
 

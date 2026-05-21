@@ -10,7 +10,11 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP (main), SRPD (ablation/supplementary)
 - **Baselines**: 9 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
-- **Server**: `pony-rec-gpu` (agents cannot access directly; user pastes commands/output)
+- **Server**: `pony-rec-gpu` (SSH accessible via `ssh pony-rec-gpu`, key-based auth configured)
+  - Server project path: `~/projects/pony-rec-rescue-shadow-v6`
+  - Local project path: `D:\Research\Uncertainty`
+  - SSH config: `125.71.97.70:15302`, user `ajifang`
+  - GPU: RTX 4090 (49GB VRAM)
 
 ## Your Role (Claude Code / Opus / Sonnet)
 

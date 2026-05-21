@@ -197,19 +197,25 @@ state the minimum remaining gates, not an open-ended wishlist.
 
 ## Server Collaboration
 
-Agents normally cannot see the server. Do not guess server state. Give the user
-copy-paste commands, then use the pasted output to decide the next action.
-
-Ask for or provide commands that reveal:
-
+Server `pony-rec-gpu` is now directly accessible via SSH key-based auth:
 ```bash
-git status --short --branch
-python main_project_readiness_check.py
-python main_audit_official_fairness_policy.py
-python main_audit_official_external_repos.py
-tail -n 80 <LOG>
-ps -p $(cat <PID_FILE>) -o pid=,etime=,cmd=
-ls -lh <expected output paths>
+ssh pony-rec-gpu "<command>"
+```
+- Host: `125.71.97.70:15302`, User: `ajifang`
+- GPU: NVIDIA RTX 4090 (49GB VRAM)
+- Server project path: `~/projects/pony-rec-rescue-shadow-v6`
+- Local project path: `D:\Research\Uncertainty`
+
+Agents can directly run commands, check logs, monitor GPU, and manage files.
+Do not guess server state — run a command to verify before claiming status.
+
+Useful diagnostic commands:
+```bash
+ssh pony-rec-gpu "git -C ~/projects/pony-rec-rescue-shadow-v6 status --short --branch"
+ssh pony-rec-gpu "nvidia-smi"
+ssh pony-rec-gpu "ps aux | grep python | grep -v grep"
+ssh pony-rec-gpu "tail -n 80 <LOG>"
+ssh pony-rec-gpu "wc -l <output_file>"
 ```
 
 If a long job is needed, use `nohup` or the runbook pattern. Record the log path

@@ -11,7 +11,11 @@ This file is the Codex (GPT-5.5) entry point for the Uncertainty project.
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP (main), SRPD (ablation/supplementary)
 - **Baselines**: 9 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
-- **Server**: `pony-rec-gpu` (cannot access directly; user pastes commands/output)
+- **Server**: `pony-rec-gpu` (SSH key-based auth, directly accessible)
+  - SSH: `ssh pony-rec-gpu` or `ssh -p 15302 ajifang@125.71.97.70`
+  - GPU: RTX 4090 (49GB VRAM)
+  - Server project: `~/projects/pony-rec-rescue-shadow-v6`
+  - Local project: `D:\Research\Uncertainty`
 
 ## Start Every Task
 
@@ -44,18 +48,21 @@ For complex tasks, run an `rg` discovery pass for the subsystem. Cover project r
 
 ## Server Workflow
 
-Give copy-paste commands, continue only from user's pasted output:
-
+Server is directly accessible via SSH. Run commands with:
 ```bash
-git status --short --branch
-python main_project_readiness_check.py
-python main_audit_official_fairness_policy.py
-python main_audit_official_external_repos.py
-tail -n 80 <LOG>
-ps -p $(cat <PID_FILE>) -o pid=,etime=,stat=,cmd=
-ls -lh <expected output paths>
+ssh pony-rec-gpu "<command>"
 ```
 
+Useful diagnostic commands:
+```bash
+ssh pony-rec-gpu "nvidia-smi"
+ssh pony-rec-gpu "ps aux | grep python | grep -v grep"
+ssh pony-rec-gpu "git -C ~/projects/pony-rec-rescue-shadow-v6 status --short --branch"
+ssh pony-rec-gpu "tail -n 80 <LOG>"
+ssh pony-rec-gpu "wc -l <output_file>"
+```
+
+Do not guess server state — always verify with a command.
 For storage-heavy baselines: one method-domain production loop. Run → verify → import → package → confirm local copy → clean → next.
 
 ## Codex Role in This Project
