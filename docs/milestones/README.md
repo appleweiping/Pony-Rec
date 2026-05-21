@@ -97,3 +97,25 @@ logs, PIDs, output paths, and failures; it does not change claim boundaries.
 Root-level [AGENTS.md](../../AGENTS.md) is the operating contract for future
 agents. If a milestone status changes, update this file and the relevant M-file
 rather than relying on a chat handoff.
+
+## Current Working Position (updated 2026-05-21)
+
+The repository is now between M5 and M6:
+
+- C-CRP v3 (profile-enhanced prompt) completed on beauty (HR@10=0.239)
+- Four-domain run in progress (books/electronics/movies, 10000 users each)
+- Calibration depth analysis completed (38 methods x 4 domains)
+- Official external baselines all completed (8 methods, 4 domains)
+- Next: conformal calibration layer + paper writing
+
+### Key C-CRP v3 Result
+
+| Method | Beauty HR@10 | Beauty NDCG@10 |
+|--------|-------------|----------------|
+| C-CRP v3 (ours) | 0.239 | 0.136 |
+| ProEx (best baseline) | 0.253 | 0.151 |
+| IRLLRec | 0.220 | 0.129 |
+
+C-CRP v3 beats IRLLRec, approaches ProEx. Additionally, C-CRP has
+calibration_depth=19 (vs IRLLRec=12), meaning its ranking is reliable
+deeper into the list.
