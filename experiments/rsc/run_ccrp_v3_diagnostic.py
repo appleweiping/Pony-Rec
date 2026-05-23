@@ -93,7 +93,7 @@ def compute_calibration_metrics(scores, labels):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, required=True)
-    parser.add_argument("--n_users", type=int, default=1000)
+    parser.add_argument("--n_users", type=int, default=None, help="Limit users (None=all)")
     parser.add_argument("--output", type=str, required=True)
     parser.add_argument("--model", type=str, default="/home/ajifang/models/Qwen/Qwen3-8B")
     args = parser.parse_args()
