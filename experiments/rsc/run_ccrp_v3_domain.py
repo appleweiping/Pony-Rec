@@ -131,5 +131,29 @@ def main():
     print(f"NDCG@20: {report['ndcg20']:.4f}")
     print(f"MRR:     {report['mrr']:.4f}")
 
+    # Auto-save markdown summary (agent-independent persistence)
+    domain = Path(args.data).parent.name.split("_")[0]
+    summary_dir = Path("experiment_results")
+    summary_dir.mkdir(parents=True, exist_ok=True)
+    summary_file = summary_dir / f"ccrp_v3_{domain}_{time.strftime('%Y-%m-%d_%H%M%S')}.md"
+    summary_file.write_text(
+        f"---\ntitle: C-CRP v3 {domain} result\ntype: fact\n"
+        f"created: {time.strftime('%Y-%m-%dT%H:%M:%S')}\nagent: script-auto\n"
+        f"tags: [experiment, ccrp-v3, {domain}]\n---\n\n"
+        f"## Result\n\n"
+        f"| Metric | Value |\n|--------|-------|\n"
+        f"| HR@5 | {report['hr5']:.4f} |\n"
+        f"| HR@10 | {report['hr10']:.4f} |\n"
+        f"| HR@20 | {report['hr20']:.4f} |\n"
+        f"| NDCG@5 | {report['ndcg5']:.4f} |\n"
+        f"| NDCG@10 | {report['ndcg10']:.4f} |\n"
+        f"| NDCG@20 | {report['ndcg20']:.4f} |\n"
+        f"| MRR | {report['mrr']:.4f} |\n"
+        f"| Users | {report['n_users']} |\n\n"
+        f"## Config\n\n- Data: {args.data}\n- Model: {args.model}\n"
+        f"- Inference time: {elapsed:.0f}s\n- Prompts: {report['n_prompts']}\n"
+    )
+    print(f"[AUTO-MEMORY] Saved to {summary_file}")
+
 if __name__ == "__main__":
     main()
