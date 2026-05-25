@@ -89,3 +89,22 @@ End substantial work with:
 - Next server command, code/doc action, audit, or stopping condition
 
 When enough gates are complete, say the experiment phase is closed and the project should move to writing. When gates remain, name the minimum remaining gates, not an open-ended wishlist.
+
+## Memory Checklist (Codex 每次任务后必做)
+
+**不需要判断"是否重要"。做完事 → 写 memory → 再汇报。**
+
+1. 跑完命令/实验 → `memory_save(type=workflow)` 写结果数字+配置+耗时
+2. 遇到报错 → `memory_lesson_save()` 写错误+根因+修复
+3. 改了文件/配置 → 更新项目 docs (milestones/README.md 或对应文件)
+4. 做了选择 → 写 markdown `decisions/<topic>.md`
+5. 不确定要不要写 → **写。宁多勿少。**
+
+**口诀：每一步都写，不是做完所有事再统一写。**
+
+## Git & 备份 Checklist
+
+1. 本地改了文件 → commit + push 到 GitHub（不要攒着）
+2. 服务器不 push → 只 pull + 执行
+3. 服务器跑出重要结果 → scp 回本地备份（report.json、metrics、关键 log）
+4. 不可再生的数据 → 必须有本地副本
