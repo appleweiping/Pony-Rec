@@ -199,6 +199,13 @@ Paper/**
 !Paper/**/
 !Paper/.gitkeep
 !Paper/**/.gitkeep
+!Paper/main.tex
+!Paper/sections/
+!Paper/sections/*.tex
+!Paper/tables/
+!Paper/tables/*.tex
+!Paper/references.bib
+!Paper/CLAIM_MAP.md
 *.pdf
 *.ppt
 *.pptx

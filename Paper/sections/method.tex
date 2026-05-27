@@ -1,0 +1,80 @@
+\section{Method}
+\label{sec:method}
+
+\subsection{Problem Formulation}
+
+Given a user $u$ with interaction history $H_u = \{h_1, h_2, \ldots, h_m\}$ and a candidate set $C = \{c_1, c_2, \ldots, c_n\}$ containing one positive item $c^+$ and $n-1$ negative items, the task is to rank candidates such that $c^+$ appears as high as possible.
+
+In LLM-based recommendation, a language model $\mathcal{M}$ assigns a relevance score $s_i = f_\mathcal{M}(H_u, c_i)$ to each candidate. The ranking is determined by sorting candidates in descending order of $s_i$.
+
+\subsection{Observation: LLM Confidence is Informative but Unreliable}
+
+We first establish the motivating observation. When prompting Qwen3-8B to output a confidence score alongside its recommendation decision, we find:
+
+\begin{enumerate}
+    \item \textbf{Informative:} The confidence signal correlates with correctness (AUROC $> 0.5$ across all domains).
+    \item \textbf{Unreliable:} The confidence is severely miscalibrated (ECE $\in [0.31, 0.66]$ for all baselines), with Maximum Calibration Error (MCE) exceeding 0.88 in every case.
+    \item \textbf{Domain-dependent:} The same method's calibration quality varies unpredictably across domains (e.g., LLM2Rec AUROC ranges from 0.50 on Beauty to 0.70 on Books).
+\end{enumerate}
+
+This observation holds not only for our method but for all LLM-based recommendation baselines that produce numerical scores, establishing it as a \emph{backbone-level phenomenon} rather than a method-specific artifact.
+
+\subsection{Task-Grounded Relevance Probability Scoring}
+
+Instead of relying on implicit confidence or post-hoc calibration, we propose \textbf{task-grounded relevance probability scoring}: directly prompting the LLM to estimate the probability that a candidate is the user's next interaction, grounded in explicit reasoning about the user's history.
+
+\paragraph{Prompt Design.} For each user-candidate pair $(u, c_i)$, we construct a structured prompt:
+
+\begin{enumerate}
+    \item Present the user's recent interaction history (up to 5 most recent items)
+    \item Present the candidate item with title and description
+    \item Ask the model to estimate $P(\text{relevant} | H_u, c_i) \in [0, 1]$
+    \item Require a one-sentence justification (``reason'')
+\end{enumerate}
+
+The key design choice is asking for a \emph{task-specific probability} rather than a generic confidence score. The model must ground its estimate in observable evidence: category alignment, attribute matching, and purchase trajectory patterns.
+
+\paragraph{Scoring Function.} The relevance probability output is used directly as the ranking score:
+\begin{equation}
+    s_i = P_\mathcal{M}(\text{relevant} | H_u, c_i)
+\end{equation}
+
+Candidates are ranked by $s_i$ in descending order. No post-hoc calibration, temperature scaling, or uncertainty penalty is applied.
+
+\subsection{Why This Works}
+
+The effectiveness of task-grounded relevance probability scoring stems from three properties:
+
+\begin{enumerate}
+    \item \textbf{Evidence grounding:} By requiring the model to justify its estimate, hallucinated high-confidence scores become less likely. The model must identify concrete evidence (category match, trajectory continuation) rather than pattern-matching surface features.
+
+    \item \textbf{Probability framing:} Asking for a probability $\in [0,1]$ naturally produces a more calibrated output than asking for a ranking score or binary decision. The model's pretraining on probabilistic reasoning tasks transfers to this setting.
+
+    \item \textbf{Task specificity:} The prompt explicitly frames the task as ``next interaction prediction'' rather than generic relevance. This aligns the model's output distribution with the evaluation metric (HR@$k$, NDCG@$k$).
+\end{enumerate}
+
+\subsection{Comparison with Existing Approaches}
+
+Table~\ref{tab:method_comparison} contrasts our approach with existing LLM-based recommendation methods:
+
+\begin{table}[h]
+\centering
+\small
+\caption{Comparison of scoring approaches in LLM-based recommendation.}
+\label{tab:method_comparison}
+\begin{tabular}{lcccc}
+\toprule
+Method & Score Type & Calibrated & Evidence & Task-Specific \\
+\midrule
+LLMEmb & Embedding sim. & \xmark & \xmark & \xmark \\
+LLM2Rec & Log-likelihood & \xmark & \xmark & Partial \\
+IRLLRec & Intent score & \xmark & \xmark & Partial \\
+ProEx/ProMax & Profile score & \xmark & \xmark & \cmark \\
+RLMRec & Graph + LLM & \xmark & \xmark & \xmark \\
+\midrule
+\textbf{Ours} & Relevance prob. & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Our method is the only approach that simultaneously produces calibrated scores, requires evidence grounding, and is task-specific. This combination explains its strong performance on domains where title/description information is sufficient for preference inference (Books, Electronics) and its competitive performance on domains with shorter, less informative item descriptions (Beauty, Movies).

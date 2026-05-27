@@ -1,0 +1,20 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Large language models (LLMs) have emerged as powerful tools for recommendation, leveraging their world knowledge and reasoning capabilities to understand user preferences from interaction histories~\cite{llm4rec_survey}. Recent methods such as LLM2Rec~\cite{llm2rec}, LLMEmb~\cite{llmemb}, and ProEx~\cite{proex} demonstrate that LLMs can achieve competitive recommendation performance through various scoring mechanisms: embedding similarity, log-likelihood, profile matching, and intent inference.
+
+However, a critical question remains underexplored: \emph{how reliable are the confidence signals produced by these LLM-based recommenders?} When an LLM assigns a high score to a candidate item, does this genuinely indicate high relevance, or is it an artifact of miscalibration?
+
+We conduct a systematic calibration analysis across 4 Amazon domains and 8 official LLM-based recommendation baselines, all using the same Qwen3-8B backbone. Our findings reveal a \textbf{backbone-level phenomenon}: every baseline exhibits severe miscalibration (Expected Calibration Error 0.31--0.66, Maximum Calibration Error $>$ 0.88), meaning their scores are informative for ranking but \emph{unreliable as probability estimates}. This miscalibration is not method-specific — it persists across embedding-based, likelihood-based, and profile-based approaches.
+
+Motivated by this observation, we propose \textbf{task-grounded relevance probability scoring}: instead of extracting implicit confidence from model internals, we directly prompt the LLM to estimate the probability that a candidate is the user's next interaction, grounded in explicit reasoning about purchase history patterns. This simple but principled approach produces scores that are simultaneously effective for ranking and well-calibrated as probabilities.
+
+Our contributions are:
+
+\begin{enumerate}
+    \item \textbf{Observation:} We establish that LLM confidence miscalibration is a universal phenomenon across 8 methods and 4 domains under controlled same-backbone evaluation, with ECE consistently exceeding 0.31.
+
+    \item \textbf{Method:} We propose task-grounded relevance probability scoring — a prompt-based approach that elicits calibrated probability estimates by requiring evidence-grounded justification. The method requires no fine-tuning, no post-hoc calibration, and no additional model components.
+
+    \item \textbf{Evaluation:} Under a rigorous same-candidate protocol (101 items, unified Qwen3-8B backbone, official baseline implementations), our method achieves state-of-the-art NDCG@10 on Books (+21.5\%) and Electronics (+52.5\%), competitive performance on Beauty, and provides the best-calibrated scores across all domains.
+\end{enumerate}

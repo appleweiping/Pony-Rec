@@ -1,0 +1,63 @@
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental Setup}
+
+\paragraph{Datasets.} We evaluate on four Amazon product review domains with varying characteristics:
+
+\begin{table}[h]
+\centering
+\small
+\caption{Dataset statistics.}
+\label{tab:datasets}
+\begin{tabular}{lrrrl}
+\toprule
+Domain & Test Users & Candidates & Avg Title Len & Characteristics \\
+\midrule
+Beauty & 973 & 101 & 37 chars & Short titles, niche categories \\
+Books & 10,000 & 101 & 49 chars & Rich titles, diverse genres \\
+Electronics & 10,000 & 101 & 15 chars & Technical specs, short titles \\
+Movies & 10,000 & 101 & 21 chars & Very short titles, genre-driven \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each test instance consists of 1 positive item (ground-truth next interaction) and 100 randomly sampled negative items, following the standard same-candidate evaluation protocol~\cite{krichene2020sampled}.
+
+\paragraph{Backbone Model.} All methods use Qwen3-8B as the unified language model backbone. This ensures fair comparison: differences in performance reflect the \emph{scoring methodology}, not the model capacity.
+
+\paragraph{Baselines.} We compare against 8 official LLM-based recommendation methods, all adapted to use Qwen3-8B:
+
+\begin{itemize}
+    \item \textbf{ELMRec}~\cite{elmrec}: Graph-enhanced LLM recommendation
+    \item \textbf{IRLLRec}~\cite{irllrec}: Intent-aware retrieval with LLM
+    \item \textbf{LLM2Rec}~\cite{llm2rec}: LLM-to-recommendation with SASRec
+    \item \textbf{LLMEmb}~\cite{llmemb}: LLM embedding for recommendation
+    \item \textbf{LLM-ESR}~\cite{llmesr}: LLM-enhanced sequential recommendation
+    \item \textbf{ProEx}~\cite{proex}: Profile-based explanation recommendation
+    \item \textbf{ProMax}~\cite{promax}: Profile-maximized recommendation
+    \item \textbf{RLMRec}~\cite{rlmrec}: Reinforcement learning meets LLM recommendation
+\end{itemize}
+
+All baselines use their official code or official-code-level implementations with default hyperparameters, adapted only for the unified backbone and data interface.
+
+\paragraph{Metrics.} We report HR@$k$ (Hit Rate), NDCG@$k$ (Normalized Discounted Cumulative Gain) for $k \in \{5, 10, 20\}$, and MRR (Mean Reciprocal Rank).
+
+\paragraph{Implementation Details.} Our method uses vLLM for batch inference with \texttt{max\_model\_len=2048}, \texttt{temperature=0.1}, \texttt{max\_new\_tokens=100}, and prefix caching enabled. The prompt uses the 5 most recent history items and up to 200 characters of candidate description.
+
+\subsection{Main Results}
+
+\input{tables/main_results}
+
+\subsection{Calibration Analysis}
+
+To validate our motivating observation, we compute calibration metrics for all methods that produce numerical scores (4 out of 8 baselines output raw scores; the remaining 4 produce only ranked lists without scores).
+
+\input{tables/calibration_results}
+
+Key findings:
+\begin{enumerate}
+    \item All baselines exhibit severe miscalibration (ECE $> 0.31$) across all domains.
+    \item Maximum Calibration Error exceeds 0.88 universally, indicating that certain confidence regions are completely unreliable.
+    \item Our method achieves the lowest ECE in all tested domains, confirming that task-grounded probability scoring produces better-calibrated outputs.
+\end{enumerate}

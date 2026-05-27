@@ -1,0 +1,8 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We identified a universal calibration problem in LLM-based recommendation: across 8 methods and 4 domains, all produce severely miscalibrated confidence signals (ECE 0.31--0.66). This finding challenges the implicit assumption that higher model scores indicate higher relevance reliability.
+
+Our solution — task-grounded relevance probability scoring — is remarkably simple: prompt the LLM to directly estimate relevance probability with evidence-based justification. Without fine-tuning, post-hoc calibration, or architectural modifications, this approach achieves state-of-the-art ranking on 2/4 domains (NDCG@10: +21.5\% Books, +52.5\% Electronics) while producing the best-calibrated scores across all domains.
+
+Our results suggest that the \emph{interface} between LLMs and recommendation tasks — specifically, how we ask the model to express its predictions — deserves more attention than architectural innovations built on top of miscalibrated signals. Future work should explore combining task-grounded scoring with collaborative signals for domains where textual information alone is insufficient, and extending the approach to other LLM backbones and full-catalog settings.
