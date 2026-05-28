@@ -37,6 +37,7 @@ def main():
     parser.add_argument("--n_users", type=int, default=None, help="Limit users (None=all)")
     parser.add_argument("--output", type=str, required=True)
     parser.add_argument("--model", type=str, default="/home/ajifang/models/Qwen/Qwen3-8B")
+    parser.add_argument("--gpu_mem", type=float, default=0.85, help="GPU memory utilization (0-1)")
     args = parser.parse_args()
 
     print(f"Loading {args.data}...")
@@ -49,7 +50,7 @@ def main():
     backend = VLLMBackend(
         model_name_or_path=args.model,
         max_model_len=1024,
-        gpu_memory_utilization=0.85,
+        gpu_memory_utilization=args.gpu_mem,
         enable_prefix_caching=True,
         temperature=0.1,
         max_new_tokens=100,
