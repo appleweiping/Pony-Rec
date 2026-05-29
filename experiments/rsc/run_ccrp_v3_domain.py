@@ -69,10 +69,23 @@ def main():
             all_prompts.append(prompt)
             all_meta.append({"user_id": rec["user_id"], "candidate_idx": i})
 
-    print(f"Total prompts: {len(all_prompts)} ({len(records)} users x {len(records[0]['candidate_titles'])} candidates)")
-    print("Running inference...")
+    n_candidates = len(records[0]['candidate_titles'])
+    print(f"Total prompts: {len(all_prompts)} ({len(records)} users x {n_candidates} candidates)")
+
+    # Process in chunks to avoid overwhelming vLLM scheduler
+    CHUNK_USERS = 1000
+    chunk_size = CHUNK_USERS * n_candidates
+    print(f"Running inference in chunks of {CHUNK_USERS} users ({chunk_size} prompts)...")
     start = time.time()
-    results = backend.batch_generate(all_prompts)
+    results = []
+    for i in range(0, len(all_prompts), chunk_size):
+        chunk = all_prompts[i:i + chunk_size]
+        chunk_results = backend.batch_generate(chunk)
+        results.extend(chunk_results)
+        done = min(i + chunk_size, len(all_prompts))
+        elapsed_so_far = time.time() - start
+        rate = done / elapsed_so_far if elapsed_so_far > 0 else 0
+        print(f"  [{done}/{len(all_prompts)}] {rate:.0f} prompts/s")
     elapsed = time.time() - start
     print(f"Done in {elapsed:.1f}s ({len(all_prompts)/elapsed:.1f} samples/s)")
 
