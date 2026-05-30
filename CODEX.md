@@ -55,6 +55,19 @@ Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)
 
 ## Start Every Task
 
+### ⚠️ 第一步：检查服务器是否有实验在跑
+
+**每次接手任务，必须先检查服务器状态。不检查就操作 = 违规。**
+
+```bash
+ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\|baseline\|uncertainty'"
+ssh pony-rec-gpu "nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader"
+ssh pony-rec-gpu "grep 'DONE:\|FAILED:\|C-CRP v3:' ~/projects/pony-rec-rescue-shadow-v6/ccrp_v3_all_domains.log 2>/dev/null"
+```
+
+**严禁：** 不检查就启动新实验、kill 正在运行的进程、重跑已完成的实验。
+**正确做法：** 确认 GPU 空闲 → 检查 outputs/ 里哪些域已有 report.json → 再决定下一步。
+
 1. Read `AGENTS.md` and `README.md`
 2. Read `docs/milestones/README.md` for current milestone position
 3. Read `docs/paper_claims_and_status.md` for frozen claims

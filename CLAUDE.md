@@ -81,6 +81,19 @@ Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
 
 ## Your Role (Claude Code / Opus / Sonnet)
 
+### ⚠️ 接手前必做：检查服务器运行状态
+
+**每次新会话开始，第一件事检查服务器是否有正在运行的实验。不检查就操作 = 违规。**
+
+```bash
+ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\|baseline\|uncertainty'"
+ssh pony-rec-gpu "nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader"
+ssh pony-rec-gpu "tail -5 ~/projects/pony-rec-rescue-shadow-v6/ccrp_v3_all_domains.log 2>/dev/null"
+```
+
+**严禁：** 不检查就启动新实验、kill 正在运行的进程、重跑已完成的实验。
+**正确做法：** 确认 GPU 空闲 → 检查哪些域已完成 → 再决定下一步。
+
 When invoked by Codex or OpenCode as a reviewer:
 - You are **read-only**. Do not edit files, stage, commit, or push.
 - Challenge rigor, novelty, technical depth, ablation completeness, baseline coverage, leakage risk, table eligibility.

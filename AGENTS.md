@@ -30,6 +30,27 @@ The default extra reads should cover four needs: project route, task plan,
 implementation details, and execution/evidence rules. Do not rely only on the
 fixed first-read list when the task clearly touches a narrower subsystem.
 
+## ⚠️ 接手前必做：检查服务器运行状态
+
+**每次新会话/新 agent 接手本项目，第一件事必须检查服务器上是否有正在运行的实验进程。**
+
+```bash
+ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\|baseline\|uncertainty'"
+ssh pony-rec-gpu "tail -5 ~/projects/pony-rec-rescue-shadow-v6/ccrp_v3_all_domains.log 2>/dev/null"
+ssh pony-rec-gpu "nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader"
+```
+
+**严禁：**
+- 在不检查的情况下启动新实验（会 OOM 或覆盖正在写入的文件）
+- kill 掉正在运行的进程（除非明确知道它已经卡死）
+- 重跑已经在跑或已经完成的实验（浪费 GPU 时间）
+
+**正确做法：**
+1. 先跑上面的命令确认 GPU 是否空闲
+2. 检查 `outputs/` 目录看哪些域已经有 `scores.csv` 或 `report.json`
+3. 如果有进程在跑，记录 PID 和进度，等它跑完再做下一步
+4. 如果不确定进程状态，看日志而不是盲目重启
+
 ## Project Direction
 
 The project is not a toy demo and not a loose collection of scripts. The
