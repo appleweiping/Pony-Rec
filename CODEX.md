@@ -7,15 +7,51 @@ This file is the Codex (GPT-5.5) entry point for the Uncertainty project.
 ## Quick Orientation
 
 - **Title**: Task-Grounded Uncertainty for LLM-based Recommendation
-- **Stage**: Between M4 (baseline system) and M5 (four-domain 100-neg validation)
+- **Stage**: M5 (multi-domain SOTA validation in progress)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
-- **Methods**: C-CRP (main), SRPD (ablation/supplementary)
-- **Baselines**: 9 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
+- **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
+- **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
+- **Domains**: beauty, books, electronics, movies (original 4) + sports, toys, home, tools (new 4)
 - **Server**: `pony-rec-gpu` (SSH key-based auth, directly accessible)
   - SSH: `ssh pony-rec-gpu` or `ssh -p 15302 ajifang@125.71.97.70`
   - GPU: RTX 4090 (49GB VRAM)
   - Server project: `~/projects/pony-rec-rescue-shadow-v6`
   - Local project: `D:\Research\Uncertainty`
+
+## Project Goal（硬性目标）
+
+1. 必须达到 SOTA（C-CRP v3 在多个域超越 8 个 official baselines）
+2. 创新非缝合（原创方法，有理论动机）
+3. 禁止 toy 化（full-scale: 10k 用户、101 候选）
+4. 公平比较（setting 完全对齐：用户数、候选数、指标 @5/@10/@20、Qwen3-8B）
+5. GPT-5.5 review 达到 8/10（ARIS 审核标准）
+6. 实验做完再写（不能半成品提交 review）
+7. 每步 commit + memory
+8. 2 小时监控实验进度
+9. 服务器跑实验，本地不跑
+
+## Experiment Roadmap（2026-05-31）
+
+```text
+Phase 1: C-CRP v3 on 8 domains ← IN PROGRESS (6/8 done)
+Phase 2: 8 official baselines on 4 new domains (scripts/run_baselines_new_domains.sh)
+Phase 3: Full comparison table + statistical significance tests
+Phase 4: Paper writing (ARIS paper-write skill)
+Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)
+```
+
+### Current Results (C-CRP v3)
+
+| Domain | HR@10 | NDCG@10 | Status |
+|--------|-------|---------|--------|
+| books | **0.476** | **0.333** | SOTA |
+| electronics | **0.299** | **0.183** | SOTA |
+| toys | 0.396 | 0.271 | baselines pending |
+| sports | 0.382 | 0.233 | baselines pending |
+| beauty | 0.229 | 0.134 | #2 |
+| movies | 0.208 | 0.128 | #5 |
+| home | — | — | running |
+| tools | — | — | queued |
 
 ## Start Every Task
 

@@ -26,18 +26,44 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order
+## Current Priority Order (2026-05-31)
 
 ```text
 1. Pull latest repo state.
-2. Run the readiness check and confirm canonical docs are present.
-3. Confirm no stale nohup job is still running.
-4. Finish or restart the Week8 four-domain 100neg paper-style supplementary run
-   only if that is the intended diagnostic.
-5. Audit official external repositories.
-6. Implement official adapters in order: LLM2Rec, LLM-ESR, LLMEmb, RLMRec,
-   IRLLRec, then the replacement expansion baselines ELMRec, ProEx, and
-   ProMax. SETRec is currently blocked/replaced after repeated large-domain
+2. C-CRP v3 batch run on new domains (run_ccrp_v3_all_new_domains.sh)
+   - sports ✓, toys ✓, home → running, tools → queued
+3. After C-CRP v3 finishes: run baselines on new domains
+   - Script: scripts/run_baselines_new_domains.sh
+   - Launch: nohup bash scripts/run_baselines_new_domains.sh > baselines_new_domains.log 2>&1 &
+4. After baselines finish: scp report/provenance/audit files to local
+5. Build comparison table, run stat tests
+```
+
+## Key Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `run_ccrp_v3_all_new_domains.sh` | C-CRP v3 on sports/toys/home/tools (sequential) |
+| `scripts/run_baselines_new_domains.sh` | 8 baselines × 4 new domains |
+| `scripts/run_ccrp_v3_new_domains.sh` | C-CRP v3 on home/tools only |
+| `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
+
+## Monitoring
+
+```bash
+# Check progress
+tail -5 ~/projects/pony-rec-rescue-shadow-v6/ccrp_v3_all_domains.log
+grep 'DONE:\|FAILED:\|C-CRP v3:' ccrp_v3_all_domains.log
+
+# GPU status
+nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader
+
+# Disk
+df -h /home/ajifang
+
+# Running processes
+ps aux | grep python | grep -v grep
+```
    upstream `tokenize_all` CUDA OOM failures and should not be included in the
    main official block unless a future memory-stable run passes all gates.
 7. Run Shadow large-scale diagnostics only after the 100neg task packages are

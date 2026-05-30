@@ -288,12 +288,57 @@ When in doubt, downgrade the claim, not the evidence standard.
 ## 强制记录规则（所有 agent 必须遵守）
 
 每完成一个阶段、一个 step、一次错误排除、一次贡献，都必须同时更新：
-1. 共享 memory (Vipin Knowledgebase memory/)
+1. agentmemory MCP（共享 memory）
 2. 项目自身文档 (docs/paper_claims_and_status.md, docs/milestones/README.md)
+3. CLAUDE.md 和 AGENTS.md（如果路线/规则变化）
 
 不是做完所有事再统一更新，而是每一步都更新。不写 = 违规。
 
 实验公平性：和 baseline 对比时，指标 @5/@10/@20、数据、用户数必须完全对齐。
+
+## Project Goal（硬性目标，不可降级）
+
+1. **必须达到 SOTA** — C-CRP v3 在多个域上超越所有 8 个 official baselines
+2. **创新非缝合** — 方法必须是原创的、有理论动机的，不是拼凑已有方法
+3. **禁止 toy 化** — 所有实验必须是 full-scale（10k 用户、101 候选）
+4. **8 个 official baselines** — 每个域都必须有完整的 8 个 baseline 对比
+5. **公平比较** — setting 完全对齐（用户数、候选数、指标、统一 Qwen3-8B backbone）
+6. **GPT-5.5 review 达到 8/10** — 按 ARIS 审核标准，多维度评价
+7. **实验做完再写** — 结果完整后再写作，不能半成品提交 review
+8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
+9. **2 小时监控** — 长期项目，每 2 小时检查实验进度
+10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
+
+## Experiment Roadmap（2026-05-31 更新）
+
+```text
+Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home→ tools→)
+Phase 2: 8 official baselines on 4 new domains (scripts/run_baselines_new_domains.sh)
+Phase 3: Full comparison table + statistical significance tests
+Phase 4: Paper writing (ARIS paper-write skill)
+Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)
+```
+
+## Artifact Management（产物管理规则）
+
+### 本地保留 + commit 到 GitHub：
+- `report.json` — 指标结果
+- `user_ranks.jsonl` — 每用户排名（统计检验用）
+- `main_comparison_table.csv` — 对比表
+- `fairness_provenance.json` — baseline 公平性证据
+- `*_score_audit.json` — 分数审计
+- `*_run_summary.json` — 运行摘要
+- Paper 源文件、scripts、configs、docs
+
+### 只留服务器（不下载、不提交）：
+- `scores.csv`（87MB/域）
+- `predictions/`（600MB+）
+- `embeddings/`、`checkpoints/`
+- 原始数据、模型权重
+
+### 不提交到 GitHub：
+- API keys、credentials
+- `__pycache__/`、`.pyc`、editor swap files
 
 ## Git 工作流
 

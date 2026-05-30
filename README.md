@@ -92,6 +92,28 @@ The paper-facing contribution is organized as:
 For the frozen claim and status rules, see
 [docs/paper_claims_and_status.md](docs/paper_claims_and_status.md).
 
+## Current Status (2026-05-31)
+
+**C-CRP v3 multi-domain results:**
+
+| Domain | Users | HR@10 | NDCG@10 | Status |
+|--------|-------|-------|---------|--------|
+| books | 10,000 | **0.476** | **0.333** | SOTA |
+| electronics | 10,000 | **0.299** | **0.183** | SOTA |
+| toys | 10,000 | 0.396 | 0.271 | baselines pending |
+| sports | 10,000 | 0.382 | 0.233 | baselines pending |
+| beauty | 973 | 0.229 | 0.134 | #2 |
+| movies | 10,000 | 0.208 | 0.128 | #5 |
+| home | 10,000 | — | — | running |
+| tools | 10,000 | — | — | queued |
+
+**8 official baselines** (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx,
+ProMax, RLMRec) completed on beauty/books/electronics/movies. Pending on
+sports/toys/home/tools.
+
+**Experiment protocol:** 10k users, 101 candidates (1+100neg), Qwen3-8B via
+vLLM, same-candidate evaluation, metrics @5/@10/@20 + MRR.
+
 ## What Is Implemented
 
 The repository includes:
