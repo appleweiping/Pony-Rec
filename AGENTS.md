@@ -51,6 +51,48 @@ ssh pony-rec-gpu "nvidia-smi --query-gpu=utilization.gpu,memory.used --format=cs
 3. 如果有进程在跑，记录 PID 和进度，等它跑完再做下一步
 4. 如果不确定进程状态，看日志而不是盲目重启
 
+## 断点续接：如何确定当前状态
+
+每次新会话开始，按以下步骤确定项目处于哪个阶段，从哪里继续：
+
+### Step 1: 读取 Roadmap 确定当前 Phase
+
+查看本文件的 "Experiment Roadmap" 部分，确定当前在哪个 Phase。
+
+### Step 2: 检查服务器实际完成情况
+
+```bash
+# 查看哪些域的 C-CRP v3 已完成（有 report.json = 完成）
+ssh pony-rec-gpu "for d in beauty books electronics movies sports toys home tools; do echo -n \"\$d: \"; ls ~/projects/pony-rec-rescue-shadow-v6/outputs/\${d}*ccrp_v3/report.json 2>/dev/null && echo 'DONE' || echo 'NOT DONE'; done"
+
+# 查看哪些域的 baselines 已完成
+ssh pony-rec-gpu "for d in sports toys home tools; do echo \"=== \$d ===\"; ls ~/projects/pony-rec-rescue-shadow-v6/outputs/\${d}_large10000_100neg_*_official_*/scores.csv 2>/dev/null | wc -l; done"
+
+# 查看正在运行的进程
+ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\|baseline'"
+```
+
+### Step 3: 确定下一步动作
+
+| 如果状态是... | 则下一步是... |
+|--------------|-------------|
+| C-CRP v3 还有域在跑 | 等待，监控进度 |
+| C-CRP v3 全部完成，baselines 未开始 | 启动 `scripts/run_baselines_new_domains.sh` |
+| Baselines 正在跑 | 等待，监控进度 |
+| Baselines 全部完成 | scp 轻量产物到本地 → 构建对比表 → 统计检验 |
+| 对比表和统计检验完成 | 开始论文写作（ARIS paper-write skill） |
+| 论文初稿完成 | 提交 GPT-5.5/Codex review（目标 8/10） |
+| Review 返回修改意见 | 修改 → 重跑必要实验 → 再提交 review |
+
+### Step 4: 同步本地仓库
+
+```bash
+cd D:\Research\Uncertainty
+git pull origin main
+```
+
+确认本地文档和服务器状态一致后再开始工作。
+
 ## Project Direction
 
 The project is not a toy demo and not a loose collection of scripts. The
