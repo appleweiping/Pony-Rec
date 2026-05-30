@@ -1,0 +1,22 @@
+[
+  {
+    "method": "elmrec",
+    "domain": "beauty",
+    "runner": "main_run_elmrec_official_same_candidate_adapter.py",
+    "task_dir": "outputs/baselines/external_tasks/beauty_supplementary_smallerN_100neg_test_same_candidate",
+    "ranking_input_path": "outputs/baselines/external_tasks/beauty_supplementary_smallerN_100neg_test_same_candidate/ranking_test.jsonl",
+    "scores_path": "outputs/baselines/official_adapters/beauty_supplementary_smallerN_100neg_elmrec_official/elmrec_official_scores.csv",
+    "provenance_path": "outputs/baselines/official_adapters/beauty_supplementary_smallerN_100neg_elmrec_official/fairness_provenance.json",
+    "imported_exp": "beauty_supplementary_smallerN_100neg_elmrec_official_qwen3base_graph_same_candidate",
+    "target_baseline_name": "elmrec_official_qwen3base_graph",
+    "dataset_name": "amazon_beauty",
+    "fairness_policy_id": "official_code_qwen3base_default_hparams_declared_adaptation_v1",
+    "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+    "comparison_tier": "official_code_qwen3base_default_hparams_declared_adaptation",
+    "backbone_family": "Qwen3-8B",
+    "backbone_path": "/home/ajifang/models/Qwen/Qwen3-8B",
+    "hparam_policy": "official_default_or_recommended",
+    "implementation_status": "official_completed",
+    "plan_stage": "run"
+  }
+]

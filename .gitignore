@@ -149,17 +149,22 @@ data/cache/
 
 # =========================
 # Research outputs
-# 实验输出、中间结果、旧备份都不提交
+# 提交关键产物（report, ranks, comparison tables）
+# 不提交大文件（scores.csv, predictions/, checkpoints）
 # =========================
-outputs/**
-!outputs/
-!outputs/**/
-!outputs/.gitkeep
-!outputs/**/.gitkeep
+outputs/**/scores.csv
+outputs/**/predictions/
+outputs/**/checkpoints/
+outputs/**/embeddings/
+outputs/**/calibrated/
+outputs/**/reranked/
+outputs/**/figures/
+outputs/**/*.tar.gz
+outputs/**/*.log
 outputs_backup_old/
 logs/
 results/
-experiments/
+experiments/rsc/results/
 artifacts/
 checkpoints/
 

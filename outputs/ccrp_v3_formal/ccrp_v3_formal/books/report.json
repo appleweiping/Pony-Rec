@@ -1,0 +1,13 @@
+{
+  "hr5": 0.3736,
+  "ndcg5": 0.2999490429408034,
+  "hr10": 0.4758,
+  "ndcg10": 0.33280196207428,
+  "hr20": 0.5915,
+  "ndcg20": 0.36193003945072244,
+  "mrr": 0.3063331264890853,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 26578.988316059113,
+  "data_path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+}

@@ -1,0 +1,13 @@
+{
+  "HR@5": 0.2745,
+  "NDCG@5": 0.1984514067348281,
+  "HR@10": 0.3819,
+  "NDCG@10": 0.23286197589860086,
+  "HR@20": 0.5172,
+  "NDCG@20": 0.26700629932419995,
+  "MRR": 0.20756582350031022,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 29973.632190465927,
+  "data_path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+}

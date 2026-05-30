@@ -1,0 +1,13 @@
+{
+  "HR@5": 0.3172,
+  "NDCG@5": 0.2451904009717959,
+  "HR@10": 0.3964,
+  "NDCG@10": 0.27079859856897753,
+  "HR@20": 0.5059,
+  "NDCG@20": 0.298341205798594,
+  "MRR": 0.2503049488607351,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 31147.84668302536,
+  "data_path": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+}

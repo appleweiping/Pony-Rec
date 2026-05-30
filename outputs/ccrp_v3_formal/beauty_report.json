@@ -1,0 +1,13 @@
+{
+  "hr5": 0.15724563206577596,
+  "ndcg5": 0.11094940895853836,
+  "hr10": 0.22918807810894143,
+  "ndcg10": 0.13405198045497876,
+  "hr20": 0.36896197327852004,
+  "ndcg20": 0.16904232193814442,
+  "mrr": 0.12762667992425564,
+  "n_users": 973,
+  "n_prompts": 98273,
+  "inference_time_s": 3160.2815322875977,
+  "data_path": "outputs/baselines/external_tasks/beauty_supplementary_smallerN_100neg_test_same_candidate/ranking_test.jsonl"
+}

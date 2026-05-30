@@ -1,0 +1,13 @@
+{
+  "hr5": 0.218,
+  "ndcg5": 0.15712993900258593,
+  "hr10": 0.2993,
+  "ndcg10": 0.1832855407620405,
+  "hr20": 0.4178,
+  "ndcg20": 0.21307715350709897,
+  "mrr": 0.16832887776052635,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 32884.4525270462,
+  "data_path": "outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+}
