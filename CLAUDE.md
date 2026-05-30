@@ -6,15 +6,78 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Quick Orientation
 
-- **Stage**: Between M4 and M5 (four-domain 100-neg validation is the active gate)
+- **Stage**: M5→M6 (multi-domain SOTA validation in progress)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
-- **Methods**: C-CRP (main), SRPD (ablation/supplementary)
-- **Baselines**: 9 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
+- **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
+- **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
+- **Domains**: beauty, books, electronics, movies (original 4) + sports, toys, home, tools (new 4)
 - **Server**: `pony-rec-gpu` (SSH accessible via `ssh pony-rec-gpu`, key-based auth configured)
   - Server project path: `~/projects/pony-rec-rescue-shadow-v6`
   - Local project path: `D:\Research\Uncertainty`
   - SSH config: `125.71.97.70:15302`, user `ajifang`
   - GPU: RTX 4090 (49GB VRAM)
+
+## Experiment Roadmap (2026-05-31)
+
+### Phase 1: C-CRP v3 Scoring (IN PROGRESS)
+Run C-CRP v3 on all 8 domains with Qwen3-8B via vLLM.
+- beauty (973 users): DONE — HR@10=0.229
+- books (10k users): DONE — HR@10=0.476 **SOTA**
+- electronics (10k users): DONE — HR@10=0.299 **SOTA**
+- movies (10k users): DONE — HR@10=0.208
+- sports (10k users): DONE — HR@10=0.382
+- toys (10k users): DONE — HR@10=0.396
+- home (10k users): RUNNING
+- tools (10k users): QUEUED
+
+### Phase 2: Official Baselines on New Domains
+Run 8 official baselines on sports/toys/home/tools (same protocol as original 4).
+Script: `scripts/run_baselines_new_domains.sh` (already on server).
+Start after Phase 1 completes.
+
+### Phase 3: Full Comparison Table + Statistical Tests
+Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
+
+### Phase 4: Paper Writing (ARIS paper-write skill)
+
+### Phase 5: GPT-5.5/Codex Review Cycle (must reach 8/10)
+
+## Project Goal
+
+本项目的最终目标是产出一篇达到顶会投稿水平的论文。具体要求：
+
+1. **必须达到 SOTA** — C-CRP v3 在多个域上超越所有 8 个 official baselines
+2. **创新非缝合** — 方法必须是原创的、有理论动机的，不是拼凑已有方法
+3. **禁止 toy 化** — 所有实验必须是 full-scale（10k 用户、101 候选），不能用小样本代替
+4. **8 个 official baselines** — 每个域都必须有完整的 8 个 baseline 对比
+5. **公平比较** — 所有 setting 对齐（用户数、候选数、指标 @5/@10/@20、统一 backbone）
+6. **GPT-5.5 review 达到 8/10** — 按 ARIS 审核标准，多维度评价，总分必须 ≥8
+7. **实验做完再写** — 不能实验做一半就提交 review，必须结果完整后再写作
+8. **每步 commit + memory** — 每个关键产物都要 commit 到 GitHub，更新项目文档
+9. **2 小时监控** — 长期项目，每 2 小时检查实验进度
+10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
+
+## Artifact Management Rules
+
+### 本地保留（commit 到 GitHub）：
+- `report.json` — 每个域/方法的指标结果
+- `user_ranks.jsonl` — 每用户排名（统计检验用）
+- `main_comparison_table.csv` — 对比表
+- `fairness_provenance.json` — baseline 公平性证据
+- `*_score_audit.json` — 分数审计
+- `*_run_summary.json` — 运行摘要
+- Paper 源文件、scripts、configs、docs
+
+### 只留服务器（不下载、不提交）：
+- `scores.csv`（87MB/域，可重新生成）
+- `predictions/`（600MB+）
+- `embeddings/`、`checkpoints/`
+- 原始数据、模型权重
+
+### 不提交到 GitHub：
+- API keys、credentials
+- `__pycache__/`、`.pyc`、editor swap files
+- 上述大文件
 
 ## Your Role (Claude Code / Opus / Sonnet)
 

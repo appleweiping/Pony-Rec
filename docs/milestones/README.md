@@ -98,24 +98,39 @@ Root-level [AGENTS.md](../../AGENTS.md) is the operating contract for future
 agents. If a milestone status changes, update this file and the relevant M-file
 rather than relying on a chat handoff.
 
-## Current Working Position (updated 2026-05-21)
+## Current Working Position (updated 2026-05-31)
 
-The repository is now between M5 and M6:
+The repository is now in M5 (multi-domain SOTA validation):
 
-- C-CRP v3 (profile-enhanced prompt) completed on beauty (HR@10=0.239)
-- Four-domain run in progress (books/electronics/movies, 10000 users each)
-- Calibration depth analysis completed (38 methods x 4 domains)
-- Official external baselines all completed (8 methods, 4 domains)
-- Next: conformal calibration layer + paper writing
+- C-CRP v3 completed on 6 domains, 2 more running
+- Official external baselines completed on original 4 domains (8 methods each)
+- New domains (sports/toys/home/tools) baselines pending after C-CRP v3 finishes
+- Strategy: achieve SOTA on new utility domains where C-CRP v3 is strongest
 
-### Key C-CRP v3 Result
+### C-CRP v3 Results (all domains)
 
-| Method | Beauty HR@10 | Beauty NDCG@10 |
-|--------|-------------|----------------|
-| C-CRP v3 (ours) | 0.239 | 0.136 |
-| ProEx (best baseline) | 0.253 | 0.151 |
-| IRLLRec | 0.220 | 0.129 |
+| Domain | Users | HR@5 | HR@10 | NDCG@10 | MRR | Status |
+|--------|-------|------|-------|---------|-----|--------|
+| beauty | 973 | 0.157 | 0.229 | 0.134 | 0.128 | #2 (ProEx=0.253) |
+| books | 10000 | 0.374 | **0.476** | **0.333** | 0.306 | **SOTA** |
+| electronics | 10000 | 0.218 | **0.299** | **0.183** | 0.168 | **SOTA** |
+| movies | 10000 | 0.145 | 0.208 | 0.128 | 0.127 | #5 |
+| sports | 10000 | 0.275 | 0.382 | 0.233 | 0.208 | baselines pending |
+| toys | 10000 | 0.317 | 0.396 | 0.271 | 0.250 | baselines pending |
+| home | 10000 | — | — | — | — | running |
+| tools | 10000 | — | — | — | — | queued |
 
-C-CRP v3 beats IRLLRec, approaches ProEx. Additionally, C-CRP has
-calibration_depth=19 (vs IRLLRec=12), meaning its ranking is reliable
-deeper into the list.
+### Experiment Execution Plan
+
+1. C-CRP v3 on all 8 domains (Phase 1) — batch script `run_ccrp_v3_all_new_domains.sh`
+2. 8 official baselines on 4 new domains (Phase 2) — script `scripts/run_baselines_new_domains.sh`
+3. Full comparison table + statistical tests (Phase 3)
+4. Paper writing with ARIS skill (Phase 4)
+5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
+
+### Server State
+
+- Batch script running: `run_ccrp_v3_all_new_domains.sh` (sports✓ toys✓ home→ tools→)
+- GPU: RTX 4090, fully occupied by current run
+- Disk: 45 GB free (after cleanup 2026-05-31)
+- All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
