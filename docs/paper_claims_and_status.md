@@ -178,11 +178,12 @@ external-baseline comparison.
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports is currently running from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
-   child at the 2026-05-31 22:17 CST checkpoint is sports `llmemb` PID
-   `2794731`, progressing at about `185136/233470`, with GPU about `96%`,
-   `16285 MiB / 49140 MiB`, and disk about `44G` free. No sports official row
-   has completed `scores.csv`, score-audit JSON, imported table, or final
-   `fairness_provenance.json` yet.
+   child at the 2026-05-31 22:32 CST checkpoint is sports `llmemb` PID
+   `2794731`. It has completed the `hf_mean_pool` embedding pass
+   (`233470/233470`) and entered `llmemb-sasrec` training, with log lines
+   through epoch 35. GPU is about `33%`, `16301 MiB / 49140 MiB`; disk is about
+   `36G` free. No sports official row has completed `scores.csv`,
+   score-audit JSON, imported table, or final `fairness_provenance.json` yet.
 2. Import and audit each new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

@@ -148,10 +148,11 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 - Phase 2 sports official-baseline run started 2026-05-31:
   `baselines_new_domains_sports.log`, runner PID `2794722`; current first row
   is `llmemb` on sports
-- Monitoring cadence updated 2026-05-31: the active automation is a 30-minute
-  heartbeat for the full Pony-rec goal. Each wake performs one bounded
-  read-only status cycle, records material changes, and then waits for the next
-  heartbeat; it must not immediately chain repeated monitor turns.
+- Monitoring cadence updated 2026-05-31: the separate Pony-rec automation was
+  deleted after the user clarified it is unnecessary. The active goal
+  continuation is now the driver for future monitoring. Each continuation
+  performs one bounded read-only status cycle, records material changes, and
+  must not immediately chain repeated monitor turns.
 - Monitoring checkpoint 2026-05-31 21:42 CST: runner PID `2794722` and child
   PID `2794731` are active; `llmemb` is encoding Qwen3 item/user text at about
   `28048/233470`; no baseline score/audit/import files are expected yet
@@ -195,6 +196,14 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   no completed `scores.csv`, score-audit JSON, imported table, or final
   `fairness_provenance.json` is present yet. This is expected while the first
   baseline is still embedding/scoring.
+- Monitoring checkpoint 2026-05-31 22:32 CST: sports `llmemb` has completed
+  the `hf_mean_pool` embedding pass (`233470/233470`) and advanced into
+  `llmemb-sasrec` training, with log lines through epoch 35. PID `2794731`
+  remains active under runner `2794722`; GPU is about `33%` with
+  `16301 MiB / 49140 MiB`; disk has dropped to about `36G` free (`81%` used).
+  No `scores.csv`, score-audit JSON, imported table, or final
+  `fairness_provenance.json` exists yet for any of the eight sports official
+  methods, so no baseline row is complete or table-eligible.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

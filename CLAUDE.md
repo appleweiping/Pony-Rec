@@ -67,7 +67,7 @@ Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
 6. **GPT-5.5 review 达到 8/10** — 按 ARIS 审核标准，多维度评价，总分必须 ≥8
 7. **实验做完再写** — 不能实验做一半就提交 review，必须结果完整后再写作
 8. **每步 commit + memory** — 每个关键产物都要 commit 到 GitHub，更新项目文档
-9. **30 分钟 heartbeat 监控** — 长期项目，每 30 分钟自动唤醒检查一次实验进度；每次只做一个有界监控周期，禁止刚结束就连续自触发
+9. **目标续跑监控** — 长期项目依靠 active goal continuation 持续推进；不再单独设置 automation；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发
 10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
 
 ## Artifact Management Rules
