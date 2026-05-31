@@ -9,9 +9,10 @@ Before changing code, documents, experiments, or claims, read:
 
 1. `README.md`
 2. `docs/milestones/README.md`
-3. `docs/paper_claims_and_status.md`
-4. `docs/top_conference_review_gate.md`
-5. `docs/server_runbook.md`
+3. `docs/active_todo_pony_uncertainty.md`
+4. `docs/paper_claims_and_status.md`
+5. `docs/top_conference_review_gate.md`
+6. `docs/server_runbook.md`
 
 For baseline or experiment implementation, also read:
 

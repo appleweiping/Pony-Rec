@@ -24,6 +24,11 @@ Task-grounded calibrated uncertainty can turn it into a decision-useful signal
 under a controlled same-candidate recommendation protocol.
 ```
 
+For the current cumulative execution checklist, see
+`docs/active_todo_pony_uncertainty.md`. Keep that file updated after each
+completed official row, blocker, evidence-package decision, comparison-table
+build, or review cycle.
+
 The larger system story remains staged:
 
 ```text
