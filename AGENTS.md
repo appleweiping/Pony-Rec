@@ -369,7 +369,7 @@ When in doubt, downgrade the claim, not the evidence standard.
 6. **GPT-5.5 review 达到 8/10** — 按 ARIS 审核标准，多维度评价
 7. **实验做完再写** — 结果完整后再写作，不能半成品提交 review
 8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
-9. **2 小时监控** — 长期项目，每 2 小时检查实验进度
+9. **30 分钟 heartbeat 监控** — 长期项目，每 30 分钟自动唤醒检查一次实验进度；每次只做一个有界监控周期，禁止刚结束就连续自触发
 10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
 
 ## Experiment Roadmap（2026-05-31 更新）

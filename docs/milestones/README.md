@@ -148,6 +148,10 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 - Phase 2 sports official-baseline run started 2026-05-31:
   `baselines_new_domains_sports.log`, runner PID `2794722`; current first row
   is `llmemb` on sports
+- Monitoring cadence updated 2026-05-31: the active automation is a 30-minute
+  heartbeat for the full Pony-rec goal. Each wake performs one bounded
+  read-only status cycle, records material changes, and then waits for the next
+  heartbeat; it must not immediately chain repeated monitor turns.
 - Monitoring checkpoint 2026-05-31 21:42 CST: runner PID `2794722` and child
   PID `2794731` are active; `llmemb` is encoding Qwen3 item/user text at about
   `28048/233470`; no baseline score/audit/import files are expected yet
@@ -181,6 +185,16 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   `16285 MiB / 49140 MiB`; disk is still about `44G` free; recent log scan
   shows no error/blocker keywords; sports artifact matrix remains incomplete
   for all 8 official methods and only `llmemb` inspect provenance is present
+- Monitoring checkpoint 2026-05-31 22:17 CST: active process is
+  `main_run_llmemb_official_same_candidate_adapter.py` for sports `llmemb`
+  (PID `2794731`); log progress is about `185136/233470`; GPU is about `96%`
+  with `16285 MiB / 49140 MiB`; disk remains about `44G` free. The sports
+  official artifact matrix is still incomplete for all eight canonical
+  methods (`llmemb`, `llm2rec_sasrec`, `irllrec_intent`, `rlmrec_graphcl`,
+  `proex_profile`, `promax_profile`, `llmesr_sasrec`, `elmrec_graph`):
+  no completed `scores.csv`, score-audit JSON, imported table, or final
+  `fairness_provenance.json` is present yet. This is expected while the first
+  baseline is still embedding/scoring.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
