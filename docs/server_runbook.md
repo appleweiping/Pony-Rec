@@ -225,6 +225,23 @@ and archived. If storage is tight, delete predictions or large model/adapter
 intermediates first, but do not remove the imported summary directory in a way
 that makes a completed domain disappear from later comparisons.
 
+After copying a lightweight local evidence package, run the package audit before
+recording the row as safely backed up:
+
+```powershell
+python scripts\audit\main_audit_official_evidence_package.py `
+  --evidence_dir outputs\baselines\official_adapters\<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --mode local_light `
+  --quiet
+```
+
+Run the same audit in `server_final` mode on the server output directory when
+verifying the full server-side result. `local_light` intentionally permits
+`scores.csv` and `predictions/rank_predictions.jsonl` to stay server-only, but
+still requires final provenance, score audits, run summary, full `@5/@10/@20`
+and MRR metrics, coverage/exposure/summary tables, and
+`tables/ranking_eval_records.csv`.
+
 Single-domain command template:
 
 ```bash

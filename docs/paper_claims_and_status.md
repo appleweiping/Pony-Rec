@@ -238,6 +238,16 @@ external-baseline comparison.
    `outputs/baselines/paper_adapters/` working directories were then removed
    after path checks, while final scores/provenance/audits/tables/predictions
    and checkpoints were preserved. Disk recovered to about `33G` free.
+   At 2026-06-01 06:36 CST, the same runner remains active on sports
+   `irllrec_intent` (child PID `2835275`), with log progress through epoch
+   `1190/3000`, latest train loss `0.625393`, GPU about `98%`, `16295 MiB /
+   49140 MiB`, disk about `29G` free (`85%` used), and no fatal/OOM/no-space
+   markers. Four sports official rows are complete and locally backed up;
+   `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, and
+   `llmesr_sasrec` are still incomplete. The local package gate
+   `scripts/audit/main_audit_official_evidence_package.py` passed on all four
+   completed lightweight evidence packages and is now the required check
+   before recording future copied official evidence as backed up.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

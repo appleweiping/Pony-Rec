@@ -302,6 +302,23 @@ not as a reason to silently rerun completed metric rows.
   imported tables, predictions, and compact checkpoints) remain in place. Disk
   recovered from about `15G` free (`93%` used) to about `33G` free (`83%`
   used). The active sports `irllrec_intent` adapter directory remains present.
+- Monitoring/tooling checkpoint 2026-06-01 06:36 CST: runner PID `2794722`
+  and sports `irllrec_intent` child PID `2835275` are still active. The log
+  has reached epoch `1190` of the default `3000` IRLLRec official-adapter
+  epochs, with latest train loss `0.625393`; no `Traceback`, `Killed`, OOM,
+  CUDA, no-space, or fatal markers were found. GPU is about `98%` with
+  `16295 MiB / 49140 MiB`; disk is about `29G` free (`85%` used). Based on
+  observed epoch rate, IRLLRec training likely has roughly 3 more hours before
+  scoring/import/audit overhead, but the next status source remains the log
+  and final provenance, not the estimate. Four sports official rows remain
+  complete (`llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`);
+  `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`
+  are not complete yet. A new read-only package gate,
+  `scripts/audit/main_audit_official_evidence_package.py`, was added and
+  passed on all four local lightweight sports evidence packages. It checks
+  final provenance, blockers, score coverage, full `@5/@10/@20 + MRR`
+  metrics, row counts, score audits, run summaries, and per-event evaluation
+  records before a copied package is treated as safely backed up.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
