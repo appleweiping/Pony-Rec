@@ -157,6 +157,12 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   `48056/233470`; GPU is about `100%` with `16285 MiB / 49140 MiB`; disk is
   still about `44G` free; no sports baseline has completed `scores.csv`,
   audit, import table, or final fairness provenance yet
+- Monitoring checkpoint 2026-05-31 21:52 CST: runner PID `2794722` and child
+  PID `2794731` are still active; `llmemb` is encoding at about
+  `78888/233470`; GPU is about `100%` with `16285 MiB / 49140 MiB`; disk is
+  still about `44G` free; all 8 sports official baseline rows still have no
+  completed `scores.csv`, score-audit log, imported summary table, or final
+  fairness provenance because the first baseline has not finished
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
