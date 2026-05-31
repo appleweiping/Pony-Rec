@@ -98,21 +98,20 @@ For the frozen claim and status rules, see
 
 | Domain | Users | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR | Status |
 |--------|-------|------|-------|-------|--------|---------|---------|-----|--------|
-| books | 10,000 | 0.374 | **0.476** | — | — | **0.333** | — | 0.306 | SOTA |
-| electronics | 10,000 | 0.218 | **0.299** | — | — | **0.183** | — | 0.168 | SOTA |
+| books | 10,000 | 0.374 | **0.476** | 0.592 | 0.300 | **0.333** | 0.362 | 0.306 | SOTA |
+| electronics | 10,000 | 0.218 | **0.299** | 0.418 | 0.157 | **0.183** | 0.213 | 0.168 | SOTA |
 | toys | 10,000 | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | baselines pending |
 | sports | 10,000 | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | baselines pending |
-| beauty | 973 | 0.157 | 0.229 | — | — | 0.134 | — | 0.128 | #2 |
-| movies | 10,000 | 0.145 | 0.208 | — | — | 0.128 | — | 0.127 | #5 |
+| beauty | 973 | 0.157 | 0.229 | 0.369 | 0.111 | 0.134 | 0.169 | 0.128 | #2 |
+| movies | 10,000 | 0.145 | 0.208 | 0.331 | 0.108 | 0.128 | 0.159 | 0.127 | #5 |
 | home | 10,000 | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | baselines pending |
 | tools | 10,000 | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
 
-For the four new domains, each C-CRP v3 run emitted `report.json`,
-`user_ranks.jsonl` with 10,000 rows, and `scores.csv` with 1,010,000 candidate
-scores plus a header row.
-For original domains, fields marked `—` were not present in the current
-server-side `outputs/*ccrp_v3/report.json` lookup on 2026-05-31 and must be
-recovered from archived artifacts before paper-table finalization.
+Original-domain C-CRP v3 formal reports are under
+`outputs/ccrp_v3_formal/<domain>/report.json` and are also included in
+`outputs/ccrp_v3_formal/main_comparison_table.csv`. For the four new domains,
+each C-CRP v3 run emitted `report.json`, `user_ranks.jsonl` with 10,000 rows,
+and `scores.csv` with 1,010,000 candidate scores plus a header row.
 
 **8 official baselines** (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx,
 ProMax, RLMRec) completed on beauty/books/electronics/movies. Pending on

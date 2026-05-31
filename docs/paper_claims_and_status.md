@@ -140,10 +140,10 @@ preferences before scoring each candidate. All domains use 10k users,
 
 | Domain | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR | vs Best Baseline |
 |--------|------|-------|-------|--------|---------|---------|-----|------------------|
-| beauty (973u) | 0.157 | 0.229 | — | — | 0.134 | — | 0.128 | #2 (ProEx=0.253) |
-| books | 0.374 | **0.476** | — | — | **0.333** | — | 0.306 | **SOTA** (+0.8% vs LLMEmb) |
-| electronics | 0.218 | **0.299** | — | — | **0.183** | — | 0.168 | **SOTA** (+22% vs LLMEmb) |
-| movies | 0.145 | 0.208 | — | — | 0.128 | — | 0.127 | #5 (LLMEmb=0.334) |
+| beauty (973u) | 0.157 | 0.229 | 0.369 | 0.111 | 0.134 | 0.169 | 0.128 | #2 (ProEx=0.253) |
+| books | 0.374 | **0.476** | 0.592 | 0.300 | **0.333** | 0.362 | 0.306 | **SOTA** (+0.8% vs LLMEmb) |
+| electronics | 0.218 | **0.299** | 0.418 | 0.157 | **0.183** | 0.213 | 0.168 | **SOTA** (+22% vs LLMEmb) |
+| movies | 0.145 | 0.208 | 0.331 | 0.108 | 0.128 | 0.159 | 0.127 | #5 (LLMEmb=0.334) |
 | sports | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | baselines pending |
 | toys | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | baselines pending |
 | home | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | baselines pending |
@@ -156,9 +156,10 @@ For sports/toys/home/tools, each report records `n_users=10000`,
 `n_prompts=1010000`, the test same-candidate `data_path`, `scores.csv` with
 1,010,000 scored candidate rows plus header, and `user_ranks.jsonl` with
 10,000 rows.
-Fields marked `—` for beauty/books/electronics/movies are currently missing
-from the server `outputs/*ccrp_v3/report.json` lookup and must be recovered
-from archived artifacts before final paper tables.
+Original-domain C-CRP v3 formal reports are present under
+`outputs/ccrp_v3_formal/<domain>/report.json`, and the old four-domain
+official-baseline comparison is present at
+`outputs/ccrp_v3_formal/main_comparison_table.csv`.
 
 ### Strategy for SOTA
 
