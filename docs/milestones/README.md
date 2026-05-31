@@ -132,6 +132,15 @@ completeness: each of sports/toys/home/tools has `report.json`, `scores.csv`
 with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 10,000 user-rank rows.
 
+Artifact audit note (2026-05-31): the old four-domain C-CRP reports are present
+under `outputs/ccrp_v3_formal/<domain>/report.json`; they were only missed by
+flat-path checks such as `outputs/*ccrp_v3/report.json`. The old four-domain
+8-baseline comparison table is metric-complete, but some method-specific
+old-domain baseline directories are table-only under the current strict
+evidence gate because final provenance/audit files are not co-located with the
+imported tables. Treat this as artifact reconciliation before paper submission,
+not as a reason to silently rerun completed metric rows.
+
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
@@ -225,6 +234,13 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   `llmemb_official_model.pt`. The runner has advanced to `proex_profile` on
   sports (active child PID `2805588`). Disk is now about `31G` free (`84%`
   used), so storage is a watch item for the next monitor cycle.
+- Monitoring checkpoint 2026-05-31 23:29 CST: runner PID `2794722` is active
+  and sports `proex_profile` child PID `2805588` is encoding with
+  `hf_mean_pool` progress about `135560/233470`. GPU is about `95%` with
+  `16285 MiB / 49140 MiB`; disk is about `31G` free (`84%` used). Recent log
+  scan shows no `ERROR`, `WARN`, `Traceback`, `Killed`, `OOM`, `CUDA out`, or
+  `FAILED` markers. Sports matrix remains: `llmemb` official-completed; the
+  other seven canonical official baselines not yet complete.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

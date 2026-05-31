@@ -161,6 +161,14 @@ Original-domain C-CRP v3 formal reports are present under
 `outputs/ccrp_v3_formal/<domain>/report.json`, and the old four-domain
 official-baseline comparison is present at
 `outputs/ccrp_v3_formal/main_comparison_table.csv`.
+Artifact audit note (2026-05-31): the old four-domain C-CRP reports were not
+missing; earlier searches that only checked `outputs/*ccrp_v3/report.json`
+missed the `outputs/ccrp_v3_formal/<domain>/report.json` layout. The old
+four-domain 8-baseline comparison table is metric-complete, but some
+method-specific old-domain baseline directories are table-only under the
+current strict evidence gate because final provenance/audit files are not
+co-located with the imported tables. Reconcile those evidence packs before
+paper submission; do not rerun or relabel them without a provenance decision.
 
 ### Strategy for SOTA
 
@@ -192,7 +200,11 @@ external-baseline comparison.
    `candidate_rows=1010000`. Lightweight local evidence is under
    `outputs/baselines/official_adapters/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/`;
    server-only large artifacts remain on the server. The runner then advanced
-   to sports `proex_profile`.
+   to sports `proex_profile`. At 2026-05-31 23:29 CST, `proex_profile` was
+   still actively encoding (`135560/233470` in the log), GPU was about `95%`
+   with `16285 MiB / 49140 MiB`, disk was about `31G` free (`84%` used), and
+   no `ERROR`, `WARN`, `Traceback`, `Killed`, `OOM`, `CUDA out`, or `FAILED`
+   markers were present.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

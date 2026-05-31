@@ -114,10 +114,18 @@ each C-CRP v3 run emitted `report.json`, `user_ranks.jsonl` with 10,000 rows,
 and `scores.csv` with 1,010,000 candidate scores plus a header row.
 
 **8 official baselines** (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx,
-ProMax, RLMRec) completed on beauty/books/electronics/movies. Pending on
-sports/toys/home/tools. Do not include SETRec in the main 8-baseline block
-unless its blocked status in `configs/official_external_baselines.yaml` is
-resolved and it passes the same official-completed gates.
+ProMax, RLMRec) have metric-complete old-domain rows in
+`outputs/ccrp_v3_formal/main_comparison_table.csv` for
+beauty/books/electronics/movies. Under the stricter 2026-05-31 evidence gate,
+some old-domain method directories still need artifact reconciliation because
+their imported tables are not co-located with final
+`fairness_provenance.json` and score-audit JSON. Treat this as an evidence
+packaging/reconciliation task, not a reason to silently rerun or to drop the
+old-domain rows. New-domain baselines are pending on sports/toys/home/tools
+except for sports `llmemb`, which is fully `official_completed`. Do not include
+SETRec in the main 8-baseline block unless its blocked status in
+`configs/official_external_baselines.yaml` is resolved and it passes the same
+official-completed gates.
 
 **Experiment protocol:** 10k users, 101 candidates (1+100neg), Qwen3-8B via
 vLLM, same-candidate evaluation, metrics @5/@10/@20 + MRR.

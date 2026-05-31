@@ -62,11 +62,12 @@ ssh pony-rec-gpu "nvidia-smi --query-gpu=utilization.gpu,memory.used --format=cs
 ### Step 2: 检查服务器实际完成情况
 
 ```bash
-# 查看哪些域的 C-CRP v3 已完成（有 report.json = 完成）
-ssh pony-rec-gpu "for d in beauty books electronics movies sports toys home tools; do echo -n \"\$d: \"; ls ~/projects/pony-rec-rescue-shadow-v6/outputs/\${d}*ccrp_v3/report.json 2>/dev/null && echo 'DONE' || echo 'NOT DONE'; done"
+# 查看哪些域的 C-CRP v3 已完成（旧四域和新四域路径不同）
+ssh pony-rec-gpu "cd ~/projects/pony-rec-rescue-shadow-v6 && for d in beauty books electronics movies; do echo -n \"\$d: \"; test -s outputs/ccrp_v3_formal/\$d/report.json && echo DONE || echo NOT_DONE; done; for d in sports toys home tools; do echo -n \"\$d: \"; test -s outputs/\${d}_large10000_100neg_ccrp_v3/report.json && echo DONE || echo NOT_DONE; done"
 
-# 查看哪些域的 baselines 已完成
-ssh pony-rec-gpu "for d in sports toys home tools; do echo \"=== \$d ===\"; ls ~/projects/pony-rec-rescue-shadow-v6/outputs/\${d}_large10000_100neg_*_official_*/scores.csv 2>/dev/null | wc -l; done"
+# 查看哪些新域的 official baselines 已完成（scores.csv 不是充分条件；
+# 还必须有 fairness_provenance.json、score audit、imported metrics table）
+ssh pony-rec-gpu "for d in sports toys home tools; do echo \"=== \$d ===\"; find ~/projects/pony-rec-rescue-shadow-v6/outputs -maxdepth 2 -type f -path \"*/\${d}_large10000_100neg_*official*same_candidate/fairness_provenance.json\" 2>/dev/null | wc -l; done"
 
 # 查看正在运行的进程
 ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\|baseline'"

@@ -34,6 +34,14 @@ For new-domain C-CRP v3 status reports, always include the full metric set:
 HR@5/@10/@20, NDCG@5/@10/@20, MRR, `n_users`, `n_prompts`, data path, and
 score/rank row counts. Do not summarize only @10.
 
+Original-domain C-CRP v3 reports are not in the new-domain flat directory
+layout. Use `outputs/ccrp_v3_formal/<domain>/report.json` for
+beauty/books/electronics/movies and `outputs/ccrp_v3_formal/main_comparison_table.csv`
+for their metric-complete 8-baseline comparison. As of the 2026-05-31 artifact
+audit, those old-domain baseline metrics exist, but some method-specific
+evidence packs still need provenance/audit reconciliation under the current
+strict gate.
+
 ### Phase 2: Official Baselines on New Domains
 Run 8 official baselines on sports/toys/home/tools (same protocol as original 4).
 Script: `scripts/run_baselines_new_domains.sh` (already on server).
