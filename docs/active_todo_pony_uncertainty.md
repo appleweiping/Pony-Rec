@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 06:47 CST
+Last updated: 2026-06-01 06:52 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -29,8 +29,8 @@ or review cycle.
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
 - Active row: sports `irllrec_intent`, child PID `2835275`
-- Latest checked progress: 2026-06-01 06:47 CST, epoch `1420/3000`, loss
-  `0.624789`
+- Latest checked progress: 2026-06-01 06:52 CST, epoch `1520/3000`, loss
+  `0.624800`
 - GPU/disk at latest check: GPU `99%`, `16295 MiB / 49140 MiB`, disk `29G`
   free (`85%` used)
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
