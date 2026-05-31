@@ -25,10 +25,14 @@ Run C-CRP v3 on all 8 domains with Qwen3-8B via vLLM.
 - books (10k users): DONE — HR@10=0.476 **SOTA**
 - electronics (10k users): DONE — HR@10=0.299 **SOTA**
 - movies (10k users): DONE — HR@10=0.208
-- sports (10k users): DONE — HR@10=0.382
-- toys (10k users): DONE — HR@10=0.396
-- home (10k users): DONE — HR@10=0.226
-- tools (10k users): DONE — HR@10=0.270
+- sports (10k users): DONE — HR@5/10/20=0.275/0.382/0.517, NDCG@5/10/20=0.198/0.233/0.267, MRR=0.208
+- toys (10k users): DONE — HR@5/10/20=0.317/0.396/0.506, NDCG@5/10/20=0.245/0.271/0.298, MRR=0.250
+- home (10k users): DONE — HR@5/10/20=0.156/0.226/0.351, NDCG@5/10/20=0.110/0.132/0.164, MRR=0.126
+- tools (10k users): DONE — HR@5/10/20=0.194/0.270/0.393, NDCG@5/10/20=0.142/0.166/0.197, MRR=0.156
+
+For new-domain C-CRP v3 status reports, always include the full metric set:
+HR@5/@10/@20, NDCG@5/@10/@20, MRR, `n_users`, `n_prompts`, data path, and
+score/rank row counts. Do not summarize only @10.
 
 ### Phase 2: Official Baselines on New Domains
 Run 8 official baselines on sports/toys/home/tools (same protocol as original 4).

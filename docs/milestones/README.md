@@ -110,16 +110,20 @@ The repository is now in M5 (multi-domain SOTA validation):
 
 ### C-CRP v3 Results (all domains)
 
-| Domain | Users | HR@5 | HR@10 | NDCG@10 | MRR | Status |
-|--------|-------|------|-------|---------|-----|--------|
-| beauty | 973 | 0.157 | 0.229 | 0.134 | 0.128 | #2 (ProEx=0.253) |
-| books | 10000 | 0.374 | **0.476** | **0.333** | 0.306 | **SOTA** |
-| electronics | 10000 | 0.218 | **0.299** | **0.183** | 0.168 | **SOTA** |
-| movies | 10000 | 0.145 | 0.208 | 0.128 | 0.127 | #5 |
-| sports | 10000 | 0.275 | 0.382 | 0.233 | 0.208 | baselines pending |
-| toys | 10000 | 0.317 | 0.396 | 0.271 | 0.250 | baselines pending |
-| home | 10000 | 0.156 | 0.226 | 0.132 | 0.126 | baselines pending |
-| tools | 10000 | 0.194 | 0.270 | 0.166 | 0.156 | baselines pending |
+| Domain | Users | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR | Status |
+|--------|-------|------|-------|-------|--------|---------|---------|-----|--------|
+| beauty | 973 | 0.157 | 0.229 | — | — | 0.134 | — | 0.128 | #2 (ProEx=0.253) |
+| books | 10000 | 0.374 | **0.476** | — | — | **0.333** | — | 0.306 | **SOTA** |
+| electronics | 10000 | 0.218 | **0.299** | — | — | **0.183** | — | 0.168 | **SOTA** |
+| movies | 10000 | 0.145 | 0.208 | — | — | 0.128 | — | 0.127 | #5 |
+| sports | 10000 | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | baselines pending |
+| toys | 10000 | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | baselines pending |
+| home | 10000 | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | baselines pending |
+| tools | 10000 | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
+
+New-domain artifact completeness: each of sports/toys/home/tools has
+`report.json`, `scores.csv` with 1,010,000 candidate-score rows plus header,
+and `user_ranks.jsonl` with 10,000 user-rank rows.
 
 ### Experiment Execution Plan
 

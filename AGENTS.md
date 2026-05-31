@@ -384,6 +384,15 @@ Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)
 
 ## Artifact Management（产物管理规则）
 
+### Reporting Completeness（汇报完整性）
+
+Pony-rec experiment status reports must not summarize only HR@10/NDCG@10.
+For every completed domain/method result, report the full metric set whenever
+available: HR@5/@10/@20, NDCG@5/@10/@20, MRR, user count, prompt/candidate
+score count, data path, score file row count, rank file row count, and any
+FAILED/OOM/Traceback log scan result. If a metric is absent from an older
+artifact, mark it as missing rather than silently omitting it.
+
 ### 本地保留 + commit 到 GitHub：
 - `report.json` — 指标结果
 - `user_ranks.jsonl` — 每用户排名（统计检验用）
