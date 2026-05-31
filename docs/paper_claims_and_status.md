@@ -263,6 +263,12 @@ external-baseline comparison.
    `scripts/audit/main_sync_official_evidence_package.py` now performs
    allowlist-based lightweight sync and size/sha256 verification before the
    `local_light` evidence audit.
+   At 2026-06-01 07:32 CST, sports `irllrec_intent` was still active at epoch
+   `2320/3000` with latest train loss `0.625049`; GPU/memory were about
+   `69%` and `16295 MiB / 49140 MiB`, disk remained about `29G` free, and
+   fatal scans were clean. No final IRLLRec score/provenance/table package
+   exists yet, so paper-facing sports official evidence remains four completed
+   rows.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

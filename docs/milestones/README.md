@@ -367,6 +367,15 @@ not as a reason to silently rerun completed metric rows.
   no-copy verification against the completed sports `llmemb` package matched
   10 lightweight files by size and sha256 while excluding the server-only
   score file, predictions file, and large checkpoint.
+- Monitoring checkpoint 2026-06-01 07:32 CST: sports `irllrec_intent` remains
+  active under runner PID `2794722` and child PID `2835275`. The log has
+  reached epoch `2320/3000`, latest train loss `0.625049`; GPU is about
+  `69%`, `16295 MiB / 49140 MiB`, and disk remains about `29G` free (`85%`
+  used). Fatal scan remains clean: no `Traceback`, `Killed`, OOM, CUDA,
+  no-space, disk quota, exception, or runtime-error markers. No final
+  `fairness_provenance.json`, `scores.csv`, score audit, imported tables, or
+  predictions exist yet for `irllrec_intent`, so no fifth sports official row
+  has been recorded.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
