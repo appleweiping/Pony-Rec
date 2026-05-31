@@ -4,7 +4,14 @@ import argparse
 import csv
 import math
 from pathlib import Path
+import sys
 from typing import Any
+
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+_repo_root_text = str(_REPO_ROOT)
+if _repo_root_text not in sys.path:
+    sys.path.insert(0, _repo_root_text)
 
 from src.baselines.same_candidate_external import load_score_rows
 

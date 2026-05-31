@@ -172,7 +172,10 @@ external-baseline comparison.
 
 1. Run the canonical 8 official baselines on sports/toys/home/tools after a
    fresh disk/GPU/process check. `scripts/run_baselines_new_domains.sh` is
-   aligned to exclude SETRec while it remains blocked/supplementary.
+   aligned to exclude SETRec while it remains blocked/supplementary, supports
+   single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
+   complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
+   score file.
 2. Import and audit each new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

@@ -77,7 +77,7 @@ ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\
 | 如果状态是... | 则下一步是... |
 |--------------|-------------|
 | C-CRP v3 还有域在跑 | 等待，监控进度 |
-| C-CRP v3 全部完成，baselines 未开始 | 启动 `scripts/run_baselines_new_domains.sh` |
+| C-CRP v3 全部完成，baselines 未开始 | 用单域生产循环启动 `scripts/run_baselines_new_domains.sh`，例如 `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh` |
 | Baselines 正在跑 | 等待，监控进度 |
 | Baselines 全部完成 | scp 轻量产物到本地 → 构建对比表 → 统计检验 |
 | 对比表和统计检验完成 | 开始论文写作（ARIS paper-write skill） |
@@ -376,7 +376,7 @@ When in doubt, downgrade the claim, not the evidence standard.
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
-Phase 2: 8 official baselines on 4 new domains (scripts/run_baselines_new_domains.sh; SETRec excluded while blocked)
+Phase 2: 8 official baselines on 4 new domains (scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
 Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)

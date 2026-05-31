@@ -2,6 +2,20 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
+
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+for _path in (
+    _REPO_ROOT,
+    _REPO_ROOT / "scripts" / "adapters",
+    _REPO_ROOT / "scripts" / "audit",
+    _REPO_ROOT / "scripts" / "build",
+    _REPO_ROOT / "scripts" / "train",
+):
+    _path_text = str(_path)
+    if _path_text not in sys.path:
+        sys.path.insert(0, _path_text)
 
 from src.baselines.official_runner.adapters import inspect_official_adapter, run_official_adapter
 from src.baselines.official_runner.contract import resolve_method_config, write_json

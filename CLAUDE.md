@@ -41,6 +41,10 @@ The script is aligned to the canonical 8-method block and excludes SETRec while
 SETRec remains blocked/supplementary in `configs/official_external_baselines.yaml`.
 It uses `${PYTHON:-/home/ajifang/miniconda3/bin/python}` to avoid non-interactive
 SSH sessions failing on a missing bare `python`.
+Use the documented single-domain loop under current storage pressure, e.g.
+`DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`. The runner
+audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
+after each completed score file.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.

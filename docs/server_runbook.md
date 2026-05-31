@@ -30,15 +30,18 @@ PIDs, audit summaries, and missing-file errors.
 
 ```text
 1. Pull latest repo state.
-2. C-CRP v3 batch run on new domains (run_ccrp_v3_all_new_domains.sh)
-   - sports ✓, toys ✓, home → running, tools → queued
-3. After C-CRP v3 finishes: run baselines on new domains
+2. C-CRP v3 batch run on new domains is complete
+   - sports ✓, toys ✓, home ✓, tools ✓
+3. Run baselines on new domains with a single-domain production loop
    - Script: scripts/run_baselines_new_domains.sh
-   - Launch: nohup bash scripts/run_baselines_new_domains.sh > baselines_new_domains.log 2>&1 &
+   - Example launch: nohup env DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh > baselines_new_domains_sports.log 2>&1 &
    - Canonical 8-method block only: LLMEmb, ProEx, ProMax, ELMRec,
      IRLLRec, RLMRec, LLM2Rec, LLM-ESR. SETRec is excluded while blocked.
    - The script uses `${PYTHON:-/home/ajifang/miniconda3/bin/python}`; set
      `PYTHON` explicitly only if the conda path changes.
+   - The script exports project/script import paths, audits exact score
+     coverage, and imports complete `@5/@10/@20 + MRR` same-candidate metrics
+     immediately after each score file is produced.
 4. After baselines finish: scp report/provenance/audit files to local
 5. Build comparison table, run stat tests
 ```
