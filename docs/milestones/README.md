@@ -348,6 +348,15 @@ not as a reason to silently rerun completed metric rows.
   official matrix is unchanged: four rows are final/audited, while
   `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`
   are not final yet.
+- Preflight audit 2026-06-01 07:21 CST: while IRLLRec continued running,
+  the local and server unified official-runner dispatch were checked for the
+  remaining sports methods. Server `adapters.py` contains real `run` branches
+  for `rlmrec`, `llm2rec`, and `llmesr`, and each corresponding sports
+  inspect provenance is `official_inspection_ready` with `blockers=[]`, a
+  pinned official repo commit, and aligned train/valid/test/candidate task
+  sources. The server repo is an experiment workspace with active dirty state,
+  so no server pull, reset, cleanup, or process action was performed during
+  the live runner.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

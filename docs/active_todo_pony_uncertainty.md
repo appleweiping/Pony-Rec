@@ -35,6 +35,12 @@ or review cycle.
   free (`85%` used)
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
+- Follow-up preflight: 2026-06-01 07:21 CST server code still has real
+  `run` dispatch branches for `rlmrec`, `llm2rec`, and `llmesr`; the sports
+  inspect provenance for `rlmrec_graphcl`, `llm2rec_sasrec`, and
+  `llmesr_sasrec` is `official_inspection_ready` with `blockers=[]`, pinned
+  official repo commits, and aligned train/valid/test/candidate task sources.
+  No server git pull or cleanup was performed while the active runner is live.
 
 ## Sports Official Baselines
 
