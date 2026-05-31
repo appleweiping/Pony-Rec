@@ -248,6 +248,11 @@ external-baseline comparison.
    `scripts/audit/main_audit_official_evidence_package.py` passed on all four
    completed lightweight evidence packages and is now the required check
    before recording future copied official evidence as backed up.
+   At 2026-06-01 06:44 CST, the same gate was run in `server_final` mode on
+   `pony-rec-gpu` for the four completed sports output directories; all four
+   passed, including final server-side `scores.csv`, predictions, provenance,
+   full metrics, coverage/exposure tables, and per-event evaluation records.
+   The active `irllrec_intent` process was left untouched.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

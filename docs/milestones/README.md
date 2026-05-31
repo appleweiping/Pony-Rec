@@ -319,6 +319,14 @@ not as a reason to silently rerun completed metric rows.
   final provenance, blockers, score coverage, full `@5/@10/@20 + MRR`
   metrics, row counts, score audits, run summaries, and per-event evaluation
   records before a copied package is treated as safely backed up.
+- Server-final evidence audit 2026-06-01 06:44 CST: the same package gate was
+  copied to `/tmp/pony_audit_official_evidence_package.py` on `pony-rec-gpu`
+  and run in `server_final` mode against the four completed sports official
+  output directories. All four passed, including server-side `scores.csv`
+  line count `1,010,001`, `predictions/rank_predictions.jsonl` line count
+  `10,000`, final provenance, score audits, full metrics, coverage/exposure
+  tables, and per-event evaluation records. The active `irllrec_intent`
+  process was not stopped, restarted, or modified.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
