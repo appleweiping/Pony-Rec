@@ -151,7 +151,8 @@ preferences before scoring each candidate. All domains use 10k users,
 
 Status: `completed_result` for beauty/books/electronics/movies/sports/toys/home/tools.
 The C-CRP v3 batch completed without FAILED/OOM/Traceback markers in
-`ccrp_v3_all_domains.log`; new-domain official baselines have not started.
+`ccrp_v3_all_domains.log`; new-domain official baselines entered Phase 2 on
+2026-05-31 with a sports single-domain production run.
 For sports/toys/home/tools, each report records `n_users=10000`,
 `n_prompts=1010000`, the test same-candidate `data_path`, `scores.csv` with
 1,010,000 scored candidate rows plus header, and `user_ranks.jsonl` with
@@ -175,7 +176,8 @@ external-baseline comparison.
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file.
+   score file. Sports is currently running from
+   `baselines_new_domains_sports.log` with runner PID `2794722`.
 2. Import and audit each new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

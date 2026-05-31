@@ -104,9 +104,10 @@ The repository is now in M5 (multi-domain SOTA validation):
 
 - C-CRP v3 completed on all 8 domains
 - Official external baselines completed on original 4 domains (8 methods each)
-- New domains (sports/toys/home/tools) official baselines are pending; the
-  Phase 2 runner is now reconciled to the canonical 8-method block and imports
-  full `@5/@10/@20 + MRR` metrics after each successful score audit
+- New domains (sports/toys/home/tools) official baselines are in Phase 2;
+  sports launched on 2026-05-31 with the reconciled canonical 8-method runner,
+  which imports full `@5/@10/@20 + MRR` metrics after each successful score
+  audit
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 
@@ -134,9 +135,9 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — runner reconciled;
-   launch with a single-domain production loop such as
-   `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`
+2. 8 official baselines on 4 new domains (Phase 2) — sports running;
+   continue the single-domain production loop after each domain passes
+   provenance, exact-score, import, and storage checks
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -144,6 +145,9 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 ### Server State
 
 - Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
-- GPU: RTX 4090, idle after C-CRP completion
-- Disk: 44 GB free (checked 2026-05-31)
+- Phase 2 sports official-baseline run started 2026-05-31:
+  `baselines_new_domains_sports.log`, runner PID `2794722`; current first row
+  is `llmemb` on sports
+- GPU: RTX 4090, active for the sports official-baseline run
+- Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

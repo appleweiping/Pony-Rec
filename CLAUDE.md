@@ -6,7 +6,7 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Quick Orientation
 
-- **Stage**: M5 (C-CRP v3 complete; new-domain official baselines pending)
+- **Stage**: M5 (C-CRP v3 complete; sports official-baseline run active)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
@@ -45,6 +45,8 @@ Use the documented single-domain loop under current storage pressure, e.g.
 `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`. The runner
 audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
 after each completed score file.
+Current active run: sports, `baselines_new_domains_sports.log`, runner PID
+`2794722`, launched 2026-05-31.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
