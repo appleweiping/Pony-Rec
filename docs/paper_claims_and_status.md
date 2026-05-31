@@ -146,23 +146,27 @@ preferences before scoring each candidate. All domains use 10k users,
 | movies | 0.145 | 0.208 | 0.128 | 0.127 | #5 (LLMEmb=0.334) |
 | sports | 0.275 | 0.382 | 0.233 | 0.208 | baselines pending |
 | toys | 0.317 | 0.396 | 0.271 | 0.250 | baselines pending |
-| home | — | — | — | — | running |
-| tools | — | — | — | — | queued |
+| home | 0.156 | 0.226 | 0.132 | 0.126 | baselines pending |
+| tools | 0.194 | 0.270 | 0.166 | 0.156 | baselines pending |
 
-Status: `completed_result` for beauty/books/electronics/movies/sports/toys.
-Running for home/tools (batch script, expected completion 2026-05-31).
+Status: `completed_result` for beauty/books/electronics/movies/sports/toys/home/tools.
+The C-CRP v3 batch completed without FAILED/OOM/Traceback markers in
+`ccrp_v3_all_domains.log`; new-domain official baselines have not started.
 
 ### Strategy for SOTA
 
-C-CRP v3 achieves SOTA on books and electronics. The new utility domains
-(sports, toys, home, tools) have similar characteristics to electronics —
-sequential purchase patterns where the LLM's text understanding excels.
-Expected to achieve SOTA on these domains once baselines are run.
+C-CRP v3 achieves SOTA on books and electronics. For sports, toys, home, and
+tools, do not claim SOTA until the canonical 8 official baselines finish and
+paired same-candidate tests pass. Current values are candidate results awaiting
+external-baseline comparison.
 
 ### Remaining for paper submission
 
-1. C-CRP v3 on home and tools (running)
-2. 8 official baselines on 4 new domains (scripts ready)
+1. Reconcile `scripts/run_baselines_new_domains.sh` with the canonical 8
+   official baselines; SETRec is marked blocked/supplementary in
+   `configs/official_external_baselines.yaml` unless future gates pass.
+2. Run 8 official baselines on sports/toys/home/tools after the script is
+   aligned and disk/GPU state is rechecked.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing

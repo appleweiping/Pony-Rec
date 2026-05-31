@@ -6,10 +6,10 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Quick Orientation
 
-- **Stage**: M5→M6 (multi-domain SOTA validation in progress)
+- **Stage**: M5 (C-CRP v3 complete; new-domain official baselines pending)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
-- **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec, SetRec)
+- **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
 - **Domains**: beauty, books, electronics, movies (original 4) + sports, toys, home, tools (new 4)
 - **Server**: `pony-rec-gpu` (SSH accessible via `ssh pony-rec-gpu`, key-based auth configured)
   - Server project path: `~/projects/pony-rec-rescue-shadow-v6`
@@ -19,7 +19,7 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Experiment Roadmap (2026-05-31)
 
-### Phase 1: C-CRP v3 Scoring (IN PROGRESS)
+### Phase 1: C-CRP v3 Scoring (COMPLETE)
 Run C-CRP v3 on all 8 domains with Qwen3-8B via vLLM.
 - beauty (973 users): DONE — HR@10=0.229
 - books (10k users): DONE — HR@10=0.476 **SOTA**
@@ -27,13 +27,15 @@ Run C-CRP v3 on all 8 domains with Qwen3-8B via vLLM.
 - movies (10k users): DONE — HR@10=0.208
 - sports (10k users): DONE — HR@10=0.382
 - toys (10k users): DONE — HR@10=0.396
-- home (10k users): RUNNING
-- tools (10k users): QUEUED
+- home (10k users): DONE — HR@10=0.226
+- tools (10k users): DONE — HR@10=0.270
 
 ### Phase 2: Official Baselines on New Domains
 Run 8 official baselines on sports/toys/home/tools (same protocol as original 4).
 Script: `scripts/run_baselines_new_domains.sh` (already on server).
-Start after Phase 1 completes.
+Before launch, reconcile the script with the canonical 8-method block because
+the current script also includes SETRec, which is blocked/supplementary in
+`configs/official_external_baselines.yaml`.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.

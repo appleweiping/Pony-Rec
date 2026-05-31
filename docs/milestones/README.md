@@ -102,10 +102,11 @@ rather than relying on a chat handoff.
 
 The repository is now in M5 (multi-domain SOTA validation):
 
-- C-CRP v3 completed on 6 domains, 2 more running
+- C-CRP v3 completed on all 8 domains
 - Official external baselines completed on original 4 domains (8 methods each)
-- New domains (sports/toys/home/tools) baselines pending after C-CRP v3 finishes
-- Strategy: achieve SOTA on new utility domains where C-CRP v3 is strongest
+- New domains (sports/toys/home/tools) official baselines are pending
+- Strategy: achieve SOTA only after the new-domain official baselines pass
+  same-candidate score/provenance/import gates
 
 ### C-CRP v3 Results (all domains)
 
@@ -117,20 +118,22 @@ The repository is now in M5 (multi-domain SOTA validation):
 | movies | 10000 | 0.145 | 0.208 | 0.128 | 0.127 | #5 |
 | sports | 10000 | 0.275 | 0.382 | 0.233 | 0.208 | baselines pending |
 | toys | 10000 | 0.317 | 0.396 | 0.271 | 0.250 | baselines pending |
-| home | 10000 | — | — | — | — | running |
-| tools | 10000 | — | — | — | — | queued |
+| home | 10000 | 0.156 | 0.226 | 0.132 | 0.126 | baselines pending |
+| tools | 10000 | 0.194 | 0.270 | 0.166 | 0.156 | baselines pending |
 
 ### Experiment Execution Plan
 
-1. C-CRP v3 on all 8 domains (Phase 1) — batch script `run_ccrp_v3_all_new_domains.sh`
-2. 8 official baselines on 4 new domains (Phase 2) — script `scripts/run_baselines_new_domains.sh`
+1. C-CRP v3 on all 8 domains (Phase 1) — complete
+2. 8 official baselines on 4 new domains (Phase 2) — reconcile
+   `scripts/run_baselines_new_domains.sh` to the canonical 8-method block
+   before launch
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
 
 ### Server State
 
-- Batch script running: `run_ccrp_v3_all_new_domains.sh` (sports✓ toys✓ home→ tools→)
-- GPU: RTX 4090, fully occupied by current run
-- Disk: 45 GB free (after cleanup 2026-05-31)
+- Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
+- GPU: RTX 4090, idle after C-CRP completion
+- Disk: 44 GB free (checked 2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

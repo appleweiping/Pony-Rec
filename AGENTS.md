@@ -375,8 +375,8 @@ When in doubt, downgrade the claim, not the evidence standard.
 ## Experiment Roadmap（2026-05-31 更新）
 
 ```text
-Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home→ tools→)
-Phase 2: 8 official baselines on 4 new domains (scripts/run_baselines_new_domains.sh)
+Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
+Phase 2: 8 official baselines on 4 new domains (fix/verify scripts/run_baselines_new_domains.sh before launch)
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
 Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)

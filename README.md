@@ -104,12 +104,14 @@ For the frozen claim and status rules, see
 | sports | 10,000 | 0.382 | 0.233 | baselines pending |
 | beauty | 973 | 0.229 | 0.134 | #2 |
 | movies | 10,000 | 0.208 | 0.128 | #5 |
-| home | 10,000 | — | — | running |
-| tools | 10,000 | — | — | queued |
+| home | 10,000 | 0.226 | 0.132 | baselines pending |
+| tools | 10,000 | 0.270 | 0.166 | baselines pending |
 
 **8 official baselines** (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx,
 ProMax, RLMRec) completed on beauty/books/electronics/movies. Pending on
-sports/toys/home/tools.
+sports/toys/home/tools. Do not include SETRec in the main 8-baseline block
+unless its blocked status in `configs/official_external_baselines.yaml` is
+resolved and it passes the same official-completed gates.
 
 **Experiment protocol:** 10k users, 101 candidates (1+100neg), Qwen3-8B via
 vLLM, same-candidate evaluation, metrics @5/@10/@20 + MRR.
