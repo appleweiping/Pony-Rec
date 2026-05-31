@@ -357,6 +357,16 @@ not as a reason to silently rerun completed metric rows.
   sources. The server repo is an experiment workspace with active dirty state,
   so no server pull, reset, cleanup, or process action was performed during
   the live runner.
+- Evidence-sync tooling checkpoint 2026-06-01 07:26 CST:
+  `scripts/audit/main_sync_official_evidence_package.py` was added as a
+  local-side allowlist sync and server/local checksum verifier for official
+  evidence packages. It excludes `scores.csv`, `predictions/`, checkpoints,
+  embeddings, and other large binary artifacts by default, while copying and
+  verifying final provenance, inspect provenance, score audits, run summaries,
+  imported tables, and compact manifests. `python -m py_compile` passed, and a
+  no-copy verification against the completed sports `llmemb` package matched
+  10 lightweight files by size and sha256 while excluding the server-only
+  score file, predictions file, and large checkpoint.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

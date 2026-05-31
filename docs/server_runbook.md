@@ -42,7 +42,9 @@ PIDs, audit summaries, and missing-file errors.
    - The script exports project/script import paths, audits exact score
      coverage, and imports complete `@5/@10/@20 + MRR` same-candidate metrics
      immediately after each score file is produced.
-4. After baselines finish: scp report/provenance/audit files to local
+4. After each baseline row finishes: run the server-final evidence audit, then
+   sync the lightweight package to local with
+   `scripts/audit/main_sync_official_evidence_package.py`
 5. Build comparison table, run stat tests
 ```
 
@@ -169,6 +171,31 @@ python main_run_official_same_candidate_adapter.py \
   --backbone_path /home/ajifang/models/Qwen/Qwen3-8B \
   --allow_blocked_exit_zero
 ```
+
+## Lightweight Evidence Sync
+
+After a row has passed the server-final evidence audit, sync only the useful
+local evidence package from the local repository:
+
+```powershell
+python scripts\audit\main_sync_official_evidence_package.py `
+  --remote_evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --local_evidence_dir outputs\baselines\official_adapters\<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --copy `
+  --quiet
+
+python scripts\audit\main_audit_official_evidence_package.py `
+  --evidence_dir outputs\baselines\official_adapters\<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --mode local_light `
+  --quiet
+```
+
+The sync tool uses an allowlist and verifies server/local size and sha256. It
+copies final and inspect provenance, score audits, run summaries, imported
+`tables/`, logs/manifests if present, and compact metadata. It excludes
+`scores.csv`, `predictions/`, checkpoints, embeddings, and other large binary
+artifacts by default, so those remain server-side unless a separate archive
+decision is recorded.
 
 ## LLM2Rec Single-Domain Production Loop
 

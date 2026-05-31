@@ -259,6 +259,10 @@ external-baseline comparison.
    `16295 MiB / 49140 MiB`, disk remained about `29G` free (`85%` used), and
    fatal/OOM/CUDA/no-space/runtime-error scans remained clean. No fifth sports
    official row is final yet, so no new paper-facing metric row has been added.
+   To prevent local evidence omissions after future rows finish,
+   `scripts/audit/main_sync_official_evidence_package.py` now performs
+   allowlist-based lightweight sync and size/sha256 verification before the
+   `local_light` evidence audit.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

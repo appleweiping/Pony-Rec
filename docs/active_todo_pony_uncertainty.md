@@ -41,6 +41,12 @@ or review cycle.
   `llmesr_sasrec` is `official_inspection_ready` with `blockers=[]`, pinned
   official repo commits, and aligned train/valid/test/candidate task sources.
   No server git pull or cleanup was performed while the active runner is live.
+- Local preparation: `scripts/audit/main_sync_official_evidence_package.py`
+  now provides a safe allowlist-based lightweight evidence sync. It was
+  compiled and verified against the completed sports `llmemb` package:
+  10 allowed lightweight files matched server/local size and sha256, while
+  `scores.csv`, `predictions/rank_predictions.jsonl`, and the large checkpoint
+  were excluded.
 
 ## Sports Official Baselines
 
@@ -81,6 +87,16 @@ score audits, full metric tables, coverage/exposure tables, and
    summary, imported `tables/`, and compact manifests if present. Do not copy
    huge score/prediction/checkpoint files unless a recovery decision requires
    it.
+   Preferred command:
+
+   ```powershell
+   python scripts\audit\main_sync_official_evidence_package.py `
+     --remote_evidence_dir outputs/sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate `
+     --local_evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate `
+     --copy `
+     --quiet
+   ```
+
 4. Run the local package audit:
 
    ```powershell
@@ -111,6 +127,12 @@ score audits, full metric tables, coverage/exposure tables, and
 Local lightweight package:
 
 ```powershell
+python scripts\audit\main_sync_official_evidence_package.py `
+  --remote_evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --local_evidence_dir outputs\baselines\official_adapters\<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --copy `
+  --quiet
+
 python scripts\audit\main_audit_official_evidence_package.py `
   --evidence_dir outputs\baselines\official_adapters\<EXP>_<METHOD>_official_qwen3base_same_candidate `
   --mode local_light `
