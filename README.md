@@ -122,7 +122,7 @@ their imported tables are not co-located with final
 `fairness_provenance.json` and score-audit JSON. Treat this as an evidence
 packaging/reconciliation task, not a reason to silently rerun or to drop the
 old-domain rows. New-domain baselines are pending on sports/toys/home/tools
-except for sports `llmemb` and `proex_profile`, which are fully
+except for sports `llmemb`, `proex_profile`, and `promax_profile`, which are fully
 `official_completed` with exact same-candidate score coverage and complete
 @5/@10/@20+MRR imported tables. Do not include SETRec in the main 8-baseline
 block unless its blocked status in

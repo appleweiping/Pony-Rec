@@ -377,7 +377,7 @@ When in doubt, downgrade the claim, not the evidence standard.
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
-Phase 2: 8 official baselines on 4 new domains (sports running with llmemb+proex_profile complete and promax_profile active; toys/home/tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
+Phase 2: 8 official baselines on 4 new domains (sports running with llmemb+proex_profile+promax_profile complete and elmrec_graph active; toys/home/tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
 Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)

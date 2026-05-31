@@ -208,10 +208,18 @@ external-baseline comparison.
    MRR=`0.0742689715`, `sample_count=10000`, `score_rows=1010000`, and
    `candidate_rows=1010000`. Lightweight local evidence is under
    `outputs/baselines/official_adapters/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`;
+   server-only large artifacts remain on the server. At 2026-06-01 03:04 CST,
+   sports `promax_profile` completed as `official_completed` with
+   `blockers=[]`, `score_coverage_rate=1.0`, and exact audit `audit_ok=True`.
+   Metrics: HR@5/10/20=`0.0825/0.1387/0.2370`,
+   NDCG@5/10/20=`0.0541847954/0.0721533411/0.0967593591`,
+   MRR=`0.0741052747`, `sample_count=10000`, `score_rows=1010000`, and
+   `candidate_rows=1010000`. Lightweight local evidence is under
+   `outputs/baselines/official_adapters/sports_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`;
    server-only large artifacts remain on the server. The runner advanced to
-   sports `promax_profile`; at the 2026-06-01 00:26 CST checkpoint disk was
-   about `26G` free (`87%` used), so storage is a watch item but not yet a
-   blocker.
+   sports `elmrec_graph`; at the 2026-06-01 03:05 CST checkpoint disk was
+   about `20G` free (`90%` used), so storage is a close watch item but not yet
+   a blocker.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

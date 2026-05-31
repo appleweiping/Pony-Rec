@@ -145,7 +145,7 @@ not as a reason to silently rerun completed metric rows.
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports running with
-   `llmemb` and `proex_profile` complete; continue the single-domain
+   `llmemb`, `proex_profile`, and `promax_profile` complete; continue the single-domain
    production loop after each domain passes provenance, exact-score, import,
    and storage checks
 3. Full comparison table + statistical tests (Phase 3)
@@ -256,6 +256,20 @@ not as a reason to silently rerun completed metric rows.
   to `promax_profile` on sports (child PID `2816461` at the 00:26 CST
   checkpoint). Disk is now about `26G` free (`87%` used), so storage pressure
   remains a watch item.
+- Completion checkpoint 2026-06-01 03:04 CST: sports `promax_profile`
+  completed as `implementation_status=official_completed` with `blockers=[]`,
+  `score_coverage_rate=1.0`, and exact same-candidate audit `audit_ok=True`.
+  Full metrics are HR@5/10/20=`0.0825/0.1387/0.2370`,
+  NDCG@5/10/20=`0.0541847954/0.0721533411/0.0967593591`, and
+  MRR=`0.0741052747` over 10,000 users and 1,010,000 candidate scores.
+  `scores.csv` has 1,010,001 lines including header; `rank_predictions.jsonl`
+  has 10,000 rows. Lightweight evidence is backed up locally under
+  `outputs/baselines/official_adapters/sports_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`.
+  Large server-only artifacts are left on the server:
+  `scores.csv`, `predictions/rank_predictions.jsonl`, and
+  `promax_official_model.pt`. The runner advanced to `elmrec_graph` on sports
+  (child PID `2828395` at the 03:05 CST checkpoint). Disk is now about `20G`
+  free (`90%` used), so storage pressure is a close watch item.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
