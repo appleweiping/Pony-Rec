@@ -184,10 +184,16 @@ external-baseline comparison.
    through epoch 35. By the 2026-05-31 22:52 CST checkpoint,
    `llmemb-sasrec` had completed 200 epochs and the `llmemb` training phase
    had reached epoch 175. GPU was about `83%`, `16301 MiB / 49140 MiB`; disk
-   was about `36G` free. No sports official row has completed `scores.csv`,
-   score-audit JSON, imported table, `report.json`, or final
-   `fairness_provenance.json` yet.
-2. Import and audit each new-domain baseline row with exact score coverage,
+   was about `36G` free. At 2026-05-31 22:56 CST, sports `llmemb` completed
+   as `official_completed` with `blockers=[]`, `score_coverage_rate=1.0`, and
+   exact audit `audit_ok=True`. Metrics: HR@5/10/20=`0.2124/0.3384/0.4900`,
+   NDCG@5/10/20=`0.1388527216/0.1795004215/0.2176868359`,
+   MRR=`0.1538831336`, `n_users=10000`, `score_rows=1010000`, and
+   `candidate_rows=1010000`. Lightweight local evidence is under
+   `outputs/baselines/official_adapters/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/`;
+   server-only large artifacts remain on the server. The runner then advanced
+   to sports `proex_profile`.
+2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)

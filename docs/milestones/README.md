@@ -149,7 +149,7 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   `baselines_new_domains_sports.log`, runner PID `2794722`; current first row
   is `llmemb` on sports
 - Monitoring cadence updated 2026-05-31: use the current-thread heartbeat
-  `pony-rec-30m-goal-heartbeat` to reactivate every 30 minutes. Each
+  `pony-rec-30m-goal-heartbeat` to reactivate every 2 hours. Each
   continuation performs one bounded read-only status cycle, records material
   changes, and must not immediately chain repeated monitor turns.
 - Monitoring checkpoint 2026-05-31 21:42 CST: runner PID `2794722` and child
@@ -211,6 +211,20 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   `Killed`, `OOM`, `CUDA out`, or `FAILED`, and no sports official method has
   completed `scores.csv`, score-audit JSON, imported table, `report.json`, or
   final `fairness_provenance.json` yet.
+- Completion checkpoint 2026-05-31 22:56 CST: sports `llmemb` reached
+  `implementation_status=official_completed` with `blockers=[]`,
+  `score_coverage_rate=1.0`, and exact same-candidate audit
+  `audit_ok=True`. Full metrics are HR@5/10/20=`0.2124/0.3384/0.4900`,
+  NDCG@5/10/20=`0.1388527216/0.1795004215/0.2176868359`, and
+  MRR=`0.1538831336` over 10,000 users and 1,010,000 candidate scores.
+  `scores.csv` has 1,010,001 lines including header; `rank_predictions.jsonl`
+  has 10,000 rows. Lightweight evidence is backed up locally under
+  `outputs/baselines/official_adapters/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/`.
+  Large server-only artifacts are left on the server:
+  `scores.csv`, `predictions/rank_predictions.jsonl`, and
+  `llmemb_official_model.pt`. The runner has advanced to `proex_profile` on
+  sports (active child PID `2805588`). Disk is now about `31G` free (`84%`
+  used), so storage is a watch item for the next monitor cycle.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
