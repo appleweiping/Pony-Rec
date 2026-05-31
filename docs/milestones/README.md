@@ -144,9 +144,10 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports running;
-   continue the single-domain production loop after each domain passes
-   provenance, exact-score, import, and storage checks
+2. 8 official baselines on 4 new domains (Phase 2) — sports running with
+   `llmemb` and `proex_profile` complete; continue the single-domain
+   production loop after each domain passes provenance, exact-score, import,
+   and storage checks
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -241,6 +242,20 @@ not as a reason to silently rerun completed metric rows.
   scan shows no `ERROR`, `WARN`, `Traceback`, `Killed`, `OOM`, `CUDA out`, or
   `FAILED` markers. Sports matrix remains: `llmemb` official-completed; the
   other seven canonical official baselines not yet complete.
+- Completion checkpoint 2026-06-01 00:25 CST: sports `proex_profile`
+  completed as `implementation_status=official_completed` with `blockers=[]`,
+  `score_coverage_rate=1.0`, and exact same-candidate audit `audit_ok=True`.
+  Full metrics are HR@5/10/20=`0.0821/0.1527/0.2777`,
+  NDCG@5/10/20=`0.0516826556/0.0741722663/0.1054064715`, and
+  MRR=`0.0742689715` over 10,000 users and 1,010,000 candidate scores.
+  `scores.csv` has 1,010,001 lines including header; `rank_predictions.jsonl`
+  has 10,000 rows. Lightweight evidence is backed up locally under
+  `outputs/baselines/official_adapters/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`.
+  Large server-only artifacts are left on the server:
+  `scores.csv` and `predictions/rank_predictions.jsonl`. The runner advanced
+  to `promax_profile` on sports (child PID `2816461` at the 00:26 CST
+  checkpoint). Disk is now about `26G` free (`87%` used), so storage pressure
+  remains a watch item.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
