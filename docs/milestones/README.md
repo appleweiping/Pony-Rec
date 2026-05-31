@@ -148,6 +148,10 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 - Phase 2 sports official-baseline run started 2026-05-31:
   `baselines_new_domains_sports.log`, runner PID `2794722`; current first row
   is `llmemb` on sports
+- Monitoring checkpoint 2026-05-31 21:42 CST: runner PID `2794722` and child
+  PID `2794731` are active; `llmemb` is encoding Qwen3 item/user text at about
+  `28048/233470`; no baseline score/audit/import files are expected yet
+  because the first baseline has not completed
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
