@@ -63,6 +63,14 @@ tables. The runner advanced to `irllrec_intent` on 2026-06-01 04:37 CST; disk
 was about 15G free at the 04:38 CST checkpoint, so storage is a close watch
 item but not yet a blocker. Do not add a separate monitor automation; continue
 from the active thread goal and record only material evidence changes.
+At the 2026-06-01 05:31 CST checkpoint, completed sports baseline evidence was
+augmented locally with inspect provenance, text score-audit logs, and
+`tables/ranking_eval_records.csv` for paired/statistical follow-up. The four
+completed methods' server-side `outputs/baselines/paper_adapters/*` working
+directories were then removed after path checks; final server outputs
+(`scores.csv`, provenance, audits, tables, predictions, checkpoints) remain.
+Disk recovered from about 15G free to about 33G free. Active server process:
+sports `irllrec_intent`, PID `2835275`.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.

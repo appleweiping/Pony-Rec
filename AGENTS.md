@@ -403,6 +403,13 @@ artifact, mark it as missing rather than silently omitting it.
 - `*_run_summary.json` — 运行摘要
 - Paper 源文件、scripts、configs、docs
 
+For completed official baseline rows, copy a lightweight but complete local
+evidence package before any server cleanup: inspect/final provenance,
+JSON/TXT score audits, run summary, imported metric/coverage/exposure summary
+tables, and the per-event `tables/ranking_eval_records.csv` needed for paired
+or statistical follow-up. Keep huge `scores.csv`, full predictions,
+checkpoints, and embedding files server-side unless a separate archive is
+explicitly requested; provenance/run summaries must record their hashes.
 ### 只留服务器（不下载、不提交）：
 - `scores.csv`（87MB/域）
 - `predictions/`（600MB+）

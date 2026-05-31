@@ -288,6 +288,20 @@ not as a reason to silently rerun completed metric rows.
   `2835275` at the 04:38 CST checkpoint). Disk is now about `15G` free (`93%`
   used), so storage pressure is a close watch item but no `No space left`,
   OOM, or CUDA failure has been observed.
+- Evidence packaging and cleanup checkpoint 2026-06-01 05:31 CST: local
+  sports evidence for the four completed official rows
+  (`llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`) now includes
+  inspect provenance, final provenance, JSON/TXT score audits, run summaries,
+  metric/coverage/exposure/summary tables, and per-event
+  `tables/ranking_eval_records.csv` for later paired/statistical checks.
+  Local/server file-size and line-count checks matched for the copied evidence;
+  each `ranking_eval_records.csv` has 10,001 lines including header. After the
+  local check, server-side completed-method working directories under
+  `outputs/baselines/paper_adapters/` were removed for those four methods only.
+  Final server outputs (`scores.csv`, `fairness_provenance.json`, score audits,
+  imported tables, predictions, and compact checkpoints) remain in place. Disk
+  recovered from about `15G` free (`93%` used) to about `33G` free (`83%`
+  used). The active sports `irllrec_intent` adapter directory remains present.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

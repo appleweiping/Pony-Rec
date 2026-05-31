@@ -230,6 +230,14 @@ external-baseline comparison.
    sports `irllrec_intent`; at the 2026-06-01 04:38 CST checkpoint disk was
    about `15G` free (`93%` used), so storage is a close watch item but no
    space/OOM/CUDA failure has been observed.
+   At 2026-06-01 05:31 CST, local lightweight evidence for the four completed
+   sports official rows was expanded to include inspect provenance, JSON/TXT
+   score audits, run summaries, imported summary/metric/coverage/exposure
+   tables, and per-event `tables/ranking_eval_records.csv`; local/server
+   size and line-count checks matched. The four completed methods' server
+   `outputs/baselines/paper_adapters/` working directories were then removed
+   after path checks, while final scores/provenance/audits/tables/predictions
+   and checkpoints were preserved. Disk recovered to about `33G` free.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
