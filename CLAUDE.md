@@ -55,11 +55,14 @@ audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
 after each completed score file.
 Current active run: sports, `baselines_new_domains_sports.log`, runner PID
 `2794722`, launched 2026-05-31. Completed sports official rows so far:
-`llmemb`, `proex_profile`, and `promax_profile`, all `official_completed` with
+`llmemb`, `proex_profile`, `promax_profile`, and `elmrec_graph`, all
+`official_completed` with
 `blockers=[]`, exact `score_coverage_rate=1.0`, 10,000 users, 1,010,000
 candidate score rows, and complete HR/NDCG @5/@10/@20 plus MRR imported
-tables. The runner advanced to `elmrec_graph` on 2026-06-01 03:04 CST; disk
-was about 20G free at the 03:05 CST checkpoint, so storage is a watch item.
+tables. The runner advanced to `irllrec_intent` on 2026-06-01 04:37 CST; disk
+was about 15G free at the 04:38 CST checkpoint, so storage is a close watch
+item but not yet a blocker. Do not add a separate monitor automation; continue
+from the active thread goal and record only material evidence changes.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.

@@ -145,7 +145,8 @@ not as a reason to silently rerun completed metric rows.
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports running with
-   `llmemb`, `proex_profile`, and `promax_profile` complete; continue the single-domain
+   `llmemb`, `proex_profile`, `promax_profile`, and `elmrec_graph` complete;
+   continue the single-domain
    production loop after each domain passes provenance, exact-score, import,
    and storage checks
 3. Full comparison table + statistical tests (Phase 3)
@@ -156,12 +157,13 @@ not as a reason to silently rerun completed metric rows.
 
 - Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
 - Phase 2 sports official-baseline run started 2026-05-31:
-  `baselines_new_domains_sports.log`, runner PID `2794722`; current first row
-  is `llmemb` on sports
-- Monitoring cadence updated 2026-05-31: use the current-thread heartbeat
-  `pony-rec-30m-goal-heartbeat` to reactivate every 2 hours. Each
-  continuation performs one bounded read-only status cycle, records material
-  changes, and must not immediately chain repeated monitor turns.
+  `baselines_new_domains_sports.log`, runner PID `2794722`. Sports completed
+  `llmemb`, `proex_profile`, `promax_profile`, and `elmrec_graph`; the current
+  active row is `irllrec_intent`.
+- Monitoring cadence updated 2026-06-01: no separate monitor automation is
+  required while the active thread goal is running. Each continuation performs
+  bounded read-only status checks, records material evidence changes, and must
+  not start duplicate experiments.
 - Monitoring checkpoint 2026-05-31 21:42 CST: runner PID `2794722` and child
   PID `2794731` are active; `llmemb` is encoding Qwen3 item/user text at about
   `28048/233470`; no baseline score/audit/import files are expected yet
@@ -270,6 +272,22 @@ not as a reason to silently rerun completed metric rows.
   `promax_official_model.pt`. The runner advanced to `elmrec_graph` on sports
   (child PID `2828395` at the 03:05 CST checkpoint). Disk is now about `20G`
   free (`90%` used), so storage pressure is a close watch item.
+- Completion checkpoint 2026-06-01 04:37 CST: sports `elmrec_graph`
+  completed as `implementation_status=official_completed` with `blockers=[]`,
+  `score_coverage_rate=1.0`, and exact same-candidate audit `audit_ok=True`.
+  Full metrics are HR@5/10/20=`0.0532/0.1054/0.2013`,
+  NDCG@5/10/20=`0.0317045493/0.0483716358/0.0723504733`, and
+  MRR=`0.0537009851` over 10,000 users and 1,010,000 candidate scores.
+  `scores.csv` has 1,010,001 lines including header; `rank_predictions.jsonl`
+  has 10,000 rows. Lightweight evidence is backed up locally under
+  `outputs/baselines/official_adapters/sports_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+  Large server-only artifacts are left on the server:
+  `scores.csv`, `predictions/rank_predictions.jsonl`,
+  `elmrec_official_model.pt`, and Qwen3 item embedding intermediates recorded
+  by provenance. The runner advanced to `irllrec_intent` on sports (child PID
+  `2835275` at the 04:38 CST checkpoint). Disk is now about `15G` free (`93%`
+  used), so storage pressure is a close watch item but no `No space left`,
+  OOM, or CUDA failure has been observed.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

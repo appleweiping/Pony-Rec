@@ -219,7 +219,17 @@ external-baseline comparison.
    server-only large artifacts remain on the server. The runner advanced to
    sports `elmrec_graph`; at the 2026-06-01 03:05 CST checkpoint disk was
    about `20G` free (`90%` used), so storage is a close watch item but not yet
-   a blocker.
+   a blocker. At 2026-06-01 04:37 CST, sports `elmrec_graph` completed as
+   `official_completed` with `blockers=[]`, `score_coverage_rate=1.0`, and
+   exact audit `audit_ok=True`. Metrics: HR@5/10/20=`0.0532/0.1054/0.2013`,
+   NDCG@5/10/20=`0.0317045493/0.0483716358/0.0723504733`,
+   MRR=`0.0537009851`, `sample_count=10000`, `score_rows=1010000`, and
+   `candidate_rows=1010000`. Lightweight local evidence is under
+   `outputs/baselines/official_adapters/sports_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`;
+   server-only large artifacts remain on the server. The runner advanced to
+   sports `irllrec_intent`; at the 2026-06-01 04:38 CST checkpoint disk was
+   about `15G` free (`93%` used), so storage is a close watch item but no
+   space/OOM/CUDA failure has been observed.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
