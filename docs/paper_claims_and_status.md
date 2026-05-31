@@ -181,9 +181,12 @@ external-baseline comparison.
    child at the 2026-05-31 22:32 CST checkpoint is sports `llmemb` PID
    `2794731`. It has completed the `hf_mean_pool` embedding pass
    (`233470/233470`) and entered `llmemb-sasrec` training, with log lines
-   through epoch 35. GPU is about `33%`, `16301 MiB / 49140 MiB`; disk is about
-   `36G` free. No sports official row has completed `scores.csv`,
-   score-audit JSON, imported table, or final `fairness_provenance.json` yet.
+   through epoch 35. By the 2026-05-31 22:52 CST checkpoint,
+   `llmemb-sasrec` had completed 200 epochs and the `llmemb` training phase
+   had reached epoch 175. GPU was about `83%`, `16301 MiB / 49140 MiB`; disk
+   was about `36G` free. No sports official row has completed `scores.csv`,
+   score-audit JSON, imported table, `report.json`, or final
+   `fairness_provenance.json` yet.
 2. Import and audit each new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

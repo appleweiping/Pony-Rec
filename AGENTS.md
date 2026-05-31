@@ -369,7 +369,7 @@ When in doubt, downgrade the claim, not the evidence standard.
 6. **GPT-5.5 review 达到 8/10** — 按 ARIS 审核标准，多维度评价
 7. **实验做完再写** — 结果完整后再写作，不能半成品提交 review
 8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
-9. **目标续跑监控** — 长期项目依靠 active goal continuation 持续推进；不再单独设置 automation；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发
+9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 30 分钟激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
 10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
 
 ## Experiment Roadmap（2026-05-31 更新）
