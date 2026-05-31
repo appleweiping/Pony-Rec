@@ -152,6 +152,11 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
   PID `2794731` are active; `llmemb` is encoding Qwen3 item/user text at about
   `28048/233470`; no baseline score/audit/import files are expected yet
   because the first baseline has not completed
+- Monitoring checkpoint 2026-05-31 21:46 CST: runner PID `2794722` and child
+  PID `2794731` are still active; `llmemb` is encoding at about
+  `48056/233470`; GPU is about `100%` with `16285 MiB / 49140 MiB`; disk is
+  still about `44G` free; no sports baseline has completed `scores.csv`,
+  audit, import table, or final fairness provenance yet
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
