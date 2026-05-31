@@ -37,9 +37,10 @@ score/rank row counts. Do not summarize only @10.
 ### Phase 2: Official Baselines on New Domains
 Run 8 official baselines on sports/toys/home/tools (same protocol as original 4).
 Script: `scripts/run_baselines_new_domains.sh` (already on server).
-Before launch, reconcile the script with the canonical 8-method block because
-the current script also includes SETRec, which is blocked/supplementary in
-`configs/official_external_baselines.yaml`.
+The script is aligned to the canonical 8-method block and excludes SETRec while
+SETRec remains blocked/supplementary in `configs/official_external_baselines.yaml`.
+It uses `${PYTHON:-/home/ajifang/miniconda3/bin/python}` to avoid non-interactive
+SSH sessions failing on a missing bare `python`.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.

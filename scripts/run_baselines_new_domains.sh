@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run all 8 official baselines on new Amazon 2023 domains (sports, toys, home, tools).
-# Execute from: ~/projects/pony-rec-rescue-shadow-v6/scripts/adapters/
-# Prerequisites: toys C-CRP v3 must be finished (GPU free).
+# Execute from anywhere; the script cd's to ~/projects/pony-rec-rescue-shadow-v6.
+# Prerequisites: C-CRP v3 must be finished on sports/toys/home/tools (GPU free).
 #
 # Execution order: fastest baselines first (embedding-only), then training-based.
 # Each domain runs all baselines before moving to the next.
@@ -9,6 +9,7 @@ set -euo pipefail
 
 cd ~/projects/pony-rec-rescue-shadow-v6
 
+PYTHON="${PYTHON:-/home/ajifang/miniconda3/bin/python}"
 BACKBONE=/home/ajifang/models/Qwen/Qwen3-8B
 POLICY_ID="official_code_qwen3base_default_hparams_declared_adaptation_v1"
 VARIANT="official_code_qwen3base_default_hparams_declared_adaptation"
@@ -39,7 +40,7 @@ run_baseline_on_domain() {
 
   case "$method" in
     llmemb)
-      python scripts/adapters/main_run_llmemb_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_llmemb_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -52,7 +53,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     proex_profile)
-      python scripts/adapters/main_run_proex_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_proex_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -65,7 +66,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     promax_profile)
-      python scripts/adapters/main_run_promax_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_promax_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -78,7 +79,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     elmrec_graph)
-      python scripts/adapters/main_run_elmrec_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_elmrec_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -91,7 +92,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     irllrec_intent)
-      python scripts/adapters/main_run_irllrec_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_irllrec_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -104,7 +105,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     rlmrec_graphcl)
-      python scripts/adapters/main_run_rlmrec_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_rlmrec_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -117,7 +118,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     llm2rec_sasrec)
-      python scripts/adapters/main_run_llm2rec_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_llm2rec_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -130,20 +131,7 @@ run_baseline_on_domain() {
         --embedding_max_length 128 --hf_device_map auto
       ;;
     llmesr_sasrec)
-      python scripts/adapters/main_run_llmesr_official_same_candidate_adapter.py \
-        --stage run --domain "$domain" \
-        --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
-        --output_scores_path "$scores_path" \
-        --provenance_output_path "$prov_path" \
-        --fairness_policy_id "$POLICY_ID" \
-        --comparison_variant "$VARIANT" \
-        --backbone_path "$BACKBONE" \
-        --llm_adaptation_mode frozen_base_embedding \
-        --embedding_backend hf_mean_pool \
-        --embedding_max_length 128 --hf_device_map auto
-      ;;
-    setrec_identifier)
-      python scripts/adapters/main_run_setrec_official_same_candidate_adapter.py \
+      "$PYTHON" scripts/adapters/main_run_llmesr_official_same_candidate_adapter.py \
         --stage run --domain "$domain" \
         --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
         --output_scores_path "$scores_path" \
@@ -162,7 +150,7 @@ run_baseline_on_domain() {
   esac
 
   if [ -f "$scores_path" ]; then
-    python scripts/audit/main_audit_same_candidate_score_file.py \
+    "$PYTHON" scripts/audit/main_audit_same_candidate_score_file.py \
       --candidate_items_path "${task_dir}/candidate_items.csv" \
       --scores_path "$scores_path" 2>&1 || true
     log_progress "DONE $method on $domain"
@@ -173,9 +161,11 @@ run_baseline_on_domain() {
 
 # Embedding-only baselines first (fastest), then training-based
 FAST_METHODS=(llmemb proex_profile promax_profile)
-TRAIN_METHODS=(elmrec_graph irllrec_intent rlmrec_graphcl llm2rec_sasrec llmesr_sasrec setrec_identifier)
+# Canonical main official block excludes SETRec while it remains blocked/supplementary.
+TRAIN_METHODS=(elmrec_graph irllrec_intent rlmrec_graphcl llm2rec_sasrec llmesr_sasrec)
 
 log_progress "=== Starting baseline runs on new domains ==="
+log_progress "Python: $PYTHON"
 log_progress "Domains: ${DOMAINS[*]}"
 log_progress "Fast methods: ${FAST_METHODS[*]}"
 log_progress "Training methods: ${TRAIN_METHODS[*]}"

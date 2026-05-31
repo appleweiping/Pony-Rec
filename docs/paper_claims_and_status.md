@@ -170,11 +170,11 @@ external-baseline comparison.
 
 ### Remaining for paper submission
 
-1. Reconcile `scripts/run_baselines_new_domains.sh` with the canonical 8
-   official baselines; SETRec is marked blocked/supplementary in
-   `configs/official_external_baselines.yaml` unless future gates pass.
-2. Run 8 official baselines on sports/toys/home/tools after the script is
-   aligned and disk/GPU state is rechecked.
+1. Run the canonical 8 official baselines on sports/toys/home/tools after a
+   fresh disk/GPU/process check. `scripts/run_baselines_new_domains.sh` is
+   aligned to exclude SETRec while it remains blocked/supplementary.
+2. Import and audit each new-domain baseline row with exact score coverage,
+   full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing
