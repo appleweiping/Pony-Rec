@@ -339,6 +339,15 @@ not as a reason to silently rerun completed metric rows.
   used). Fatal scan remains clean: no `Traceback`, `Killed`, OOM, CUDA,
   no-space, disk quota, exception, or runtime-error markers. No new sports
   official baseline row is final yet beyond the four already audited rows.
+- Monitoring checkpoint 2026-06-01 07:18 CST: sports `irllrec_intent` remains
+  active under runner PID `2794722` and child PID `2835275`. The log has
+  reached epoch `2040/3000`, latest train loss `0.624872`; GPU is about
+  `75%`, `16295 MiB / 49140 MiB`, and disk remains about `29G` free (`85%`
+  used). Fatal scan remains clean: no `Traceback`, `Killed`, OOM, CUDA,
+  no-space, disk quota, exception, or runtime-error markers. The sports
+  official matrix is unchanged: four rows are final/audited, while
+  `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`
+  are not final yet.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

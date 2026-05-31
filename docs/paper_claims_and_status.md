@@ -253,6 +253,12 @@ external-baseline comparison.
    passed, including final server-side `scores.csv`, predictions, provenance,
    full metrics, coverage/exposure tables, and per-event evaluation records.
    The active `irllrec_intent` process was left untouched.
+   At 2026-06-01 07:18 CST, sports `irllrec_intent` remained active under
+   runner PID `2794722` and child PID `2835275`; the log had reached epoch
+   `2040/3000`, latest train loss `0.624872`, GPU was about `75%` with
+   `16295 MiB / 49140 MiB`, disk remained about `29G` free (`85%` used), and
+   fatal/OOM/CUDA/no-space/runtime-error scans remained clean. No fifth sports
+   official row is final yet, so no new paper-facing metric row has been added.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
