@@ -156,6 +156,9 @@ For sports/toys/home/tools, each report records `n_users=10000`,
 `n_prompts=1010000`, the test same-candidate `data_path`, `scores.csv` with
 1,010,000 scored candidate rows plus header, and `user_ranks.jsonl` with
 10,000 rows.
+Fields marked `—` for beauty/books/electronics/movies are currently missing
+from the server `outputs/*ccrp_v3/report.json` lookup and must be recovered
+from archived artifacts before final paper tables.
 
 ### Strategy for SOTA
 

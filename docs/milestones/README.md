@@ -124,6 +124,9 @@ The repository is now in M5 (multi-domain SOTA validation):
 New-domain artifact completeness: each of sports/toys/home/tools has
 `report.json`, `scores.csv` with 1,010,000 candidate-score rows plus header,
 and `user_ranks.jsonl` with 10,000 user-rank rows.
+Fields marked `—` for original domains are missing from the current server
+`outputs/*ccrp_v3/report.json` lookup and should be recovered from archived
+artifacts before final table construction.
 
 ### Experiment Execution Plan
 

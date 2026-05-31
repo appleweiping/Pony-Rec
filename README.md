@@ -110,6 +110,9 @@ For the frozen claim and status rules, see
 For the four new domains, each C-CRP v3 run emitted `report.json`,
 `user_ranks.jsonl` with 10,000 rows, and `scores.csv` with 1,010,000 candidate
 scores plus a header row.
+For original domains, fields marked `—` were not present in the current
+server-side `outputs/*ccrp_v3/report.json` lookup on 2026-05-31 and must be
+recovered from archived artifacts before paper-table finalization.
 
 **8 official baselines** (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx,
 ProMax, RLMRec) completed on beauty/books/electronics/movies. Pending on
