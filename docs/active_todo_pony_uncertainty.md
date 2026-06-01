@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 09:05 CST
+Last updated: 2026-06-01 09:08 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -29,14 +29,18 @@ or review cycle.
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
 - Active row: sports `rlmrec_graphcl`, child PID `2851207`
-- Latest checked progress: 2026-06-01 09:05 CST, RLMRec Qwen embedding
-  generation reached `233470/233470`; the process is still active after
-  embedding completion and no final RLMRec result package exists yet
-- GPU/disk at latest check: GPU `0%`, `16285 MiB / 49140 MiB`, disk `32G`
-  free (`83%` used); child PID `2851207` was still active with high CPU and
-  memory, consistent with post-embedding graph/training preparation
+- Latest checked progress: 2026-06-01 09:08 CST, RLMRec Qwen embedding
+  generation reached `233470/233470` and official training started; latest
+  logged training line is `[rlmrec-official] epoch=10 train_loss=1.675038`
+- GPU/disk at latest check: GPU `100%`, `19943 MiB / 49140 MiB`, disk `28G`
+  free (`85%` used); child PID `2851207` remains active
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
+- Warning note: graph normalization emitted the same zero-degree
+  `divide by zero encountered in power` warning pattern seen in prior completed
+  graph baselines; the implementation immediately maps `inf` inverse degrees
+  to `0.0`, so this is recorded as a non-fatal warning unless later audit or
+  outputs show score/provenance corruption.
 - Follow-up preflight: 2026-06-01 07:21 CST server code still has real
   `run` dispatch branches for `rlmrec`, `llm2rec`, and `llmesr`; the sports
   inspect provenance for `rlmrec_graphcl`, `llm2rec_sasrec`, and
@@ -66,7 +70,7 @@ or review cycle.
 | `promax_profile` | complete | local lightweight package PASS; server-final package PASS |
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
-| `rlmrec_graphcl` | running | Qwen embedding complete; process still active; wait for final scores/provenance |
+| `rlmrec_graphcl` | running | Qwen embedding complete; official training active; wait for final scores/provenance |
 | `llm2rec_sasrec` | pending | inspect-only placeholder |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 

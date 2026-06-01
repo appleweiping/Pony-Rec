@@ -423,6 +423,15 @@ not as a reason to silently rerun completed metric rows.
   scans remain clean, and the RLMRec output directory still contains only
   `inspect_fairness_provenance.json`; no final scores/provenance/table package
   exists yet, so the row remains ineligible for audit, sync, or table import.
+- Monitoring checkpoint 2026-06-01 09:08 CST: sports `rlmrec_graphcl` entered
+  official training after embedding completion. The latest logged training
+  line is `[rlmrec-official] epoch=10 train_loss=1.675038`; default RLMRec
+  training is `3000` epochs with log interval `10`. GPU utilization is `100%`
+  with `19943 MiB / 49140 MiB`; disk is `28G` free (`85%` used). Graph
+  normalization emitted a non-fatal zero-degree inverse-degree warning already
+  seen in earlier completed graph baselines and handled by setting `inf`
+  inverse degrees to `0.0`. No final RLMRec score/provenance/table package
+  exists yet.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

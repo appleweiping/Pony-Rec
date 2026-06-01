@@ -296,7 +296,13 @@ external-baseline comparison.
    embedding completion and the output directory still contained only
    `inspect_fairness_provenance.json`; no final `scores.csv`, provenance,
    audit, run summary, or imported metrics table exists yet, so the sports
-   official evidence count remains five completed rows.
+   official evidence count remains five completed rows. At 2026-06-01 09:08
+   CST, RLMRec entered official training and logged epoch 10 train loss
+   `1.675038`; GPU was `100%` with `19943 MiB / 49140 MiB`, disk was `28G`
+   free, and no final artifacts existed yet. The zero-degree graph
+   normalization warning is recorded as non-fatal because the implementation
+   maps infinite inverse degrees to `0.0`, but final eligibility still depends
+   on successful score/provenance/audit/table outputs.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
