@@ -347,6 +347,18 @@ or review cycle.
   was `96%` with `15945 MiB / 49140 MiB`, disk was `7.3G` free (`97%` used),
   and no final score/provenance/audit/import package existed yet. Do not start
   another baseline until this row finishes or fails and has been audited.
+- IRLLRec storage-risk follow-up: at 2026-06-02 04:12 CST, toys IRLLRec had
+  entered official training (`epoch=30`) after completing Qwen3 embeddings.
+  Its active intermediate adapter directory had grown to about `4.3G`, final
+  evidence still had no score/provenance package, and disk was down to about
+  `4.0G` free (`98%` used). To reduce no-space risk without touching project
+  evidence, final outputs, active adapters, or other projects, only clearly
+  disposable pip cache/temp paths were removed after realpath/scope checks:
+  `/home/ajifang/.cache/pip` (`117M`) and `/tmp/pip-unpack-920865s3` (`314M`).
+  Disk recovered to about `4.4G` free. The old
+  `outputs/baselines/paper_adapters/books_large10000_100neg_llmesr_adapter`
+  directory was observed at about `1.3G` but was not removed because its final
+  evidence/backup status was not audited in this cycle.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees

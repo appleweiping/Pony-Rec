@@ -538,7 +538,11 @@ external-baseline comparison.
    check it was in Qwen3 `hf_mean_pool` embedding at about `1400/215034`, with
    GPU `96%` and disk about `7.3G` free. This row is running and not
    table-eligible until final score/provenance, audits, imported full metrics,
-   row counts, local-light sync, and paired evidence gates pass.
+   row counts, local-light sync, and paired evidence gates pass. At 04:12 CST,
+   after embeddings completed and training reached epoch 30, disk had fallen to
+   about `4.0G` free; only disposable pip cache/temp paths were removed after
+   scope checks, recovering disk to about `4.4G` free without touching project
+   evidence or active adapters.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing

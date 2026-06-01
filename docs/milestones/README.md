@@ -738,6 +738,12 @@ not as a reason to silently rerun completed metric rows.
   GPU used about `15945 MiB / 49140 MiB`, and disk was about `7.3G` free. No
   IRLLRec final scores/provenance/audit/import package exists yet, so the row
   is not table-eligible.
+- IRLLRec storage checkpoint 2026-06-02 04:12 CST: after embeddings completed
+  and official training reached epoch 30, disk had fallen to about `4.0G` free.
+  Only disposable pip cache/temp paths were removed after scope checks
+  (`/home/ajifang/.cache/pip` and `/tmp/pip-unpack-920865s3`), recovering disk
+  to about `4.4G` free. No project evidence, final outputs, active adapters,
+  checkpoints, scores, predictions, or other project directories were deleted.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
