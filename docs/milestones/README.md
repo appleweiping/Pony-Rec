@@ -408,6 +408,13 @@ not as a reason to silently rerun completed metric rows.
   tokens before creating output directories, preventing misquoted override
   tokens from creating malformed method directories in future launches. No
   server pull or cleanup was performed while the live runner is active.
+- Monitoring checkpoint 2026-06-01 08:34 CST: sports `rlmrec_graphcl` remains
+  active under runner PID `2794722` and child PID `2851207`. The log has reached
+  Qwen embedding progress `105376/233470`; GPU is about `94%` with
+  `16285 MiB / 49140 MiB`, disk is `32G` free (`83%` used), and fatal/OOM/CUDA/
+  no-space scans remain clean. The RLMRec output directory still contains only
+  `inspect_fairness_provenance.json`, so the row is not complete and must not
+  be audited, synced, or recorded as a result yet.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

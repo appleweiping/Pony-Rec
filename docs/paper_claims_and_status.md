@@ -287,7 +287,11 @@ external-baseline comparison.
    `outputs/sports_large10000_100neg_TRAIN_METHODS_OVERRIDE=_official_qwen3base_same_candidate/`.
    It contains no files and is not evidence; the local runner now validates
    method tokens before creating output directories so a misquoted override
-   cannot create another malformed method directory.
+   cannot create another malformed method directory. At 2026-06-01 08:34 CST,
+   RLMRec was still in Qwen embedding generation at `105376/233470` with no
+   fatal/OOM/CUDA/no-space markers; its output directory still had only
+   `inspect_fairness_provenance.json`, so no sixth sports official result is
+   available yet.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
