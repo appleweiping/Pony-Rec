@@ -28,11 +28,11 @@ or review cycle.
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
-- Active row: sports `irllrec_intent`, child PID `2835275`
-- Latest checked progress: 2026-06-01 07:32 CST, epoch `2320/3000`, loss
-  `0.625049`
-- GPU/disk at latest check: GPU `69%`, `16295 MiB / 49140 MiB`, disk `29G`
-  free (`85%` used)
+- Active row: sports `rlmrec_graphcl`, child PID `2851207`
+- Latest checked progress: 2026-06-01 08:18 CST, RLMRec Qwen embedding
+  generation `35496/233470`; no RLMRec training epochs yet
+- GPU/disk at latest check: GPU `99%`, `16213 MiB / 49140 MiB`, disk `32G`
+  free (`83%` used)
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
 - Follow-up preflight: 2026-06-01 07:21 CST server code still has real
@@ -56,8 +56,8 @@ or review cycle.
 | `proex_profile` | complete | local lightweight package PASS; server-final package PASS |
 | `promax_profile` | complete | local lightweight package PASS; server-final package PASS |
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
-| `irllrec_intent` | running | inspect-only placeholder so far; wait for final scores/provenance |
-| `rlmrec_graphcl` | pending | inspect-only placeholder |
+| `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
+| `rlmrec_graphcl` | running | Qwen embedding generation active; wait for final scores/provenance |
 | `llm2rec_sasrec` | pending | inspect-only placeholder |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 
@@ -68,21 +68,46 @@ score audits, full metric tables, coverage/exposure tables, and
 
 ## Required Next Actions
 
-1. Monitor the active sports `irllrec_intent` row until it produces final
+### IRLLRec Completed Checkpoint
+
+At 2026-06-01 08:10 CST, sports `irllrec_intent` completed as
+`implementation_status=official_completed`, `blockers=[]`, and
+`score_coverage_rate=1.0`. Full metrics over 10,000 users and 101 candidates
+per user:
+
+- HR@5/10/20: `0.1573 / 0.2215 / 0.4016`
+- NDCG@5/10/20: `0.10642150916142634 / 0.12691703149297534 / 0.17128490034441315`
+- MRR: `0.12444202662842994`
+
+Server row counts: `scores.csv` `1,010,001` lines including header,
+`predictions/rank_predictions.jsonl` `10,000` lines, and local
+`tables/ranking_eval_records.csv` `10,001` lines. Server-final package audit,
+lightweight sync, and local-light package audit all passed. Local sync copied
+11 lightweight files with matching size/sha256, including the server-final
+evidence audit JSON, while excluding server-only `scores.csv`, predictions,
+and `irllrec_official_model.pt`. After local verification, the server
+intermediate adapter directory
+`outputs/baselines/paper_adapters/sports_large10000_100neg_irllrec_official_adapter`
+was removed, recovering disk from `28G` free to `32G` free; final IRLLRec
+outputs remain on the server.
+
+## Required Next Actions
+
+1. Monitor the active sports `rlmrec_graphcl` row until it produces final
    `scores.csv`, `fairness_provenance.json`, score audits, imported tables,
    predictions, and run summary.
-2. If IRLLRec completes, run the server-side package audit:
+2. If RLMRec completes, run the server-side package audit:
 
    ```bash
    cd ~/projects/pony-rec-rescue-shadow-v6
    /home/ajifang/miniconda3/bin/python /tmp/pony_audit_official_evidence_package.py \
-     --evidence_dir outputs/sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate \
+     --evidence_dir outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate \
      --mode=server_final \
      --quiet
    ```
 
-3. Copy the lightweight IRLLRec evidence package to local
-   `outputs/baselines/official_adapters/sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`.
+3. Copy the lightweight RLMRec evidence package to local
+   `outputs/baselines/official_adapters/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`.
    Include final provenance, inspect provenance, JSON/TXT score audits, run
    summary, imported `tables/`, and compact manifests if present. Do not copy
    huge score/prediction/checkpoint files unless a recovery decision requires
@@ -91,8 +116,8 @@ score audits, full metric tables, coverage/exposure tables, and
 
    ```powershell
    python scripts\audit\main_sync_official_evidence_package.py `
-     --remote_evidence_dir outputs/sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate `
-     --local_evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate `
+     --remote_evidence_dir outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate `
+     --local_evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate `
      --copy `
      --quiet
    ```
@@ -101,7 +126,7 @@ score audits, full metric tables, coverage/exposure tables, and
 
    ```powershell
    python scripts\audit\main_audit_official_evidence_package.py `
-     --evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate `
+     --evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate `
      --mode local_light `
      --quiet
    ```
@@ -111,8 +136,8 @@ score audits, full metric tables, coverage/exposure tables, and
    row counts, provenance status, copied files, and any cleanup decision.
 6. Commit and push only the related docs/manifests/code changes from the local
    repo.
-7. Let the runner continue to `rlmrec_graphcl`, then repeat the same evidence
-   loop for `rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`.
+7. Let the runner continue to `llm2rec_sasrec`, then repeat the same evidence
+   loop for `llm2rec_sasrec` and `llmesr_sasrec`.
 8. After all eight sports official rows complete, build the sports comparison
    table and paired/statistical tests. Do not claim sports SOTA until the
    complete same-candidate table and paired tests pass.

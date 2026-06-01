@@ -376,6 +376,26 @@ not as a reason to silently rerun completed metric rows.
   `fairness_provenance.json`, `scores.csv`, score audit, imported tables, or
   predictions exist yet for `irllrec_intent`, so no fifth sports official row
   has been recorded.
+- Completion checkpoint 2026-06-01 08:10 CST: sports `irllrec_intent`
+  completed as `implementation_status=official_completed` with `blockers=[]`,
+  `score_coverage_rate=1.0`, exact same-candidate score coverage, and full
+  imported metrics. Metrics: HR@5/10/20=`0.1573/0.2215/0.4016`,
+  NDCG@5/10/20=`0.10642150916142634/0.12691703149297534/0.17128490034441315`,
+  MRR=`0.12444202662842994`, `sample_count=10000`,
+  `avg_candidates=101.0`, `score_rows=1010000`, and
+  `candidate_rows=1010000`. Server row counts passed: `scores.csv` has
+  `1,010,001` lines including header, `predictions/rank_predictions.jsonl`
+  has `10,000` lines, and `tables/ranking_eval_records.csv` has `10,001`
+  lines. Server-final audit, lightweight sync, and local-light audit all
+  passed. Local sync copied 11 lightweight files with matching size/sha256,
+  including server-final and local-light evidence audit JSONs; `scores.csv`,
+  predictions, and `irllrec_official_model.pt` remain server-only. After the
+  local backup and audits, the server intermediate adapter directory
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_irllrec_official_adapter`
+  was removed, recovering disk from about `28G` free (`86%` used) to `32G`
+  free (`83%` used). Final IRLLRec outputs were preserved. The runner advanced
+  to sports `rlmrec_graphcl` child PID `2851207`; at 2026-06-01 08:18 CST it
+  was generating Qwen embeddings at `35496/233470`, with no fatal markers.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

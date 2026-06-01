@@ -89,8 +89,12 @@ def is_allowed(rel_path: str) -> bool:
     if rel.startswith("tables/"):
         return True
     patterns = [
+        "*evidence*audit*.json",
+        "*package*audit*.json",
         "*score*audit*.json",
         "*same_candidate_score_audit.txt",
+        "*server_final_audit*.json",
+        "*local_light_audit*.json",
         "*run_summary.json",
         "*manifest*.json",
         "*metadata*.json",

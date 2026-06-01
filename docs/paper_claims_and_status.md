@@ -269,6 +269,16 @@ external-baseline comparison.
    fatal scans were clean. No final IRLLRec score/provenance/table package
    exists yet, so paper-facing sports official evidence remains four completed
    rows.
+   At 2026-06-01 08:10 CST, sports `irllrec_intent` became the fifth completed
+   sports official row: `implementation_status=official_completed`,
+   `blockers=[]`, `score_coverage_rate=1.0`, and exact score coverage passed.
+   Metrics are HR@5/10/20=`0.1573/0.2215/0.4016`,
+   NDCG@5/10/20=`0.10642150916142634/0.12691703149297534/0.17128490034441315`,
+   and MRR=`0.12444202662842994` over 10,000 users and 101 candidates.
+   Server-final audit, local lightweight sync, and local-light audit all
+   passed; the row is eligible as official sports evidence, pending the full
+   eight-baseline sports comparison and paired tests. The runner then advanced
+   to sports `rlmrec_graphcl`.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
