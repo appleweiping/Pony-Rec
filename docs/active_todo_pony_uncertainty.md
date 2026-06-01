@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 13:50 CST
+Last updated: 2026-06-01 14:03 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,12 +27,15 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: none after the sports batch stopped at the LLM2Rec export
-  blocker; do not restart the whole eight-method script because six sports rows
-  are already completed and audited
-- Latest checked state: 2026-06-01 13:44 CST, no Python baseline process was
-  active, GPU was idle (`0%`, `15 MiB / 49140 MiB`), and disk had `28G` free
-  (`86%` used)
+- Active runner: resumed single-row sports `llm2rec_sasrec`, PID `2870575`,
+  launched with `DOMAINS_OVERRIDE=sports`,
+  `FAST_METHODS_OVERRIDE=`, and `TRAIN_METHODS_OVERRIDE=llm2rec_sasrec`; do
+  not restart the whole eight-method script because six sports rows are already
+  completed and audited
+- Latest checked state: 2026-06-01 14:02 CST, LLM2Rec passed the previous
+  adapter-export blocker and entered Qwen3 embedding generation at about
+  `3432/283760`; GPU was `100%`, `16115 MiB / 49140 MiB`, and disk had `27G`
+  free (`86%` used)
 - Latest completed row: sports `rlmrec_graphcl`, completed 2026-06-01
   13:43 CST with `implementation_status=official_completed`, `blockers=[]`,
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
@@ -47,7 +50,10 @@ or review cycle.
   test `test_llm2rec_export_uses_separate_validation_task` now covers disjoint
   valid/test users and passed with
   `PYTHONPATH=scripts/build;scripts/audit;scripts/adapters;. python -m pytest
-  tests/test_llm2rec_same_candidate_export.py -q`.
+  tests/test_llm2rec_same_candidate_export.py -q`. The fix was copied to the
+  server after commit `657929e`; server lacks `pytest`, but
+  `py_compile` passed and the real sports export passed far enough to start
+  full Qwen3 embedding generation.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -83,7 +89,7 @@ or review cycle.
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
 | `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
-| `llm2rec_sasrec` | blocked/recovering | export blocker fixed locally; commit/push, server pull, then resume this row only |
+| `llm2rec_sasrec` | running | valid-history fix deployed; export passed; Qwen3 embedding active under PID `2870575` |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
@@ -165,27 +171,25 @@ Server data check showed the user has one row in
 and no rows in the test task train/candidate files. This is a real
 adapter-export bug, not a valid reason to skip validation. The local exporter
 fix keeps test histories and validation histories split-aligned. Next recovery
-step is to commit/push, pull the fix on `pony-rec-gpu`, run an adapter export
-smoke on the real sports task, then resume `llm2rec_sasrec` only.
+step completed: commit `657929e` was pushed, the fixed exporter was copied to
+the server, `py_compile` passed, and the real sports LLM2Rec run reached
+embedding generation. The active log is
+`baselines_new_domains_sports_llm2rec_resume.log`, and the corrected PID file is
+`baselines_new_domains_sports_llm2rec_resume.pid`.
 
 ## Required Next Actions
 
-1. Commit and push the LLM2Rec validation-history exporter fix plus the RLMRec
-   evidence docs/local package.
-2. Pull the committed fix on `pony-rec-gpu` after confirming no experiment
-   process is active.
-3. Run a server-side adapter export smoke for sports `llm2rec_sasrec` using
-   the real test/valid same-candidate tasks. It must complete without empty
-   valid-history errors and produce a ready adapter audit before training.
-4. Resume sports `llm2rec_sasrec` only, not the whole already-completed
-   sports batch. If it completes, run server-final audit, lightweight sync,
+1. Monitor active sports `llm2rec_sasrec` PID `2870575` without stopping it.
+   It is currently embedding Qwen3 item text (`hf_mean_pool`) after passing the
+   repaired adapter export path.
+2. If LLM2Rec completes, run server-final audit, lightweight sync,
    local-light audit, and full metric/row-count recording.
-5. Repeat the evidence loop for sports `llmesr_sasrec`.
-6. After all eight sports official rows complete, build the sports comparison
+3. Repeat the evidence loop for sports `llmesr_sasrec`.
+4. After all eight sports official rows complete, build the sports comparison
    table and paired/statistical tests. Do not claim sports SOTA until the
    complete same-candidate table and paired tests pass.
-7. Continue the same official-baseline protocol for toys, home, and tools.
-8. Only after the declared experiments, comparisons, ablations, provenance,
+5. Continue the same official-baseline protocol for toys, home, and tools.
+6. Only after the declared experiments, comparisons, ablations, provenance,
     statistical tests, and figure checks are complete, move to ARIS paper
     writing and GPT-5.5/Codex xhigh review. The review loop must reach at
     least 8/10 before submission-level readiness is claimed.

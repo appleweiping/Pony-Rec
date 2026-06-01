@@ -338,7 +338,14 @@ external-baseline comparison.
    looked up in the test-task train file. The local fix uses
    `valid_same_candidate/train_interactions.csv` for validation histories and
    passed a targeted unit test; it still needs server pull and resumed LLM2Rec
-   execution before any LLM2Rec row is eligible.
+   execution before any LLM2Rec row is eligible. At 2026-06-01 14:03 CST, the
+   fix had been deployed to the dirty server worktree without resetting
+   unrelated experiment changes, and sports `llm2rec_sasrec` was resumed as a
+   single-row job. The real sports run passed the previous adapter-export
+   blocker and entered Qwen3 `hf_mean_pool` embedding generation at about
+   `3432/283760` under PID `2870575`. This is progress only; the LLM2Rec row
+   remains ineligible until final scores, provenance, audits, complete metrics,
+   and row-count checks pass.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

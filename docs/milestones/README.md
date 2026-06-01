@@ -481,6 +481,16 @@ not as a reason to silently rerun completed metric rows.
   empty validation-history error for a valid-only user. Local fix and targeted
   unit test are in place; no baseline process is currently active, GPU is idle,
   and disk is about `28G` free.
+- LLM2Rec recovery checkpoint 2026-06-01 14:03 CST: commit `657929e` was
+  pushed locally, the fixed LLM2Rec exporter was copied to the dirty server
+  worktree without resetting unrelated experiment changes, and sports
+  `llm2rec_sasrec` was resumed as a single-row job rather than rerunning the
+  full sports batch. Active PID is `2870575`, log path is
+  `baselines_new_domains_sports_llm2rec_resume.log`, and the real sports run
+  passed the previous adapter-export blocker. It is now in Qwen3
+  `hf_mean_pool` embedding generation at about `3432/283760`; GPU is `100%`,
+  memory is `16115 MiB / 49140 MiB`, and disk is about `27G` free. This is not
+  a completed row yet.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
