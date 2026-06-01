@@ -55,6 +55,7 @@ PIDs, audit summaries, and missing-file errors.
 | `run_ccrp_v3_all_new_domains.sh` | C-CRP v3 on sports/toys/home/tools (sequential) |
 | `scripts/run_baselines_new_domains.sh` | 8 baselines × 4 new domains |
 | `scripts/run_ccrp_v3_new_domains.sh` | C-CRP v3 on home/tools only |
+| `scripts/audit/main_audit_domain_official_gate.py` | Read-only domain gate for the eight official baselines plus C-CRP full metrics, row counts, coverage, provenance, and stray official-like directories |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring

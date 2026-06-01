@@ -592,6 +592,18 @@ not as a reason to silently rerun completed metric rows.
   `9.4G` to `14G` free. Sports official baselines are now 8/8 complete and
   should move to comparison-table construction and paired tests before any
   sports SOTA wording.
+- Sports domain gate checkpoint 2026-06-01 19:08 CST: a read-only server gate
+  using `scripts/audit/main_audit_domain_official_gate.py` verified sports has
+  all eight official baselines plus `ccrp_v3_qwen3base_pointwise` with full
+  HR@5/@10/@20, NDCG@5/@10/@20, MRR, `sample_count=10000`,
+  `avg_candidates=101.0`, `score_coverage_rate=1.0`, expected row counts, and
+  no gate failures. The generated summaries are
+  `outputs/summary/sports_official_ccrp_gate_20260601.json` and `.csv` on both
+  server and local. A stale non-experiment bash diagnostic process and the
+  confirmed empty malformed `TRAIN_METHODS_OVERRIDE=` official-like directory
+  were cleaned without touching final scores, provenance, or imported tables.
+  This is a result-completeness gate only; sports still needs the full
+  comparison table and paired tests before any SOTA wording.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

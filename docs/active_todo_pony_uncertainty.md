@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 18:42 CST
+Last updated: 2026-06-01 19:08 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -30,7 +30,7 @@ or review cycle.
 - Active runner: none for sports official baselines. Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
-- Latest checked state: 2026-06-01 18:42 CST, sports official baselines are
+- Latest checked state: 2026-06-01 19:08 CST, sports official baselines are
   8/8 complete. LLM-ESR completed the Qwen3 `hf_mean_pool` embedding pass
   (`233470/233470`), ran the default 200-epoch official LLM-ESR training, and
   exported/imported exact same-candidate scores. The log ended with
@@ -38,7 +38,11 @@ or review cycle.
   `=== All baseline runs complete ===`. No active Pony/baseline Python process
   remained at the cleanup preflight. After safe cleanup of the completed
   LLM-ESR intermediate adapter directory, disk recovered from `9.4G` free
-  (`95%` used) to `14G` free (`93%` used).
+  (`95%` used) to `14G` free (`93%` used). A follow-up read-only domain gate
+  with `scripts/audit/main_audit_domain_official_gate.py` passed:
+  `official_ok_count=8`, `ccrp_ok=true`, `gate_ok=true`, and no stray
+  official-like sports output directories remained after removing the confirmed
+  empty malformed directory.
 - Resolved LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
@@ -122,6 +126,20 @@ or review cycle.
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llmesr_official_adapter`
   was removed; final server outputs and local lightweight evidence were
   preserved.
+- Sports domain gate follow-up: at 2026-06-01 19:08 CST, the new read-only
+  domain gate generated
+  `outputs/summary/sports_official_ccrp_gate_20260601.json` and `.csv` on the
+  server and copied both light summaries locally. The gate verified all eight
+  official rows plus `ccrp_v3_qwen3base_pointwise` have complete
+  HR@5/@10/@20, NDCG@5/@10/@20, MRR, `sample_count=10000`,
+  `avg_candidates=101.0`, `score_coverage_rate=1.0`, expected row counts
+  (`scores.csv` `1,010,001`, predictions `10,000`,
+  `ranking_eval_records.csv` `10,001`), and no failures. The stale non-experiment
+  bash diagnostic process from an earlier malformed grep command was cleaned,
+  and the confirmed empty malformed directory
+  `outputs/sports_large10000_100neg_TRAIN_METHODS_OVERRIDE=_official_qwen3base_same_candidate`
+  was removed. No experiment process, final score, provenance, or imported
+  table was touched.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -165,7 +183,8 @@ Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
 RLMRec, LLM2Rec, and LLM-ESR are now completed rows. Sports official baselines
-are 8/8 complete. Sports can move to comparison-table construction and paired
+are 8/8 complete, and the sports domain gate passed for the eight official
+rows plus C-CRP. Sports can move to comparison-table construction and paired
 tests; no sports SOTA claim is allowed until those gates pass.
 
 ## Completed Checkpoints

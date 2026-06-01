@@ -422,7 +422,16 @@ external-baseline comparison.
    the full sports comparison table and paired tests are built. The completed
    LLM-ESR intermediate adapter directory was removed only after final evidence
    and local lightweight backup passed, recovering disk from `9.4G` to `14G`
-   free without touching final outputs.
+   free without touching final outputs. At 2026-06-01 19:08 CST, a read-only
+   domain gate with `scripts/audit/main_audit_domain_official_gate.py`
+   generated `outputs/summary/sports_official_ccrp_gate_20260601.json` and
+   `.csv` on the server and local. The gate returned
+   `official_ok_count=8`, `ccrp_ok=true`, and `gate_ok=true`: all eight
+   official rows plus `ccrp_v3_qwen3base_pointwise` have complete
+   HR@5/@10/@20, NDCG@5/@10/@20, MRR, 10,000 users, 101 candidates,
+   `score_coverage_rate=1.0`, expected row counts, and no gate failures.
+   This confirms sports result completeness, not a SOTA claim; paired tests
+   and the full comparison table remain required before any winner wording.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
