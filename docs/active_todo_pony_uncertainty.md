@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 03:10 CST
+Last updated: 2026-06-02 04:35 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -359,6 +359,22 @@ or review cycle.
   `outputs/baselines/paper_adapters/books_large10000_100neg_llmesr_adapter`
   directory was observed at about `1.3G` but was not removed because its final
   evidence/backup status was not audited in this cycle.
+- IRLLRec monitoring/cleanup decision follow-up: at 2026-06-02 04:35 CST,
+  toys IRLLRec was still healthy under runner PID `2923429` and adapter PID
+  `2923437`. The log had reached official training `epoch=500` of the default
+  `3000` epochs, with no traceback/OOM/killed/no-space/fatal markers. GPU was
+  active (`94%`, `16295 MiB / 49140 MiB`) and disk remained tight at about
+  `4.4G` free (`98%` used). The final evidence directory still had no
+  `scores.csv`, provenance, audit JSON, imported tables, or row-countable
+  predictions, so no lightweight sync or table claim is allowed yet. A
+  read-only cleanup audit inspected the old
+  `outputs/baselines/paper_adapters/books_large10000_100neg_llmesr_adapter`
+  directory: it contains `adapter_metadata.json`, `candidate_items_mapped.csv`
+  (`950M`), `item_text_seed.csv` (`350M`), maps, and LLM-ESR handled data,
+  while the corresponding final books directory is table-only and no local
+  lightweight evidence package was found. Therefore it is not classified as
+  disposable garbage in this cycle. The active IRLLRec adapter and all final
+  evidence directories were left untouched.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees

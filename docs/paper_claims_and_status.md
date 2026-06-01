@@ -542,7 +542,14 @@ external-baseline comparison.
    after embeddings completed and training reached epoch 30, disk had fallen to
    about `4.0G` free; only disposable pip cache/temp paths were removed after
    scope checks, recovering disk to about `4.4G` free without touching project
-   evidence or active adapters.
+   evidence or active adapters. At 04:35 CST, IRLLRec was still running at
+   epoch `500/3000`; GPU was active and disk remained about `4.4G` free. The
+   final evidence directory still lacked scores/provenance/audits/imported
+   tables, so toys remains 4/8 complete. A read-only cleanup audit did not find
+   another safe project artifact to remove: the old
+   `books_large10000_100neg_llmesr_adapter` contains historical adapter mapping
+   data while the corresponding final books directory is table-only and no
+   local lightweight package was found, so it was left intact.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing

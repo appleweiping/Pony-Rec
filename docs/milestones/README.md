@@ -744,6 +744,19 @@ not as a reason to silently rerun completed metric rows.
   (`/home/ajifang/.cache/pip` and `/tmp/pip-unpack-920865s3`), recovering disk
   to about `4.4G` free. No project evidence, final outputs, active adapters,
   checkpoints, scores, predictions, or other project directories were deleted.
+- IRLLRec monitoring/cleanup checkpoint 2026-06-02 04:35 CST: toys
+  `irllrec_intent` remains active under runner PID `2923429` and adapter PID
+  `2923437`. The log has reached epoch `500/3000`, GPU is active, disk is
+  still about `4.4G` free, and the final evidence directory still has no
+  `scores.csv`, provenance, score audit, imported tables, or predictions. A
+  read-only storage audit found no additional clearly disposable project
+  artifact: the old `books_large10000_100neg_llmesr_adapter` directory is
+  about `1.3G`, but it appears to contain historical adapter mapping/text data
+  while the corresponding final books directory is table-only and no local
+  lightweight package was found. It was not deleted. The next action remains
+  to let IRLLRec finish, then run server-final audit, lightweight sync,
+  local-light audit, and only then remove the completed toys IRLLRec
+  intermediate adapter after path/final-output checks.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
