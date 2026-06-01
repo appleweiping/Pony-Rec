@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 19:08 CST
+Last updated: 2026-06-01 19:20 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -42,7 +42,14 @@ or review cycle.
   with `scripts/audit/main_audit_domain_official_gate.py` passed:
   `official_ok_count=8`, `ccrp_ok=true`, `gate_ok=true`, and no stray
   official-like sports output directories remained after removing the confirmed
-  empty malformed directory.
+  empty malformed directory. A follow-up sports comparison/statistical gate
+  with `scripts/experiments/main_build_domain_official_comparison.py` also
+  passed: C-CRP ranks first by NDCG@10 and is observed-best on all seven full
+  metrics against the eight official baselines; all 56 C-CRP-vs-official paired
+  tests are positive and Holm-significant. The closest official row is
+  `llmemb` for all seven metrics; the smallest margin is HR@20 delta `0.0272`
+  with 95% paired-bootstrap CI `[0.0164, 0.0386]` and Holm p
+  `1.219129314796352e-06`.
 - Resolved LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
@@ -140,6 +147,20 @@ or review cycle.
   `outputs/sports_large10000_100neg_TRAIN_METHODS_OVERRIDE=_official_qwen3base_same_candidate`
   was removed. No experiment process, final score, provenance, or imported
   table was touched.
+- Sports comparison/statistical gate follow-up: at 2026-06-01 19:20 CST,
+  `scripts/experiments/main_build_domain_official_comparison.py` generated and
+  synced
+  `outputs/summary/sports_official_ccrp_20260601_comparison.csv`,
+  `outputs/summary/sports_official_ccrp_20260601_comparison.md`,
+  `outputs/summary/sports_official_ccrp_20260601_paired_tests.csv`, and
+  `outputs/summary/sports_official_ccrp_20260601_paired_summary.json`. The
+  comparison table has 9 methods (C-CRP + 8 official baselines) and full
+  HR@5/@10/@20, NDCG@5/@10/@20, and MRR. C-CRP is rank 1 and observed-best on
+  all seven metrics. The paired-test table has 56 tests (8 baselines x 7
+  metrics), all with `n_paired_events=10000`, positive deltas, 95% paired
+  bootstrap CIs above zero, and Holm-significant p-values. This supports a
+  sports-domain claim only; paper-wide SOTA wording still requires the
+  declared domain set and ARIS review.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -183,9 +204,11 @@ Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
 RLMRec, LLM2Rec, and LLM-ESR are now completed rows. Sports official baselines
-are 8/8 complete, and the sports domain gate passed for the eight official
-rows plus C-CRP. Sports can move to comparison-table construction and paired
-tests; no sports SOTA claim is allowed until those gates pass.
+are 8/8 complete, and the sports domain gate plus comparison/paired-test gate
+passed for the eight official rows plus C-CRP. Sports can be labeled a
+sports-domain passed gate. Paper-wide SOTA wording remains blocked until the
+declared domain set has aligned baseline results, comparison tables, paired
+tests, and ARIS review.
 
 ## Completed Checkpoints
 

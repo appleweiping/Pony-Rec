@@ -604,6 +604,21 @@ not as a reason to silently rerun completed metric rows.
   were cleaned without touching final scores, provenance, or imported tables.
   This is a result-completeness gate only; sports still needs the full
   comparison table and paired tests before any SOTA wording.
+- Sports comparison/statistical checkpoint 2026-06-01 19:20 CST: the read-only
+  `scripts/experiments/main_build_domain_official_comparison.py` script built
+  the sports C-CRP-vs-official comparison table and paired tests from existing
+  server artifacts. Outputs were synced locally:
+  `outputs/summary/sports_official_ccrp_20260601_comparison.csv`,
+  `outputs/summary/sports_official_ccrp_20260601_comparison.md`,
+  `outputs/summary/sports_official_ccrp_20260601_paired_tests.csv`, and
+  `outputs/summary/sports_official_ccrp_20260601_paired_summary.json`. C-CRP
+  is observed-best on all seven full metrics and rank 1 by NDCG@10. The
+  paired-test family covers 8 official baselines x 7 metrics = 56 tests, all
+  with `n_paired_events=10000`, positive deltas, 95% paired-bootstrap CIs above
+  zero, and Holm-significant p-values. The closest official baseline is
+  `llmemb` for all seven metrics; the smallest margin is HR@20 delta `0.0272`,
+  CI `[0.0164, 0.0386]`, Holm p `1.219129314796352e-06`. This is a
+  sports-domain pass, not a paper-wide SOTA claim.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

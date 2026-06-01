@@ -432,6 +432,21 @@ external-baseline comparison.
    `score_coverage_rate=1.0`, expected row counts, and no gate failures.
    This confirms sports result completeness, not a SOTA claim; paired tests
    and the full comparison table remain required before any winner wording.
+   At 2026-06-01 19:20 CST, `scripts/experiments/main_build_domain_official_comparison.py`
+   built that sports comparison/statistical gate from existing server
+   artifacts. The generated local/server outputs are
+   `outputs/summary/sports_official_ccrp_20260601_comparison.csv`,
+   `outputs/summary/sports_official_ccrp_20260601_comparison.md`,
+   `outputs/summary/sports_official_ccrp_20260601_paired_tests.csv`, and
+   `outputs/summary/sports_official_ccrp_20260601_paired_summary.json`.
+   C-CRP is rank 1 and observed-best on all seven full metrics. The paired
+   family has 56 tests (8 official baselines x HR@5/@10/@20, NDCG@5/@10/@20,
+   and MRR), all with 10,000 paired events, positive deltas, paired-bootstrap
+   95% CIs above zero, and Holm-significant p-values. Against the strongest
+   official row (`llmemb`), the closest margin is HR@20 delta `0.0272` with
+   CI `[0.0164, 0.0386]` and Holm p `1.219129314796352e-06`. This supports a
+   sports-domain passed gate only; paper-wide SOTA wording still requires the
+   declared domain set and ARIS review.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
