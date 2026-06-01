@@ -520,6 +520,18 @@ not as a reason to silently rerun completed metric rows.
   `tests/test_llm2rec_same_candidate_export.py` (`3 passed`). Next action:
   copy the fixed runner to the dirty server worktree, run `py_compile`, and
   resume only LLM2Rec with the existing upstream embedding path.
+- LLM2Rec resume checkpoint 2026-06-01 15:51 CST: the fixed runner was present
+  on the server and passed `py_compile`. The first direct single-row launch
+  timed out locally but did start sports `llm2rec_sasrec`; a follow-up safety
+  launcher detected the active process and refused to duplicate it. Active
+  processes are adapter PID `2875446` and upstream official
+  `evaluate_with_seqrec.py` PID `2875559`. The upstream official command uses
+  the existing embedding path
+  `/home/ajifang/projects/LLM2Rec/item_info/SportsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+  `llm2rec_official_training.log` reached epoch 15 validation and saved epoch
+  5/10 checkpoints. GPU sample was `7%`, `9363 MiB / 49140 MiB`, and disk had
+  `22G` free. No final scores/provenance/audit/imported metrics exist yet, so
+  LLM2Rec remains running and not table-eligible.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

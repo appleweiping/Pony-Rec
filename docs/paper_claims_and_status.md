@@ -361,7 +361,13 @@ external-baseline comparison.
    remains not paper/table eligible until the server resume produces final
    `scores.csv`, provenance, score audit, imported full `@5/@10/@20 + MRR`
    metrics, row-count checks, server-final audit, and local-light evidence
-   audit.
+   audit. At 2026-06-01 15:51 CST, the fixed runner had been verified on the
+   server and sports `llm2rec_sasrec` was active again: adapter PID `2875446`
+   and upstream official `evaluate_with_seqrec.py` PID `2875559`. The upstream
+   official command uses the existing Qwen3 embedding file rather than
+   regenerating it. The training log reached epoch 15 validation and saved
+   checkpoints at epochs 5 and 10. This is a running checkpoint only; no final
+   LLM2Rec row, metric table, provenance, or score audit is available yet.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
