@@ -619,6 +619,22 @@ not as a reason to silently rerun completed metric rows.
   `llmemb` for all seven metrics; the smallest margin is HR@20 delta `0.0272`,
   CI `[0.0164, 0.0386]`, Holm p `1.219129314796352e-06`. This is a
   sports-domain pass, not a paper-wide SOTA claim.
+- Storage/toys launch checkpoint 2026-06-01 19:48 CST: before launching the
+  next domain, a server preflight confirmed no active Pony/baseline process,
+  all four new-domain C-CRP reports present, sports official baselines 8/8,
+  and toys/home/tools official baselines 0/8. Disk was only `14G` free, so a
+  read-only storage audit was performed and disposable user caches under
+  `/home/ajifang/.cache` were removed after path verification:
+  `vllm`, `torch`, `google-chrome`, `mozilla`, and `JetBrains`. Disk recovered
+  to about `19G` free. No project outputs, final scores, provenance, imported
+  tables, predictions, checkpoints, or external task packages were deleted.
+  Because disk remains tight for the storage-heavy baselines, toys was started
+  as a single-row production loop rather than an all-method batch:
+  `proex_profile` launched at 2026-06-01 19:44 CST with runner PID `2893793`,
+  adapter PID `2893803`, PID file `baselines_new_domains_toys_proex.pid`, and
+  log `baselines_new_domains_toys_proex_20260601_194414.log`. At the 19:48
+  check it was in Qwen3 `hf_mean_pool` embedding at about `7088/215034`, GPU
+  `95%`, and disk about `18G` free. The row is running and not table-eligible.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

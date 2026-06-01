@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 19:20 CST
+Last updated: 2026-06-01 19:48 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,7 +27,18 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: none for sports official baselines. Sports `llmesr_sasrec`
+- Active runner: toys `proex_profile` official row. It launched on
+  2026-06-01 19:44 CST as a single-domain/single-method production run after
+  confirming no active Pony/baseline Python process. Runner PID is `2893793`,
+  adapter PID is `2893803`, log path is
+  `baselines_new_domains_toys_proex_20260601_194414.log`, and PID file is
+  `baselines_new_domains_toys_proex.pid`. It is in Qwen3 `hf_mean_pool`
+  embedding at about `7088/215034`; GPU sample was `95%`,
+  `16093 MiB / 49140 MiB`, and disk was about `18G` free. The row is running
+  and not table-eligible until final scores, provenance, score audit, imported
+  metrics, row counts, server-final audit, local-light sync, and local-light
+  audit pass.
+- Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
 - Latest checked state: 2026-06-01 19:08 CST, sports official baselines are
@@ -50,6 +61,16 @@ or review cycle.
   `llmemb` for all seven metrics; the smallest margin is HR@20 delta `0.0272`
   with 95% paired-bootstrap CI `[0.0164, 0.0386]` and Holm p
   `1.219129314796352e-06`.
+- Storage preflight for next-domain baselines: at 2026-06-01 19:41 CST, no
+  experiment process was active, but disk was only `14G` free (`93%` used).
+  A read-only storage audit identified sports final evidence as protected and
+  user-level caches as disposable. The caches
+  `/home/ajifang/.cache/vllm`, `/home/ajifang/.cache/torch`,
+  `/home/ajifang/.cache/google-chrome`, `/home/ajifang/.cache/mozilla`, and
+  `/home/ajifang/.cache/JetBrains` were removed after path verification under
+  `/home/ajifang/.cache`, recovering disk to about `19G` free. No final
+  scores, provenance, imported tables, predictions, checkpoints, external task
+  packages, or project outputs were deleted.
 - Resolved LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
@@ -161,6 +182,16 @@ or review cycle.
   bootstrap CIs above zero, and Holm-significant p-values. This supports a
   sports-domain claim only; paper-wide SOTA wording still requires the
   declared domain set and ARIS review.
+- Toys official-baseline launch follow-up: at 2026-06-01 19:44 CST, after the
+  cache cleanup and a no-active-experiment preflight, toys `proex_profile` was
+  launched as the next official row with:
+  `nohup env DOMAINS_OVERRIDE=toys FAST_METHODS_OVERRIDE=proex_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
+  This intentionally runs one low-space-risk row rather than the whole toys
+  domain, because disk remains tight and LLM2Rec/LLM-ESR/LLMEmb create large
+  protected checkpoints. At the 19:48 CST check, runner PID `2893793` and
+  adapter PID `2893803` were active, embedding progress was about
+  `7088/215034`, GPU was `95%`, and disk was about `18G` free. Do not start
+  another baseline until this row finishes or fails and has been audited.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -209,6 +240,19 @@ passed for the eight official rows plus C-CRP. Sports can be labeled a
 sports-domain passed gate. Paper-wide SOTA wording remains blocked until the
 declared domain set has aligned baseline results, comparison tables, paired
 tests, and ARIS review.
+
+## Toys Official Baselines
+
+| Method | Status | Evidence status |
+| --- | --- | --- |
+| `proex_profile` | running | launched 2026-06-01 19:44 CST, log `baselines_new_domains_toys_proex_20260601_194414.log`, runner PID `2893793`, adapter PID `2893803`; not table-eligible yet |
+| `llmemb` | not started | pending disk-aware single-row loop |
+| `promax_profile` | not started | pending after `proex_profile` gate |
+| `elmrec_graph` | not started | pending |
+| `irllrec_intent` | not started | pending |
+| `rlmrec_graphcl` | not started | pending |
+| `llm2rec_sasrec` | not started | pending; storage-heavy |
+| `llmesr_sasrec` | not started | pending; storage-heavy |
 
 ## Completed Checkpoints
 

@@ -448,7 +448,20 @@ external-baseline comparison.
    sports-domain passed gate only; paper-wide SOTA wording still requires the
    declared domain set and ARIS review.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
-   full @5/@10/@20 metrics, provenance, and row-count checks.
+   full @5/@10/@20 metrics, provenance, and row-count checks. At
+   2026-06-01 19:48 CST, the next-domain phase began with a storage preflight:
+   disk was only `14G` free, so disposable user caches under
+   `/home/ajifang/.cache` were removed after path verification, recovering
+   about `5G` and leaving about `19G` free without deleting project outputs or
+   protected evidence. Toys `proex_profile` was then launched as a
+   single-domain/single-method official row with runner PID `2893793`, adapter
+   PID `2893803`, PID file `baselines_new_domains_toys_proex.pid`, and log
+   `baselines_new_domains_toys_proex_20260601_194414.log`. At the 19:48 check
+   it was in Qwen3 `hf_mean_pool` embedding at about `7088/215034`, with GPU
+   `95%` and disk about `18G` free. This row is running and not yet
+   table-eligible; do not include it in claims until final score/provenance,
+   audits, imported full metrics, row counts, local-light sync, and paired
+   evidence gates pass.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing
