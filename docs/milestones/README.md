@@ -448,6 +448,15 @@ not as a reason to silently rerun completed metric rows.
   directory still contains only `inspect_fairness_provenance.json`; no final
   scores/provenance/audit/table package exists, so sports official evidence
   remains five completed rows.
+- Monitoring checkpoint 2026-06-01 10:41 CST: sports `rlmrec_graphcl` passed
+  the 1000-epoch training checkpoint and reached
+  `[rlmrec-official] epoch=1030 train_loss=1.478778`. The epoch-1000 loss was
+  `1.477797`. The process remains active under child PID `2851207`; GPU was
+  `6%` at sample time with `19943 MiB / 49140 MiB`, disk remained `28G` free
+  (`85%` used), and fatal/OOM/CUDA/no-space scans remained clean. The output
+  directory still contains only `inspect_fairness_provenance.json`; no final
+  scores/provenance/audit/table package exists, so sports official evidence
+  remains five completed rows.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
