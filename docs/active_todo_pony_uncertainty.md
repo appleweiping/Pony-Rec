@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 08:34 CST
+Last updated: 2026-06-01 08:41 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -29,9 +29,9 @@ or review cycle.
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
 - Active row: sports `rlmrec_graphcl`, child PID `2851207`
-- Latest checked progress: 2026-06-01 08:34 CST, RLMRec Qwen embedding
-  generation `105376/233470`; no RLMRec training epochs yet
-- GPU/disk at latest check: GPU `94%`, `16285 MiB / 49140 MiB`, disk `32G`
+- Latest checked progress: 2026-06-01 08:41 CST, RLMRec Qwen embedding
+  generation `135424/233470`; no RLMRec training epochs yet
+- GPU/disk at latest check: GPU `95%`, `16285 MiB / 49140 MiB`, disk `32G`
   free (`83%` used)
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
@@ -72,7 +72,7 @@ Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec is not yet a completed row: as of 2026-06-01 08:34 CST its output
+RLMRec is not yet a completed row: as of 2026-06-01 08:41 CST its output
 directory contains only `inspect_fairness_provenance.json`; there is no final
 `scores.csv`, score audit, imported table, run summary, or final
 `fairness_provenance.json` to audit or sync.
