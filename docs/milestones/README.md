@@ -150,8 +150,8 @@ not as a reason to silently rerun completed metric rows.
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports has all eight
-   audited official rows complete; toys has three audited official rows
-   complete and its fourth row is running; home/tools remain pending.
+   audited official rows complete; toys has four audited official rows
+   complete; home/tools remain pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -711,15 +711,24 @@ not as a reason to silently rerun completed metric rows.
   After verifying protected final evidence and no active ElmRec process, the
   completed intermediate adapter directory was removed, recovering disk from
   about `12G` to `16G` free.
-- Toys LLMEmb launch checkpoint 2026-06-02 01:46 CST: after the ElmRec gate and
-  cleanup, toys `llmemb` was launched as the next disk-aware single-row
-  official baseline. The intended adapter is active as PID `2915450` under
-  runner PID `2915438`; log path is
-  `baselines_new_domains_toys_llmemb_20260602_014334.log`. At the first
-  stable check it was in Qwen3 `hf_mean_pool` embedding at about `1592/215034`,
-  GPU used about `15945 MiB / 49140 MiB`, and disk was about `15G` free. No
-  LLMEmb final scores/provenance/audit/import package exists yet, so the row is
-  not table-eligible.
+- Toys LLMEmb completion checkpoint 2026-06-02 03:04 CST: toys `llmemb`
+  completed as the fourth toys official row with
+  `implementation_status=official_completed`, `blockers=[]`, and
+  `score_coverage_rate=1.0`. Server-final and local-light audits passed with
+  full metrics over 10,000 users and 101 candidates:
+  HR@5/10/20 `0.2499 / 0.3505 / 0.4866`, NDCG@5/10/20
+  `0.17252113274887534 / 0.20485045979333913 / 0.23905481091819092`, and MRR
+  `0.1813804118284203`. Row counts passed for `scores.csv` (`1,010,001`
+  lines), predictions (`10,000` lines), and
+  `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+  package is
+  `outputs/baselines/official_adapters/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/`.
+  A server-side sha256 manifest records `scores.csv`,
+  `predictions/rank_predictions.jsonl`, and `llmemb_official_model.pt`; those
+  large files remain server-only. After verifying protected final evidence and
+  no active LLMEmb Python process, the completed intermediate adapter directory
+  was removed, recovering disk from about `4.0G` to `8.3G` free without
+  touching final evidence. Toys official baselines are now 4/8 complete.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

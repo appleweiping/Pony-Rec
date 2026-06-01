@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 01:46 CST
+Last updated: 2026-06-02 03:10 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,18 +27,13 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `llmemb` official row. It launched on 2026-06-02
-  01:43 CST after toys `elmrec_graph` completed all final gates and the
-  ElmRec intermediate adapter directory was safely removed. Runner PID is
-  `2915438`, adapter PID is `2915450`, log path is
-  `baselines_new_domains_toys_llmemb_20260602_014334.log`, and PID files are
-  `baselines_new_domains_toys_llmemb_runner.pid` and
-  `baselines_new_domains_toys_llmemb_adapter.pid`. At the 2026-06-02
-  01:46 CST check it was in Qwen3 `hf_mean_pool` embedding at about
-  `1592/215034`, GPU sample was about `95%`, `15945 MiB / 49140 MiB`, and
-  disk was about `15G` free. The row is running and not table-eligible until
-  final scores, provenance, score audit, imported metrics, row counts,
-  server-final audit, local-light sync, and local-light audit pass.
+- Active runner: none for Pony official-baseline Python processes at the
+  2026-06-02 03:10 CST checkpoint. Toys `llmemb` completed at 03:04 CST and
+  passed the same server-final, lightweight-sync, local-light, row-count, and
+  full-metric gates as the earlier toys rows. A stale SSH launch wrapper shell
+  from the timed-out launch command may still match `run_baselines_new_domains`
+  in broad `pgrep` output; it is not an active adapter/training process and was
+  not killed.
 - Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
@@ -310,6 +305,28 @@ or review cycle.
   was `95%` with `15945 MiB / 49140 MiB`, disk was `15G` free (`92%` used),
   and no final score/provenance/audit/import package existed yet. Do not start
   another baseline until this row finishes or fails and has been audited.
+- Toys LLMEmb completion/package follow-up: at 2026-06-02 03:04 CST, toys
+  `llmemb` completed as `implementation_status=official_completed`,
+  `blockers=[]`, and `score_coverage_rate=1.0`. Server-final evidence audit
+  passed with full metrics over 10,000 users and 101 candidates:
+  HR@5/10/20 `0.2499 / 0.3505 / 0.4866`, NDCG@5/10/20
+  `0.17252113274887534 / 0.20485045979333913 / 0.23905481091819092`, and MRR
+  `0.1813804118284203`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. Local lightweight evidence sync and local-light audit passed under
+  `outputs/baselines/official_adapters/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/`;
+  the sync manifest has `allowed_file_count=11`, `excluded_file_count=4`, and
+  `failures=0`. The local package keeps provenance, run summary, score audits,
+  server-final audit, server large-artifact manifest, ranking metrics, coverage,
+  exposure, and per-user ranking eval records; it intentionally excludes
+  server-only `scores.csv`, predictions, `llmemb_official_model.pt`, and
+  `server_large_artifact_sizes.txt`. After verifying no active LLMEmb Python
+  process, server-final audit `ok=true`, local-light audit `ok=true`, and
+  protected final outputs, the completed intermediate adapter directory
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_llmemb_official_adapter`
+  was removed, recovering disk from about `4.0G` to `8.3G` free. Final server
+  scores, provenance, audits, predictions, imported tables, and model were not
+  deleted.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -364,7 +381,7 @@ tests, and ARIS review.
 | Method | Status | Evidence status |
 | --- | --- | --- |
 | `proex_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llmemb` | running | launched 2026-06-02 01:43 CST, log `baselines_new_domains_toys_llmemb_20260602_014334.log`, runner PID `2915438`, adapter PID `2915450`; at 01:46 CST embedding progress was about `1592/215034`; not table-eligible yet |
+| `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `irllrec_intent` | not started | pending |
@@ -372,9 +389,11 @@ tests, and ARIS review.
 | `llm2rec_sasrec` | not started | pending; storage-heavy |
 | `llmesr_sasrec` | not started | pending; storage-heavy |
 
-Toys official baselines are now 3/8 complete (`proex_profile`,
-`promax_profile`, `elmrec_graph`). `llmemb` is the active fourth row and is not
-table-eligible until the same gates pass.
+Toys official baselines are now 4/8 complete (`proex_profile`, `llmemb`,
+`promax_profile`, `elmrec_graph`). The remaining rows are `irllrec_intent`,
+`rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`. Do not build a toys
+SOTA comparison table until all eight official rows and C-CRP imported evidence
+pass the same gate.
 
 ## Completed Checkpoints
 
