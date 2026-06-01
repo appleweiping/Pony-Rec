@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 04:56 CST
+Last updated: 2026-06-02 06:47 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,21 +27,21 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `irllrec_intent` official row. It launched on
-  2026-06-02 03:16 CST after toys `llmemb` completed all final gates and the
-  LLMEmb intermediate adapter directory was safely removed. Runner PID is
-  `2923429`, adapter PID is `2923437`, log path is
-  `baselines_new_domains_toys_irllrec_20260602_031623.log`, and PID files are
-  `baselines_new_domains_toys_irllrec_runner.pid` and
-  `baselines_new_domains_toys_irllrec_adapter.pid`. At the 03:19 CST check it
-  was in Qwen3 `hf_mean_pool` embedding at about `1400/215034`, GPU sample was
-  about `96%`, `15945 MiB / 49140 MiB`, and disk was about `7.3G` free. The
-  row is running and not table-eligible until final scores, provenance, score
+- Active runner: toys `rlmrec_graphcl` official row. It launched on
+  2026-06-02 06:44 CST after toys `irllrec_intent` completed all final gates
+  and the completed IRLLRec intermediate adapter directory was safely removed.
+  Intended runner PID is `2937284`, adapter PID is `2937292`, log path is
+  `baselines_new_domains_toys_rlmrec_20260602_064443.log`, and corrected PID
+  files are `baselines_new_domains_toys_rlmrec_runner.pid` and
+  `baselines_new_domains_toys_rlmrec_adapter.pid`. At the 06:47 CST check it
+  was in Qwen3 `hf_mean_pool` embedding at about `1664/215034`, GPU sample was
+  `99%` with `15945 MiB / 49140 MiB`, and disk was about `8.8G` free. The row
+  is running and not table-eligible until final scores, provenance, score
   audit, imported metrics, row counts, server-final audit, local-light sync,
-  and local-light audit pass. Stale SSH launch wrapper shells from prior
-  timed-out launch commands may still match `run_baselines_new_domains` in
-  broad `pgrep` output; they are not adapter/training Python processes and
-  were not killed.
+  and local-light audit pass. Stale SSH launch wrapper shells from the timed
+  out launch command may match `run_baselines_new_domains` in broad process
+  output; they are not extra adapter/training Python processes and were not
+  killed.
 - Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
@@ -396,6 +396,38 @@ or review cycle.
   final evidence, active adapters, models, conda/Python environments, or other
   projects. VSCode remote server binaries can be reinstalled by VSCode if
   needed later.
+- Toys IRLLRec completion/package follow-up: at 2026-06-02 06:35 CST, toys
+  `irllrec_intent` completed as `implementation_status=official_completed`,
+  `blockers=[]`, and `score_coverage_rate=1.0`. Server-final audit passed with
+  `ok=true`, `failures=[]`, full metrics over 10,000 users and 101 candidates:
+  HR@5/10/20 `0.1565 / 0.2293 / 0.4098`, NDCG@5/10/20
+  `0.11049209461545026 / 0.13380144693674725 / 0.1785851471792316`, and MRR
+  `0.1311986744710446`. Row counts passed for `scores.csv` (`1,010,001`
+  lines), predictions (`10,000` lines), and
+  `tables/ranking_eval_records.csv` (`10,001` lines). A server-side sha256
+  manifest records server-only `scores.csv`,
+  `predictions/rank_predictions.jsonl`, and `irllrec_official_model.pt`.
+  Lightweight sync and local-light audit passed under
+  `outputs/baselines/official_adapters/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`
+  with 11 allowlist files matched by size and sha256 and 4 excluded server-only
+  files. After verifying no active IRLLRec Python process, protected final
+  evidence, and realpath scope under `outputs/baselines/paper_adapters/`, the
+  completed intermediate adapter directory
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_irllrec_official_adapter`
+  was removed. Disk recovered from about `5.4G` to `9.7G` free; final scores,
+  provenance, audits, predictions, imported tables, and model were not deleted.
+- Toys RLMRec launch follow-up: at 2026-06-02 06:44 CST, after the IRLLRec
+  gate/package/cleanup preflight, toys `rlmrec_graphcl` was launched as the
+  next single-row official baseline with:
+  `nohup env DOMAINS_OVERRIDE=toys FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=rlmrec_graphcl bash scripts/run_baselines_new_domains.sh`.
+  The local SSH command timed out while the remote job continued, so PID files
+  were corrected after process inspection. Runner PID is `2937284`, adapter PID
+  is `2937292`, and log path is
+  `baselines_new_domains_toys_rlmrec_20260602_064443.log`. At the 06:47 CST
+  check it was active in Qwen3 `hf_mean_pool` embedding at about `1664/215034`,
+  GPU was `99%` with `15945 MiB / 49140 MiB`, and disk was about `8.8G` free.
+  Do not start another baseline until this row finishes or fails and has been
+  audited.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -453,16 +485,16 @@ tests, and ARIS review.
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `irllrec_intent` | running | launched 2026-06-02 03:16 CST, log `baselines_new_domains_toys_irllrec_20260602_031623.log`, runner PID `2923429`, adapter PID `2923437`; at 03:19 CST embedding progress was about `1400/215034`; not table-eligible yet |
-| `rlmrec_graphcl` | not started | pending |
+| `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `rlmrec_graphcl` | running | launched 2026-06-02 06:44 CST, log `baselines_new_domains_toys_rlmrec_20260602_064443.log`, runner PID `2937284`, adapter PID `2937292`; at 06:47 CST embedding progress was about `1664/215034`; not table-eligible yet |
 | `llm2rec_sasrec` | not started | pending; storage-heavy |
 | `llmesr_sasrec` | not started | pending; storage-heavy |
 
-Toys official baselines are now 4/8 complete (`proex_profile`, `llmemb`,
-`promax_profile`, `elmrec_graph`). The remaining rows are `irllrec_intent`,
-`rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`. Do not build a toys
-SOTA comparison table until all eight official rows and C-CRP imported evidence
-pass the same gate.
+Toys official baselines are now 5/8 complete (`proex_profile`, `llmemb`,
+`promax_profile`, `elmrec_graph`, and `irllrec_intent`). The remaining rows are
+the active `rlmrec_graphcl`, plus pending `llm2rec_sasrec` and
+`llmesr_sasrec`. Do not build a toys SOTA comparison table until all eight
+official rows and C-CRP imported evidence pass the same gate.
 
 ## Completed Checkpoints
 

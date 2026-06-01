@@ -184,8 +184,8 @@ external-baseline comparison.
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports is now 8/8 complete; toys is 4/8 complete; home/tools
-   remain pending.
+   score file. Sports is now 8/8 complete; toys is 5/8 complete with
+   `rlmrec_graphcl` currently running; home/tools remain pending.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
@@ -562,6 +562,29 @@ external-baseline comparison.
    a no-process check and realpath prefix verification, recovering disk to
    about `6.4G` free without touching project outputs, final evidence, active
    adapters, models, conda/Python environments, or other projects.
+   At 2026-06-02 06:35 CST, toys `irllrec_intent` completed as the fifth
+   official row with `implementation_status=official_completed`, `blockers=[]`,
+   and `score_coverage_rate=1.0`. Server-final audit and local-light audit
+   passed with full metrics over 10,000 users and 101 candidates: HR@5/10/20
+   `0.1565 / 0.2293 / 0.4098`, NDCG@5/10/20
+   `0.11049209461545026 / 0.13380144693674725 / 0.1785851471792316`, and MRR
+   `0.1311986744710446`. Row counts passed for `scores.csv` (`1,010,001`
+   lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+   package is
+   `outputs/baselines/official_adapters/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`;
+   final `scores.csv`, predictions, and `irllrec_official_model.pt` remain
+   server-only and covered by `server_large_artifact_manifest.sha256`. After
+   audits and local sync passed, the completed IRLLRec intermediate adapter
+   directory was removed, recovering disk from about `5.4G` to `9.7G` free
+   without touching final evidence. Toys now has 5/8 completed official
+   baselines. At 2026-06-02 06:44 CST, toys `rlmrec_graphcl` was launched as
+   the next single-row official baseline with runner PID `2937284`, adapter PID
+   `2937292`, and log `baselines_new_domains_toys_rlmrec_20260602_064443.log`;
+   at the 06:47 CST check it was in Qwen3 `hf_mean_pool` embedding at about
+   `1664/215034`, GPU `99%`, and disk about `8.8G` free. This row is running
+   and not table-eligible until final score/provenance, audits, imported full
+   metrics, row counts, local-light sync, and paired evidence gates pass.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing
