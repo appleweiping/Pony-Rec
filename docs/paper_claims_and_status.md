@@ -199,7 +199,11 @@ external-baseline comparison.
    `rlmrec_graphcl` currently running; home/tools remain pending. At the
    2026-06-02 07:18 CST monitoring checkpoint, toys `rlmrec_graphcl` was still
    in Qwen3 `hf_mean_pool` embedding at about `133152/215034`, GPU and disk
-   were healthy enough to continue, and the recent error scan was clean.
+   were healthy enough to continue, and the recent error scan was clean. At
+   2026-06-02 07:48 CST, the embedding pass had completed (`215034/215034`)
+   and official RLMRec training had reached epoch 90 with loss `1.496428`;
+   disk was tight at about `5.4G` free and no final score/provenance/audit or
+   imported tables existed yet, so this row remains non-table-eligible.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

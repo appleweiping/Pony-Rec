@@ -823,6 +823,16 @@ not as a reason to silently rerun completed metric rows.
   counts are present under `outputs/toys_large10000_100neg_ccrp_v3`, but
   imported prediction/metric/coverage tables still need reconciliation before
   a toys comparison table is paper-facing.
+- Toys RLMRec training checkpoint 2026-06-02 07:48 CST: the Qwen3 embedding
+  pass completed (`215034/215034`) and toys `rlmrec_graphcl` entered official
+  training. The latest logged line was `[rlmrec-official] epoch=90
+  train_loss=1.496428`; the familiar non-fatal graph normalization warnings
+  appeared before training. No final score/provenance/audit/import package
+  exists yet. Disk fell to about `5.4G` free (`98%` used) as the active RLMRec
+  adapter grew to about `4.3G`. A read-only cleanup audit did not find a safe
+  large deletion target: the active adapter must stay, the old books LLM-ESR
+  adapter is not yet verified as disposable, and `.vscode-server` has live
+  Code-related processes. Continue monitoring disk through final export.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

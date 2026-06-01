@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 07:18 CST
+Last updated: 2026-06-02 07:48 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -35,14 +35,20 @@ or review cycle.
   files are `baselines_new_domains_toys_rlmrec_runner.pid` and
   `baselines_new_domains_toys_rlmrec_adapter.pid`. At the 06:47 CST check it
   was in Qwen3 `hf_mean_pool` embedding at about `1664/215034`; at the
-  07:18 CST check it had reached about `133152/215034`. GPU was active
-  (`98%`, `16285 MiB / 49140 MiB`, 75C), disk was still about `8.8G` free, and
-  the error scan was clean. The row is running and not table-eligible until
-  final scores, provenance, score audit, imported metrics, row counts,
-  server-final audit, local-light sync, and local-light audit pass. Stale SSH
-  launch/audit wrapper shells may match broad process scans; they were checked
-  at `0.0%` CPU/MEM and were left untouched because they are not additional
-  adapter/training Python processes.
+  07:18 CST check it had reached about `133152/215034`; at the 07:48 CST check
+  the embedding pass had completed (`215034/215034`) and official RLMRec
+  training had reached `epoch=90`, `train_loss=1.496428`. GPU was active
+  again after the transition, the active adapter directory was about `4.3G`,
+  disk was about `5.4G` free (`98%` used), and the error scan was clean. The
+  row is running and not table-eligible until final scores, provenance, score
+  audit, imported metrics, row counts, server-final audit, local-light sync,
+  and local-light audit pass. Stale SSH launch/audit wrapper shells may match
+  broad process scans; they were checked at `0.0%` CPU/MEM and were left
+  untouched because they are not additional adapter/training Python processes.
+  A read-only disk audit found no safe large cleanup target: the active RLMRec
+  adapter must be preserved, a `1.3G` old books LLM-ESR adapter remains
+  unverified and was not deleted, normal caches are small, and `.vscode-server`
+  has live Code-related processes.
 - Toys C-CRP v3 evidence note: the core result directory
   `outputs/toys_large10000_100neg_ccrp_v3` exists on the server with complete
   full metrics in `report.json`, `scores.csv` line count `1,010,001`, and
@@ -500,7 +506,7 @@ tests, and ARIS review.
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `rlmrec_graphcl` | running | launched 2026-06-02 06:44 CST, log `baselines_new_domains_toys_rlmrec_20260602_064443.log`, runner PID `2937284`, adapter PID `2937292`; at 07:18 CST embedding progress was about `133152/215034`; not table-eligible yet |
+| `rlmrec_graphcl` | running | launched 2026-06-02 06:44 CST, log `baselines_new_domains_toys_rlmrec_20260602_064443.log`, runner PID `2937284`, adapter PID `2937292`; at 07:48 CST embedding had completed and official training reached epoch 90; not table-eligible yet |
 | `llm2rec_sasrec` | not started | pending; storage-heavy |
 | `llmesr_sasrec` | not started | pending; storage-heavy |
 
@@ -521,6 +527,19 @@ gate currently marks toys C-CRP as incomplete only because its imported
 same-candidate tables are not present at the gate's expected imported path;
 the raw C-CRP `report.json`, `scores.csv`, and `user_ranks.jsonl` are present
 and metric-complete under `outputs/toys_large10000_100neg_ccrp_v3`.
+
+RLMRec training checkpoint 2026-06-02 07:48 CST: toys `rlmrec_graphcl`
+finished the Qwen3 embedding pass (`215034/215034`) and entered official
+training. The latest training line was `[rlmrec-official] epoch=90
+train_loss=1.496428`; the same non-fatal graph normalization warnings seen in
+previous RLMRec runs appeared before training. No final
+`scores.csv`, provenance, score audit, imported tables, or predictions exist
+yet, so no local package or table row is allowed. Disk dropped to about `5.4G`
+free because the active adapter directory grew to about `4.3G`. A read-only
+cleanup audit did not find a safe large deletion: active RLMRec artifacts must
+stay, the old `books_large10000_100neg_llmesr_adapter` remains unverified, and
+`.vscode-server` has live Code-related processes. Monitor disk closely through
+final export.
 
 ## Completed Checkpoints
 
