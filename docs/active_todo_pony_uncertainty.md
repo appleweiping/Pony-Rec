@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 15:56 CST
+Last updated: 2026-06-01 16:28 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,14 +27,13 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: none for LLM2Rec at 2026-06-01 15:56 CST. Sports
-  `llm2rec_sasrec` completed after the `sys.executable` runner fix and has
-  passed score audit, same-candidate import, server-final audit, lightweight
-  sync, and local-light audit.
-- Latest checked state: 2026-06-01 15:56 CST, GPU idle (`0%`,
-  `15 MiB / 49140 MiB`) and disk has `17G` free (`91%` used). Disk is now a
-  watch item before starting sports `llmesr_sasrec`; do not delete final
-  scores/provenance/audits/imported tables/predictions/checkpoints.
+- Active runner: sports `llmesr_sasrec`, launched 2026-06-01 16:13 CST as a
+  single-row production run with runner PID `2877443` and adapter PID
+  `2877452`.
+- Latest checked state: 2026-06-01 16:28 CST, LLM-ESR is in Qwen3
+  `hf_mean_pool` embedding at about `51472/233470`; GPU sample was `95%`,
+  `16285 MiB / 49140 MiB`, and disk has `22G` free (`89%` used). No final
+  LLM-ESR scores/provenance/imported tables exist yet.
 - Current LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
@@ -74,6 +73,12 @@ or review cycle.
   was removed. This recovered about `4.5G` and did not touch final RLMRec
   scores, provenance, audits, imported tables, predictions, or local
   lightweight evidence.
+- Storage cleanup follow-up: after LLM2Rec server-final and local-light audits
+  passed, the completed LLM2Rec intermediate adapter directory
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter`
+  was removed. This recovered about `5.3G` and did not touch final LLM2Rec
+  scores, final provenance, audits, imported tables, predictions, checkpoints,
+  or the upstream embedding under `/home/ajifang/projects/LLM2Rec/item_info/`.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -110,7 +115,7 @@ or review cycle.
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
 | `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
 | `llm2rec_sasrec` | complete | local lightweight package PASS; server-final package PASS |
-| `llmesr_sasrec` | pending | inspect-only placeholder |
+| `llmesr_sasrec` | running | Qwen3 embedding active under runner PID `2877443`, adapter PID `2877452`; not table-eligible |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
@@ -266,14 +271,15 @@ evidence is under
 
 ## Required Next Actions
 
-1. Preflight disk/process state before starting sports `llmesr_sasrec`; disk
-   is only `17G` free after LLM2Rec completion.
-2. Repeat the evidence loop for sports `llmesr_sasrec`.
-4. After all eight sports official rows complete, build the sports comparison
+1. Monitor active sports `llmesr_sasrec` PIDs `2877443`/`2877452` without
+   stopping or duplicating them. If it completes, run score audit,
+   same-candidate import, server-final audit, lightweight sync, local-light
+   audit, and full metric/row-count recording.
+2. After all eight sports official rows complete, build the sports comparison
    table and paired/statistical tests. Do not claim sports SOTA until the
    complete same-candidate table and paired tests pass.
-5. Continue the same official-baseline protocol for toys, home, and tools.
-6. Only after the declared experiments, comparisons, ablations, provenance,
+3. Continue the same official-baseline protocol for toys, home, and tools.
+4. Only after the declared experiments, comparisons, ablations, provenance,
     statistical tests, and figure checks are complete, move to ARIS paper
     writing and GPT-5.5/Codex xhigh review. The review loop must reach at
     least 8/10 before submission-level readiness is claimed.

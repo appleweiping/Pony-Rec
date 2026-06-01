@@ -545,6 +545,19 @@ not as a reason to silently rerun completed metric rows.
   `tables/ranking_eval_records.csv` has `10,001` lines. Disk is now `17G`
   free (`91%` used), so preflight cleanup/disk review is needed before
   launching sports `llmesr_sasrec`.
+- Storage/LLM-ESR launch checkpoint 2026-06-01 16:28 CST: the completed
+  LLM2Rec intermediate adapter directory
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter`
+  was removed after LLM2Rec server-final and local-light audits passed and
+  final evidence paths were rechecked. This recovered about `5.3G`, raising
+  free disk to about `23G`, and did not touch final LLM2Rec scores,
+  provenance, audits, imported tables, predictions, checkpoints, or the
+  upstream embedding under `/home/ajifang/projects/LLM2Rec/item_info/`.
+  Sports `llmesr_sasrec` was then launched as the final sports official row
+  with runner PID `2877443` and adapter PID `2877452`. It is currently in Qwen3
+  `hf_mean_pool` embedding at about `51472/233470`; GPU sample was `95%`,
+  `16285 MiB / 49140 MiB`, and disk had `22G` free. LLM-ESR is running and
+  not table-eligible until final score/provenance/audit/import gates pass.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

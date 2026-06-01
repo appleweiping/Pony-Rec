@@ -378,7 +378,15 @@ external-baseline comparison.
    (`1,010,001` lines), predictions (`10,000` lines), and
    `tables/ranking_eval_records.csv` (`10,001` lines). Sports now has seven
    completed official rows; no sports SOTA claim is allowed until LLM-ESR,
-   the full eight-baseline table, and paired tests finish.
+   the full eight-baseline table, and paired tests finish. At 2026-06-01
+   16:28 CST, the completed LLM2Rec intermediate adapter directory was removed
+   after server-final/local-light audit checks, recovering about `5.3G`
+   without touching final LLM2Rec evidence or the upstream embedding. Sports
+   `llmesr_sasrec` was then launched as the eighth sports official row under
+   runner PID `2877443` and adapter PID `2877452`; it is in Qwen3
+   `hf_mean_pool` embedding at about `51472/233470`. This is a running
+   checkpoint only: LLM-ESR has no final scores/provenance/imported metrics
+   yet and is not table-eligible.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
