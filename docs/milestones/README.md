@@ -149,14 +149,11 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports has six audited
+2. 8 official baselines on 4 new domains (Phase 2) — sports has seven audited
    official rows complete: `llmemb`, `proex_profile`, `promax_profile`,
-   `elmrec_graph`, `irllrec_intent`, and `rlmrec_graphcl`. `llm2rec_sasrec`
-   has passed the validation-history export fix and completed full Qwen3 item
-   embedding, but stopped before official SASRec training because the runner
-   invoked bare `python` in the server environment. Local fix switches that
-   wrapper command to `sys.executable`; resume LLM2Rec only, reusing the
-   existing upstream embedding.
+   `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and `llm2rec_sasrec`.
+   The final sports row, `llmesr_sasrec`, is currently running and is not
+   table-eligible until final score/provenance/audit/import gates pass.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -165,11 +162,9 @@ not as a reason to silently rerun completed metric rows.
 
 - Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
 - Phase 2 sports official-baseline run started 2026-05-31:
-  `baselines_new_domains_sports.log`, runner PID `2794722`. Sports completed
-  `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`,
-  `irllrec_intent`, and `rlmrec_graphcl`. No related Python process was active
-  at the 2026-06-01 15:14 CST check; sports `llm2rec_sasrec` is resume-ready
-  after a runner-environment fix, not table-eligible.
+  `baselines_new_domains_sports.log`, runner PID `2794722`. Sports now has
+  seven completed official rows; `llmesr_sasrec` was launched separately as
+  the final sports row under runner PID `2877443` and adapter PID `2877452`.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must
@@ -558,6 +553,19 @@ not as a reason to silently rerun completed metric rows.
   `hf_mean_pool` embedding at about `51472/233470`; GPU sample was `95%`,
   `16285 MiB / 49140 MiB`, and disk had `22G` free. LLM-ESR is running and
   not table-eligible until final score/provenance/audit/import gates pass.
+- Monitoring/gate checkpoint 2026-06-01 16:50 CST: sports `llmesr_sasrec`
+  remains active under runner PID `2877443` and adapter PID `2877452`, with
+  Qwen3 `hf_mean_pool` embedding progress about `141696/233470`. GPU sample
+  was `95%`, `16285 MiB / 49140 MiB`, disk remained about `22G` free (`89%`
+  used), and no final LLM-ESR `scores.csv`, final provenance, score audit,
+  imported table, or predictions exist yet. A complete-metrics gate also
+  rechecked the seven completed sports rows: each has HR@5/@10/@20,
+  NDCG@5/@10/@20, MRR, `sample_count=10000`, `avg_candidates=101.0`, exact
+  1,010,000/1,010,000 score coverage, final provenance, score audit, and
+  imported `ranking_eval_records.csv`. The four earliest completed rows were
+  missing only the newly standardized `server_final_evidence_audit.json`; that
+  JSON was backfilled on the server, copied to local lightweight packages, and
+  local-light audits passed for all four without changing any scores.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

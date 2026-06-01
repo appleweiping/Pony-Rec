@@ -386,7 +386,20 @@ external-baseline comparison.
    runner PID `2877443` and adapter PID `2877452`; it is in Qwen3
    `hf_mean_pool` embedding at about `51472/233470`. This is a running
    checkpoint only: LLM-ESR has no final scores/provenance/imported metrics
-   yet and is not table-eligible.
+   yet and is not table-eligible. At 2026-06-01 16:50 CST, LLM-ESR was still
+   running under the same PIDs, with embedding progress about
+   `141696/233470`, GPU sample `95%`, `16285 MiB / 49140 MiB`, and about
+   `22G` free disk. No LLM-ESR `scores.csv`, final provenance, score audit,
+   imported table, or predictions exist yet. The completed sports rows were
+   also rechecked for the user's full-metric concern: the seven completed rows
+   all have HR@5/@10/@20, NDCG@5/@10/@20, MRR, `sample_count=10000`,
+   `avg_candidates=101.0`, exact 1,010,000/1,010,000 score coverage, final
+   provenance, score audit, and imported `ranking_eval_records.csv`. The four
+   earliest rows (`llmemb`, `proex_profile`, `promax_profile`, and
+   `elmrec_graph`) lacked only the newer standardized
+   `server_final_evidence_audit.json`; that audit was backfilled with
+   `ok=true` on the server and local-light audits passed after copying the new
+   JSONs into the local lightweight packages. No scores changed.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

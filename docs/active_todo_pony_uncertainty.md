@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 16:28 CST
+Last updated: 2026-06-01 16:50 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -30,11 +30,14 @@ or review cycle.
 - Active runner: sports `llmesr_sasrec`, launched 2026-06-01 16:13 CST as a
   single-row production run with runner PID `2877443` and adapter PID
   `2877452`.
-- Latest checked state: 2026-06-01 16:28 CST, LLM-ESR is in Qwen3
-  `hf_mean_pool` embedding at about `51472/233470`; GPU sample was `95%`,
-  `16285 MiB / 49140 MiB`, and disk has `22G` free (`89%` used). No final
-  LLM-ESR scores/provenance/imported tables exist yet.
-- Current LLM2Rec recovery: the full embedding artifact completed. Both
+- Latest checked state: 2026-06-01 16:48 CST, LLM-ESR is still in Qwen3
+  `hf_mean_pool` embedding at about `141696/233470`; GPU sample was `95%`,
+  `16285 MiB / 49140 MiB`, and disk has `22G` free (`89%` used). The final
+  LLM-ESR output directory is still only `8.0K`; no final LLM-ESR
+  scores/provenance/imported tables exist yet. The fixed-string error scan
+  only matched the harmless model-loading `Notes:` line already seen in prior
+  runs.
+- Resolved LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
   `/home/ajifang/projects/LLM2Rec/item_info/SportsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
@@ -47,11 +50,11 @@ or review cycle.
   `python`. Targeted tests passed:
   `tests/test_llm2rec_upstream_adapter.py` (`5 passed`) and
   `tests/test_llm2rec_same_candidate_export.py` (`3 passed`).
-- Latest completed row: sports `rlmrec_graphcl`, completed 2026-06-01
-  13:43 CST with `implementation_status=official_completed`, `blockers=[]`,
+- Latest completed row: sports `llm2rec_sasrec`, completed 2026-06-01
+  15:56 CST with `implementation_status=official_completed`, `blockers=[]`,
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
-  and local-light audit PASS
-- Current blocker/recovery: sports `llm2rec_sasrec` failed during adapter
+  and local-light audit PASS.
+- Resolved blocker/recovery: sports `llm2rec_sasrec` previously failed during adapter
   export because the exporter mapped validation candidate events through the
   test-task `train_interactions.csv`; at least one validation user exists only
   in `sports_large10000_100neg_valid_same_candidate/train_interactions.csv`.
@@ -62,9 +65,8 @@ or review cycle.
   valid/test users and passed with
   `PYTHONPATH=scripts/build;scripts/audit;scripts/adapters;. python -m pytest
   tests/test_llm2rec_same_candidate_export.py -q`. The fix was copied to the
-  server after commit `657929e`; server lacks `pytest`, but
-  `py_compile` passed and the real sports export passed far enough to start
-  full Qwen3 embedding generation.
+  server after commit `657929e`; server lacks `pytest`, but `py_compile`
+  passed and the resumed official row completed all final gates.
 - Storage cleanup: after verifying RLMRec server-final audit `ok=true` and
   absolute target path under
   `~/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/`,
@@ -79,6 +81,16 @@ or review cycle.
   was removed. This recovered about `5.3G` and did not touch final LLM2Rec
   scores, final provenance, audits, imported tables, predictions, checkpoints,
   or the upstream embedding under `/home/ajifang/projects/LLM2Rec/item_info/`.
+- Evidence backfill follow-up: at 2026-06-01 16:50 CST, the four earlier
+  completed sports official rows (`llmemb`, `proex_profile`, `promax_profile`,
+  and `elmrec_graph`) were rechecked because their server directories had full
+  metrics, score audits, provenance, scores, predictions, and imported tables
+  but lacked `server_final_evidence_audit.json`. Server-final audits were run
+  in place and all four returned `ok=true`, `failures=[]`, complete
+  HR@5/@10/@20, NDCG@5/@10/@20, MRR, `sample_count=10000`,
+  `avg_candidates=101.0`, and `score_coverage_rate=1.0`. The new audit JSONs
+  were copied into the local lightweight packages, and local-light audits
+  passed for all four. No scores or experiment processes were changed.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
