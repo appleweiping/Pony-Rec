@@ -532,6 +532,19 @@ not as a reason to silently rerun completed metric rows.
   5/10 checkpoints. GPU sample was `7%`, `9363 MiB / 49140 MiB`, and disk had
   `22G` free. No final scores/provenance/audit/imported metrics exist yet, so
   LLM2Rec remains running and not table-eligible.
+- LLM2Rec completion checkpoint 2026-06-01 15:56 CST: sports
+  `llm2rec_sasrec` completed as the seventh sports official row with
+  `implementation_status=official_completed`, `blockers=[]`,
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  and local-light audit PASS. Official training early-stopped at epoch 45 and
+  loaded the best epoch 25 checkpoint. Full metrics over 10,000 users and 101
+  candidates: HR@5/10/20=`0.1105/0.206/0.3657`,
+  NDCG@5/10/20=`0.06514778914391295/0.09566791850988236/0.13561659669926907`,
+  MRR=`0.08828933028385053`. Row counts passed: `scores.csv` has
+  `1,010,001` lines, predictions have `10,000` lines, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. Disk is now `17G`
+  free (`91%` used), so preflight cleanup/disk review is needed before
+  launching sports `llmesr_sasrec`.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

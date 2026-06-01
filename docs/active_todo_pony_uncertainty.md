@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 15:51 CST
+Last updated: 2026-06-01 15:56 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,16 +27,14 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: sports `llm2rec_sasrec` resumed after the `sys.executable`
-  runner fix. At 2026-06-01 15:51 CST, the direct adapter process is PID
-  `2875446` and the upstream official `evaluate_with_seqrec.py` process is PID
-  `2875559`. Do not start another LLM2Rec job while these are active.
-- Latest checked state: 2026-06-01 15:51 CST, LLM2Rec official SASRec training
-  is active; the training log reached epoch 15 validation and has already
-  saved checkpoints at epochs 5 and 10. GPU sample was `7%`,
-  `9363 MiB / 49140 MiB`, and disk has `22G` free (`89%` used). This is still
-  not a completed result and must not enter a table until final score,
-  provenance, audit, import, and row-count gates pass.
+- Active runner: none for LLM2Rec at 2026-06-01 15:56 CST. Sports
+  `llm2rec_sasrec` completed after the `sys.executable` runner fix and has
+  passed score audit, same-candidate import, server-final audit, lightweight
+  sync, and local-light audit.
+- Latest checked state: 2026-06-01 15:56 CST, GPU idle (`0%`,
+  `15 MiB / 49140 MiB`) and disk has `17G` free (`91%` used). Disk is now a
+  watch item before starting sports `llmesr_sasrec`; do not delete final
+  scores/provenance/audits/imported tables/predictions/checkpoints.
 - Current LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
@@ -111,14 +109,14 @@ or review cycle.
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
 | `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
-| `llm2rec_sasrec` | running | valid-history fix deployed; Qwen3 embedding complete; official SASRec training active under PIDs `2875446`/`2875559`; not table-eligible |
+| `llm2rec_sasrec` | complete | local lightweight package PASS; server-final package PASS |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec is now a completed row. LLM2Rec and LLM-ESR are still missing final
+RLMRec and LLM2Rec are now completed rows. LLM-ESR is still missing final
 score/provenance/table packages and must not enter a comparison table yet.
 
 ## Completed Checkpoints
@@ -246,13 +244,31 @@ checkpoints at epochs 5 and 10. No final `scores.csv`,
 `fairness_provenance.json`, score audit, imported tables, or row-count gates
 exist yet.
 
+### LLM2Rec Completed Checkpoint
+
+At 2026-06-01 15:56 CST, sports `llm2rec_sasrec` completed as
+`implementation_status=official_completed`, `blockers=[]`, and
+`score_coverage_rate=1.0`. The official training early-stopped at epoch 45,
+loaded the best epoch 25 checkpoint, exported `scores.csv`, and the unified
+same-candidate importer produced full metrics over 10,000 users and 101
+candidates:
+
+- HR@5/10/20: `0.1105 / 0.206 / 0.3657`
+- NDCG@5/10/20: `0.06514778914391295 / 0.09566791850988236 / 0.13561659669926907`
+- MRR: `0.08828933028385053`
+
+Server row counts: `scores.csv` `1,010,001` lines including header,
+`predictions/rank_predictions.jsonl` `10,000` lines, and
+`tables/ranking_eval_records.csv` `10,001` lines. Server-final evidence audit,
+lightweight sync, and local-light evidence audit all passed. Local lightweight
+evidence is under
+`outputs/baselines/official_adapters/sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+
 ## Required Next Actions
 
-1. Monitor active sports `llm2rec_sasrec` PIDs `2875446`/`2875559` without
-   stopping or duplicating them.
-2. If LLM2Rec completes, run server-final audit, lightweight sync,
-   local-light audit, and full metric/row-count recording.
-3. Repeat the evidence loop for sports `llmesr_sasrec`.
+1. Preflight disk/process state before starting sports `llmesr_sasrec`; disk
+   is only `17G` free after LLM2Rec completion.
+2. Repeat the evidence loop for sports `llmesr_sasrec`.
 4. After all eight sports official rows complete, build the sports comparison
    table and paired/statistical tests. Do not claim sports SOTA until the
    complete same-candidate table and paired tests pass.

@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "copy": true,
+  "remote_host": "pony-rec-gpu",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "local_evidence_dir": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "allowed_file_count": 12,
+  "excluded_file_count": 3,
+  "excluded_files_preview": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "size": 699382591
+    },
+    {
+      "rel_path": "scores.csv",
+      "size": 104229110
+    },
+    {
+      "rel_path": "seqrec_ckpt/LLM2Rec_official_qwen3base_sports_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=S-Jun-01-2026_15-50-27-b0f3ad.pth",
+      "size": 4652329391
+    }
+  ],
+  "too_large": [],
+  "checked_files": [
+    {
+      "rel_path": "fairness_provenance.json",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\fairness_provenance.json",
+      "size": 8547,
+      "sha256": "7babcc7dfc59896c764dd9ee6c2349b412e1f6e03a20b0223860a7c0166f2462",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "inspect_fairness_provenance.json",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\inspect_fairness_provenance.json",
+      "size": 3882,
+      "sha256": "0d89bee999124149617a1d545f22b4a0d9a8c3cc5fb4879f40ae804d5ff68131",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_official_run_summary.json",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_official_run_summary.json",
+      "size": 13242,
+      "sha256": "86e9b62bc9bb3533e11e52a94c3c39ea307bd97a6cd395cf8ef3d3ab686a7ee5",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_official_score_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_official_score_audit.json",
+      "size": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_official_training.log",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_official_training.log",
+      "size": 70384,
+      "sha256": "9744fcd90ea25889c4e4522fb2392d453e2b408cd7df24569397749403e0dced",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_sasrec_same_candidate_score_audit.txt",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_sasrec_same_candidate_score_audit.txt",
+      "size": 534,
+      "sha256": "c3c9e465ed07597a5ad1c672937d39df560eb6e77719e2a0f42acb0597e6bb01",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_final_evidence_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_final_evidence_audit.json",
+      "size": 3890,
+      "sha256": "6cdf1dcf1a390120548b74501ab24fff896c9471be1300c1c38c0b50767bcc44",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\external_score_coverage.csv",
+      "size": 211,
+      "sha256": "6e90dbf9374eb36199e8dddb78ab1d5aa26d01a3bcf6d21fa597d1d4c07bdf2d",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "size": 42267984,
+      "sha256": "7564dce194d1db9a7a2d9b5f224906c815a9b07918ce2bd704cb26d7528ae6b1",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\ranking_exposure_distribution.csv",
+      "size": 64,
+      "sha256": "9ac9eb81f7d5979fe418ae4e9c72ac7f47481f1272104e550987fdb92863531d",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\ranking_metrics.csv",
+      "size": 576,
+      "sha256": "f47bcd764f9049297ad6c2aaa69284aef6662c30828729c98be4d3b042b3341a",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\same_candidate_external_baseline_summary.csv",
+      "size": 1839,
+      "sha256": "a87dc00e833a34907dd486f80559265852de052172b83d2dbfa639a4d5290a7a",
+      "size_ok": true,
+      "sha256_ok": true
+    }
+  ],
+  "failures": []
+}

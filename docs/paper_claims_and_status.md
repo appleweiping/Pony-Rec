@@ -368,6 +368,17 @@ external-baseline comparison.
    regenerating it. The training log reached epoch 15 validation and saved
    checkpoints at epochs 5 and 10. This is a running checkpoint only; no final
    LLM2Rec row, metric table, provenance, or score audit is available yet.
+   At 2026-06-01 15:56 CST, sports `llm2rec_sasrec` completed as an official
+   row with `implementation_status=official_completed`, `blockers=[]`,
+   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+   and local-light audit PASS. Full same-candidate metrics over 10,000 users
+   and 101 candidates are HR@5/10/20=`0.1105/0.206/0.3657`,
+   NDCG@5/10/20=`0.06514778914391295/0.09566791850988236/0.13561659669926907`,
+   and MRR=`0.08828933028385053`. Row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). Sports now has seven
+   completed official rows; no sports SOTA claim is allowed until LLM-ESR,
+   the full eight-baseline table, and paired tests finish.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
