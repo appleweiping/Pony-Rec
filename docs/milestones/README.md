@@ -415,6 +415,14 @@ not as a reason to silently rerun completed metric rows.
   no-space scans remain clean. The RLMRec output directory still contains only
   `inspect_fairness_provenance.json`, so the row is not complete and must not
   be audited, synced, or recorded as a result yet.
+- Monitoring checkpoint 2026-06-01 09:05 CST: sports `rlmrec_graphcl` reached
+  Qwen embedding progress `233470/233470`. The child process `2851207` remains
+  active after embedding completion with high CPU/memory and momentary GPU
+  utilization `0%`, consistent with post-embedding graph or training
+  preparation. Disk remains `32G` free (`83%` used), fatal/OOM/CUDA/no-space
+  scans remain clean, and the RLMRec output directory still contains only
+  `inspect_fairness_provenance.json`; no final scores/provenance/table package
+  exists yet, so the row remains ineligible for audit, sync, or table import.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

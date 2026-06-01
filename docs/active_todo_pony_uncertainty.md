@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 08:41 CST
+Last updated: 2026-06-01 09:05 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -29,10 +29,12 @@ or review cycle.
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
 - Active row: sports `rlmrec_graphcl`, child PID `2851207`
-- Latest checked progress: 2026-06-01 08:41 CST, RLMRec Qwen embedding
-  generation `135424/233470`; no RLMRec training epochs yet
-- GPU/disk at latest check: GPU `95%`, `16285 MiB / 49140 MiB`, disk `32G`
-  free (`83%` used)
+- Latest checked progress: 2026-06-01 09:05 CST, RLMRec Qwen embedding
+  generation reached `233470/233470`; the process is still active after
+  embedding completion and no final RLMRec result package exists yet
+- GPU/disk at latest check: GPU `0%`, `16285 MiB / 49140 MiB`, disk `32G`
+  free (`83%` used); child PID `2851207` was still active with high CPU and
+  memory, consistent with post-embedding graph/training preparation
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
 - Follow-up preflight: 2026-06-01 07:21 CST server code still has real
@@ -64,7 +66,7 @@ or review cycle.
 | `promax_profile` | complete | local lightweight package PASS; server-final package PASS |
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
-| `rlmrec_graphcl` | running | Qwen embedding generation active; wait for final scores/provenance |
+| `rlmrec_graphcl` | running | Qwen embedding complete; process still active; wait for final scores/provenance |
 | `llm2rec_sasrec` | pending | inspect-only placeholder |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 
@@ -72,8 +74,8 @@ Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec is not yet a completed row: as of 2026-06-01 08:41 CST its output
-directory contains only `inspect_fairness_provenance.json`; there is no final
+RLMRec is not yet a completed row: as of 2026-06-01 09:05 CST its output
+directory still contains only `inspect_fairness_provenance.json`; there is no final
 `scores.csv`, score audit, imported table, run summary, or final
 `fairness_provenance.json` to audit or sync.
 

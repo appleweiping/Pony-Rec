@@ -291,7 +291,12 @@ external-baseline comparison.
    RLMRec was still in Qwen embedding generation at `105376/233470` with no
    fatal/OOM/CUDA/no-space markers; its output directory still had only
    `inspect_fairness_provenance.json`, so no sixth sports official result is
-   available yet.
+   available yet. At 2026-06-01 09:05 CST, RLMRec reached Qwen embedding
+   progress `233470/233470`, but child PID `2851207` was still active after
+   embedding completion and the output directory still contained only
+   `inspect_fairness_provenance.json`; no final `scores.csv`, provenance,
+   audit, run summary, or imported metrics table exists yet, so the sports
+   official evidence count remains five completed rows.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
