@@ -766,6 +766,16 @@ not as a reason to silently rerun completed metric rows.
   and Code `CachedData`. This recovered disk from about `4.4G` to `4.6G`
   free. Project outputs, active adapters, models, Python site-packages, and
   other projects were left untouched.
+- IRLLRec IDE-cache cleanup checkpoint 2026-06-02 04:56 CST: toys
+  `irllrec_intent` remains active and reached epoch `940/3000`; no final
+  evidence files exist yet and error scans are clean. After confirming there
+  were no VSCode server processes, five inactive
+  `.vscode-server/cli/servers/Stable-*` cache directories were removed with
+  realpath prefix checks, recovering disk from about `4.6G` to `6.4G` free.
+  Project outputs, final evidence, active adapters, models, conda/Python
+  environments, and other projects were not touched. Next action is still to
+  wait for IRLLRec completion, run full evidence gates, sync the lightweight
+  package, and then remove only the completed IRLLRec intermediate adapter.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

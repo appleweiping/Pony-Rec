@@ -556,6 +556,12 @@ external-baseline comparison.
    and Code `CachedData`) were removed after realpath allowlist checks,
    recovering disk from about `4.4G` to `4.6G` free without touching project
    outputs, active adapters, models, Python site-packages, or other projects.
+   At 04:56 CST, IRLLRec had reached `epoch=940/3000` with no final evidence
+   files and a clean error scan. Five inactive VSCode remote server cache
+   directories under `.vscode-server/cli/servers/Stable-*` were removed after
+   a no-process check and realpath prefix verification, recovering disk to
+   about `6.4G` free without touching project outputs, final evidence, active
+   adapters, models, conda/Python environments, or other projects.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing

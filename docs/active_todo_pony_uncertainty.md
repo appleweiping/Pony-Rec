@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 04:47 CST
+Last updated: 2026-06-02 04:56 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -385,6 +385,17 @@ or review cycle.
   about `4.4G` to `4.6G` free. No project outputs, evidence directories,
   active adapters, models, Python site-packages, or other projects were
   removed.
+- IRLLRec IDE-cache cleanup follow-up: at 2026-06-02 04:56 CST, toys IRLLRec
+  was still running and had reached `epoch=940/3000`; no final evidence files
+  existed yet and the error scan remained clean. To give the final
+  scores/predictions export more disk headroom, five inactive VSCode remote
+  server cache directories under
+  `/home/ajifang/.vscode-server/cli/servers/Stable-*` were removed after a
+  no-process check and realpath prefix verification. This recovered disk from
+  about `4.6G` to `6.4G` free. The cleanup did not touch project outputs,
+  final evidence, active adapters, models, conda/Python environments, or other
+  projects. VSCode remote server binaries can be reinstalled by VSCode if
+  needed later.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
