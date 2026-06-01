@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 14:09 CST
+Last updated: 2026-06-01 15:14 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,15 +27,27 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: resumed single-row sports `llm2rec_sasrec`, PID `2870575`,
-  launched with `DOMAINS_OVERRIDE=sports`,
-  `FAST_METHODS_OVERRIDE=`, and `TRAIN_METHODS_OVERRIDE=llm2rec_sasrec`; do
-  not restart the whole eight-method script because six sports rows are already
-  completed and audited
-- Latest checked state: 2026-06-01 14:08 CST, LLM2Rec passed the previous
-  adapter-export blocker and entered Qwen3 embedding generation at about
-  `28736/283760`; GPU was `95%`, `16213 MiB / 49140 MiB`, and disk had `31G`
-  free (`84%` used)
+- Active runner: none at 2026-06-01 15:14 CST. The resumed single-row sports
+  `llm2rec_sasrec` job stopped after completing Qwen3 item embedding and before
+  official SASRec training because the runner invoked bare `python` from a
+  stripped server environment.
+- Latest checked state: 2026-06-01 15:14 CST, GPU idle (`0%`,
+  `15 MiB / 49140 MiB`) and disk has `22G` free (`89%` used). Do not restart
+  the whole eight-method script because six sports rows are already completed
+  and audited; resume only the LLM2Rec row after deploying the runner fix.
+- Current LLM2Rec recovery: the full embedding artifact completed. Both
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
+  and upstream
+  `/home/ajifang/projects/LLM2Rec/item_info/SportsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
+  are `4,649,140,352` bytes. Metadata records `items=283760`,
+  `embedding_rows=283761`, `embedding_dim=4096`,
+  `embedding_text_coverage=1.0`, and
+  `valid_history_source=valid_task_train_interactions` from the earlier
+  adapter audit. Local runner fix: `src/baselines/official_runner/llm2rec.py`
+  now starts the official entrypoint with `sys.executable` instead of bare
+  `python`. Targeted tests passed:
+  `tests/test_llm2rec_upstream_adapter.py` (`5 passed`) and
+  `tests/test_llm2rec_same_candidate_export.py` (`3 passed`).
 - Latest completed row: sports `rlmrec_graphcl`, completed 2026-06-01
   13:43 CST with `implementation_status=official_completed`, `blockers=[]`,
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
@@ -97,7 +109,7 @@ or review cycle.
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
 | `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
-| `llm2rec_sasrec` | running | valid-history fix deployed; export passed; Qwen3 embedding active under PID `2870575` |
+| `llm2rec_sasrec` | resume-ready after runner fix | valid-history fix deployed; export passed; Qwen3 embedding complete; previous run stopped at official training launch due bare `python`; not table-eligible |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
@@ -192,11 +204,31 @@ candidate events `10000`, candidate rows `1010000`, validation candidate rows
 `1010000`, missing mapped candidates `0`, and
 `valid_history_source=valid_task_train_interactions`.
 
+### LLM2Rec Embedding Completion and Training-Launch Blocker
+
+At 2026-06-01 15:14 CST, sports `llm2rec_sasrec` had completed the full Qwen3
+item embedding step (`283760/283760`) but stopped before official SASRec
+training. The failure was:
+
+```text
+FileNotFoundError: [Errno 2] No such file or directory: 'python'
+```
+
+The traceback points to `_train_with_official_entrypoint` in
+`src/baselines/official_runner/llm2rec.py`. This is an execution-environment
+bug in the wrapper command, not a metric result and not a reason to skip
+LLM2Rec. The local fix switches the command to `sys.executable` while
+preserving the official `evaluate_with_seqrec.py` entrypoint and SASRec
+arguments. Resume should reuse the existing upstream embedding path
+`/home/ajifang/projects/LLM2Rec/item_info/SportsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
+instead of regenerating the 4.65GB embedding.
+
 ## Required Next Actions
 
-1. Monitor active sports `llm2rec_sasrec` PID `2870575` without stopping it.
-   It is currently embedding Qwen3 item text (`hf_mean_pool`) after passing the
-   repaired adapter export path.
+1. Deploy the `sys.executable` runner fix to the server, `py_compile` it there,
+   and resume only sports `llm2rec_sasrec` with the existing upstream embedding
+   path. Do not regenerate embeddings unless the metadata or file hash check
+   fails.
 2. If LLM2Rec completes, run server-final audit, lightweight sync,
    local-light audit, and full metric/row-count recording.
 3. Repeat the evidence loop for sports `llmesr_sasrec`.

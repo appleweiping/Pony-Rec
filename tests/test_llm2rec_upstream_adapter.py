@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 
 import numpy as np
 
@@ -10,6 +11,7 @@ from main_score_llm2rec_same_candidate_adapter import (
     _load_item_embeddings,
     _load_upstream_config,
 )
+from src.baselines.official_runner.llm2rec import _train_with_official_entrypoint
 
 
 def test_prepare_llm2rec_upstream_adapter_installs_data_and_patches_maps(tmp_path):
@@ -105,3 +107,22 @@ def test_llm2rec_upstream_config_uses_adapter_item_pool(tmp_path):
     assert config["eos_token"] == 1184
     assert config["max_seq_length"] == 10
     assert config["hidden_size"] == 64
+
+
+def test_llm2rec_official_training_uses_current_python_interpreter(tmp_path):
+    summary = _train_with_official_entrypoint(
+        repo_dir=tmp_path / "LLM2Rec",
+        config={
+            "dataset": "SportsSameCandidate100Neg",
+            "embedding": "/tmp/item_emb.npy",
+            "seq_embedding": "",
+            "run_id": "dry-run",
+            "save": True,
+            "ckpt_dir": str(tmp_path / "ckpt"),
+        },
+        log_path=tmp_path / "train.log",
+        dry_run=True,
+    )
+
+    assert summary["status"] == "dry_run_planned"
+    assert summary["official_training_command"][0] == sys.executable

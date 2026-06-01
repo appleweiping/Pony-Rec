@@ -6,6 +6,7 @@ import json
 import math
 import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -200,7 +201,7 @@ def _train_with_official_entrypoint(
     dry_run: bool,
 ) -> dict[str, Any]:
     argv = [
-        "python",
+        sys.executable,
         "evaluate_with_seqrec.py",
         "--model=SASRec",
         f"--dataset={config['dataset']}",

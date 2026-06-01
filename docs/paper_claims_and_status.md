@@ -345,7 +345,23 @@ external-baseline comparison.
    blocker and entered Qwen3 `hf_mean_pool` embedding generation at about
    `3432/283760` under PID `2870575`. This is progress only; the LLM2Rec row
    remains ineligible until final scores, provenance, audits, complete metrics,
-   and row-count checks pass.
+   and row-count checks pass. At 2026-06-01 15:14 CST, sports
+   `llm2rec_sasrec` had completed full Qwen3 item embedding
+   (`283760/283760`) and produced matching 4,649,140,352-byte embedding files
+   under the Pony adapter directory and the upstream LLM2Rec
+   `item_info/SportsSameCandidate100Neg/` path. The run then stopped before
+   official SASRec training with
+   `FileNotFoundError: [Errno 2] No such file or directory: 'python'` from
+   `_train_with_official_entrypoint`. This is a wrapper environment bug, not
+   a completed or failed metric row. Local fix changes the subprocess command
+   to start with `sys.executable` while preserving the official
+   `evaluate_with_seqrec.py` entrypoint and SASRec arguments; targeted local
+   tests passed (`tests/test_llm2rec_upstream_adapter.py`: 5 passed,
+   `tests/test_llm2rec_same_candidate_export.py`: 3 passed). The LLM2Rec row
+   remains not paper/table eligible until the server resume produces final
+   `scores.csv`, provenance, score audit, imported full `@5/@10/@20 + MRR`
+   metrics, row-count checks, server-final audit, and local-light evidence
+   audit.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

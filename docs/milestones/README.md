@@ -152,10 +152,11 @@ not as a reason to silently rerun completed metric rows.
 2. 8 official baselines on 4 new domains (Phase 2) — sports has six audited
    official rows complete: `llmemb`, `proex_profile`, `promax_profile`,
    `elmrec_graph`, `irllrec_intent`, and `rlmrec_graphcl`. `llm2rec_sasrec`
-   exposed a validation-history adapter export bug after RLMRec completed; the
-   local fix uses `valid_same_candidate/train_interactions.csv` for validation
-   candidate histories and must be pulled to the server before resuming LLM2Rec
-   only.
+   has passed the validation-history export fix and completed full Qwen3 item
+   embedding, but stopped before official SASRec training because the runner
+   invoked bare `python` in the server environment. Local fix switches that
+   wrapper command to `sys.executable`; resume LLM2Rec only, reusing the
+   existing upstream embedding.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -165,8 +166,10 @@ not as a reason to silently rerun completed metric rows.
 - Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
 - Phase 2 sports official-baseline run started 2026-05-31:
   `baselines_new_domains_sports.log`, runner PID `2794722`. Sports completed
-  `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
-  `irllrec_intent`; the current active row is `rlmrec_graphcl`.
+  `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`,
+  `irllrec_intent`, and `rlmrec_graphcl`. No related Python process was active
+  at the 2026-06-01 15:14 CST check; sports `llm2rec_sasrec` is resume-ready
+  after a runner-environment fix, not table-eligible.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must
@@ -502,6 +505,21 @@ not as a reason to silently rerun completed metric rows.
   inside the project paper-adapter directory, the completed RLMRec intermediate
   adapter directory was removed, recovering about `4.5G`; final RLMRec evidence
   outputs and local lightweight package were preserved.
+- LLM2Rec training-launch blocker checkpoint 2026-06-01 15:14 CST: sports
+  `llm2rec_sasrec` completed Qwen3 item embedding (`283760/283760`) and wrote
+  matching 4,649,140,352-byte embedding files at
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
+  and
+  `/home/ajifang/projects/LLM2Rec/item_info/SportsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+  It then stopped before official SASRec training with
+  `FileNotFoundError: [Errno 2] No such file or directory: 'python'` from
+  `_train_with_official_entrypoint`. Local fix changes the official-entrypoint
+  subprocess command to start with `sys.executable`, preserving the
+  `evaluate_with_seqrec.py` entrypoint and SASRec arguments. Targeted local
+  tests passed: `tests/test_llm2rec_upstream_adapter.py` (`5 passed`) and
+  `tests/test_llm2rec_same_candidate_export.py` (`3 passed`). Next action:
+  copy the fixed runner to the dirty server worktree, run `py_compile`, and
+  resume only LLM2Rec with the existing upstream embedding path.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
