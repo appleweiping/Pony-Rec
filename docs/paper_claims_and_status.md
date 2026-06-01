@@ -278,7 +278,16 @@ external-baseline comparison.
    Server-final audit, local lightweight sync, and local-light audit all
    passed; the row is eligible as official sports evidence, pending the full
    eight-baseline sports comparison and paired tests. The runner then advanced
-   to sports `rlmrec_graphcl`.
+   to sports `rlmrec_graphcl`. At 2026-06-01 08:24 CST, RLMRec remained active
+   under runner PID `2794722` and child PID `2851207`, generating Qwen
+   embeddings at `57992/233470`; GPU was about `95%` with
+   `16285 MiB / 49140 MiB`, disk was `32G` free, and fatal/OOM/CUDA/no-space
+   scans remained clean. A read-only scan found one empty malformed output
+   directory named
+   `outputs/sports_large10000_100neg_TRAIN_METHODS_OVERRIDE=_official_qwen3base_same_candidate/`.
+   It contains no files and is not evidence; the local runner now validates
+   method tokens before creating output directories so a misquoted override
+   cannot create another malformed method directory.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

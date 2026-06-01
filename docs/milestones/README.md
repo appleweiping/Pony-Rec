@@ -150,7 +150,8 @@ not as a reason to silently rerun completed metric rows.
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports running with
-   `llmemb`, `proex_profile`, `promax_profile`, and `elmrec_graph` complete;
+   `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
+   `irllrec_intent` complete;
    continue the single-domain
    production loop after each domain passes provenance, exact-score, import,
    and storage checks
@@ -163,8 +164,8 @@ not as a reason to silently rerun completed metric rows.
 - Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
 - Phase 2 sports official-baseline run started 2026-05-31:
   `baselines_new_domains_sports.log`, runner PID `2794722`. Sports completed
-  `llmemb`, `proex_profile`, `promax_profile`, and `elmrec_graph`; the current
-  active row is `irllrec_intent`.
+  `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
+  `irllrec_intent`; the current active row is `rlmrec_graphcl`.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must
@@ -396,6 +397,17 @@ not as a reason to silently rerun completed metric rows.
   free (`83%` used). Final IRLLRec outputs were preserved. The runner advanced
   to sports `rlmrec_graphcl` child PID `2851207`; at 2026-06-01 08:18 CST it
   was generating Qwen embeddings at `35496/233470`, with no fatal markers.
+- Monitoring/tooling checkpoint 2026-06-01 08:24 CST: sports `rlmrec_graphcl`
+  remains active under runner PID `2794722` and child PID `2851207`. The log
+  has reached Qwen embedding progress `57992/233470`; GPU is about `95%` with
+  `16285 MiB / 49140 MiB`, disk is `32G` free (`83%` used), and fatal/OOM/CUDA/
+  no-space scans remain clean. A read-only server scan found one empty malformed
+  output directory,
+  `outputs/sports_large10000_100neg_TRAIN_METHODS_OVERRIDE=_official_qwen3base_same_candidate/`;
+  it has no files and is not evidence. The local runner now validates method
+  tokens before creating output directories, preventing misquoted override
+  tokens from creating malformed method directories in future launches. No
+  server pull or cleanup was performed while the live runner is active.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

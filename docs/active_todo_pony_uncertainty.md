@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 06:52 CST
+Last updated: 2026-06-01 08:24 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -29,9 +29,9 @@ or review cycle.
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
 - Active row: sports `rlmrec_graphcl`, child PID `2851207`
-- Latest checked progress: 2026-06-01 08:18 CST, RLMRec Qwen embedding
-  generation `35496/233470`; no RLMRec training epochs yet
-- GPU/disk at latest check: GPU `99%`, `16213 MiB / 49140 MiB`, disk `32G`
+- Latest checked progress: 2026-06-01 08:24 CST, RLMRec Qwen embedding
+  generation `57992/233470`; no RLMRec training epochs yet
+- GPU/disk at latest check: GPU `95%`, `16285 MiB / 49140 MiB`, disk `32G`
   free (`83%` used)
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
@@ -47,6 +47,13 @@ or review cycle.
   10 allowed lightweight files matched server/local size and sha256, while
   `scores.csv`, `predictions/rank_predictions.jsonl`, and the large checkpoint
   were excluded.
+- Runner hygiene note: a read-only server scan found one empty malformed output
+  directory,
+  `outputs/sports_large10000_100neg_TRAIN_METHODS_OVERRIDE=_official_qwen3base_same_candidate/`.
+  It contains no files and is not one of the eight official rows. The local
+  runner now validates method tokens before creating output directories so a
+  misquoted override cannot create another malformed method directory. No server
+  pull or cleanup was performed while RLMRec is running.
 
 ## Sports Official Baselines
 
@@ -66,7 +73,7 @@ Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
 
-## Required Next Actions
+## Completed Checkpoints
 
 ### IRLLRec Completed Checkpoint
 

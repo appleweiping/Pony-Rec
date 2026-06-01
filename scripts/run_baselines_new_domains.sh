@@ -30,6 +30,18 @@ log_progress() {
 run_baseline_on_domain() {
   local method=$1
   local domain=$2
+  case "$method" in
+    llmemb|proex_profile|promax_profile|elmrec_graph|irllrec_intent|rlmrec_graphcl|llm2rec_sasrec|llmesr_sasrec)
+      ;;
+    ""|*=*)
+      log_progress "ERROR: Invalid method token '$method'. Check FAST_METHODS_OVERRIDE/TRAIN_METHODS_OVERRIDE quoting."
+      return 1
+      ;;
+    *)
+      log_progress "ERROR: Unknown method $method"
+      return 1
+      ;;
+  esac
   local exp="${domain}_large10000_100neg"
   local task_dir="outputs/baselines/external_tasks/${exp}_test_same_candidate"
   local valid_dir="outputs/baselines/external_tasks/${exp}_valid_same_candidate"
