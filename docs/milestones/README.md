@@ -149,11 +149,8 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports has seven audited
-   official rows complete: `llmemb`, `proex_profile`, `promax_profile`,
-   `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and `llm2rec_sasrec`.
-   The final sports row, `llmesr_sasrec`, is currently running and is not
-   table-eligible until final score/provenance/audit/import gates pass.
+2. 8 official baselines on 4 new domains (Phase 2) — sports has all eight
+   audited official rows complete; toys/home/tools remain pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -161,10 +158,10 @@ not as a reason to silently rerun completed metric rows.
 ### Server State
 
 - Batch script complete: `run_ccrp_v3_all_new_domains.sh` (sports/toys/home/tools)
-- Phase 2 sports official-baseline run started 2026-05-31:
-  `baselines_new_domains_sports.log`, runner PID `2794722`. Sports now has
-  seven completed official rows; `llmesr_sasrec` was launched separately as
-  the final sports row under runner PID `2877443` and adapter PID `2877452`.
+- Phase 2 sports official-baseline run started 2026-05-31 and is now complete:
+  all eight sports official rows passed final provenance/coverage/import gates.
+  The last separate LLM-ESR runner (`2877443`/`2877452`) finished at
+  2026-06-01 18:31 CST.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must
@@ -577,6 +574,24 @@ not as a reason to silently rerun completed metric rows.
   found the active LLM-ESR adapter at about `4.5G`; no cleanup was performed
   because meaningful large candidates were either active intermediates or
   protected final evidence from completed rows.
+- LLM-ESR completion/package checkpoint 2026-06-01 18:42 CST: sports
+  `llmesr_sasrec` completed as the eighth sports official row. The run reached
+  epoch 200 with final train loss `0.011395`, saved final provenance, exported
+  exact same-candidate scores, and imported metrics. Server-final audit passed
+  with `implementation_status=official_completed`, `blockers=[]`,
+  `score_coverage_rate=1.0`, `sample_count=10000`, and
+  `avg_candidates=101.0`. Full metrics are HR@5/10/20=`0.0916/0.1564/0.2650`,
+  NDCG@5/10/20=`0.054919833257876506/0.0758115528438973/0.10310478593304104`,
+  and MRR=`0.0751149958885503`. Row counts passed: `scores.csv` has
+  `1,010,001` lines, predictions have `10,000` lines, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. Lightweight sync and
+  local-light audit passed; the local package is under
+  `outputs/baselines/official_adapters/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`.
+  After verifying no active LLM-ESR process and protected final outputs, the
+  completed intermediate adapter directory was removed, recovering disk from
+  `9.4G` to `14G` free. Sports official baselines are now 8/8 complete and
+  should move to comparison-table construction and paired tests before any
+  sports SOTA wording.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

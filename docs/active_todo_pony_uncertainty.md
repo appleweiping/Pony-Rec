@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 17:15 CST
+Last updated: 2026-06-01 18:42 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,19 +27,18 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: sports `llmesr_sasrec`, launched 2026-06-01 16:13 CST as a
-  single-row production run with runner PID `2877443` and adapter PID
-  `2877452`.
-- Latest checked state: 2026-06-01 17:15 CST, LLM-ESR completed the Qwen3
-  `hf_mean_pool` embedding pass (`233470/233470`) and entered official
-  LLM-ESR training. Logged training checkpoints: epoch 1 loss `1.374167`,
-  epoch 5 loss `0.361412`. Active runner PID is still `2877443`; adapter PID
-  is still `2877452`. GPU sample was `100%`, `21215 MiB / 49140 MiB`, and
-  disk has `15G` free (`93%` used). The final LLM-ESR output directory still
-  has no `scores.csv`, final provenance, score audit, predictions, or imported
-  tables, so the row is still not table-eligible. The fixed-string error scan
-  only matched the harmless model-loading `Notes:` line already seen in prior
-  runs.
+- Active runner: none for sports official baselines. Sports `llmesr_sasrec`
+  launched 2026-06-01 16:13 CST as a single-row production run with runner PID
+  `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
+- Latest checked state: 2026-06-01 18:42 CST, sports official baselines are
+  8/8 complete. LLM-ESR completed the Qwen3 `hf_mean_pool` embedding pass
+  (`233470/233470`), ran the default 200-epoch official LLM-ESR training, and
+  exported/imported exact same-candidate scores. The log ended with
+  `[2026-06-01 18:31:16] DONE llmesr_sasrec on sports` and
+  `=== All baseline runs complete ===`. No active Pony/baseline Python process
+  remained at the cleanup preflight. After safe cleanup of the completed
+  LLM-ESR intermediate adapter directory, disk recovered from `9.4G` free
+  (`95%` used) to `14G` free (`93%` used).
 - Resolved LLM2Rec recovery: the full embedding artifact completed. Both
   `outputs/baselines/paper_adapters/sports_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
   and upstream
@@ -94,6 +93,35 @@ or review cycle.
   `avg_candidates=101.0`, and `score_coverage_rate=1.0`. The new audit JSONs
   were copied into the local lightweight packages, and local-light audits
   passed for all four. No scores or experiment processes were changed.
+- Evidence package verification follow-up: at 2026-06-01 17:45 CST, the
+  allowlist sync verifier compared all seven completed sports local
+  lightweight packages against the server evidence directories by size and
+  sha256. All seven returned `failures=0`. The completed rows each had 11
+  allowed lightweight files and 3 excluded server-only large files, except
+  `llm2rec_sasrec`, which had 12 allowed lightweight files and 3 excluded
+  server-only large files. The four earliest packages now also include tracked
+  `light_evidence_sync_manifest.json` files. Excluded server-only files remain
+  protected on the server (`scores.csv`, predictions, checkpoints/large
+  binaries); no experiment output scores were changed.
+- LLM-ESR completion and cleanup follow-up: at 2026-06-01 18:31 CST, sports
+  `llmesr_sasrec` completed as the eighth sports official row with
+  `implementation_status=official_completed`, `blockers=[]`, and
+  `score_coverage_rate=1.0`. Server-final audit PASS, lightweight sync PASS,
+  and local-light audit PASS. Full metrics over 10,000 users and 101
+  candidates:
+  HR@5/10/20 `0.0916 / 0.1564 / 0.2650`,
+  NDCG@5/10/20 `0.054919833257876506 / 0.0758115528438973 / 0.10310478593304104`,
+  MRR `0.0751149958885503`. Row counts passed: `scores.csv` `1,010,001`
+  lines, predictions `10,000` lines, `tables/ranking_eval_records.csv`
+  `10,001` lines, and summary table `2` lines. The local lightweight package
+  is under
+  `outputs/baselines/official_adapters/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`.
+  After verifying no active LLM-ESR process, server-final audit `ok=true`, and
+  final score/provenance files present, the completed intermediate adapter
+  directory
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_llmesr_official_adapter`
+  was removed; final server outputs and local lightweight evidence were
+  preserved.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -130,15 +158,15 @@ or review cycle.
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
 | `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
 | `llm2rec_sasrec` | complete | local lightweight package PASS; server-final package PASS |
-| `llmesr_sasrec` | running | official training active under runner PID `2877443`, adapter PID `2877452`; embedding complete; not table-eligible |
+| `llmesr_sasrec` | complete | local lightweight package PASS; server-final package PASS |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec and LLM2Rec are now completed rows. LLM-ESR is in official training and
-is still missing final score/provenance/table packages; it must not enter a
-comparison table yet.
+RLMRec, LLM2Rec, and LLM-ESR are now completed rows. Sports official baselines
+are 8/8 complete. Sports can move to comparison-table construction and paired
+tests; no sports SOTA claim is allowed until those gates pass.
 
 ## Completed Checkpoints
 
@@ -287,14 +315,14 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor active sports `llmesr_sasrec` PIDs `2877443`/`2877452` without
-   stopping or duplicating them. If it completes, run score audit,
-   same-candidate import, server-final audit, lightweight sync, local-light
-   audit, and full metric/row-count recording.
-2. After all eight sports official rows complete, build the sports comparison
-   table and paired/statistical tests. Do not claim sports SOTA until the
-   complete same-candidate table and paired tests pass.
-3. Continue the same official-baseline protocol for toys, home, and tools.
+1. Build the sports 8-official-baseline comparison table against C-CRP v3 and
+   any declared internal method rows, using full @5/@10/@20 + MRR metrics and
+   the same 10,000-user/101-candidate setting.
+2. Run paired/statistical tests from `tables/ranking_eval_records.csv` before
+   claiming sports SOTA.
+3. Continue the same official-baseline protocol for toys, home, and tools,
+   with single-domain production loops and storage preflight before each
+   launch.
 4. Only after the declared experiments, comparisons, ablations, provenance,
     statistical tests, and figure checks are complete, move to ARIS paper
     writing and GPT-5.5/Codex xhigh review. The review loop must reach at

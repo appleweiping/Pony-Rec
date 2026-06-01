@@ -184,10 +184,11 @@ external-baseline comparison.
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports is currently running from
+   score file. Sports is now 8/8 complete; toys/home/tools remain pending.
+   Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
-   child at the 2026-05-31 22:32 CST checkpoint is sports `llmemb` PID
-   `2794731`. It has completed the `hf_mean_pool` embedding pass
+   child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
+   `2794731`. It had completed the `hf_mean_pool` embedding pass
    (`233470/233470`) and entered `llmemb-sasrec` training, with log lines
    through epoch 35. By the 2026-05-31 22:52 CST checkpoint,
    `llmemb-sasrec` had completed 200 epochs and the `llmemb` training phase
@@ -408,6 +409,20 @@ external-baseline comparison.
    exists yet. Disk is a watch item at about `15G` free (`93%` used), but a
    read-only storage review found no meaningful safe cleanup while the active
    LLM-ESR adapter is running and completed-row final evidence is protected.
+   At 2026-06-01 18:42 CST, sports `llmesr_sasrec` completed as the eighth
+   sports official row with `implementation_status=official_completed`,
+   `blockers=[]`, and `score_coverage_rate=1.0`. Server-final audit,
+   lightweight sync, and local-light audit passed. Full metrics over 10,000
+   users and 101 candidates are HR@5/10/20=`0.0916/0.1564/0.2650`,
+   NDCG@5/10/20=`0.054919833257876506/0.0758115528438973/0.10310478593304104`,
+   and MRR=`0.0751149958885503`. Row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). Sports now has all
+   eight official rows complete, but sports SOTA is still not claimable until
+   the full sports comparison table and paired tests are built. The completed
+   LLM-ESR intermediate adapter directory was removed only after final evidence
+   and local lightweight backup passed, recovering disk from `9.4G` to `14G`
+   free without touching final outputs.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
