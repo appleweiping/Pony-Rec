@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 19:48 CST
+Last updated: 2026-06-01 20:17 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -32,9 +32,10 @@ or review cycle.
   confirming no active Pony/baseline Python process. Runner PID is `2893793`,
   adapter PID is `2893803`, log path is
   `baselines_new_domains_toys_proex_20260601_194414.log`, and PID file is
-  `baselines_new_domains_toys_proex.pid`. It is in Qwen3 `hf_mean_pool`
-  embedding at about `7088/215034`; GPU sample was `95%`,
-  `16093 MiB / 49140 MiB`, and disk was about `18G` free. The row is running
+  `baselines_new_domains_toys_proex.pid`. At the 2026-06-01 20:17 CST
+  monitoring check it was still in Qwen3 `hf_mean_pool` embedding at about
+  `113608/215034`; GPU sample was `96%`, `16285 MiB / 49140 MiB`, and disk
+  was about `18G` free. The row is running
   and not table-eligible until final scores, provenance, score audit, imported
   metrics, row counts, server-final audit, local-light sync, and local-light
   audit pass.
@@ -192,6 +193,18 @@ or review cycle.
   adapter PID `2893803` were active, embedding progress was about
   `7088/215034`, GPU was `95%`, and disk was about `18G` free. Do not start
   another baseline until this row finishes or fails and has been audited.
+- Toys ProEx monitoring follow-up: at 2026-06-01 20:17 CST, runner PID
+  `2893793` and adapter PID `2893803` were still active. The log had advanced
+  to about `113608/215034` Qwen3 `hf_mean_pool` embeddings, GPU was `96%`
+  with `16285 MiB / 49140 MiB`, disk was `18G` free (`91%` used), and the
+  error scan showed only the known model-loading `UNEXPECTED` notes, not
+  traceback/OOM/no-space/fatal markers. The final toys ProEx evidence directory
+  still had no final `scores.csv`, `fairness_provenance.json`, score audit,
+  imported tables, or row-countable predictions, so the row remains running
+  and not table-eligible. Sports remains the only domain with all eight
+  official final provenance packages; toys/home/tools still have zero completed
+  official baseline rows, while C-CRP v3 reports are present for
+  sports/toys/home/tools.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
