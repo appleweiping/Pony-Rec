@@ -549,7 +549,13 @@ external-baseline comparison.
    another safe project artifact to remove: the old
    `books_large10000_100neg_llmesr_adapter` contains historical adapter mapping
    data while the corresponding final books directory is table-only and no
-   local lightweight package was found, so it was left intact.
+   local lightweight package was found, so it was left intact. At 04:47 CST,
+   IRLLRec had reached `epoch=760/3000` and still had no final evidence
+   package. Three user-level cache directories
+   (`.vscode-server/data/CachedExtensionVSIXs`, Chrome `component_crx_cache`,
+   and Code `CachedData`) were removed after realpath allowlist checks,
+   recovering disk from about `4.4G` to `4.6G` free without touching project
+   outputs, active adapters, models, Python site-packages, or other projects.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing

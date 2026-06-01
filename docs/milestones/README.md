@@ -757,6 +757,15 @@ not as a reason to silently rerun completed metric rows.
   to let IRLLRec finish, then run server-final audit, lightweight sync,
   local-light audit, and only then remove the completed toys IRLLRec
   intermediate adapter after path/final-output checks.
+- IRLLRec cache-cleanup checkpoint 2026-06-02 04:47 CST: toys
+  `irllrec_intent` remains active and reached epoch `760/3000`; no final
+  score/provenance/audit/import package exists yet. To reduce no-space risk
+  without touching project evidence or dependencies, only three user-level
+  cache directories were removed after realpath allowlist checks:
+  `.vscode-server/data/CachedExtensionVSIXs`, Chrome `component_crx_cache`,
+  and Code `CachedData`. This recovered disk from about `4.4G` to `4.6G`
+  free. Project outputs, active adapters, models, Python site-packages, and
+  other projects were left untouched.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

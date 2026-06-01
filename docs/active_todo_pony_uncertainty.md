@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 04:35 CST
+Last updated: 2026-06-02 04:47 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -375,6 +375,16 @@ or review cycle.
   lightweight evidence package was found. Therefore it is not classified as
   disposable garbage in this cycle. The active IRLLRec adapter and all final
   evidence directories were left untouched.
+- IRLLRec cache-cleanup follow-up: at 2026-06-02 04:47 CST, toys IRLLRec was
+  still running and had reached `epoch=760/3000`; the final evidence directory
+  still had no score/provenance/audit/import package. Because disk remained
+  tight, three user-level cache directories were removed after realpath
+  allowlist checks: `/home/ajifang/.vscode-server/data/CachedExtensionVSIXs`
+  (`148M`), `/home/ajifang/.config/google-chrome/component_crx_cache` (`44M`),
+  and `/home/ajifang/.config/Code/CachedData` (`11M`). Disk recovered from
+  about `4.4G` to `4.6G` free. No project outputs, evidence directories,
+  active adapters, models, Python site-packages, or other projects were
+  removed.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
