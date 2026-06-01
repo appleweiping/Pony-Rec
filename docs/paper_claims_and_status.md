@@ -157,6 +157,17 @@ For sports/toys/home/tools, each report records `n_users=10000`,
 `n_prompts=1010000`, the test same-candidate `data_path`, `scores.csv` with
 1,010,000 scored candidate rows plus header, and `user_ranks.jsonl` with
 10,000 rows.
+Toys-specific audit checkpoint (2026-06-02 07:18 CST): the C-CRP core result
+under `outputs/toys_large10000_100neg_ccrp_v3` is metric-complete
+(HR@5/10/20 `0.3172 / 0.3964 / 0.5059`, NDCG@5/10/20
+`0.2451904009717959 / 0.27079859856897753 / 0.298341205798594`, MRR
+`0.2503049488607351`, `n_users=10000`, `scores.csv` `1,010,001` lines, and
+`user_ranks.jsonl` `10,000` rows). However, the unified domain gate currently
+expects imported C-CRP artifacts under
+`outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise`; those imported
+prediction/metric/coverage tables are absent. Therefore toys C-CRP is not yet
+paper-facing through the same comparison-table gate even though the core
+metrics are present.
 Original-domain C-CRP v3 formal reports are present under
 `outputs/ccrp_v3_formal/<domain>/report.json`, and the old four-domain
 official-baseline comparison is present at
@@ -185,7 +196,10 @@ external-baseline comparison.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports is now 8/8 complete; toys is 5/8 complete with
-   `rlmrec_graphcl` currently running; home/tools remain pending.
+   `rlmrec_graphcl` currently running; home/tools remain pending. At the
+   2026-06-02 07:18 CST monitoring checkpoint, toys `rlmrec_graphcl` was still
+   in Qwen3 `hf_mean_pool` embedding at about `133152/215034`, GPU and disk
+   were healthy enough to continue, and the recent error scan was clean.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

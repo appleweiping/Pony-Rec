@@ -103,16 +103,17 @@ Root-level [AGENTS.md](../../AGENTS.md) is the operating contract for future
 agents. If a milestone status changes, update this file and the relevant M-file
 rather than relying on a chat handoff.
 
-## Current Working Position (updated 2026-05-31)
+## Current Working Position (updated 2026-06-02)
 
 The repository is now in M5 (multi-domain SOTA validation):
 
 - C-CRP v3 completed on all 8 domains
 - Official external baselines completed on original 4 domains (8 methods each)
-- New domains (sports/toys/home/tools) official baselines are in Phase 2;
-  sports launched on 2026-05-31 with the reconciled canonical 8-method runner,
-  which imports full `@5/@10/@20 + MRR` metrics after each successful score
-  audit
+- New domains (sports/toys/home/tools) official baselines are in Phase 2.
+  Sports has all eight official rows plus C-CRP imported evidence through the
+  domain gate. Toys has five audited official rows complete and the sixth row,
+  `rlmrec_graphcl`, is running; every completed row imports full
+  `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 
@@ -136,6 +137,14 @@ the canonical official baseline block is
 completeness: each of sports/toys/home/tools has `report.json`, `scores.csv`
 with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 10,000 user-rank rows.
+
+New-domain imported-table note (2026-06-02): toys C-CRP v3 is metric-complete
+under `outputs/toys_large10000_100neg_ccrp_v3` (`report.json`, `scores.csv`,
+and `user_ranks.jsonl` are present with aligned 10k-user/101-candidate counts),
+but the current unified domain gate looks for imported C-CRP artifacts under
+`outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise`. Until the import
+step or gate mapping is reconciled, do not treat toys as having passed the
+same comparison-table gate even though the core C-CRP metrics exist.
 
 Artifact audit note (2026-05-31): the old four-domain C-CRP reports are present
 under `outputs/ccrp_v3_formal/<domain>/report.json`; they were only missed by
@@ -803,6 +812,17 @@ not as a reason to silently rerun completed metric rows.
   `1664/215034`, GPU was `99%` with `15945 MiB / 49140 MiB`, and disk was
   about `8.8G` free. Do not start another toys baseline until this row
   finishes or fails and has been audited.
+- Toys RLMRec monitoring/gate checkpoint 2026-06-02 07:18 CST: active runner
+  PID `2937284` and adapter PID `2937292` remain live. Qwen3 embedding reached
+  about `133152/215034`; GPU was `98%` with `16285 MiB / 49140 MiB` at 75C,
+  disk remained about `8.8G` free, and the recent error scan was clean. A
+  read-only toys domain gate found five official rows passing all compact
+  server checks (`llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`,
+  `irllrec_intent`), while `rlmrec_graphcl`, `llm2rec_sasrec`, and
+  `llmesr_sasrec` are incomplete as expected. Toys C-CRP core metrics and row
+  counts are present under `outputs/toys_large10000_100neg_ccrp_v3`, but
+  imported prediction/metric/coverage tables still need reconciliation before
+  a toys comparison table is paper-facing.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)
