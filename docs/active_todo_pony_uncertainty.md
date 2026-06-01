@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 10:41 CST
+Last updated: 2026-06-01 12:10 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -29,11 +29,11 @@ or review cycle.
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
 - Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
 - Active row: sports `rlmrec_graphcl`, child PID `2851207`
-- Latest checked progress: 2026-06-01 10:41 CST, RLMRec official training
-  passed the 1000-epoch checkpoint and reached
-  `[rlmrec-official] epoch=1030 train_loss=1.478778` out of the default
+- Latest checked progress: 2026-06-01 12:10 CST, RLMRec official training
+  passed the 2000-epoch checkpoint:
+  `[rlmrec-official] epoch=2000 train_loss=1.476514` out of the default
   `3000` epochs; final scoring has not started
-- GPU/disk at latest check: GPU `6%`, `19943 MiB / 49140 MiB`, disk `28G`
+- GPU/disk at latest check: GPU `70%`, `19943 MiB / 49140 MiB`, disk `28G`
   free (`85%` used); child PID `2851207` remains active
 - Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
   exception, or runtime-error markers
@@ -79,7 +79,7 @@ Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec is not yet a completed row: as of 2026-06-01 10:41 CST its output
+RLMRec is not yet a completed row: as of 2026-06-01 12:10 CST its output
 directory still contains only `inspect_fairness_provenance.json`; there is no final
 `scores.csv`, score audit, imported table, run summary, or final
 `fairness_provenance.json` to audit or sync.
@@ -112,15 +112,17 @@ outputs remain on the server.
 ### RLMRec Training Checkpoint
 
 At 2026-06-01 09:53 CST, sports `rlmrec_graphcl` passed the 500-epoch
-checkpoint under child PID `2851207`. At 2026-06-01 10:41 CST it passed the
-1000-epoch checkpoint. Logged training loss:
+checkpoint under child PID `2851207`; at 2026-06-01 10:41 CST it passed the
+1000-epoch checkpoint; at 2026-06-01 12:10 CST it passed the 2000-epoch
+checkpoint. Logged training loss:
 
 - epoch 500: `1.480699`
 - epoch 510: `1.482085`
 - epoch 1000: `1.477797`
 - epoch 1030: `1.478778`
+- epoch 2000: `1.476514`
 
-At the 10:41 CST sample, GPU was `6%` with `19943 MiB / 49140 MiB`, disk was
+At the 12:10 CST sample, GPU was `70%` with `19943 MiB / 49140 MiB`, disk was
 `28G` free (`85%` used), and fatal/OOM/CUDA/no-space scans remained clean. The
 output directory still contained only `inspect_fairness_provenance.json`; there
 was no final `scores.csv`, final provenance, score audit, imported table, or
