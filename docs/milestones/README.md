@@ -635,6 +635,34 @@ not as a reason to silently rerun completed metric rows.
   log `baselines_new_domains_toys_proex_20260601_194414.log`. At the 19:48
   check it was in Qwen3 `hf_mean_pool` embedding at about `7088/215034`, GPU
   `95%`, and disk about `18G` free. The row is running and not table-eligible.
+- Toys ProEx completion/package checkpoint 2026-06-01 21:13 CST:
+  `proex_profile` completed as the first toys official row with
+  `implementation_status=official_completed`, `blockers=[]`, and
+  `score_coverage_rate=1.0`. Server-final audit passed with full metrics:
+  HR@5/10/20=`0.0895/0.1615/0.3017`,
+  NDCG@5/10/20=`0.058141214365017416/0.0810170703641553/0.11607709818340411`,
+  and MRR=`0.08121671352544663`; `sample_count=10000` and
+  `avg_candidates=101.0`. Row counts passed: `scores.csv` has `1,010,001`
+  lines, predictions have `10,000` lines, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The lightweight local
+  package is under
+  `outputs/baselines/official_adapters/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`;
+  local sync and local-light audit both passed, with 11 allowed lightweight
+  files and 4 server-only large files. A server-side sha256 manifest now records
+  final `scores.csv`, predictions, and `proex_official_model.pt` without
+  copying those large files locally. After verifying protected final evidence,
+  the completed intermediate adapter directory was removed, recovering disk
+  from about `14G` to `18G` free.
+- Toys ProMax launch checkpoint 2026-06-01 21:31 CST: after the ProEx gate and
+  cleanup, toys `promax_profile` was launched as the next single-row official
+  baseline. The intended adapter is active as PID `2899998` under runner PID
+  `2899989`; log path is
+  `baselines_new_domains_toys_promax_20260601_212808.log`. At the first
+  post-launch check it was in Qwen3 `hf_mean_pool` embedding at about
+  `1312/215034`, GPU used about `14843 MiB / 49140 MiB`, disk was about `17G`
+  free, and the error scan showed only the known model-loading note. No ProMax
+  final scores/provenance/audit/import package exists yet, so the row is not
+  table-eligible.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 20:17 CST
+Last updated: 2026-06-01 21:31 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,18 +27,19 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `proex_profile` official row. It launched on
-  2026-06-01 19:44 CST as a single-domain/single-method production run after
-  confirming no active Pony/baseline Python process. Runner PID is `2893793`,
-  adapter PID is `2893803`, log path is
-  `baselines_new_domains_toys_proex_20260601_194414.log`, and PID file is
-  `baselines_new_domains_toys_proex.pid`. At the 2026-06-01 20:17 CST
-  monitoring check it was still in Qwen3 `hf_mean_pool` embedding at about
-  `113608/215034`; GPU sample was `96%`, `16285 MiB / 49140 MiB`, and disk
-  was about `18G` free. The row is running
-  and not table-eligible until final scores, provenance, score audit, imported
-  metrics, row counts, server-final audit, local-light sync, and local-light
-  audit pass.
+- Active runner: toys `promax_profile` official row. It launched on
+  2026-06-01 21:28 CST as a single-domain/single-method production run after
+  toys `proex_profile` completed all final gates and its intermediate adapter
+  directory was safely removed. Runner PID is `2899989`, adapter PID is
+  `2899998`, log path is
+  `baselines_new_domains_toys_promax_20260601_212808.log`, and PID files are
+  `baselines_new_domains_toys_promax_runner.pid` and
+  `baselines_new_domains_toys_promax_adapter.pid`. At the 2026-06-01
+  21:31 CST check it was in Qwen3 `hf_mean_pool` embedding at about
+  `1312/215034`; GPU sample was about `26%`, `14843 MiB / 49140 MiB`, and
+  disk was about `17G` free. The row is running and not table-eligible until
+  final scores, provenance, score audit, imported metrics, row counts,
+  server-final audit, local-light sync, and local-light audit pass.
 - Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
@@ -205,6 +206,39 @@ or review cycle.
   official final provenance packages; toys/home/tools still have zero completed
   official baseline rows, while C-CRP v3 reports are present for
   sports/toys/home/tools.
+- Toys ProEx completion/package follow-up: at 2026-06-01 21:11 CST, toys
+  `proex_profile` completed as `implementation_status=official_completed`,
+  `blockers=[]`, and `score_coverage_rate=1.0`. Server-final evidence audit
+  passed with full metrics over 10,000 users and 101 candidates:
+  HR@5/10/20 `0.0895 / 0.1615 / 0.3017`, NDCG@5/10/20
+  `0.058141214365017416 / 0.0810170703641553 / 0.11607709818340411`, and MRR
+  `0.08121671352544663`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. Local lightweight evidence sync and local-light audit passed under
+  `outputs/baselines/official_adapters/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`;
+  the sync manifest has `allowed_file_count=11`, `excluded_file_count=4`, and
+  `failures=0`, including a server-side large-artifact sha256 manifest for
+  `scores.csv`, predictions, and `proex_official_model.pt`. After verifying no
+  active toys ProEx process and protected final outputs, the intermediate
+  adapter directory
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_proex_official_adapter`
+  was removed, recovering disk from about `14G` to `18G` free. Final server
+  scores, provenance, audits, predictions, imported tables, and model were not
+  deleted.
+- Toys ProMax launch follow-up: at 2026-06-01 21:28 CST, after a no-active
+  experiment preflight and the toys ProEx package/cleanup gate, toys
+  `promax_profile` was launched as the next low-space-risk official row with:
+  `nohup env DOMAINS_OVERRIDE=toys FAST_METHODS_OVERRIDE=promax_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
+  The first launch command timed out locally but did start the intended row; a
+  follow-up process check found adapter PID `2899998` under runner PID
+  `2899989`, and PID files were corrected to
+  `baselines_new_domains_toys_promax_adapter.pid` and
+  `baselines_new_domains_toys_promax_runner.pid`. Log path:
+  `baselines_new_domains_toys_promax_20260601_212808.log`. At the 21:31 CST
+  check it was in Qwen3 `hf_mean_pool` embedding at about `1312/215034`, with
+  only the known model-loading `UNEXPECTED` note and no fatal/OOM/no-space
+  markers. Do not start another baseline until this row finishes or fails and
+  has been audited.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -258,9 +292,9 @@ tests, and ARIS review.
 
 | Method | Status | Evidence status |
 | --- | --- | --- |
-| `proex_profile` | running | launched 2026-06-01 19:44 CST, log `baselines_new_domains_toys_proex_20260601_194414.log`, runner PID `2893793`, adapter PID `2893803`; not table-eligible yet |
+| `proex_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llmemb` | not started | pending disk-aware single-row loop |
-| `promax_profile` | not started | pending after `proex_profile` gate |
+| `promax_profile` | running | launched 2026-06-01 21:28 CST, log `baselines_new_domains_toys_promax_20260601_212808.log`, runner PID `2899989`, adapter PID `2899998`; not table-eligible yet |
 | `elmrec_graph` | not started | pending |
 | `irllrec_intent` | not started | pending |
 | `rlmrec_graphcl` | not started | pending |

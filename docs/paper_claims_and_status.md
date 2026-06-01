@@ -461,7 +461,26 @@ external-baseline comparison.
    `95%` and disk about `18G` free. This row is running and not yet
    table-eligible; do not include it in claims until final score/provenance,
    audits, imported full metrics, row counts, local-light sync, and paired
-   evidence gates pass.
+   evidence gates pass. At 2026-06-01 21:13 CST, toys `proex_profile`
+   completed as `official_completed` with `blockers=[]` and
+   `score_coverage_rate=1.0`. Server-final audit, lightweight sync, and
+   local-light audit passed. Full metrics over 10,000 users and 101 candidates
+   are HR@5/10/20=`0.0895/0.1615/0.3017`,
+   NDCG@5/10/20=`0.058141214365017416/0.0810170703641553/0.11607709818340411`,
+   and MRR=`0.08121671352544663`; row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local package is
+   `outputs/baselines/official_adapters/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`.
+   A server-side sha256 manifest records the final large files while keeping
+   `scores.csv`, predictions, and `proex_official_model.pt` server-only. The
+   completed intermediate adapter directory was removed after audits, recovering
+   disk from about `14G` to `18G` free without touching final evidence. Toys
+   now has 1/8 completed official baselines. At 2026-06-01 21:31 CST, toys
+   `promax_profile` was running as the next single-row official baseline under
+   runner PID `2899989` and adapter PID `2899998`, with log
+   `baselines_new_domains_toys_promax_20260601_212808.log`; it was in Qwen3
+   embedding at about `1312/215034` and is not table-eligible until the same
+   gates pass.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing
