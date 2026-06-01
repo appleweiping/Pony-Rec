@@ -566,6 +566,17 @@ not as a reason to silently rerun completed metric rows.
   missing only the newly standardized `server_final_evidence_audit.json`; that
   JSON was backfilled on the server, copied to local lightweight packages, and
   local-light audits passed for all four without changing any scores.
+- Training checkpoint 2026-06-01 17:15 CST: sports `llmesr_sasrec` completed
+  Qwen3 `hf_mean_pool` embedding (`233470/233470`) and entered official
+  LLM-ESR training. Logged losses are epoch 1 `1.374167` and epoch 5
+  `0.361412`. The same runner/adapter PIDs remain active (`2877443`/`2877452`);
+  GPU sample was `100%` with `21215 MiB / 49140 MiB`, and disk was `15G` free
+  (`93%` used). No final LLM-ESR `scores.csv`, final provenance, score audit,
+  predictions, imported tables, or local evidence package exists yet, so the
+  eighth sports row remains not table-eligible. A read-only storage review
+  found the active LLM-ESR adapter at about `4.5G`; no cleanup was performed
+  because meaningful large candidates were either active intermediates or
+  protected final evidence from completed rows.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

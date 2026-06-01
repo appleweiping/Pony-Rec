@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 16:50 CST
+Last updated: 2026-06-01 17:15 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -30,11 +30,14 @@ or review cycle.
 - Active runner: sports `llmesr_sasrec`, launched 2026-06-01 16:13 CST as a
   single-row production run with runner PID `2877443` and adapter PID
   `2877452`.
-- Latest checked state: 2026-06-01 16:48 CST, LLM-ESR is still in Qwen3
-  `hf_mean_pool` embedding at about `141696/233470`; GPU sample was `95%`,
-  `16285 MiB / 49140 MiB`, and disk has `22G` free (`89%` used). The final
-  LLM-ESR output directory is still only `8.0K`; no final LLM-ESR
-  scores/provenance/imported tables exist yet. The fixed-string error scan
+- Latest checked state: 2026-06-01 17:15 CST, LLM-ESR completed the Qwen3
+  `hf_mean_pool` embedding pass (`233470/233470`) and entered official
+  LLM-ESR training. Logged training checkpoints: epoch 1 loss `1.374167`,
+  epoch 5 loss `0.361412`. Active runner PID is still `2877443`; adapter PID
+  is still `2877452`. GPU sample was `100%`, `21215 MiB / 49140 MiB`, and
+  disk has `15G` free (`93%` used). The final LLM-ESR output directory still
+  has no `scores.csv`, final provenance, score audit, predictions, or imported
+  tables, so the row is still not table-eligible. The fixed-string error scan
   only matched the harmless model-loading `Notes:` line already seen in prior
   runs.
 - Resolved LLM2Rec recovery: the full embedding artifact completed. Both
@@ -127,14 +130,15 @@ or review cycle.
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
 | `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
 | `llm2rec_sasrec` | complete | local lightweight package PASS; server-final package PASS |
-| `llmesr_sasrec` | running | Qwen3 embedding active under runner PID `2877443`, adapter PID `2877452`; not table-eligible |
+| `llmesr_sasrec` | running | official training active under runner PID `2877443`, adapter PID `2877452`; embedding complete; not table-eligible |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec and LLM2Rec are now completed rows. LLM-ESR is still missing final
-score/provenance/table packages and must not enter a comparison table yet.
+RLMRec and LLM2Rec are now completed rows. LLM-ESR is in official training and
+is still missing final score/provenance/table packages; it must not enter a
+comparison table yet.
 
 ## Completed Checkpoints
 

@@ -399,7 +399,15 @@ external-baseline comparison.
    `elmrec_graph`) lacked only the newer standardized
    `server_final_evidence_audit.json`; that audit was backfilled with
    `ok=true` on the server and local-light audits passed after copying the new
-   JSONs into the local lightweight packages. No scores changed.
+   JSONs into the local lightweight packages. No scores changed. At
+   2026-06-01 17:15 CST, LLM-ESR completed Qwen3 embedding
+   (`233470/233470`) and entered official training, with logged losses
+   epoch 1 `1.374167` and epoch 5 `0.361412`. The row is still not
+   table-eligible: no final LLM-ESR `scores.csv`, final provenance, score
+   audit, predictions, imported tables, or local lightweight evidence package
+   exists yet. Disk is a watch item at about `15G` free (`93%` used), but a
+   read-only storage review found no meaningful safe cleanup while the active
+   LLM-ESR adapter is running and completed-row final evidence is protected.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
