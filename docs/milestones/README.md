@@ -432,6 +432,13 @@ not as a reason to silently rerun completed metric rows.
   seen in earlier completed graph baselines and handled by setting `inf`
   inverse degrees to `0.0`. No final RLMRec score/provenance/table package
   exists yet.
+- Monitoring checkpoint 2026-06-01 09:19 CST: sports `rlmrec_graphcl` is
+  still training normally under child PID `2851207`. The latest logged line is
+  `[rlmrec-official] epoch=140 train_loss=1.490221`; loss continues to decline,
+  GPU is `100%` with `19943 MiB / 49140 MiB`, disk remains `28G` free (`85%`
+  used), and fatal/OOM/CUDA/no-space scans remain clean. The output directory
+  still contains only `inspect_fairness_provenance.json`, so no server-final
+  audit, local sync, result table, or sixth sports official row is available.
 - GPU: RTX 4090, active for the sports official-baseline run
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

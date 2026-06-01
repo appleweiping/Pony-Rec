@@ -302,7 +302,10 @@ external-baseline comparison.
    free, and no final artifacts existed yet. The zero-degree graph
    normalization warning is recorded as non-fatal because the implementation
    maps infinite inverse degrees to `0.0`, but final eligibility still depends
-   on successful score/provenance/audit/table outputs.
+   on successful score/provenance/audit/table outputs. At 2026-06-01 09:19
+   CST, RLMRec was still training at epoch 140 with train loss `1.490221`,
+   clean fatal/OOM/no-space scans, and only `inspect_fairness_provenance.json`
+   in the output directory; the sports official evidence count remains five.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
