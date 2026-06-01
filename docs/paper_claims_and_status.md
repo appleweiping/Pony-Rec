@@ -306,6 +306,11 @@ external-baseline comparison.
    CST, RLMRec was still training at epoch 140 with train loss `1.490221`,
    clean fatal/OOM/no-space scans, and only `inspect_fairness_provenance.json`
    in the output directory; the sports official evidence count remains five.
+   At 2026-06-01 09:53 CST, RLMRec passed epoch 500 (`train_loss=1.480699`)
+   and reached epoch 510 (`train_loss=1.482085`) with clean fatal/OOM/CUDA/
+   no-space scans and stable `28G` free disk. No final `scores.csv`, final
+   provenance, audit, run summary, or imported metrics table exists yet, so
+   the sports official evidence count remains five.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains
