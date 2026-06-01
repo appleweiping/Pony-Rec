@@ -88,6 +88,7 @@ def _build_user_item_maps(
     train_rows: list[dict[str, str]],
     candidate_rows: list[dict[str, str]],
     valid_candidate_rows: list[dict[str, str]] | None = None,
+    extra_train_rows: list[dict[str, str]] | None = None,
 ) -> tuple[dict[str, int], dict[str, int]]:
     user_ids = {_text(row.get("user_id")) for row in train_rows}
     user_ids.update(_text(row.get("user_id")) for row in candidate_rows)
@@ -96,6 +97,9 @@ def _build_user_item_maps(
     if valid_candidate_rows:
         user_ids.update(_text(row.get("user_id")) for row in valid_candidate_rows)
         item_ids.update(_text(row.get("item_id")) for row in valid_candidate_rows)
+    if extra_train_rows:
+        user_ids.update(_text(row.get("user_id")) for row in extra_train_rows)
+        item_ids.update(_text(row.get("item_id")) for row in extra_train_rows)
 
     user_ids.discard("")
     item_ids.discard("")
@@ -211,6 +215,20 @@ def _load_item_metadata(task_dir: Path) -> dict[str, dict[str, str]]:
     return _item_catalog_from_rows(_read_csv(path))
 
 
+def _merge_item_metadata(
+    primary: dict[str, dict[str, str]],
+    extra: dict[str, dict[str, str]],
+) -> dict[str, dict[str, str]]:
+    merged = {item_id: dict(info) for item_id, info in primary.items()}
+    for item_id, info in extra.items():
+        current = merged.setdefault(item_id, {"candidate_title": "", "candidate_text": ""})
+        if info.get("candidate_title") and not current.get("candidate_title"):
+            current["candidate_title"] = info["candidate_title"]
+        if info.get("candidate_text") and not current.get("candidate_text"):
+            current["candidate_text"] = info["candidate_text"]
+    return merged
+
+
 def _merge_item_catalogs(
     candidate_rows: list[dict[str, str]],
     item_metadata: dict[str, dict[str, str]] | None = None,
@@ -319,19 +337,34 @@ def export_llm2rec_package(
     train_rows = _read_csv(train_path)
     candidate_rows = _read_csv(candidate_path)
     valid_candidate_rows: list[dict[str, str]] | None = None
+    valid_train_rows: list[dict[str, str]] = []
     valid_candidate_path = None
+    valid_train_path = None
     if valid_task_dir is not None:
         valid_candidate_path = valid_task_dir / "candidate_items.csv"
         if not valid_candidate_path.exists():
             raise FileNotFoundError(f"validation candidate_items.csv not found: {valid_candidate_path}")
         valid_candidate_rows = _read_csv(valid_candidate_path)
+        valid_train_path = valid_task_dir / "train_interactions.csv"
+        if valid_train_path.exists():
+            valid_train_rows = _read_csv(valid_train_path)
     item_metadata = _load_item_metadata(task_dir)
-    user_to_idx, item_to_idx = _build_user_item_maps(train_rows, candidate_rows, valid_candidate_rows)
+    if valid_task_dir is not None:
+        item_metadata = _merge_item_metadata(item_metadata, _load_item_metadata(valid_task_dir))
+    user_to_idx, item_to_idx = _build_user_item_maps(
+        train_rows,
+        candidate_rows,
+        valid_candidate_rows,
+        extra_train_rows=valid_train_rows,
+    )
     train_sequences = _group_train_sequences(train_rows, user_to_idx, item_to_idx)
     event_rows, event_index_by_source = _candidate_event_rows(candidate_rows, train_sequences, user_to_idx, item_to_idx)
     valid_event_rows = event_rows
+    valid_history_sequences = train_sequences
     if valid_candidate_rows is not None:
-        valid_event_rows, _ = _candidate_event_rows(valid_candidate_rows, train_sequences, user_to_idx, item_to_idx)
+        if valid_train_rows:
+            valid_history_sequences = _group_train_sequences(valid_train_rows, user_to_idx, item_to_idx)
+        valid_event_rows, _ = _candidate_event_rows(valid_candidate_rows, valid_history_sequences, user_to_idx, item_to_idx)
     mapped_candidates = _candidate_mapped_rows(candidate_rows, user_to_idx, item_to_idx, event_index_by_source)
 
     train_seq_rows = [seq for _, seq in sorted(train_sequences.items()) if len(seq) >= 2]
@@ -415,7 +448,9 @@ def export_llm2rec_package(
         "users": len(user_to_idx),
         "items": len(item_to_idx),
         "train_interaction_rows": len(train_rows),
+        "valid_train_interaction_rows": len(valid_train_rows),
         "train_sequence_rows": train_count,
+        "valid_history_sequence_users": len(valid_history_sequences),
         "data_rows": data_count,
         "valid_sequence_rows": valid_count,
         "test_sequence_rows": test_count,
@@ -424,6 +459,12 @@ def export_llm2rec_package(
         "valid_candidate_events": len(valid_event_rows),
         "valid_candidate_rows": len(valid_candidate_rows or candidate_rows),
         "valid_candidate_items_path": str(valid_candidate_path) if valid_candidate_path else "",
+        "valid_train_interactions_path": str(valid_train_path) if valid_train_path else "",
+        "valid_history_source": (
+            "valid_task_train_interactions"
+            if valid_train_rows
+            else "test_task_train_interactions_fallback"
+        ),
         "required_score_schema": ["source_event_id", "user_id", "item_id", "score"],
         "upstream_adapter_blockers": [
             "LLM2Rec hard-codes dataset aliases and source_dict paths; wrapper must register dataset_alias and llm2rec_data_dir.",

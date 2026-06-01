@@ -319,7 +319,26 @@ external-baseline comparison.
    (`train_loss=1.476514`) with clean fatal/OOM/CUDA/no-space scans and stable
    `28G` free disk. The output directory still contained only
    `inspect_fairness_provenance.json`; no final score/provenance/audit/table
-   package exists yet, so the sports official evidence count remains five.
+   package existed yet, so the sports official evidence count remained five.
+   At 2026-06-01 13:50 CST, sports `rlmrec_graphcl` completed and passed all
+   row gates: `implementation_status=official_completed`, `blockers=[]`,
+   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+   and local-light audit PASS. Metrics over 10,000 users and 101 candidates:
+   HR@5/10/20=`0.1212/0.1879/0.3009`,
+   NDCG@5/10/20=`0.078580389191345/0.10001773336299705/0.12818232277286493`,
+   MRR=`0.09720456858848743`, `sample_count=10000`,
+   `avg_candidates=101.0`, `score_rows=1010000`, and
+   `candidate_rows=1010000`. Server row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). Sports now has six
+   completed official rows, but no sports SOTA claim is allowed until LLM2Rec,
+   LLM-ESR, the complete eight-baseline comparison table, and paired tests
+   finish. The runner then reached sports `llm2rec_sasrec` and stopped during
+   adapter export because validation candidate histories were incorrectly
+   looked up in the test-task train file. The local fix uses
+   `valid_same_candidate/train_interactions.csv` for validation histories and
+   passed a targeted unit test; it still needs server pull and resumed LLM2Rec
+   execution before any LLM2Rec row is eligible.
 2. Import and audit each remaining new-domain baseline row with exact score coverage,
    full @5/@10/@20 metrics, provenance, and row-count checks.
 3. Full @5/@10/@20 comparison table across all domains

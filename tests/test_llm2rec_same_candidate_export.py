@@ -195,6 +195,13 @@ def test_llm2rec_export_uses_separate_validation_task(tmp_path):
         ],
         ["user_id", "item_id", "timestamp", "sequence_index"],
     )
+    _write_csv(
+        valid_task_dir / "train_interactions.csv",
+        [
+            {"user_id": "u9", "item_id": "i7", "timestamp": 1, "sequence_index": 0},
+        ],
+        ["user_id", "item_id", "timestamp", "sequence_index"],
+    )
     rows = [
         {
             "source_event_id": "u1::4",
@@ -219,8 +226,8 @@ def test_llm2rec_export_uses_separate_validation_task(tmp_path):
     ]
     valid_rows = [
         {
-            "source_event_id": "u1::3",
-            "user_id": "u1",
+            "source_event_id": "u9::3",
+            "user_id": "u9",
             "timestamp": 3,
             "candidate_index": 0,
             "item_id": "i5",
@@ -229,8 +236,8 @@ def test_llm2rec_export_uses_separate_validation_task(tmp_path):
             "candidate_title": "Valid Positive",
         },
         {
-            "source_event_id": "u1::3",
-            "user_id": "u1",
+            "source_event_id": "u9::3",
+            "user_id": "u9",
             "timestamp": 3,
             "candidate_index": 1,
             "item_id": "i6",
@@ -262,6 +269,8 @@ def test_llm2rec_export_uses_separate_validation_task(tmp_path):
 
     data_dir = tmp_path / "outputs" / "baselines" / "paper_adapters" / "books_llm2rec_adapter" / "llm2rec" / "data" / "BooksSameCandidate" / "downstream"
     assert metadata["valid_candidate_rows"] == 2
+    assert metadata["valid_train_interaction_rows"] == 1
+    assert metadata["valid_history_source"] == "valid_task_train_interactions"
     assert metadata["candidate_rows"] == 2
-    assert (data_dir / "val_data.txt").read_text(encoding="utf-8").strip().endswith("5")
+    assert (data_dir / "val_data.txt").read_text(encoding="utf-8").strip() == "7 5"
     assert (data_dir / "test_data.txt").read_text(encoding="utf-8").strip().endswith("3")

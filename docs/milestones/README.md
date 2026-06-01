@@ -149,12 +149,13 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports running with
-   `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
-   `irllrec_intent` complete;
-   continue the single-domain
-   production loop after each domain passes provenance, exact-score, import,
-   and storage checks
+2. 8 official baselines on 4 new domains (Phase 2) — sports has six audited
+   official rows complete: `llmemb`, `proex_profile`, `promax_profile`,
+   `elmrec_graph`, `irllrec_intent`, and `rlmrec_graphcl`. `llm2rec_sasrec`
+   exposed a validation-history adapter export bug after RLMRec completed; the
+   local fix uses `valid_same_candidate/train_interactions.csv` for validation
+   candidate histories and must be pulled to the server before resuming LLM2Rec
+   only.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -466,6 +467,20 @@ not as a reason to silently rerun completed metric rows.
   contains only `inspect_fairness_provenance.json`; no final
   scores/provenance/audit/table package exists, so sports official evidence
   remains five completed rows.
-- GPU: RTX 4090, active for the sports official-baseline run
+- Completion/recovery checkpoint 2026-06-01 13:50 CST: sports
+  `rlmrec_graphcl` completed as `implementation_status=official_completed`
+  with `blockers=[]`, `score_coverage_rate=1.0`, server-final audit PASS,
+  lightweight sync PASS, and local-light audit PASS. Full metrics:
+  HR@5/10/20=`0.1212/0.1879/0.3009`,
+  NDCG@5/10/20=`0.078580389191345/0.10001773336299705/0.12818232277286493`,
+  MRR=`0.09720456858848743`, `sample_count=10000`, `avg_candidates=101.0`,
+  and `score_rows=1010000`. Server row counts passed: `scores.csv` has
+  `1,010,001` lines, predictions have `10,000` lines, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The runner then
+  advanced to sports `llm2rec_sasrec` and stopped during adapter export with an
+  empty validation-history error for a valid-only user. Local fix and targeted
+  unit test are in place; no baseline process is currently active, GPU is idle,
+  and disk is about `28G` free.
+- GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 12:10 CST
+Last updated: 2026-06-01 13:50 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,16 +27,27 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: `baselines_new_domains_sports.log`, runner PID `2794722`
-- Active row: sports `rlmrec_graphcl`, child PID `2851207`
-- Latest checked progress: 2026-06-01 12:10 CST, RLMRec official training
-  passed the 2000-epoch checkpoint:
-  `[rlmrec-official] epoch=2000 train_loss=1.476514` out of the default
-  `3000` epochs; final scoring has not started
-- GPU/disk at latest check: GPU `70%`, `19943 MiB / 49140 MiB`, disk `28G`
-  free (`85%` used); child PID `2851207` remains active
-- Latest fatal scan: no `Traceback`, `Killed`, OOM, CUDA, no-space, disk quota,
-  exception, or runtime-error markers
+- Active runner: none after the sports batch stopped at the LLM2Rec export
+  blocker; do not restart the whole eight-method script because six sports rows
+  are already completed and audited
+- Latest checked state: 2026-06-01 13:44 CST, no Python baseline process was
+  active, GPU was idle (`0%`, `15 MiB / 49140 MiB`), and disk had `28G` free
+  (`86%` used)
+- Latest completed row: sports `rlmrec_graphcl`, completed 2026-06-01
+  13:43 CST with `implementation_status=official_completed`, `blockers=[]`,
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  and local-light audit PASS
+- Current blocker/recovery: sports `llm2rec_sasrec` failed during adapter
+  export because the exporter mapped validation candidate events through the
+  test-task `train_interactions.csv`; at least one validation user exists only
+  in `sports_large10000_100neg_valid_same_candidate/train_interactions.csv`.
+  Local fix: `main_export_llm2rec_same_candidate_task.py` now uses
+  `valid_task_dir/train_interactions.csv` for validation histories when
+  present and keeps the test-task train history for test events. Targeted unit
+  test `test_llm2rec_export_uses_separate_validation_task` now covers disjoint
+  valid/test users and passed with
+  `PYTHONPATH=scripts/build;scripts/audit;scripts/adapters;. python -m pytest
+  tests/test_llm2rec_same_candidate_export.py -q`.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -71,18 +82,16 @@ or review cycle.
 | `promax_profile` | complete | local lightweight package PASS; server-final package PASS |
 | `elmrec_graph` | complete | local lightweight package PASS; server-final package PASS |
 | `irllrec_intent` | complete | local lightweight package PASS; server-final package PASS |
-| `rlmrec_graphcl` | running | Qwen embedding complete; official training active; wait for final scores/provenance |
-| `llm2rec_sasrec` | pending | inspect-only placeholder |
+| `rlmrec_graphcl` | complete | local lightweight package PASS; server-final package PASS |
+| `llm2rec_sasrec` | blocked/recovering | export blocker fixed locally; commit/push, server pull, then resume this row only |
 | `llmesr_sasrec` | pending | inspect-only placeholder |
 
 Completed sports rows have server-side `scores.csv` line count `1,010,001`,
 `predictions/rank_predictions.jsonl` line count `10,000`, final provenance,
 score audits, full metric tables, coverage/exposure tables, and
 `tables/ranking_eval_records.csv`.
-RLMRec is not yet a completed row: as of 2026-06-01 12:10 CST its output
-directory still contains only `inspect_fairness_provenance.json`; there is no final
-`scores.csv`, score audit, imported table, run summary, or final
-`fairness_provenance.json` to audit or sync.
+RLMRec is now a completed row. LLM2Rec and LLM-ESR are still missing final
+score/provenance/table packages and must not enter a comparison table yet.
 
 ## Completed Checkpoints
 
@@ -109,78 +118,74 @@ intermediate adapter directory
 was removed, recovering disk from `28G` free to `32G` free; final IRLLRec
 outputs remain on the server.
 
-### RLMRec Training Checkpoint
+### RLMRec Completed Checkpoint
 
 At 2026-06-01 09:53 CST, sports `rlmrec_graphcl` passed the 500-epoch
 checkpoint under child PID `2851207`; at 2026-06-01 10:41 CST it passed the
 1000-epoch checkpoint; at 2026-06-01 12:10 CST it passed the 2000-epoch
-checkpoint. Logged training loss:
+checkpoint; at 2026-06-01 13:43 CST it completed 3000 epochs, final score
+export, and same-candidate metric import. Logged training loss:
 
 - epoch 500: `1.480699`
 - epoch 510: `1.482085`
 - epoch 1000: `1.477797`
 - epoch 1030: `1.478778`
 - epoch 2000: `1.476514`
+- epoch 3000: `1.476057`
 
-At the 12:10 CST sample, GPU was `70%` with `19943 MiB / 49140 MiB`, disk was
-`28G` free (`85%` used), and fatal/OOM/CUDA/no-space scans remained clean. The
-output directory still contained only `inspect_fairness_provenance.json`; there
-was no final `scores.csv`, final provenance, score audit, imported table, or
-run summary. These checkpoints are training-health records only, not a sixth
-completed sports official row.
+Final evidence status: `implementation_status=official_completed`,
+`blockers=[]`, `score_coverage_rate=1.0`, server-final audit PASS,
+lightweight sync PASS, local-light audit PASS. Full metrics over 10,000 users
+and 101 candidates:
+
+- HR@5/10/20: `0.1212 / 0.1879 / 0.3009`
+- NDCG@5/10/20: `0.078580389191345 / 0.10001773336299705 / 0.12818232277286493`
+- MRR: `0.09720456858848743`
+
+Server row counts: `scores.csv` `1,010,001` lines including header,
+`predictions/rank_predictions.jsonl` `10,000` lines, and
+`tables/ranking_eval_records.csv` `10,001` lines. Local sync copied
+lightweight provenance/audit/run-summary/imported-table evidence under
+`outputs/baselines/official_adapters/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`
+and excluded server-only `scores.csv`, predictions, and
+`rlmrec_official_model.pt`.
+
+### LLM2Rec Export Blocker and Fix
+
+At 2026-06-01 13:43 CST, the sports runner advanced to `llm2rec_sasrec` and
+failed before training with:
+
+```text
+ValueError: source_event_id='AE226MX6WSMZ33PVVTMN4LAOMIAA::1330139774000'
+has empty mapped history for user_id='AE226MX6WSMZ33PVVTMN4LAOMIAA'
+```
+
+Server data check showed the user has one row in
+`outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/train_interactions.csv`
+and no rows in the test task train/candidate files. This is a real
+adapter-export bug, not a valid reason to skip validation. The local exporter
+fix keeps test histories and validation histories split-aligned. Next recovery
+step is to commit/push, pull the fix on `pony-rec-gpu`, run an adapter export
+smoke on the real sports task, then resume `llm2rec_sasrec` only.
 
 ## Required Next Actions
 
-1. Monitor the active sports `rlmrec_graphcl` row until it produces final
-   `scores.csv`, `fairness_provenance.json`, score audits, imported tables,
-   predictions, and run summary.
-2. If RLMRec completes, run the server-side package audit:
-
-   ```bash
-   cd ~/projects/pony-rec-rescue-shadow-v6
-   /home/ajifang/miniconda3/bin/python /tmp/pony_audit_official_evidence_package.py \
-     --evidence_dir outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate \
-     --mode=server_final \
-     --quiet
-   ```
-
-3. Copy the lightweight RLMRec evidence package to local
-   `outputs/baselines/official_adapters/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`.
-   Include final provenance, inspect provenance, JSON/TXT score audits, run
-   summary, imported `tables/`, and compact manifests if present. Do not copy
-   huge score/prediction/checkpoint files unless a recovery decision requires
-   it.
-   Preferred command:
-
-   ```powershell
-   python scripts\audit\main_sync_official_evidence_package.py `
-     --remote_evidence_dir outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate `
-     --local_evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate `
-     --copy `
-     --quiet
-   ```
-
-4. Run the local package audit:
-
-   ```powershell
-   python scripts\audit\main_audit_official_evidence_package.py `
-     --evidence_dir outputs\baselines\official_adapters\sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate `
-     --mode local_light `
-     --quiet
-   ```
-
-5. Update shared memory, `docs/milestones/README.md`,
-   `docs/paper_claims_and_status.md`, and this TODO with the complete metrics,
-   row counts, provenance status, copied files, and any cleanup decision.
-6. Commit and push only the related docs/manifests/code changes from the local
-   repo.
-7. Let the runner continue to `llm2rec_sasrec`, then repeat the same evidence
-   loop for `llm2rec_sasrec` and `llmesr_sasrec`.
-8. After all eight sports official rows complete, build the sports comparison
+1. Commit and push the LLM2Rec validation-history exporter fix plus the RLMRec
+   evidence docs/local package.
+2. Pull the committed fix on `pony-rec-gpu` after confirming no experiment
+   process is active.
+3. Run a server-side adapter export smoke for sports `llm2rec_sasrec` using
+   the real test/valid same-candidate tasks. It must complete without empty
+   valid-history errors and produce a ready adapter audit before training.
+4. Resume sports `llm2rec_sasrec` only, not the whole already-completed
+   sports batch. If it completes, run server-final audit, lightweight sync,
+   local-light audit, and full metric/row-count recording.
+5. Repeat the evidence loop for sports `llmesr_sasrec`.
+6. After all eight sports official rows complete, build the sports comparison
    table and paired/statistical tests. Do not claim sports SOTA until the
    complete same-candidate table and paired tests pass.
-9. Continue the same official-baseline protocol for toys, home, and tools.
-10. Only after the declared experiments, comparisons, ablations, provenance,
+7. Continue the same official-baseline protocol for toys, home, and tools.
+8. Only after the declared experiments, comparisons, ablations, provenance,
     statistical tests, and figure checks are complete, move to ARIS paper
     writing and GPT-5.5/Codex xhigh review. The review loop must reach at
     least 8/10 before submission-level readiness is claimed.
