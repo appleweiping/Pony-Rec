@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 21:31 CST
+Last updated: 2026-06-02 00:15 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,17 +27,18 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `promax_profile` official row. It launched on
-  2026-06-01 21:28 CST as a single-domain/single-method production run after
-  toys `proex_profile` completed all final gates and its intermediate adapter
-  directory was safely removed. Runner PID is `2899989`, adapter PID is
-  `2899998`, log path is
-  `baselines_new_domains_toys_promax_20260601_212808.log`, and PID files are
-  `baselines_new_domains_toys_promax_runner.pid` and
-  `baselines_new_domains_toys_promax_adapter.pid`. At the 2026-06-01
-  21:31 CST check it was in Qwen3 `hf_mean_pool` embedding at about
-  `1312/215034`; GPU sample was about `26%`, `14843 MiB / 49140 MiB`, and
-  disk was about `17G` free. The row is running and not table-eligible until
+- Active runner: toys `elmrec_graph` official row. It launched on
+  2026-06-02 00:07 CST as a single-domain/single-method production run after
+  toys `promax_profile` completed all final gates and its intermediate adapter
+  directory was safely removed. Runner PID is `2906447`, adapter PID is
+  `2906455`, log path is
+  `baselines_new_domains_toys_elmrec_20260602_000729.log`, and PID files are
+  `baselines_new_domains_toys_elmrec_runner.pid` and
+  `baselines_new_domains_toys_elmrec_adapter.pid`. At the 2026-06-02
+  00:10 CST check it was in Qwen3 `hf_mean_pool` embedding at about
+  `3624/215034`; at the 2026-06-02 00:15 CST check it had advanced to about
+  `21872/215034`; GPU sample was about `95%`, `16213 MiB / 49140 MiB`, and
+  disk was about `16G` free. The row is running and not table-eligible until
   final scores, provenance, score audit, imported metrics, row counts,
   server-final audit, local-light sync, and local-light audit pass.
 - Previous sports runner: Sports `llmesr_sasrec`
@@ -239,6 +240,47 @@ or review cycle.
   only the known model-loading `UNEXPECTED` note and no fatal/OOM/no-space
   markers. Do not start another baseline until this row finishes or fails and
   has been audited.
+- Toys ProMax completion/package follow-up: at 2026-06-02 00:02 CST, toys
+  `promax_profile` completed as `implementation_status=official_completed`,
+  `blockers=[]`, and `score_coverage_rate=1.0`. Server-final evidence audit
+  passed with full metrics over 10,000 users and 101 candidates:
+  HR@5/10/20 `0.0920 / 0.1435 / 0.2416`, NDCG@5/10/20
+  `0.06289618254810064 / 0.07937554863319267 / 0.10387644003990415`, and MRR
+  `0.08184625622431366`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. Local lightweight evidence sync and local-light audit passed under
+  `outputs/baselines/official_adapters/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`;
+  the sync manifest has `allowed_file_count=11`, `excluded_file_count=4`, and
+  `failures=0`, including a server-side large-artifact sha256 manifest for
+  `scores.csv`, predictions, and `promax_official_model.pt`. After verifying
+  no active toys ProMax process and protected final outputs, the intermediate
+  adapter directory
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_promax_official_adapter`
+  was removed, recovering disk from about `13G` to `17G` free. Final server
+  scores, provenance, audits, predictions, imported tables, and model were not
+  deleted.
+- Toys ElmRec launch follow-up: at 2026-06-02 00:07 CST, after a no-active
+  experiment preflight and the toys ProMax package/cleanup gate, toys
+  `elmrec_graph` was launched as the next official row with:
+  `nohup env DOMAINS_OVERRIDE=toys FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=elmrec_graph bash scripts/run_baselines_new_domains.sh`.
+  The first launch command timed out locally but did start the intended row; a
+  follow-up process check found adapter PID `2906455` under runner PID
+  `2906447`, and PID files were corrected to
+  `baselines_new_domains_toys_elmrec_adapter.pid` and
+  `baselines_new_domains_toys_elmrec_runner.pid`. Log path:
+  `baselines_new_domains_toys_elmrec_20260602_000729.log`. At the 00:10 CST
+  check it was in Qwen3 `hf_mean_pool` embedding at about `3624/215034`, with
+  only the known model-loading `UNEXPECTED` note and no fatal/OOM/no-space
+  markers. Do not start another baseline until this row finishes or fails and
+  has been audited.
+- Toys ElmRec monitor follow-up: at 2026-06-02 00:15 CST, runner PID `2906447`
+  and adapter PID `2906455` were still active. The log had advanced to about
+  `21872/215034` Qwen3 `hf_mean_pool` embeddings, GPU was `95%` with
+  `16213 MiB / 49140 MiB`, disk was `16G` free (`92%` used), and the error
+  scan showed only the known model-loading `UNEXPECTED` note, not
+  traceback/OOM/no-space/fatal markers. The final toys ElmRec evidence
+  directory still had no final score/provenance/audit/import package, so the
+  row remains running and not table-eligible.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -294,8 +336,8 @@ tests, and ARIS review.
 | --- | --- | --- |
 | `proex_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llmemb` | not started | pending disk-aware single-row loop |
-| `promax_profile` | running | launched 2026-06-01 21:28 CST, log `baselines_new_domains_toys_promax_20260601_212808.log`, runner PID `2899989`, adapter PID `2899998`; not table-eligible yet |
-| `elmrec_graph` | not started | pending |
+| `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `elmrec_graph` | running | launched 2026-06-02 00:07 CST, log `baselines_new_domains_toys_elmrec_20260602_000729.log`, runner PID `2906447`, adapter PID `2906455`; at 00:15 CST embedding progress was about `21872/215034`; not table-eligible yet |
 | `irllrec_intent` | not started | pending |
 | `rlmrec_graphcl` | not started | pending |
 | `llm2rec_sasrec` | not started | pending; storage-heavy |

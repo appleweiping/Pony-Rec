@@ -480,7 +480,27 @@ external-baseline comparison.
    runner PID `2899989` and adapter PID `2899998`, with log
    `baselines_new_domains_toys_promax_20260601_212808.log`; it was in Qwen3
    embedding at about `1312/215034` and is not table-eligible until the same
-   gates pass.
+   gates pass. At 2026-06-02 00:02 CST, toys `promax_profile` completed as
+   `official_completed` with `blockers=[]` and `score_coverage_rate=1.0`.
+   Server-final audit, lightweight sync, and local-light audit passed. Full
+   metrics over 10,000 users and 101 candidates are
+   HR@5/10/20=`0.0920/0.1435/0.2416`,
+   NDCG@5/10/20=`0.06289618254810064/0.07937554863319267/0.10387644003990415`,
+   and MRR=`0.08184625622431366`; row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local package is
+   `outputs/baselines/official_adapters/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`.
+   A server-side sha256 manifest records final large files while keeping
+   `scores.csv`, predictions, and `promax_official_model.pt` server-only. The
+   completed intermediate adapter directory was removed after audits, recovering
+   disk from about `13G` to `17G` free without touching final evidence. Toys
+   now has 2/8 completed official baselines. At 2026-06-02 00:10 CST, toys
+   `elmrec_graph` was running as the next single-row official baseline under
+   runner PID `2906447` and adapter PID `2906455`, with log
+   `baselines_new_domains_toys_elmrec_20260602_000729.log`; at the 2026-06-02
+   00:15 CST monitor check it was still active and had advanced to about
+   `21872/215034` Qwen3 embeddings, with no fatal/OOM/no-space markers. It is
+   not table-eligible until the same gates pass.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing
