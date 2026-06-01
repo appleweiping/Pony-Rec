@@ -184,7 +184,8 @@ external-baseline comparison.
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports is now 8/8 complete; toys/home/tools remain pending.
+   score file. Sports is now 8/8 complete; toys is 3/8 complete with the
+   fourth row running; home/tools remain pending.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
@@ -500,7 +501,28 @@ external-baseline comparison.
    `baselines_new_domains_toys_elmrec_20260602_000729.log`; at the 2026-06-02
    00:15 CST monitor check it was still active and had advanced to about
    `21872/215034` Qwen3 embeddings, with no fatal/OOM/no-space markers. It is
-   not table-eligible until the same gates pass.
+   not table-eligible until the same gates pass. At 2026-06-02 01:36 CST,
+   toys `elmrec_graph` completed as `official_completed` with `blockers=[]` and
+   `score_coverage_rate=1.0`. Server-final audit, lightweight sync, and
+   local-light audit passed. Full metrics over 10,000 users and 101 candidates
+   are HR@5/10/20=`0.0545/0.1043/0.2013`,
+   NDCG@5/10/20=`0.03259298673054038/0.04856005753116525/0.07278039157879498`,
+   and MRR=`0.05431081812612059`; row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local package is
+   `outputs/baselines/official_adapters/toys_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+   A server-side sha256 manifest records final large files while keeping
+   `scores.csv`, predictions, and `elmrec_official_model.pt` server-only. The
+   completed intermediate adapter directory was removed after audits, recovering
+   disk from about `12G` to `16G` free without touching final evidence. Toys
+   now has 3/8 completed official baselines. At 2026-06-02 01:43 CST, toys
+   `llmemb` was launched as the fourth single-row official baseline under
+   runner PID `2915438` and adapter PID `2915450`, with log
+   `baselines_new_domains_toys_llmemb_20260602_014334.log`; at the 01:46 CST
+   check it was in Qwen3 `hf_mean_pool` embedding at about `1592/215034`, with
+   GPU `95%` and disk about `15G` free. This row is running and not
+   table-eligible until final score/provenance, audits, imported full metrics,
+   row counts, local-light sync, and paired evidence gates pass.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing

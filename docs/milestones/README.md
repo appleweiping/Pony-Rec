@@ -150,7 +150,8 @@ not as a reason to silently rerun completed metric rows.
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports has all eight
-   audited official rows complete; toys/home/tools remain pending.
+   audited official rows complete; toys has three audited official rows
+   complete and its fourth row is running; home/tools remain pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -691,6 +692,33 @@ not as a reason to silently rerun completed metric rows.
   about `21872/215034`, GPU used about `16213 MiB / 49140 MiB`, disk was about
   `16G` free, and the error scan showed only the known model-loading note. No
   ElmRec final scores/provenance/audit/import package exists yet, so the row is
+  not table-eligible.
+- Toys ElmRec completion/package checkpoint 2026-06-02 01:36 CST:
+  `elmrec_graph` completed as the third toys official row with
+  `implementation_status=official_completed`, `blockers=[]`, and
+  `score_coverage_rate=1.0`. Server-final audit PASS, lightweight sync PASS,
+  and local-light audit PASS. Full metrics over 10,000 users and 101
+  candidates:
+  HR@5/10/20 `0.0545 / 0.1043 / 0.2013`,
+  NDCG@5/10/20
+  `0.03259298673054038 / 0.04856005753116525 / 0.07278039157879498`,
+  MRR `0.05431081812612059`. Row counts passed: `scores.csv` `1,010,001`
+  lines, predictions `10,000` lines, and `tables/ranking_eval_records.csv`
+  `10,001` lines. The local lightweight package is under
+  `outputs/baselines/official_adapters/toys_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`;
+  final `scores.csv`, predictions, and `elmrec_official_model.pt` remain
+  server-only and are covered by `server_large_artifact_manifest.sha256`.
+  After verifying protected final evidence and no active ElmRec process, the
+  completed intermediate adapter directory was removed, recovering disk from
+  about `12G` to `16G` free.
+- Toys LLMEmb launch checkpoint 2026-06-02 01:46 CST: after the ElmRec gate and
+  cleanup, toys `llmemb` was launched as the next disk-aware single-row
+  official baseline. The intended adapter is active as PID `2915450` under
+  runner PID `2915438`; log path is
+  `baselines_new_domains_toys_llmemb_20260602_014334.log`. At the first
+  stable check it was in Qwen3 `hf_mean_pool` embedding at about `1592/215034`,
+  GPU used about `15945 MiB / 49140 MiB`, and disk was about `15G` free. No
+  LLMEmb final scores/provenance/audit/import package exists yet, so the row is
   not table-eligible.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
