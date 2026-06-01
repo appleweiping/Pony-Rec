@@ -27,13 +27,21 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: none for Pony official-baseline Python processes at the
-  2026-06-02 03:10 CST checkpoint. Toys `llmemb` completed at 03:04 CST and
-  passed the same server-final, lightweight-sync, local-light, row-count, and
-  full-metric gates as the earlier toys rows. A stale SSH launch wrapper shell
-  from the timed-out launch command may still match `run_baselines_new_domains`
-  in broad `pgrep` output; it is not an active adapter/training process and was
-  not killed.
+- Active runner: toys `irllrec_intent` official row. It launched on
+  2026-06-02 03:16 CST after toys `llmemb` completed all final gates and the
+  LLMEmb intermediate adapter directory was safely removed. Runner PID is
+  `2923429`, adapter PID is `2923437`, log path is
+  `baselines_new_domains_toys_irllrec_20260602_031623.log`, and PID files are
+  `baselines_new_domains_toys_irllrec_runner.pid` and
+  `baselines_new_domains_toys_irllrec_adapter.pid`. At the 03:19 CST check it
+  was in Qwen3 `hf_mean_pool` embedding at about `1400/215034`, GPU sample was
+  about `96%`, `15945 MiB / 49140 MiB`, and disk was about `7.3G` free. The
+  row is running and not table-eligible until final scores, provenance, score
+  audit, imported metrics, row counts, server-final audit, local-light sync,
+  and local-light audit pass. Stale SSH launch wrapper shells from prior
+  timed-out launch commands may still match `run_baselines_new_domains` in
+  broad `pgrep` output; they are not adapter/training Python processes and
+  were not killed.
 - Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
@@ -327,6 +335,18 @@ or review cycle.
   was removed, recovering disk from about `4.0G` to `8.3G` free. Final server
   scores, provenance, audits, predictions, imported tables, and model were not
   deleted.
+- Toys IRLLRec launch follow-up: at 2026-06-02 03:16 CST, after a no-active
+  official Python process check and the toys LLMEmb package/cleanup gate, toys
+  `irllrec_intent` was launched as the next single-row official baseline with:
+  `nohup env DOMAINS_OVERRIDE=toys FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=irllrec_intent bash scripts/run_baselines_new_domains.sh`.
+  The local SSH command timed out while the remote process continued, so PID
+  files were corrected after a process check. Runner PID is `2923429`, adapter
+  PID is `2923437`, and log path is
+  `baselines_new_domains_toys_irllrec_20260602_031623.log`. At the 03:19 CST
+  check it was in Qwen3 `hf_mean_pool` embedding at about `1400/215034`, GPU
+  was `96%` with `15945 MiB / 49140 MiB`, disk was `7.3G` free (`97%` used),
+  and no final score/provenance/audit/import package existed yet. Do not start
+  another baseline until this row finishes or fails and has been audited.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -384,7 +404,7 @@ tests, and ARIS review.
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `irllrec_intent` | not started | pending |
+| `irllrec_intent` | running | launched 2026-06-02 03:16 CST, log `baselines_new_domains_toys_irllrec_20260602_031623.log`, runner PID `2923429`, adapter PID `2923437`; at 03:19 CST embedding progress was about `1400/215034`; not table-eligible yet |
 | `rlmrec_graphcl` | not started | pending |
 | `llm2rec_sasrec` | not started | pending; storage-heavy |
 | `llmesr_sasrec` | not started | pending; storage-heavy |

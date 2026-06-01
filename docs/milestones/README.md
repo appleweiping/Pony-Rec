@@ -729,6 +729,15 @@ not as a reason to silently rerun completed metric rows.
   no active LLMEmb Python process, the completed intermediate adapter directory
   was removed, recovering disk from about `4.0G` to `8.3G` free without
   touching final evidence. Toys official baselines are now 4/8 complete.
+- Toys IRLLRec launch checkpoint 2026-06-02 03:19 CST: after the LLMEmb gate
+  and cleanup, toys `irllrec_intent` was launched as the next single-row
+  official baseline. The intended adapter is active as PID `2923437` under
+  runner PID `2923429`; log path is
+  `baselines_new_domains_toys_irllrec_20260602_031623.log`. At the first
+  stable check it was in Qwen3 `hf_mean_pool` embedding at about `1400/215034`,
+  GPU used about `15945 MiB / 49140 MiB`, and disk was about `7.3G` free. No
+  IRLLRec final scores/provenance/audit/import package exists yet, so the row
+  is not table-eligible.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

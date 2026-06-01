@@ -530,7 +530,15 @@ external-baseline comparison.
    server-only and covered by `server_large_artifact_manifest.sha256`. After
    audits and local sync passed, the completed intermediate adapter directory
    was removed, recovering disk from about `4.0G` to `8.3G` free without
-   touching final evidence. Toys now has 4/8 completed official baselines.
+   touching final evidence. Toys now has 4/8 completed official baselines. At
+   2026-06-02 03:16 CST, toys `irllrec_intent` was launched as the fifth
+   single-row official baseline under runner PID `2923429` and adapter PID
+   `2923437`, with log
+   `baselines_new_domains_toys_irllrec_20260602_031623.log`; at the 03:19 CST
+   check it was in Qwen3 `hf_mean_pool` embedding at about `1400/215034`, with
+   GPU `96%` and disk about `7.3G` free. This row is running and not
+   table-eligible until final score/provenance, audits, imported full metrics,
+   row counts, local-light sync, and paired evidence gates pass.
 3. Full @5/@10/@20 comparison table across all domains
 4. Statistical significance tests (paired t-test, 20+ seeds or bootstrap)
 5. Paper writing
