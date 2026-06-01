@@ -491,6 +491,17 @@ not as a reason to silently rerun completed metric rows.
   `hf_mean_pool` embedding generation at about `3432/283760`; GPU is `100%`,
   memory is `16115 MiB / 49140 MiB`, and disk is about `27G` free. This is not
   a completed row yet.
+- Storage/progress checkpoint 2026-06-01 14:09 CST: the sports LLM2Rec adapter
+  package passed the server adapter audit as
+  `ready_for_llm2rec_upstream_wrapper` with `valid_history_source` equal to
+  `valid_task_train_interactions`, `10000` validation events, `10000` test
+  events, `1010000` candidate rows, and zero missing mapped candidates.
+  LLM2Rec embedding progress reached about `28736/283760`; GPU remained about
+  `95%` with `16213 MiB / 49140 MiB`. After verifying RLMRec
+  `server_final_evidence_audit.json` had `ok=true` and the absolute path was
+  inside the project paper-adapter directory, the completed RLMRec intermediate
+  adapter directory was removed, recovering about `4.5G`; final RLMRec evidence
+  outputs and local lightweight package were preserved.
 - GPU: RTX 4090, active when official-baseline rows are running
 - Disk: 44 GB free at launch check (2026-05-31)
 - All experiments use: Qwen3-8B, vLLM, 10k users, 101 candidates (1+100neg)

@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-01 14:03 CST
+Last updated: 2026-06-01 14:09 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -32,10 +32,10 @@ or review cycle.
   `FAST_METHODS_OVERRIDE=`, and `TRAIN_METHODS_OVERRIDE=llm2rec_sasrec`; do
   not restart the whole eight-method script because six sports rows are already
   completed and audited
-- Latest checked state: 2026-06-01 14:02 CST, LLM2Rec passed the previous
+- Latest checked state: 2026-06-01 14:08 CST, LLM2Rec passed the previous
   adapter-export blocker and entered Qwen3 embedding generation at about
-  `3432/283760`; GPU was `100%`, `16115 MiB / 49140 MiB`, and disk had `27G`
-  free (`86%` used)
+  `28736/283760`; GPU was `95%`, `16213 MiB / 49140 MiB`, and disk had `31G`
+  free (`84%` used)
 - Latest completed row: sports `rlmrec_graphcl`, completed 2026-06-01
   13:43 CST with `implementation_status=official_completed`, `blockers=[]`,
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
@@ -54,6 +54,14 @@ or review cycle.
   server after commit `657929e`; server lacks `pytest`, but
   `py_compile` passed and the real sports export passed far enough to start
   full Qwen3 embedding generation.
+- Storage cleanup: after verifying RLMRec server-final audit `ok=true` and
+  absolute target path under
+  `~/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/`,
+  the completed RLMRec intermediate adapter directory
+  `outputs/baselines/paper_adapters/sports_large10000_100neg_rlmrec_official_adapter`
+  was removed. This recovered about `4.5G` and did not touch final RLMRec
+  scores, provenance, audits, imported tables, predictions, or local
+  lightweight evidence.
 - Warning note: graph normalization emitted the same zero-degree
   `divide by zero encountered in power` warning pattern seen in prior completed
   graph baselines; the implementation immediately maps `inf` inverse degrees
@@ -176,6 +184,13 @@ the server, `py_compile` passed, and the real sports LLM2Rec run reached
 embedding generation. The active log is
 `baselines_new_domains_sports_llm2rec_resume.log`, and the corrected PID file is
 `baselines_new_domains_sports_llm2rec_resume.pid`.
+
+The exported LLM2Rec adapter package was audited on the server and is
+`ready_for_llm2rec_upstream_wrapper`: users `19912`, items `283760`,
+train interaction rows `41142`, validation train interaction rows `31417`,
+candidate events `10000`, candidate rows `1010000`, validation candidate rows
+`1010000`, missing mapped candidates `0`, and
+`valid_history_source=valid_task_train_interactions`.
 
 ## Required Next Actions
 
