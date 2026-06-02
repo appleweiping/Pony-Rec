@@ -112,8 +112,9 @@ The repository is now in M5 (multi-domain SOTA validation):
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports has all eight official rows plus C-CRP imported evidence through the
   domain gate. Toys has seven audited official rows complete and the eighth
-  row, `llmesr_sasrec`, is running; every completed row imports full
-  `@5/@10/@20 + MRR` metrics after score audit.
+  row, `llmesr_sasrec`, is running; toys C-CRP imported evidence now passes
+  its domain-gate section; every completed row imports full `@5/@10/@20 + MRR`
+  metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 
@@ -140,11 +141,13 @@ with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 
 New-domain imported-table note (2026-06-02): toys C-CRP v3 is metric-complete
 under `outputs/toys_large10000_100neg_ccrp_v3` (`report.json`, `scores.csv`,
-and `user_ranks.jsonl` are present with aligned 10k-user/101-candidate counts),
-but the current unified domain gate looks for imported C-CRP artifacts under
-`outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise`. Until the import
-step or gate mapping is reconciled, do not treat toys as having passed the
-same comparison-table gate even though the core C-CRP metrics exist.
+and `user_ranks.jsonl` are present with aligned 10k-user/101-candidate counts).
+At 2026-06-02 17:09 CST the scores were imported into
+`outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+through the existing same-candidate importer with exact coverage
+(`score_coverage_rate=1.0`). The follow-up toys domain gate recorded
+`ccrp_ok=true`, `official_ok_count=7`, and `gate_ok=false` only because the
+active `llmesr_sasrec` official row has not produced final evidence yet.
 
 Artifact audit note (2026-05-31): the old four-domain C-CRP reports are present
 under `outputs/ccrp_v3_formal/<domain>/report.json`; they were only missed by
@@ -173,9 +176,11 @@ not as a reason to silently rerun completed metric rows.
   The last separate LLM-ESR runner (`2877443`/`2877452`) finished at
   2026-06-01 18:31 CST.
 - Phase 2 toys official-baseline run is in progress. As of 2026-06-02
-  16:35 CST, seven toys rows are audited complete
+  17:10 CST, seven toys rows are audited complete
   (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-  `irllrec_intent`, `rlmrec_graphcl`, and `llm2rec_sasrec`). The latest
+  `irllrec_intent`, `rlmrec_graphcl`, and `llm2rec_sasrec`). The active
+  eighth row, `llmesr_sasrec`, was still running at about `173,024/215,034` in
+  Qwen3 embedding with disk `5.5G` free and a clean error scan. The latest
   completed row, `llm2rec_sasrec`, passed server-final audit, lightweight sync,
   local-light audit, full metrics, exact coverage, and row-count gates after
   the disk-full recovery described below. The previous completed row,
@@ -861,8 +866,10 @@ not as a reason to silently rerun completed metric rows.
   `irllrec_intent`), while `rlmrec_graphcl`, `llm2rec_sasrec`, and
   `llmesr_sasrec` are incomplete as expected. Toys C-CRP core metrics and row
   counts are present under `outputs/toys_large10000_100neg_ccrp_v3`, but
-  imported prediction/metric/coverage tables still need reconciliation before
-  a toys comparison table is paper-facing.
+  imported prediction/metric/coverage tables still needed reconciliation before
+  a toys comparison table was paper-facing. That C-CRP import/gate issue was
+  resolved at 2026-06-02 17:09 CST; the remaining toys gate blocker is the
+  active `llmesr_sasrec` official row.
 - Toys RLMRec training checkpoint 2026-06-02 07:48 CST: the Qwen3 embedding
   pass completed (`215034/215034`) and toys `rlmrec_graphcl` entered official
   training. The latest logged line was `[rlmrec-official] epoch=90

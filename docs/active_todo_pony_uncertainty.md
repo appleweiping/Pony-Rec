@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 16:47 CST
+Last updated: 2026-06-02 17:10 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -47,6 +47,12 @@ or review cycle.
   `outputs/summary/old_style_llmesr_model_cleanup_manifest_20260602.sha256`.
   Metadata, score summaries, current toys LLM-ESR active adapter files, final
   official outputs, and all local lightweight packages were left untouched.
+  At the 2026-06-02 17:08 CST monitoring check, the same runner was still
+  active at about `173,024/215,034` in Qwen3 `hf_mean_pool`, GPU was about
+  `95%` with `16.2G / 49.1G` used, disk was `5.5G` free after the C-CRP import
+  reconciliation below, and the error scan had no Traceback/OOM/no-space/
+  killed/fatal markers. The final LLM-ESR evidence directory still had no
+  score/provenance/table files, so the row remains not table-eligible.
 - Latest completed toys row: `llm2rec_sasrec`, completed 2026-06-02 16:18 CST
   after a disk-full recovery. It passed with `implementation_status=official_completed`,
   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
@@ -104,13 +110,20 @@ or review cycle.
   `user_ranks.jsonl` line count `10,000`. Metrics are HR@5/10/20
   `0.3172 / 0.3964 / 0.5059`, NDCG@5/10/20
   `0.2451904009717959 / 0.27079859856897753 / 0.298341205798594`, and MRR
-  `0.2503049488607351` over `n_users=10000` and `n_prompts=1010000`. However,
-  the unified domain gate currently expects imported artifacts under
-  `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise` and therefore
-  reports `ccrp_ok=false` for toys because imported prediction/metric/coverage
-  tables are absent at that expected path. Treat this as an import/gate
-  reconciliation blocker before building toys comparison tables, not as missing
-  C-CRP core metrics.
+  `0.2503049488607351` over `n_users=10000` and `n_prompts=1010000`. At
+  2026-06-02 17:09 CST the C-CRP scores were imported through the existing
+  same-candidate importer into
+  `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+  without `--allow_partial_scores`; the import reported
+  `score_coverage_rate=1.000000`. A follow-up domain gate wrote
+  `outputs/summary/toys_official_gate_after_ccrp_import_pending_llmesr_20260602_1709.{json,csv}`
+  and confirmed `ccrp_ok=true`, `official_ok_count=7`, and `gate_ok=false`
+  only because `llmesr_sasrec` final evidence is still missing. The local
+  lightweight C-CRP import package contains the five imported tables under
+  `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/`
+  plus the two gate summary files under `outputs/summary/`; server/local
+  sha256 checks matched. The 806M imported prediction JSONL remains
+  server-only.
 - Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
@@ -557,12 +570,13 @@ tests, and ARIS review.
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `rlmrec_graphcl` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llm2rec_sasrec` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llmesr_sasrec` | running | launched 2026-06-02 16:31 CST, log `baselines_new_domains_toys_llmesr_20260602_1635.log`, wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`; at 16:47 CST embedding was about `58,176/215,034`, disk `6.3G` free after old-style checkpoint cleanup, error scan clean; not table-eligible yet |
+| `llmesr_sasrec` | running | launched 2026-06-02 16:31 CST, log `baselines_new_domains_toys_llmesr_20260602_1635.log`, wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`; at 17:08 CST embedding was about `173,024/215,034`, disk `5.5G` free after C-CRP import reconciliation, error scan clean; not table-eligible yet |
 
 Toys official baselines are now 7/8 complete (`proex_profile`, `llmemb`,
 `promax_profile`, `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and
-`llm2rec_sasrec`). The remaining row is active `llmesr_sasrec`. Do not build a toys SOTA comparison table until all eight
-official rows and C-CRP imported evidence pass the same gate.
+`llm2rec_sasrec`). The remaining row is active `llmesr_sasrec`. Toys C-CRP
+imported evidence now passes its domain-gate section. Do not build a toys SOTA
+comparison table until all eight official rows pass the same gate.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -570,11 +584,10 @@ official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `avg_candidates=101.0`, `score_coverage_rate=1.0`, `scores.csv` line count
 `1,010,001`, predictions `10,000`, and
 `tables/ranking_eval_records.csv` `10,001`. `rlmrec_graphcl`,
-`llm2rec_sasrec`, and `llmesr_sasrec` remain incomplete by design. The same
-gate currently marks toys C-CRP as incomplete only because its imported
-same-candidate tables are not present at the gate's expected imported path;
-the raw C-CRP `report.json`, `scores.csv`, and `user_ranks.jsonl` are present
-and metric-complete under `outputs/toys_large10000_100neg_ccrp_v3`.
+`llm2rec_sasrec`, and `llmesr_sasrec` remain incomplete by design. A later
+2026-06-02 17:09 CST import reconciled the toys C-CRP gate path and produced
+imported same-candidate tables with exact coverage; the current toys gate
+blocker is no longer C-CRP, only the unfinished `llmesr_sasrec` row.
 
 RLMRec training checkpoint 2026-06-02 07:48 CST: toys `rlmrec_graphcl`
 finished the Qwen3 embedding pass (`215034/215034`) and entered official

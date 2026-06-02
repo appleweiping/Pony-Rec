@@ -162,12 +162,15 @@ under `outputs/toys_large10000_100neg_ccrp_v3` is metric-complete
 (HR@5/10/20 `0.3172 / 0.3964 / 0.5059`, NDCG@5/10/20
 `0.2451904009717959 / 0.27079859856897753 / 0.298341205798594`, MRR
 `0.2503049488607351`, `n_users=10000`, `scores.csv` `1,010,001` lines, and
-`user_ranks.jsonl` `10,000` rows). However, the unified domain gate currently
-expects imported C-CRP artifacts under
-`outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise`; those imported
-prediction/metric/coverage tables are absent. Therefore toys C-CRP is not yet
-paper-facing through the same comparison-table gate even though the core
-metrics are present.
+`user_ranks.jsonl` `10,000` rows). At 2026-06-02 17:09 CST the raw scores were
+imported into
+`outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+through the existing same-candidate importer without `--allow_partial_scores`.
+The import reported `score_coverage_rate=1.000000`, and the follow-up toys
+domain gate recorded `ccrp_ok=true`, `official_ok_count=7`, and `gate_ok=false`
+only because `llmesr_sasrec` is still running and lacks final evidence. The
+local lightweight C-CRP import package keeps the imported tables and gate
+summary; the large imported prediction JSONL remains server-only.
 Original-domain C-CRP v3 formal reports are present under
 `outputs/ccrp_v3_formal/<domain>/report.json`, and the old four-domain
 official-baseline comparison is present at
@@ -241,7 +244,9 @@ external-baseline comparison.
    checkpoints, and the toys adapter embedding were not deleted. Toys
    `llmesr_sasrec` launched at 2026-06-02 16:31 CST with wrapper PID `2970036`,
    runner PID `2970047`, adapter PID `2970055`, and log
-   `baselines_new_domains_toys_llmesr_20260602_1635.log`; it is not
+   `baselines_new_domains_toys_llmesr_20260602_1635.log`. At 17:08 CST it was
+   still active in Qwen3 embedding at about `173,024/215,034`, GPU was active,
+   disk was `5.5G` free, and the error scan was clean. It is not
    table-eligible until final evidence gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
