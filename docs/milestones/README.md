@@ -111,9 +111,9 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home has 2/8 audited official
-  rows complete (`proex_profile`, `promax_profile`) and the third row
-  (`elmrec_graph`) is running; tools remains pending.
+  evidence through domain and paired-test gates. Home has 3/8 audited official
+  rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`); tools
+  remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -164,8 +164,7 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 2/8 audited official rows complete and home
-   `elmrec_graph` is running as the third home official row; tools remains
+   complete; home has 3/8 audited official rows complete; tools remains
    pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
@@ -248,11 +247,21 @@ not as a reason to silently rerun completed metric rows.
   Disk recovered from about `7.5G` to `15G` free without touching final
   evidence. Home `elmrec_graph` then launched at 2026-06-03 03:02 CST as the
   third home official row with runner PID `3061705`, adapter PID `3061714`,
-  and log `baselines_new_domains_home_elmrec_20260603_0302.log`; at first
-  startup check the adapter process was alive, output directory existed, GPU
-  was idle, and disk was about `14G` free. Home ElmRec is not table-eligible
-  until final provenance, exact coverage, imported full metrics, row counts,
-  server-final audit, lightweight sync, and local-light audit pass.
+  and log `baselines_new_domains_home_elmrec_20260603_0302.log`. It completed
+  at 2026-06-03 05:47 CST as `implementation_status=official_completed` with
+  `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+  lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+  users and 101 candidates are HR@5/10/20 `0.0509 / 0.1021 / 0.2018`,
+  NDCG@5/10/20
+  `0.029717257242599254 / 0.0460440741915887 / 0.0708856096588022`, and MRR
+  `0.05195852255617441`; row counts passed for `scores.csv` (`1,010,001`
+  lines), predictions (`10,000` lines), and `tables/ranking_eval_records.csv`
+  (`10,001` lines). The local lightweight evidence package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+  At the 2026-06-03 05:48 CST checkpoint no Pony/C-CRP/baseline Python process
+  was active, GPU was idle, and disk was tight at about `6.5G` free; the next
+  home row needs a fresh preflight and cleanup/storage decision for the
+  completed ElmRec intermediate adapter.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must

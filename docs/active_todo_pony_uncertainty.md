@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-03 03:24 CST
+Last updated: 2026-06-03 05:48 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,22 +27,30 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: home `elmrec_graph` official row. After home
-  `promax_profile` completed, final/server/local evidence gates passed, and
-  its completed intermediate adapter was safely cleaned, a clean
-  process/GPU/disk preflight confirmed no active Pony/C-CRP/baseline process
-  and no existing home ElmRec final directory. It launched at 2026-06-03
-  03:02 CST with runner PID `3061705`, adapter PID `3061714`, and log
-  `baselines_new_domains_home_elmrec_20260603_0302.log`:
-  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=elmrec_graph bash scripts/run_baselines_new_domains.sh`.
-  At the 2026-06-03 03:24 CST check it was in Qwen3 `hf_mean_pool` embedding
-  at about `83768/385364`, GPU was `100%` with `16213 MiB / 49140 MiB`, disk
-  was about `14G` free, and no final scores/provenance/import files existed
-  yet. The row is not
-  table-eligible until final scores, provenance, score audit, imported full
-  metrics, row counts, server-final audit, lightweight sync, and local-light
-  audit pass. Do not start another baseline while this row is active.
-- Latest completed home row: `promax_profile`, completed 2026-06-03 02:53 CST
+- Active runner: none. At the 2026-06-03 05:48 CST checkpoint, no
+  Pony/C-CRP/baseline/uncertainty Python process matched, GPU was idle
+  (`0%`, `15 MiB / 49140 MiB`), and disk was tight at about `6.5G` free
+  (`97%` used). The completed home ElmRec intermediate adapter still occupies
+  about `7.0G` at
+  `outputs/baselines/paper_adapters/home_large10000_100neg_elmrec_official_adapter`;
+  do not launch the next home row until a fresh preflight and cleanup/storage
+  decision are made.
+- Latest completed home row: `elmrec_graph`, completed 2026-06-03 05:47 CST
+  with `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  local-light audit PASS, and no local forbidden large files. Full metrics over
+  10,000 users and 101 candidates are HR@5/10/20
+  `0.0509 / 0.1021 / 0.2018`, NDCG@5/10/20
+  `0.029717257242599254 / 0.0460440741915887 / 0.0708856096588022`, and MRR
+  `0.05195852255617441`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. The local lightweight package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+  The server large-artifact manifest records `scores.csv`,
+  `predictions/rank_predictions.jsonl`, and `elmrec_official_model.pt` while
+  keeping those files server-only. Home now has 3/8 completed official
+  baseline rows.
+- Previous completed home row: `promax_profile`, completed 2026-06-03 02:53 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
   local-light audit PASS, and no local forbidden large files. Full metrics over
@@ -670,18 +678,19 @@ set is complete.
 | --- | --- | --- |
 | `proex_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `elmrec_graph` | running | runner PID `3061705`, adapter PID `3061714`, log `baselines_new_domains_home_elmrec_20260603_0302.log`; no final files yet |
-| `llmemb` | pending | do not launch while ElmRec is active |
-| `irllrec_intent` | pending | do not launch while ElmRec is active |
-| `rlmrec_graphcl` | pending | do not launch while ElmRec is active |
-| `llm2rec_sasrec` | pending | do not launch while ElmRec is active |
-| `llmesr_sasrec` | pending | do not launch while ElmRec is active |
+| `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `llmemb` | pending | launch only after fresh process/GPU/disk preflight and ElmRec cleanup/storage decision |
+| `irllrec_intent` | pending | launch only after prior row gates pass |
+| `rlmrec_graphcl` | pending | launch only after prior row gates pass |
+| `llm2rec_sasrec` | pending | launch only after prior row gates pass |
+| `llmesr_sasrec` | pending | launch only after prior row gates pass |
 
-Home official baselines are now 2/8 complete (`proex_profile`,
-`promax_profile`). Both completed rows passed final provenance, exact score
-coverage, server-final package audit, lightweight local sync, local-light audit,
-full metrics, and row-count gates. Home is not domain-gate eligible until all
-eight official rows and imported C-CRP evidence pass the same checks.
+Home official baselines are now 3/8 complete (`proex_profile`,
+`promax_profile`, `elmrec_graph`). All completed rows passed final provenance,
+exact score coverage, server-final package audit, lightweight local sync,
+local-light audit, full metrics, and row-count gates. Home is not domain-gate
+eligible until all eight official rows and imported C-CRP evidence pass the
+same checks.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -853,10 +862,11 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `elmrec_graph` row; do not launch another baseline
-   until it finishes or fails and has been audited. The current log is
-   `baselines_new_domains_home_elmrec_20260603_0302.log`; runner PID
-   `3061705`, adapter PID `3061714`.
+1. Decide whether to clean the completed home ElmRec intermediate adapter
+   `outputs/baselines/paper_adapters/home_large10000_100neg_elmrec_official_adapter`
+   after preserving final evidence and the local lightweight package. Disk is
+   tight (`6.5G` free at the 2026-06-03 05:48 CST checkpoint), so run a fresh
+   process/GPU/disk preflight before launching the next home row.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

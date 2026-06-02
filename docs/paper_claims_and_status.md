@@ -192,7 +192,7 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys now pass domain-level official-baseline and paired-test
 gates. Do not generalize to paper-wide SOTA until the declared domain set is
-complete; home has only 1/8 audited official rows complete and tools still has
+complete; home has only 3/8 audited official rows complete and tools still has
 0/8, so both still need canonical eight-row official blocks and paired
 same-candidate tests.
 
@@ -204,9 +204,9 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 2/8 audited official rows
-   complete (`proex_profile`, `promax_profile`) and home `elmrec_graph` is
-   running as the third home official row, while tools remains pending. Toys
+   domain/comparison/paired-test gates; home has 3/8 audited official rows
+   complete (`proex_profile`, `promax_profile`, `elmrec_graph`), while tools
+   remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
@@ -265,10 +265,23 @@ same-candidate tests.
    manifest
    `outputs/summary/home_promax_completed_adapter_cleanup_manifest_20260602.sha256`,
    recovering disk from about `7.5G` to `15G` free without touching final
-   evidence. Home now has 2/8 completed official rows. Home `elmrec_graph`
-   launched at 2026-06-03 03:02 CST with runner PID `3061705`, adapter PID
-   `3061714`, and log `baselines_new_domains_home_elmrec_20260603_0302.log`;
-   it is not a result row until final gates pass.
+   evidence. Home `elmrec_graph` launched at 2026-06-03 03:02 CST with runner
+   PID `3061705`, adapter PID `3061714`, and log
+   `baselines_new_domains_home_elmrec_20260603_0302.log`. It completed at
+   2026-06-03 05:47 CST as `implementation_status=official_completed` with
+   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+   lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+   users and 101 candidates are HR@5/10/20=`0.0509/0.1021/0.2018`,
+   NDCG@5/10/20=`0.029717257242599254/0.0460440741915887/0.0708856096588022`,
+   and MRR=`0.05195852255617441`. Row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+   package is
+   `outputs/baselines/official_adapters/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+   Home now has 3/8 completed official rows. At the 2026-06-03 05:48 CST
+   checkpoint no Pony/C-CRP/baseline Python process was active, GPU was idle,
+   and disk was tight at about `6.5G` free; do not launch the next home row
+   until a fresh preflight and ElmRec cleanup/storage decision.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
