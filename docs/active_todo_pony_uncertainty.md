@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 14:29 CST
+Last updated: 2026-06-02 16:35 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,23 +27,40 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `llm2rec_sasrec` official row. It launched on
-  2026-06-02 14:26 CST after toys `rlmrec_graphcl` completed all final gates,
-  its lightweight evidence was synced and audited locally, and the completed
-  RLMRec intermediate adapter directory was safely removed. Actual runner PID
-  is `2960050`, adapter PID is `2960058`, log path is
-  `baselines_new_domains_toys_llm2rec_20260602_142615.log`, and corrected PID
-  files are `baselines_new_domains_toys_llm2rec_runner.pid` and
-  `baselines_new_domains_toys_llm2rec_adapter.pid`. A stale wrapper shell
-  (`2960047`) may still appear from the local SSH timeout that launched the
-  detached job; it is not a second adapter/training process. At the 14:29 CST
-  check, LLM2Rec was in Qwen3 `hf_mean_pool` embedding at about
-  `5448/254815`, GPU was active (`96%`, about `16237 MiB` used), disk was
-  about `7.7G` free (`96%` used), the active adapter directory was about
-  `1.1G`, and the error scan was clean. The row is running and not
-  table-eligible until final scores, provenance, score audit, imported metrics,
-  row counts, server-final audit, local-light sync, and local-light audit pass.
-- Latest completed toys row: `rlmrec_graphcl`, completed 2026-06-02 12:00 CST
+- Active runner: toys `llmesr_sasrec` official row. It launched at
+  2026-06-02 16:31 CST as a single-domain/single-method official run via
+  `/tmp/pony_run_toys_llmesr_20260602.sh`, with wrapper PID `2970036`,
+  runner PID `2970047`, adapter PID `2970055`, and log
+  `baselines_new_domains_toys_llmesr_20260602_1635.log`. Preflight verified no
+  active relevant Python process, GPU idle, and about `6.3G` free disk. The
+  row is not table-eligible until final scores, provenance, score audit,
+  imported full metrics, row counts, server-final audit, lightweight sync, and
+  local-light audit pass.
+- Latest completed toys row: `llm2rec_sasrec`, completed 2026-06-02 16:18 CST
+  after a disk-full recovery. It passed with `implementation_status=official_completed`,
+  `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+  lightweight sync PASS, local-light audit PASS, and no local forbidden large
+  files. Full metrics over 10,000 users and 101 candidates:
+  HR@5/10/20 `0.2202 / 0.3172 / 0.4652`,
+  NDCG@5/10/20
+  `0.1475691807818137 / 0.17887285724512209 / 0.21609262826220665`,
+  MRR `0.15921596430464027`. Row counts passed: `scores.csv` `1,010,001`
+  lines, predictions `10,000` lines, `tables/ranking_eval_records.csv`
+  `10,001` lines, and metrics/coverage/summary tables each have one data row.
+  The local lightweight evidence package is
+  `outputs/baselines/official_adapters/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+  It contains 11 server-matched lightweight evidence files plus local audit and
+  sync manifest; server-only excluded files are `scores.csv` (101M),
+  `predictions/rank_predictions.jsonl` (780M), and the 4.18G official SASRec
+  checkpoint. To recover space without touching final evidence, the completed
+  LLM2Rec adapter intermediate CSVs `candidate_items_mapped.csv` and
+  `item_text_seed.csv` were gzip-compressed in place, and the old sports
+  upstream LLM2Rec item-info embedding cache was removed after recording
+  sha256 `41e968bc31de1454eb3deab08eff6e06e1d68308d7ed2b25137f0b377f6b9a2c`
+  in `outputs/summary/sports_llm2rec_upstream_embedding_cache_cleanup_manifest_20260602.sha256`.
+  Final scores, provenance, audits, predictions, imported tables, checkpoints,
+  and the toys adapter embedding were not deleted.
+- Previous completed toys row: `rlmrec_graphcl`, completed 2026-06-02 12:00 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
   local-light audit PASS, and no local forbidden large files. Full metrics over
@@ -527,14 +544,13 @@ tests, and ARIS review.
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `rlmrec_graphcl` | running | launched 2026-06-02 06:44 CST, log `baselines_new_domains_toys_rlmrec_20260602_064443.log`, runner PID `2937284`, adapter PID `2937292`; at 07:48 CST embedding had completed and official training reached epoch 90; not table-eligible yet |
-| `llm2rec_sasrec` | not started | pending; storage-heavy |
-| `llmesr_sasrec` | not started | pending; storage-heavy |
+| `rlmrec_graphcl` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `llm2rec_sasrec` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `llmesr_sasrec` | running | launched 2026-06-02 16:31 CST, log `baselines_new_domains_toys_llmesr_20260602_1635.log`, wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`; not table-eligible yet |
 
-Toys official baselines are now 5/8 complete (`proex_profile`, `llmemb`,
-`promax_profile`, `elmrec_graph`, and `irllrec_intent`). The remaining rows are
-the active `rlmrec_graphcl`, plus pending `llm2rec_sasrec` and
-`llmesr_sasrec`. Do not build a toys SOTA comparison table until all eight
+Toys official baselines are now 7/8 complete (`proex_profile`, `llmemb`,
+`promax_profile`, `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and
+`llm2rec_sasrec`). The remaining row is active `llmesr_sasrec`. Do not build a toys SOTA comparison table until all eight
 official rows and C-CRP imported evidence pass the same gate.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side

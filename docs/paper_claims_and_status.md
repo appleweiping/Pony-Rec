@@ -195,8 +195,8 @@ external-baseline comparison.
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports is now 8/8 complete; toys is 6/8 complete with
-   `llm2rec_sasrec` currently running; home/tools remain pending. Toys
+   score file. Sports is now 8/8 complete; toys is 7/8 complete with
+   `llmesr_sasrec` currently running; home/tools remain pending. Toys
    `rlmrec_graphcl` completed at 2026-06-02 12:00 CST with
    `implementation_status=official_completed`, `blockers=[]`, exact
    `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
@@ -211,11 +211,38 @@ external-baseline comparison.
    and excludes the server-only large scores/predictions/model files while
    preserving their sha256 manifest. After the completed RLMRec intermediate
    adapter was safely removed, toys `llm2rec_sasrec` launched at 2026-06-02
-   14:26 CST with runner PID `2960050`, adapter PID `2960058`, and log
-   `baselines_new_domains_toys_llm2rec_20260602_142615.log`; at 14:29 CST it
-   was embedding at about `5448/254815`, disk was about `7.7G` free, and the
-   error scan was clean. This LLM2Rec row is not table-eligible until its final
-   evidence gates pass.
+   14:26 CST. The first run completed Qwen3 embedding (`254815/254815`) but
+   failed when the server reached `0` free disk; the complete adapter-side
+   embedding was preserved and verified mmap-readable with shape
+   `(254816, 4096)`, while the upstream LLM2Rec item-info copy was incomplete.
+   Recovery deleted the incomplete upstream copy plus temporary files and the
+   old non-active books LLM-ESR intermediate adapter, then symlinked the
+   upstream Toys item-info path to the complete adapter embedding. The recovery
+   job launched at 2026-06-02 16:04 CST with runner PID `2965472`, adapter PID
+   `2965476`, official training child PID `2965700`, and log
+   `baselines_new_domains_toys_llm2rec_recovery_20260602_1603.log`. It reuses
+   the preserved embedding via `--llm2rec_item_embedding_path` and
+   `--llm2rec_link_mode symlink` instead of rerunning embedding. At 16:18 CST
+   the recovery completed as `implementation_status=official_completed` with
+   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+   lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+   users and 101 candidates are HR@5/10/20
+   `0.2202 / 0.3172 / 0.4652`, NDCG@5/10/20
+   `0.1475691807818137 / 0.17887285724512209 / 0.21609262826220665`, and MRR
+   `0.15921596430464027`; row counts are `scores.csv` `1,010,001`,
+   predictions `10,000`, and `tables/ranking_eval_records.csv` `10,001`.
+   The local lightweight package is
+   `outputs/baselines/official_adapters/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+   To avoid another no-space failure, completed LLM2Rec adapter intermediate
+   CSVs were compressed in place and the old sports LLM2Rec upstream cache was
+   removed after recording sha256
+   `41e968bc31de1454eb3deab08eff6e06e1d68308d7ed2b25137f0b377f6b9a2c`;
+   final scores, provenance, audits, predictions, imported tables,
+   checkpoints, and the toys adapter embedding were not deleted. Toys
+   `llmesr_sasrec` launched at 2026-06-02 16:31 CST with wrapper PID `2970036`,
+   runner PID `2970047`, adapter PID `2970055`, and log
+   `baselines_new_domains_toys_llmesr_20260602_1635.log`; it is not
+   table-eligible until final evidence gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
