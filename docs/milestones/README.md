@@ -112,8 +112,8 @@ The repository is now in M5 (multi-domain SOTA validation):
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
   evidence through domain and paired-test gates. Home has 3/8 audited official
-  rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`); tools
-  remains pending.
+  rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`) and
+  `llmemb` is running as the fourth home row; tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -164,8 +164,8 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 3/8 audited official rows complete; tools remains
-   pending.
+   complete; home has 3/8 audited official rows complete and `llmemb` is
+   running as the fourth home row; tools remains pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -260,8 +260,22 @@ not as a reason to silently rerun completed metric rows.
   `outputs/baselines/official_adapters/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
   At the 2026-06-03 05:48 CST checkpoint no Pony/C-CRP/baseline Python process
   was active, GPU was idle, and disk was tight at about `6.5G` free; the next
-  home row needs a fresh preflight and cleanup/storage decision for the
-  completed ElmRec intermediate adapter.
+  home row needed a fresh preflight and cleanup/storage decision for the
+  completed ElmRec intermediate adapter. The completed intermediate adapter was
+  then removed after exact realpath checks and a 16-file sha256 cleanup
+  manifest
+  `outputs/summary/home_elmrec_completed_adapter_cleanup_manifest_20260603.sha256`;
+  a post-cleanup server-final audit remained `ok=true`, and final scores,
+  provenance, audits, predictions, imported tables, model, and local
+  lightweight evidence were preserved. Disk recovered from about `6.5G` to
+  `14G` free. After a clean process/GPU/disk and no-existing-artifact preflight,
+  home `llmemb` launched at 2026-06-03 06:08 CST as the fourth home row with
+  `FAST_METHODS_OVERRIDE=llmemb`, active adapter PID `3085786`, PID file
+  `baselines_new_domains_home_llmemb_adapter.pid`, and log
+  `baselines_new_domains_home_llmemb_20260603_0608.log`. At first stable check
+  it was in Qwen3 `hf_mean_pool` embedding at about `2808/385364`, GPU was
+  `96%` with `16067 MiB / 49140 MiB`, disk was about `13G` free, and no final
+  scores/provenance existed yet.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must

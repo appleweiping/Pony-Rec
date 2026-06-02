@@ -205,8 +205,8 @@ same-candidate tests.
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
    domain/comparison/paired-test gates; home has 3/8 audited official rows
-   complete (`proex_profile`, `promax_profile`, `elmrec_graph`), while tools
-   remains pending. Toys
+   complete (`proex_profile`, `promax_profile`, `elmrec_graph`) and home
+   `llmemb` is running as the fourth row, while tools remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
@@ -280,8 +280,22 @@ same-candidate tests.
    `outputs/baselines/official_adapters/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
    Home now has 3/8 completed official rows. At the 2026-06-03 05:48 CST
    checkpoint no Pony/C-CRP/baseline Python process was active, GPU was idle,
-   and disk was tight at about `6.5G` free; do not launch the next home row
-   until a fresh preflight and ElmRec cleanup/storage decision.
+   and disk was tight at about `6.5G` free. The completed ElmRec intermediate
+   adapter was removed after exact realpath checks and a 16-file sha256 cleanup
+   manifest
+   `outputs/summary/home_elmrec_completed_adapter_cleanup_manifest_20260603.sha256`;
+   a post-cleanup server-final audit remained `ok=true`, and final scores,
+   provenance, audits, predictions, imported tables, model, and local
+   lightweight evidence were preserved. Disk recovered to about `14G` free.
+   After a clean process/GPU/disk and no-existing-artifact preflight, home
+   `llmemb` launched at 2026-06-03 06:08 CST as the fourth home row with
+   active adapter PID `3085786`, PID file
+   `baselines_new_domains_home_llmemb_adapter.pid`, and log
+   `baselines_new_domains_home_llmemb_20260603_0608.log`. At the first stable
+   check it was in Qwen3 `hf_mean_pool` embedding at about `2808/385364`, GPU
+   was `96%` with `16067 MiB / 49140 MiB`, disk was about `13G` free, and no
+   final scores/provenance existed yet. LLMEmb is not a result row until final
+   gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
