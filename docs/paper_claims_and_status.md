@@ -204,9 +204,9 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 1/8 audited official rows
-   complete and home `promax_profile` is running as the second home official
-   row, while tools remains pending. Toys
+   domain/comparison/paired-test gates; home has 2/8 audited official rows
+   complete (`proex_profile`, `promax_profile`) and home `elmrec_graph` is
+   running as the third home official row, while tools remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
@@ -246,9 +246,28 @@ same-candidate tests.
    manifest
    `outputs/summary/home_proex_completed_adapter_cleanup_manifest_20260602.sha256`,
    recovering disk from about `8.2G` to `16G` free without touching final
-   evidence. Home now has 1/8 completed official rows. Home `promax_profile`
-   launched at 2026-06-02 22:14 CST with runner PID `3026043`, adapter PID
-   `3026052`, and log `baselines_new_domains_home_promax_20260602_2215.log`;
+   evidence. Home `promax_profile` launched at 2026-06-02 22:14 CST with
+   runner PID `3026043`, adapter PID `3026052`, and log
+   `baselines_new_domains_home_promax_20260602_2215.log`. It completed at
+   2026-06-03 02:53 CST as `implementation_status=official_completed` with
+   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+   lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+   users and 101 candidates are HR@5/10/20=`0.0514/0.1019/0.2076`,
+   NDCG@5/10/20=`0.030788292596664168/0.04691808776215203/0.07326077825489297`,
+   and MRR=`0.053474908740382465`. Row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+   package is
+   `outputs/baselines/official_adapters/home_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`;
+   server-only large artifacts remain covered by
+   `server_large_artifact_manifest.sha256`. After final evidence and local
+   backup passed, the completed intermediate adapter was removed with cleanup
+   manifest
+   `outputs/summary/home_promax_completed_adapter_cleanup_manifest_20260602.sha256`,
+   recovering disk from about `7.5G` to `15G` free without touching final
+   evidence. Home now has 2/8 completed official rows. Home `elmrec_graph`
+   launched at 2026-06-03 03:02 CST with runner PID `3061705`, adapter PID
+   `3061714`, and log `baselines_new_domains_home_elmrec_20260603_0302.log`;
    it is not a result row until final gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active

@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 22:17 CST
+Last updated: 2026-06-03 03:24 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,21 +27,44 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: home `promax_profile` official row. After home
-  `proex_profile` completed and its intermediate adapter was safely cleaned,
-  a clean process/GPU/disk preflight confirmed no active Pony/C-CRP/baseline
-  process, home valid/test task packages, and no existing home ProMax final
-  directory. It launched at 2026-06-02 22:14 CST with runner PID `3026043`,
-  adapter PID `3026052`, and log
-  `baselines_new_domains_home_promax_20260602_2215.log`:
-  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE=promax_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
-  At the first stable check it was in Qwen3 `hf_mean_pool` embedding at about
-  `808/385364`, GPU was about `96%` with `16067 MiB / 49140 MiB` used, and
-  disk was about `15G` free. The row is not table-eligible until final scores,
-  provenance, score audit, imported full metrics, row counts, server-final
-  audit, lightweight sync, and local-light audit pass. Do not start another
-  baseline while this row is active.
-- Latest completed home row: `proex_profile`, completed 2026-06-02 22:00 CST
+- Active runner: home `elmrec_graph` official row. After home
+  `promax_profile` completed, final/server/local evidence gates passed, and
+  its completed intermediate adapter was safely cleaned, a clean
+  process/GPU/disk preflight confirmed no active Pony/C-CRP/baseline process
+  and no existing home ElmRec final directory. It launched at 2026-06-03
+  03:02 CST with runner PID `3061705`, adapter PID `3061714`, and log
+  `baselines_new_domains_home_elmrec_20260603_0302.log`:
+  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=elmrec_graph bash scripts/run_baselines_new_domains.sh`.
+  At the 2026-06-03 03:24 CST check it was in Qwen3 `hf_mean_pool` embedding
+  at about `83768/385364`, GPU was `100%` with `16213 MiB / 49140 MiB`, disk
+  was about `14G` free, and no final scores/provenance/import files existed
+  yet. The row is not
+  table-eligible until final scores, provenance, score audit, imported full
+  metrics, row counts, server-final audit, lightweight sync, and local-light
+  audit pass. Do not start another baseline while this row is active.
+- Latest completed home row: `promax_profile`, completed 2026-06-03 02:53 CST
+  with `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  local-light audit PASS, and no local forbidden large files. Full metrics over
+  10,000 users and 101 candidates are HR@5/10/20
+  `0.0514 / 0.1019 / 0.2076`, NDCG@5/10/20
+  `0.030788292596664168 / 0.04691808776215203 / 0.07326077825489297`, and MRR
+  `0.053474908740382465`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. The local lightweight package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`.
+  The server large-artifact manifest records `scores.csv`,
+  `predictions/rank_predictions.jsonl`, and `promax_official_model.pt` while
+  keeping those files server-only. After final/server/local gates passed, the
+  completed intermediate adapter
+  `outputs/baselines/paper_adapters/home_large10000_100neg_promax_official_adapter`
+  was removed after exact realpath checks and a 22-file sha256 cleanup
+  manifest:
+  `outputs/summary/home_promax_completed_adapter_cleanup_manifest_20260602.sha256`.
+  Final scores, provenance, audits, predictions, imported tables, model, and
+  local lightweight evidence were preserved. Disk recovered from about `7.5G`
+  to `15G` free. Home now has 2/8 completed official baseline rows.
+- Previous completed home row: `proex_profile`, completed 2026-06-02 22:00 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
   local-light audit PASS, and no local forbidden large files. Full metrics over
@@ -62,7 +85,7 @@ or review cycle.
   `outputs/summary/home_proex_completed_adapter_cleanup_manifest_20260602.sha256`.
   Final scores, provenance, audits, predictions, imported tables, model, and
   local lightweight evidence were preserved. Disk recovered from about `8.2G`
-  to `16G` free. Home now has 1/8 completed official baseline rows.
+  to `16G` free.
 - Storage cleanup before home launch: after sports/toys LLMEmb and LLM-ESR
   final server audits and local-light packages were verified as PASS, three
   completed upstream staging directories were removed after exact realpath
@@ -641,6 +664,25 @@ paired tests positive and Holm-significant. This supports a toys-domain passed
 gate only; paper-wide SOTA wording remains blocked until the declared domain
 set is complete.
 
+## Home Official Baselines
+
+| Method | Status | Evidence status |
+| --- | --- | --- |
+| `proex_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `elmrec_graph` | running | runner PID `3061705`, adapter PID `3061714`, log `baselines_new_domains_home_elmrec_20260603_0302.log`; no final files yet |
+| `llmemb` | pending | do not launch while ElmRec is active |
+| `irllrec_intent` | pending | do not launch while ElmRec is active |
+| `rlmrec_graphcl` | pending | do not launch while ElmRec is active |
+| `llm2rec_sasrec` | pending | do not launch while ElmRec is active |
+| `llmesr_sasrec` | pending | do not launch while ElmRec is active |
+
+Home official baselines are now 2/8 complete (`proex_profile`,
+`promax_profile`). Both completed rows passed final provenance, exact score
+coverage, server-final package audit, lightweight local sync, local-light audit,
+full metrics, and row-count gates. Home is not domain-gate eligible until all
+eight official rows and imported C-CRP evidence pass the same checks.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -811,10 +853,10 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `promax_profile` row; do not launch another baseline
+1. Monitor the active home `elmrec_graph` row; do not launch another baseline
    until it finishes or fails and has been audited. The current log is
-   `baselines_new_domains_home_promax_20260602_2215.log`; runner PID `3026043`,
-   adapter PID `3026052`.
+   `baselines_new_domains_home_elmrec_20260603_0302.log`; runner PID
+   `3061705`, adapter PID `3061714`.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

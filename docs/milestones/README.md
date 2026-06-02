@@ -103,7 +103,7 @@ Root-level [AGENTS.md](../../AGENTS.md) is the operating contract for future
 agents. If a milestone status changes, update this file and the relevant M-file
 rather than relying on a chat handoff.
 
-## Current Working Position (updated 2026-06-02)
+## Current Working Position (updated 2026-06-03)
 
 The repository is now in M5 (multi-domain SOTA validation):
 
@@ -111,9 +111,9 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home has 1/8 audited official
-  rows complete (`proex_profile`) and the second row (`promax_profile`) is
-  running; tools remains pending.
+  evidence through domain and paired-test gates. Home has 2/8 audited official
+  rows complete (`proex_profile`, `promax_profile`) and the third row
+  (`elmrec_graph`) is running; tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -164,8 +164,8 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 1/8 audited official rows complete and home
-   `promax_profile` is running as the second home official row; tools remains
+   complete; home has 2/8 audited official rows complete and home
+   `elmrec_graph` is running as the third home official row; tools remains
    pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
@@ -231,9 +231,26 @@ not as a reason to silently rerun completed metric rows.
   Disk recovered from about `8.2G` to `16G` free without touching final
   evidence. Home `promax_profile` then launched at 2026-06-02 22:14 CST as the
   second home official row with runner PID `3026043`, adapter PID `3026052`,
-  and log `baselines_new_domains_home_promax_20260602_2215.log`; at first
-  stable check it was in Qwen3 `hf_mean_pool` at about `808/385364`, GPU was
-  about `96%`, and disk was about `15G` free. Home ProMax is not table-eligible
+  and log `baselines_new_domains_home_promax_20260602_2215.log`. It completed
+  at 2026-06-03 02:53 CST as `implementation_status=official_completed` with
+  `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+  lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+  users and 101 candidates are HR@5/10/20 `0.0514 / 0.1019 / 0.2076`,
+  NDCG@5/10/20
+  `0.030788292596664168 / 0.04691808776215203 / 0.07326077825489297`, and MRR
+  `0.053474908740382465`; row counts passed for `scores.csv` (`1,010,001`
+  lines), predictions (`10,000` lines), and `tables/ranking_eval_records.csv`
+  (`10,001` lines). The local lightweight evidence package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`.
+  The completed intermediate adapter was removed after final/server/local gates
+  passed and a 22-file sha256 cleanup manifest was written:
+  `outputs/summary/home_promax_completed_adapter_cleanup_manifest_20260602.sha256`.
+  Disk recovered from about `7.5G` to `15G` free without touching final
+  evidence. Home `elmrec_graph` then launched at 2026-06-03 03:02 CST as the
+  third home official row with runner PID `3061705`, adapter PID `3061714`,
+  and log `baselines_new_domains_home_elmrec_20260603_0302.log`; at first
+  startup check the adapter process was alive, output directory existed, GPU
+  was idle, and disk was about `14G` free. Home ElmRec is not table-eligible
   until final provenance, exact coverage, imported full metrics, row counts,
   server-final audit, lightweight sync, and local-light audit pass.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
