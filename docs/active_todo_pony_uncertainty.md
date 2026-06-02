@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 19:20 CST
+Last updated: 2026-06-02 19:50 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,12 +27,32 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Latest monitored server state: no active Pony/C-CRP/baseline/uncertainty
-  Python process was found after toys LLM-ESR completion. GPU is idle
-  (`0%`, `15 MiB / 49140 MiB`). Disk is still tight at about `5.9G` free
-  (`97%` used), so the next home/tools official rows must continue as
-  single-domain production loops with storage preflight. Do not launch
-  multiple baselines at once.
+- Active runner: home `proex_profile` official row. After verifying no active
+  Pony/C-CRP/baseline/uncertainty Python process, home valid/test task
+  packages, and no existing home ProEx final provenance, it launched at
+  2026-06-02 19:45 CST with runner PID `3004208`, adapter PID `3004218`, and
+  log `baselines_new_domains_home_proex_20260602_1950.log`:
+  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE=proex_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
+  At the first stable check it was in Qwen3 `hf_mean_pool` embedding at about
+  `3720/385364`, GPU was about `96%` with `16067 MiB / 49140 MiB` used, disk
+  was about `16G` free, and no final score/provenance/import package existed
+  yet. The row is not table-eligible until final scores, provenance, score
+  audit, imported full metrics, row counts, server-final audit, lightweight
+  sync, and local-light audit pass. Do not start another baseline while this
+  row is active.
+- Storage cleanup before home launch: after sports/toys LLMEmb and LLM-ESR
+  final server audits and local-light packages were verified as PASS, three
+  completed upstream staging directories were removed after exact realpath
+  allowlist checks:
+  `/home/ajifang/projects/LLMEmb/data/sports_llmemb_same_candidate_100neg`,
+  `/home/ajifang/projects/LLMEmb/data/toys_llmemb_same_candidate_100neg`, and
+  `/home/ajifang/projects/LLM-ESR/data/sports_same_candidate_100neg`. The
+  cleanup manifest is
+  `outputs/summary/upstream_completed_sports_toys_llmemb_llmesr_cleanup_manifest_20260602.sha256`.
+  Final server evidence (`outputs/*official*` scores, provenance, audits,
+  predictions, imported tables, and models) and local lightweight packages were
+  not deleted. Disk recovered from about `5.9G` free to `17G` free before the
+  home launch.
 - Latest completed toys row: `llmesr_sasrec`, completed 2026-06-02 18:59 CST
   after the disk-full recovery. It passed with
   `implementation_status=official_completed`, `blockers=[]`, exact
@@ -768,10 +788,10 @@ evidence is under
 
 ## Required Next Actions
 
-1. Continue the same official-baseline protocol for home and tools, with a
-   fresh no-active-process/GPU/disk preflight and a single-domain production
-   loop before each launch. Current server disk is tight (`5.9G` free), so do
-   not batch multiple storage-heavy rows.
+1. Monitor the active home `proex_profile` row; do not launch another baseline
+   until it finishes or fails and has been audited. The current log is
+   `baselines_new_domains_home_proex_20260602_1950.log`; runner PID `3004208`,
+   adapter PID `3004218`.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

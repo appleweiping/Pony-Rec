@@ -162,7 +162,8 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home/tools remain pending.
+   complete; home `proex_profile` is running as the first home official row;
+   tools remains pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -196,6 +197,25 @@ not as a reason to silently rerun completed metric rows.
   evidence. The final toys domain gate and comparison/statistical gate passed
   under `outputs/summary/toys_official_gate_final_20260602_1900.*` and
   `outputs/summary/toys_official_ccrp_20260602_1900_*`.
+- Storage/home launch checkpoint 2026-06-02 19:50 CST: after verifying
+  sports/toys LLMEmb and LLM-ESR final server audits plus local-light packages,
+  three completed upstream staging directories were removed with realpath
+  allowlist checks and a sha256 cleanup manifest:
+  `outputs/summary/upstream_completed_sports_toys_llmemb_llmesr_cleanup_manifest_20260602.sha256`.
+  The removed directories were
+  `/home/ajifang/projects/LLMEmb/data/sports_llmemb_same_candidate_100neg`,
+  `/home/ajifang/projects/LLMEmb/data/toys_llmemb_same_candidate_100neg`, and
+  `/home/ajifang/projects/LLM-ESR/data/sports_same_candidate_100neg`. Final
+  evidence directories and local lightweight packages were preserved. Disk
+  recovered from about `5.9G` to `17G` free. The safer local
+  `scripts/run_baselines_new_domains.sh` was copied to the server to preserve
+  method-token validation. Home `proex_profile` then launched as a single-row
+  official loop with runner PID `3004208`, adapter PID `3004218`, and log
+  `baselines_new_domains_home_proex_20260602_1950.log`. At the first stable
+  check it was in Qwen3 `hf_mean_pool` at about `3720/385364`, GPU was about
+  `96%`, and disk was about `16G` free. Home ProEx is not table-eligible until
+  final provenance, exact coverage, imported full metrics, row counts,
+  server-final audit, lightweight sync, and local-light audit pass.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must

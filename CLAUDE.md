@@ -6,7 +6,7 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Quick Orientation
 
-- **Stage**: M5 (C-CRP v3 complete; sports official-baseline run active)
+- **Stage**: M5 (C-CRP v3 complete; sports/toys official gates passed; home official-baseline run active)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
@@ -53,24 +53,23 @@ Use the documented single-domain loop under current storage pressure, e.g.
 `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`. The runner
 audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
 after each completed score file.
-Current active run: sports, `baselines_new_domains_sports.log`, runner PID
-`2794722`, launched 2026-05-31. Completed sports official rows so far:
-`llmemb`, `proex_profile`, `promax_profile`, and `elmrec_graph`, all
-`official_completed` with
-`blockers=[]`, exact `score_coverage_rate=1.0`, 10,000 users, 1,010,000
-candidate score rows, and complete HR/NDCG @5/@10/@20 plus MRR imported
-tables. The runner advanced to `irllrec_intent` on 2026-06-01 04:37 CST; disk
-was about 15G free at the 04:38 CST checkpoint, so storage is a close watch
-item but not yet a blocker. Do not add a separate monitor automation; continue
-from the active thread goal and record only material evidence changes.
-At the 2026-06-01 05:31 CST checkpoint, completed sports baseline evidence was
-augmented locally with inspect provenance, text score-audit logs, and
-`tables/ranking_eval_records.csv` for paired/statistical follow-up. The four
-completed methods' server-side `outputs/baselines/paper_adapters/*` working
-directories were then removed after path checks; final server outputs
-(`scores.csv`, provenance, audits, tables, predictions, checkpoints) remain.
-Disk recovered from about 15G free to about 33G free. Active server process:
-sports `irllrec_intent`, PID `2835275`.
+Current status (2026-06-02): sports and toys are each 8/8 official baselines
+complete and have passed their domain/comparison/paired-test gates against
+C-CRP. Home `proex_profile` is the active next row, launched as a single-row
+official loop with runner PID `3004208`, adapter PID `3004218`, and log
+`baselines_new_domains_home_proex_20260602_1950.log`. At the first stable
+check it was in Qwen3 `hf_mean_pool` embedding at about `3720/385364`, GPU was
+about `96%`, and disk was about `16G` free. It is not table-eligible until
+final provenance, exact coverage, imported full metrics, row counts,
+server-final audit, lightweight sync, and local-light audit pass. Do not start
+another baseline while it is active.
+
+Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
+upstream staging directories were removed only after final server audits and
+local-light packages passed. The cleanup manifest is
+`outputs/summary/upstream_completed_sports_toys_llmemb_llmesr_cleanup_manifest_20260602.sha256`;
+final official evidence directories and local lightweight packages were
+preserved. Disk recovered from about `5.9G` to `17G` free.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.

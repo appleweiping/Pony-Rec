@@ -203,7 +203,8 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home/tools remain pending. Toys
+   domain/comparison/paired-test gates; home `proex_profile` is running as the
+   first home official row, while tools remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
@@ -219,9 +220,15 @@ same-candidate tests.
    `outputs/summary/toys_official_gate_final_20260602_1900.*` and
    `outputs/summary/toys_official_ccrp_20260602_1900_*`. C-CRP is rank 1 on
    all seven toys metrics; all 56 paired tests are positive and
-   Holm-significant. Current server disk is about `5.9G` free after removing
-   only the completed LLM-ESR intermediate adapter with a cleanup manifest, so
-   the next official rows must stay single-domain and storage-aware.
+   Holm-significant. Current server disk recovered from about `5.9G` to `17G`
+   free after removing only verified completed upstream staging data for
+   sports/toys LLMEmb and LLM-ESR, with cleanup manifest
+   `outputs/summary/upstream_completed_sports_toys_llmemb_llmesr_cleanup_manifest_20260602.sha256`.
+   Final official evidence and local lightweight packages were preserved.
+   Home `proex_profile` launched at 2026-06-02 19:45 CST with runner PID
+   `3004208`, adapter PID `3004218`, and log
+   `baselines_new_domains_home_proex_20260602_1950.log`; it is not a result
+   row until final gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
