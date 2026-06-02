@@ -176,11 +176,15 @@ not as a reason to silently rerun completed metric rows.
   The last separate LLM-ESR runner (`2877443`/`2877452`) finished at
   2026-06-01 18:31 CST.
 - Phase 2 toys official-baseline run is in progress. As of 2026-06-02
-  17:10 CST, seven toys rows are audited complete
+  17:43 CST, seven toys rows are audited complete
   (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
   `irllrec_intent`, `rlmrec_graphcl`, and `llm2rec_sasrec`). The active
-  eighth row, `llmesr_sasrec`, was still running at about `173,024/215,034` in
-  Qwen3 embedding with disk `5.5G` free and a clean error scan. The latest
+  eighth row, `llmesr_sasrec`, completed embeddings but hit a no-space failure
+  while copying the 3.3G LLM-ESR handled item embedding into the upstream repo.
+  The failed upstream copy and one completed LLM2Rec intermediate embedding
+  were removed, the LLM-ESR training adapter now symlinks handled files instead
+  of copying them, and the recovery run reached epoch 1 under adapter PID
+  `2978726` with about `6.1G` free disk. The latest
   completed row, `llm2rec_sasrec`, passed server-final audit, lightweight sync,
   local-light audit, full metrics, exact coverage, and row-count gates after
   the disk-full recovery described below. The previous completed row,

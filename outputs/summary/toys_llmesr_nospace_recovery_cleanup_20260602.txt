@@ -1,0 +1,31 @@
+toys LLM-ESR no-space recovery cleanup manifest
+timestamp_cst: 2026-06-02 17:43
+
+failure:
+  log: baselines_new_domains_toys_llmesr_20260602_1635.log
+  error: OSError [Errno 28] No space left on device while copying itm_emb_np.pkl
+  source: /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/toys_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl
+  failed_target: /home/ajifang/projects/LLM-ESR/data/toys_same_candidate_100neg/handled/itm_emb_np.pkl
+
+cleanup:
+  removed_completed_intermediate_file:
+    path: /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/toys_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy
+    observed_size_bytes: 4174905472
+    reason: completed LLM2Rec intermediate; final server evidence and local-light audit already passed
+  removed_incomplete_failed_copy:
+    path: /home/ajifang/projects/LLM-ESR/data/toys_same_candidate_100neg/handled/itm_emb_np.pkl
+    observed_size: 2.2G
+    reason: incomplete no-space copy in upstream LLM-ESR data dir, not final evidence
+
+code_fix:
+  file: scripts/train/main_train_score_llmesr_upstream_adapter.py
+  change: symlink required handled files into the upstream LLM-ESR data directory instead of copying them
+  purpose: avoid duplicating the 3.3G Qwen3 item embedding artifact during recovery and future LLM-ESR official runs
+
+recovery:
+  wrapper_pid: 2978707
+  runner_pid: 2978718
+  adapter_pid: 2978726
+  log: baselines_new_domains_toys_llmesr_20260602_1635.log
+  first_training_line_seen: "[llmesr] epoch=1 train_loss=1.315467"
+  disk_after_cleanup: 6.1G free on /home/ajifang

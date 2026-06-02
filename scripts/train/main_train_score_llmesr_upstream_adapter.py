@@ -6,7 +6,6 @@ import json
 import math
 import os
 import random
-import shutil
 import sys
 from contextlib import contextmanager
 from pathlib import Path
@@ -141,7 +140,10 @@ def _copy_required_handled_files(adapter_dir: Path, llmesr_repo_dir: Path, datas
         source_path = source / name
         if not source_path.exists():
             raise FileNotFoundError(f"Required LLM-ESR handled file missing: {source_path}")
-        shutil.copy2(source_path, target / name)
+        target_path = target / name
+        if target_path.exists() or target_path.is_symlink():
+            target_path.unlink()
+        target_path.symlink_to(source_path.resolve())
     return target
 
 

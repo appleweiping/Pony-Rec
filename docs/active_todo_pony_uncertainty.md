@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 17:10 CST
+Last updated: 2026-06-02 17:43 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -53,6 +53,22 @@ or review cycle.
   reconciliation below, and the error scan had no Traceback/OOM/no-space/
   killed/fatal markers. The final LLM-ESR evidence directory still had no
   score/provenance/table files, so the row remains not table-eligible.
+  At 2026-06-02 17:26 CST the first LLM-ESR attempt failed after completing
+  Qwen3 embeddings because `_copy_required_handled_files` tried to copy the
+  3.3G `itm_emb_np.pkl` into the upstream LLM-ESR data directory and hit
+  `OSError: [Errno 28] No space left on device`. Recovery actions did not
+  touch active/final evidence: the completed LLM2Rec intermediate embedding
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
+  was removed after confirming LLM2Rec final server/local gates had passed,
+  and the incomplete upstream LLM-ESR failed copy
+  `/home/ajifang/projects/LLM-ESR/data/toys_same_candidate_100neg/handled/itm_emb_np.pkl`
+  was removed. `scripts/train/main_train_score_llmesr_upstream_adapter.py`
+  now symlinks required handled files into the upstream LLM-ESR data directory
+  instead of copying them. Recovery launched at 2026-06-02 17:38 CST with
+  wrapper PID `2978707`, runner PID `2978718`, and adapter PID `2978726`; it
+  reused the existing embeddings and reached `[llmesr] epoch=1
+  train_loss=1.315467`. Disk was about `6.1G` free after cleanup. The row
+  remains not table-eligible until final evidence gates pass.
 - Latest completed toys row: `llm2rec_sasrec`, completed 2026-06-02 16:18 CST
   after a disk-full recovery. It passed with `implementation_status=official_completed`,
   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
@@ -570,7 +586,7 @@ tests, and ARIS review.
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `rlmrec_graphcl` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llm2rec_sasrec` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llmesr_sasrec` | running | launched 2026-06-02 16:31 CST, log `baselines_new_domains_toys_llmesr_20260602_1635.log`, wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`; at 17:08 CST embedding was about `173,024/215,034`, disk `5.5G` free after C-CRP import reconciliation, error scan clean; not table-eligible yet |
+| `llmesr_sasrec` | running recovery | first attempt completed embeddings but failed at 17:26 CST on no-space while copying `itm_emb_np.pkl`; recovery removed only a completed LLM2Rec intermediate embedding and the incomplete upstream failed copy, patched LLM-ESR handled files to symlink instead of copy, and relaunched at 17:38 CST with wrapper PID `2978707`, runner PID `2978718`, adapter PID `2978726`; reached epoch 1, disk about `6.1G` free; not table-eligible yet |
 
 Toys official baselines are now 7/8 complete (`proex_profile`, `llmemb`,
 `promax_profile`, `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and

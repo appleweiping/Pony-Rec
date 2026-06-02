@@ -246,8 +246,14 @@ external-baseline comparison.
    runner PID `2970047`, adapter PID `2970055`, and log
    `baselines_new_domains_toys_llmesr_20260602_1635.log`. At 17:08 CST it was
    still active in Qwen3 embedding at about `173,024/215,034`, GPU was active,
-   disk was `5.5G` free, and the error scan was clean. It is not
-   table-eligible until final evidence gates pass.
+   disk was `5.5G` free, and the error scan was clean. At 17:26 CST the first
+   attempt failed after embeddings with `OSError: [Errno 28] No space left on
+   device` while copying the 3.3G LLM-ESR item embedding into the upstream
+   repo. Recovery removed only non-final intermediate/failed-copy files,
+   changed the LLM-ESR upstream training adapter to symlink handled files
+   instead of copying them, and relaunched at 17:38 CST. The recovery reached
+   `[llmesr] epoch=1 train_loss=1.315467` with about `6.1G` disk free. It is
+   not table-eligible until final evidence gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
