@@ -1,0 +1,6 @@
+# Preserve generated evidence bytes so sha256 manifests stay meaningful.
+outputs/baselines/official_adapters/** -text
+outputs/summary/*.csv -text
+outputs/summary/*.json -text
+outputs/summary/*.md -text
+outputs/summary/*.sha256 -text

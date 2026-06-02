@@ -110,11 +110,9 @@ The repository is now in M5 (multi-domain SOTA validation):
 - C-CRP v3 completed on all 8 domains
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
-  Sports has all eight official rows plus C-CRP imported evidence through the
-  domain gate. Toys has seven audited official rows complete and the eighth
-  row, `llmesr_sasrec`, is running; toys C-CRP imported evidence now passes
-  its domain-gate section; every completed row imports full `@5/@10/@20 + MRR`
-  metrics after score audit.
+  Sports and toys each have all eight audited official rows plus C-CRP imported
+  evidence through domain and paired-test gates. Home/tools remain pending.
+  Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 
@@ -126,8 +124,8 @@ The repository is now in M5 (multi-domain SOTA validation):
 | books | 10000 | 0.374 | **0.476** | 0.592 | 0.300 | **0.333** | 0.362 | 0.306 | **SOTA** |
 | electronics | 10000 | 0.218 | **0.299** | 0.418 | 0.157 | **0.183** | 0.213 | 0.168 | **SOTA** |
 | movies | 10000 | 0.145 | 0.208 | 0.331 | 0.108 | 0.128 | 0.159 | 0.127 | #5 |
-| sports | 10000 | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | baselines pending |
-| toys | 10000 | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | baselines pending |
+| sports | 10000 | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | domain gate PASS |
+| toys | 10000 | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | domain gate PASS |
 | home | 10000 | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | baselines pending |
 | tools | 10000 | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
 
@@ -139,15 +137,16 @@ completeness: each of sports/toys/home/tools has `report.json`, `scores.csv`
 with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 10,000 user-rank rows.
 
-New-domain imported-table note (2026-06-02): toys C-CRP v3 is metric-complete
-under `outputs/toys_large10000_100neg_ccrp_v3` (`report.json`, `scores.csv`,
-and `user_ranks.jsonl` are present with aligned 10k-user/101-candidate counts).
-At 2026-06-02 17:09 CST the scores were imported into
+New-domain imported-table note (2026-06-02): sports and toys C-CRP v3 imported
+same-candidate evidence now passes domain gates against all eight official
+baselines. For toys, raw scores under `outputs/toys_large10000_100neg_ccrp_v3`
+were imported into
 `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
-through the existing same-candidate importer with exact coverage
-(`score_coverage_rate=1.0`). The follow-up toys domain gate recorded
-`ccrp_ok=true`, `official_ok_count=7`, and `gate_ok=false` only because the
-active `llmesr_sasrec` official row has not produced final evidence yet.
+with exact coverage (`score_coverage_rate=1.0`). After toys `llmesr_sasrec`
+finished, `outputs/summary/toys_official_gate_final_20260602_1900.{json,csv}`
+recorded `ccrp_ok=true`, `official_ok_count=8`, `official_all_ok=true`, and
+`gate_ok=true`. The follow-up toys comparison/statistical gate records C-CRP
+rank 1 on all seven metrics and 56/56 positive Holm-significant paired tests.
 
 Artifact audit note (2026-05-31): the old four-domain C-CRP reports are present
 under `outputs/ccrp_v3_formal/<domain>/report.json`; they were only missed by
@@ -161,9 +160,9 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports has all eight
-   audited official rows complete; toys has seven audited official rows complete
-   with `llmesr_sasrec` currently running; home/tools remain pending.
+2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
+   all eight audited official rows plus domain/comparison/paired-test gates
+   complete; home/tools remain pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -175,52 +174,28 @@ not as a reason to silently rerun completed metric rows.
   all eight sports official rows passed final provenance/coverage/import gates.
   The last separate LLM-ESR runner (`2877443`/`2877452`) finished at
   2026-06-01 18:31 CST.
-- Phase 2 toys official-baseline run is in progress. As of 2026-06-02
-  17:43 CST, seven toys rows are audited complete
-  (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-  `irllrec_intent`, `rlmrec_graphcl`, and `llm2rec_sasrec`). The active
-  eighth row, `llmesr_sasrec`, completed embeddings but hit a no-space failure
-  while copying the 3.3G LLM-ESR handled item embedding into the upstream repo.
-  The failed upstream copy and one completed LLM2Rec intermediate embedding
-  were removed, the LLM-ESR training adapter now symlinks handled files instead
-  of copying them, and the recovery run reached epoch 1 under adapter PID
-  `2978726` with about `6.1G` free disk. The latest
-  completed row, `llm2rec_sasrec`, passed server-final audit, lightweight sync,
-  local-light audit, full metrics, exact coverage, and row-count gates after
-  the disk-full recovery described below. The previous completed row,
-  `rlmrec_graphcl`, also passed all gates and its completed intermediate
-  adapter was safely removed after final evidence and local backup were
-  verified. Toys `llm2rec_sasrec` first launched at
-  2026-06-02 14:26 CST completed Qwen3 embedding (`254815/254815`) but failed
-  when disk reached `0` free; the adapter-side embedding was verified complete
-  with shape `(254816, 4096)` and the upstream LLM2Rec item-info file was an
-  incomplete disk-full copy. Recovery removed the incomplete upstream copy,
-  temporary files, and the old non-active books LLM-ESR intermediate adapter,
-  then symlinked the upstream Toys item-info path to the complete adapter
-  embedding. The recovery job launched at 2026-06-02 16:04 CST with runner PID
-  `2965472`, adapter PID `2965476`, official training child PID `2965700`, and
-  log `baselines_new_domains_toys_llm2rec_recovery_20260602_1603.log`. It
-  finished at 16:18 CST as `official_completed` with `blockers=[]`,
+- Phase 2 toys official-baseline run is complete for all eight rows. The final
+  row, `llmesr_sasrec`, first hit `OSError: [Errno 28] No space left on device`
+  while copying the 3.3G LLM-ESR handled item embedding into the upstream repo;
+  recovery removed only verified non-final/failed-copy storage and changed the
+  adapter to symlink handled files. The recovery finished at 2026-06-02
+  18:59 CST with `implementation_status=official_completed`, `blockers=[]`,
   `score_coverage_rate=1.0`, full metrics HR@5/10/20
-  `0.2202 / 0.3172 / 0.4652`, NDCG@5/10/20
-  `0.1475691807818137 / 0.17887285724512209 / 0.21609262826220665`, MRR
-  `0.15921596430464027`, and aligned row counts (`scores.csv` `1,010,001`,
-  predictions `10,000`, `tables/ranking_eval_records.csv` `10,001`). The local
-  lightweight package is
-  `outputs/baselines/official_adapters/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
-  Completed adapter intermediate CSVs were compressed, and the old sports
-  LLM2Rec upstream item-info cache was removed after recording sha256
-  `41e968bc31de1454eb3deab08eff6e06e1d68308d7ed2b25137f0b377f6b9a2c`; final
-  scores, provenance, audits, predictions, imported tables, checkpoints, and
-  the toys embedding were not deleted. Toys `llmesr_sasrec` is now active
-  under wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`,
-  with log `baselines_new_domains_toys_llmesr_20260602_1635.log`. At the
-  2026-06-02 16:47 CST monitoring check it was still in Qwen3 embedding at
-  about `58,176/215,034`, GPU was active, disk was `6.3G` free, and the error
-  scan was clean. To reduce no-space risk, five old non-active 2026-05-05
-  style/smoke LLM-ESR checkpoint files were removed only after writing
-  `outputs/summary/old_style_llmesr_model_cleanup_manifest_20260602.sha256`;
-  active toys files and final evidence were not touched.
+  `0.0637 / 0.1172 / 0.2203`, NDCG@5/10/20
+  `0.037504900117522603 / 0.05456849726033091 / 0.08036871527121744`, MRR
+  `0.05844977379835533`, and aligned row counts (`scores.csv` `1,010,001`,
+  predictions `10,000`, `tables/ranking_eval_records.csv` `10,001`).
+  Server-final audit, lightweight sync, and local-light audit all passed.
+  The lightweight evidence package is
+  `outputs/baselines/official_adapters/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`;
+  server-only `scores.csv`, predictions, and `llmesr_official_model.pt` are
+  covered by `server_large_artifact_manifest.sha256`. After gates passed, the
+  completed intermediate adapter was removed with cleanup manifest
+  `outputs/summary/toys_llmesr_completed_adapter_cleanup_manifest_20260602.sha256`,
+  recovering disk from about `1.6G` to `5.9G` free while preserving final
+  evidence. The final toys domain gate and comparison/statistical gate passed
+  under `outputs/summary/toys_official_gate_final_20260602_1900.*` and
+  `outputs/summary/toys_official_ccrp_20260602_1900_*`.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must

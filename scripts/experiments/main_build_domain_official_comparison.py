@@ -373,7 +373,7 @@ def _write_markdown(
     lines.extend(
         [
             "",
-            "Claim note: this is a sports-domain statistical gate. Multi-domain paper-level SOTA wording still requires the declared domain set, aligned baselines, and ARIS review.",
+            f"Claim note: this is a {domain}-domain statistical gate. Multi-domain paper-level SOTA wording still requires the declared domain set, aligned baselines, and ARIS review.",
             "",
         ]
     )
@@ -438,12 +438,12 @@ def main() -> int:
         "best_official_by_metric": best_baseline,
         "closest_baseline_tests": closest_tests,
         "claim_gate": (
-            "sports_domain_pass"
+            f"{args.domain}_domain_pass"
             if observed_best and all_positive_significant
-            else "sports_domain_incomplete_or_not_significant"
+            else f"{args.domain}_domain_incomplete_or_not_significant"
         ),
         "claim_scope_warning": (
-            "Sports-only gate. Do not generalize to the paper's full domain set until all declared "
+            f"{args.domain}-only gate. Do not generalize to the paper's full domain set until all declared "
             "domains, comparison tables, paired tests, and ARIS review gates are complete."
         ),
     }
@@ -508,7 +508,7 @@ def main() -> int:
 
     if not args.quiet:
         print(json.dumps(stats_summary, indent=2, ensure_ascii=False))
-    return 0 if stats_summary["claim_gate"] == "sports_domain_pass" else 1
+    return 0 if stats_summary["claim_gate"] == f"{args.domain}_domain_pass" else 1
 
 
 if __name__ == "__main__":

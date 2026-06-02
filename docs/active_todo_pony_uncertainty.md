@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 17:43 CST
+Last updated: 2026-06-02 19:20 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,49 +27,36 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `llmesr_sasrec` official row. It launched at
-  2026-06-02 16:31 CST as a single-domain/single-method official run via
-  `/tmp/pony_run_toys_llmesr_20260602.sh`, with wrapper PID `2970036`,
-  runner PID `2970047`, adapter PID `2970055`, and log
-  `baselines_new_domains_toys_llmesr_20260602_1635.log`. Preflight verified no
-  active relevant Python process, GPU idle, and about `6.3G` free disk. The
-  row is not table-eligible until final scores, provenance, score audit,
-  imported full metrics, row counts, server-final audit, lightweight sync, and
-  local-light audit pass. At the 2026-06-02 16:47 CST monitoring check it was
-  still active in Qwen3 `hf_mean_pool` embedding at about `58,176/215,034`,
-  GPU was about `95%` with `16.2G / 49.1G` used, disk was `6.3G` free after
-  cleanup, and the log/error scan had no Traceback/OOM/no-space/killed/fatal
-  markers.
-  To reduce no-space risk without touching active or final evidence, five old
-  non-active 2026-05-05 style/smoke LLM-ESR checkpoint files under
-  `outputs/baselines/paper_adapters/{beauty,books,electronics,movies}_llmesr_same_candidate_adapter/`
-  were removed after recording sha256/stat evidence in
-  `outputs/summary/old_style_llmesr_model_cleanup_manifest_20260602.sha256`.
-  Metadata, score summaries, current toys LLM-ESR active adapter files, final
-  official outputs, and all local lightweight packages were left untouched.
-  At the 2026-06-02 17:08 CST monitoring check, the same runner was still
-  active at about `173,024/215,034` in Qwen3 `hf_mean_pool`, GPU was about
-  `95%` with `16.2G / 49.1G` used, disk was `5.5G` free after the C-CRP import
-  reconciliation below, and the error scan had no Traceback/OOM/no-space/
-  killed/fatal markers. The final LLM-ESR evidence directory still had no
-  score/provenance/table files, so the row remains not table-eligible.
-  At 2026-06-02 17:26 CST the first LLM-ESR attempt failed after completing
-  Qwen3 embeddings because `_copy_required_handled_files` tried to copy the
-  3.3G `itm_emb_np.pkl` into the upstream LLM-ESR data directory and hit
-  `OSError: [Errno 28] No space left on device`. Recovery actions did not
-  touch active/final evidence: the completed LLM2Rec intermediate embedding
-  `outputs/baselines/paper_adapters/toys_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy`
-  was removed after confirming LLM2Rec final server/local gates had passed,
-  and the incomplete upstream LLM-ESR failed copy
-  `/home/ajifang/projects/LLM-ESR/data/toys_same_candidate_100neg/handled/itm_emb_np.pkl`
-  was removed. `scripts/train/main_train_score_llmesr_upstream_adapter.py`
-  now symlinks required handled files into the upstream LLM-ESR data directory
-  instead of copying them. Recovery launched at 2026-06-02 17:38 CST with
-  wrapper PID `2978707`, runner PID `2978718`, and adapter PID `2978726`; it
-  reused the existing embeddings and reached `[llmesr] epoch=1
-  train_loss=1.315467`. Disk was about `6.1G` free after cleanup. The row
-  remains not table-eligible until final evidence gates pass.
-- Latest completed toys row: `llm2rec_sasrec`, completed 2026-06-02 16:18 CST
+- Latest monitored server state: no active Pony/C-CRP/baseline/uncertainty
+  Python process was found after toys LLM-ESR completion. GPU is idle
+  (`0%`, `15 MiB / 49140 MiB`). Disk is still tight at about `5.9G` free
+  (`97%` used), so the next home/tools official rows must continue as
+  single-domain production loops with storage preflight. Do not launch
+  multiple baselines at once.
+- Latest completed toys row: `llmesr_sasrec`, completed 2026-06-02 18:59 CST
+  after the disk-full recovery. It passed with
+  `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  local-light audit PASS, and no local forbidden large files. Full metrics over
+  10,000 users and 101 candidates: HR@5/10/20
+  `0.0637 / 0.1172 / 0.2203`, NDCG@5/10/20
+  `0.037504900117522603 / 0.05456849726033091 / 0.08036871527121744`, and MRR
+  `0.05844977379835533`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv`
+  `10,001` lines. The local lightweight evidence package is
+  `outputs/baselines/official_adapters/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`;
+  sync manifest `ok=true`, 11 allowed files matched by size/sha256, and 3
+  server-only large files were intentionally excluded: `scores.csv` (100M),
+  `predictions/rank_predictions.jsonl` (779M), and
+  `llmesr_official_model.pt` (3.6G). The server large-artifact manifest records
+  sha256 for all three excluded files. After final server/local gates passed,
+  the completed intermediate adapter
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_llmesr_official_adapter`
+  was removed after writing
+  `outputs/summary/toys_llmesr_completed_adapter_cleanup_manifest_20260602.sha256`;
+  final scores, provenance, audits, predictions, imported tables, and model
+  were preserved. Disk recovered from about `1.6G` free to `5.9G` free.
+- Previous completed toys row: `llm2rec_sasrec`, completed 2026-06-02 16:18 CST
   after a disk-full recovery. It passed with `implementation_status=official_completed`,
   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
   lightweight sync PASS, local-light audit PASS, and no local forbidden large
@@ -133,13 +120,27 @@ or review cycle.
   without `--allow_partial_scores`; the import reported
   `score_coverage_rate=1.000000`. A follow-up domain gate wrote
   `outputs/summary/toys_official_gate_after_ccrp_import_pending_llmesr_20260602_1709.{json,csv}`
-  and confirmed `ccrp_ok=true`, `official_ok_count=7`, and `gate_ok=false`
-  only because `llmesr_sasrec` final evidence is still missing. The local
-  lightweight C-CRP import package contains the five imported tables under
+  while LLM-ESR was still pending. After LLM-ESR completion, the final toys
+  domain gate wrote `outputs/summary/toys_official_gate_final_20260602_1900.{json,csv}`
+  and returned `ccrp_ok=true`, `official_ok_count=8`,
+  `official_all_ok=true`, and `gate_ok=true`. The local lightweight C-CRP
+  import package contains the five imported tables under
   `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/`
   plus the two gate summary files under `outputs/summary/`; server/local
   sha256 checks matched. The 806M imported prediction JSONL remains
   server-only.
+- Toys comparison/statistical gate follow-up: at 2026-06-02 19:07 CST,
+  `scripts/experiments/main_build_domain_official_comparison.py` built the
+  toys C-CRP-vs-8-official comparison and paired-test package under
+  `outputs/summary/toys_official_ccrp_20260602_1900_*`. The comparison table
+  has 9 methods and full HR@5/@10/@20, NDCG@5/@10/@20, and MRR. C-CRP ranks
+  first and is observed-best on all seven metrics. The paired-test table has
+  56 tests (8 official baselines x 7 metrics), all with `n_paired_events=10000`,
+  positive deltas, bootstrap CIs above zero, and Holm-significant p-values.
+  The closest official row is `llmemb`; the smallest margin is HR@20 delta
+  `0.0193` with 95% CI `[0.008298, 0.029900]` and Holm p
+  `0.0004061119980698498`. This is a toys-domain statistical gate only; do not
+  generalize to paper-wide SOTA until the declared domain set is complete.
 - Previous sports runner: Sports `llmesr_sasrec`
   launched 2026-06-01 16:13 CST as a single-row production run with runner PID
   `2877443` and adapter PID `2877452`; it finished at 2026-06-01 18:31 CST.
@@ -302,10 +303,10 @@ or review cycle.
   traceback/OOM/no-space/fatal markers. The final toys ProEx evidence directory
   still had no final `scores.csv`, `fairness_provenance.json`, score audit,
   imported tables, or row-countable predictions, so the row remains running
-  and not table-eligible. Sports remains the only domain with all eight
-  official final provenance packages; toys/home/tools still have zero completed
-  official baseline rows, while C-CRP v3 reports are present for
-  sports/toys/home/tools.
+  and not table-eligible. At that checkpoint, sports was still the only domain
+  with all eight official final provenance packages and toys/home/tools had no
+  completed official baseline rows; this historical status has since been
+  superseded by the toys 8/8 completion and toys domain/statistical gate.
 - Toys ProEx completion/package follow-up: at 2026-06-01 21:11 CST, toys
   `proex_profile` completed as `implementation_status=official_completed`,
   `blockers=[]`, and `score_coverage_rate=1.0`. Server-final evidence audit
@@ -586,24 +587,26 @@ tests, and ARIS review.
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `rlmrec_graphcl` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llm2rec_sasrec` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llmesr_sasrec` | running recovery | first attempt completed embeddings but failed at 17:26 CST on no-space while copying `itm_emb_np.pkl`; recovery removed only a completed LLM2Rec intermediate embedding and the incomplete upstream failed copy, patched LLM-ESR handled files to symlink instead of copy, and relaunched at 17:38 CST with wrapper PID `2978707`, runner PID `2978718`, adapter PID `2978726`; reached epoch 1, disk about `6.1G` free; not table-eligible yet |
+| `llmesr_sasrec` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded; final toys domain/comparison/paired-test gate PASS |
 
-Toys official baselines are now 7/8 complete (`proex_profile`, `llmemb`,
-`promax_profile`, `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and
-`llm2rec_sasrec`). The remaining row is active `llmesr_sasrec`. Toys C-CRP
-imported evidence now passes its domain-gate section. Do not build a toys SOTA
-comparison table until all eight official rows pass the same gate.
+Toys official baselines are now 8/8 complete (`proex_profile`, `llmemb`,
+`promax_profile`, `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`,
+`llm2rec_sasrec`, and `llmesr_sasrec`). Toys C-CRP imported evidence and all
+eight official rows pass the domain gate, and the toys comparison/paired-test
+gate passes with C-CRP rank 1 on all seven metrics and all 56 C-CRP-vs-official
+paired tests positive and Holm-significant. This supports a toys-domain passed
+gate only; paper-wide SOTA wording remains blocked until the declared domain
+set is complete.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
 `avg_candidates=101.0`, `score_coverage_rate=1.0`, `scores.csv` line count
 `1,010,001`, predictions `10,000`, and
-`tables/ranking_eval_records.csv` `10,001`. `rlmrec_graphcl`,
-`llm2rec_sasrec`, and `llmesr_sasrec` remain incomplete by design. A later
-2026-06-02 17:09 CST import reconciled the toys C-CRP gate path and produced
-imported same-candidate tables with exact coverage; the current toys gate
-blocker is no longer C-CRP, only the unfinished `llmesr_sasrec` row.
+`tables/ranking_eval_records.csv` `10,001`. A later 2026-06-02 17:09 CST
+import reconciled the toys C-CRP gate path and produced imported same-candidate
+tables with exact coverage. The final 2026-06-02 19:00 CST toys domain gate
+then passed with `official_ok_count=8`, `ccrp_ok=true`, and `gate_ok=true`.
 
 RLMRec training checkpoint 2026-06-02 07:48 CST: toys `rlmrec_graphcl`
 finished the Qwen3 embedding pass (`215034/215034`) and entered official
@@ -765,14 +768,17 @@ evidence is under
 
 ## Required Next Actions
 
-1. Build the sports 8-official-baseline comparison table against C-CRP v3 and
-   any declared internal method rows, using full @5/@10/@20 + MRR metrics and
-   the same 10,000-user/101-candidate setting.
-2. Run paired/statistical tests from `tables/ranking_eval_records.csv` before
-   claiming sports SOTA.
-3. Continue the same official-baseline protocol for toys, home, and tools,
-   with single-domain production loops and storage preflight before each
-   launch.
+1. Continue the same official-baseline protocol for home and tools, with a
+   fresh no-active-process/GPU/disk preflight and a single-domain production
+   loop before each launch. Current server disk is tight (`5.9G` free), so do
+   not batch multiple storage-heavy rows.
+2. After each completed home/tools row, verify full HR@5/@10/@20,
+   NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
+   score/candidate row counts, exact same-candidate coverage, provenance,
+   score audit, imported tables, server-final audit, lightweight sync, and
+   local-light audit before recording it as official evidence.
+3. Build domain comparison + paired-test gates only after all eight official
+   rows for that domain and C-CRP imported evidence pass the domain gate.
 4. Only after the declared experiments, comparisons, ablations, provenance,
     statistical tests, and figure checks are complete, move to ARIS paper
     writing and GPT-5.5/Codex xhigh review. The review loop must reach at
