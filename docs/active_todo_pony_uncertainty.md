@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 07:48 CST
+Last updated: 2026-06-02 14:29 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,28 +27,49 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: toys `rlmrec_graphcl` official row. It launched on
-  2026-06-02 06:44 CST after toys `irllrec_intent` completed all final gates
-  and the completed IRLLRec intermediate adapter directory was safely removed.
-  Intended runner PID is `2937284`, adapter PID is `2937292`, log path is
-  `baselines_new_domains_toys_rlmrec_20260602_064443.log`, and corrected PID
-  files are `baselines_new_domains_toys_rlmrec_runner.pid` and
-  `baselines_new_domains_toys_rlmrec_adapter.pid`. At the 06:47 CST check it
-  was in Qwen3 `hf_mean_pool` embedding at about `1664/215034`; at the
-  07:18 CST check it had reached about `133152/215034`; at the 07:48 CST check
-  the embedding pass had completed (`215034/215034`) and official RLMRec
-  training had reached `epoch=90`, `train_loss=1.496428`. GPU was active
-  again after the transition, the active adapter directory was about `4.3G`,
-  disk was about `5.4G` free (`98%` used), and the error scan was clean. The
-  row is running and not table-eligible until final scores, provenance, score
-  audit, imported metrics, row counts, server-final audit, local-light sync,
-  and local-light audit pass. Stale SSH launch/audit wrapper shells may match
-  broad process scans; they were checked at `0.0%` CPU/MEM and were left
-  untouched because they are not additional adapter/training Python processes.
-  A read-only disk audit found no safe large cleanup target: the active RLMRec
-  adapter must be preserved, a `1.3G` old books LLM-ESR adapter remains
-  unverified and was not deleted, normal caches are small, and `.vscode-server`
-  has live Code-related processes.
+- Active runner: toys `llm2rec_sasrec` official row. It launched on
+  2026-06-02 14:26 CST after toys `rlmrec_graphcl` completed all final gates,
+  its lightweight evidence was synced and audited locally, and the completed
+  RLMRec intermediate adapter directory was safely removed. Actual runner PID
+  is `2960050`, adapter PID is `2960058`, log path is
+  `baselines_new_domains_toys_llm2rec_20260602_142615.log`, and corrected PID
+  files are `baselines_new_domains_toys_llm2rec_runner.pid` and
+  `baselines_new_domains_toys_llm2rec_adapter.pid`. A stale wrapper shell
+  (`2960047`) may still appear from the local SSH timeout that launched the
+  detached job; it is not a second adapter/training process. At the 14:29 CST
+  check, LLM2Rec was in Qwen3 `hf_mean_pool` embedding at about
+  `5448/254815`, GPU was active (`96%`, about `16237 MiB` used), disk was
+  about `7.7G` free (`96%` used), the active adapter directory was about
+  `1.1G`, and the error scan was clean. The row is running and not
+  table-eligible until final scores, provenance, score audit, imported metrics,
+  row counts, server-final audit, local-light sync, and local-light audit pass.
+- Latest completed toys row: `rlmrec_graphcl`, completed 2026-06-02 12:00 CST
+  with `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  local-light audit PASS, and no local forbidden large files. Full metrics over
+  10,000 users and 101 candidates:
+  HR@5/10/20 `0.1281 / 0.1885 / 0.3050`,
+  NDCG@5/10/20
+  `0.08716027936492049 / 0.10650871155525234 / 0.1353997243006345`,
+  MRR `0.1058452782968119`. Row counts passed: `scores.csv` `1,010,001`
+  lines, predictions `10,000` lines, `tables/ranking_eval_records.csv`
+  `10,001` lines, and metrics/coverage/summary tables each have one data row.
+  The local lightweight evidence package is
+  `outputs/baselines/official_adapters/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`.
+  It contains 11 useful evidence files: final provenance, server-final audit,
+  local-light audit, sync manifest, score audit JSON/TXT, run summary, imported
+  metric/coverage/exposure/eval/summary tables, and the server-side
+  large-artifact sha256 manifest. Server-only large files are protected by
+  `server_large_artifact_manifest.sha256`: `scores.csv` (102M),
+  `predictions/rank_predictions.jsonl` (781M), and
+  `rlmrec_official_model.pt` (60M). After final evidence and local backup gates
+  passed, the completed intermediate adapter
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_rlmrec_official_adapter`
+  was removed, recovering disk from about `4.5G` free to `8.8G` free without
+  deleting final scores, provenance, audits, predictions, imported tables, or
+  model. A follow-up server/local hash check passed for the five earlier toys
+  lightweight packages as well: each had 11 allowed files matching by size and
+  sha256 and 4 server-only excluded large files.
 - Toys C-CRP v3 evidence note: the core result directory
   `outputs/toys_large10000_100neg_ccrp_v3` exists on the server with complete
   full metrics in `report.json`, `scores.csv` line count `1,010,001`, and

@@ -111,8 +111,8 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports has all eight official rows plus C-CRP imported evidence through the
-  domain gate. Toys has five audited official rows complete and the sixth row,
-  `rlmrec_graphcl`, is running; every completed row imports full
+  domain gate. Toys has six audited official rows complete and the seventh
+  row, `llm2rec_sasrec`, is running; every completed row imports full
   `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -159,8 +159,8 @@ not as a reason to silently rerun completed metric rows.
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports has all eight
-   audited official rows complete; toys has five audited official rows
-   complete with `rlmrec_graphcl` currently running; home/tools remain pending.
+   audited official rows complete; toys has six audited official rows complete
+   with `llm2rec_sasrec` currently running; home/tools remain pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -172,6 +172,18 @@ not as a reason to silently rerun completed metric rows.
   all eight sports official rows passed final provenance/coverage/import gates.
   The last separate LLM-ESR runner (`2877443`/`2877452`) finished at
   2026-06-01 18:31 CST.
+- Phase 2 toys official-baseline run is in progress. As of 2026-06-02
+  14:29 CST, six toys rows are audited complete
+  (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
+  `irllrec_intent`, and `rlmrec_graphcl`). The latest completed row,
+  `rlmrec_graphcl`, passed server-final audit, lightweight sync, local-light
+  audit, full metrics, exact coverage, and row-count gates; its completed
+  intermediate adapter was safely removed after final evidence and local backup
+  were verified. The active toys row is `llm2rec_sasrec` with runner PID
+  `2960050`, adapter PID `2960058`, and log
+  `baselines_new_domains_toys_llm2rec_20260602_142615.log`. At the 14:29 CST
+  check it was in Qwen3 embedding at about `5448/254815`, disk was about
+  `7.7G` free, and no fatal/OOM/no-space markers were present.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must

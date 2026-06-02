@@ -195,15 +195,27 @@ external-baseline comparison.
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports is now 8/8 complete; toys is 5/8 complete with
-   `rlmrec_graphcl` currently running; home/tools remain pending. At the
-   2026-06-02 07:18 CST monitoring checkpoint, toys `rlmrec_graphcl` was still
-   in Qwen3 `hf_mean_pool` embedding at about `133152/215034`, GPU and disk
-   were healthy enough to continue, and the recent error scan was clean. At
-   2026-06-02 07:48 CST, the embedding pass had completed (`215034/215034`)
-   and official RLMRec training had reached epoch 90 with loss `1.496428`;
-   disk was tight at about `5.4G` free and no final score/provenance/audit or
-   imported tables existed yet, so this row remains non-table-eligible.
+   score file. Sports is now 8/8 complete; toys is 6/8 complete with
+   `llm2rec_sasrec` currently running; home/tools remain pending. Toys
+   `rlmrec_graphcl` completed at 2026-06-02 12:00 CST with
+   `implementation_status=official_completed`, `blockers=[]`, exact
+   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+   and local-light audit PASS. Its full metrics over 10,000 users and 101
+   candidates are HR@5/10/20 `0.1281 / 0.1885 / 0.3050`,
+   NDCG@5/10/20
+   `0.08716027936492049 / 0.10650871155525234 / 0.1353997243006345`, and MRR
+   `0.1058452782968119`. Row counts passed: `scores.csv` `1,010,001`,
+   predictions `10,000`, and `tables/ranking_eval_records.csv` `10,001`.
+   The local lightweight package is
+   `outputs/baselines/official_adapters/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`
+   and excludes the server-only large scores/predictions/model files while
+   preserving their sha256 manifest. After the completed RLMRec intermediate
+   adapter was safely removed, toys `llm2rec_sasrec` launched at 2026-06-02
+   14:26 CST with runner PID `2960050`, adapter PID `2960058`, and log
+   `baselines_new_domains_toys_llm2rec_20260602_142615.log`; at 14:29 CST it
+   was embedding at about `5448/254815`, disk was about `7.7G` free, and the
+   error scan was clean. This LLM2Rec row is not table-eligible until its final
+   evidence gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
