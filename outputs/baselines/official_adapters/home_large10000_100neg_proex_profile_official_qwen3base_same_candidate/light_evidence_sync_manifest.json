@@ -1,0 +1,116 @@
+{
+  "ok": true,
+  "copy": false,
+  "remote_host": "pony-rec-gpu",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+  "local_evidence_dir": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+  "allowed_file_count": 11,
+  "excluded_file_count": 3,
+  "excluded_files_preview": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "size": 760028679
+    },
+    {
+      "rel_path": "proex_official_model.pt",
+      "size": 50630385
+    },
+    {
+      "rel_path": "scores.csv",
+      "size": 105977216
+    }
+  ],
+  "too_large": [],
+  "checked_files": [
+    {
+      "rel_path": "fairness_provenance.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\fairness_provenance.json",
+      "size": 8638,
+      "sha256": "0aee706d1183ba504d29718a423c937f1b3d27f82dac04020ed7a338723fde6f",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "proex_official_run_summary.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\proex_official_run_summary.json",
+      "size": 10870,
+      "sha256": "1549de7e85b3a3bb7cbda86a5df8999cf59b42ec94307e4320b81f3ebf9b246d",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "proex_official_score_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\proex_official_score_audit.json",
+      "size": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "proex_profile_same_candidate_score_audit.txt",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\proex_profile_same_candidate_score_audit.txt",
+      "size": 534,
+      "sha256": "c3c9e465ed07597a5ad1c672937d39df560eb6e77719e2a0f42acb0597e6bb01",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_final_evidence_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\server_final_evidence_audit.json",
+      "size": 3845,
+      "sha256": "e55763c4a8cfc9472998b4247855d473c0b64e9a169ed9c1c1a3f1c8b4003579",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.sha256",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
+      "size": 505,
+      "sha256": "d7ed9dbb1bf37de2033d7254386fdeb2cd3f274bbed7a1df68cc8733a9946ebd",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\tables\\external_score_coverage.csv",
+      "size": 210,
+      "sha256": "246b15024d179f50fa6d45a0d9939ce94ec985d87e9b37c7fa18dbcbc4d2223e",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "size": 42315262,
+      "sha256": "fd4735f7710714d44f933fed1add8e6d85459bdf2eb1e44c9774cda785118934",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\tables\\ranking_exposure_distribution.csv",
+      "size": 63,
+      "sha256": "d21fd673564eec0f68701d6602db2d2df2b954539cc0dac3bb417dc7ff196044",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\tables\\ranking_metrics.csv",
+      "size": 583,
+      "sha256": "6c81c5d788e08dda21f2b4f921a0031f52e0a7626da1f165befa55cca7b2fbe9",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\tables\\same_candidate_external_baseline_summary.csv",
+      "size": 1832,
+      "sha256": "ed08eea21a5c0296b53614a91722dfb354b6f7b7492d09bf659a02911769999d",
+      "size_ok": true,
+      "sha256_ok": true
+    }
+  ],
+  "failures": []
+}

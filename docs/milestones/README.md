@@ -111,7 +111,9 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home/tools remain pending.
+  evidence through domain and paired-test gates. Home has 1/8 audited official
+  rows complete (`proex_profile`) and the second row (`promax_profile`) is
+  running; tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -162,8 +164,9 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home `proex_profile` is running as the first home official row;
-   tools remains pending.
+   complete; home has 1/8 audited official rows complete and home
+   `promax_profile` is running as the second home official row; tools remains
+   pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
@@ -211,10 +214,27 @@ not as a reason to silently rerun completed metric rows.
   `scripts/run_baselines_new_domains.sh` was copied to the server to preserve
   method-token validation. Home `proex_profile` then launched as a single-row
   official loop with runner PID `3004208`, adapter PID `3004218`, and log
-  `baselines_new_domains_home_proex_20260602_1950.log`. At the first stable
-  check it was in Qwen3 `hf_mean_pool` at about `3720/385364`, GPU was about
-  `96%`, and disk was about `16G` free. Home ProEx is not table-eligible until
-  final provenance, exact coverage, imported full metrics, row counts,
+  `baselines_new_domains_home_proex_20260602_1950.log`. It completed at
+  2026-06-02 22:00 CST with `implementation_status=official_completed`,
+  `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+  lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+  users and 101 candidates are HR@5/10/20 `0.0606 / 0.1177 / 0.2296`,
+  NDCG@5/10/20
+  `0.03662857786324662 / 0.054867449700296195 / 0.08290060869107069`, and MRR
+  `0.05933326491258513`; row counts passed for `scores.csv` (`1,010,001`
+  lines), predictions (`10,000` lines), and `tables/ranking_eval_records.csv`
+  (`10,001` lines). The local lightweight evidence package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`.
+  The completed intermediate adapter was removed after final/server/local gates
+  passed and a 27-file sha256 cleanup manifest was written:
+  `outputs/summary/home_proex_completed_adapter_cleanup_manifest_20260602.sha256`.
+  Disk recovered from about `8.2G` to `16G` free without touching final
+  evidence. Home `promax_profile` then launched at 2026-06-02 22:14 CST as the
+  second home official row with runner PID `3026043`, adapter PID `3026052`,
+  and log `baselines_new_domains_home_promax_20260602_2215.log`; at first
+  stable check it was in Qwen3 `hf_mean_pool` at about `808/385364`, GPU was
+  about `96%`, and disk was about `15G` free. Home ProMax is not table-eligible
+  until final provenance, exact coverage, imported full metrics, row counts,
   server-final audit, lightweight sync, and local-light audit pass.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs

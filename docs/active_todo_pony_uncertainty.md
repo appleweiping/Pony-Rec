@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 19:50 CST
+Last updated: 2026-06-02 22:17 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,19 +27,42 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: home `proex_profile` official row. After verifying no active
-  Pony/C-CRP/baseline/uncertainty Python process, home valid/test task
-  packages, and no existing home ProEx final provenance, it launched at
-  2026-06-02 19:45 CST with runner PID `3004208`, adapter PID `3004218`, and
-  log `baselines_new_domains_home_proex_20260602_1950.log`:
-  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE=proex_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
+- Active runner: home `promax_profile` official row. After home
+  `proex_profile` completed and its intermediate adapter was safely cleaned,
+  a clean process/GPU/disk preflight confirmed no active Pony/C-CRP/baseline
+  process, home valid/test task packages, and no existing home ProMax final
+  directory. It launched at 2026-06-02 22:14 CST with runner PID `3026043`,
+  adapter PID `3026052`, and log
+  `baselines_new_domains_home_promax_20260602_2215.log`:
+  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE=promax_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
   At the first stable check it was in Qwen3 `hf_mean_pool` embedding at about
-  `3720/385364`, GPU was about `96%` with `16067 MiB / 49140 MiB` used, disk
-  was about `16G` free, and no final score/provenance/import package existed
-  yet. The row is not table-eligible until final scores, provenance, score
-  audit, imported full metrics, row counts, server-final audit, lightweight
-  sync, and local-light audit pass. Do not start another baseline while this
-  row is active.
+  `808/385364`, GPU was about `96%` with `16067 MiB / 49140 MiB` used, and
+  disk was about `15G` free. The row is not table-eligible until final scores,
+  provenance, score audit, imported full metrics, row counts, server-final
+  audit, lightweight sync, and local-light audit pass. Do not start another
+  baseline while this row is active.
+- Latest completed home row: `proex_profile`, completed 2026-06-02 22:00 CST
+  with `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  local-light audit PASS, and no local forbidden large files. Full metrics over
+  10,000 users and 101 candidates are HR@5/10/20
+  `0.0606 / 0.1177 / 0.2296`, NDCG@5/10/20
+  `0.03662857786324662 / 0.054867449700296195 / 0.08290060869107069`, and MRR
+  `0.05933326491258513`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. The local lightweight package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`.
+  The server large-artifact manifest records `scores.csv`,
+  `predictions/rank_predictions.jsonl`, and `proex_official_model.pt` while
+  keeping those files server-only. After final/server/local gates passed, the
+  completed intermediate adapter
+  `outputs/baselines/paper_adapters/home_large10000_100neg_proex_official_adapter`
+  was removed after exact realpath checks and a 27-file sha256 cleanup
+  manifest:
+  `outputs/summary/home_proex_completed_adapter_cleanup_manifest_20260602.sha256`.
+  Final scores, provenance, audits, predictions, imported tables, model, and
+  local lightweight evidence were preserved. Disk recovered from about `8.2G`
+  to `16G` free. Home now has 1/8 completed official baseline rows.
 - Storage cleanup before home launch: after sports/toys LLMEmb and LLM-ESR
   final server audits and local-light packages were verified as PASS, three
   completed upstream staging directories were removed after exact realpath
@@ -788,10 +811,10 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `proex_profile` row; do not launch another baseline
+1. Monitor the active home `promax_profile` row; do not launch another baseline
    until it finishes or fails and has been audited. The current log is
-   `baselines_new_domains_home_proex_20260602_1950.log`; runner PID `3004208`,
-   adapter PID `3004218`.
+   `baselines_new_domains_home_promax_20260602_2215.log`; runner PID `3026043`,
+   adapter PID `3026052`.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
