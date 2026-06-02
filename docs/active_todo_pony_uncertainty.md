@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-02 16:35 CST
+Last updated: 2026-06-02 16:47 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -35,7 +35,18 @@ or review cycle.
   active relevant Python process, GPU idle, and about `6.3G` free disk. The
   row is not table-eligible until final scores, provenance, score audit,
   imported full metrics, row counts, server-final audit, lightweight sync, and
-  local-light audit pass.
+  local-light audit pass. At the 2026-06-02 16:47 CST monitoring check it was
+  still active in Qwen3 `hf_mean_pool` embedding at about `58,176/215,034`,
+  GPU was about `95%` with `16.2G / 49.1G` used, disk was `6.3G` free after
+  cleanup, and the log/error scan had no Traceback/OOM/no-space/killed/fatal
+  markers.
+  To reduce no-space risk without touching active or final evidence, five old
+  non-active 2026-05-05 style/smoke LLM-ESR checkpoint files under
+  `outputs/baselines/paper_adapters/{beauty,books,electronics,movies}_llmesr_same_candidate_adapter/`
+  were removed after recording sha256/stat evidence in
+  `outputs/summary/old_style_llmesr_model_cleanup_manifest_20260602.sha256`.
+  Metadata, score summaries, current toys LLM-ESR active adapter files, final
+  official outputs, and all local lightweight packages were left untouched.
 - Latest completed toys row: `llm2rec_sasrec`, completed 2026-06-02 16:18 CST
   after a disk-full recovery. It passed with `implementation_status=official_completed`,
   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
@@ -546,7 +557,7 @@ tests, and ARIS review.
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `rlmrec_graphcl` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llm2rec_sasrec` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llmesr_sasrec` | running | launched 2026-06-02 16:31 CST, log `baselines_new_domains_toys_llmesr_20260602_1635.log`, wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`; not table-eligible yet |
+| `llmesr_sasrec` | running | launched 2026-06-02 16:31 CST, log `baselines_new_domains_toys_llmesr_20260602_1635.log`, wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`; at 16:47 CST embedding was about `58,176/215,034`, disk `6.3G` free after old-style checkpoint cleanup, error scan clean; not table-eligible yet |
 
 Toys official baselines are now 7/8 complete (`proex_profile`, `llmemb`,
 `promax_profile`, `elmrec_graph`, `irllrec_intent`, `rlmrec_graphcl`, and

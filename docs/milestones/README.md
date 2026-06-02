@@ -205,7 +205,13 @@ not as a reason to silently rerun completed metric rows.
   scores, provenance, audits, predictions, imported tables, checkpoints, and
   the toys embedding were not deleted. Toys `llmesr_sasrec` is now active
   under wrapper PID `2970036`, runner PID `2970047`, adapter PID `2970055`,
-  with log `baselines_new_domains_toys_llmesr_20260602_1635.log`.
+  with log `baselines_new_domains_toys_llmesr_20260602_1635.log`. At the
+  2026-06-02 16:47 CST monitoring check it was still in Qwen3 embedding at
+  about `58,176/215,034`, GPU was active, disk was `6.3G` free, and the error
+  scan was clean. To reduce no-space risk, five old non-active 2026-05-05
+  style/smoke LLM-ESR checkpoint files were removed only after writing
+  `outputs/summary/old_style_llmesr_model_cleanup_manifest_20260602.sha256`;
+  active toys files and final evidence were not touched.
 - Monitoring cadence updated 2026-06-01: no separate monitor automation is
   required while the active thread goal is running. Each continuation performs
   bounded read-only status checks, records material evidence changes, and must
