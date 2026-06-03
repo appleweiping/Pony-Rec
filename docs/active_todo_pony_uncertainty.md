@@ -62,7 +62,12 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    triples, uncertainty thresholds/gates, anchor conflict penalties, and any
    real learning-rate/lambda controls used by trainable SRPD or related modules.
    Use sensible ranges, plot curves with matplotlib, and label validation-only
-   selection separately from test reporting.
+   selection separately from test reporting. Script entry for C-CRP sweep plots:
+   `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`, consuming
+   `valid_ccrp_sweep.csv` from the validation selector and failing by default
+   when a requested curve has fewer than three values. It supports
+   `--test_sweep_csv` so validation and test curves can be reported separately;
+   valid-only output is not sufficient for a paper stability claim.
 4. Framework overview figure: prepare a clean paper figure showing the full
    pipeline, where task-grounded uncertainty is estimated, which components
    enter C-CRP, and where risk-adjusted ranking is applied.

@@ -133,6 +133,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   completed paper result until real C-CRP uncertainty signal rows are located
   or regenerated without LLM re-query leakage and the Sports/Toys runs pass
   row-count, join-rate, table, figure, and provenance gates.
+- C-CRP hyperparameter curve script entry now exists:
+  `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`. It consumes
+  validation `valid_ccrp_sweep.csv` artifacts and is not a completed paper
+  result until Sports/Toys sweeps produce at least three values per plotted
+  control with validation/test separation, `--test_sweep_csv` reporting, and
+  provenance.
 
 ### C-CRP v3 Results (all domains)
 

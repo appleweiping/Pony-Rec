@@ -197,6 +197,37 @@ Required plots:
 - `fig_hyper_temperature_curve.pdf/png` if temperature is an active control
 - SRPD learning-rate/lambda curves only if SRPD is used in the paper story.
 
+Implementation anchor:
+
+- `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`
+
+Command template after a validation sweep exists:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \
+  --domain sports \
+  --sweep_csv outputs/summary/paper_critical/ccrp_ablation_sports/valid_ccrp_sweep.csv \
+  --test_sweep_csv outputs/summary/paper_critical/ccrp_ablation_sports/test_ccrp_sweep.csv \
+  --output_dir outputs/summary/paper_critical/hyperparameter_sports \
+  --metric NDCG@10 \
+  --score_mode full \
+  --ablation full \
+  --eta 1.0 \
+  --confidence_weight 0.5 \
+  --weight_grid_label "0.5,0.3,0.2" \
+  --controls eta,confidence_weight,weight_grid_label \
+  --min_values 3
+```
+
+The plotting script is an evidence-packaging step, not a model runner. When a
+test sweep is available, pass it via `--test_sweep_csv` so validation and test
+curves are reported separately. If no test sweep is supplied, the provenance is
+marked `valid_only`, which is useful for planning but not sufficient for the
+paper stability claim. The script fails by default when any requested curve has
+fewer than three values. Use `--allow_incomplete` only for diagnostic output
+that will not support a paper stability claim.
+
 Numeric gates:
 
 - Curves must report validation and test separately.

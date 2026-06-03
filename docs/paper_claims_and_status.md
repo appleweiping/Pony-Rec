@@ -63,7 +63,12 @@ also include:
    validation-only selection clearly separated from test reporting. Candidate
    controls include eta, confidence weight, weight triples, uncertainty
    thresholds/gates, anchor conflict penalties, and SRPD learning-rate/lambda
-   controls when SRPD rows are used.
+   controls when SRPD rows are used. C-CRP sweep plotting entry:
+   `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`, consuming
+   validation `valid_ccrp_sweep.csv` outputs and requiring at least three values
+   per paper-facing curve by default. Paper-facing stability wording requires
+   validation and test curves to be reported separately, using `--test_sweep_csv`
+   when the test sweep is available.
 4. A clean framework overview figure showing the full pipeline and where
    uncertainty and C-CRP components enter the ranking decision.
 
