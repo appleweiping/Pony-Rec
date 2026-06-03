@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 05:26 CST
+Last updated: 2026-06-04 05:47 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -76,6 +76,17 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    four score-only files, so the next productive action is not another blind
    server sweep but locating the original full-scale signal-generation path or
    regenerating rows from saved non-test-selected signal inputs.
+   Static trace helper:
+   `scripts/audit/main_trace_ccrp_formal_signal_path.py`, with evidence
+   `outputs/summary/paper_critical/ccrp_formal_signal_path_trace_20260604_0535.json`,
+   confirms `experiments/rsc/run_ccrp_v3_domain.py` only requests
+   `relevance_probability`, writes `scores.csv`, `report.json`, and
+   `user_ranks.jsonl`, and does not write
+   `ccrp_selected_test_scored_rows.csv`,
+   `ccrp_internal_provenance.json`, evidence/counterevidence fields, or
+   `ccrp_uncertainty`. Therefore paper-ready uncertainty rows cannot be
+   rebuilt from formal `scores.csv` alone; the selector route still requires
+   real valid/test signal paths.
    Discovery helper:
    `scripts/audit/main_discover_ccrp_uncertainty_sources.py`, which scans CSV
    and JSONL headers for domain-specific C-CRP/shadow/signal/scored artifacts
@@ -228,8 +239,8 @@ passes gates, or fails with an audited recovery decision.
   and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
   Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
   process continued.
-  Latest continuation check in this thread at 2026-06-04 05:26 CST: the same
-  runner/adapter remained active at epoch `2530`, with no completion/failure
+  Latest continuation check in this thread at 2026-06-04 05:47 CST: the same
+  runner/adapter remained active at epoch `2650`, with no completion/failure
   markers, final output still empty, GPU active, and `/` at about `13G` free /
   `94%` used. Do not start another baseline until this row either completes
   and passes gates or fails with an audited recovery decision.

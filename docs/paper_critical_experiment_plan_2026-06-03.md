@@ -177,6 +177,17 @@ Local evidence copies are under `outputs/summary/paper_critical/` with names
 plus
 `ccrp_uncertainty_source_audit_{sports,toys,home,tools}_fixed_filter_20260604_0502.*`.
 
+Static trace result (2026-06-04): `scripts/audit/main_trace_ccrp_formal_signal_path.py`
+confirms that `experiments/rsc/run_ccrp_v3_domain.py` only requests
+`relevance_probability` and writes `scores.csv`, `report.json`, and
+`user_ranks.jsonl`; it does not preserve evidence/counterevidence fields,
+`ccrp_uncertainty`, selected scored rows, or internal provenance. The selector
+route in `scripts/misc/main_select_ccrp_variant_on_valid.py` can write
+`ccrp_selected_test_scored_rows.csv` and `ccrp_internal_provenance.json`, but
+only when given real valid/test signal paths. Do not attempt to infer
+paper-ready uncertainty rows from formal `scores.csv` alone. Evidence:
+`outputs/summary/paper_critical/ccrp_formal_signal_path_trace_20260604_0535.json`.
+
 ## Module B: C-CRP Component Ablation
 
 Goal: show which C-CRP components matter and honestly identify weak components.

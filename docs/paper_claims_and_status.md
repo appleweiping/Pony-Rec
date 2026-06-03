@@ -64,7 +64,12 @@ also include:
    `scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py`, and
    `scripts/audit/main_audit_ccrp_uncertainty_sources.py`. A 2026-06-04
    project-root broad scan also found no additional full-scale signal rows
-   outside `outputs/`.
+   outside `outputs/`. Static trace
+   `scripts/audit/main_trace_ccrp_formal_signal_path.py` shows the formal v3
+   runner only requested `relevance_probability` and did not preserve
+   evidence/counterevidence, `ccrp_uncertainty`, selected scored rows, or
+   internal provenance, so the paper-critical uncertainty rows cannot be
+   reconstructed from formal `scores.csv` alone.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap

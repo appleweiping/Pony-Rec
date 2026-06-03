@@ -1,0 +1,52 @@
+{
+  "formal_runner_path": "D:\\Research\\Uncertainty\\experiments\\rsc\\run_ccrp_v3_domain.py",
+  "selector_path": "D:\\Research\\Uncertainty\\scripts\\misc\\main_select_ccrp_variant_on_valid.py",
+  "config_path": "D:\\Research\\Uncertainty\\configs\\week8_large_scale_future_framework.yaml",
+  "prompt_fields_requested_by_formal_runner": {
+    "relevance_probability": true,
+    "evidence_support": false,
+    "counterevidence": false,
+    "uncertainty": false
+  },
+  "formal_runner_outputs_detected": {
+    "scores_csv": true,
+    "report_json": true,
+    "user_ranks_jsonl": true,
+    "selected_scored_rows_csv": false,
+    "internal_provenance_json": false
+  },
+  "formal_score_schema_markers": {
+    "source_event_id": true,
+    "user_id": true,
+    "item_id": true,
+    "score": true,
+    "ccrp_uncertainty": false
+  },
+  "selector_contract_detected": {
+    "requires_valid_signal_path": true,
+    "requires_test_signal_path": true,
+    "writes_valid_sweep": true,
+    "writes_selected_scores": true,
+    "writes_selected_scored_rows": true,
+    "writes_internal_provenance": true
+  },
+  "configured_shadow_paths_detected": {
+    "pointwise_output_dir": true,
+    "ccrp_formal_output_dir": true,
+    "winner_signal_variant": true
+  },
+  "formal_prompt_could_generate_recomputable_signal_if_preserved": false,
+  "can_rebuild_paper_ready_uncertainty_rows_from_formal_scores_only": false,
+  "required_inputs_for_selector_route": [
+    "valid_signal_path with source_event_id,user_id,item_id/candidate_item_id and uncertainty/recomputable signal columns",
+    "test_signal_path with source_event_id,user_id,item_id/candidate_item_id and uncertainty/recomputable signal columns",
+    "valid/test candidate_items.csv for exact key coverage",
+    "valid/test ranking_task.jsonl for metric evaluation"
+  ],
+  "blockers": [
+    "formal_runner_does_not_write_scored_rows_with_uncertainty_components",
+    "formal_runner_prompt_does_not_request_evidence_or_counterevidence_fields",
+    "formal_scores_schema_has_no_uncertainty_column"
+  ],
+  "recommended_next_action": "Do not try to infer uncertainty from formal scores.csv. Locate saved full-scale valid/test signal rows, or schedule a new signal-generation run that preserves raw/calibrated signal fields after the active Home RLMRec baseline completes and gates pass."
+}
