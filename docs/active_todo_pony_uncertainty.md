@@ -69,7 +69,15 @@ or review cycle.
   `outputs/summary/toys_proex_prediction_deleted_for_home_irllrec_disk_20260603.sha256`.
   Final scores, provenance, audits, imported tables, models, and local-light
   packages were preserved; disk recovered to about `2.5G`, and the active home
-  IRLLRec process reached epoch `1480` by 17:45 CST.
+  IRLLRec process reached epoch `1480` by 17:45 CST. At the 18:08 CST
+  follow-up, the same active row had reached epoch `1740` with no fatal/OOM/no
+  space markers, but disk remained tight. After confirming sports ProMax
+  server-final audit `ok=true` and local-light audit `ok=true`, only the
+  already gated server-side Sports ProMax prediction JSONL was removed with
+  sha256 manifest
+  `outputs/summary/sports_promax_prediction_deleted_for_home_irllrec_disk_20260603.sha256`.
+  Sports ProMax `scores.csv`, provenance, audits, imported tables, model, and
+  local-light package were preserved; disk recovered to about `3.1G`.
 - Latest completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
   disk-full checkpoint/import recovery. The first 2026-06-03 06:08 CST LLMEmb
   run reached exact score export but failed during `torch.save` with the
@@ -940,7 +948,8 @@ evidence is under
    Watch disk closely: it fell to about `30M` free before emergency cleanup
    recovered it to about `2.0G` at the 2026-06-03 17:27 CST checkpoint, then a
    further audited Toys ProEx prediction cleanup recovered it to about `2.5G`
-   at the 17:45 CST checkpoint. The
+   at the 17:45 CST checkpoint, and an audited Sports ProMax prediction cleanup
+   recovered it to about `3.1G` at the 18:08 CST checkpoint. The
    final row is not table-eligible until the full
    score/provenance/import/audit/local-light gate passes.
 2. After each completed home/tools row, verify full HR@5/@10/@20,

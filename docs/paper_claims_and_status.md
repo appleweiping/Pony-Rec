@@ -336,7 +336,14 @@ same-candidate tests.
    additional manifest is
    `outputs/summary/toys_proex_prediction_deleted_for_home_irllrec_disk_20260603.sha256`;
    disk recovered to about `2.5G`, and active training reached epoch `1480` by
-   17:45 CST.
+   17:45 CST. At the 18:08 CST follow-up, home IRLLRec remained active through
+   epoch `1740` with no fatal/OOM/no-space markers, but disk was still tight.
+   After confirming sports ProMax server-final audit `ok=true` and local-light
+   audit `ok=true`, only the already gated server-side Sports ProMax prediction
+   JSONL was removed with sha256 manifest
+   `outputs/summary/sports_promax_prediction_deleted_for_home_irllrec_disk_20260603.sha256`.
+   Sports ProMax scores, provenance, audits, imported tables, model, and
+   local-light package were preserved; disk recovered to about `3.1G`.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
