@@ -176,6 +176,21 @@ python main_run_official_same_candidate_adapter.py \
 
 ## Lightweight Evidence Sync
 
+For a completed official row, you can first generate a guarded local gate plan
+so the required sequence is explicit before running anything:
+
+```powershell
+python scripts\audit\main_plan_official_completion_gates.py `
+  --domain home `
+  --method rlmrec_graphcl `
+  --output_dir outputs\summary\official_completion_gate_plan `
+  --plan_id home_rlmrec_graphcl_completion_gates_20260604
+```
+
+The generated PowerShell file starts with a `throw`, so it is documentation
+until the active runner has exited normally and the preconditions have been
+checked. It must not be used to start the next baseline.
+
 After a row has passed the server-final evidence audit, first record the
 server-only large artifacts on the server. From the local repository, prefer
 the SSH-stdin wrapper so it uses the current local helper even if the server

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 06:08 CST
+Last updated: 2026-06-04 06:27 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -171,6 +171,13 @@ process and no conflicting worktree state, or run
 `scripts/audit/main_remote_server_large_artifact_manifest.py` from the local
 checkout before local-light sync; that wrapper sends the current local helper
 through SSH stdin and does not depend on the server checkout version.
+Guarded completion-gate plan helper:
+`scripts/audit/main_plan_official_completion_gates.py` writes a planning-only
+JSON plus guarded PowerShell script for a completed official row. The generated
+plan fixes the required order as server-final audit, server large-artifact
+manifest, local-light sync, and local-light audit; it begins with a PowerShell
+`throw` and does not run by default. Current Home RLMRec plan artifact:
+`outputs/summary/official_completion_gate_plan/home_rlmrec_graphcl_completion_gates_20260604.*`.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start these server runs until the active Home RLMRec row completes and
