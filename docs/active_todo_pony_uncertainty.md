@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 03:24 CST
+Last updated: 2026-06-04 03:31 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -118,6 +118,13 @@ evidence directory. It writes `server_large_artifact_manifest.sha256/json` for
 `scores.csv`, `predictions/rank_predictions.jsonl`, and method-specific
 model/checkpoint artifacts such as `*_official_model.pt`, avoiding brittle
 manual `sha256sum` commands that guess the model filename.
+Operational note from the 2026-06-04 03:31 CST monitor: while Home RLMRec is
+active, do not `git pull` the server checkout. The server working tree is
+still on commit `9ded57b` and behind local/GitHub `6409d98`, so the new
+large-artifact manifest helper is not yet present there. When the active run
+finishes, either perform a safe `git pull --ff-only` after confirming no active
+process and no conflicting worktree state, or run the helper through remote
+stdin from the local checkout before local-light sync.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start these server runs until the active Home RLMRec row completes and
