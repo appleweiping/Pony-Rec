@@ -27,10 +27,10 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: none at the 2026-06-03 09:55 CST evidence checkpoint. The
+- Active runner: none at the 2026-06-03 13:45 CST cleanup checkpoint. The
   latest completed home row is `llmemb`; the next row should not launch until
-  a fresh process/GPU/disk check passes and verified non-final storage is freed
-  because the filesystem had only about `42M` free after import/audit.
+  a fresh process/GPU/disk check passes. The completed LLMEmb adapter cleanup
+  recovered the filesystem to about `7.1G` free.
 - Latest completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
   disk-full checkpoint/import recovery. The first 2026-06-03 06:08 CST LLMEmb
   run reached exact score export but failed during `torch.save` with the
@@ -54,7 +54,13 @@ or review cycle.
   The server large-artifact manifest records `scores.csv`,
   `predictions/rank_predictions.jsonl`, and `llmemb_official_model.pt` while
   keeping those files server-only. Home now has 4/8 completed official
-  baseline rows.
+  baseline rows. After local evidence was refreshed, the completed
+  intermediate adapter
+  `outputs/baselines/paper_adapters/home_large10000_100neg_llmemb_official_adapter`
+  was removed with cleanup manifest
+  `outputs/summary/home_llmemb_completed_adapter_cleanup_manifest_20260603.sha256`;
+  a post-cleanup server-final audit remained `ok=true`, and disk recovered to
+  about `7.1G` free.
 - Previous completed home row: `elmrec_graph`, completed 2026-06-03 05:47 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
@@ -891,10 +897,9 @@ evidence is under
 ## Required Next Actions
 
 1. Before launching the next home row (`irllrec_intent`), run a fresh server
-   process/GPU/disk check. The home `llmemb` row is complete, but the server
-   filesystem is still tight after import (`42M` free at the 2026-06-03 09:55
-   CST audit checkpoint), so free only verified non-final or packaged
-   intermediates before starting another baseline.
+   process/GPU/disk check. Home `llmemb` is complete and its intermediate
+   adapter cleanup recovered disk to about `7.1G` free, but the next row still
+   needs a clean preflight and single-row launch discipline.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

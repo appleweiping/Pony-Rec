@@ -307,9 +307,12 @@ same-candidate tests.
    `outputs/baselines/official_adapters/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/`;
    server-only large artifacts remain covered by
    `server_large_artifact_manifest.sha256`. Home now has 4/8 completed
-   official rows. The next home row requires a fresh process/GPU/disk check and
-   safe cleanup first, because the server filesystem had only about `42M` free
-   after the LLMEmb import/audit checkpoint.
+   official rows. The completed LLMEmb intermediate adapter was then removed
+   with cleanup manifest
+   `outputs/summary/home_llmemb_completed_adapter_cleanup_manifest_20260603.sha256`;
+   a post-cleanup server-final audit remained `ok=true`, and disk recovered to
+   about `7.1G` free. The next home row requires a fresh process/GPU/disk check
+   and single-row launch discipline.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
