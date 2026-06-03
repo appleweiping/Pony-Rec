@@ -157,13 +157,20 @@ share that alias policy. A coverage failure after a passing
 `recomputable_signal_rows` audit should therefore be treated as a real key
 mismatch, not a known schema-alias limitation.
 
-Validated preflight result (2026-06-03): running the audit helper through remote
-stdin against the already imported Sports and Toys C-CRP `scores.csv` files
-reported exact candidate-key coverage for both domains
-(`1,010,000/1,010,000`, 10,000 events) but classified both files as
-`score_only_not_uncertainty` with failure `missing_uncertainty_column`. This
-confirms that the formal score files are usable for ranking import/audit but
-not for uncertainty-bin motivation evidence.
+Validated preflight result (updated 2026-06-04): the remote discovery helper
+is now safe for absolute server roots because it matches domain/name tokens
+against paths relative to the scan root, not against `/home/...`. Fixed-filter
+header discovery plus a broader token sweep over Sports, Toys, Home, and Tools
+found only the four full-scale C-CRP formal `scores.csv` files and no
+paper-ready or recomputable uncertainty/signal rows. Full audits against each
+domain's test `candidate_items.csv` reported exact candidate-key coverage
+(`1,010,000/1,010,000`, 10,000 events) for all four files, but classified every
+file as `score_only_not_uncertainty` with failure
+`missing_uncertainty_column`. This confirms that the formal score files are
+usable for ranking import/audit but not for uncertainty-bin motivation evidence.
+Local evidence copies are under `outputs/summary/paper_critical/` with names
+`ccrp_uncertainty_source_discovery_fullscale*_fixed_filter_20260604_*` and
+`ccrp_uncertainty_source_audit_{sports,toys,home,tools}_fixed_filter_20260604_0502.*`.
 
 ## Module B: C-CRP Component Ablation
 

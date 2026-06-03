@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 04:43 CST
+Last updated: 2026-06-04 05:12 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -58,15 +58,27 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    candidate files as `paper_ready_uncertainty_rows`,
    `recomputable_signal_rows`, or `score_only_not_uncertainty` and checks
    candidate-key coverage when `candidate_items.csv` is supplied.
-   Remote stdin preflight on 2026-06-03 confirmed
-   `outputs/{sports,toys}_large10000_100neg_ccrp_v3/scores.csv` each has
-   1,010,000/1,010,000 candidate-key coverage and 10,000 events, but both are
-   classified `score_only_not_uncertainty` with failure
-   `missing_uncertainty_column`.
+   Remote stdin preflight on 2026-06-04 with the fixed-filter discovery wrapper
+   confirmed the visible full-scale new-domain C-CRP artifacts are only
+   `outputs/{sports,toys,home,tools}_large10000_100neg_ccrp_v3/scores.csv`.
+   Header discovery and a broader token sweep found no paper-ready or
+   recomputable signal rows for those four domains. Full audits against each
+   domain's test `candidate_items.csv` confirmed every C-CRP score file has
+   1,010,000 rows, 10,000 events, exact candidate-key coverage `1.0`, and
+   status `score_only_not_uncertainty` with failure
+   `missing_uncertainty_column`. Evidence files:
+   `outputs/summary/paper_critical/ccrp_uncertainty_source_discovery_fullscale_fixed_filter_20260604_0458.*`,
+   `outputs/summary/paper_critical/ccrp_uncertainty_source_discovery_fullscale_broad_fixed_filter_20260604_0459.*`,
+   and
+   `outputs/summary/paper_critical/ccrp_uncertainty_source_audit_{sports,toys,home,tools}_fixed_filter_20260604_0502.*`.
    Discovery helper:
    `scripts/audit/main_discover_ccrp_uncertainty_sources.py`, which scans CSV
    and JSONL headers for domain-specific C-CRP/shadow/signal/scored artifacts
-   before the stricter row/key audit.
+   before the stricter row/key audit. On 2026-06-04 the helper's path filter
+   was fixed to match domain/name tokens against paths relative to the scan
+   root, preventing `--domain home` from matching every absolute `/home/...`
+   server path. Remote wrapper:
+   `scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py`.
    Rebuild helper:
    `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py`, to convert a
    future located `recomputable_signal_rows` artifact plus a fixed selected
@@ -211,8 +223,8 @@ passes gates, or fails with an audited recovery decision.
   and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
   Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
   process continued.
-  Latest continuation check in this thread at 2026-06-04 04:43 CST: the same
-  runner/adapter remained active at epoch `2270`, with no completion/failure
+  Latest continuation check in this thread at 2026-06-04 05:12 CST: the same
+  runner/adapter remained active at epoch `2440`, with no completion/failure
   markers, final output still empty, GPU active, and `/` at about `13G` free /
   `94%` used. Do not start another baseline until this row either completes
   and passes gates or fails with an audited recovery decision.

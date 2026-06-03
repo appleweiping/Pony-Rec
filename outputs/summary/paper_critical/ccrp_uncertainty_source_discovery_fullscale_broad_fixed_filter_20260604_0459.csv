@@ -1,0 +1,5 @@
+path,size,header_status,has_identity,has_uncertainty,has_recomputable_signal,has_score_only,audit_status,audit_candidate_key_coverage_rate,audit_failures,audit_warnings
+/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3/scores.csv,89890405,header_score_only_candidate,True,False,False,True,,,,
+/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_ccrp_v3/scores.csv,89891286,header_score_only_candidate,True,False,False,True,,,,
+/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_ccrp_v3/scores.csv,89891288,header_score_only_candidate,True,False,False,True,,,,
+/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3/scores.csv,89891568,header_score_only_candidate,True,False,False,True,,,,

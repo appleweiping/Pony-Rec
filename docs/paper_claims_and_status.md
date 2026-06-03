@@ -55,7 +55,13 @@ also include:
    only for the older Beauty supplementary smaller-N selector run; the
    Sports/Toys/Home/Tools formal C-CRP outputs currently visible are score-only
    and cannot support the motivation figure until real signal/scored rows are
-   located or regenerated without LLM re-query leakage. Preflight audit entry:
+   located or regenerated without LLM re-query leakage. Fixed-filter discovery
+   and full audits on 2026-06-04 confirmed that each visible new-domain formal
+   C-CRP `scores.csv` has 1,010,000 rows, 10,000 events, and candidate coverage
+   `1.0`, but all four are `score_only_not_uncertainty` because they lack an
+   uncertainty column. Preflight entries:
+   `scripts/audit/main_discover_ccrp_uncertainty_sources.py`,
+   `scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py`, and
    `scripts/audit/main_audit_ccrp_uncertainty_sources.py`.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary

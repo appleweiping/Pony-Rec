@@ -101,8 +101,11 @@ def classify_header(columns: Iterable[str]) -> dict[str, Any]:
     }
 
 
-def _path_matches(path: Path, *, domains: list[str], name_tokens: list[str]) -> bool:
-    text = path.as_posix().lower()
+def _path_matches(path: Path, *, root: Path, domains: list[str], name_tokens: list[str]) -> bool:
+    try:
+        text = path.relative_to(root).as_posix().lower()
+    except ValueError:
+        text = path.as_posix().lower()
     if domains and not any(domain.lower() in text for domain in domains):
         return False
     if name_tokens and not any(token.lower() in text for token in name_tokens):
@@ -142,7 +145,7 @@ def discover_sources(
             if path.suffix.lower() not in {".csv", ".jsonl"}:
                 skipped["unsupported_suffix"] += 1
                 continue
-            if not _path_matches(path, domains=domain_filters, name_tokens=token_filters):
+            if not _path_matches(path, root=root, domains=domain_filters, name_tokens=token_filters):
                 skipped["filtered"] += 1
                 continue
             size = path.stat().st_size

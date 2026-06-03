@@ -1,4 +1,4 @@
-from scripts.audit.main_discover_ccrp_uncertainty_sources import classify_header, discover_sources
+from scripts.audit.main_discover_ccrp_uncertainty_sources import _path_matches, classify_header, discover_sources
 
 
 def _write(path, text):
@@ -40,6 +40,13 @@ def test_discover_sources_filters_domains_and_detects_score_only(tmp_path):
 
     assert payload["candidate_count"] == 1
     assert payload["sources"][0]["header_status"] == "header_score_only_candidate"
+
+
+def test_path_matches_domain_filter_uses_relative_path_not_absolute_home(tmp_path):
+    root = tmp_path / "home" / "project" / "outputs"
+    path = root / "beauty_large10000_100neg_ccrp_v3" / "scores.csv"
+
+    assert _path_matches(path, root=root, domains=["home"], name_tokens=["ccrp"]) is False
 
 
 def test_discover_sources_full_audit_reports_candidate_coverage(tmp_path):
