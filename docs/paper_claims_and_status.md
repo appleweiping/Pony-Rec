@@ -317,7 +317,18 @@ same-candidate tests.
    `baselines_new_domains_home_irllrec_20260603_1355.log`. At the 13:57 CST
    checkpoint it was CPU-side active with about `6.1G` free and no final
    scores/provenance/imported tables, so no fifth home result row is eligible
-   yet.
+   yet. At the 2026-06-03 17:21 CST heartbeat, the active row had completed
+   Qwen3 embedding and reached official training epoch `1220`, but disk fell to
+   about `30M` free. Emergency cleanup removed only the completed Toys LLM2Rec
+   intermediate adapter and two server-only prediction JSONLs from already
+   gated toys rows (`rlmrec_graphcl` and `irllrec_intent`) after sha256
+   manifests; scores, provenance, audits, imported tables, models, and
+   local-light packages were preserved. Disk recovered to about `2.0G`, and the
+   active home IRLLRec process continued to epoch `1280` by 17:27 CST. The
+   cleanup manifests are
+   `outputs/summary/toys_llm2rec_completed_adapter_cleanup_manifest_20260603_irllrec_disk.sha256`
+   and
+   `outputs/summary/toys_predictions_deleted_for_home_irllrec_disk_20260603.sha256`.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

@@ -36,6 +36,25 @@ or review cycle.
   adapter directory about `1.1G`, final output directory empty, and disk about
   `6.1G` free. No scores/provenance/imported tables exist yet, so this is not
   table-eligible.
+- Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
+  heartbeat, the row was active after completing Qwen3 embedding and had
+  reached official training epoch `1220`, but disk had fallen to about `30M`
+  free. Safe cleanup first removed the completed, non-final Toys LLM2Rec
+  intermediate adapter
+  `outputs/baselines/paper_adapters/toys_large10000_100neg_llm2rec_official_adapter`
+  after confirming Toys LLM2Rec server-final and local-light audits were PASS
+  and writing
+  `outputs/summary/toys_llm2rec_completed_adapter_cleanup_manifest_20260603_irllrec_disk.sha256`.
+  Because this only recovered disk to about `410M`, two server-only prediction
+  JSONLs from already gated toys rows were removed after a sha256 manifest:
+  `outputs/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl`
+  and
+  `outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl`.
+  Scores, provenance, audits, imported tables, models, and local-light packages
+  were preserved; the deletion manifest is
+  `outputs/summary/toys_predictions_deleted_for_home_irllrec_disk_20260603.sha256`.
+  Disk recovered to about `2.0G`; the active home IRLLRec process continued and
+  reached epoch `1280` by 17:27 CST.
 - Latest completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
   disk-full checkpoint/import recovery. The first 2026-06-03 06:08 CST LLMEmb
   run reached exact score export but failed during `torch.save` with the
@@ -903,8 +922,9 @@ evidence is under
 
 1. Monitor the active home `irllrec_intent` row. Do not launch another
    baseline while runner PID `3147646` / adapter PID `3147655` are active.
-   Watch disk closely: it was about `6.1G` free at the 2026-06-03 13:57 CST
-   checkpoint and the final row is not table-eligible until the full
+   Watch disk closely: it fell to about `30M` free before emergency cleanup
+   recovered it to about `2.0G` at the 2026-06-03 17:27 CST checkpoint. The
+   final row is not table-eligible until the full
    score/provenance/import/audit/local-light gate passes.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
