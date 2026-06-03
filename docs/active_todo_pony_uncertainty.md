@@ -63,6 +63,11 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    1,010,000/1,010,000 candidate-key coverage and 10,000 events, but both are
    classified `score_only_not_uncertainty` with failure
    `missing_uncertainty_column`.
+   Rebuild helper:
+   `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py`, to convert a
+   future located `recomputable_signal_rows` artifact plus a fixed selected
+   C-CRP config into `ccrp_scored_rows.csv`/`ccrp_scores.csv`/provenance without
+   LLM re-query.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

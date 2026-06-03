@@ -62,6 +62,9 @@ Numeric gates:
 Implementation anchor:
 
 - `scripts/analysis/main_build_uncertainty_observation_study.py`
+- `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py` for rebuilding
+  scored rows with `ccrp_uncertainty` columns from saved signal inputs and a
+  fixed validation-selected C-CRP config, without any LLM re-query.
 - `scripts/audit/main_audit_ccrp_uncertainty_sources.py` for the required
   preflight audit of candidate signal/scored-row files.
 
@@ -121,6 +124,24 @@ Proceed only when the target full-scale artifact is classified as
 `paper_ready_uncertainty_rows` or, for regeneration, `recomputable_signal_rows`
 with exact or near-exact candidate-key coverage. `score_only_not_uncertainty`
 is a blocker for observation/motivation evidence.
+
+If a full-scale `recomputable_signal_rows` artifact is found, rebuild the
+paper-critical scored rows without querying the LLM:
+
+```bash
+python scripts/analysis/main_export_ccrp_scored_rows_from_signal.py \
+  --domain sports \
+  --signal_path <TEST_CCRP_SIGNAL_JSONL_OR_CSV> \
+  --candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --selected_config_json <SELECTED_VALID_CONFIG_OR_PROVENANCE_JSON> \
+  --output_dir outputs/summary/paper_critical/ccrp_scored_rows_sports \
+  --expected_rows 1010000
+```
+
+The resulting `ccrp_scored_rows.csv` is the preferred
+`--uncertainty_scores_path` input for the observation script, and
+`ccrp_scores.csv` must pass exact same-candidate coverage before any imported
+ranking/ablation claim is made.
 
 Validated preflight result (2026-06-03): running the audit helper through remote
 stdin against the already imported Sports and Toys C-CRP `scores.csv` files
