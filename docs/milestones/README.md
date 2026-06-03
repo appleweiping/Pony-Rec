@@ -128,6 +128,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   sensitivity curves, plus a clean framework overview figure. These modules are
   main paper gates, not optional polish. Execution specification:
   `docs/paper_critical_experiment_plan_2026-06-03.md`.
+- Observation/motivation script entry now exists:
+  `scripts/analysis/main_build_uncertainty_observation_study.py`. It is not a
+  completed paper result until real C-CRP uncertainty signal rows are located
+  or regenerated without LLM re-query leakage and the Sports/Toys runs pass
+  row-count, join-rate, table, figure, and provenance gates.
 
 ### C-CRP v3 Results (all domains)
 

@@ -59,6 +59,32 @@ Numeric gates:
 - The figure must be backed by tabular data and not by manual screenshot-only
   inspection.
 
+Implementation anchor:
+
+- `scripts/analysis/main_build_uncertainty_observation_study.py`
+
+Command template:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/analysis/main_build_uncertainty_observation_study.py \
+  --domain sports \
+  --uncertainty_scores_path <CCRP_SIGNAL_OR_SCORE_ROWS_WITH_UNCERTAINTY> \
+  --ccrp_eval_path outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv \
+  --method_eval llmemb=outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \
+  --method_eval rlmrec=outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \
+  --method_eval proex=outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \
+  --output_dir outputs/summary/paper_critical/observation_sports \
+  --expected_events 10000 \
+  --min_join_rate 0.999
+```
+
+Do not pass final C-CRP `scores.csv` if it only contains
+`source_event_id,user_id,item_id,score`; the script intentionally rejects
+score-only files without an uncertainty column. If necessary, regenerate the
+C-CRP signal rows from saved non-test-selected inputs without re-querying the
+LLM, then record that command and sha256 in the provenance.
+
 ## Module B: C-CRP Component Ablation
 
 Goal: show which C-CRP components matter and honestly identify weak components.

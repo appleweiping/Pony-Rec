@@ -41,7 +41,12 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    can use a few representative completed baselines/domains rather than every
    method/domain, but it must produce a paper-ready figure or table and record
    data paths, metrics, commands, row counts, provenance notes, and the git
-   commit.
+   commit. Script entry:
+   `scripts/analysis/main_build_uncertainty_observation_study.py`. Current
+   blocker to resolve before running it for Sports/Toys: the already imported
+   C-CRP final `scores.csv` files are score-only, so a signal/score row file
+   with a real uncertainty column must be located or regenerated without LLM
+   re-query leakage.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

@@ -47,7 +47,10 @@ also include:
    this framework. It should use representative completed baselines and fair
    same-candidate settings, not paid/SOTA general-model exhaustiveness, and it
    must produce a paper-ready figure or table showing the uncertainty
-   phenomenon.
+   phenomenon. Script entry:
+   `scripts/analysis/main_build_uncertainty_observation_study.py`; it requires
+   real event-level uncertainty fields and intentionally rejects score-only
+   C-CRP files.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap
