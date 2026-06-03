@@ -476,8 +476,20 @@ same-candidate tests.
    `server_large_artifact_manifest.sha256`. Home now has 6/8 completed official
    rows; remaining Home rows are `llm2rec_sasrec` and `llmesr_sasrec`. Home is
    still not domain-gate eligible until all eight official rows and C-CRP
-   imported evidence pass the same checks. No next baseline was launched after
-   RLMRec gates; disk was about `12G` free / `94%` used.
+   imported evidence pass the same checks. Before launching Home LLM2Rec, the
+   completed non-final RLMRec intermediate adapter was removed after cleanup
+   manifest
+   `outputs/summary/home_rlmrec_completed_adapter_cleanup_manifest_20260604.sha256`,
+   exact realpath check, and post-cleanup RLMRec server-final audit PASS; final
+   RLMRec evidence was preserved. Disk recovered to about `19G` free / `91%`
+   used. Home `llm2rec_sasrec` then launched at 2026-06-04 07:19 CST as the
+   seventh home row with runner PID `3236678`, adapter PID `3236688`, and log
+   `baselines_new_domains_home_llm2rec_20260604_071902.log`. At the first
+   stable check it was in Qwen3 `hf_mean_pool` embedding at about `944/568891`,
+   GPU was about `96%`, and `/` was about `18G` free / `91%` used. It is not
+   table-eligible until final score/provenance/import/server-final,
+   large-artifact manifest, local-light sync, local-light audit, and full
+   metric/row-count gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

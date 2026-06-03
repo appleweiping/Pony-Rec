@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 07:00 CST
+Last updated: 2026-06-04 07:22 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -243,7 +243,30 @@ passes gates, or fails with an audited recovery decision.
   completed official baseline rows. No next baseline was launched; runner PID
   `3178395` had exited, GPU was idle, and `/` was about `12G` free / `94%`
   used after the row gates. Domain-wide Home gates remain pending until all
-  eight official rows complete.
+  eight official rows complete. Before launching the next storage-heavy row,
+  the completed non-final intermediate adapter
+  `outputs/baselines/paper_adapters/home_large10000_100neg_rlmrec_official_adapter`
+  was audited with cleanup manifest
+  `outputs/summary/home_rlmrec_completed_adapter_cleanup_manifest_20260604.sha256`
+  and removed after exact realpath checks. This recovered `/` from about `12G`
+  free / `94%` used to about `19G` free / `91%` used without touching final
+  RLMRec scores, provenance, audits, imported tables, model, or local-light
+  evidence. A post-cleanup server-final RLMRec audit remained PASS.
+- Active runner: home `llm2rec_sasrec` official row, launched 2026-06-04
+  07:19 CST after confirming no active experiment process, no existing Home
+  LLM2Rec final output directory, no existing Home LLM2Rec adapter directory,
+  Home RLMRec final evidence still protected, and disk recovered to about `19G`
+  free. Runner PID `3236678`, adapter PID `3236688`, PID file
+  `baselines_new_domains_home_llm2rec_20260604_071902.pid`, log
+  `baselines_new_domains_home_llm2rec_20260604_071902.log`. At the first stable
+  check the row had entered Qwen3 `hf_mean_pool` embedding, progress was about
+  `944/568891`, GPU was about `96%` with `15945 MiB / 49140 MiB`, the
+  intermediate adapter directory was about `1.3G`, the final output directory
+  was still a placeholder, and `/` was about `18G` free / `91%` used. This row
+  is not table-eligible until final score/provenance/import/server-final,
+  server large-artifact manifest, local-light sync, local-light audit, and full
+  metric/row-count gates pass. Do not start `llmesr_sasrec` while this runner
+  is active.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -976,8 +999,8 @@ set is complete.
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery |
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery and adapter cleanup |
 | `rlmrec_graphcl` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llm2rec_sasrec` | pending | do not launch until RLMRec docs/memory/git gates are complete and disk has enough margin |
-| `llmesr_sasrec` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
+| `llm2rec_sasrec` | active | launched 2026-06-04 07:19 CST after RLMRec adapter cleanup; runner PID `3236678`, adapter PID `3236688`, log `baselines_new_domains_home_llm2rec_20260604_071902.log`; early Qwen3 embedding progress about `944/568891`; not table-eligible yet |
+| `llmesr_sasrec` | pending | do not launch until Home LLM2Rec completes, is packaged/audited locally, and disk has enough margin |
 
 Home official baselines are now 6/8 complete (`proex_profile`,
 `promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
@@ -1156,19 +1179,15 @@ evidence is under
 
 ## Required Next Actions
 
-1. Finish the Home RLMRec documentation/memory/git gate before starting another
-   row. The row itself is official-completed and locally packaged; no next
-   baseline has been launched. Current disk is tight but above the danger
-   threshold at about `12G` free / `94%` used. If headroom drops before the next
-   storage-heavy row, the first cleanup candidate is the completed intermediate
-   adapter
-   `outputs/baselines/paper_adapters/home_large10000_100neg_rlmrec_official_adapter`,
-   but remove it only after an explicit cleanup decision that confirms final
-   scores, provenance, audits, imported tables, model hash, and local-light
-   package are protected.
-2. Continue the remaining Home official rows one at a time:
-   `llm2rec_sasrec`, then `llmesr_sasrec`, after a fresh process/GPU/disk
-   preflight and duplicate-output check.
+1. Monitor the active home `llm2rec_sasrec` row. Do not launch another
+   baseline while runner PID `3236678` / adapter PID `3236688` are active. Watch
+   disk closely: after launch the adapter directory was about `1.3G`, final
+   output was still a placeholder, and `/` was about `18G` free / `91%` used.
+2. After Home LLM2Rec completes, run the established official-row gates before
+   marking it complete: server-final evidence audit, server large-artifact
+   sha256 manifest, lightweight local sync, local-light audit, docs/memory
+   update, related-only stage/commit/push. Do not start Home `llmesr_sasrec`
+   until those gates pass.
 3. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
