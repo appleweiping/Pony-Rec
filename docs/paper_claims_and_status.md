@@ -192,8 +192,8 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys now pass domain-level official-baseline and paired-test
 gates. Do not generalize to paper-wide SOTA until the declared domain set is
-complete; home has only 3/8 audited official rows complete and tools still has
-0/8, so both still need canonical eight-row official blocks and paired
+complete; home has 5/8 audited official rows complete and tools still has 0/8,
+so both still need canonical eight-row official blocks and paired
 same-candidate tests.
 
 ### Remaining for paper submission
@@ -204,9 +204,10 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 4/8 audited official rows
-   complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`) after
-   the LLMEmb disk-full recovery, while tools remains pending. Toys
+   domain/comparison/paired-test gates; home has 5/8 audited official rows
+   complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
+   `irllrec_intent`) after the IRLLRec evidence gate and adapter cleanup, while
+   tools remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
@@ -306,8 +307,8 @@ same-candidate tests.
    package is
    `outputs/baselines/official_adapters/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/`;
    server-only large artifacts remain covered by
-   `server_large_artifact_manifest.sha256`. Home now has 4/8 completed
-   official rows. The completed LLMEmb intermediate adapter was then removed
+   `server_large_artifact_manifest.sha256`. At that checkpoint, Home had 4/8
+   completed official rows before IRLLRec. The completed LLMEmb intermediate adapter was then removed
    with cleanup manifest
    `outputs/summary/home_llmemb_completed_adapter_cleanup_manifest_20260603.sha256`;
    a post-cleanup server-final audit remained `ok=true`, and disk recovered to
@@ -316,8 +317,8 @@ same-candidate tests.
    adapter PID `3147655`, log
    `baselines_new_domains_home_irllrec_20260603_1355.log`. At the 13:57 CST
    checkpoint it was CPU-side active with about `6.1G` free and no final
-   scores/provenance/imported tables, so no fifth home result row is eligible
-   yet. At the 2026-06-03 17:21 CST heartbeat, the active row had completed
+   scores/provenance/imported tables, so no fifth home result row was eligible
+   at that checkpoint. At the 2026-06-03 17:21 CST heartbeat, the active row had completed
    Qwen3 embedding and reached official training epoch `1220`, but disk fell to
    about `30M` free. Emergency cleanup removed only the completed Toys LLM2Rec
    intermediate adapter and two server-only prediction JSONLs from already
@@ -355,7 +356,32 @@ same-candidate tests.
    `outputs/summary/home_completed_predictions_deleted_for_irllrec_disk_20260603.sha256`.
    Their scores, provenance, audits, imported tables, models, and local-light
    packages were preserved; disk recovered to about `6.0G`, and the active Home
-   IRLLRec runner/adapter remained active.
+   IRLLRec runner/adapter remained active at that checkpoint. Home
+   `irllrec_intent` completed at
+   2026-06-03 20:05 CST as `implementation_status=official_completed` with
+   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+   lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+   users and 101 candidates are HR@5/10/20=`0.0821/0.1443/0.2878`,
+   NDCG@5/10/20=`0.05108975290090002/0.07089752436733526/0.10662011242627113`,
+   and MRR=`0.07424325424843974`. Row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+   package is
+   `outputs/baselines/official_adapters/home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`;
+   server-only large artifacts remain covered by
+   `server_large_artifact_manifest.sha256`. After final evidence and local
+   backup passed, the completed IRLLRec intermediate adapter was removed with
+   cleanup manifest
+   `outputs/summary/home_irllrec_completed_adapter_cleanup_manifest_20260603.sha256`;
+   a post-cleanup server-final audit remained `ok=true`, final scores,
+   provenance, audits, predictions, imported tables, model, and local-light
+   package were preserved, and disk recovered from about `4.7G` to `12G` free.
+   Home now has 5/8 completed official rows. Home `rlmrec_graphcl` launched at
+   2026-06-03 20:28 CST as the sixth home row after fresh process/GPU/disk and
+   duplicate-output preflight; runner PID `3178395`, adapter PID `3178403`,
+   log `baselines_new_domains_home_rlmrec_20260603_2028.log`. It is not
+   table-eligible until final score/provenance/import/server-final and
+   local-light gates pass.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

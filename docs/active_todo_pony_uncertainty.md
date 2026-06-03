@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-03 18:45 CST
+Last updated: 2026-06-03 20:31 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -35,15 +35,43 @@ or review cycle.
   certifies the missing prediction file's original line count. This exception
   does not cover `scores.csv`, provenance, score audits, run summaries,
   imported `tables/`, models, checkpoints, or local evidence packages.
-- Active runner: home `irllrec_intent` official row, launched 2026-06-03
-  13:55 CST after a clean process/GPU/disk preflight and LLMEmb cleanup.
-  Runner PID `3147646`, adapter PID `3147655`, PID file
-  `baselines_new_domains_home_irllrec_20260603_1355.pid`, log
-  `baselines_new_domains_home_irllrec_20260603_1355.log`. At the 13:57 CST
-  checkpoint it was CPU-side active, GPU idle (`0%`, `15 MiB / 49140 MiB`),
-  adapter directory about `1.1G`, final output directory empty, and disk about
-  `6.1G` free. No scores/provenance/imported tables exist yet, so this is not
-  table-eligible.
+- Latest completed home row: `irllrec_intent`, completed 2026-06-03 20:05 CST
+  with `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
+  local-light audit PASS, and no local forbidden large files. Full metrics over
+  10,000 users and 101 candidates are HR@5/10/20
+  `0.0821 / 0.1443 / 0.2878`, NDCG@5/10/20
+  `0.05108975290090002 / 0.07089752436733526 / 0.10662011242627113`, and MRR
+  `0.07424325424843974`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. The local lightweight package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`.
+  Server-only large artifacts are `scores.csv`,
+  `predictions/rank_predictions.jsonl`, and `irllrec_official_model.pt`,
+  covered by `server_large_artifact_manifest.sha256`. After final/server/local
+  gates passed, the completed intermediate adapter
+  `outputs/baselines/paper_adapters/home_large10000_100neg_irllrec_official_adapter`
+  was removed with cleanup manifest
+  `outputs/summary/home_irllrec_completed_adapter_cleanup_manifest_20260603.sha256`.
+  A post-cleanup server-final audit remained `ok=true`; final scores,
+  provenance, audits, predictions, imported tables, model, and local
+  lightweight evidence were preserved. Disk recovered from about `4.7G` to
+  `12G` free, and no Pony/C-CRP/baseline/uncertainty Python process remained
+  active. Home now has 5/8 completed official baseline rows.
+- Active runner: home `rlmrec_graphcl` official row, launched 2026-06-03
+  20:28 CST after a clean process/GPU/disk preflight and after confirming no
+  existing Home RLMRec final directory, adapter directory, or prior RLMRec log.
+  Runner PID `3178395`, adapter PID `3178403`, PID file
+  `baselines_new_domains_home_rlmrec_20260603_2028.pid`, log
+  `baselines_new_domains_home_rlmrec_20260603_2028.log`. The launch log shows
+  `START rlmrec_graphcl on home`; at the first stable check the adapter
+  directory was about `1.0G`, the final output directory was still empty, GPU
+  was idle (`0%`, `15 MiB / 49140 MiB`), and disk was about `11G` free. This
+  row is not table-eligible until final score/provenance/import/server-final
+  and local-light gates pass. At the 20:36 CST follow-up, the same adapter PID
+  `3178403` was active in Qwen3 `hf_mean_pool` embedding at about
+  `24760/385364`, GPU was about `96%` with `16166 MiB / 49140 MiB`, and disk
+  remained about `11G` free.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -90,7 +118,7 @@ or review cycle.
   Their `scores.csv`, provenance, audits, imported tables, models, and local
   lightweight packages were preserved. Disk recovered to about `6.0G`, and the
   active Home IRLLRec runner/adapter remained active.
-- Latest completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
+- Previous completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
   disk-full checkpoint/import recovery. The first 2026-06-03 06:08 CST LLMEmb
   run reached exact score export but failed during `torch.save` with the
   filesystem at `100%` used. The orphaned `scores.csv` had `1,010,001` lines
@@ -112,8 +140,9 @@ or review cycle.
   `outputs/baselines/official_adapters/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/`.
   The server large-artifact manifest records `scores.csv`,
   `predictions/rank_predictions.jsonl`, and `llmemb_official_model.pt` while
-  keeping those files server-only. Home now has 4/8 completed official
-  baseline rows. After local evidence was refreshed, the completed
+  keeping those files server-only. At that checkpoint, Home had 4/8 completed
+  official baseline rows before IRLLRec. After local evidence was refreshed,
+  the completed
   intermediate adapter
   `outputs/baselines/paper_adapters/home_large10000_100neg_llmemb_official_adapter`
   was removed with cleanup manifest
@@ -955,20 +984,12 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `irllrec_intent` row. Do not launch another
-   baseline while runner PID `3147646` / adapter PID `3147655` are active.
-   Watch disk closely: it fell to about `30M` free before emergency cleanup
-   recovered it to about `2.0G` at the 2026-06-03 17:27 CST checkpoint, then a
-   further audited Toys ProEx prediction cleanup recovered it to about `2.5G`
-   at the 17:45 CST checkpoint, and an audited Sports ProMax prediction cleanup
-   recovered it to about `3.1G` at the 18:08 CST checkpoint. A further audited
-   cleanup of completed Home ProEx/ProMax/ElmRec/LLMEmb server-only prediction
-   JSONLs recovered disk to about `6.0G` at the 18:45 CST checkpoint, with
-   sha256 in
-   `outputs/summary/home_completed_predictions_deleted_for_irllrec_disk_20260603.sha256`.
-   The
-   final row is not table-eligible until the full
-   score/provenance/import/audit/local-light gate passes.
+1. Monitor the active home `rlmrec_graphcl` row. Do not launch another
+   baseline while runner PID `3178395` / adapter PID `3178403` are active.
+   Watch disk closely: after launch the adapter directory was about `1.0G`,
+   the final output directory was empty, and disk was about `11G` free. The row
+   is not table-eligible until final score/provenance/import/server-final and
+   local-light gates pass.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

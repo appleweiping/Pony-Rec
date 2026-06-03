@@ -111,10 +111,11 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home has 4/8 audited official
-  rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`)
-  after the LLMEmb disk-full recovery, and home `irllrec_intent` is running as
-  the fifth row since 2026-06-03 13:55 CST; tools remains pending.
+  evidence through domain and paired-test gates. Home has 5/8 audited official
+  rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
+  `irllrec_intent`) after the IRLLRec evidence gate and completed-adapter
+  cleanup, and home `rlmrec_graphcl` is running as the sixth row since
+  2026-06-03 20:28 CST; tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -165,9 +166,9 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 4/8 audited official rows complete after LLMEmb passed
-   server-final and local-light evidence gates, and home `irllrec_intent` is
-   active as the fifth row; tools remains pending.
+   complete; home has 5/8 audited official rows complete after IRLLRec passed
+   server-final and local-light evidence gates, and home `rlmrec_graphcl` is
+   active as the sixth row; tools remains pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)

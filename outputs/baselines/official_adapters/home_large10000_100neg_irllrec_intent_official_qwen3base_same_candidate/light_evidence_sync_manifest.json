@@ -1,0 +1,116 @@
+{
+  "ok": true,
+  "copy": true,
+  "remote_host": "pony-rec-gpu",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
+  "local_evidence_dir": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
+  "allowed_file_count": 11,
+  "excluded_file_count": 3,
+  "excluded_files_preview": [
+    {
+      "rel_path": "irllrec_official_model.pt",
+      "size": 84774461
+    },
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "size": 761000441
+    },
+    {
+      "rel_path": "scores.csv",
+      "size": 106938978
+    }
+  ],
+  "too_large": [],
+  "checked_files": [
+    {
+      "rel_path": "fairness_provenance.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\fairness_provenance.json",
+      "size": 8137,
+      "sha256": "4de43f969f53609e395f03cf46660f50409821aba5016e86b13834a177cf729b",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "irllrec_intent_same_candidate_score_audit.txt",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\irllrec_intent_same_candidate_score_audit.txt",
+      "size": 534,
+      "sha256": "c3c9e465ed07597a5ad1c672937d39df560eb6e77719e2a0f42acb0597e6bb01",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "irllrec_official_run_summary.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\irllrec_official_run_summary.json",
+      "size": 9721,
+      "sha256": "ae197d1c6663ab7ada909bf1a1694f97ae99da3cb778dfe0fbe8941f619ef8f7",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "irllrec_official_score_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\irllrec_official_score_audit.json",
+      "size": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_final_evidence_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\server_final_evidence_audit.json",
+      "size": 3863,
+      "sha256": "b816472c88888030f77163334ba9a6d052a41ee54054dfd850290d2ed1d3eb4a",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.sha256",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
+      "size": 510,
+      "sha256": "77330f36b560956e321b910c17d648c99252c7054299c72e21e556d09fac20c3",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\tables\\external_score_coverage.csv",
+      "size": 211,
+      "sha256": "cbe780803f23c25ca263636d15047ac68e534588c0ce6151ae9d1d1a447df988",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "size": 42332159,
+      "sha256": "5a322b56ff2421dff5a76e3136c472e2b670355c85ca73dc166249a5c201ba91",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\tables\\ranking_exposure_distribution.csv",
+      "size": 64,
+      "sha256": "5b73bf3b63f5f2c79a58ed11cce168fb399a730fb2479e10ac45f5408e68eb27",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\tables\\ranking_metrics.csv",
+      "size": 582,
+      "sha256": "87aa6bd77743cd40adb969ba928e03bc4953bc6330cbcf510f1d55eef9515aba",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\tables\\same_candidate_external_baseline_summary.csv",
+      "size": 1835,
+      "sha256": "f70b11b6d6b6840df591703a0e391794e28532b2bbe4dce10a390709553630f4",
+      "size_ok": true,
+      "sha256_ok": true
+    }
+  ],
+  "failures": []
+}

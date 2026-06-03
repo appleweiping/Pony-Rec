@@ -6,7 +6,7 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Quick Orientation
 
-- **Stage**: M5 (C-CRP v3 complete; sports/toys official gates passed; home official-baseline run active)
+- **Stage**: M5 (C-CRP v3 complete; sports/toys official gates passed; home 5/8 official rows complete; home RLMRec active)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
@@ -53,16 +53,22 @@ Use the documented single-domain loop under current storage pressure, e.g.
 `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`. The runner
 audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
 after each completed score file.
-Current status (2026-06-02): sports and toys are each 8/8 official baselines
+Current status (2026-06-03): sports and toys are each 8/8 official baselines
 complete and have passed their domain/comparison/paired-test gates against
-C-CRP. Home `proex_profile` is the active next row, launched as a single-row
-official loop with runner PID `3004208`, adapter PID `3004218`, and log
-`baselines_new_domains_home_proex_20260602_1950.log`. At the first stable
-check it was in Qwen3 `hf_mean_pool` embedding at about `3720/385364`, GPU was
-about `96%`, and disk was about `16G` free. It is not table-eligible until
-final provenance, exact coverage, imported full metrics, row counts,
-server-final audit, lightweight sync, and local-light audit pass. Do not start
-another baseline while it is active.
+C-CRP. Home has 5/8 audited official rows complete: `proex_profile`,
+`promax_profile`, `elmrec_graph`, `llmemb`, and `irllrec_intent`. The latest
+row, home `irllrec_intent`, completed at 2026-06-03 20:05 CST with
+`implementation_status=official_completed`, `blockers=[]`, exact
+`score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS, and
+local-light audit PASS. After the completed IRLLRec intermediate adapter was
+removed with cleanup manifest
+`outputs/summary/home_irllrec_completed_adapter_cleanup_manifest_20260603.sha256`,
+disk recovered to about `12G` free. Home `rlmrec_graphcl` launched at
+2026-06-03 20:28 CST as the sixth home row after fresh preflight; runner PID
+`3178395`, adapter PID `3178403`, log
+`baselines_new_domains_home_rlmrec_20260603_2028.log`. It is not
+table-eligible until final score/provenance/import/server-final and local-light
+gates pass.
 
 Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
 upstream staging directories were removed only after final server audits and

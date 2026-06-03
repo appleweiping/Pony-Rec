@@ -382,11 +382,11 @@ When in doubt, downgrade the claim, not the evidence standard.
 9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 2 小时激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
 10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
 
-## Experiment Roadmap（2026-06-02 更新）
+## Experiment Roadmap（2026-06-03 更新）
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
-Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home proex_profile running as first home row; tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
+Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 5/8 with proex_profile/promax_profile/elmrec_graph/llmemb/irllrec_intent gated and rlmrec_graphcl active since 2026-06-03 20:28 CST; tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
 Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)
