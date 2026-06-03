@@ -329,6 +329,14 @@ same-candidate tests.
    `outputs/summary/toys_llm2rec_completed_adapter_cleanup_manifest_20260603_irllrec_disk.sha256`
    and
    `outputs/summary/toys_predictions_deleted_for_home_irllrec_disk_20260603.sha256`.
+   At the 17:43 CST follow-up, disk had slipped to about `1.7G`, so the
+   already gated Toys ProEx server-only prediction JSONL was removed after
+   confirming server-final and local-light audits; scores, provenance, audits,
+   imported tables, models, and local-light packages were preserved. The
+   additional manifest is
+   `outputs/summary/toys_proex_prediction_deleted_for_home_irllrec_disk_20260603.sha256`;
+   disk recovered to about `2.5G`, and active training reached epoch `1480` by
+   17:45 CST.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

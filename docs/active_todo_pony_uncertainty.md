@@ -54,7 +54,14 @@ or review cycle.
   were preserved; the deletion manifest is
   `outputs/summary/toys_predictions_deleted_for_home_irllrec_disk_20260603.sha256`.
   Disk recovered to about `2.0G`; the active home IRLLRec process continued and
-  reached epoch `1280` by 17:27 CST.
+  reached epoch `1280` by 17:27 CST. At the 17:43 CST follow-up, disk had
+  slipped to about `1.7G` while the same runner/adapter remained active, so the
+  already gated Toys ProEx server-only prediction JSONL was removed after
+  confirming server-final and local-light audits and recording sha256
+  `outputs/summary/toys_proex_prediction_deleted_for_home_irllrec_disk_20260603.sha256`.
+  Final scores, provenance, audits, imported tables, models, and local-light
+  packages were preserved; disk recovered to about `2.5G`, and the active home
+  IRLLRec process reached epoch `1480` by 17:45 CST.
 - Latest completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
   disk-full checkpoint/import recovery. The first 2026-06-03 06:08 CST LLMEmb
   run reached exact score export but failed during `torch.save` with the
@@ -923,7 +930,9 @@ evidence is under
 1. Monitor the active home `irllrec_intent` row. Do not launch another
    baseline while runner PID `3147646` / adapter PID `3147655` are active.
    Watch disk closely: it fell to about `30M` free before emergency cleanup
-   recovered it to about `2.0G` at the 2026-06-03 17:27 CST checkpoint. The
+   recovered it to about `2.0G` at the 2026-06-03 17:27 CST checkpoint, then a
+   further audited Toys ProEx prediction cleanup recovered it to about `2.5G`
+   at the 17:45 CST checkpoint. The
    final row is not table-eligible until the full
    score/provenance/import/audit/local-light gate passes.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
