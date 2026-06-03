@@ -176,8 +176,23 @@ python main_run_official_same_candidate_adapter.py \
 
 ## Lightweight Evidence Sync
 
-After a row has passed the server-final evidence audit, sync only the useful
-local evidence package from the local repository:
+After a row has passed the server-final evidence audit, first record the
+server-only large artifacts on the server:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/audit/main_build_server_large_artifact_manifest.py \
+  --evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate \
+  --quiet
+```
+
+This writes both `server_large_artifact_manifest.sha256` and
+`server_large_artifact_manifest.json` inside the evidence directory. It records
+`scores.csv`, `predictions/rank_predictions.jsonl`, and model/checkpoint
+artifacts such as `*_official_model.pt` without requiring the operator to guess
+the method-specific model filename.
+
+Then sync only the useful local evidence package from the local repository:
 
 ```powershell
 python scripts\audit\main_sync_official_evidence_package.py `

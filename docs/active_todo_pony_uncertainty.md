@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-03 23:14 CST
+Last updated: 2026-06-04 03:24 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -110,6 +110,14 @@ configs, commands, seeds, git commit, row counts, provenance notes, key logs,
 and only minimal checkpoints needed for verification or resume. Compare server
 and local manifests so missing files are caught. Do not package huge redundant
 raw outputs by default.
+
+Official row gate helper: after `server_final` passes and before local-light
+sync or any cleanup decision, run
+`scripts/audit/main_build_server_large_artifact_manifest.py` on the server
+evidence directory. It writes `server_large_artifact_manifest.sha256/json` for
+`scores.csv`, `predictions/rank_predictions.jsonl`, and method-specific
+model/checkpoint artifacts such as `*_official_model.pt`, avoiding brittle
+manual `sha256sum` commands that guess the model filename.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start these server runs until the active Home RLMRec row completes and
