@@ -141,9 +141,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   provenance.
 - Framework overview figure builder now exists:
   `scripts/analysis/main_build_framework_overview_figure.py`. It exports SVG
-  editable source plus PDF/PNG/caption/provenance, and must keep the claim
-  boundary as controlled same-candidate ranking rather than full-catalog or
-  generative-title recommendation.
+  editable source plus PDF/PNG/caption/provenance. As of 2026-06-04 04:43 CST,
+  the draft local package exists at
+  `outputs/summary/paper_critical/framework_overview/` with a sha256 manifest.
+  It must keep the claim boundary as controlled same-candidate ranking rather
+  than full-catalog or generative-title recommendation and still needs final
+  paper-layout/reviewer polish.
 
 ### C-CRP v3 Results (all domains)
 

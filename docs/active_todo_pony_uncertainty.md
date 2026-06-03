@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 03:50 CST
+Last updated: 2026-06-04 04:43 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -102,7 +102,14 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    pipeline, where task-grounded uncertainty is estimated, which components
    enter C-CRP, and where risk-adjusted ranking is applied. Script entry:
    `scripts/analysis/main_build_framework_overview_figure.py`; generated SVG
-   is the editable source, with PDF/PNG/caption/provenance exports.
+   is the editable source, with PDF/PNG/caption/provenance exports. Draft
+   local package generated at 2026-06-04 04:43 CST under
+   `outputs/summary/paper_critical/framework_overview/` with SVG, PDF, PNG,
+   caption, provenance, and `framework_overview_manifest.sha256`. The draft
+   now labels the risk score formula as
+   `risk_score = posterior - eta * uncertainty` and includes counterevidence
+   in the C-CRP uncertainty box; it
+   still needs final paper-layout/reviewer polish before camera-ready use.
 
 Evidence packaging for these modules follows the same lightweight-but-complete
 standard as official rows: keep selected metrics CSV/JSON, final tables, plots,
@@ -204,11 +211,11 @@ passes gates, or fails with an audited recovery decision.
   and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
   Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
   process continued.
-  Latest continuation check in this thread: the same runner/adapter remained
-  active at epoch `700`, with no completion/failure markers, final output still
-  `4.0K`, GPU active, and `/` at about `13G` free / `94%` used. Do not start
-  another baseline until this row either completes and passes gates or fails
-  with an audited recovery decision.
+  Latest continuation check in this thread at 2026-06-04 04:43 CST: the same
+  runner/adapter remained active at epoch `2270`, with no completion/failure
+  markers, final output still empty, GPU active, and `/` at about `13G` free /
+  `94%` used. Do not start another baseline until this row either completes
+  and passes gates or fails with an audited recovery decision.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`

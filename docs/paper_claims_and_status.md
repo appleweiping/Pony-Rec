@@ -78,7 +78,10 @@ also include:
 4. A clean framework overview figure showing the full pipeline and where
    uncertainty and C-CRP components enter the ranking decision. Figure builder:
    `scripts/analysis/main_build_framework_overview_figure.py`; generated SVG
-   is the editable source and PDF/PNG are export artifacts.
+   is the editable source and PDF/PNG are export artifacts. Draft package:
+   `outputs/summary/paper_critical/framework_overview/` with SVG, PDF, PNG,
+   caption, provenance, and `framework_overview_manifest.sha256`. This package
+   is paper-critical evidence scaffolding, not yet a final camera-ready figure.
 
 Each module needs status labels, row counts, commands, configs, seeds when
 applicable, provenance notes, plots/tables, and a lightweight local evidence

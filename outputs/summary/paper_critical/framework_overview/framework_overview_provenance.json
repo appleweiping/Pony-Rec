@@ -1,0 +1,16 @@
+{
+  "status_label": "paper_critical_framework_overview_draft",
+  "generated_at_utc": "2026-06-03T20:43:44+00:00",
+  "git_commit": "1b0a63080a3dca88560e24ee1d0db616e1a24bde",
+  "command": "python scripts/analysis/main_build_framework_overview_figure.py --output_dir outputs\\summary\\paper_critical\\framework_overview",
+  "outputs": {
+    "svg": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview.svg",
+    "pdf": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview.pdf",
+    "png": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview.png",
+    "caption": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_caption.md",
+    "provenance": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_provenance.json",
+    "manifest": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_manifest.sha256"
+  },
+  "caption": "Figure: Framework overview for Actionable Uncertainty. The method builds a controlled same-candidate ranking task, extracts task-grounded LLM relevance and evidence signals, calibrates the posterior on validation data, decomposes uncertainty into boundary ambiguity, calibration gap, and evidence insufficiency/counterevidence, and applies risk-adjusted ranking. Official baselines and C-CRP share the same candidate rows, metric importer, provenance, and evidence gates.",
+  "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog"
+}

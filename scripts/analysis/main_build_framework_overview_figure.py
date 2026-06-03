@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +38,21 @@ def _git_commit() -> str:
         ).strip()
     except Exception:
         return ""
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _strip_trailing_whitespace(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    stripped = "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
+    if stripped != text:
+        path.write_text(stripped, encoding="utf-8")
 
 
 def _box(
@@ -119,12 +136,12 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         ),
         (
             "C-CRP uncertainty",
-            "Boundary ambiguity\nCalibration gap\nEvidence insufficiency",
+            "Boundary ambiguity\nCalibration gap\nEvidence insufficiency\nCounterevidence",
             face_c,
         ),
         (
             "Risk-adjusted ranking",
-            "Posterior score x\nuncertainty penalty\nExact score export\nRanked list",
+            "risk_score = posterior\n- eta * uncertainty\nExact score export\nRanked list",
             face_d,
         ),
     ]
@@ -194,10 +211,12 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         "the same candidate rows, metric importer, provenance, and evidence gates."
     )
 
-    paths = {}
+    paths: dict[str, str] = {}
     for suffix in ("svg", "pdf", "png"):
         path = out / f"framework_overview.{suffix}"
         fig.savefig(path, dpi=240, bbox_inches="tight")
+        if suffix == "svg":
+            _strip_trailing_whitespace(path)
         paths[suffix] = str(path)
     plt.close(fig)
 
@@ -207,14 +226,24 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
 
     provenance_path = out / "framework_overview_provenance.json"
     paths["provenance"] = str(provenance_path)
+    manifest_path = out / "framework_overview_manifest.sha256"
+    paths["manifest"] = str(manifest_path)
     provenance = {
         "status_label": "paper_critical_framework_overview_draft",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "git_commit": _git_commit(),
+        "command": "python scripts/analysis/main_build_framework_overview_figure.py --output_dir "
+        + str(out),
         "outputs": paths,
         "caption": caption,
         "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog",
     }
     provenance_path.write_text(json.dumps(provenance, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    manifest_inputs = [Path(paths[key]) for key in ("svg", "pdf", "png", "caption", "provenance")]
+    manifest_path.write_text(
+        "".join(f"{_sha256(path)}  {path.name}\n" for path in manifest_inputs),
+        encoding="utf-8",
+    )
     return provenance
 
 
