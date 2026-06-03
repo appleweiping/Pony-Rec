@@ -70,7 +70,9 @@ also include:
    validation and test curves to be reported separately, using `--test_sweep_csv`
    when the test sweep is available.
 4. A clean framework overview figure showing the full pipeline and where
-   uncertainty and C-CRP components enter the ranking decision.
+   uncertainty and C-CRP components enter the ranking decision. Figure builder:
+   `scripts/analysis/main_build_framework_overview_figure.py`; generated SVG
+   is the editable source and PDF/PNG are export artifacts.
 
 Each module needs status labels, row counts, commands, configs, seeds when
 applicable, provenance notes, plots/tables, and a lightweight local evidence

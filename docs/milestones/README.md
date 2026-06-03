@@ -139,6 +139,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   result until Sports/Toys sweeps produce at least three values per plotted
   control with validation/test separation, `--test_sweep_csv` reporting, and
   provenance.
+- Framework overview figure builder now exists:
+  `scripts/analysis/main_build_framework_overview_figure.py`. It exports SVG
+  editable source plus PDF/PNG/caption/provenance, and must keep the claim
+  boundary as controlled same-candidate ranking rather than full-catalog or
+  generative-title recommendation.
 
 ### C-CRP v3 Results (all domains)
 

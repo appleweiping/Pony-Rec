@@ -70,7 +70,9 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    valid-only output is not sufficient for a paper stability claim.
 4. Framework overview figure: prepare a clean paper figure showing the full
    pipeline, where task-grounded uncertainty is estimated, which components
-   enter C-CRP, and where risk-adjusted ranking is applied.
+   enter C-CRP, and where risk-adjusted ranking is applied. Script entry:
+   `scripts/analysis/main_build_framework_overview_figure.py`; generated SVG
+   is the editable source, with PDF/PNG/caption/provenance exports.
 
 Evidence packaging for these modules follows the same lightweight-but-complete
 standard as official rows: keep selected metrics CSV/JSON, final tables, plots,

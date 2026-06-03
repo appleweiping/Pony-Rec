@@ -257,6 +257,23 @@ Output:
 - export as `.pdf` and `.png`;
 - short figure caption draft.
 
+Implementation anchor:
+
+- `scripts/analysis/main_build_framework_overview_figure.py`
+
+Command template:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/analysis/main_build_framework_overview_figure.py \
+  --output_dir outputs/summary/paper_critical/framework_overview
+```
+
+The generated `.svg` is the editable source for this figure; `.pdf` and `.png`
+are paper/export artifacts. The caption and provenance must keep the claim
+boundary explicit: controlled same-candidate ranking, not full-catalog or
+generative-title recommendation.
+
 ## Evidence Package Standard
 
 For each finished module, create a lightweight package under:
