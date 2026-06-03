@@ -306,6 +306,14 @@ archive. Do not delete imported `outputs/*_same_candidate/tables/` summaries
 needed by comparison builders until the method-level and final cross-baseline
 tables have been rebuilt and archived; otherwise completed domains will drop
 out of later comparison tables.
+For disk emergencies after a completed row has passed `server_final` audit and
+local-light sync, `predictions/rank_predictions.jsonl` may be removed only with
+an exact sha256 manifest and a doc/memory note. The domain gate and comparison
+builder accept a missing prediction JSONL only when
+`server_final_evidence_audit.json` proves the file existed with the expected
+line count. Keep `scores.csv`, provenance, score audits, imported `tables/`,
+models/checkpoints, and local packages protected unless a separate archive
+decision explicitly says otherwise.
 
 Use the completed LLM2Rec official four-domain run as the template for future
 official external baselines. A baseline is not complete when one domain finishes
@@ -411,6 +419,11 @@ tables, and the per-event `tables/ranking_eval_records.csv` needed for paired
 or statistical follow-up. Keep huge `scores.csv`, full predictions,
 checkpoints, and embedding files server-side unless a separate archive is
 explicitly requested; provenance/run summaries must record their hashes.
+If disk pressure threatens active progress, a completed row's full prediction
+JSONL can be deleted after `server_final` audit + local-light audit PASS, with
+sha256 recorded before deletion. This is not allowed for `scores.csv`, imported
+`tables/`, provenance, score audits, run summaries, or models/checkpoints
+without an explicit separate archive decision.
 ### 只留服务器（不下载、不提交）：
 - `scores.csv`（87MB/域）
 - `predictions/`（600MB+）

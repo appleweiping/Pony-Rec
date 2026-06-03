@@ -92,6 +92,15 @@ locally. Keep imported `outputs/*_same_candidate/tables/` summaries available
 until final comparison tables are rebuilt and archived; otherwise completed
 domains can silently disappear from method-level tables.
 
+Disk-pressure exception: after a row has passed server-final audit and
+local-light sync, the large server-side `predictions/rank_predictions.jsonl`
+may be removed with a sha256 deletion manifest. This is acceptable because the
+paired-test input is `tables/ranking_eval_records.csv`, and the updated domain
+gate/comparison builder uses `server_final_evidence_audit.json` as the
+prediction line-count certificate. This exception does not apply to
+`scores.csv`, final provenance, score audits, run summaries, imported `tables/`,
+or method checkpoints/models.
+
 ## Reliability proxy audit
 
 The old "baseline confidence formulation audit" is renamed:

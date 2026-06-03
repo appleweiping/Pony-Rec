@@ -199,6 +199,15 @@ copies final and inspect provenance, score audits, run summaries, imported
 artifacts by default, so those remain server-side unless a separate archive
 decision is recorded.
 
+If disk pressure threatens the next active row after `server_final` and
+`local_light` audits have passed, a completed row's
+`predictions/rank_predictions.jsonl` may be removed only after recording its
+sha256 in `outputs/summary/` and documenting the exact path. The domain gate and
+comparison builder can use `server_final_evidence_audit.json` as the line-count
+certificate for a missing prediction JSONL. Do not remove `scores.csv`, final
+provenance, score audits, run summaries, imported `tables/`, or models/checkpoints
+under this shortcut.
+
 ## LLM2Rec Single-Domain Production Loop
 
 LLM2Rec is the first official-code-level adapter wired for execution. Its run
@@ -253,6 +262,9 @@ the method-level and final cross-baseline comparison tables have been rebuilt
 and archived. If storage is tight, delete predictions or large model/adapter
 intermediates first, but do not remove the imported summary directory in a way
 that makes a completed domain disappear from later comparisons.
+For deleted prediction JSONLs, keep the completed row's
+`server_final_evidence_audit.json`; it is the only accepted certificate that
+the prediction file existed and had the expected 10,000-line count.
 
 After copying a lightweight local evidence package, run the package audit before
 recording the row as safely backed up:

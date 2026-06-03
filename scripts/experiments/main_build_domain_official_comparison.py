@@ -73,6 +73,34 @@ def _line_count(path: Path) -> int:
         return sum(1 for _ in fh)
 
 
+def _certified_prediction_line_count(base_dir: Path) -> tuple[int | None, str]:
+    prediction_path = base_dir / "predictions" / "rank_predictions.jsonl"
+    if prediction_path.exists() and prediction_path.is_file():
+        return _line_count(prediction_path), "file"
+
+    audit_path = base_dir / "server_final_evidence_audit.json"
+    if not audit_path.exists():
+        return None, ""
+    try:
+        with audit_path.open("r", encoding="utf-8") as fh:
+            audit = json.load(fh)
+    except Exception:
+        return None, ""
+    files = audit.get("files") if isinstance(audit.get("files"), dict) else {}
+    row = files.get("predictions/rank_predictions.jsonl")
+    if not isinstance(row, dict):
+        return None, ""
+    if (
+        audit.get("mode") == "server_final"
+        and audit.get("ok") is True
+        and audit.get("failures") == []
+        and row.get("present") is True
+        and row.get("lines") is not None
+    ):
+        return int(row["lines"]), "server_final_evidence_audit"
+    return None, ""
+
+
 def _metric_from_rank(rank: int, metric: str) -> float:
     if metric.startswith("HR@"):
         k = int(metric.split("@", 1)[1])
@@ -241,11 +269,15 @@ def _build_comparison_rows(
             "eval_path": str(info["eval_path"]),
             "scores_path": str(info["scores_path"]),
             "scores_csv_lines": _line_count(Path(info["scores_path"])),
-            "predictions_jsonl_lines": _line_count(Path(info["prediction_path"])),
             "ranking_eval_records_csv_lines": _line_count(Path(info["eval_path"])),
         }
+        prediction_lines, prediction_source = _certified_prediction_line_count(Path(info["dir"]))
+        row["predictions_jsonl_lines"] = prediction_lines
+        row["predictions_jsonl_line_source"] = prediction_source
         if row["scores_csv_lines"] != expected_score_lines:
             raise ValueError(f"{method}: score line count mismatch {row['scores_csv_lines']}")
+        if row["predictions_jsonl_lines"] != expected_users:
+            raise ValueError(f"{method}: prediction line count mismatch {row['predictions_jsonl_lines']}")
         for metric in REQUIRED_METRICS:
             summary_value = _as_float(summary.get(metric))
             event_value = float(np.mean(frame[:, REQUIRED_METRICS.index(metric)]))
@@ -467,6 +499,7 @@ def main() -> int:
         "matched_candidates",
         "scores_csv_lines",
         "predictions_jsonl_lines",
+        "predictions_jsonl_line_source",
         "ranking_eval_records_csv_lines",
         "status_label",
         "artifact_class",

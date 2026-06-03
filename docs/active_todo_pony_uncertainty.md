@@ -27,6 +27,14 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
+- Disk policy update: after a completed official row has passed server-final
+  audit and local-light sync, the huge server-side
+  `predictions/rank_predictions.jsonl` may be deleted with sha256 manifest and
+  docs/memory note if disk pressure threatens active progress. Domain gate and
+  comparison scripts now accept the row only if `server_final_evidence_audit.json`
+  certifies the missing prediction file's original line count. This exception
+  does not cover `scores.csv`, provenance, score audits, run summaries,
+  imported `tables/`, models, checkpoints, or local evidence packages.
 - Active runner: home `irllrec_intent` official row, launched 2026-06-03
   13:55 CST after a clean process/GPU/disk preflight and LLMEmb cleanup.
   Runner PID `3147646`, adapter PID `3147655`, PID file

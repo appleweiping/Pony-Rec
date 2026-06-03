@@ -112,6 +112,51 @@ def _basic_file_row(path: Path) -> dict[str, Any]:
     return row
 
 
+def _certified_missing_prediction_row(evidence_dir: Path, rel_path: str) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "present": False,
+        "size": 0,
+    }
+    if rel_path != "predictions/rank_predictions.jsonl":
+        return row
+
+    audit_path = evidence_dir / "server_final_evidence_audit.json"
+    if not audit_path.exists():
+        return row
+    try:
+        audit = _load_json(audit_path)
+    except Exception:
+        return row
+    files = audit.get("files") if isinstance(audit.get("files"), dict) else {}
+    audit_row = files.get(rel_path) if isinstance(files.get(rel_path), dict) else {}
+    if (
+        audit.get("mode") == "server_final"
+        and audit.get("ok") is True
+        and audit.get("failures") == []
+        and audit_row.get("present") is True
+        and audit_row.get("lines") is not None
+    ):
+        row.update(
+            {
+                "lines": audit_row.get("lines"),
+                "certified_missing": True,
+                "certified_by": str(audit_path),
+                "certified_original_size": audit_row.get("size", 0),
+            }
+        )
+    return row
+
+
+def _evidence_file_row(evidence_dir: Path, rel_path: str) -> dict[str, Any]:
+    row = _basic_file_row(evidence_dir / rel_path)
+    if row["present"]:
+        return row
+    certified = _certified_missing_prediction_row(evidence_dir, rel_path)
+    if certified.get("certified_missing"):
+        return certified
+    return row
+
+
 def _metric_gate(
     metrics_path: Path,
     failures: list[str],
@@ -208,10 +253,12 @@ def audit_official_dir(
     files: dict[str, Any] = {}
 
     for rel_path in OFFICIAL_REQUIRED_FILES:
-        row = _basic_file_row(evidence_dir / rel_path)
+        row = _evidence_file_row(evidence_dir, rel_path)
         files[rel_path] = row
-        if not row["present"]:
+        if not row["present"] and not row.get("certified_missing"):
             failures.append(f"missing_required_file:{rel_path}")
+        if row.get("certified_missing"):
+            warnings.append(f"missing_file_certified_by_server_final_audit:{rel_path}")
 
     if files.get("scores.csv", {}).get("lines") != expected_score_rows + 1:
         failures.append("scores_csv_line_count_mismatch")
