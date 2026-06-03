@@ -63,6 +63,10 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    1,010,000/1,010,000 candidate-key coverage and 10,000 events, but both are
    classified `score_only_not_uncertainty` with failure
    `missing_uncertainty_column`.
+   Discovery helper:
+   `scripts/audit/main_discover_ccrp_uncertainty_sources.py`, which scans CSV
+   and JSONL headers for domain-specific C-CRP/shadow/signal/scored artifacts
+   before the stricter row/key audit.
    Rebuild helper:
    `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py`, to convert a
    future located `recomputable_signal_rows` artifact plus a fixed selected

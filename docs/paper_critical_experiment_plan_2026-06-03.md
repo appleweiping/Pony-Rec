@@ -62,6 +62,8 @@ Numeric gates:
 Implementation anchor:
 
 - `scripts/analysis/main_build_uncertainty_observation_study.py`
+- `scripts/audit/main_discover_ccrp_uncertainty_sources.py` for scanning
+  candidate artifact headers before choosing paths for the stricter audit.
 - `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py` for rebuilding
   scored rows with `ccrp_uncertainty` columns from saved signal inputs and a
   fixed validation-selected C-CRP config, without any LLM re-query.
@@ -110,6 +112,13 @@ Preflight audit template:
 
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/audit/main_discover_ccrp_uncertainty_sources.py \
+  --root outputs \
+  --domain sports \
+  --domain toys \
+  --output_json outputs/summary/paper_critical/ccrp_uncertainty_source_discovery.json \
+  --output_csv outputs/summary/paper_critical/ccrp_uncertainty_source_discovery.csv
+
 python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
   --candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \
   --source sports_scores=outputs/sports_large10000_100neg_ccrp_v3/scores.csv \
