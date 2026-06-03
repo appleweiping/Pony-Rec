@@ -177,7 +177,18 @@ python main_run_official_same_candidate_adapter.py \
 ## Lightweight Evidence Sync
 
 After a row has passed the server-final evidence audit, first record the
-server-only large artifacts on the server:
+server-only large artifacts on the server. From the local repository, prefer
+the SSH-stdin wrapper so it uses the current local helper even if the server
+checkout is behind:
+
+```powershell
+python scripts\audit\main_remote_server_large_artifact_manifest.py `
+  --remote_evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --quiet
+```
+
+If the server checkout is confirmed up to date and idle, the equivalent
+server-side command is:
 
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6

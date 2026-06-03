@@ -123,8 +123,10 @@ active, do not `git pull` the server checkout. The server working tree is
 still on commit `9ded57b` and behind local/GitHub `6409d98`, so the new
 large-artifact manifest helper is not yet present there. When the active run
 finishes, either perform a safe `git pull --ff-only` after confirming no active
-process and no conflicting worktree state, or run the helper through remote
-stdin from the local checkout before local-light sync.
+process and no conflicting worktree state, or run
+`scripts/audit/main_remote_server_large_artifact_manifest.py` from the local
+checkout before local-light sync; that wrapper sends the current local helper
+through SSH stdin and does not depend on the server checkout version.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start these server runs until the active Home RLMRec row completes and
