@@ -122,6 +122,14 @@ Proceed only when the target full-scale artifact is classified as
 with exact or near-exact candidate-key coverage. `score_only_not_uncertainty`
 is a blocker for observation/motivation evidence.
 
+Validated preflight result (2026-06-03): running the audit helper through remote
+stdin against the already imported Sports and Toys C-CRP `scores.csv` files
+reported exact candidate-key coverage for both domains
+(`1,010,000/1,010,000`, 10,000 events) but classified both files as
+`score_only_not_uncertainty` with failure `missing_uncertainty_column`. This
+confirms that the formal score files are usable for ranking import/audit but
+not for uncertainty-bin motivation evidence.
+
 ## Module B: C-CRP Component Ablation
 
 Goal: show which C-CRP components matter and honestly identify weak components.

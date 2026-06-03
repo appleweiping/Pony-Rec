@@ -58,6 +58,11 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    candidate files as `paper_ready_uncertainty_rows`,
    `recomputable_signal_rows`, or `score_only_not_uncertainty` and checks
    candidate-key coverage when `candidate_items.csv` is supplied.
+   Remote stdin preflight on 2026-06-03 confirmed
+   `outputs/{sports,toys}_large10000_100neg_ccrp_v3/scores.csv` each has
+   1,010,000/1,010,000 candidate-key coverage and 10,000 events, but both are
+   classified `score_only_not_uncertainty` with failure
+   `missing_uncertainty_column`.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component
