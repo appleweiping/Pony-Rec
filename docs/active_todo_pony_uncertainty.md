@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 03:31 CST
+Last updated: 2026-06-04 03:50 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1158,10 +1158,14 @@ python scripts\audit\main_audit_official_evidence_package.py `
 
 Server final package:
 
-```bash
-/home/ajifang/miniconda3/bin/python /tmp/pony_audit_official_evidence_package.py \
-  --evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate \
-  --mode=server_final \
+```powershell
+python scripts\audit\main_remote_official_evidence_audit.py `
+  --remote_evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --mode server_final `
+  --quiet
+
+python scripts\audit\main_remote_server_large_artifact_manifest.py `
+  --remote_evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate `
   --quiet
 ```
 

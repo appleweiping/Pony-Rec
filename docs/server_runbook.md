@@ -303,7 +303,17 @@ python scripts\audit\main_audit_official_evidence_package.py `
 ```
 
 Run the same audit in `server_final` mode on the server output directory when
-verifying the full server-side result. `local_light` intentionally permits
+verifying the full server-side result. From the local repository, prefer:
+
+```powershell
+python scripts\audit\main_remote_official_evidence_audit.py `
+  --remote_evidence_dir outputs/<EXP>_<METHOD>_official_qwen3base_same_candidate `
+  --mode server_final `
+  --quiet
+```
+
+This sends the current local audit helper through SSH stdin, so it does not
+depend on the server checkout version. `local_light` intentionally permits
 `scores.csv` and `predictions/rank_predictions.jsonl` to stay server-only, but
 still requires final provenance, score audits, run summary, full `@5/@10/@20`
 and MRR metrics, coverage/exposure/summary tables, and
