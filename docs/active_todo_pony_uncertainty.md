@@ -1,11 +1,11 @@
-# Pony-rec / Uncertainty Active TODO
+# Uncertainty Active TODO
 
-Last updated: 2026-06-03 20:31 CST
+Last updated: 2026-06-03 21:14 CST
 
-This is the cumulative execution TODO for the active Pony-rec / Uncertainty
-goal. It is a handoff artifact, not a claim of paper readiness. Update it after
-each completed official row, blocker, cleanup decision, comparison-table build,
-or review cycle.
+This is the cumulative execution TODO for the active Uncertainty goal. It is a
+handoff artifact, not a claim of paper readiness. Update it after each completed
+official row, blocker, cleanup decision, comparison-table build, or review
+cycle.
 
 ## Hard Invariants
 
@@ -71,7 +71,30 @@ or review cycle.
   and local-light gates pass. At the 20:36 CST follow-up, the same adapter PID
   `3178403` was active in Qwen3 `hf_mean_pool` embedding at about
   `24760/385364`, GPU was about `96%` with `16166 MiB / 49140 MiB`, and disk
-  remained about `11G` free.
+  remained about `11G` free. At the 21:14 CST continuation check, the same
+  runner and adapter were still active with no fatal/OOM/no-space markers, and
+  embedding had reached about `176768/385364`. Because disk was tight at
+  about `11G` free and upcoming Home rows are storage-heavy, a bounded cleanup
+  removed only server-side `predictions/rank_predictions.jsonl` files from
+  already gated Sports/Toys official rows after verifying server-final audit
+  `ok=true`, local-light audit `ok=true`, provenance
+  `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, and `tables/ranking_eval_records.csv` `10,001`
+  lines for each row. The cleanup covered completed Toys `llmemb`,
+  `llm2rec_sasrec`, `elmrec_graph`, `llmesr_sasrec`, and `promax_profile`,
+  plus completed Sports `rlmrec_graphcl`, `irllrec_intent`, `proex_profile`,
+  `llmemb`, `llmesr_sasrec`, `elmrec_graph`, and `llm2rec_sasrec`. It did not
+  remove any `scores.csv`, provenance, audits, imported `tables/`, models,
+  checkpoints, C-CRP predictions, Home evidence, or current RLMRec inputs. The
+  deletion manifest is
+  `outputs/summary/sports_toys_completed_predictions_deleted_for_home_rlmrec_disk_20260603.sha256`.
+  A current domain-gate script was run from `/tmp` on the server after deletion:
+  Sports and Toys both remained `gate_ok=true` with `official_ok_count=8` and
+  `ccrp_ok=true`; the copied gate outputs are
+  `outputs/summary/sports_official_gate_after_prediction_cleanup_20260603.*`
+  and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
+  Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
+  process continued.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`

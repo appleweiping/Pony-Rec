@@ -115,7 +115,10 @@ The repository is now in M5 (multi-domain SOTA validation):
   rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
   `irllrec_intent`) after the IRLLRec evidence gate and completed-adapter
   cleanup, and home `rlmrec_graphcl` is running as the sixth row since
-  2026-06-03 20:28 CST; tools remains pending.
+  2026-06-03 20:28 CST. At the 21:14 CST monitor it remained active in Qwen3
+  embedding with no fatal markers; a bounded server-only prediction cleanup for
+  already gated Sports/Toys official rows recovered disk to about `19G` free,
+  and post-cleanup Sports/Toys domain gates still passed. Tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

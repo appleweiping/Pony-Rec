@@ -68,7 +68,14 @@ disk recovered to about `12G` free. Home `rlmrec_graphcl` launched at
 `3178395`, adapter PID `3178403`, log
 `baselines_new_domains_home_rlmrec_20260603_2028.log`. It is not
 table-eligible until final score/provenance/import/server-final and local-light
-gates pass.
+gates pass. At 2026-06-03 21:14 CST it remained active in Qwen3 embedding at
+about `176768/385364` with no fatal markers. A bounded cleanup removed only
+server-side prediction JSONLs from already gated Sports/Toys official rows,
+recorded
+`outputs/summary/sports_toys_completed_predictions_deleted_for_home_rlmrec_disk_20260603.sha256`,
+and copied post-cleanup Sports/Toys domain gate outputs showing
+`gate_ok=true`, `official_ok_count=8`, and `ccrp_ok=true`; disk recovered to
+about `19G` free.
 
 Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
 upstream staging directories were removed only after final server audits and

@@ -381,7 +381,23 @@ same-candidate tests.
    duplicate-output preflight; runner PID `3178395`, adapter PID `3178403`,
    log `baselines_new_domains_home_rlmrec_20260603_2028.log`. It is not
    table-eligible until final score/provenance/import/server-final and
-   local-light gates pass.
+   local-light gates pass. At the 21:14 CST continuation checkpoint, the same
+   RLMRec runner/adapter remained active in Qwen3 `hf_mean_pool` embedding at
+   about `176768/385364` with no fatal/OOM/no-space markers. To avoid another
+   disk-full interruption while preserving table evidence, only server-side
+   `predictions/rank_predictions.jsonl` files from already gated Sports/Toys
+   official rows were removed after server-final and local-light PASS checks;
+   scores, provenance, audits, imported tables, models/checkpoints, C-CRP
+   predictions, Home evidence, and current RLMRec inputs were preserved. The
+   sha256 manifest is
+   `outputs/summary/sports_toys_completed_predictions_deleted_for_home_rlmrec_disk_20260603.sha256`.
+   Post-cleanup domain gates run on the server remained PASS for Sports and
+   Toys (`official_ok_count=8`, `ccrp_ok=true`, `gate_ok=true`), with copied
+   outputs under
+   `outputs/summary/sports_official_gate_after_prediction_cleanup_20260603.*`
+   and
+   `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
+   Disk recovered from about `11G` to `19G` free.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
