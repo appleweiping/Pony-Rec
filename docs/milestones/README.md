@@ -157,6 +157,13 @@ The repository is now in M5 (multi-domain SOTA validation):
   checked as nonblank/readable. It must keep the claim boundary as controlled
   same-candidate ranking rather than full-catalog or generative-title
   recommendation and still needs final paper-layout/reviewer polish.
+- Consolidated paper-critical module audit now exists:
+  `scripts/audit/main_audit_paper_critical_modules.py`. Current artifact
+  `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`
+  reports `paper_ready=false`, `framework_overview_scaffold_ready=true`,
+  `guarded_plan_ready=true`, and `signal_rows_available=false`; observation,
+  ablation, and hyperparameter modules remain blocked until full-scale
+  uncertainty or recomputable signal rows are located or regenerated.
 
 ### C-CRP v3 Results (all domains)
 

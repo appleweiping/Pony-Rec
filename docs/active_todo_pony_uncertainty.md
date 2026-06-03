@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 07:22 CST
+Last updated: 2026-06-04 07:47 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -114,6 +114,14 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    launch work before Home RLMRec gates pass and real full-scale signal paths
    are filled. Current local plan artifact:
    `outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`.
+   Readiness audit helper:
+   `scripts/audit/main_audit_paper_critical_modules.py` now consolidates the
+   paper-critical module state without running experiments. Current artifact:
+   `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`.
+   It reports `paper_ready=false`, `framework_overview_scaffold_ready=true`,
+   `guarded_plan_ready=true`, and `signal_rows_available=false`; therefore the
+   observation, ablation, and hyperparameter modules remain blocked by
+   `missing_full_scale_uncertainty_or_recomputable_signal_rows`.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

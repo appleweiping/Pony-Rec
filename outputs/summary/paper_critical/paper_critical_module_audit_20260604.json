@@ -1,0 +1,163 @@
+{
+  "ok": true,
+  "paper_ready": false,
+  "generated_at_utc": "2026-06-03T23:49:08+00:00",
+  "root": "D:\\Research\\Uncertainty",
+  "summary": {
+    "framework_overview_scaffold_ready": true,
+    "signal_rows_available": false,
+    "guarded_plan_ready": true,
+    "paper_claims_ready": false
+  },
+  "signal_source_state": {
+    "status": "blocked_missing_signal_rows",
+    "paper_ready_uncertainty_source_count": 0,
+    "recomputable_signal_source_count": 0,
+    "score_only_source_count": 4,
+    "exact_coverage_source_count": 4,
+    "domain_audits": {
+      "sports": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_sports_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      },
+      "toys": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_toys_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      },
+      "home": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_home_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      },
+      "tools": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_tools_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      }
+    },
+    "formal_trace": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_formal_signal_path_trace_20260604_0535.json",
+      "present": true,
+      "can_rebuild_from_formal_scores_only": false,
+      "blockers": [
+        "formal_runner_does_not_write_scored_rows_with_uncertainty_components",
+        "formal_runner_prompt_does_not_request_evidence_or_counterevidence_fields",
+        "formal_scores_schema_has_no_uncertainty_column"
+      ]
+    },
+    "failures": [
+      "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+    ]
+  },
+  "guarded_signal_plan": {
+    "status": "guarded_plan_ready_not_executable",
+    "paper_claim_ready": false,
+    "files": {
+      "json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan\\ccrp_signal_generation_plan_20260604.json",
+      "shell": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan\\ccrp_signal_generation_plan_20260604.sh"
+    },
+    "domains": [
+      "sports",
+      "toys"
+    ],
+    "current_blocker": "Full-scale C-CRP Sports/Toys/Home/Tools artifacts visible so far are score-only; valid/test signal rows with evidence and counterevidence must be located or regenerated from saved non-test-selected inputs before observation, ablation, or hyperparameter claims.",
+    "failures": []
+  },
+  "modules": {
+    "observation_motivation": {
+      "status": "blocked_missing_signal_rows",
+      "paper_claim_ready": false,
+      "required_next_gate": "locate_or_regenerate_valid_test_uncertainty_signal_rows",
+      "blockers": [
+        "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+      ],
+      "script": "scripts/analysis/main_build_uncertainty_observation_study.py"
+    },
+    "component_ablation": {
+      "status": "blocked_missing_signal_rows",
+      "paper_claim_ready": false,
+      "required_next_gate": "run_leave_one_component_out_after_signal_rows_exist",
+      "blockers": [
+        "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+      ],
+      "script": "scripts/misc/main_select_ccrp_variant_on_valid.py"
+    },
+    "hyperparameter_analysis": {
+      "status": "blocked_missing_signal_rows",
+      "paper_claim_ready": false,
+      "required_next_gate": "build_validation_and_test_curves_after_signal_rows_exist",
+      "blockers": [
+        "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+      ],
+      "script": "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py"
+    },
+    "framework_overview": {
+      "module": "framework_overview",
+      "status": "draft_scaffold_ready",
+      "artifact_scaffold_ready": true,
+      "paper_claim_ready": false,
+      "remaining_blockers": [
+        "final_paper_layout_and_reviewer_polish"
+      ],
+      "files": {
+        "framework_overview.svg": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview.svg",
+        "framework_overview.pdf": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview.pdf",
+        "framework_overview.png": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview.png",
+        "framework_overview_caption.md": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_caption.md",
+        "framework_overview_provenance.json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_provenance.json",
+        "framework_overview_manifest.sha256": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_manifest.sha256"
+      },
+      "manifest_checks": {
+        "framework_overview.svg": {
+          "expected": "f3e16d385109b6fe01b0c066e64c0b3380ad64586bc8dadf07cccdcef9353b97",
+          "actual": "f3e16d385109b6fe01b0c066e64c0b3380ad64586bc8dadf07cccdcef9353b97",
+          "ok": true
+        },
+        "framework_overview.pdf": {
+          "expected": "67c560668f233737f52b403ef535d8e0a4b626e3d84198d8b1a3504974484878",
+          "actual": "67c560668f233737f52b403ef535d8e0a4b626e3d84198d8b1a3504974484878",
+          "ok": true
+        },
+        "framework_overview.png": {
+          "expected": "1ef47dd5739031b0a98c49ac738e42269b5329c700cb079649b62d499ae4e158",
+          "actual": "1ef47dd5739031b0a98c49ac738e42269b5329c700cb079649b62d499ae4e158",
+          "ok": true
+        },
+        "framework_overview_caption.md": {
+          "expected": "00818669f71c4890feb06d443661935314c4c82fc331535a017e36636750628e",
+          "actual": "00818669f71c4890feb06d443661935314c4c82fc331535a017e36636750628e",
+          "ok": true
+        },
+        "framework_overview_provenance.json": {
+          "expected": "3d41aacd0d74caf66474d5b3dd5eca144c9f0d9ffe5ab0b30e1c877318c52ffb",
+          "actual": "3d41aacd0d74caf66474d5b3dd5eca144c9f0d9ffe5ab0b30e1c877318c52ffb",
+          "ok": true
+        }
+      },
+      "provenance": {
+        "status_label": "paper_critical_framework_overview_draft",
+        "git_commit": "8f972ca000955c3067885e0d23d8529e6ae5a29e",
+        "generated_at_utc": "2026-06-03T23:32:07+00:00"
+      }
+    }
+  },
+  "next_action": "Keep the active Home LLM2Rec run protected. For paper-critical C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running observation, ablation, or hyperparameter claims."
+}

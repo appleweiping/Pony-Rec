@@ -73,8 +73,16 @@ also include:
    `scripts/audit/main_plan_ccrp_signal_generation.py` writes a planning-only
    JSON/shell command package for Sports/Toys signal discovery, source audit,
    validation selection, ablation, observation, and hyperparameter plots. The
-   generated shell exits before running commands and remains
-   `planning_only_not_executed` until real full-scale signal paths pass audit.
+    generated shell exits before running commands and remains
+    `planning_only_not_executed` until real full-scale signal paths pass audit.
+    Consolidated module audit entry:
+    `scripts/audit/main_audit_paper_critical_modules.py` writes
+    `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`
+    without running experiments. The current audit reports
+    `paper_ready=false`, `framework_overview_scaffold_ready=true`,
+    `guarded_plan_ready=true`, and `signal_rows_available=false`, so the
+    observation, component-ablation, and hyperparameter modules remain blocked
+    by missing full-scale uncertainty or recomputable signal rows.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap
