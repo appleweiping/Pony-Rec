@@ -53,6 +53,11 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    Toys, Home, and Tools formal C-CRP directories currently expose only
    score-only `scores.csv`, `report.json`, and `user_ranks.jsonl` plus imported
    ranking tables. Do not use those score-only files as uncertainty evidence.
+   Audit helper:
+   `scripts/audit/main_audit_ccrp_uncertainty_sources.py`, which classifies
+   candidate files as `paper_ready_uncertainty_rows`,
+   `recomputable_signal_rows`, or `score_only_not_uncertainty` and checks
+   candidate-key coverage when `candidate_items.csv` is supplied.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

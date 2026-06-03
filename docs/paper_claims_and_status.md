@@ -55,7 +55,8 @@ also include:
    only for the older Beauty supplementary smaller-N selector run; the
    Sports/Toys/Home/Tools formal C-CRP outputs currently visible are score-only
    and cannot support the motivation figure until real signal/scored rows are
-   located or regenerated without LLM re-query leakage.
+   located or regenerated without LLM re-query leakage. Preflight audit entry:
+   `scripts/audit/main_audit_ccrp_uncertainty_sources.py`.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap

@@ -62,6 +62,8 @@ Numeric gates:
 Implementation anchor:
 
 - `scripts/analysis/main_build_uncertainty_observation_study.py`
+- `scripts/audit/main_audit_ccrp_uncertainty_sources.py` for the required
+  preflight audit of candidate signal/scored-row files.
 
 Command template:
 
@@ -100,6 +102,25 @@ columns. Therefore the next observation/ablation launch must first resolve
 full-scale `VALID_CCRP_SIGNAL_JSONL_OR_CSV` and `TEST_CCRP_SIGNAL_JSONL_OR_CSV`
 paths, or regenerate scored rows from existing saved signal inputs without any
 LLM re-query.
+
+Preflight audit template:
+
+```bash
+cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --source sports_scores=outputs/sports_large10000_100neg_ccrp_v3/scores.csv \
+  --source <LABEL>=<CANDIDATE_SIGNAL_OR_SCORED_ROWS_PATH> \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_uncertainty_source_audit_sports.json \
+  --output_csv outputs/summary/paper_critical/ccrp_uncertainty_source_audit_sports.csv
+```
+
+Proceed only when the target full-scale artifact is classified as
+`paper_ready_uncertainty_rows` or, for regeneration, `recomputable_signal_rows`
+with exact or near-exact candidate-key coverage. `score_only_not_uncertainty`
+is a blocker for observation/motivation evidence.
 
 ## Module B: C-CRP Component Ablation
 
