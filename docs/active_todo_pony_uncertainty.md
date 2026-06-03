@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 06:27 CST
+Last updated: 2026-06-04 07:00 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -195,7 +195,7 @@ passes gates, or fails with an audited recovery decision.
   certifies the missing prediction file's original line count. This exception
   does not cover `scores.csv`, provenance, score audits, run summaries,
   imported `tables/`, models, checkpoints, or local evidence packages.
-- Latest completed home row: `irllrec_intent`, completed 2026-06-03 20:05 CST
+- Previous completed home row: `irllrec_intent`, completed 2026-06-03 20:05 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
   local-light audit PASS, and no local forbidden large files. Full metrics over
@@ -217,50 +217,33 @@ passes gates, or fails with an audited recovery decision.
   provenance, audits, predictions, imported tables, model, and local
   lightweight evidence were preserved. Disk recovered from about `4.7G` to
   `12G` free, and no Pony/C-CRP/baseline/uncertainty Python process remained
-  active. Home now has 5/8 completed official baseline rows.
-- Active runner: home `rlmrec_graphcl` official row, launched 2026-06-03
-  20:28 CST after a clean process/GPU/disk preflight and after confirming no
-  existing Home RLMRec final directory, adapter directory, or prior RLMRec log.
-  Runner PID `3178395`, adapter PID `3178403`, PID file
-  `baselines_new_domains_home_rlmrec_20260603_2028.pid`, log
-  `baselines_new_domains_home_rlmrec_20260603_2028.log`. The launch log shows
-  `START rlmrec_graphcl on home`; at the first stable check the adapter
-  directory was about `1.0G`, the final output directory was still empty, GPU
-  was idle (`0%`, `15 MiB / 49140 MiB`), and disk was about `11G` free. This
-  row is not table-eligible until final score/provenance/import/server-final
-  and local-light gates pass. At the 20:36 CST follow-up, the same adapter PID
-  `3178403` was active in Qwen3 `hf_mean_pool` embedding at about
-  `24760/385364`, GPU was about `96%` with `16166 MiB / 49140 MiB`, and disk
-  remained about `11G` free. At the 21:14 CST continuation check, the same
-  runner and adapter were still active with no fatal/OOM/no-space markers, and
-  embedding had reached about `176768/385364`. Because disk was tight at
-  about `11G` free and upcoming Home rows are storage-heavy, a bounded cleanup
-  removed only server-side `predictions/rank_predictions.jsonl` files from
-  already gated Sports/Toys official rows after verifying server-final audit
-  `ok=true`, local-light audit `ok=true`, provenance
-  `implementation_status=official_completed`, `blockers=[]`, exact
-  `score_coverage_rate=1.0`, and `tables/ranking_eval_records.csv` `10,001`
-  lines for each row. The cleanup covered completed Toys `llmemb`,
-  `llm2rec_sasrec`, `elmrec_graph`, `llmesr_sasrec`, and `promax_profile`,
-  plus completed Sports `rlmrec_graphcl`, `irllrec_intent`, `proex_profile`,
-  `llmemb`, `llmesr_sasrec`, `elmrec_graph`, and `llm2rec_sasrec`. It did not
-  remove any `scores.csv`, provenance, audits, imported `tables/`, models,
-  checkpoints, C-CRP predictions, Home evidence, or current RLMRec inputs. The
-  deletion manifest is
-  `outputs/summary/sports_toys_completed_predictions_deleted_for_home_rlmrec_disk_20260603.sha256`.
-  A current domain-gate script was run from `/tmp` on the server after deletion:
-  Sports and Toys both remained `gate_ok=true` with `official_ok_count=8` and
-  `ccrp_ok=true`; the copied gate outputs are
-  `outputs/summary/sports_official_gate_after_prediction_cleanup_20260603.*`
-  and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
-  Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
-  process continued.
-  Latest continuation check in this thread at 2026-06-04 06:08 CST: the same
-  runner/adapter remained active, the log had advanced to epoch `2710`, there
-  were no completion/failure markers, the final output directory was still
-  empty, GPU memory was about `34361 MiB / 49140 MiB`, and `/` was about `13G`
-  free / `94%` used. Do not start another baseline until this row either
-  completes and passes gates or fails with an audited recovery decision.
+  active. At that checkpoint, Home had 5/8 completed official baseline rows.
+- Latest completed home row: `rlmrec_graphcl`, completed 2026-06-04 06:49 CST
+  as `implementation_status=official_completed`, `blockers=[]`, and exact
+  `score_coverage_rate=1.0`. It ran from
+  `baselines_new_domains_home_rlmrec_20260603_2028.log`, reached
+  `[rlmrec-official] epoch=3000 train_loss=1.546134`, exported final scores,
+  predictions, and imported tables, and then passed the required row gates:
+  server-final evidence audit PASS, server large-artifact sha256 manifest
+  written, lightweight local sync PASS, and local-light audit PASS. Full
+  metrics over 10,000 users and 101 candidates are HR@5/10/20
+  `0.0685 / 0.1268 / 0.2451`, NDCG@5/10/20
+  `0.04126795456098191 / 0.059869974785318684 / 0.08932211717259728`, and MRR
+  `0.06397404670906748`. Row counts passed: `scores.csv` `1,010,001` lines,
+  predictions `10,000` lines, and `tables/ranking_eval_records.csv` `10,001`
+  lines. The local lightweight package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`.
+  Server-only large artifacts are `scores.csv`
+  (`sha256=002255fb767705fc2c7a30428269dd5f53cc6268647c04f5c26a4a923ce29c51`),
+  `predictions/rank_predictions.jsonl`
+  (`sha256=0204ca3e4491440d5d00a84a5fff911ea0d7af225d04574a851912a629148fdc`),
+  and `rlmrec_official_model.pt`
+  (`sha256=87b900951174eeefc7daa4dc6c15e33bf8709264017bb94b7bfe092d6ac2a32c`),
+  covered by `server_large_artifact_manifest.sha256`. Home now has 6/8
+  completed official baseline rows. No next baseline was launched; runner PID
+  `3178395` had exited, GPU was idle, and `/` was about `12G` free / `94%`
+  used after the row gates. Domain-wide Home gates remain pending until all
+  eight official rows complete.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -991,17 +974,17 @@ set is complete.
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery |
-| `irllrec_intent` | active | launched 2026-06-03 13:55 CST; runner PID `3147646`, adapter PID `3147655`, log `baselines_new_domains_home_irllrec_20260603_1355.log`; no final scores/provenance yet |
-| `rlmrec_graphcl` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
-| `llm2rec_sasrec` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
+| `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery and adapter cleanup |
+| `rlmrec_graphcl` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
+| `llm2rec_sasrec` | pending | do not launch until RLMRec docs/memory/git gates are complete and disk has enough margin |
 | `llmesr_sasrec` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
 
-Home official baselines are now 4/8 complete (`proex_profile`,
-`promax_profile`, `elmrec_graph`, `llmemb`). All completed rows passed final
-provenance, exact score coverage, server-final package audit, lightweight
-local sync, local-light audit, full metrics, and row-count gates. Home is not
-domain-gate eligible until all eight official rows and imported C-CRP evidence
-pass the same checks.
+Home official baselines are now 6/8 complete (`proex_profile`,
+`promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
+`rlmrec_graphcl`). All completed rows passed final provenance, exact score
+coverage, server-final package audit, lightweight local sync, local-light
+audit, full metrics, and row-count gates. Home is not domain-gate eligible
+until all eight official rows and imported C-CRP evidence pass the same checks.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1173,20 +1156,27 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `rlmrec_graphcl` row. Do not launch another
-   baseline while runner PID `3178395` / adapter PID `3178403` are active.
-   Watch disk closely: after launch the adapter directory was about `1.0G`,
-   the final output directory was empty, and disk was about `11G` free. The row
-   is not table-eligible until final score/provenance/import/server-final and
-   local-light gates pass.
-2. After each completed home/tools row, verify full HR@5/@10/@20,
+1. Finish the Home RLMRec documentation/memory/git gate before starting another
+   row. The row itself is official-completed and locally packaged; no next
+   baseline has been launched. Current disk is tight but above the danger
+   threshold at about `12G` free / `94%` used. If headroom drops before the next
+   storage-heavy row, the first cleanup candidate is the completed intermediate
+   adapter
+   `outputs/baselines/paper_adapters/home_large10000_100neg_rlmrec_official_adapter`,
+   but remove it only after an explicit cleanup decision that confirms final
+   scores, provenance, audits, imported tables, model hash, and local-light
+   package are protected.
+2. Continue the remaining Home official rows one at a time:
+   `llm2rec_sasrec`, then `llmesr_sasrec`, after a fresh process/GPU/disk
+   preflight and duplicate-output check.
+3. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
    score audit, imported tables, server-final audit, lightweight sync, and
    local-light audit before recording it as official evidence.
-3. Build domain comparison + paired-test gates only after all eight official
+4. Build domain comparison + paired-test gates only after all eight official
    rows for that domain and C-CRP imported evidence pass the domain gate.
-4. Only after the declared experiments, comparisons, ablations, provenance,
+5. Only after the declared experiments, comparisons, ablations, provenance,
     statistical tests, and figure checks are complete, move to ARIS paper
     writing and GPT-5.5/Codex xhigh review. The review loop must reach at
     least 8/10 before submission-level readiness is claimed.

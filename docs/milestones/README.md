@@ -111,14 +111,13 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home has 5/8 audited official
+  evidence through domain and paired-test gates. Home has 6/8 audited official
   rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-  `irllrec_intent`) after the IRLLRec evidence gate and completed-adapter
-  cleanup, and home `rlmrec_graphcl` is running as the sixth row since
-  2026-06-03 20:28 CST. At the 21:14 CST monitor it remained active in Qwen3
-  embedding with no fatal markers; a bounded server-only prediction cleanup for
-  already gated Sports/Toys official rows recovered disk to about `19G` free,
-  and post-cleanup Sports/Toys domain gates still passed. Tools remains pending.
+  `irllrec_intent`, `rlmrec_graphcl`) after the RLMRec evidence gate and local
+  lightweight package passed. RLMRec completed at 2026-06-04 06:49 CST with
+  full `@5/@10/@20 + MRR` metrics, exact score coverage, row counts, and
+  server large-artifact sha256 manifest. Remaining Home rows are
+  `llm2rec_sasrec` and `llmesr_sasrec`; Tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -199,9 +198,9 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 5/8 audited official rows complete after IRLLRec passed
-   server-final and local-light evidence gates, and home `rlmrec_graphcl` is
-   active as the sixth row; tools remains pending.
+   complete; home has 6/8 audited official rows complete after RLMRec passed
+   server-final, server large-artifact manifest, local sync, and local-light
+   evidence gates; tools remains pending.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.
