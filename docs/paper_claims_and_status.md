@@ -344,6 +344,18 @@ same-candidate tests.
    `outputs/summary/sports_promax_prediction_deleted_for_home_irllrec_disk_20260603.sha256`.
    Sports ProMax scores, provenance, audits, imported tables, model, and
    local-light package were preserved; disk recovered to about `3.1G`.
+   At the 18:45 CST continuation check, Home IRLLRec was still active through
+   epoch `2140` with no fatal/OOM/no-space markers, but disk remained tight.
+   After confirming server-final audit `ok=true`, local-light audit `ok=true`,
+   `implementation_status=official_completed`, `blockers=[]`, and
+   `score_coverage_rate=1.0` for completed Home `proex_profile`,
+   `promax_profile`, `elmrec_graph`, and `llmemb`, only those four rows'
+   server-side `predictions/rank_predictions.jsonl` files were removed under
+   the documented disk-pressure exception. The sha256 manifest is
+   `outputs/summary/home_completed_predictions_deleted_for_irllrec_disk_20260603.sha256`.
+   Their scores, provenance, audits, imported tables, models, and local-light
+   packages were preserved; disk recovered to about `6.0G`, and the active Home
+   IRLLRec runner/adapter remained active.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
