@@ -151,6 +151,11 @@ The resulting `ccrp_scored_rows.csv` is the preferred
 `--uncertainty_scores_path` input for the observation script, and
 `ccrp_scores.csv` must pass exact same-candidate coverage before any imported
 ranking/ablation claim is made.
+The source signal artifact may use either `candidate_item_id` or `item_id` for
+candidate identity; the audit, rebuild helper, and validation selector now
+share that alias policy. A coverage failure after a passing
+`recomputable_signal_rows` audit should therefore be treated as a real key
+mismatch, not a known schema-alias limitation.
 
 Validated preflight result (2026-06-03): running the audit helper through remote
 stdin against the already imported Sports and Toys C-CRP `scores.csv` files

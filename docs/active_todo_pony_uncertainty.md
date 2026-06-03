@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-03 21:14 CST
+Last updated: 2026-06-03 23:14 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -71,7 +71,12 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py`, to convert a
    future located `recomputable_signal_rows` artifact plus a fixed selected
    C-CRP config into `ccrp_scored_rows.csv`/`ccrp_scores.csv`/provenance without
-   LLM re-query.
+   LLM re-query. On 2026-06-03 this rebuild path and
+   `scripts/misc/main_select_ccrp_variant_on_valid.py` were hardened to accept
+   both `candidate_item_id` and `item_id` in signal rows, matching the
+   uncertainty-source audit's allowed schema aliases; this prevents a
+   preflight-passing `item_id` signal artifact from failing later score
+   coverage only because of column naming.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

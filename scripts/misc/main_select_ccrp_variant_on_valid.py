@@ -58,7 +58,8 @@ def _load_signal(path: str | Path) -> pd.DataFrame:
 def _score_lookup(scored_df: pd.DataFrame) -> dict[tuple[str, str, str], float]:
     lookup: dict[tuple[str, str, str], float] = {}
     for row in scored_df.to_dict(orient="records"):
-        key = (text(row.get("source_event_id")), text(row.get("user_id")), text(row.get("candidate_item_id")))
+        item_id = text(row.get("candidate_item_id")) or text(row.get("item_id"))
+        key = (text(row.get("source_event_id")), text(row.get("user_id")), item_id)
         if all(key):
             lookup[key] = finite_float(row.get("ccrp_risk_adjusted_score"))
     return lookup
