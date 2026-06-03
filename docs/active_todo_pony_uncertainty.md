@@ -1,6 +1,6 @@
 # Pony-rec / Uncertainty Active TODO
 
-Last updated: 2026-06-03 06:11 CST
+Last updated: 2026-06-03 09:20 CST
 
 This is the cumulative execution TODO for the active Pony-rec / Uncertainty
 goal. It is a handoff artifact, not a claim of paper readiness. Update it after
@@ -27,19 +27,29 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: home `llmemb` official row. After confirming no active
-  Pony/C-CRP/baseline/uncertainty Python process, idle GPU, no existing home
-  LLMEmb final/adapter/log path, and about `14G` free, the row launched at
-  2026-06-03 06:08 CST with:
-  `nohup env DOMAINS_OVERRIDE=home FAST_METHODS_OVERRIDE=llmemb TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh`.
-  The remote SSH launch timed out because the background process kept the
-  session attached, but no duplicate was started; one adapter is active as PID
-  `3085786`, recorded in
-  `baselines_new_domains_home_llmemb_adapter.pid`, with log
-  `baselines_new_domains_home_llmemb_20260603_0608.log`. At the first stable
-  check it was in Qwen3 `hf_mean_pool` embedding at about `2808/385364`, GPU
-  was `96%` with `16067 MiB / 49140 MiB`, disk was about `13G` free, and no
-  final scores/provenance existed yet. Do not launch another baseline while
+- Active runner: home `llmemb` official row, symlink recovery rerun. The first
+  2026-06-03 06:08 CST LLMEmb run reached exact score export but then failed
+  during `torch.save` with the filesystem at `100%` used. The orphaned
+  `scores.csv` had `1,010,001` lines and a read-only exact-key audit passed
+  (`1,010,000/1,010,000` finite keys, no duplicates, no missing/extra keys),
+  but `fairness_provenance.json`, run summary, import tables, and server-final
+  audit were missing, so the row is not official/table-eligible. Recovery
+  removed only failed-run storage: the corrupt partial
+  `llmemb_official_model.pt` and the generated duplicate upstream staging dir
+  `/home/ajifang/projects/LLMEmb/data/home_llmemb_same_candidate_100neg`.
+  The Pony adapter source embedding under
+  `outputs/baselines/paper_adapters/home_large10000_100neg_llmemb_official_adapter/`
+  was preserved. The orphaned score file was renamed to
+  `scores.failed_checkpoint_no_provenance_20260603_0807.csv` so the runner
+  would not import it as a completed row. The LLMEmb trainer now symlinks the
+  large handled `itm_emb_np.pkl` into the pinned upstream repo instead of
+  duplicating a 6G file; `LLMEMB_COPY_HANDLED_EMBEDDINGS=1` keeps the old copy
+  behavior available if needed. The patched script passed `py_compile` locally
+  and on the server. The true rerun launched at 2026-06-03 09:16 CST with log
+  `baselines_new_domains_home_llmemb_symlink_rerun_20260603_0920.log`, runner
+  PID `3133363`, and adapter PID `3133372`. At the first stable check it was
+  active in CPU-side setup, GPU idle, disk about `6.8G` free, and no final
+  `scores.csv`/provenance existed yet. Do not launch another baseline while
   this row is active.
 - Latest completed home row: `elmrec_graph`, completed 2026-06-03 05:47 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
@@ -693,11 +703,11 @@ set is complete.
 | `proex_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llmemb` | running | adapter PID `3085786`, log `baselines_new_domains_home_llmemb_20260603_0608.log`; Qwen3 embedding in progress; no final files yet |
-| `irllrec_intent` | pending | do not launch while LLMEmb is active |
-| `rlmrec_graphcl` | pending | do not launch while LLMEmb is active |
-| `llm2rec_sasrec` | pending | do not launch while LLMEmb is active |
-| `llmesr_sasrec` | pending | do not launch while LLMEmb is active |
+| `llmemb` | recovery rerun active | first run failed at checkpoint save with disk full after exact score export; orphaned score file preserved as failed-run evidence; symlink rerun active with runner PID `3133363`, adapter PID `3133372`, log `baselines_new_domains_home_llmemb_symlink_rerun_20260603_0920.log`; no final official files yet |
+| `irllrec_intent` | pending | do not launch while LLMEmb rerun is active |
+| `rlmrec_graphcl` | pending | do not launch while LLMEmb rerun is active |
+| `llm2rec_sasrec` | pending | do not launch while LLMEmb rerun is active |
+| `llmesr_sasrec` | pending | do not launch while LLMEmb rerun is active |
 
 Home official baselines are now 3/8 complete (`proex_profile`,
 `promax_profile`, `elmrec_graph`). All completed rows passed final provenance,

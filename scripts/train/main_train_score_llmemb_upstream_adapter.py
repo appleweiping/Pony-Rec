@@ -119,12 +119,38 @@ def _copy_handled_files(adapter_dir: Path, repo_dir: Path, dataset_alias: str) -
     source = adapter_dir / "llm_esr" / "handled"
     target = repo_dir / "data" / dataset_alias / "handled"
     target.mkdir(parents=True, exist_ok=True)
-    for name in ["inter.txt", "itm_emb_np.pkl"]:
-        source_path = source / name
-        if not source_path.exists():
-            raise FileNotFoundError(f"Required handled file missing: {source_path}")
-        shutil.copy2(source_path, target / name)
+    inter_path = source / "inter.txt"
+    if not inter_path.exists():
+        raise FileNotFoundError(f"Required handled file missing: {inter_path}")
+    shutil.copy2(inter_path, target / "inter.txt")
+
+    embedding_path = source / "itm_emb_np.pkl"
+    if not embedding_path.exists():
+        raise FileNotFoundError(f"Required handled file missing: {embedding_path}")
+    _stage_large_handled_file(embedding_path, target / "itm_emb_np.pkl")
     return target
+
+
+def _stage_large_handled_file(source_path: Path, target_path: Path) -> None:
+    if os.environ.get("LLMEMB_COPY_HANDLED_EMBEDDINGS") == "1":
+        shutil.copy2(source_path, target_path)
+        return
+
+    if target_path.exists() or target_path.is_symlink():
+        try:
+            if os.path.samefile(source_path, target_path):
+                return
+        except OSError:
+            pass
+        if target_path.is_file() or target_path.is_symlink():
+            target_path.unlink()
+        else:
+            raise IsADirectoryError(f"Cannot replace non-file handled target: {target_path}")
+
+    try:
+        os.symlink(source_path, target_path)
+    except OSError:
+        shutil.copy2(source_path, target_path)
 
 
 def _load_sequences(path: Path, *, user_count: int) -> dict[int, list[int]]:

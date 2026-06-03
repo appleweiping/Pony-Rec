@@ -113,7 +113,8 @@ The repository is now in M5 (multi-domain SOTA validation):
   Sports and toys each have all eight audited official rows plus C-CRP imported
   evidence through domain and paired-test gates. Home has 3/8 audited official
   rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`) and
-  `llmemb` is running as the fourth home row; tools remains pending.
+  `llmemb` is in a symlink recovery rerun after a disk-full checkpoint failure;
+  tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -164,8 +165,9 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 3/8 audited official rows complete and `llmemb` is
-   running as the fourth home row; tools remains pending.
+   complete; home has 3/8 audited official rows complete and `llmemb` is in a
+   symlink recovery rerun after a disk-full checkpoint failure; tools remains
+   pending.
 3. Full comparison table + statistical tests (Phase 3)
 4. Paper writing with ARIS skill (Phase 4)
 5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)

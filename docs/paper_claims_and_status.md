@@ -206,7 +206,8 @@ same-candidate tests.
    score file. Sports and toys are now 8/8 complete and have passed their
    domain/comparison/paired-test gates; home has 3/8 audited official rows
    complete (`proex_profile`, `promax_profile`, `elmrec_graph`) and home
-   `llmemb` is running as the fourth row, while tools remains pending. Toys
+   `llmemb` is in a symlink recovery rerun after a disk-full checkpoint
+   failure, while tools remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
