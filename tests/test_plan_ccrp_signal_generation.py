@@ -1,0 +1,67 @@
+from scripts.audit.main_plan_ccrp_signal_generation import build_plan, guarded_shell_script
+
+
+def test_plan_defaults_to_non_executing_sports_toys_flow():
+    plan = build_plan(
+        domains=[],
+        remote_project="/repo",
+        remote_root=".",
+        output_dir="outputs/summary/paper_critical/ccrp_signal_generation_plan",
+        expected_events=10000,
+        expected_candidates_per_event=101,
+        selection_metric="NDCG@10",
+        plan_id="test_plan",
+    )
+
+    assert plan["will_start_experiment"] is False
+    assert plan["status_label"] == "planning_only_not_executed"
+    assert plan["domains"] == ["sports", "toys"]
+    assert "score-only" in plan["current_blocker"]
+    assert "main_remote_discover_ccrp_uncertainty_sources.py" in plan["global_commands"]["remote_header_discovery"]
+    assert "--domain sports" in plan["global_commands"]["remote_header_discovery"]
+
+
+def test_domain_plan_uses_placeholders_and_full_scale_counts():
+    plan = build_plan(
+        domains=["sports"],
+        remote_project="/repo",
+        remote_root=".",
+        output_dir="outputs/summary/paper_critical/ccrp_signal_generation_plan",
+        expected_events=10000,
+        expected_candidates_per_event=101,
+        selection_metric="NDCG@10",
+        plan_id="test_plan",
+    )
+    domain_plan = plan["domain_plans"][0]
+
+    assert domain_plan["expected_score_rows"] == 1010000
+    assert domain_plan["paths"]["valid_signal_placeholder"] == "TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV"
+    assert domain_plan["paths"]["test_signal_placeholder"] == "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV"
+    selector = domain_plan["commands"]["select_ccrp_ablation_and_scores_template"]
+    assert "main_select_ccrp_variant_on_valid.py" in selector
+    assert "--valid_signal_path TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in selector
+    assert "--test_signal_path TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in selector
+    assert "--import_scores" in selector
+    observation = domain_plan["commands"]["build_observation_study_template"]
+    assert "ccrp_selected_test_scored_rows.csv" in observation
+    assert "main_build_uncertainty_observation_study.py" in observation
+
+
+def test_guarded_shell_exits_before_any_command():
+    plan = build_plan(
+        domains=["sports"],
+        remote_project="/repo",
+        remote_root=".",
+        output_dir="outputs/summary/paper_critical/ccrp_signal_generation_plan",
+        expected_events=10000,
+        expected_candidates_per_event=101,
+        selection_metric="NDCG@10",
+        plan_id="test_plan",
+    )
+
+    shell = guarded_shell_script(plan)
+
+    assert "exit 2" in shell
+    assert shell.index("exit 2") < shell.index("cd /repo")
+    assert "nohup" not in shell
+    assert "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in shell

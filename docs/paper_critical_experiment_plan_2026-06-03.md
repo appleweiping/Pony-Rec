@@ -64,6 +64,11 @@ Implementation anchor:
 - `scripts/analysis/main_build_uncertainty_observation_study.py`
 - `scripts/audit/main_discover_ccrp_uncertainty_sources.py` for scanning
   candidate artifact headers before choosing paths for the stricter audit.
+- `scripts/audit/main_plan_ccrp_signal_generation.py` for producing a
+  guarded, non-executing Sports/Toys command plan after Home RLMRec gates pass.
+  Generated shell plans start with `exit 2` and retain
+  `TODO_*_CCRP_SIGNAL_JSONL_OR_CSV` placeholders until real full-scale signal
+  artifacts have passed audit.
 - `scripts/analysis/main_export_ccrp_scored_rows_from_signal.py` for rebuilding
   scored rows with `ccrp_uncertainty` columns from saved signal inputs and a
   fixed validation-selected C-CRP config, without any LLM re-query.
@@ -187,6 +192,15 @@ route in `scripts/misc/main_select_ccrp_variant_on_valid.py` can write
 only when given real valid/test signal paths. Do not attempt to infer
 paper-ready uncertainty rows from formal `scores.csv` alone. Evidence:
 `outputs/summary/paper_critical/ccrp_formal_signal_path_trace_20260604_0535.json`.
+
+Guarded next-step plan (2026-06-04): local plan artifact
+`outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`
+records the Sports/Toys discovery, per-domain source audit, C-CRP validation
+selection/ablation, observation-study, and hyperparameter-plot command
+templates. It is intentionally not executable as generated; the shell exits
+before any command and requires replacing `TODO_VALID_*`/`TODO_TEST_*` signal
+paths with artifacts classified as `recomputable_signal_rows` or
+`paper_ready_uncertainty_rows`.
 
 ## Module B: C-CRP Component Ablation
 

@@ -69,7 +69,12 @@ also include:
    runner only requested `relevance_probability` and did not preserve
    evidence/counterevidence, `ccrp_uncertainty`, selected scored rows, or
    internal provenance, so the paper-critical uncertainty rows cannot be
-   reconstructed from formal `scores.csv` alone.
+   reconstructed from formal `scores.csv` alone. Guarded planning entry:
+   `scripts/audit/main_plan_ccrp_signal_generation.py` writes a planning-only
+   JSON/shell command package for Sports/Toys signal discovery, source audit,
+   validation selection, ablation, observation, and hyperparameter plots. The
+   generated shell exits before running commands and remains
+   `planning_only_not_executed` until real full-scale signal paths pass audit.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap

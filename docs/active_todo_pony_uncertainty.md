@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 05:47 CST
+Last updated: 2026-06-04 06:08 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -105,6 +105,15 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    uncertainty-source audit's allowed schema aliases; this prevents a
    preflight-passing `item_id` signal artifact from failing later score
    coverage only because of column naming.
+   Guarded plan helper:
+   `scripts/audit/main_plan_ccrp_signal_generation.py` generates a
+   non-executing JSON/shell plan for Sports/Toys C-CRP signal evidence
+   discovery, source audit, validation selection, ablation, observation, and
+   hyperparameter plotting. The generated shell begins with `exit 2` and uses
+   `TODO_*_CCRP_SIGNAL_JSONL_OR_CSV` placeholders, so it cannot accidentally
+   launch work before Home RLMRec gates pass and real full-scale signal paths
+   are filled. Current local plan artifact:
+   `outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component
@@ -239,11 +248,12 @@ passes gates, or fails with an audited recovery decision.
   and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
   Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
   process continued.
-  Latest continuation check in this thread at 2026-06-04 05:47 CST: the same
-  runner/adapter remained active at epoch `2650`, with no completion/failure
-  markers, final output still empty, GPU active, and `/` at about `13G` free /
-  `94%` used. Do not start another baseline until this row either completes
-  and passes gates or fails with an audited recovery decision.
+  Latest continuation check in this thread at 2026-06-04 06:08 CST: the same
+  runner/adapter remained active, the log had advanced to epoch `2710`, there
+  were no completion/failure markers, the final output directory was still
+  empty, GPU memory was about `34361 MiB / 49140 MiB`, and `/` was about `13G`
+  free / `94%` used. Do not start another baseline until this row either
+  completes and passes gates or fails with an audited recovery decision.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
