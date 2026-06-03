@@ -87,6 +87,26 @@ preserved. Disk recovered from about `5.9G` to `17G` free.
 ### Phase 3: Full Comparison Table + Statistical Tests
 Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
 
+### Phase 2.5 / Paper-Critical Method Evidence
+Before claiming paper readiness, complete four method-story gates:
+
+- observation/motivation study showing why uncertainty is needed, using
+  representative completed baselines/domains under fair same-candidate settings
+  and producing a paper-ready figure or table;
+- leave-one-component-out C-CRP ablations over the actual nontrivial
+  implementation components, including score mode, boundary uncertainty,
+  calibration gap, evidence support/insufficiency, counterevidence, risk
+  penalty, eta, confidence weight, and C-CRP weight triples where supported;
+- hyperparameter sensitivity curves for real controls such as eta, C-CRP
+  weights, confidence weight, uncertainty gates/thresholds, anchor penalties,
+  and SRPD learning-rate/lambda controls when SRPD rows are used;
+- a clean framework overview figure showing the full pipeline and where
+  uncertainty/components enter the ranking decision.
+
+Each finished module needs commands, configs, seeds when applicable, git
+commit, row counts, provenance notes, plots/tables, key logs, and a
+lightweight local evidence package with server/local manifest comparison.
+
 ### Phase 4: Paper Writing (ARIS paper-write skill)
 
 ### Phase 5: GPT-5.5/Codex Review Cycle (must reach 8/10)
@@ -105,6 +125,7 @@ Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
 8. **每步 commit + memory** — 每个关键产物都要 commit 到 GitHub，更新项目文档
 9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 2 小时激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
 10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
+11. **motivation/ablation/hyperparameter/figure 四件套必做** — 这些是 paper-ready 前置门禁，不是写作润色项
 
 ## Artifact Management Rules
 

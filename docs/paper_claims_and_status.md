@@ -27,6 +27,35 @@ framework/ablation line and becomes paper-facing only after leakage-clean
 teacher generation, weighted-loss training when claimed, exact same-candidate
 score export, and paired-test gates pass.
 
+## Paper-critical readiness modules
+
+Official-baseline completion is necessary but no longer sufficient for paper
+readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
+also include:
+
+1. An observation/motivation study explaining why uncertainty should be used in
+   this framework. It should use representative completed baselines and fair
+   same-candidate settings, not paid/SOTA general-model exhaustiveness, and it
+   must produce a paper-ready figure or table showing the uncertainty
+   phenomenon.
+2. A component ablation study over every nontrivial C-CRP design component
+   found in the implementation/docs. At minimum, audit score mode, boundary
+   uncertainty, calibration gap, evidence support/insufficiency,
+   counterevidence, risk penalty, eta, confidence weight, and C-CRP weight
+   triples where the code path supports them. A component whose removal is
+   neutral or better must be reported as weak or misdesigned rather than hidden.
+3. A hyperparameter analysis over real method controls, with curves and
+   validation-only selection clearly separated from test reporting. Candidate
+   controls include eta, confidence weight, weight triples, uncertainty
+   thresholds/gates, anchor conflict penalties, and SRPD learning-rate/lambda
+   controls when SRPD rows are used.
+4. A clean framework overview figure showing the full pipeline and where
+   uncertainty and C-CRP components enter the ranking decision.
+
+Each module needs status labels, row counts, commands, configs, seeds when
+applicable, provenance notes, plots/tables, and a lightweight local evidence
+package before it can support paper claims.
+
 ## Not primary claims unless completed
 
 - Generative title recommendation.

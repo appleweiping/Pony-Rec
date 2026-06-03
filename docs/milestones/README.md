@@ -122,6 +122,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
+- Paper readiness now also requires three paper-critical modules before final
+  writing: a representative uncertainty observation/motivation study, a
+  leave-one-component-out C-CRP ablation suite, and real hyperparameter
+  sensitivity curves, plus a clean framework overview figure. These modules are
+  main paper gates, not optional polish.
 
 ### C-CRP v3 Results (all domains)
 
@@ -172,9 +177,12 @@ not as a reason to silently rerun completed metric rows.
    complete; home has 5/8 audited official rows complete after IRLLRec passed
    server-final and local-light evidence gates, and home `rlmrec_graphcl` is
    active as the sixth row; tools remains pending.
-3. Full comparison table + statistical tests (Phase 3)
-4. Paper writing with ARIS skill (Phase 4)
-5. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
+3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
+   C-CRP component ablations, hyperparameter curves, and framework overview
+   figure.
+4. Full comparison table + statistical tests (Phase 3)
+5. Paper writing with ARIS skill (Phase 4)
+6. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
 
 ### Server State
 

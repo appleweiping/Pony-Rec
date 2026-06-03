@@ -23,6 +23,41 @@ cycle.
 - Every important status change must update shared memory and canonical project
   docs, then commit and push from the local repository.
 
+## Paper-Critical Readiness Addendum (2026-06-03)
+
+The paper is not ready after official-baseline completion alone. Before moving
+to final writing or claiming readiness, add and gate these top-priority modules:
+
+1. Observation/motivation study: show why uncertainty is needed in this
+   framework using representative existing baselines under fair settings. This
+   can use a few representative completed baselines/domains rather than every
+   method/domain, but it must produce a paper-ready figure or table and record
+   data paths, metrics, commands, row counts, provenance notes, and the git
+   commit.
+2. Component ablation: identify every nontrivial C-CRP component from the
+   implementation and docs, then run leave-one-component-out variants under the
+   same candidate protocol and validation/test discipline. Known component
+   handles include score mode, boundary uncertainty, calibration gap, evidence
+   support/insufficiency, counterevidence, risk penalty, eta, confidence weight,
+   and the C-CRP weight triple. If removing a component is neutral or better,
+   report it honestly and mark the component as weak or needing redesign.
+3. Hyperparameter analysis: sweep actual method controls rather than cosmetic
+   knobs. Candidate controls include eta, confidence weight, C-CRP weight
+   triples, uncertainty thresholds/gates, anchor conflict penalties, and any
+   real learning-rate/lambda controls used by trainable SRPD or related modules.
+   Use sensible ranges, plot curves with matplotlib, and label validation-only
+   selection separately from test reporting.
+4. Framework overview figure: prepare a clean paper figure showing the full
+   pipeline, where task-grounded uncertainty is estimated, which components
+   enter C-CRP, and where risk-adjusted ranking is applied.
+
+Evidence packaging for these modules follows the same lightweight-but-complete
+standard as official rows: keep selected metrics CSV/JSON, final tables, plots,
+configs, commands, seeds, git commit, row counts, provenance notes, key logs,
+and only minimal checkpoints needed for verification or resume. Compare server
+and local manifests so missing files are caught. Do not package huge redundant
+raw outputs by default.
+
 ## Current Server State
 
 - Server: `pony-rec-gpu`
@@ -95,6 +130,11 @@ cycle.
   and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
   Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
   process continued.
+  Latest continuation check in this thread: the same runner/adapter remained
+  active at epoch `700`, with no completion/failure markers, final output still
+  `4.0K`, GPU active, and `/` at about `13G` free / `94%` used. Do not start
+  another baseline until this row either completes and passes gates or fails
+  with an audited recovery decision.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`

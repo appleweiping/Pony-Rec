@@ -381,12 +381,17 @@ When in doubt, downgrade the claim, not the evidence standard.
 8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
 9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 2 小时激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
 10. **服务器跑实验，本地不跑** — GPU 实验全在服务器，本地只做版本控制和写作
+11. **motivation 必做** — 论文 ready 前必须有代表性 observation/motivation study，解释为什么 uncertainty 在该框架中必要，并产出可入文的图或表
+12. **组件 ablation 必做** — C-CRP 每个非平凡设计组件都要做 leave-one-component-out 审计；删掉不降反升要诚实报告为弱组件或设计问题
+13. **超参曲线必做** — eta、C-CRP weights、confidence weight、uncertainty gates/thresholds、SRPD lr/lambda 等真实控制量需要合理 sweep 和 matplotlib 曲线
+14. **框架图必做** — 论文 ready 前必须准备清晰 pipeline/framework overview figure，标出 uncertainty、calibration/evidence 和 risk-adjusted ranking 位置
 
 ## Experiment Roadmap（2026-06-03 更新）
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
 Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 5/8 with proex_profile/promax_profile/elmrec_graph/llmemb/irllrec_intent gated and rlmrec_graphcl active since 2026-06-03 20:28 CST; tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
+Phase 2.5: Paper-critical modules before readiness claim: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
 Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)

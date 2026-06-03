@@ -120,6 +120,29 @@ At least one main paper should make these boundaries visible:
 - compact six-candidate vs 100neg protocol separation;
 - official vs paper-style external-baseline status.
 
+New paper-readiness hard gate (2026-06-03): the paper must include a systematic
+C-CRP component ablation before final writing. Identify components from the
+actual implementation and docs, run leave-one-component-out variants under the
+same candidate protocol where feasible, and report neutral or better removals
+as evidence of weak or misdesigned components instead of suppressing them.
+
+### Motivation and Sensitivity
+
+Before claiming the paper is ready, add:
+
+- a representative observation/motivation study showing why uncertainty is
+  useful in this framework. It may use a few completed baselines/domains if the
+  selection is justified and fair, but it needs a paper-ready table or figure;
+- hyperparameter sensitivity curves for actual method controls such as eta,
+  C-CRP weights, confidence weight, uncertainty gates/thresholds, anchor
+  penalties, and SRPD learning-rate/lambda controls when relevant;
+- a clean framework overview figure that shows the pipeline and where
+  uncertainty, calibration, evidence, and risk-adjusted ranking enter.
+
+For these modules, a reviewer should be able to trace commands, configs, seeds
+when applicable, row counts, status labels, provenance notes, local evidence
+packages, and plots/tables.
+
 ### Endgame Gate
 
 Before asking for more experiments, decide whether the experiment phase should
@@ -129,6 +152,8 @@ for the defended claim:
 - the claim is scoped to controlled same-candidate candidate ranking/reranking;
 - core internal method rows have validation-only selection, exact score export,
   same-schema import, paired tests, and ablation coverage;
+- the observation/motivation study, component ablation, hyperparameter curves,
+  and framework overview figure are complete enough to defend the method story;
 - the required baseline block has either completed official-code-level rows or
   explicitly documented limitations/supplementary status;
 - four-domain or declared-domain robustness is complete enough for the stated
