@@ -1,4 +1,4 @@
-# Task-Grounded Uncertainty for LLM-based Recommendation
+# Actionable Uncertainty for LLM-based Recommendation
 
 This repository studies whether uncertainty from large language models can be
 made reliable enough to support recommendation decisions.

@@ -2,7 +2,7 @@
 
 Read `AGENTS.md` first. It is the authoritative operating contract for this repository.
 
-This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recommendation.
+This is the Uncertainty project: Actionable Uncertainty for LLM-based Recommendation.
 
 ## Quick Orientation
 

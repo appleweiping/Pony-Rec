@@ -27,6 +27,12 @@ cycle.
 
 ## Paper-Critical Readiness Addendum (2026-06-03)
 
+Working display title: **Actionable Uncertainty for LLM-based Recommendation**.
+This replaces the more engineering-sounding "Task-Grounded Uncertainty for
+LLM-based Recommendation" as the repo/paper-facing name, while preserving the
+frozen technical claim: task-grounded calibrated uncertainty under controlled
+same-candidate evaluation.
+
 The paper is not ready after official-baseline completion alone. Before moving
 to final writing or claiming readiness, add and gate these top-priority modules:
 

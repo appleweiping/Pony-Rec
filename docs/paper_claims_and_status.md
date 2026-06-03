@@ -3,6 +3,16 @@
 This file freezes the paper scope so the project does not drift into a mixed
 system log.
 
+## Working title
+
+Actionable Uncertainty for LLM-based Recommendation.
+
+This title replaces the more engineering-sounding "Task-Grounded Uncertainty
+for LLM-based Recommendation" as the public-facing project/paper name. The
+technical claim remains task-grounded calibrated uncertainty under controlled
+same-candidate evaluation; the new title must not be used to broaden the paper
+into full-catalog or generic recommender SOTA claims.
+
 ## Primary claim
 
 Task-grounded calibrated uncertainty improves controlled candidate ranking and
