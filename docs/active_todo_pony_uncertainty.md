@@ -27,10 +27,15 @@ or review cycle.
 
 - Server: `pony-rec-gpu`
 - Server repo: `~/projects/pony-rec-rescue-shadow-v6`
-- Active runner: none at the 2026-06-03 13:45 CST cleanup checkpoint. The
-  latest completed home row is `llmemb`; the next row should not launch until
-  a fresh process/GPU/disk check passes. The completed LLMEmb adapter cleanup
-  recovered the filesystem to about `7.1G` free.
+- Active runner: home `irllrec_intent` official row, launched 2026-06-03
+  13:55 CST after a clean process/GPU/disk preflight and LLMEmb cleanup.
+  Runner PID `3147646`, adapter PID `3147655`, PID file
+  `baselines_new_domains_home_irllrec_20260603_1355.pid`, log
+  `baselines_new_domains_home_irllrec_20260603_1355.log`. At the 13:57 CST
+  checkpoint it was CPU-side active, GPU idle (`0%`, `15 MiB / 49140 MiB`),
+  adapter directory about `1.1G`, final output directory empty, and disk about
+  `6.1G` free. No scores/provenance/imported tables exist yet, so this is not
+  table-eligible.
 - Latest completed home row: `llmemb`, completed 2026-06-03 09:55 CST after a
   disk-full checkpoint/import recovery. The first 2026-06-03 06:08 CST LLMEmb
   run reached exact score export but failed during `torch.save` with the
@@ -714,7 +719,7 @@ set is complete.
 | `promax_profile` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `elmrec_graph` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery |
-| `irllrec_intent` | pending | next candidate row after a fresh process/GPU/disk check and safe cleanup, if needed |
+| `irllrec_intent` | active | launched 2026-06-03 13:55 CST; runner PID `3147646`, adapter PID `3147655`, log `baselines_new_domains_home_irllrec_20260603_1355.log`; no final scores/provenance yet |
 | `rlmrec_graphcl` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
 | `llm2rec_sasrec` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
 | `llmesr_sasrec` | pending | do not launch until the previous row is packaged/audited and disk has enough margin |
@@ -896,10 +901,11 @@ evidence is under
 
 ## Required Next Actions
 
-1. Before launching the next home row (`irllrec_intent`), run a fresh server
-   process/GPU/disk check. Home `llmemb` is complete and its intermediate
-   adapter cleanup recovered disk to about `7.1G` free, but the next row still
-   needs a clean preflight and single-row launch discipline.
+1. Monitor the active home `irllrec_intent` row. Do not launch another
+   baseline while runner PID `3147646` / adapter PID `3147655` are active.
+   Watch disk closely: it was about `6.1G` free at the 2026-06-03 13:57 CST
+   checkpoint and the final row is not table-eligible until the full
+   score/provenance/import/audit/local-light gate passes.
 2. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

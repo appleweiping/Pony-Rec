@@ -311,8 +311,13 @@ same-candidate tests.
    with cleanup manifest
    `outputs/summary/home_llmemb_completed_adapter_cleanup_manifest_20260603.sha256`;
    a post-cleanup server-final audit remained `ok=true`, and disk recovered to
-   about `7.1G` free. The next home row requires a fresh process/GPU/disk check
-   and single-row launch discipline.
+   about `7.1G` free. Home `irllrec_intent` then launched at 2026-06-03 13:55
+   CST as the fifth home row after a clean preflight; runner PID `3147646`,
+   adapter PID `3147655`, log
+   `baselines_new_domains_home_irllrec_20260603_1355.log`. At the 13:57 CST
+   checkpoint it was CPU-side active with about `6.1G` free and no final
+   scores/provenance/imported tables, so no fifth home result row is eligible
+   yet.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID
