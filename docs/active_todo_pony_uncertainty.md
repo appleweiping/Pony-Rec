@@ -46,7 +46,13 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    blocker to resolve before running it for Sports/Toys: the already imported
    C-CRP final `scores.csv` files are score-only, so a signal/score row file
    with a real uncertainty column must be located or regenerated without LLM
-   re-query leakage.
+   re-query leakage. Read-only server discovery on 2026-06-03 found that the
+   only current `ccrp_selected_test_scored_rows.csv`/`ccrp_internal_provenance`
+   pair is the older Beauty supplementary smaller-N run under
+   `outputs/summary/week8_large10000_100neg_ccrp_formal/beauty/`; Sports,
+   Toys, Home, and Tools formal C-CRP directories currently expose only
+   score-only `scores.csv`, `report.json`, and `user_ranks.jsonl` plus imported
+   ranking tables. Do not use those score-only files as uncertainty evidence.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

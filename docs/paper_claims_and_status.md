@@ -50,7 +50,12 @@ also include:
    phenomenon. Script entry:
    `scripts/analysis/main_build_uncertainty_observation_study.py`; it requires
    real event-level uncertainty fields and intentionally rejects score-only
-   C-CRP files.
+   C-CRP files. Current artifact audit status: the server has a complete
+   `ccrp_selected_test_scored_rows.csv`/`ccrp_internal_provenance.json` pair
+   only for the older Beauty supplementary smaller-N selector run; the
+   Sports/Toys/Home/Tools formal C-CRP outputs currently visible are score-only
+   and cannot support the motivation figure until real signal/scored rows are
+   located or regenerated without LLM re-query leakage.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap

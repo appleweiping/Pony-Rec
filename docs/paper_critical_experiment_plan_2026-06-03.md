@@ -85,6 +85,22 @@ score-only files without an uncertainty column. If necessary, regenerate the
 C-CRP signal rows from saved non-test-selected inputs without re-querying the
 LLM, then record that command and sha256 in the provenance.
 
+Discovery status (2026-06-03): a read-only server inventory found only one
+complete C-CRP selector provenance/scored-row package:
+`outputs/summary/week8_large10000_100neg_ccrp_formal/beauty/`, where
+`ccrp_internal_provenance.json` points to
+`outputs/beauty_supplementary_smallerN_100neg_qwen3_shadow_v1/calibrated/{valid,test}_calibrated.jsonl`
+and `ccrp_selected_test_scored_rows.csv` includes `ccrp_uncertainty` and its
+component columns. This Beauty package is useful for script/interface smoke
+checks but is supplementary smaller-N evidence, not the Sports/Toys full-scale
+motivation result. The visible Sports/Toys/Home/Tools formal C-CRP directories
+currently contain score-only `scores.csv`, `report.json`, and
+`user_ranks.jsonl`; their imported same-candidate tables also lack uncertainty
+columns. Therefore the next observation/ablation launch must first resolve
+full-scale `VALID_CCRP_SIGNAL_JSONL_OR_CSV` and `TEST_CCRP_SIGNAL_JSONL_OR_CSV`
+paths, or regenerate scored rows from existing saved signal inputs without any
+LLM re-query.
+
 ## Module B: C-CRP Component Ablation
 
 Goal: show which C-CRP components matter and honestly identify weak components.
@@ -145,6 +161,9 @@ The `<VALID_CCRP_SIGNAL_JSONL_OR_CSV>` and `<TEST_CCRP_SIGNAL_JSONL_OR_CSV>`
 paths must be resolved before launch. If C-CRP v3 kept only final `scores.csv`
 and not the signal rows with uncertainty fields, regenerate the scored rows
 from saved signal inputs without re-querying the LLM, and record the command.
+As of the 2026-06-03 inventory, this path-resolution step remains open for
+Sports/Toys/Home/Tools; only the Beauty supplementary smaller-N selector
+package has a saved signal path and scored rows with C-CRP uncertainty columns.
 
 Required outputs:
 
