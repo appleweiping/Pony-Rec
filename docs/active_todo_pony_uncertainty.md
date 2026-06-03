@@ -146,7 +146,13 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    now labels the risk score formula as
    `risk_score = posterior - eta * uncertainty` and includes counterevidence
    in the C-CRP uncertainty box; it
-   still needs final paper-layout/reviewer polish before camera-ready use.
+   still needs final paper-layout/reviewer polish before camera-ready use. On
+   2026-06-04 07:32 CST, the package was regenerated from
+   `scripts/analysis/main_build_framework_overview_figure.py` at git commit
+   `8f972ca`, `tests/test_framework_overview_figure.py` passed, and the PNG was
+   visually checked as nonblank/readable. This completes the current draft
+   scaffold for the framework-overview paper-critical module, but not final
+   camera-ready reviewer polish.
 
 Evidence packaging for these modules follows the same lightweight-but-complete
 standard as official rows: keep selected metrics CSV/JSON, final tables, plots,
