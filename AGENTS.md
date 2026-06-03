@@ -248,6 +248,10 @@ Each sub-agent handoff should report:
 Reviewer/auditor findings can veto wording and table inclusion. Do not average
 away a serious reviewer objection.
 
+Current tool-routing note (2026-06-03): Claude reviewer tooling is unavailable
+in this thread. When multi-agent review/collaboration is required, use
+GPT-5.5 xhigh sub-agents instead of Claude reviewer sessions.
+
 Every substantial final report must include both what changed or was learned
 and a concrete next-step plan. The plan must name the next server command,
 code/doc action, audit, or stopping condition. If no further experiment is

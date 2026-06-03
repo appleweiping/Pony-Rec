@@ -6,6 +6,9 @@ This is the Uncertainty project: Task-Grounded Uncertainty for LLM-based Recomme
 
 ## Quick Orientation
 
+- **Current collaboration routing**: Claude reviewer tooling is unavailable in
+  this thread; when multi-agent review is required, use GPT-5.5 xhigh
+  sub-agents instead.
 - **Stage**: M5 (C-CRP v3 complete; sports/toys official gates passed; home 5/8 official rows complete; home RLMRec active)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)

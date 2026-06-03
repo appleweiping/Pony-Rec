@@ -40,10 +40,12 @@ also include:
    phenomenon.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
-   uncertainty, calibration gap, evidence support/insufficiency,
-   counterevidence, risk penalty, eta, confidence weight, and C-CRP weight
-   triples where the code path supports them. A component whose removal is
-   neutral or better must be reported as weak or misdesigned rather than hidden.
+   uncertainty (`without_boundary_uncertainty`), calibration gap
+   (`without_calibration_gap`), evidence support/insufficiency
+   (`without_evidence_support`), counterevidence, risk penalty, eta,
+   confidence weight, and C-CRP weight triples where the code path supports
+   them. A component whose removal is neutral or better must be reported as
+   weak or misdesigned rather than hidden.
 3. A hyperparameter analysis over real method controls, with curves and
    validation-only selection clearly separated from test reporting. Candidate
    controls include eta, confidence weight, weight triples, uncertainty
@@ -55,6 +57,9 @@ also include:
 Each module needs status labels, row counts, commands, configs, seeds when
 applicable, provenance notes, plots/tables, and a lightweight local evidence
 package before it can support paper claims.
+
+The current execution specification is
+`docs/paper_critical_experiment_plan_2026-06-03.md`.
 
 ## Not primary claims unless completed
 

@@ -178,7 +178,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--test_signal_path", required=True)
     parser.add_argument("--output_dir", required=True)
     parser.add_argument("--score_modes", default="confidence_only,evidence_only,confidence_plus_evidence,full")
-    parser.add_argument("--ablations", default="full,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty")
+    parser.add_argument(
+        "--ablations",
+        default=(
+            "full,without_boundary_uncertainty,without_calibration_gap,"
+            "without_evidence_support,without_counterevidence,without_risk_penalty"
+        ),
+    )
     parser.add_argument("--etas", default="0.5,1.0,2.0")
     parser.add_argument("--confidence_weights", default="0.5,0.7,0.9")
     parser.add_argument("--weight_grid", default="0.5,0.3,0.2")

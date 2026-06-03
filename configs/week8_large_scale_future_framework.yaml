@@ -36,7 +36,7 @@ shadow:
   uncertainty_thresholds: [0.5, 0.6, 0.65, 0.7, 0.8]
   anchor_conflict_penalties: [0.25, 0.5, 0.75]
   ccrp_score_modes: [confidence_only, evidence_only, confidence_plus_evidence, full]
-  ccrp_ablations: [full, without_calibration_gap, without_evidence_support, without_counterevidence, without_risk_penalty]
+  ccrp_ablations: [full, without_boundary_uncertainty, without_calibration_gap, without_evidence_support, without_counterevidence, without_risk_penalty]
   ccrp_etas: [0.5, 1.0, 2.0]
   ccrp_confidence_weights: [0.5, 0.7, 0.9]
   ccrp_selection_metric: NDCG@10

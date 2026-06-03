@@ -22,6 +22,8 @@ cycle.
   server-side unless a recovery/archive decision says otherwise.
 - Every important status change must update shared memory and canonical project
   docs, then commit and push from the local repository.
+- Current multi-agent routing: Claude reviewer tooling is unavailable in this
+  thread. When collaboration/review is required, use GPT-5.5 xhigh sub-agents.
 
 ## Paper-Critical Readiness Addendum (2026-06-03)
 
@@ -37,10 +39,13 @@ to final writing or claiming readiness, add and gate these top-priority modules:
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component
-   handles include score mode, boundary uncertainty, calibration gap, evidence
-   support/insufficiency, counterevidence, risk penalty, eta, confidence weight,
-   and the C-CRP weight triple. If removing a component is neutral or better,
-   report it honestly and mark the component as weak or needing redesign.
+   handles include score mode, boundary uncertainty
+   (`without_boundary_uncertainty`), calibration gap
+   (`without_calibration_gap`), evidence support/insufficiency
+   (`without_evidence_support`), counterevidence, risk penalty, eta,
+   confidence weight, and the C-CRP weight triple. If removing a component is
+   neutral or better, report it honestly and mark the component as weak or
+   needing redesign.
 3. Hyperparameter analysis: sweep actual method controls rather than cosmetic
    knobs. Candidate controls include eta, confidence weight, C-CRP weight
    triples, uncertainty thresholds/gates, anchor conflict penalties, and any
@@ -57,6 +62,10 @@ configs, commands, seeds, git commit, row counts, provenance notes, key logs,
 and only minimal checkpoints needed for verification or resume. Compare server
 and local manifests so missing files are caught. Do not package huge redundant
 raw outputs by default.
+
+Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
+Do not start these server runs until the active Home RLMRec row completes and
+passes gates, or fails with an audited recovery decision.
 
 ## Current Server State
 

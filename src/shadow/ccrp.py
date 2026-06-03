@@ -33,6 +33,7 @@ class CcrpWeights:
 
 CCRP_ABLATIONS = {
     "full": CcrpWeights(0.5, 0.3, 0.2),
+    "without_boundary_uncertainty": CcrpWeights(0.0, 0.6, 0.4),
     "without_calibration_gap": CcrpWeights(0.7, 0.0, 0.3),
     "without_evidence_support": CcrpWeights(0.625, 0.375, 0.0),
     "without_counterevidence": CcrpWeights(0.5, 0.3, 0.2),
@@ -47,14 +48,32 @@ CCRP_SCORE_MODES = {
 }
 
 
+def _normalized_with_fallback(weights: CcrpWeights, fallback: CcrpWeights) -> CcrpWeights:
+    total = weights.boundary + weights.calibration_gap + weights.evidence
+    if total <= 0:
+        return fallback.normalized()
+    return weights.normalized()
+
+
 def apply_ablation_to_weights(weights: CcrpWeights, ablation: str) -> CcrpWeights:
     """Keep ablation labels faithful even when weights are grid-searched."""
 
     ablation = str(ablation or "full").strip().lower()
+    if ablation == "without_boundary_uncertainty":
+        return _normalized_with_fallback(
+            CcrpWeights(0.0, weights.calibration_gap, weights.evidence),
+            CCRP_ABLATIONS["without_boundary_uncertainty"],
+        )
     if ablation == "without_calibration_gap":
-        return CcrpWeights(weights.boundary, 0.0, weights.evidence).normalized()
+        return _normalized_with_fallback(
+            CcrpWeights(weights.boundary, 0.0, weights.evidence),
+            CCRP_ABLATIONS["without_calibration_gap"],
+        )
     if ablation == "without_evidence_support":
-        return CcrpWeights(weights.boundary, weights.calibration_gap, 0.0).normalized()
+        return _normalized_with_fallback(
+            CcrpWeights(weights.boundary, weights.calibration_gap, 0.0),
+            CCRP_ABLATIONS["without_evidence_support"],
+        )
     return weights.normalized()
 
 

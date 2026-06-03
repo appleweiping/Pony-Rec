@@ -126,7 +126,8 @@ The repository is now in M5 (multi-domain SOTA validation):
   writing: a representative uncertainty observation/motivation study, a
   leave-one-component-out C-CRP ablation suite, and real hyperparameter
   sensitivity curves, plus a clean framework overview figure. These modules are
-  main paper gates, not optional polish.
+  main paper gates, not optional polish. Execution specification:
+  `docs/paper_critical_experiment_plan_2026-06-03.md`.
 
 ### C-CRP v3 Results (all domains)
 
