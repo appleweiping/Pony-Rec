@@ -162,14 +162,19 @@ is now safe for absolute server roots because it matches domain/name tokens
 against paths relative to the scan root, not against `/home/...`. Fixed-filter
 header discovery plus a broader token sweep over Sports, Toys, Home, and Tools
 found only the four full-scale C-CRP formal `scores.csv` files and no
-paper-ready or recomputable uncertainty/signal rows. Full audits against each
-domain's test `candidate_items.csv` reported exact candidate-key coverage
+paper-ready or recomputable uncertainty/signal rows. A follow-up project-root
+scan with `--root .` and broad C-CRP/shadow/signal/calibration/bridge/rows
+tokens produced the same four score-only candidates and no additional signal
+rows outside `outputs/`. Full audits against each domain's test
+`candidate_items.csv` reported exact candidate-key coverage
 (`1,010,000/1,010,000`, 10,000 events) for all four files, but classified every
 file as `score_only_not_uncertainty` with failure
 `missing_uncertainty_column`. This confirms that the formal score files are
 usable for ranking import/audit but not for uncertainty-bin motivation evidence.
 Local evidence copies are under `outputs/summary/paper_critical/` with names
 `ccrp_uncertainty_source_discovery_fullscale*_fixed_filter_20260604_*` and
+`ccrp_uncertainty_source_discovery_projectroot_broad_fixed_filter_20260604_0520.*`,
+plus
 `ccrp_uncertainty_source_audit_{sports,toys,home,tools}_fixed_filter_20260604_0502.*`.
 
 ## Module B: C-CRP Component Ablation

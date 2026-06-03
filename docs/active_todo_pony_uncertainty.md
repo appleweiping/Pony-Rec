@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 05:12 CST
+Last updated: 2026-06-04 05:26 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -69,8 +69,13 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `missing_uncertainty_column`. Evidence files:
    `outputs/summary/paper_critical/ccrp_uncertainty_source_discovery_fullscale_fixed_filter_20260604_0458.*`,
    `outputs/summary/paper_critical/ccrp_uncertainty_source_discovery_fullscale_broad_fixed_filter_20260604_0459.*`,
+   `outputs/summary/paper_critical/ccrp_uncertainty_source_discovery_projectroot_broad_fixed_filter_20260604_0520.*`,
    and
    `outputs/summary/paper_critical/ccrp_uncertainty_source_audit_{sports,toys,home,tools}_fixed_filter_20260604_0502.*`.
+   The project-root broad scan used `--root .` and still found only the same
+   four score-only files, so the next productive action is not another blind
+   server sweep but locating the original full-scale signal-generation path or
+   regenerating rows from saved non-test-selected signal inputs.
    Discovery helper:
    `scripts/audit/main_discover_ccrp_uncertainty_sources.py`, which scans CSV
    and JSONL headers for domain-specific C-CRP/shadow/signal/scored artifacts
@@ -223,8 +228,8 @@ passes gates, or fails with an audited recovery decision.
   and `outputs/summary/toys_official_gate_after_prediction_cleanup_20260603.*`.
   Disk recovered to about `19G` free (`90%` used), and the active Home RLMRec
   process continued.
-  Latest continuation check in this thread at 2026-06-04 05:12 CST: the same
-  runner/adapter remained active at epoch `2440`, with no completion/failure
+  Latest continuation check in this thread at 2026-06-04 05:26 CST: the same
+  runner/adapter remained active at epoch `2530`, with no completion/failure
   markers, final output still empty, GPU active, and `/` at about `13G` free /
   `94%` used. Do not start another baseline until this row either completes
   and passes gates or fails with an audited recovery decision.

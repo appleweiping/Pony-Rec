@@ -62,7 +62,9 @@ also include:
    uncertainty column. Preflight entries:
    `scripts/audit/main_discover_ccrp_uncertainty_sources.py`,
    `scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py`, and
-   `scripts/audit/main_audit_ccrp_uncertainty_sources.py`.
+   `scripts/audit/main_audit_ccrp_uncertainty_sources.py`. A 2026-06-04
+   project-root broad scan also found no additional full-scale signal rows
+   outside `outputs/`.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap

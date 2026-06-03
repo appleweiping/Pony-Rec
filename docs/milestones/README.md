@@ -136,7 +136,8 @@ The repository is now in M5 (multi-domain SOTA validation):
   Fixed-filter discovery/full audits on 2026-06-04 found no paper-ready or
   recomputable full-scale new-domain C-CRP signal rows under visible server
   outputs; Sports/Toys/Home/Tools formal `scores.csv` files are complete for
-  ranking import but score-only for uncertainty analysis.
+  ranking import but score-only for uncertainty analysis. A project-root broad
+  scan also found no additional matching signal rows outside `outputs/`.
 - C-CRP hyperparameter curve script entry now exists:
   `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`. It consumes
   validation `valid_ccrp_sweep.csv` artifacts and is not a completed paper
