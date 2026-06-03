@@ -204,10 +204,9 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 3/8 audited official rows
-   complete (`proex_profile`, `promax_profile`, `elmrec_graph`) and home
-   `llmemb` is in a symlink recovery rerun after a disk-full checkpoint
-   failure, while tools remains pending. Toys
+   domain/comparison/paired-test gates; home has 4/8 audited official rows
+   complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`) after
+   the LLMEmb disk-full recovery, while tools remains pending. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
@@ -279,7 +278,8 @@ same-candidate tests.
    `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
    package is
    `outputs/baselines/official_adapters/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
-   Home now has 3/8 completed official rows. At the 2026-06-03 05:48 CST
+   At that 2026-06-03 05:47 CST checkpoint, home had 3/8 completed official
+   rows. At the 2026-06-03 05:48 CST
    checkpoint no Pony/C-CRP/baseline Python process was active, GPU was idle,
    and disk was tight at about `6.5G` free. The completed ElmRec intermediate
    adapter was removed after exact realpath checks and a 16-file sha256 cleanup
@@ -288,15 +288,28 @@ same-candidate tests.
    a post-cleanup server-final audit remained `ok=true`, and final scores,
    provenance, audits, predictions, imported tables, model, and local
    lightweight evidence were preserved. Disk recovered to about `14G` free.
-   After a clean process/GPU/disk and no-existing-artifact preflight, home
-   `llmemb` launched at 2026-06-03 06:08 CST as the fourth home row with
-   active adapter PID `3085786`, PID file
-   `baselines_new_domains_home_llmemb_adapter.pid`, and log
-   `baselines_new_domains_home_llmemb_20260603_0608.log`. At the first stable
-   check it was in Qwen3 `hf_mean_pool` embedding at about `2808/385364`, GPU
-   was `96%` with `16067 MiB / 49140 MiB`, disk was about `13G` free, and no
-   final scores/provenance existed yet. LLMEmb is not a result row until final
-   gates pass.
+   Home `llmemb` launched at 2026-06-03 06:08 CST as the fourth home row. The
+   first run reached exact score export but failed during checkpoint save at
+   `100%` disk, so the orphan score was quarantined and not imported as
+   official evidence. After removing only failed-run/generated staging storage
+   and patching LLMEmb handled embedding staging to symlink the large
+   `itm_emb_np.pkl`, the true symlink rerun launched at 2026-06-03 09:16 CST
+   with log `baselines_new_domains_home_llmemb_symlink_rerun_20260603_0920.log`.
+   It completed as `implementation_status=official_completed` with
+   `blockers=[]`, exact `score_coverage_rate=1.0`, server-final audit PASS,
+   lightweight sync PASS, and local-light audit PASS. Full metrics over 10,000
+   users and 101 candidates are HR@5/10/20=`0.1079/0.1856/0.3169`,
+   NDCG@5/10/20=`0.06899578967097944/0.09390612986107003/0.12674255822842873`,
+   and MRR=`0.09012268660291177`. Row counts passed for `scores.csv`
+   (`1,010,001` lines), predictions (`10,000` lines), and
+   `tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+   package is
+   `outputs/baselines/official_adapters/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/`;
+   server-only large artifacts remain covered by
+   `server_large_artifact_manifest.sha256`. Home now has 4/8 completed
+   official rows. The next home row requires a fresh process/GPU/disk check and
+   safe cleanup first, because the server filesystem had only about `42M` free
+   after the LLMEmb import/audit checkpoint.
    Historical sports run record: sports started from
    `baselines_new_domains_sports.log` with runner PID `2794722`; the active
    child at the 2026-05-31 22:32 CST checkpoint was sports `llmemb` PID

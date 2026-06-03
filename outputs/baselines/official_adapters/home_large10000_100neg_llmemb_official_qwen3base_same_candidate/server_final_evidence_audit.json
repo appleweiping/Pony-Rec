@@ -1,0 +1,103 @@
+{
+  "evidence_dir": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate",
+  "mode": "server_final",
+  "expected_users": 10000,
+  "expected_candidates_per_user": 101,
+  "ok": true,
+  "failures": [],
+  "warnings": [],
+  "files": {
+    "fairness_provenance.json": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/fairness_provenance.json",
+      "present": true,
+      "size": 7592
+    },
+    "tables/ranking_metrics.csv": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_metrics.csv",
+      "present": true,
+      "size": 580,
+      "lines": 2
+    },
+    "tables/same_candidate_external_baseline_summary.csv": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/same_candidate_external_baseline_summary.csv",
+      "present": true,
+      "size": 1801,
+      "lines": 2
+    },
+    "tables/external_score_coverage.csv": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/external_score_coverage.csv",
+      "present": true,
+      "size": 203,
+      "lines": 2
+    },
+    "tables/ranking_exposure_distribution.csv": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_exposure_distribution.csv",
+      "present": true,
+      "size": 64,
+      "lines": 4
+    },
+    "tables/ranking_eval_records.csv": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "present": true,
+      "size": 42240925,
+      "lines": 10001
+    },
+    "scores.csv": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/scores.csv",
+      "present": true,
+      "size": 105270418,
+      "lines": 1010001
+    },
+    "predictions/rank_predictions.jsonl": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "present": true,
+      "size": 759251881,
+      "lines": 10000
+    },
+    "inspect_fairness_provenance.json": {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/inspect_fairness_provenance.json",
+      "present": false,
+      "size": 0
+    }
+  },
+  "dynamic_files": {
+    "score_audit_json": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_score_audit.json",
+    "score_audit_txt": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_same_candidate_score_audit.txt",
+    "run_summary_json": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_run_summary.json"
+  },
+  "provenance": {
+    "implementation_status": "official_completed",
+    "blocker_count": 0,
+    "score_coverage_rate": 1.0,
+    "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+    "score_schema": [
+      "source_event_id",
+      "user_id",
+      "item_id",
+      "score"
+    ],
+    "test_set_model_selection_allowed": false,
+    "baseline_extra_tuning_allowed": false
+  },
+  "metrics": {
+    "HR@5": "0.1079",
+    "HR@10": "0.1856",
+    "HR@20": "0.3169",
+    "NDCG@5": "0.06899578967097944",
+    "NDCG@10": "0.09390612986107003",
+    "NDCG@20": "0.12674255822842873",
+    "MRR": "0.09012268660291177",
+    "sample_count": "10000",
+    "avg_candidates": "101.0"
+  },
+  "coverage": {
+    "baseline_name": "llmemb",
+    "ranking_events": "10000",
+    "total_candidates": "1010000",
+    "matched_candidates": "1010000",
+    "score_coverage_rate": "1.0",
+    "fully_scored_event_rate": "1.0",
+    "missing_score": "-1000000000000.0",
+    "score_rows_loaded": "1010000"
+  }
+}
