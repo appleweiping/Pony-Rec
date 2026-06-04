@@ -298,7 +298,7 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys now pass domain-level official-baseline and paired-test
 gates. Do not generalize to paper-wide SOTA until the declared domain set is
-complete; home has 6/8 audited official rows complete and tools still has 0/8,
+complete; home has 7/8 audited official rows complete and tools still has 0/8,
 so both still need canonical eight-row official blocks and paired
 same-candidate tests.
 
@@ -310,10 +310,25 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 6/8 audited official rows
+   domain/comparison/paired-test gates; home has 7/8 audited official rows
    complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-   `irllrec_intent`, `rlmrec_graphcl`) after the IRLLRec and RLMRec evidence
-   gates, while tools remains pending. Toys
+   `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`) after the IRLLRec,
+   RLMRec, and LLM2Rec evidence gates, while tools remains pending. Home
+   LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
+   recovery and passed score audit/import, server-final audit, server
+   large-artifact manifest, lightweight local sync, and local-light audit.
+   Full metrics over 10,000 users and 101 candidates are HR@5/10/20
+   `0.0577 / 0.1101 / 0.2153`, NDCG@5/10/20
+   `0.034207889197971464 / 0.05094946457092549 / 0.07719596686909931`, and
+   MRR `0.0563865859396318`; `scores.csv` has `1,010,001` lines,
+   predictions had `10,000` lines before post-gate deletion, and
+   `tables/ranking_eval_records.csv` has `10,001` lines. The local
+   lightweight package is
+   `outputs/baselines/official_adapters/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+   The post-gate server prediction deletion manifest is
+   `outputs/summary/home_llm2rec_prediction_deleted_after_gates_20260604.sha256`.
+   Do not launch Home `llmesr_sasrec` until disk is recovered from the current
+   danger state (`/` about `1.2G` free / `100%` used). Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101

@@ -111,20 +111,16 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home has 6/8 audited official
+  evidence through domain and paired-test gates. Home has 7/8 audited official
   rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-  `irllrec_intent`, `rlmrec_graphcl`) after the RLMRec evidence gate and local
-  lightweight package passed. RLMRec completed at 2026-06-04 06:49 CST with
-  full `@5/@10/@20 + MRR` metrics, exact score coverage, row counts, and
-  server large-artifact sha256 manifest. Remaining Home rows are
-  `llm2rec_sasrec` and `llmesr_sasrec`; after a cleanup-manifested removal of
-  the completed RLMRec intermediate adapter recovered disk to about `19G` free,
-  Home `llm2rec_sasrec` launched at 2026-06-04 07:19 CST as the seventh Home
-  row and entered Qwen3 embedding under runner PID `3236678` / adapter PID
-  `3236688`. A robust SSH-stdin monitor snapshot at 2026-06-04 08:01 CST saw
-  progress `182792/568891`, one matching adapter Python process, no
-  completion/failure/disk/duplicate-run notification reason, and `/` at about
-  `17.17G` free / `91%` used. Tools remains pending.
+  `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`) after the LLM2Rec
+  recovery evidence gate and local lightweight package passed. Home LLM2Rec
+  completed at 2026-06-04 09:49 CST after a disk-full partial-copy recovery,
+  with full `@5/@10/@20 + MRR` metrics, exact score coverage, row counts,
+  server-final audit, server large-artifact sha256 manifest, local-light audit,
+  and post-gate prediction JSONL deletion manifest. Remaining Home row is
+  `llmesr_sasrec`, but `/` is still about `1.2G` free / `100%` used, so the
+  next row must wait for a documented storage decision. Tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -228,11 +224,11 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 6/8 audited official rows complete after RLMRec passed
-   server-final, server large-artifact manifest, local sync, and local-light
-   evidence gates; home `llm2rec_sasrec` is active as the seventh Home row and
-   reached `182792/568891` Qwen3 embedding progress at the 2026-06-04 08:01 CST
-   robust monitor snapshot with no notification reason; tools remains pending.
+   complete; home has 7/8 audited official rows complete after LLM2Rec passed
+   score audit/import, server-final audit, server large-artifact manifest,
+   local sync, and local-light evidence gates; home `llmesr_sasrec` is pending
+   on a storage decision because `/` remains about `1.2G` free / `100%` used;
+   tools remains pending.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

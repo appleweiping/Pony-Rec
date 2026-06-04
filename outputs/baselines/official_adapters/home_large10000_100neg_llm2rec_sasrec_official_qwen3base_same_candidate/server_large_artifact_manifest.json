@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "size": 758095001,
+      "sha256": "1ded409e95d54d2e75eb432ee788e8ba44c086b284c14157fc678234b1b28e80"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "size": 104033538,
+      "sha256": "bf2b30c35815894dd3aa7c6da09fc75746115ea371f23d6473fc152a0cab51f1"
+    },
+    {
+      "rel_path": "seqrec_ckpt/LLM2Rec_official_qwen3base_home_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=H-Jun-04-2026_09-41-59-190fc7.pth",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/seqrec_ckpt/LLM2Rec_official_qwen3base_home_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=H-Jun-04-2026_09-41-59-190fc7.pth",
+      "size": 9323915611,
+      "sha256": "07bcfdba02475e76f0b0dfc0f02e64444b881d21f6ccf1cc5276502a25e58d08"
+    }
+  ],
+  "file_count": 3,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ]
+}

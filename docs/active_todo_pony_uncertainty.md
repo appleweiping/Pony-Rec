@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 09:21 CST
+Last updated: 2026-06-04 10:05 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -308,7 +308,7 @@ passes gates, or fails with an audited recovery decision.
   free / `94%` used to about `19G` free / `91%` used without touching final
   RLMRec scores, provenance, audits, imported tables, model, or local-light
   evidence. A post-cleanup server-final RLMRec audit remained PASS.
-- Active runner: home `llm2rec_sasrec` official row, launched 2026-06-04
+- Latest completed home row: `llm2rec_sasrec`, launched 2026-06-04
   07:19 CST after confirming no active experiment process, no existing Home
   LLM2Rec final output directory, no existing Home LLM2Rec adapter directory,
   Home RLMRec final evidence still protected, and disk recovered to about `19G`
@@ -333,7 +333,41 @@ passes gates, or fails with an audited recovery decision.
   matching adapter Python process was present, Qwen3 embedding progress reached
   `283088/568891` (`0.4976`), GPU was `96%` with `16285 MiB / 49140 MiB`, `/`
   had about `17.17G` free and `91%` used, output sizes remained `1.3G` adapter
-  and `4.0K` final directory, and `should_notify=false`.
+  and `4.0K` final directory, and `should_notify=false`. The original run then
+  completed Qwen3 embedding but failed while copying the 9.3G upstream item
+  embedding because `/` reached 100% used. The partial upstream copy was
+  removed and replaced by a symlink to the complete project embedding with
+  cleanup manifest
+  `outputs/summary/home_llm2rec_failed_partial_upstream_embedding_cleanup_20260604.txt`.
+  After deleting only already gated Home IRLLRec/RLMRec prediction JSONLs under
+  the documented emergency policy, recovery PID `3244540` launched from
+  `baselines_new_domains_home_llm2rec_recovery_20260604_094007.log` and
+  completed official SASRec training with early stopping at epoch 50, best
+  epoch 30, final provenance
+  `implementation_status=official_completed`, `blockers=[]`, and exact
+  `score_coverage_rate=1.0`. Score audit, same-candidate import, server-final
+  evidence audit, server large-artifact sha256 manifest, lightweight local
+  sync, and local-light audit all passed. Full metrics over 10,000 users and
+  101 candidates are HR@5/10/20 `0.0577 / 0.1101 / 0.2153`, NDCG@5/10/20
+  `0.034207889197971464 / 0.05094946457092549 / 0.07719596686909931`, and
+  MRR `0.0563865859396318`. Row counts passed: `scores.csv` `1,010,001`
+  lines, predictions `10,000` lines before post-gate deletion, and
+  `tables/ranking_eval_records.csv` `10,001` lines. The local lightweight
+  package is
+  `outputs/baselines/official_adapters/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+  Server-only large artifacts are `scores.csv`
+  (`sha256=bf2b30c35815894dd3aa7c6da09fc75746115ea371f23d6473fc152a0cab51f1`)
+  and the 9.3G SASRec checkpoint
+  (`sha256=07bcfdba02475e76f0b0dfc0f02e64444b881d21f6ccf1cc5276502a25e58d08`),
+  covered by `server_large_artifact_manifest.sha256`. Because disk remained
+  dangerous after import (`/` about `466M` free / `100%` used), the completed
+  server-side prediction JSONL was removed only after server-final and
+  local-light gates passed, with sha256/line-count manifest
+  `outputs/summary/home_llm2rec_prediction_deleted_after_gates_20260604.sha256`.
+  Scores, provenance, score audits, run summary, imported tables, checkpoint,
+  embedding, and local evidence were preserved. `/` is still only about `1.2G`
+  free / `100%` used, so do not start Home `llmesr_sasrec` until a documented
+  storage decision frees enough space.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -1066,12 +1100,12 @@ set is complete.
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery |
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery and adapter cleanup |
 | `rlmrec_graphcl` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llm2rec_sasrec` | active | launched 2026-06-04 07:19 CST after RLMRec adapter cleanup; runner PID `3236678`, adapter PID `3236688`, log `baselines_new_domains_home_llm2rec_20260604_071902.log`; robust monitor at 2026-06-04 08:40 CST saw Qwen3 embedding progress `283088/568891`, one matching adapter Python process, no completion/failure/disk/duplicate-run notification reason; not table-eligible yet |
-| `llmesr_sasrec` | pending | do not launch until Home LLM2Rec completes, is packaged/audited locally, and disk has enough margin |
+| `llm2rec_sasrec` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery; post-gate server prediction JSONL deleted with sha256 manifest while preserving scores/provenance/audits/tables/checkpoint |
+| `llmesr_sasrec` | pending | do not launch until a documented storage decision frees enough margin; `/` was still about `1.2G` free / `100%` used after Home LLM2Rec gates |
 
-Home official baselines are now 6/8 complete (`proex_profile`,
+Home official baselines are now 7/8 complete (`proex_profile`,
 `promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
-`rlmrec_graphcl`). All completed rows passed final provenance, exact score
+`rlmrec_graphcl`, `llm2rec_sasrec`). All completed rows passed final provenance, exact score
 coverage, server-final package audit, lightweight local sync, local-light
 audit, full metrics, and row-count gates. Home is not domain-gate eligible
 until all eight official rows and imported C-CRP evidence pass the same checks.
@@ -1246,17 +1280,17 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `llm2rec_sasrec` row with
-   `scripts/audit/main_remote_baseline_monitor_snapshot.py`. Do not launch
-   another baseline while runner PID `3236678` / adapter PID `3236688` are
-   active. Watch disk closely: the latest robust snapshot had the adapter
-   directory about `1.3G`, final output still a placeholder, and `/` about
-   `17.17G` free / `91%` used.
-2. After Home LLM2Rec completes, run the established official-row gates before
-   marking it complete: server-final evidence audit, server large-artifact
-   sha256 manifest, lightweight local sync, local-light audit, docs/memory
-   update, related-only stage/commit/push. Do not start Home `llmesr_sasrec`
-   until those gates pass.
+1. Resolve the current server disk blocker before launching another baseline:
+   Home `llm2rec_sasrec` is complete and gated, but `/` remains about `1.2G`
+   free / `100%` used. The next action is a read-only large-artifact audit and
+   a documented storage decision for protected checkpoint/embedding/archive
+   candidates; do not delete scores, provenance, audits, imported tables,
+   current evidence packages, or other-project files.
+2. After disk margin is restored, launch only Home `llmesr_sasrec` as the next
+   single-row official baseline. Do not start Tools or any parallel row until
+   Home `llmesr_sasrec` completes and passes score audit/import, server-final
+   evidence audit, server large-artifact manifest, lightweight local sync,
+   local-light audit, docs/memory update, and related-only commit/push.
 3. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
