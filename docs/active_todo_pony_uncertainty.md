@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 13:25 CST
+Last updated: 2026-06-04 13:50 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -232,12 +232,13 @@ completion/failure markers, GPU, disk, output sizes, and `should_notify` only
 for completion, failure, disk danger, duplicate-run risk, or dead tracked PIDs.
 For recurring heartbeats, pass `--output_json_on_notify_only` so quiet checks
 print status without dirtying the tracked snapshot file.
-Current heartbeat target: Home `llmesr_sasrec`, wrapper PID `3248921`, adapter
-PID `3248934`, log `baselines_new_domains_home_llmesr_20260604_1015.log`.
+Current heartbeat target: Home official-baseline monitoring is complete. Any
+remaining Home runner heartbeat should be deleted or retargeted to the next
+bounded Tools storage/preflight checkpoint.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
-Do not start these server runs until the active Home LLM-ESR row completes and
-passes gates, or fails with an audited recovery decision.
+Do not start Tools official baselines until the Home domain gate artifacts are
+committed and a fresh process/GPU/disk preflight plus storage decision passes.
 
 ## Current Server State
 
@@ -1166,11 +1167,29 @@ set is complete.
 
 Home official baselines are now 8/8 row-gated complete (`proex_profile`,
 `promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
-`rlmrec_graphcl`, `llm2rec_sasrec`, `llmesr_sasrec`). All completed rows passed final provenance, exact score
-coverage, server-final package audit, lightweight local sync, local-light
-audit, full metrics, and row-count gates. Home still needs the domain-level
-comparison/paired-test gate with imported C-CRP evidence before it is a
-domain-gated completed block.
+`rlmrec_graphcl`, `llm2rec_sasrec`, `llmesr_sasrec`). All completed rows
+passed final provenance, exact score coverage, server-final package audit,
+lightweight local sync, local-light audit, full metrics, and row-count gates.
+
+Home domain gate follow-up 2026-06-04 13:50 CST: C-CRP raw scores were imported
+into
+`outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+with exact `score_coverage_rate=1.0`; the import reported NDCG@10
+`0.13239420796539653`, wrote `predictions/rank_predictions.jsonl` with 10,000
+rows and `tables/ranking_eval_records.csv` with 10,001 lines, and local light
+sync copied raw `report.json`, `user_ranks.jsonl`, and the imported tables
+while keeping `scores.csv` and the imported prediction JSONL server-side. The
+read-only domain gate wrote
+`outputs/summary/home_official_ccrp_gate_20260604.{json,csv}` and passed with
+`official_ok_count=8`, `official_all_ok=true`, `ccrp_ok=true`, and
+`gate_ok=true`. The comparison/statistical gate wrote
+`outputs/summary/home_official_ccrp_20260604_*`; C-CRP ranks first on all
+seven metrics, all 56 C-CRP-vs-official paired tests are positive and
+Holm-significant, and `home_official_ccrp_20260604_paired_summary.json`
+records `claim_gate=home_domain_pass`, `min_delta=0.0336`, `min_ci_low=0.0216`,
+and `max_holm_p_value=1.0216927255359559e-08`. This supports a Home-domain
+passed gate only; paper-wide SOTA wording remains blocked until Tools is
+complete and all paper-critical modules/review gates pass.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1342,16 +1361,13 @@ evidence is under
 
 ## Required Next Actions
 
-1. Run the Home domain-level official comparison/paired-test gate now that all
-   eight Home official rows are row-gated and local-light audited. Do not make
-   a Home SOTA/domain-complete claim until this gate passes with imported
-   C-CRP evidence and full HR@5/@10/@20, NDCG@5/@10/@20, MRR, row counts, and
-   paired-test coverage.
-2. Before launching Tools official baselines, run a fresh process/GPU/disk
-   preflight and a storage decision. Disk is still tight at about `8.7G` free
-   after Home LLM-ESR post-gate cleanup, so do not start Tools until there is
-   enough safe space or an explicit storage plan.
-3. After each completed home/tools row, verify full HR@5/@10/@20,
+1. Before launching Tools official baselines, run a fresh process/GPU/disk
+   preflight and a storage decision. Disk is still in warning state at about
+   `7.9G` free after the Home C-CRP import/comparison, so do not start Tools
+   until there is enough safe space or an explicit storage plan.
+2. Run Tools as the same disk-aware single-domain production loop, one
+   method-row at a time, with no parallel baseline launches.
+3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
    score audit, imported tables, server-final audit, lightweight sync, and

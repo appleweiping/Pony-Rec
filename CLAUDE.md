@@ -9,7 +9,7 @@ This is the Uncertainty project: Actionable Uncertainty for LLM-based Recommenda
 - **Current collaboration routing**: Claude reviewer tooling is unavailable in
   this thread; when multi-agent review is required, use GPT-5.5 xhigh
   sub-agents instead.
-- **Stage**: M5 (C-CRP v3 complete; sports/toys official gates passed; home 5/8 official rows complete; home RLMRec active)
+- **Stage**: M5 (C-CRP v3 complete; sports/toys/home official gates passed; tools official baselines pending)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
@@ -56,29 +56,17 @@ Use the documented single-domain loop under current storage pressure, e.g.
 `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`. The runner
 audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
 after each completed score file.
-Current status (2026-06-03): sports and toys are each 8/8 official baselines
-complete and have passed their domain/comparison/paired-test gates against
-C-CRP. Home has 5/8 audited official rows complete: `proex_profile`,
-`promax_profile`, `elmrec_graph`, `llmemb`, and `irllrec_intent`. The latest
-row, home `irllrec_intent`, completed at 2026-06-03 20:05 CST with
-`implementation_status=official_completed`, `blockers=[]`, exact
-`score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS, and
-local-light audit PASS. After the completed IRLLRec intermediate adapter was
-removed with cleanup manifest
-`outputs/summary/home_irllrec_completed_adapter_cleanup_manifest_20260603.sha256`,
-disk recovered to about `12G` free. Home `rlmrec_graphcl` launched at
-2026-06-03 20:28 CST as the sixth home row after fresh preflight; runner PID
-`3178395`, adapter PID `3178403`, log
-`baselines_new_domains_home_rlmrec_20260603_2028.log`. It is not
-table-eligible until final score/provenance/import/server-final and local-light
-gates pass. At 2026-06-03 21:14 CST it remained active in Qwen3 embedding at
-about `176768/385364` with no fatal markers. A bounded cleanup removed only
-server-side prediction JSONLs from already gated Sports/Toys official rows,
-recorded
-`outputs/summary/sports_toys_completed_predictions_deleted_for_home_rlmrec_disk_20260603.sha256`,
-and copied post-cleanup Sports/Toys domain gate outputs showing
-`gate_ok=true`, `official_ok_count=8`, and `ccrp_ok=true`; disk recovered to
-about `19G` free.
+Current status (2026-06-04): sports, toys, and home are each 8/8 official
+baselines complete and have passed their domain/comparison/paired-test gates
+against C-CRP. The Home gate artifacts are
+`outputs/summary/home_official_ccrp_gate_20260604.{json,csv}` and
+`outputs/summary/home_official_ccrp_20260604_*`; the paired summary records
+`claim_gate=home_domain_pass`, C-CRP observed-best on all seven metrics, and
+56/56 C-CRP-vs-official paired tests positive and Holm-significant. Tools is
+the only new-domain official-baseline block still pending. Before launching
+Tools, run a fresh process/GPU/disk preflight and storage decision because `/`
+was still below the 10G warning threshold after the Home C-CRP import and
+comparison package.
 
 Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
 upstream staging directories were removed only after final server audits and

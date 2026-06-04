@@ -390,11 +390,11 @@ When in doubt, downgrade the claim, not the evidence standard.
 13. **超参曲线必做** — eta、C-CRP weights、confidence weight、uncertainty gates/thresholds、SRPD lr/lambda 等真实控制量需要合理 sweep 和 matplotlib 曲线
 14. **框架图必做** — 论文 ready 前必须准备清晰 pipeline/framework overview figure，标出 uncertainty、calibration/evidence 和 risk-adjusted ranking 位置
 
-## Experiment Roadmap（2026-06-03 更新）
+## Experiment Roadmap（2026-06-04 更新）
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
-Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 5/8 with proex_profile/promax_profile/elmrec_graph/llmemb/irllrec_intent gated and rlmrec_graphcl active since 2026-06-03 20:28 CST; tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
+Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 8/8 + gate✓ with C-CRP rank 1 on all 7 metrics and 56/56 positive Holm-significant paired tests; tools pending; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
 Phase 2.5: Paper-critical modules before readiness claim: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)

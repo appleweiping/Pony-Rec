@@ -252,7 +252,7 @@ preferences before scoring each candidate. All domains use 10k users,
 | movies | 0.145 | 0.208 | 0.331 | 0.108 | 0.128 | 0.159 | 0.127 | #5 (LLMEmb=0.334) |
 | sports | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | domain gate PASS |
 | toys | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | domain gate PASS |
-| home | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | baselines pending |
+| home | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | domain gate PASS |
 | tools | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
 
 Status: `completed_result` for beauty/books/electronics/movies/sports/toys/home/tools.
@@ -296,25 +296,21 @@ paper submission; do not rerun or relabel them without a provenance decision.
 ### Strategy for SOTA
 
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
-table, and sports/toys now pass domain-level official-baseline and paired-test
-gates. Do not generalize to paper-wide SOTA until the declared domain set is
-complete; home has 8/8 audited official rows complete but still needs the
-domain-level comparison/paired-test gate, and tools still has 0/8, so both
-still need paired same-candidate tests before any paper-wide SOTA claim.
+table, and sports/toys/home now pass domain-level official-baseline and
+paired-test gates. Do not generalize to paper-wide SOTA until the declared
+domain set is complete; tools still has 0/8 new-domain official rows, so it
+still needs official rows plus paired same-candidate tests before any
+paper-wide SOTA claim.
 
 ### Remaining for paper submission
 
-1. Run the canonical 8 official baselines on home/tools after a
+1. Run the canonical 8 official baselines on tools after a
    fresh disk/GPU/process check. `scripts/run_baselines_new_domains.sh` is
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 8/8 audited official rows
-   complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-   `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, `llmesr_sasrec`)
-   after the IRLLRec, RLMRec, LLM2Rec, and LLM-ESR evidence gates, while
-   tools remains pending. Home
+   score file. Sports, toys, and home are now 8/8 complete and have passed
+   their domain/comparison/paired-test gates; tools remains pending. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.
@@ -348,9 +344,17 @@ still need paired same-candidate tests before any paper-wide SOTA claim.
    The post-gate prediction/staging cleanup manifest is
    `outputs/summary/home_llmesr_post_gate_cleanup_20260604.sha256`, and final
    scores/provenance/audits/imported tables/`llmesr_official_model.pt` were
-   preserved. Home is now 8/8 row-gated but still requires the domain-level
-   comparison/paired-test gate with imported C-CRP evidence before any Home
-   domain-complete or SOTA claim. Toys
+   preserved. The Home C-CRP raw scores were then imported into
+   `outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+   with exact coverage and NDCG@10 `0.13239420796539653`. The Home domain gate
+   wrote `outputs/summary/home_official_ccrp_gate_20260604.{json,csv}` with
+   `official_ok_count=8`, `official_all_ok=true`, `ccrp_ok=true`, and
+   `gate_ok=true`. The comparison/statistical package
+   `outputs/summary/home_official_ccrp_20260604_*` records C-CRP rank 1 on all
+   seven metrics, all 56 C-CRP-vs-official paired tests positive and
+   Holm-significant, `min_delta=0.0336`, `min_ci_low=0.0216`, and
+   `max_holm_p_value=1.0216927255359559e-08`. This is a Home-domain pass only,
+   not a paper-wide SOTA claim. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101

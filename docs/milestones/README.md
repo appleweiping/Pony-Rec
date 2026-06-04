@@ -132,9 +132,14 @@ The repository is now in M5 (multi-domain SOTA validation):
   MRR `0.059737054548523474`. Its post-gate prediction JSONL and temporary
   adapter staging directory were removed under
   `outputs/summary/home_llmesr_post_gate_cleanup_20260604.sha256`, preserving
-  scores/provenance/audits/tables/final model and local evidence. Home still
-  needs the domain-level comparison/paired-test gate before domain completion;
-  Tools remains pending.
+  scores/provenance/audits/tables/final model and local evidence. The Home
+  C-CRP import, domain gate, and comparison/paired-test package then passed at
+  2026-06-04 13:50 CST: `outputs/summary/home_official_ccrp_gate_20260604.*`
+  records `official_ok_count=8`, `ccrp_ok=true`, and `gate_ok=true`, and
+  `outputs/summary/home_official_ccrp_20260604_paired_summary.json` records
+  `claim_gate=home_domain_pass`, C-CRP observed-best on all seven metrics, and
+  all 56 C-CRP-vs-official paired tests positive and Holm-significant. Tools
+  remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -202,7 +207,7 @@ The repository is now in M5 (multi-domain SOTA validation):
 | movies | 10000 | 0.145 | 0.208 | 0.331 | 0.108 | 0.128 | 0.159 | 0.127 | #5 |
 | sports | 10000 | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | domain gate PASS |
 | toys | 10000 | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | domain gate PASS |
-| home | 10000 | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | baselines pending |
+| home | 10000 | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | domain gate PASS |
 | tools | 10000 | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
 
 Original-domain C-CRP v3 formal reports are under
@@ -213,9 +218,10 @@ completeness: each of sports/toys/home/tools has `report.json`, `scores.csv`
 with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 10,000 user-rank rows.
 
-New-domain imported-table note (2026-06-02): sports and toys C-CRP v3 imported
-same-candidate evidence now passes domain gates against all eight official
-baselines. For toys, raw scores under `outputs/toys_large10000_100neg_ccrp_v3`
+New-domain imported-table note (updated 2026-06-04): sports, toys, and home
+C-CRP v3 imported same-candidate evidence now passes domain gates against all
+eight official baselines. For toys, raw scores under
+`outputs/toys_large10000_100neg_ccrp_v3`
 were imported into
 `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
 with exact coverage (`score_coverage_rate=1.0`). After toys `llmesr_sasrec`
@@ -223,6 +229,13 @@ finished, `outputs/summary/toys_official_gate_final_20260602_1900.{json,csv}`
 recorded `ccrp_ok=true`, `official_ok_count=8`, `official_all_ok=true`, and
 `gate_ok=true`. The follow-up toys comparison/statistical gate records C-CRP
 rank 1 on all seven metrics and 56/56 positive Holm-significant paired tests.
+For home, raw scores under `outputs/home_large10000_100neg_ccrp_v3` were
+imported into
+`outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+with exact coverage, and
+`outputs/summary/home_official_ccrp_gate_20260604.{json,csv}` plus
+`outputs/summary/home_official_ccrp_20260604_*` record the passed Home domain
+gate and 56/56 positive Holm-significant paired tests.
 
 Artifact audit note (2026-05-31): the old four-domain C-CRP reports are present
 under `outputs/ccrp_v3_formal/<domain>/report.json`; they were only missed by
@@ -236,12 +249,9 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
-   all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 8/8 audited official rows complete after LLM-ESR passed
-   score audit/import, server-final audit, server large-artifact manifest,
-   local sync, local-light evidence gates, and post-gate cleanup; home
-   domain/comparison/paired-test gate remains pending; tools remains pending.
+2. 8 official baselines on 4 new domains (Phase 2) — sports, toys, and home
+   each have all eight audited official rows plus C-CRP import,
+   domain/comparison, and paired-test gates complete; tools remains pending.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.
