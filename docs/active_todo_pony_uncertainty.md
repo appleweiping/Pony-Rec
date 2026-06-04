@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 01:59 CST
+Last updated: 2026-06-05 02:14 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1542,6 +1542,16 @@ The plan is `planning_only_not_executed`, starts with a PowerShell `throw`,
 records the required server-final audit -> server large-artifact manifest ->
 local-light sync -> local-light audit order, and must not be used until the
 active runner exits normally.
+Monitor update 2026-06-05 02:14 CST: Qwen3 embedding completed
+`269711/269711` and IRLLRec official training began; latest observed line was
+`[irllrec-official] epoch=1 train_loss=1.467340`. Runner PID `3326805` and
+adapter PID `3326813` remained alive, with no completion marker and final
+output still placeholder-only. Disk crossed the warning threshold at about
+`9.2G` free / `96%` used. Read-only storage audit found the active IRLLRec
+adapter at `5.2G` (`llm_esr/handled/itm_emb_np.pkl` about `4.1G`) and no
+obvious safe large deletion outside active/protected evidence, models,
+checkpoints, task packages, or final artifacts, so no cleanup was performed.
+Continue monitoring disk; do not delete active adapter files.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1718,7 +1728,8 @@ evidence is under
    `baselines_new_domains_tools_irllrec_20260605_0058.log`, and heartbeat
    `monitor-tools-irllrec`. Notify on completion, failure, duplicate process,
    dead PID, disk below 10G free, or disk at/above 97% used. Do not start
-   another baseline while this row is active.
+   another baseline while this row is active. Current monitor status as of
+   2026-06-05 02:14 CST is disk-warning active training, not completed row.
 2. After Tools `irllrec_intent` completes, run the established row gates before
    marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
