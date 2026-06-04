@@ -203,12 +203,34 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/summary/tools_elmrec_completed_adapter_cleanup_manifest_20260604.sha256`
   and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`.
   Final scores, provenance, audits, imported tables, and model were preserved,
-  and post-cleanup `/` was about `11G` free / `95%` used. Tools is now 3/8
-  official rows complete. After a fresh preflight, Tools `llmemb` launched at
-  2026-06-04 23:10 CST as the fourth single-row Tools official baseline with
-  runner PID `3317251`, adapter PID `3317260`, and log
-  `baselines_new_domains_tools_llmemb_20260604_231030.log`; it is active
-  monitor-only evidence, not a completed row.
+  and post-cleanup `/` was about `11G` free / `95%` used. Tools `llmemb`
+  launched at 2026-06-04 23:10 CST as the fourth single-row Tools official
+  baseline with runner PID `3317251`, adapter PID `3317260`, and log
+  `baselines_new_domains_tools_llmemb_20260604_231030.log`; it completed at
+  2026-06-05 00:43 CST with `implementation_status=official_completed`,
+  `blockers=[]`, exact `score_coverage_rate=1.0`, and passing server-final
+  audit, server large-artifact sha256 manifest, lightweight local sync, and
+  local-light audit. Full metrics over 10,000 users and 101 candidates are
+  HR@5/10/20 `0.1365 / 0.2257 / 0.3637`, NDCG@5/10/20
+  `0.087457824217457 / 0.11594350972806679 / 0.15050644138929892`, and MRR
+  `0.10649354669900822`; `scores.csv` has `1,010,001` lines, predictions had
+  `10,000` lines before post-gate deletion, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+  package is
+  `outputs/baselines/official_adapters/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/`.
+  Server-only `scores.csv`, deleted prediction metadata, and
+  `llmemb_official_model.pt` are covered by `server_large_artifact_manifest.*`
+  and `prediction_deletion_manifest.json`; the completed intermediate adapter
+  was removed after final evidence and local backup passed, with cleanup
+  manifests
+  `outputs/summary/tools_llmemb_completed_adapter_cleanup_manifest_20260605.sha256`
+  and `outputs/summary/tools_llmemb_completed_adapter_cleanup_du_20260605.txt`.
+  A completed Home LLM2Rec checkpoint was also deleted under emergency disk
+  approval after sha256/size manifesting; local record:
+  `outputs/summary/home_llm2rec_checkpoint_deletion_manifest_20260604.json`.
+  Final scores, provenance, audits, imported tables, and model were preserved,
+  and post-cleanup `/` was about `15G` free / `93%` used. Tools is now 4/8
+  official rows complete.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

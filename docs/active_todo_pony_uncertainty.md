@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 23:15 CST
+Last updated: 2026-06-05 00:55 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1457,30 +1457,57 @@ and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`.
 Final scores, provenance, audits, imported tables, and model were preserved.
 Post-cleanup checks show no matching Python experiment process and `/` back to
 about `11G` free / `95%` used. Tools is now 3/8 official rows complete; the
-remaining Tools official rows are `llmemb`, `irllrec_intent`,
-`rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`.
+remaining Tools official rows are `irllrec_intent`, `rlmrec_graphcl`,
+`llm2rec_sasrec`, and `llmesr_sasrec`.
 
-Tools LLMEmb launch checkpoint 2026-06-04 23:15 CST: after the ElmRec gates,
-local package, commit/push, and post-gate cleanup, a fresh preflight found no
-matching experiment Python process, GPU idle, `/` and `/home/ajifang` at about
-`11G` free / `95%` used, no existing Tools `llmemb` final output, and no
-existing Tools LLMEmb adapter path. Tools `llmemb` launched as the fourth
-Tools single-row official baseline with:
+Tools LLMEmb completion/gate checkpoint 2026-06-05 00:55 CST: after the ElmRec
+gates, local package, commit/push, and post-gate cleanup, Tools `llmemb`
+launched as the fourth Tools single-row official baseline with:
 
 ```bash
 nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE=llmemb TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh
 ```
 
-Current monitor target: runner PID `3317251`, adapter PID `3317260`, PID files
-`baselines_new_domains_tools_llmemb_20260604_231030.runner.pid` and
-`baselines_new_domains_tools_llmemb_20260604_231030.adapter.pid`, and log
-`baselines_new_domains_tools_llmemb_20260604_231030.log`. Stable launch
-snapshot `outputs/summary/tools_llmemb_launch_monitor_20260604.json` reports
-one matching LLMEmb adapter process, no completion or failure markers, adapter
-directory `1000M`, final output directory placeholder-only, and disk warning
-at about `9.54G` free / `95%` used. Do not start another baseline while this
-row is active. The heartbeat `monitor-home-llm2rec` is retargeted to
-`Monitor Tools LLMEmb`.
+The wrapper log `baselines_new_domains_tools_llmemb_20260604_231030.log`
+ended with `DONE llmemb on tools` and `=== All baseline runs complete ===`.
+Final provenance records `implementation_status=official_completed`,
+`blockers=[]`, pinned LLMEmb commit
+`3458a5e225062e94b4f1a01e41f3ec82089f0407`, and exact
+`score_coverage_rate=1.0`. The row passed server-final audit, server
+large-artifact manifest, lightweight local sync, and local-light audit. Full
+metrics over 10,000 users and 101 candidates are HR@5/10/20
+`0.1365 / 0.2257 / 0.3637`, NDCG@5/10/20
+`0.087457824217457 / 0.11594350972806679 / 0.15050644138929892`, and MRR
+`0.10649354669900822`; `scores.csv` has `1,010,001` lines, predictions had
+`10,000` lines before post-gate deletion, and
+`tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/`.
+Server-only `scores.csv`, deleted prediction metadata, and
+`llmemb_official_model.pt` are covered by `server_large_artifact_manifest.*`
+and `prediction_deletion_manifest.json`; sha256 values are
+`bcbf84afd2af8c43b943e97464ab21060bc84fce8601a047698057cd63042e4c` for
+scores, `a8301ae1337551f1502c751dad66e6d9e8e69c50e22764b251e1a3fdbf2b38c2`
+for the deleted prediction JSONL, and
+`a2cbeab06b437b09c7d4ed66f052b54baf7de04923cc4bdb84bf9df91c661c52` for the
+final model. During the run, disk fell to about `4.9G` free after the active
+adapter grew to `5.2G`, so the completed Home LLM2Rec checkpoint was removed
+under emergency approval after server-final/local-light evidence and
+sha256/size manifest verification; local record:
+`outputs/summary/home_llm2rec_checkpoint_deletion_manifest_20260604.json`.
+After all LLMEmb gates and local sync passed, Codex removed only the
+server-side prediction JSONL and completed intermediate adapter
+`outputs/baselines/paper_adapters/tools_large10000_100neg_llmemb_official_adapter`.
+Cleanup manifests were synced locally as
+`outputs/summary/tools_llmemb_prediction_deletion_manifest_20260605.json`,
+`outputs/summary/tools_llmemb_completed_adapter_cleanup_manifest_20260605.sha256`,
+and `outputs/summary/tools_llmemb_completed_adapter_cleanup_du_20260605.txt`.
+Final scores, provenance, audits, imported tables, and model were preserved.
+Post-cleanup `/` returned to about `15G` free / `93%` used. Tools is now 4/8
+official rows complete; next action is a fresh preflight and one single next
+Tools official row, likely `irllrec_intent`, not a batch. The stale
+`Monitor Tools LLMEmb` heartbeat (`monitor-home-llm2rec`) was deleted after
+completion.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1652,16 +1679,13 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active Tools `llmemb` row: runner PID `3317251`, adapter PID
-   `3317260`, log `baselines_new_domains_tools_llmemb_20260604_231030.log`.
-   Notify on completion, failure, duplicate process, dead PID, disk below 10G
-   free, or disk at/above 97% used. Do not start another baseline while this
-   row is active.
-2. After Tools `llmemb` completes, run the established row gates before
-   marking it official: score audit/import, server-final audit, server
-   large-artifact sha256 manifest, local-light sync, local-light audit,
-   docs/memory, related-only commit/push, and then clean only eligible
-   completed intermediate artifacts if disk remains tight.
+1. Before launching the next Tools row, run a fresh process/GPU/disk and
+   duplicate-output preflight on `pony-rec-gpu`. Do not launch if any
+   Pony/C-CRP/baseline/uncertainty process is active.
+2. Launch exactly one next Tools official row, likely `irllrec_intent`, using
+   the single-domain production loop:
+   `DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=irllrec_intent bash scripts/run_baselines_new_domains.sh`.
+   Monitor PID/log/disk and do not start another baseline while it is active.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
