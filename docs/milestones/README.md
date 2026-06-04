@@ -103,7 +103,7 @@ Root-level [AGENTS.md](../../AGENTS.md) is the operating contract for future
 agents. If a milestone status changes, update this file and the relevant M-file
 rather than relying on a chat handoff.
 
-## Current Working Position (updated 2026-06-03)
+## Current Working Position (updated 2026-06-04)
 
 The repository is now in M5 (multi-domain SOTA validation):
 
@@ -111,20 +111,29 @@ The repository is now in M5 (multi-domain SOTA validation):
 - Official external baselines completed on original 4 domains (8 methods each)
 - New domains (sports/toys/home/tools) official baselines are in Phase 2.
   Sports and toys each have all eight audited official rows plus C-CRP imported
-  evidence through domain and paired-test gates. Home has 7/8 audited official
+  evidence through domain and paired-test gates. Home has all eight audited official
   rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-  `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`) after the LLM2Rec
-  recovery evidence gate and local lightweight package passed. Home LLM2Rec
+  `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, `llmesr_sasrec`) after
+  the LLM2Rec and LLM-ESR recovery/evidence gates and local lightweight
+  packages passed. Home LLM2Rec
   completed at 2026-06-04 09:49 CST after a disk-full partial-copy recovery,
   with full `@5/@10/@20 + MRR` metrics, exact score coverage, row counts,
   server-final audit, server large-artifact sha256 manifest, local-light audit,
   and post-gate prediction JSONL deletion manifest. The completed LLM2Rec
   intermediate adapter was then removed with sha256 cleanup manifest, restoring
-  `/` to about `12G` free / `95%` used. The remaining Home row,
-  `llmesr_sasrec`, launched at 2026-06-04 10:14 CST under wrapper PID
-  `3248921` / adapter PID `3248934` with log
-  `baselines_new_domains_home_llmesr_20260604_1015.log`; it is not
-  table-eligible until final score/provenance/import/server/local gates pass.
+  `/` to about `12G` free / `95%` used. Home LLM-ESR launched at
+  2026-06-04 10:14 CST, completed at 2026-06-04 13:09 CST with
+  `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, and passed server-final audit, server
+  large-artifact manifest, lightweight local sync, and local-light audit. Full
+  Home LLM-ESR metrics over 10,000 users and 101 candidates are HR@5/10/20
+  `0.0621 / 0.1163 / 0.2139`, NDCG@5/10/20
+  `0.037993209299003045 / 0.055376101596196485 / 0.0797502336556021`, and
+  MRR `0.059737054548523474`. Its post-gate prediction JSONL and temporary
+  adapter staging directory were removed under
+  `outputs/summary/home_llmesr_post_gate_cleanup_20260604.sha256`, preserving
+  scores/provenance/audits/tables/final model and local evidence. Home still
+  needs the domain-level comparison/paired-test gate before domain completion;
   Tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
@@ -229,11 +238,10 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports and toys each have
    all eight audited official rows plus domain/comparison/paired-test gates
-   complete; home has 7/8 audited official rows complete after LLM2Rec passed
+   complete; home has 8/8 audited official rows complete after LLM-ESR passed
    score audit/import, server-final audit, server large-artifact manifest,
-   local sync, and local-light evidence gates; home `llmesr_sasrec` is active
-   as the eighth Home row under wrapper PID `3248921` / adapter PID `3248934`;
-   tools remains pending.
+   local sync, local-light evidence gates, and post-gate cleanup; home
+   domain/comparison/paired-test gate remains pending; tools remains pending.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

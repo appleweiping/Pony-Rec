@@ -298,9 +298,9 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys now pass domain-level official-baseline and paired-test
 gates. Do not generalize to paper-wide SOTA until the declared domain set is
-complete; home has 7/8 audited official rows complete and tools still has 0/8,
-so both still need canonical eight-row official blocks and paired
-same-candidate tests.
+complete; home has 8/8 audited official rows complete but still needs the
+domain-level comparison/paired-test gate, and tools still has 0/8, so both
+still need paired same-candidate tests before any paper-wide SOTA claim.
 
 ### Remaining for paper submission
 
@@ -310,10 +310,11 @@ same-candidate tests.
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports and toys are now 8/8 complete and have passed their
-   domain/comparison/paired-test gates; home has 7/8 audited official rows
+   domain/comparison/paired-test gates; home has 8/8 audited official rows
    complete (`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`,
-   `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`) after the IRLLRec,
-   RLMRec, and LLM2Rec evidence gates, while tools remains pending. Home
+   `irllrec_intent`, `rlmrec_graphcl`, `llm2rec_sasrec`, `llmesr_sasrec`)
+   after the IRLLRec, RLMRec, LLM2Rec, and LLM-ESR evidence gates, while
+   tools remains pending. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.
@@ -332,10 +333,24 @@ same-candidate tests.
    `outputs/summary/home_llm2rec_completed_adapter_cleanup_manifest_20260604.sha256`,
    recovering `/` to about `12G` free / `95%` used without touching final
    evidence. Home `llmesr_sasrec` launched at 2026-06-04 10:14 CST as the
-   eighth Home row under wrapper PID `3248921` / adapter PID `3248934` with
-   log `baselines_new_domains_home_llmesr_20260604_1015.log`; it is not
-   table-eligible until score/provenance/import/server/local evidence gates
-   pass. Toys
+   eighth Home row and completed at 2026-06-04 13:09 CST with
+   `implementation_status=official_completed`, `blockers=[]`, exact
+   `score_coverage_rate=1.0`, score audit/imported tables, server-final audit,
+   server large-artifact sha256 manifest, lightweight local sync, and
+   local-light audit all passing. Full metrics over 10,000 users and 101
+   candidates are HR@5/10/20 `0.0621 / 0.1163 / 0.2139`, NDCG@5/10/20
+   `0.037993209299003045 / 0.055376101596196485 / 0.0797502336556021`, and
+   MRR `0.059737054548523474`; `scores.csv` has `1,010,001` lines,
+   predictions had `10,000` lines before post-gate deletion, and
+   `tables/ranking_eval_records.csv` has `10,001` lines. The local
+   lightweight package is
+   `outputs/baselines/official_adapters/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`.
+   The post-gate prediction/staging cleanup manifest is
+   `outputs/summary/home_llmesr_post_gate_cleanup_20260604.sha256`, and final
+   scores/provenance/audits/imported tables/`llmesr_official_model.pt` were
+   preserved. Home is now 8/8 row-gated but still requires the domain-level
+   comparison/paired-test gate with imported C-CRP evidence before any Home
+   domain-complete or SOTA claim. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
