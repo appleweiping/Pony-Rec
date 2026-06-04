@@ -11,7 +11,7 @@
       },
       "domain": "sports",
       "execution_gates": [
-        "Do not run while Home rlmrec_graphcl or any other baseline process is active.",
+        "Do not run while any official baseline row or matching baseline Python process is active.",
         "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
         "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
         "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
@@ -51,7 +51,7 @@
       },
       "domain": "toys",
       "execution_gates": [
-        "Do not run while Home rlmrec_graphcl or any other baseline process is active.",
+        "Do not run while any official baseline row or matching baseline Python process is active.",
         "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
         "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
         "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
@@ -87,8 +87,8 @@
     "sports",
     "toys"
   ],
-  "git_commit": "742ec485b28e1cedaf8c3b242909fe78c1347dca",
-  "git_status_short_relevant_at_generation": "M docs/active_todo_pony_uncertainty.md\n M docs/paper_claims_and_status.md\n M docs/paper_critical_experiment_plan_2026-06-03.md\n?? outputs/summary/paper_critical/ccrp_signal_generation_plan/\n?? scripts/audit/main_plan_ccrp_signal_generation.py\n?? tests/test_plan_ccrp_signal_generation.py",
+  "git_commit": "dfe5522049ec53fc1318f9d9aedae079624278ac",
+  "git_status_short_relevant_at_generation": "M scripts/audit/main_plan_ccrp_signal_generation.py\n M tests/test_plan_ccrp_signal_generation.py",
   "git_worktree_dirty_at_generation": true,
   "global_commands": {
     "remote_header_discovery": "python scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py \\\n  --root . \\\n  --domain sports \\\n  --domain toys \\\n  --name_token ccrp \\\n  --name_token shadow \\\n  --name_token signal \\\n  --name_token calibrated \\\n  --name_token scored \\\n  --name_token rows \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_source_discovery.json \\\n  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_source_discovery.csv \\\n  --quiet"
@@ -103,7 +103,7 @@
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_root": ".",
   "required_status_before_execution": [
-    "Active Home rlmrec_graphcl official row completed or failed with an audited recovery decision.",
+    "Every active official baseline row completed or failed with an audited recovery decision.",
     "Official-row server_final and local_light gates complete before any next baseline or C-CRP evidence run.",
     "No matching Python process that would create duplicate-run or GPU-memory risk.",
     "Server disk is above the project danger threshold after any necessary audited cleanup."

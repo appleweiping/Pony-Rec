@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 00:55 CST
+Last updated: 2026-06-05 01:50 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -123,6 +123,11 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    launch work before real full-scale signal paths are filled. Current local
    plan artifact:
    `outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`.
+   Guard wording hardening on 2026-06-05 01:50 CST: the plan generator,
+   generated JSON, and focused tests now name the precondition generically as
+   no active official baseline row or matching baseline Python process,
+   removing stale row-specific wording from an older Home RLMRec handoff while
+   preserving the non-executing `exit 2` shell guard.
    Readiness audit helper:
    `scripts/audit/main_audit_paper_critical_modules.py` now consolidates the
    paper-critical module state without running experiments. Current artifact:

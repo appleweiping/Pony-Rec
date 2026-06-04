@@ -75,6 +75,10 @@ also include:
    validation selection, ablation, observation, and hyperparameter plots. The
     generated shell exits before running commands and remains
     `planning_only_not_executed` until real full-scale signal paths pass audit.
+    On 2026-06-05 01:50 CST, the generator and plan artifact were hardened to
+    require no active official baseline row or matching baseline Python process,
+    replacing stale row-specific wording while preserving the non-executing
+    shell guard.
     Consolidated module audit entry:
    `scripts/audit/main_audit_paper_critical_modules.py` writes
     `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`

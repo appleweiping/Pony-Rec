@@ -282,7 +282,7 @@ def build_domain_plan(
             ),
         },
         "execution_gates": [
-            "Do not run while Home rlmrec_graphcl or any other baseline process is active.",
+            "Do not run while any official baseline row or matching baseline Python process is active.",
             "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
             "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
             "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
@@ -368,7 +368,7 @@ def build_plan(
         },
         "domain_plans": domain_plans,
         "required_status_before_execution": [
-            "Active Home rlmrec_graphcl official row completed or failed with an audited recovery decision.",
+            "Every active official baseline row completed or failed with an audited recovery decision.",
             "Official-row server_final and local_light gates complete before any next baseline or C-CRP evidence run.",
             "No matching Python process that would create duplicate-run or GPU-memory risk.",
             "Server disk is above the project danger threshold after any necessary audited cleanup.",

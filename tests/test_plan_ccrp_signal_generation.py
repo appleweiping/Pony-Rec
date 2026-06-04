@@ -19,6 +19,8 @@ def test_plan_defaults_to_non_executing_sports_toys_flow():
     assert "score-only" in plan["current_blocker"]
     assert "main_remote_discover_ccrp_uncertainty_sources.py" in plan["global_commands"]["remote_header_discovery"]
     assert "--domain sports" in plan["global_commands"]["remote_header_discovery"]
+    assert "official baseline row" in plan["required_status_before_execution"][0]
+    assert "Home rlmrec_graphcl" not in " ".join(plan["required_status_before_execution"])
 
 
 def test_domain_plan_uses_placeholders_and_full_scale_counts():
@@ -45,6 +47,8 @@ def test_domain_plan_uses_placeholders_and_full_scale_counts():
     observation = domain_plan["commands"]["build_observation_study_template"]
     assert "ccrp_selected_test_scored_rows.csv" in observation
     assert "main_build_uncertainty_observation_study.py" in observation
+    assert "matching baseline Python process" in domain_plan["execution_gates"][0]
+    assert "Home rlmrec_graphcl" not in " ".join(domain_plan["execution_gates"])
 
 
 def test_guarded_shell_exits_before_any_command():

@@ -295,6 +295,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   `signal_rows_available=false`; observation, ablation, and hyperparameter
   modules remain blocked until full-scale
   uncertainty or recomputable signal rows are located or regenerated.
+- The guarded C-CRP signal-generation plan now uses generic active-row
+  preconditions: no active official baseline row or matching baseline Python
+  process may be running before the placeholder signal paths are filled and the
+  non-executing shell guard is removed. This 2026-06-05 guard hardening removes
+  stale Home RLMRec wording from the generated plan without starting any
+  experiment.
 
 ### C-CRP v3 Results (all domains)
 
