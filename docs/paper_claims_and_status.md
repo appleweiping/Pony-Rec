@@ -467,7 +467,10 @@ same-candidate tests before any paper-wide SOTA claim.
    2026-06-05 06:25 CST follow-up found Qwen3 embedding progress
    `172352/269711`, the same PIDs alive and unique, disk still about `12.35G`
    free / `94%` used, and no completion/failure markers or final
-   scores/provenance/tables. This is active monitor-only evidence, not a
+   scores/provenance/tables. A 2026-06-05 06:33 CST follow-up found Qwen3
+   embedding progress `209840/269711`, the same PIDs alive and unique, disk
+   still about `12.35G` free / `94%` used, and no completion/failure markers or
+   final scores/provenance/tables. This is active monitor-only evidence, not a
    completed row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
