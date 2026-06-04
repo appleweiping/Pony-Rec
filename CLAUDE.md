@@ -9,7 +9,7 @@ This is the Uncertainty project: Actionable Uncertainty for LLM-based Recommenda
 - **Current collaboration routing**: Claude reviewer tooling is unavailable in
   this thread; when multi-agent review is required, use GPT-5.5 xhigh
   sub-agents instead.
-- **Stage**: M5 (C-CRP v3 complete; sports/toys/home official gates passed; tools official baselines pending)
+- **Stage**: M5 (C-CRP v3 complete; sports/toys/home official gates passed; Tools ProEx active)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
@@ -63,10 +63,12 @@ against C-CRP. The Home gate artifacts are
 `outputs/summary/home_official_ccrp_20260604_*`; the paired summary records
 `claim_gate=home_domain_pass`, C-CRP observed-best on all seven metrics, and
 56/56 C-CRP-vs-official paired tests positive and Holm-significant. Tools is
-the only new-domain official-baseline block still pending. Before launching
-Tools, run a fresh process/GPU/disk preflight and storage decision because `/`
-was still below the 10G warning threshold after the Home C-CRP import and
-comparison package.
+the only new-domain official-baseline block still incomplete. Tools
+`proex_profile` launched at 2026-06-04 14:25 CST as a single-domain,
+single-method run; monitor adapter PID `3269572`, PID file
+`baselines_new_domains_tools_proex_20260604_142548.adapter.pid`, and log
+`baselines_new_domains_tools_proex_20260604_142548.log`. Do not start another
+baseline while this row is active.
 
 Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
 upstream staging directories were removed only after final server audits and

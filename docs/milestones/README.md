@@ -139,7 +139,9 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/summary/home_official_ccrp_20260604_paired_summary.json` records
   `claim_gate=home_domain_pass`, C-CRP observed-best on all seven metrics, and
   all 56 C-CRP-vs-official paired tests positive and Holm-significant. Tools
-  remains pending.
+  `proex_profile` launched at 2026-06-04 14:25 CST as the first Tools official
+  row; monitor adapter PID `3269572` and log
+  `baselines_new_domains_tools_proex_20260604_142548.log`.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -251,7 +253,8 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports, toys, and home
    each have all eight audited official rows plus C-CRP import,
-   domain/comparison, and paired-test gates complete; tools remains pending.
+   domain/comparison, and paired-test gates complete; Tools `proex_profile` is
+   active as the first Tools official row.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

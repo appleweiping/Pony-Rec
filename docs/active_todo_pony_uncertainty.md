@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 14:20 CST
+Last updated: 2026-06-04 14:31 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1219,8 +1219,33 @@ passed. Four obsolete home-root transfer archives were then deleted with
 manifest `outputs/summary/server_home_root_archive_cleanup_for_tools_20260604.{json,sha256}`.
 Final scores, raw C-CRP outputs, imported `tables/`, official evidence,
 models/checkpoints, task data, source/config/docs, and other project
-directories were preserved. Final preflight: no matching experiment process,
-GPU idle, and `/` at `11,504,844,800` bytes free (`11G`, `95%` used).
+directories were preserved. Final cleanup preflight: no matching experiment
+process, GPU idle, and `/` at `11,504,844,800` bytes free (`11G`, `95%` used).
+
+Tools `proex_profile` launch: at 2026-06-04 14:25 CST, after the Home domain
+gate was committed and pushed, a fresh duplicate-output check found no existing
+Tools ProEx final directory, adapter directory, log, or PID file. The first
+Tools official row was launched as a single-domain, single-method run:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE=proex_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh
+```
+
+The SSH launch timed out while backgrounding, so a clean adapter PID file was
+written manually after verifying the active process. Current monitor target:
+adapter PID `3269572`, PID file
+`baselines_new_domains_tools_proex_20260604_142548.adapter.pid`, log
+`baselines_new_domains_tools_proex_20260604_142548.log`. Stable checkpoint at
+2026-06-04 14:31 CST: exactly one matching ProEx adapter process was active,
+Qwen3 `hf_mean_pool` had reached `11104/269711`, GPU was about `95%` with
+`16091 MiB / 49140 MiB`, no fatal/OOM/no-space/failed markers were present,
+the active adapter directory was about `1005M`, and final output was still a
+placeholder. Disk fell under the warning line during staging, so a bounded
+cleanup removed only inactive old `outputs/baselines/paper_adapters/*`
+directories while preserving the active Tools ProEx adapter. Manifest:
+`outputs/summary/inactive_paper_adapters_cleanup_for_tools_proex_20260604.{json,sha256}`.
+Post-cleanup `/` was `10,951,237,632` bytes free (`95%` used). Do not start
+another baseline while this row is active.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1392,14 +1417,15 @@ evidence is under
 
 ## Required Next Actions
 
-1. Before launching Tools official baselines, run a fresh process/GPU/disk
-   preflight and a storage decision. Disk is now above the literal 10GB warning
-   threshold at `11,504,844,800` bytes free after cleanup, but this is still
-   tight for storage-heavy LLMEmb/LLM2Rec/LLM-ESR rows. Prefer starting Tools
-   with a smaller single row such as `proex_profile`, then gate, local-sync,
-   clean its temporary adapter, and reassess before the next row.
-2. Run Tools as the same disk-aware single-domain production loop, one
-   method-row at a time, with no parallel baseline launches.
+1. Monitor the active Tools `proex_profile` row (`3269572`,
+   `baselines_new_domains_tools_proex_20260604_142548.log`). Notify on
+   completion, failure, duplicate process, dead PID, or disk below 10G/at or
+   above 97% used. Do not start another baseline while this row is active.
+2. If Tools `proex_profile` completes, run the established row gates before
+   marking it official: score audit/import, server-final audit, server
+   large-artifact sha256 manifest, local-light sync, local-light audit,
+   docs/memory, related-only commit/push, and then clean the completed
+   temporary adapter if disk remains tight.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

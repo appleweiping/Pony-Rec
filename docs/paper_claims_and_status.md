@@ -298,19 +298,21 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; tools still has 0/8 new-domain official rows, so it
-still needs official rows plus paired same-candidate tests before any
-paper-wide SOTA claim.
+domain set is complete; Tools `proex_profile` is active as the first Tools
+official row, so Tools still needs completed official rows plus paired
+same-candidate tests before any paper-wide SOTA claim.
 
 ### Remaining for paper submission
 
-1. Run the canonical 8 official baselines on tools after a
+1. Complete the canonical 8 official baselines on tools after a
    fresh disk/GPU/process check. `scripts/run_baselines_new_domains.sh` is
    aligned to exclude SETRec while it remains blocked/supplementary, supports
    single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports, toys, and home are now 8/8 complete and have passed
-   their domain/comparison/paired-test gates; tools remains pending. Home
+   their domain/comparison/paired-test gates. Tools `proex_profile` launched at
+   2026-06-04 14:25 CST as the first Tools row; monitor adapter PID `3269572`
+   and log `baselines_new_domains_tools_proex_20260604_142548.log`. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.

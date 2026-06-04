@@ -1,0 +1,1718 @@
+{
+  "active_adapter_preserved": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_proex_official_adapter",
+  "created_at_utc": "2026-06-04T06:30:26.707100+00:00",
+  "dirs": [
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "sha256": "d501eaa01082dcc2aec1bbc4f12607c3ad153d2c6c71d6cda87f239979e01756",
+          "size": 600568
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "b6a73ad67aafb7bb085af96851a60caa36733949bbdd97a9f1067a6cca119bed",
+          "size": 1768
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "sha256": "e14e281cdfc87f27768c53fda87f031789730d9e302a60e4ebb078c3b8688984",
+          "size": 1533
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "sha256": "1db56eeb055c2e7f37bc3b8859d885bc40935859ee3a330e1b0f36e0d569d5e8",
+          "size": 1300
+        }
+      ],
+      "size_bytes": 605169
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter",
+      "file_count": 19,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/README.md",
+          "sha256": "2c29c702d81d68353f395c0ee971db82ebf00ea3d934d68a54332e24d83c4135",
+          "size": 612
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "d87211ae7a59fe192149ddb059548fd926e4ce1b12976ab2806fa92f31a85d03",
+          "size": 654
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "6636ef05d04d355024a95003c0d0df576c66ac01ceae81a5f453f4791a3b3b46",
+          "size": 3784
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "1f3ce5ab61aae2f793eb58cd15319b319bae6532c2af1590f944c9bcde49183a",
+          "size": 1620665
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "sha256": "539c3f857fe975b45f44b6bcc5091e06c4eb8f5d45575fb6706a8d09ffd8038d",
+          "size": 19030
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "d58c352e29f4f8f3e28ee3d39acfede6fa468bd965789fef2c44cf2356fb1ce9",
+          "size": 388988
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/data.txt",
+          "sha256": "ab79bbe7227e101ee2452fe3957a18a939d4c8033b696eade84a10cd229a36d1",
+          "size": 44312
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/item_titles.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/item_titles.json",
+          "sha256": "53082493d33100c150d057f3e420ca0e6cb83156ff74fc07ff277f7f5941c5f9",
+          "size": 188273
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/test_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/test_data.txt",
+          "sha256": "760ffda950c5053d88fcab2efc4fbe0910182ae69d399b3bf06b2db99566055c",
+          "size": 22546
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/train_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/train_data.txt",
+          "sha256": "ab0f061925f4a4553d76e5f6ccdb71f27da84b0009dd7b28169fc52579d57185",
+          "size": 16958
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/val_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec/data/beauty_same_candidate/downstream/val_data.txt",
+          "sha256": "760ffda950c5053d88fcab2efc4fbe0910182ae69d399b3bf06b2db99566055c",
+          "size": 22546
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "sha256": "a2025065b0540f54401c22f1e095fb150bf4f5fa1517cfa5a3ceee4e7b0a148a",
+          "size": 1032
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "sha256": "d014c092de7d1d1d1c1ee0161b5292f519bafc209d102c5db0df8d61e84c55db",
+          "size": 19398784
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "sha256": "79e1b2707cf0b39c64190ac507d506a59412d99ffc5c572a3a9e434ac529a527",
+          "size": 1214
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "sha256": "de2d96dba390b23105bc3b1cbef1a8ecb3047c2484bbafee1325cdd5c64a5a9f",
+          "size": 1087
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "sha256": "c002f847febdad5d51237e67ee678ac58cfb92c99da954755d86695114b0a70d",
+          "size": 609734
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "sha256": "daccd28d520c2dcbd40a190ef164f18fbc2565bf0ef4e5ec59355c4d2560bd98",
+          "size": 790
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "sha256": "b90c3ac7541c5756d1a09db885a7ecc90aa75e1b289118d6e6bb6b53e118370f",
+          "size": 137560
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "sha256": "5f9d5b50a36e22ee159c9ed562f1bd7b1012a4a3b0891e7b904622cc244692c6",
+          "size": 33044
+        }
+      ],
+      "size_bytes": 22511613
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "sha256": "2a4d22c6ee22c83026cfac1e46cabbe47d9b60f19663ea8747ed02f550e1f57a",
+          "size": 603736
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "3a398f761bbe64998333911f2b335b8e9316cff8490fea5ca5920e2da92f4e9b",
+          "size": 1785
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "sha256": "84541e52d530af042ce2534e4b8f980319685dcb71ad488c556241866e3f5f76",
+          "size": 1576
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "sha256": "bdfcb6ee8e9a63dbd770a92db6493e3d9a6332910403075cd9c3afe8cb38d319",
+          "size": 1337
+        }
+      ],
+      "size_bytes": 608434
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter",
+      "file_count": 23,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/README.md",
+          "sha256": "e62816509d7c17a42a93b79434a15f8b75990aae38dcf2db3c9da9982db7d496",
+          "size": 1122
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "32533b04c0a4fb5a0d78c10747a23dae2c70aa67b79d33415917e2e0378a6bfd",
+          "size": 661
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "daf995884e805edbe7ac6abec7503bcd9a3c6e487fe8e09a775b904c994c2e25",
+          "size": 3085
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "1b347ed0496238ab2c94d382e3f70821bfe2d4f89497d162646b832279f53df6",
+          "size": 1597950
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/item_id_map.csv",
+          "sha256": "f6d32f311726ab47cb8960994e71bde46e22b362a82086fe68062365338ca96a",
+          "size": 19029
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "sha256": "6704bf5a1546b85d63ce8f7858937a754c9a4aa21163b11ea24afa92be170da1",
+          "size": 644
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "77417991e8c849897aeb8084a6079469d3011c3abd9ba82722946e692f9782f4",
+          "size": 769307
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "sha256": "4a78b7b931bd83600b5c3cc6b052812bfd5179b212b48565b4bec1a44869af12",
+          "size": 36129
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "sha256": "a8141b5c9b97aab08be4bcd6d955bb458f5e01202ed7a9c4e9a2b28b1ee53bcb",
+          "size": 19382436
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "sha256": "395c11c2802ea08abb08b3aec13f55d9b6724d183ec947ceaec1cc327e61e48a",
+          "size": 303011
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "sha256": "7d9b4b64e66f20531c55de6a5ae45750a8b8178edfc5329572bb622c4ad9bf1b",
+          "size": 306457
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "sha256": "09bba4588948e4ae896bf21588508d291816415da97ec423769bab7851eee6ee",
+          "size": 211147
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100_user_indexed.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100_user_indexed.pkl",
+          "sha256": "3172de2fed038ae8ad6b32253447c75dcc74a8ed08ab958c68e41733b6729124",
+          "size": 211157
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "sha256": "37b9cd1269f02ecac395ad1484b992303998a11711ebc2fde562eab73d37570e",
+          "size": 845
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "sha256": "7f2dbc6fab2def8647ae0e4a998046f22a7c0bad8e24901041f910a58d049d21",
+          "size": 845
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "sha256": "e75260b1caf8794d0160a239b60c635249a2239f0772ba05f3b52ac5543549d2",
+          "size": 754
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "sha256": "bf3515224ac7b830ead5883c0fee7f62065fae71ecc0e825d429d08373c6f414",
+          "size": 614409
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "sha256": "a844c70cf546d6bfc5bec39e53303b61cf4de1b40b04d8dbab45818360393529",
+          "size": 1892
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "sha256": "8e3b55db35b170faa35425b02b027e20212f66ddf4b559d148b400ee748d36b7",
+          "size": 607547
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores_smoke.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores_smoke.csv",
+          "sha256": "b16ca430daf879a19fb45e9a51736f48270f23e753d288d7c8188633d0bd6d3a",
+          "size": 608829
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "sha256": "2a77c361d50c139cd1093f54e1d35889c36b69231b6af94d8c96519f9548b558",
+          "size": 1525
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "sha256": "9ee12ad59ae3364a55c80d7c4bbb601b597653a43fd96ff63b7be75ecea31f97",
+          "size": 1310
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_llmesr_same_candidate_adapter/user_id_map.csv",
+          "sha256": "b89fe105afd247dc5abf5f319cb560499652b262046d3b2d69b12cfc5184f4cc",
+          "size": 33043
+        }
+      ],
+      "size_bytes": 24713134
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "sha256": "fa6cbc121bb77c479a63a4b475bba74c65785d6d441b6937438002995f22cac7",
+          "size": 611491
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "b408ca9e0151ffac036b6bcc737bb1cb74301bf72a3699371617301ce4790a99",
+          "size": 4941
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "sha256": "767899299a056040fd642d18fcf40a9e61d24c85b728e351282cde20921e9521",
+          "size": 1593
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "sha256": "35181a812df832e675bc30e9eae0f1266ca13219e2a1a47e0ec002848f95613d",
+          "size": 1346
+        }
+      ],
+      "size_bytes": 619371
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "sha256": "80a3e2cfac689be09747f1a1d605e19610a6e4c0f5fd07651def448e20ee6c8e",
+          "size": 607385
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "cbc93f1572396ecdfad67b28a84d11a509969229648c09fb1866ec682b25056a",
+          "size": 1804
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "sha256": "e25adf559a75e385f30bd211b7d14ee7dd9088c5f932e34cebb00fcae43c454a",
+          "size": 1513
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "sha256": "165906999c3a9a5ec2e715bedc4c1fb14c77d0779b55d5f5687fd5f2d8e1754d",
+          "size": 1286
+        }
+      ],
+      "size_bytes": 611988
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter",
+      "file_count": 15,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/README.md",
+          "sha256": "2c29c702d81d68353f395c0ee971db82ebf00ea3d934d68a54332e24d83c4135",
+          "size": 612
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/adapter_metadata.json",
+          "sha256": "22b191b8a672fe6f763b39b825bce4961cfde645b1458b8db2504ba4de658bd1",
+          "size": 5204
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/candidate_items_mapped.csv",
+          "sha256": "3699f7904d10bd80078f7cbf728048a77184c3c8fdccce67855f0d1b4c7638b2",
+          "size": 47885672
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/item_id_map.csv",
+          "sha256": "cd6a8552889a9fbfeb1815b81cd42c7507f9f373056cc8fc195c25b19b69dfc1",
+          "size": 19047
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/item_text_seed.csv",
+          "sha256": "51756fa02b8a6a8595f9ecd98d8fe54a67f27e743b6fff585c8659ede4f7ae91",
+          "size": 460770
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/data.txt",
+          "sha256": "b81348437437f18c6b6acf127268b178e7f9283b156a0a57b9644df53fc159e5",
+          "size": 53842
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/item_titles.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/item_titles.json",
+          "sha256": "023a2fde5be990a1ee5027bdeabdcd798ed8f8c734f1aef3ea55c2a9baeea08f",
+          "size": 189872
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/test_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/test_data.txt",
+          "sha256": "3dec8448c5ea8b0c98b19f39adf5f0bcdae601abde55d08c2d5da7f36c0890ca",
+          "size": 26597
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/train_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/train_data.txt",
+          "sha256": "ea84ac7843d15e7d1ffd3b0426e466ade25c7086d951fa652f00ea893d44f42d",
+          "size": 22432
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/val_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec/data/BeautySupplementary100Neg/downstream/val_data.txt",
+          "sha256": "3dec8448c5ea8b0c98b19f39adf5f0bcdae601abde55d08c2d5da7f36c0890ca",
+          "size": 26597
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec_embedding_metadata.json",
+          "sha256": "7a63472e2c70d1582aa2e522998196d6921c90e7162cc51ce382fb2c4ccb9cfc",
+          "size": 1094
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec_item_embeddings.npy",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec_item_embeddings.npy",
+          "sha256": "1ec665ae8139ee4ac81a961bd2f92234bbdb2ad13908dd3b9a3b84eb6e97d6a0",
+          "size": 19415168
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec_upstream_prepare_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/llm2rec_upstream_prepare_summary.json",
+          "sha256": "be26e8736bdcecb63d4889e3fa825f4aacf220db224aff1da359018717ba022b",
+          "size": 836
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/same_candidate_events.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/same_candidate_events.csv",
+          "sha256": "811afe28a8c348755e1ae807013b185c4ac7d5f209ce61ba28dfc78ddce6b58d",
+          "size": 147608
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llm2rec_adapter/user_id_map.csv",
+          "sha256": "5f9d5b50a36e22ee159c9ed562f1bd7b1012a4a3b0891e7b904622cc244692c6",
+          "size": 33044
+        }
+      ],
+      "size_bytes": 68288395
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter",
+      "file_count": 12,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/README.md",
+          "sha256": "e62816509d7c17a42a93b79434a15f8b75990aae38dcf2db3c9da9982db7d496",
+          "size": 1122
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/adapter_metadata.json",
+          "sha256": "6df9573606b4aa50b39742ce4f94b7fb846d0fe44896533f164922ea5c03e9ec",
+          "size": 4432
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/candidate_items_mapped.csv",
+          "sha256": "e3862957b4aa1e09d4f5b6298c35cc54afd55a4a94ae4727611a7fa4043cd70f",
+          "size": 47503667
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/item_id_map.csv",
+          "sha256": "fcd03679b4359433510871dec91d6d457c0a8443dbd049d39d68866b9f44aede",
+          "size": 19046
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/item_text_seed.csv",
+          "sha256": "0f573b7ec47f3ea50a1e6dd7c95fd18425735503685fa6f840432c36257d0072",
+          "size": 460769
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/inter.txt",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/inter.txt",
+          "sha256": "c81846d9d56715ac150a2cc1fda8c76b49b33521020859af0ab873b05c625e78",
+          "size": 43964
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "sha256": "649cd0cef57e0c9b0934cf8f5f4f333870acf4973e2d6c1fb16a1da457134c7e",
+          "size": 19398820
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "sha256": "660c018a8f9f758c88795c47c7daf7f597cb48819cabf1f72b97cf1f60afd5b4",
+          "size": 303267
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/sim_user_100.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/sim_user_100.csv",
+          "sha256": "c5f52841305b0419ee5c07652f5ad4539f75c770e7afed6ec194a2397196c60c",
+          "size": 312624
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/sim_user_100.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llm_esr/handled/sim_user_100.pkl",
+          "sha256": "1bd25dd053e350ebed6dfd6601ac62b5366b35a9cdf035345bcc9b338579c7e0",
+          "size": 216161
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llmesr_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/llmesr_embedding_metadata.json",
+          "sha256": "12452946121bf3fb552007950c111ead472ff0d9bf3d2034b25b1996ec556b3d",
+          "size": 890
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/beauty_supplementary_smallerN_100neg_llmesr_adapter/user_id_map.csv",
+          "sha256": "b89fe105afd247dc5abf5f319cb560499652b262046d3b2d69b12cfc5184f4cc",
+          "size": 33043
+        }
+      ],
+      "size_bytes": 68297805
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "sha256": "74f50d3de99094cdee9876fd7128294b5d5646996e4fd8456278e3d7e816ff2f",
+          "size": 326681
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "4dd9b2c7aa7045f5c3b9fc78da0eba5cef4876725317aacfc2cfaf85f00fcdcc",
+          "size": 1804
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "sha256": "c9bd4c794a3f3fc838e7889536aea5030692474901cfbca910c9015b437fbe3f",
+          "size": 1530
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "sha256": "286e221bdcaee3c921fbe2bd47999ae868cfc5709803c79def59557602d79989",
+          "size": 1297
+        }
+      ],
+      "size_bytes": 331312
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter",
+      "file_count": 19,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/README.md",
+          "sha256": "2c29c702d81d68353f395c0ee971db82ebf00ea3d934d68a54332e24d83c4135",
+          "size": 612
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "7e51227761c190f24234db5ffd1a8a6ec149c12b0b69dcb35986703bf34fda75",
+          "size": 652
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "c8031ee2587697f0d224c11a48880c54ed0ae9861c36c5fc20292ec0d4ae5e54",
+          "size": 3780
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "d37d54b4500bf35460274a8da053e7e0c483ddf411085ed34be0f30d498569bf",
+          "size": 577380
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "sha256": "79aa0adbe63e02e95466ca98d7f210827fdba2c5b158803cca68ebbf88f9323f",
+          "size": 51126
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "941e5a9bb93ae6d92f2ba52c4cce00b1b200af13ab7f1a72ca2f40cb6107632c",
+          "size": 325372
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/data.txt",
+          "sha256": "f3fb9502efe22e94d651795a50b4a96e2186f6017b69d81aabc15c1b2afda0e9",
+          "size": 37708
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/item_titles.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/item_titles.json",
+          "sha256": "5f6fe06ce5d43e22b62cb41fde7bb93c6193056f10a06846b25b9e46e53e4276",
+          "size": 155434
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/test_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/test_data.txt",
+          "sha256": "5b074916886e3ededfe6c14a09c3e221a1b547936215c8b8f1b0e5ac859c0ae6",
+          "size": 13312
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/train_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/train_data.txt",
+          "sha256": "5bb61fefb1746d25d65a4c136104f94a493480b7e6da0f4cbd90f1dea3bd1784",
+          "size": 10148
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/val_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec/data/books_same_candidate/downstream/val_data.txt",
+          "sha256": "5b074916886e3ededfe6c14a09c3e221a1b547936215c8b8f1b0e5ac859c0ae6",
+          "size": 13312
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "sha256": "b05598431ac7ae8274ac60dba3785b64b93b80906c6561044cb649f5cb9ffdc6",
+          "size": 1028
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "sha256": "0c39eb5f91eedb36833e61e11eb6a38d1fa72a381735935554538944639df109",
+          "size": 50331776
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "sha256": "9ed9a0d1b23c0468c0f70a1c7c99c9f6871cd6a8bd5d31a336bfbd38aaa5effa",
+          "size": 1210
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "sha256": "64c49af2d6e023720dcae57d566f56c2d25cea00a44ee9df5ab793998e3b6631",
+          "size": 1083
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "sha256": "5a87c3838dfd5fffffec3ed66a622fc026f2fef48e90290228a0d24dfbacf086",
+          "size": 332654
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "sha256": "9aad19e73397dd21110d1d88d880764d6090c71d94ab55cb61d6320e05716c27",
+          "size": 784
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "sha256": "ab1bbb6907b59a1e37abf8a1ec61e87ff1bbdaeeb6af622b50e5b5b77e47c1f7",
+          "size": 77068
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "sha256": "bbdf53e9f3360494e53f84226c85b8d73df8c456f790c7175dbd5f90275d9f49",
+          "size": 16918
+        }
+      ],
+      "size_bytes": 51951357
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "sha256": "afa55a0e8886d33982cd84cbeaa346d28695a735d8a94c29f25893613330a512",
+          "size": 328773
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "54bd53d75ff15f104fe8c5be0c229bcc7670bcb8247d4967f405a8920501d4c7",
+          "size": 1825
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "sha256": "3672775b24a74ea18a6679736a7497401f5de8e17000eeb5b2ef65c19d0f2634",
+          "size": 1573
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "sha256": "929fa23bae912490c5638511cc832c2503b019f605cbfa1d603f3f3ce4eb0b67",
+          "size": 1334
+        }
+      ],
+      "size_bytes": 333505
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter",
+      "file_count": 21,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/README.md",
+          "sha256": "e62816509d7c17a42a93b79434a15f8b75990aae38dcf2db3c9da9982db7d496",
+          "size": 1122
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "2ac305d07479531fe46418028e3b26fed7c2e60b9e971c5f1b33722fb8826198",
+          "size": 660
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "7f8174ccd51a2d0a222c17d8eaee80f83dc43626d97046a2986ba90fd1a1f127",
+          "size": 3091
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "accb182cb81c5e963750b0a67af11c9340d9140b50e5f837b562d27fc5ad62b7",
+          "size": 566017
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/item_id_map.csv",
+          "sha256": "51e100ff0f2ebf72bd55772efc16a6776e09ca77b9d16797a50f18f1c6ee4ba3",
+          "size": 51125
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "sha256": "4a72d39c385a86007c9f1d8b66b650c81b572d6f9f25084a15cee31517654d69",
+          "size": 662
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "443f7cbc8683d357d1c9fbaaae67ecb47da29476e866d39f4a7ff395edfc0349",
+          "size": 7375980
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "sha256": "376796ab4a9653fa5b43ab8fc893ee41f12fac97427470fc016410f956ca9054",
+          "size": 19995
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "sha256": "4f9791b9dfe221998fd68bc1cce00890bb104886ac59d38d97de2d0e786fc155",
+          "size": 50315428
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "sha256": "3ee3557cf982e2f5553119e911839db5ef03c0ecf9428a246eb459a0c524c3cf",
+          "size": 786339
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "sha256": "86c2722e7c033779ae0f004beceea373a5513fb8fd5dd124450a5aba549fd7b8",
+          "size": 149486
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "sha256": "9a1248f3fd979cf7ac7b08da331e65291ad8ae1beadd233321079c8a2da68113",
+          "size": 102050
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "sha256": "18ee06e0d343ae42eb3964f245e6d71a3127799e163be5ecfc03751832a00a4d",
+          "size": 842
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "sha256": "4cb7b89f76c4e7334b455d3b75a741e3e50c829a4b1f4fdbe90c38fcd1cba23d",
+          "size": 843
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "sha256": "a688bc66e5c11d7d5cd79d45248736c6eb99191d4d2eb0b81de67da22ad8b9ed",
+          "size": 752
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "sha256": "e562d9381f6a9bd743200295df097f8e39e2c81ecc38fed23cbd471e5eb2896b",
+          "size": 332807
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "sha256": "f20c7c767b818c233fedc4a3d28659f7f47e57c98c846cb74daf10ea10a4c377",
+          "size": 1910
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "sha256": "128ebcd8d33d2545378e330fa7450760c110db156a6125f91d9163bde9369094",
+          "size": 329176
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "sha256": "fa053dca85285b6b5ff7db0d0fd493ccfeee0e3cd5dbfcdbc8dc29a31b2dc77e",
+          "size": 1521
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "sha256": "6602f6cc8b6ec65c3eabd04c8d405ab81b534cc31e72e0c4a3b0beee0349557e",
+          "size": 1306
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_llmesr_same_candidate_adapter/user_id_map.csv",
+          "sha256": "ef16cc04dd77e43d87f34fab67e9d3c6f6a77964022ab5048d5ac95537c993b4",
+          "size": 16917
+        }
+      ],
+      "size_bytes": 60058029
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "sha256": "d523bbdc716571f103ce5ded316d6d3f2e3f8c777dd6ddc5f2ba0ac53de32765",
+          "size": 332091
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "90b4909b1ff56d0fef88926ec08ad3048becb1286bc7c8464f71def78923e0c5",
+          "size": 5009
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "sha256": "9d80a382a0a10758ccda0d39db121cf59f7a5c8237a744132f96d999e31231d1",
+          "size": 1588
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "sha256": "bf07bb7397d1785d9ee3d4b3f721e26ce3bcc406ce2336f462b6e23b0494cd3a",
+          "size": 1341
+        }
+      ],
+      "size_bytes": 340029
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "sha256": "d12f0dc94eca54810cc1e3088218d2f6f5b16a74ab9a103595f454021a89c652",
+          "size": 329816
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "1a879830524905867b3f9b7b16117de4d057887b3d03430ae9d526c565d8cec8",
+          "size": 1808
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "sha256": "99e7b6e4cb1751b71c3822e49cc374107dc0b5241fd695794e68ea52a521b42e",
+          "size": 1510
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/books_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "sha256": "0dabb4a562b4f902b516b78084053b8e64d1097500578d64fb04158a4a6b905b",
+          "size": 1283
+        }
+      ],
+      "size_bytes": 334417
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "sha256": "44c187feceb746ad5ffeb6053f8d84e6192fd7de1c8b2a6fcafcbea6147f002e",
+          "size": 326506
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "b88c189701fb274d8e5062dcb2ac4a09f0b0f819525a18da4bdce6008b793437",
+          "size": 1781
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "sha256": "15cfbdd38865661cbae3d828d3782d08e8348f5d18b8ca24777d0f07d304f63f",
+          "size": 1553
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "sha256": "0692c2a76de41675bd41eea75415a18e04e94b5b47e2085f9252521791d04437",
+          "size": 1320
+        }
+      ],
+      "size_bytes": 331160
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter",
+      "file_count": 19,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/README.md",
+          "sha256": "2c29c702d81d68353f395c0ee971db82ebf00ea3d934d68a54332e24d83c4135",
+          "size": 612
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "b3480222a3e0908df9c5b97c340641f984d535ad49f0a5adc2097746aad3f1e8",
+          "size": 664
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "53f49edce6bdc12990be324ec25cafc8d566b510994f04f2ca365671a5ae5037",
+          "size": 3948
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "fbe31695c6e635e7f1786aed23fa94574310f5a5f010afc627b691fe5fea635f",
+          "size": 802192
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "sha256": "435ffa9daa39a1a7271b6de17a88291ce76d03a7d4ae8c0616e4883c0dcdf0cb",
+          "size": 43629
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "dab2a94c62bf663f3961f5f12a866ac86b0abb2b58cbb0de6bddd0b7e158fc9b",
+          "size": 566056
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/data.txt",
+          "sha256": "22a805be4f0c1986c245d2358dd3977cd9230d5bff1310c5a61c8351b192bcaf",
+          "size": 31859
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/item_titles.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/item_titles.json",
+          "sha256": "5c4f24384a41e1f96d4433fb0bbf3fb957e9f46f46ce6006d651a8a194c3abea",
+          "size": 274652
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/test_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/test_data.txt",
+          "sha256": "880098f10fcb6bf25ffcde10e4b11256c5b154c6aa2f8866f31cf8c18123a962",
+          "size": 11542
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/train_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/train_data.txt",
+          "sha256": "744867fc0b5c8cb2236e7c40b59f4c80855175fe805be1eeadc9bf559b096a93",
+          "size": 8274
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/val_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec/data/electronics_same_candidate/downstream/val_data.txt",
+          "sha256": "880098f10fcb6bf25ffcde10e4b11256c5b154c6aa2f8866f31cf8c18123a962",
+          "size": 11542
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "sha256": "ddbf58101cbd11ce93054634433dc70f8b9c25952d6763189cc7bac6c1032f06",
+          "size": 1052
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "sha256": "c4f9a99fbd69e380efa1beabdd0125b947a4c696368311deff24b6bd8cecc426",
+          "size": 43106432
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "sha256": "59eb273bd6cbe44926ef1ef162528e4d08da21c564d0f682e58d5b3697ca6608",
+          "size": 1234
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "sha256": "54bf817c464fe57b430053c33b82221810c9cdd8d7147d3d6dc41087e823853b",
+          "size": 1107
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "sha256": "12db359d269ca5be94cc7111dae3929480b9aecf81cbc4f7004ed3408afa10e0",
+          "size": 332621
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "sha256": "fa2bbc1344dead1ba04e907bdca7b022bf77f3cb77c5b27d2290627642b431d4",
+          "size": 820
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "sha256": "9f57c0ec6b618201f3e30d01aa35ebc0e5710a330f8ccdfe4d79c9f3b3bbabad",
+          "size": 73529
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "sha256": "cf3b2ef14e4603cb1d084c11f21088ee657a5948b4fd36a1b8b16521794bf596",
+          "size": 16918
+        }
+      ],
+      "size_bytes": 45288683
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "sha256": "1a6ebb42c7919e49854f5661822ac68c98d7dfe801dbc29abf0ced22c7c35f6b",
+          "size": 328512
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "2f3785a966e98f717f1f6e350eaf107588dc375f1f9a701b0896318dea61cba6",
+          "size": 1795
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "sha256": "18aa9b8bf2401930f2479ccb73b395263447751deb237c873ef83cf9c6a2afc3",
+          "size": 1595
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "sha256": "48034bec2700fc1a73ad76d829366ec446eab6ca357d21b6f53384cbc685cf8b",
+          "size": 1356
+        }
+      ],
+      "size_bytes": 333258
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter",
+      "file_count": 21,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/README.md",
+          "sha256": "e62816509d7c17a42a93b79434a15f8b75990aae38dcf2db3c9da9982db7d496",
+          "size": 1122
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "4adb91763e71b9502e92959f7df19dc0f86a0faf6cb81b057af18cfecb454987",
+          "size": 666
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "24338fe7db7cdf5ae31848e65797799a724fde7f3d478d101da46f9f8c69e2f1",
+          "size": 3199
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "b87b952a56745c01af4d31a9bf33982180cad7ab122a2f983faa410c67b69c3b",
+          "size": 790829
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/item_id_map.csv",
+          "sha256": "6c1400a5e5492e472d250d45ff573098c18dda367f6ce9fddd108c9a0cd928f5",
+          "size": 43628
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "sha256": "e7f919af36869a8e50cc47f365f854ee1609005954e128c843a7563c9f4cd353",
+          "size": 680
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "2ec78f3aa52e66d16156516c15f2fb370ebb0e1e08c07f6f7069a62c293b7a0d",
+          "size": 4562752
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "sha256": "c08ab2ccb1792b5089324274d6d2e74f1e9ff17573464e4ebab02b9275552f33",
+          "size": 16810
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "sha256": "fc1f8b03dee2cbdff96f78dcb18e92a423b3fca2cfc9501a7824979c04926caf",
+          "size": 43090084
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "sha256": "1f8977bdc35a351401f75d13c619f74e8bda27fa274582ac635a36004092dce0",
+          "size": 673443
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "sha256": "37f42e351b553cf95be9affa08e906f9b98992f70b022ccce3fa4babfeaf2cd0",
+          "size": 149709
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "sha256": "343cde14ab65dd16a8a452e3a56a7e2d071cfa88fb54391c9fffa3a3dfc27896",
+          "size": 102203
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "sha256": "fe727ba4d1996e0602d59b405e52e43ba5aa0e4011ca9ed1629483a21afc49f1",
+          "size": 860
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "sha256": "3e64d2ec1e61bdd6c7aa87ad8b54c1ad7fcf949985d80051794fc2e125e4f24d",
+          "size": 855
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "sha256": "39f0779eaaed6eac90b428481614d8436e171c4cf795e6a8dc783b65d5d40e21",
+          "size": 764
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "sha256": "0244ebddf7882cbb209a98381b64c43dba1482c0939d86c9790449eab8c60730",
+          "size": 333123
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "sha256": "aac86eb2d2527db89fb3f776537b9033d0cc7a9d76311beb5c0d795cf1cde7c5",
+          "size": 1903
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "sha256": "a45a3ba111d6650efb7c0865bd136fd798ae5b5d896bb8084e1e54142770e512",
+          "size": 329184
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "sha256": "f757c8f5f34672b6667fe55d85f0cd2ea95e175092f7d46542c7c4f789741285",
+          "size": 1545
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "sha256": "a8cadbb9a518f430a828dc1fbc4b4c0271faa1677c9c805224c90de33c252ae8",
+          "size": 1330
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_llmesr_same_candidate_adapter/user_id_map.csv",
+          "sha256": "1d058e7e6e2d10fb1d1b6fdf22d39c3753f4c0538652ea95b29e661be7877ff3",
+          "size": 16917
+        }
+      ],
+      "size_bytes": 50121606
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "sha256": "d91fc7e044485c4a9dbad31498aeef7b6d71a87a0160c4d12e4e9f97deb373b4",
+          "size": 332091
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "baa69fdd19518c2a34be663a27ca48b1fd58fc8a93285a2ea5f4084671293897",
+          "size": 5003
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "sha256": "6d5f39c892b30458b53b758f712d2383198b9e479121d8a4bed31468205f54d2",
+          "size": 1613
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "sha256": "5badef5e84663c7241d34573c3c638232f24b84ee3881f932b202de1b6680a65",
+          "size": 1366
+        }
+      ],
+      "size_bytes": 340073
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "sha256": "cda7ec2360cf7c7068fdfadce2374062cad4c69484dc0c82da84b82d6d641a3d",
+          "size": 329104
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "1f7b5d98fec68d9a90f4ad39c900a216f67676496a8e8b418a3db90406b081d6",
+          "size": 1805
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "sha256": "77b821ded9238c7066e4a20764b8ea1a7921f4f49672f85d2aef037d04adbef7",
+          "size": 1533
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/electronics_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "sha256": "1c9bc2b6d37980fb5c32b894a5178203b00d886bf9b7949179150dfe86d40e5c",
+          "size": 1306
+        }
+      ],
+      "size_bytes": 333748
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores.csv",
+          "sha256": "7f865803aa9a69480037c87ffedd4357bf462036a0c12d114b53399e685f3615",
+          "size": 327184
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "2b9a00807487b566308b6095a9a2e24d2c54618a49844a3180b3d3beec8ca03e",
+          "size": 1795
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_metadata.json",
+          "sha256": "971b2eac3438e803ba87a249132b2023cf0ae6985d701bf3dcf3577f150c715f",
+          "size": 1533
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_irllrec_style_same_candidate_adapter/irllrec_style_same_candidate_scores_summary.csv",
+          "sha256": "dc1fbd8d4b250f68dbd14dab48ca7f8d76cb0f238adc05258b79800ef1a5e5e7",
+          "size": 1300
+        }
+      ],
+      "size_bytes": 331812
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter",
+      "file_count": 19,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/README.md",
+          "sha256": "2c29c702d81d68353f395c0ee971db82ebf00ea3d934d68a54332e24d83c4135",
+          "size": 612
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "2171dafe998210e970299f3b2df027767c6b9cb30266ac48710a8cf3ec7e50e0",
+          "size": 654
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "18d042e643af182d39ceafc466d2dfe591820f9e29fd0a11b560e87d3af402f1",
+          "size": 3808
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "c6cde1d05c6ea18265b42e10120628722d299424d7042e668b0fe2e7fffdb59b",
+          "size": 468568
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/item_id_map.csv",
+          "sha256": "068cddd285c38dea0ce63763c50e3ca8895b0703d9b09144b08d9303f5f9d268",
+          "size": 47590
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "067970339171734358eab1553beb675ee5a10a4f4f2497f76ba9ead8a0c813b4",
+          "size": 183863
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/data.txt",
+          "sha256": "093b571ac669b16ceb77b2e3234fe64f23dbf52779349732730fc7af886f49f6",
+          "size": 36783
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/item_titles.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/item_titles.json",
+          "sha256": "2c15e0034dc8d4c408e53684b8b144d48f03d6b01ba30f8c406964e42cab8d6c",
+          "size": 89384
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/test_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/test_data.txt",
+          "sha256": "e07a0b774a09eb66362e1e48857038ccd038a63f1f117f4f27fc15abd5692591",
+          "size": 13366
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/train_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/train_data.txt",
+          "sha256": "3f80c54c7517b9e47a4a8e62b97aa049edb098c4737eb2d969922a927ddcce13",
+          "size": 10209
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/val_data.txt",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec/data/movies_same_candidate/downstream/val_data.txt",
+          "sha256": "e07a0b774a09eb66362e1e48857038ccd038a63f1f117f4f27fc15abd5692591",
+          "size": 13366
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_embedding_metadata.json",
+          "sha256": "9ce7ff4944f996c1c468f65af1dacfe5a77d6d8c45f900fc63274da0e8a5309f",
+          "size": 1033
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_item_embeddings.npy",
+          "sha256": "61cb9a13725f2b1cbbd6b1b21a30d63c7f258c1c08f087046aa668d42c8b72d8",
+          "size": 46923904
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_metadata.json",
+          "sha256": "dbbe9f455380f4f68b8e4762163da68ec623057241b87527e8ab360cec72cb48",
+          "size": 1214
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_same_candidate_score_summary.csv",
+          "sha256": "57cedda5354b0dabef7fdd7a3e30547dac77380aed28748435824ea92dcc5eac",
+          "size": 1087
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_same_candidate_scores.csv",
+          "sha256": "4c3d337e2748277ba6f888d552694eb515fd882afeffc60abfbb9b1f8b72e5c6",
+          "size": 331567
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/llm2rec_upstream_prepare_summary.json",
+          "sha256": "bfbfe33b65c56bcb7628dcff6fce76b47f9b218bf86f65995993bcfdad7f800d",
+          "size": 790
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/same_candidate_events.csv",
+          "sha256": "92fb6386ec248c3cf7e3da9de887917c48b0ba6a7a45d75b5cd7c5d8387332f4",
+          "size": 77176
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llm2rec_same_candidate_adapter/user_id_map.csv",
+          "sha256": "27dfb7609813ed7009245fa1a06abca5579b4119746c08579a49e13224496981",
+          "size": 16918
+        }
+      ],
+      "size_bytes": 48221892
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores.csv",
+          "sha256": "b20214bbee368e54556b8b588af4dea0951dcb87cae63750a4d87e83157c1daf",
+          "size": 328904
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "2192925ab0c9e5f0c1c46cc1609f083ce4f7050f7a8e900a037af2de6128bb6a",
+          "size": 1813
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_metadata.json",
+          "sha256": "70736899545bbfa39bacace71795fbccd089dc9dd8b80d4c5b904aaec246545d",
+          "size": 1576
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmemb_style_same_candidate_adapter/llmemb_style_same_candidate_scores_summary.csv",
+          "sha256": "d2430202b65c8dd8eae3c94241972887d1ce90c46e8e6f7cb963e05f7daf1db4",
+          "size": 1337
+        }
+      ],
+      "size_bytes": 333630
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter",
+      "file_count": 21,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/README.md",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/README.md",
+          "sha256": "e62816509d7c17a42a93b79434a15f8b75990aae38dcf2db3c9da9982db7d496",
+          "size": 1122
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/adapter_audit.csv",
+          "sha256": "9d3060f1837746dfde4a9dc53f1ee550f019aacef0997b0c7317a85821c7a123",
+          "size": 661
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/adapter_metadata.json",
+          "sha256": "f976383af007fbfb2ca530ac66ba49a208a5e5bfbdbd3a13bd32d3c4061337aa",
+          "size": 3109
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/candidate_items_mapped.csv",
+          "sha256": "5975a2a64b397daf56ea3150fce52f77e4f638b60d6fe3293ea31f1f20ee4b55",
+          "size": 457205
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/item_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/item_id_map.csv",
+          "sha256": "66038cb13de2fa85d04bf4c7eb22f75f41b0bc038abad665e0f0b51ef3709e02",
+          "size": 47589
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/item_text_enrichment_summary.json",
+          "sha256": "914f317802c57e51ef75b8324d3bc4f4965d821c53eb6608cf61932ccc4a1ccb",
+          "size": 721
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/item_text_seed.csv",
+          "sha256": "07451e94173e7b2c8abaeb75afde2af230850b677d6b0ab34a3c4d2f3faeabd6",
+          "size": 4387791
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/inter.txt",
+          "sha256": "b6931c761755f1977122afdf6c5b508b76c0ba7036f8fbb4812b2bb01554b783",
+          "size": 20034
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/itm_emb_np.pkl",
+          "sha256": "a30cecf139600cd426474ba2627d56345ac3c8948384f4448126a7dcb8569574",
+          "size": 46907556
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/pca64_itm_emb_np.pkl",
+          "sha256": "85644cf3da6daca43289c53b6fd8e5e859946c67085acddaadd6c9f47eae34ac",
+          "size": 733091
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.csv",
+          "sha256": "32f9c91c4766ba3a988099ae2bfaf2eeb5196b64f5e4d8c66cabdde69c5f39ee",
+          "size": 149957
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llm_esr/handled/sim_user_100.pkl",
+          "sha256": "7191ec11f6737aa131cc3ac13e3148c1bb1dcaa9c4e3cd0fc1e687a919a93b21",
+          "size": 102356
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_embedding_metadata.json",
+          "sha256": "57e7508c278b07ef5e38b4d52bed50b45633e81f9460aef2058611ee68fd60b6",
+          "size": 860
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_scaffold_score_metadata.json",
+          "sha256": "25fbf62ee3064e936552d030c2dd3f80e09e9d825d0e6fe3c75e4a64374f0aad",
+          "size": 845
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_scaffold_score_summary.csv",
+          "sha256": "fa8ba34ab65a94697ce21ba94f0b1fce85b21a6dc944b85e55da0d1ac758c971",
+          "size": 754
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_scaffold_scores.csv",
+          "sha256": "84e2b88093cc51876cb21df7521f2742364b6f4b874cfb88b959f7c373cc7453",
+          "size": 331986
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_epoch_log.csv",
+          "sha256": "b5ddec751b6b021ce633b33ed31e5f7ba9d2d7cec6b6a79a4332bec5ec9163e9",
+          "size": 1906
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_same_candidate_scores.csv",
+          "sha256": "6520704efb30d52637a31155dd00a2054c8fe07b8ce4efeff6d3f7e205663f91",
+          "size": 329601
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_score_metadata.json",
+          "sha256": "ec4ce208c900443285a0b884f5d6ea2ee80f0e467eec8fe8f72e34d350cf6298",
+          "size": 1525
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/llmesr_upstream_score_summary.csv",
+          "sha256": "9ddec79ce9d7d0b04a97de4ca7406c87c2b134e7f77e3e67c50aaa2e5cb54c82",
+          "size": 1310
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/user_id_map.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_llmesr_same_candidate_adapter/user_id_map.csv",
+          "sha256": "947f25d22d375e8d000fa760bdceac4f2ad050d98a3372604cf2f71aa3a466e0",
+          "size": 16917
+        }
+      ],
+      "size_bytes": 53496896
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores.csv",
+          "sha256": "1bdc58cedbc286698c15ebca198ae057713bee3fa9ff54e28fda8fede856e68b",
+          "size": 332265
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "0bf5d067bb09d8cdd3876eda32a962f2cc2587ab48caca5e7320b2ab8d10d362",
+          "size": 5005
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_metadata.json",
+          "sha256": "a2ede07e900693940a235c58ff87341920b2f47081be81bed407ba68a3e49cbc",
+          "size": 1593
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_rlmrec_style_same_candidate_adapter/rlmrec_style_same_candidate_scores_summary.csv",
+          "sha256": "158efd540f81cef7d8dcaef6b194e41ee356b8f807c0f521d234758ca50593c0",
+          "size": 1346
+        }
+      ],
+      "size_bytes": 340209
+    },
+    {
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter",
+      "file_count": 4,
+      "files": [
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores.csv",
+          "sha256": "f65ccaeea41d3f78fbc7e32d89006dae85d2035bf91dbb32ee61f471a5074153",
+          "size": 329665
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_epoch_log.csv",
+          "sha256": "4022e9fd8cc769bc3dca348c1b76c5b4bd53b37dbae35f0a7fbcf45de709a007",
+          "size": 1810
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "relative_path": "outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_metadata.json",
+          "sha256": "8850544e76b9b18dfabf83937af2c8bfe8a5255d4684405c92ed93d1f4563cda",
+          "size": 1514
+        },
+        {
+          "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "relative_path": "outputs/baselines/paper_adapters/movies_setrec_style_same_candidate_adapter/setrec_style_same_candidate_scores_summary.csv",
+          "sha256": "26464641c3fa3f47e66335a50f4a723368070e2c4132b8cb4c3ce1ffcabb8ef1",
+          "size": 1287
+        }
+      ],
+      "size_bytes": 334276
+    }
+  ],
+  "failures": [],
+  "mode": "inactive_paper_adapters_cleanup_for_tools_proex",
+  "ok": true,
+  "protected": [
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_proex_official_adapter",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/official_adapters",
+    "outputs/*_official_qwen3base_same_candidate final directories",
+    "outputs/baselines/external_tasks",
+    "current source/config/docs and other project directories"
+  ],
+  "reason": "recover disk while Tools proex_profile is active; exclude active tools adapter and preserve final evidence",
+  "sha256_manifest": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/inactive_paper_adapters_cleanup_for_tools_proex_20260604.sha256"
+}
