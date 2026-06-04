@@ -102,6 +102,9 @@ pipelines. It reports tracked PID liveness, matching Python processes, latest
 `hf_mean_pool` progress, completion/failure markers, GPU, disk, output sizes,
 and `should_notify`. With `--output_json_on_notify_only`, quiet checks print to
 stdout but do not dirty the working tree by overwriting the snapshot file.
+The failure detector ignores generic `error` prose inside warning lines, but it
+still treats hard markers such as `Traceback`, exceptions, OOM/no-space,
+`killed`, and `failed` as failures.
 Treat `should_notify=true` as a handoff trigger: inspect the listed
 `notify_reasons` before deciding whether to run official gates, recover from
 failure, clean disk, or stop a duplicate launch.

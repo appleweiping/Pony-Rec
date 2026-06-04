@@ -15,7 +15,6 @@ HELPER_PATH = Path(__file__).resolve()
 ERROR_PATTERNS = (
     "traceback",
     "exception",
-    "error",
     "oom",
     "out of memory",
     "no space",
@@ -23,6 +22,21 @@ ERROR_PATTERNS = (
     "killed",
     "failed",
 )
+GENERIC_ERROR_PATTERN = "error"
+WARNING_MARKERS = (
+    "warning",
+    "userwarning",
+    "futurewarning",
+)
+
+
+def _is_failure_line(line: str) -> bool:
+    low = line.lower()
+    if any(pattern in low for pattern in ERROR_PATTERNS):
+        return True
+    if GENERIC_ERROR_PATTERN not in low:
+        return False
+    return not any(marker in low for marker in WARNING_MARKERS)
 
 
 def _remote_path(remote_project: str, path: str) -> str:
@@ -58,12 +72,7 @@ def analyze_log_lines(lines: list[str]) -> dict[str, Any]:
                 "fraction": current / total if total else None,
                 "line": line,
             }
-    lowered = [line.lower() for line in lines]
-    error_hits = [
-        line
-        for line, low in zip(lines, lowered)
-        if any(pattern in low for pattern in ERROR_PATTERNS)
-    ]
+    error_hits = [line for line in lines if _is_failure_line(line)]
     completion_lines = [
         line
         for line in lines

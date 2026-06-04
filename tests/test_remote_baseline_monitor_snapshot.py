@@ -53,6 +53,30 @@ def test_analyze_log_lines_ignores_clean_active_progress():
     assert analysis["failure_detected"] is False
 
 
+def test_analyze_log_lines_ignores_warning_prose_about_errors():
+    analysis = analyze_log_lines(
+        [
+            (
+                "scripts/train/main_train_score_promax_upstream_adapter.py:197: "
+                "UserWarning: Sparse invariant checks are implicitly disabled. "
+                "Memory errors (e.g. SEGFAULT) will occur when operating on a "
+                "sparse tensor which violates the invariants."
+            ),
+            "[promax-official] epoch=2180 train_loss=2.675591",
+        ]
+    )
+
+    assert analysis["failure_detected"] is False
+    assert analysis["error_hits"] == []
+
+
+def test_analyze_log_lines_still_detects_runtime_errors_in_warning_window():
+    analysis = analyze_log_lines(["RuntimeError: CUDA out of memory"])
+
+    assert analysis["failure_detected"] is True
+    assert analysis["error_hits"] == ["RuntimeError: CUDA out of memory"]
+
+
 def test_build_remote_command_passes_all_monitor_args():
     args = argparse.Namespace(
         remote_host="pony-rec-gpu",
