@@ -425,13 +425,12 @@ SOTA claim.
    `monitor-tools-irllrec`; its launch snapshot
    `outputs/summary/tools_irllrec_launch_monitor_20260605.json` shows Qwen3
    embedding progress `2056/269711`, GPU `95%`, disk `13.34G` free, and no
-   failure markers. A 2026-06-05 03:52 CST monitor check found runner PID
+   failure markers. A 2026-06-05 04:00 CST monitor check found runner PID
    `3326805` and adapter PID `3326813` still alive, GPU about `100%` with
-   `16247 MiB / 49140 MiB`, training advanced to `epoch=1610` with latest
-   loss `0.658740`, disk about `9.1G` free / `96%` used, no fatal/OOM/no-space
-   markers, no final scores/provenance/tables yet, and no new obvious safe
-   cleanup target in the compact large-file audit. It is active monitor-only
-   evidence, not a completed row.
+   `16247 MiB / 49140 MiB`, training advanced to `epoch=1740` with latest
+   loss `0.657816`, disk about `9.1G` free / `96%` used, no fatal/OOM/no-space
+   markers, and no final scores/provenance/tables yet. It is active
+   monitor-only evidence, not a completed row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

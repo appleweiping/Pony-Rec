@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 03:52 CST
+Last updated: 2026-06-05 04:00 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1561,17 +1561,15 @@ adapter at `5.2G` (`llm_esr/handled/itm_emb_np.pkl` about `4.1G`) and no
 obvious safe large deletion outside active/protected evidence, models,
 checkpoints, task packages, or final artifacts, so no cleanup was performed.
 Continue monitoring disk; do not delete active adapter files.
-Monitor update 2026-06-05 03:52 CST: runner PID `3326805` and adapter PID
+Monitor update 2026-06-05 04:00 CST: runner PID `3326805` and adapter PID
 `3326813` remained alive, GPU was active at about `100%` with
 `16247 MiB / 49140 MiB`, and IRLLRec official training had advanced to
-`epoch=1610` with latest loss `0.658740`. Log scans still showed no
+`epoch=1740` with latest loss `0.657816`. Log scans still showed no
 completion marker and no fatal/OOM/no-space marker, and the final output
 directory remained placeholder-only. Disk remained in warning state at about
-`9.1G` free / `96%` used. A repeat compact read-only large-file audit found no new
-obvious duplicate/temp cleanup target: the multi-GB files remain protected
-final models/checkpoints/task packages or the active IRLLRec adapter. This is
-still monitor-only evidence, not an official completed row; wait for normal
-runner exit and final artifacts before running the prepared completion gates.
+`9.1G` free / `96%` used. This is still monitor-only evidence, not an official
+completed row; wait for normal runner exit and final artifacts before running
+the prepared completion gates.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
