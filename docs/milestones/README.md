@@ -210,11 +210,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   editable source plus PDF/PNG/caption/provenance. As of 2026-06-04 04:43 CST,
   the draft local package exists at
   `outputs/summary/paper_critical/framework_overview/` with a sha256 manifest.
-  It was regenerated at 2026-06-04 08:40 CST with the code-matched
-  multiplicative risk formula; relevant tests passed and the PNG was visually
-  checked as nonblank/readable. It must keep the claim boundary as controlled
-  same-candidate ranking rather than full-catalog or generative-title
-  recommendation and still needs final paper-layout/reviewer polish.
+  It was regenerated at 2026-06-04 17:31 CST against git commit `9badd19` with
+  the code-matched multiplicative risk formula; focused figure/audit tests
+  passed (`4 passed`) and the PNG was visually checked as nonblank/readable. It
+  must keep the claim boundary as controlled same-candidate ranking rather than
+  full-catalog or generative-title recommendation and still needs final
+  paper-layout/reviewer polish.
 - Consolidated paper-critical module audit now exists:
   `scripts/audit/main_audit_paper_critical_modules.py`. Current artifact
   `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`

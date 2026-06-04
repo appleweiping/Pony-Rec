@@ -1,7 +1,7 @@
 {
   "status_label": "paper_critical_framework_overview_draft",
-  "generated_at_utc": "2026-06-04T00:36:30+00:00",
-  "git_commit": "66aa27dad19cfe46496a15e14315ce5016a59be9",
+  "generated_at_utc": "2026-06-04T09:30:37+00:00",
+  "git_commit": "9badd19677f5e37c45666db948524fe5301bf067",
   "command": "python scripts/analysis/main_build_framework_overview_figure.py --output_dir outputs\\summary\\paper_critical\\framework_overview",
   "outputs": {
     "svg": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview.svg",

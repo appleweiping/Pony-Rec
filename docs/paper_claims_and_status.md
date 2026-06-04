@@ -122,9 +122,10 @@ also include:
    `outputs/summary/paper_critical/framework_overview/` with SVG, PDF, PNG,
    caption, provenance, and `framework_overview_manifest.sha256`. This package
    is paper-critical evidence scaffolding, not yet a final camera-ready figure.
-   It was regenerated at 2026-06-04 07:32 CST against git commit `8f972ca`;
-   `tests/test_framework_overview_figure.py` passed and the PNG was visually
-   checked as nonblank/readable.
+   It was regenerated at 2026-06-04 17:31 CST against git commit `9badd19`;
+   `python -m pytest tests\test_framework_overview_figure.py
+   tests\test_audit_paper_critical_modules.py` passed (`4 passed`) and the PNG
+   was visually checked as nonblank/readable.
 
 Each module needs status labels, row counts, commands, configs, seeds when
 applicable, provenance notes, plots/tables, and a lightweight local evidence

@@ -184,13 +184,14 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `src/shadow/ccrp.py`, and includes counterevidence in the C-CRP uncertainty
    box; it
    still needs final paper-layout/reviewer polish before camera-ready use. On
-   2026-06-04 08:40 CST, the package was regenerated from
-   `scripts/analysis/main_build_framework_overview_figure.py` with the
-   code-matched multiplicative risk formula, `tests/test_framework_overview_figure.py`
-   passed as part of the 9-test paper-critical check, and the PNG was visually
-   checked as nonblank/readable. This completes the current draft scaffold for
-   the framework-overview paper-critical module, but not final camera-ready
-   reviewer polish.
+   2026-06-04 17:31 CST, the package was regenerated from
+   `scripts/analysis/main_build_framework_overview_figure.py` against git
+   commit `9badd19` with the code-matched multiplicative risk formula;
+   `python -m pytest tests\test_framework_overview_figure.py
+   tests\test_audit_paper_critical_modules.py` passed (`4 passed`), and the
+   PNG was visually checked as nonblank/readable. This completes the current
+   draft scaffold for the framework-overview paper-critical module, but not
+   final camera-ready reviewer polish.
 
 Evidence packaging for these modules follows the same lightweight-but-complete
 standard as official rows: keep selected metrics CSV/JSON, final tables, plots,

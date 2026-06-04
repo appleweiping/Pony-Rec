@@ -1,7 +1,7 @@
 {
   "ok": true,
   "paper_ready": false,
-  "generated_at_utc": "2026-06-04T03:41:34+00:00",
+  "generated_at_utc": "2026-06-04T09:31:30+00:00",
   "root": "D:\\Research\\Uncertainty",
   "summary": {
     "framework_overview_scaffold_ready": true,
@@ -190,13 +190,13 @@
       },
       "manifest_checks": {
         "framework_overview.svg": {
-          "expected": "cfd31b94b8c975f304015b0c8a095b51011e8fa1a0fecc9522d3ed4f53ab5cbd",
-          "actual": "cfd31b94b8c975f304015b0c8a095b51011e8fa1a0fecc9522d3ed4f53ab5cbd",
+          "expected": "b5714263c40ccb2951f6784473f738992dc93719d7f92258bc11c18ed79463ed",
+          "actual": "b5714263c40ccb2951f6784473f738992dc93719d7f92258bc11c18ed79463ed",
           "ok": true
         },
         "framework_overview.pdf": {
-          "expected": "5ab33f1d62783cb9a5bd8df1278090be2a1efd4d6a134aa8ac5523dafd70a2a5",
-          "actual": "5ab33f1d62783cb9a5bd8df1278090be2a1efd4d6a134aa8ac5523dafd70a2a5",
+          "expected": "a3a4dc7c959a20089129d3db6a917eb103174a3fecd21be128dedbe87d39798f",
+          "actual": "a3a4dc7c959a20089129d3db6a917eb103174a3fecd21be128dedbe87d39798f",
           "ok": true
         },
         "framework_overview.png": {
@@ -210,15 +210,15 @@
           "ok": true
         },
         "framework_overview_provenance.json": {
-          "expected": "28ca0670059a349e7d88f7b2cf0c286ca30d059978c6b7c335db21df1ad0287d",
-          "actual": "28ca0670059a349e7d88f7b2cf0c286ca30d059978c6b7c335db21df1ad0287d",
+          "expected": "7becf06201beb2d8e15b33bb10afd8b389657e7fe47fb7e5bb845362fd3f6add",
+          "actual": "7becf06201beb2d8e15b33bb10afd8b389657e7fe47fb7e5bb845362fd3f6add",
           "ok": true
         }
       },
       "provenance": {
         "status_label": "paper_critical_framework_overview_draft",
-        "git_commit": "66aa27dad19cfe46496a15e14315ce5016a59be9",
-        "generated_at_utc": "2026-06-04T00:36:30+00:00"
+        "git_commit": "9badd19677f5e37c45666db948524fe5301bf067",
+        "generated_at_utc": "2026-06-04T09:30:37+00:00"
       }
     }
   },
