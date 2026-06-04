@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 10:35 CST
+Last updated: 2026-06-04 12:10 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -397,6 +397,26 @@ passes gates, or fails with an audited recovery decision.
   `95%` used, the adapter directory was `1.1G`, the final output directory
   remained `4.0K`, and the log scan found no traceback, OOM, no-space, killed,
   or duplicate-run signal.
+- Disk rescue during active Home `llmesr_sasrec`: after Qwen3 embedding
+  completed and LLM-ESR training began, the active adapter directory grew to
+  about `7.0G` and `/` dropped to about `4.1G` free / `98%` used. Read-only
+  large-file audit classified the active `llm_esr/handled/itm_emb_np.pkl`,
+  final official checkpoints/models, final scores/provenance/audits/imported
+  tables, and same-candidate task packages as protected. Cleanup therefore
+  removed only old transfer/generated diagnostic artifacts with sha256
+  manifests: ignored server `outputs/exports/*.tar.gz` transfer bundles
+  (`outputs/summary/server_exports_tarball_cleanup_20260604.sha256`), old
+  generated SRPD formal `train.jsonl`/`valid.jsonl` files while preserving
+  configs/summaries
+  (`outputs/summary/week8_srpd_formal_data_cleanup_for_home_llmesr_disk_20260604.sha256`),
+  and old Beauty Shadow diagnostic JSONL inputs/gate-sweep intermediates while
+  preserving the C-CRP selected scored rows
+  (`outputs/summary/week8_shadow_diagnostic_jsonl_cleanup_for_home_llmesr_disk_20260604.sha256`).
+  This recovered `/` to about `8.1G` free / `96%` used, enough to avoid the
+  immediate no-space cliff but still below the `<10G` warning threshold. Do
+  not delete final method checkpoints, active LLM-ESR files, task data, scores,
+  provenance, audits, or imported tables without a separate explicit archive
+  decision.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
