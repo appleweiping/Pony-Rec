@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 21:05 CST
+Last updated: 2026-06-04 21:15 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1386,10 +1386,10 @@ If it completes, run server-final audit, server large-artifact manifest,
 local-light sync, local-light audit, docs/memory update, and related-only
 commit/push before the next row.
 
-Tools ElmRec monitor checkpoint 2026-06-04 21:05 CST: robust SSH-stdin monitor
+Tools ElmRec monitor checkpoint 2026-06-04 21:15 CST: robust SSH-stdin monitor
 snapshot `outputs/summary/tools_elmrec_monitor_snapshot_latest.json` reports
 the same single matching adapter PID `3301345`, Qwen3 `hf_mean_pool` progress
-`59432/269711` (`0.22035437931712093`), GPU `95%` with
+`116952/269711` (`0.43361968922290894`), GPU `96%` with
 `16213 MiB / 49140 MiB`, adapter directory `1005M`, no completion marker, and
 no Traceback/OOM/no-space/blocker/failure markers. C-CRP all-domain log still
 ends in `ALL C-CRP v3 INFERENCE COMPLETE`. Disk remains warning-level at
@@ -1397,6 +1397,9 @@ about `9.85G` free / `95%` used, which is the only `should_notify` reason. A
 read-only large-file audit found the largest directories/files are mostly
 protected final official evidence, task packages, model/checkpoint files, or
 active ElmRec adapter files; no cleanup was performed while the row is active.
+GPT-5.5 xhigh sidecar Noether independently confirmed the monitor-only
+sequence, the post-completion gate order, and that the server ELMRec checkout
+matches pinned commit `b28c4f786d89fb8473ab358e12a882b30259f627`.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
