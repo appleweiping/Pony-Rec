@@ -266,8 +266,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   and launch snapshot `outputs/summary/tools_rlmrec_launch_monitor_20260605.json`.
   The launch snapshot found one matching adapter process, no completion or
   failure markers, adapter dir about `1000M`, final output placeholder-only,
-  and disk about `12.35G` free / `94%` used. This is active monitor-only
-  evidence, not a completed row.
+  and disk about `12.35G` free / `94%` used. A 2026-06-05 05:53 CST monitor
+  check found runner PID `3347729` and adapter PID `3347738` still alive, one
+  matching adapter process, Qwen3 embedding progress `35360/269711`, GPU
+  active, disk about `12.35G` free / `94%` used, no failure markers, and no
+  final scores/provenance/tables yet. This is active monitor-only evidence,
+  not a completed row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
