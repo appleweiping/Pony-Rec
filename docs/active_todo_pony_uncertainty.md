@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 15:02 CST
+Last updated: 2026-06-04 16:40 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1260,6 +1260,36 @@ The PowerShell file starts with a `throw` and records the required order:
 server-final audit, server large-artifact sha256 manifest, local-light sync,
 then local-light audit. It must not be used until the active runner exits
 normally and no duplicate process is present.
+
+Tools ProEx completion/gate checkpoint 2026-06-04 16:40 CST:
+`proex_profile` completed at 2026-06-04 16:08 CST as the first Tools official
+row. Final provenance records `implementation_status=official_completed`,
+`blockers=[]`, and exact `score_coverage_rate=1.0`. Server-final audit, server
+large-artifact sha256 manifest, lightweight local sync, and local-light audit
+all passed. Full metrics over 10,000 users and 101 candidates are HR@5/10/20
+`0.0602 / 0.1177 / 0.2329`, NDCG@5/10/20
+`0.037281705859706714 / 0.055676376797898205 / 0.08437492971571317`, and MRR
+`0.06071849976691817`. Row counts passed for `scores.csv` (`1,010,001`
+lines), predictions (`10,000` lines before post-gate deletion), and
+`tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+evidence package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`
+and includes final provenance, score audits, run summary, server-final audit,
+server large-artifact manifest, imported metric/coverage/exposure/eval-record
+tables, local sync manifest, local-light audit, and the post-gate prediction
+deletion manifest. Under disk pressure (`4.9G` free / `98%` used after
+completion), the server-only prediction JSONL was removed only after the
+server-final and local-light gates passed; its deletion manifest records
+`805939218` bytes, `10,000` lines, and sha256
+`9985f5fe3e99efed02d9e111ec53d3daf52e91800ff30b58f2d33ef089e4b312`. The
+completed intermediate adapter
+`outputs/baselines/paper_adapters/tools_large10000_100neg_proex_official_adapter`
+was then removed after resolved-path checks. Final scores, provenance, audits,
+imported `tables/`, and `proex_official_model.pt` were preserved. Post-cleanup
+checks show no matching Python experiment process, GPU idle, and `/` at about
+`12G` free / `95%` used. Tools is now 1/8 official rows complete. Next action:
+fresh process/GPU/disk/duplicate-output preflight, then launch the next Tools
+single-row official baseline; do not batch multiple rows.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and

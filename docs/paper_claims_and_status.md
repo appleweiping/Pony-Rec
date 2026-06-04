@@ -298,8 +298,8 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools `proex_profile` is active as the first Tools
-official row, so Tools still needs completed official rows plus paired
+domain set is complete; Tools now has 1/8 official rows gated after
+`proex_profile`, so Tools still needs seven completed official rows plus paired
 same-candidate tests before any paper-wide SOTA claim.
 
 ### Remaining for paper submission
@@ -311,8 +311,27 @@ same-candidate tests before any paper-wide SOTA claim.
    complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
    score file. Sports, toys, and home are now 8/8 complete and have passed
    their domain/comparison/paired-test gates. Tools `proex_profile` launched at
-   2026-06-04 14:25 CST as the first Tools row; monitor adapter PID `3269572`
-   and log `baselines_new_domains_tools_proex_20260604_142548.log`. Home
+   2026-06-04 14:25 CST as the first Tools row and completed at
+   2026-06-04 16:08 CST with `implementation_status=official_completed`,
+   `blockers=[]`, exact `score_coverage_rate=1.0`, score audit/imported
+   tables, server-final audit, server large-artifact sha256 manifest,
+   lightweight local sync, and local-light audit all passing. Full metrics over
+   10,000 users and 101 candidates are HR@5/10/20
+   `0.0602 / 0.1177 / 0.2329`, NDCG@5/10/20
+   `0.037281705859706714 / 0.055676376797898205 / 0.08437492971571317`, and
+   MRR `0.06071849976691817`; `scores.csv` has `1,010,001` lines,
+   predictions had `10,000` lines before post-gate deletion, and
+   `tables/ranking_eval_records.csv` has `10,001` lines. The local
+   lightweight package is
+   `outputs/baselines/official_adapters/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`.
+   Server-only `scores.csv`, deleted prediction metadata, and
+   `proex_official_model.pt` are covered by
+   `server_large_artifact_manifest.sha256` and
+   `prediction_deletion_manifest.json`. The completed intermediate adapter was
+   removed after final evidence and local backup passed, recovering `/` to
+   about `12G` free / `95%` used while preserving final evidence. Tools is now
+   1/8 complete; the next action is a fresh preflight followed by the next
+   single-row Tools official baseline. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.

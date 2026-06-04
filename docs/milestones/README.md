@@ -139,9 +139,27 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/summary/home_official_ccrp_20260604_paired_summary.json` records
   `claim_gate=home_domain_pass`, C-CRP observed-best on all seven metrics, and
   all 56 C-CRP-vs-official paired tests positive and Holm-significant. Tools
-  `proex_profile` launched at 2026-06-04 14:25 CST as the first Tools official
-  row; monitor adapter PID `3269572` and log
-  `baselines_new_domains_tools_proex_20260604_142548.log`.
+  `proex_profile` completed at 2026-06-04 16:08 CST as the first Tools official
+  row with `implementation_status=official_completed`, `blockers=[]`, exact
+  `score_coverage_rate=1.0`, and passing server-final audit, server
+  large-artifact sha256 manifest, lightweight local sync, and local-light
+  audit. Full metrics over 10,000 users and 101 candidates are HR@5/10/20
+  `0.0602 / 0.1177 / 0.2329`, NDCG@5/10/20
+  `0.037281705859706714 / 0.055676376797898205 / 0.08437492971571317`, and
+  MRR `0.06071849976691817`; `scores.csv` has `1,010,001` lines, predictions
+  had `10,000` lines before post-gate deletion, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+  package is
+  `outputs/baselines/official_adapters/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/`.
+  The post-gate server prediction deletion manifest is
+  `outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/prediction_deletion_manifest.json`,
+  and the completed intermediate adapter
+  `outputs/baselines/paper_adapters/tools_large10000_100neg_proex_official_adapter`
+  was removed after path checks, restoring `/` to about `12G` free / `95%`
+  used while preserving final scores, provenance, audits, imported tables, and
+  `proex_official_model.pt`. Tools is now 1/8 official rows complete; start
+  the next Tools row only after a fresh process/GPU/disk/duplicate-output
+  preflight.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

@@ -1,0 +1,9 @@
+{
+  "deleted_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+  "bytes": 805939218,
+  "lines": 10000,
+  "sha256": "9985f5fe3e99efed02d9e111ec53d3daf52e91800ff30b58f2d33ef089e4b312",
+  "deleted_at": "2026-06-04T08:33:52Z",
+  "reason": "disk_pressure_after_server_final_and_local_light_audits",
+  "certificate": "server_final_evidence_audit.json"
+}
