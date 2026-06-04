@@ -457,8 +457,11 @@ same-candidate tests before any paper-wide SOTA claim.
    check found runner PID `3347729` and adapter PID `3347738` still alive, one
    matching adapter process, Qwen3 embedding progress `35360/269711`, GPU
    active, disk about `12.35G` free / `94%` used, no failure markers, and no
-   final scores/provenance/tables yet. This is active monitor-only evidence,
-   not a completed row.
+   final scores/provenance/tables yet. A 2026-06-05 06:03 CST follow-up found
+   the same PIDs alive and unique, Qwen3 embedding progress `79528/269711`,
+   disk still about `12.35G` free / `94%` used, and no completion/failure
+   markers or final scores/provenance/tables. This is active monitor-only
+   evidence, not a completed row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
