@@ -144,6 +144,9 @@ The repository is now in M5 (multi-domain SOTA validation):
   outputs; Sports/Toys/Home/Tools formal `scores.csv` files are complete for
   ranking import but score-only for uncertainty analysis. A project-root broad
   scan also found no additional matching signal rows outside `outputs/`.
+  Guard hardening on 2026-06-04 added duplicate/extra eval-event rejection,
+  positive-rank and optional `num_candidates` checks, full-metric provenance,
+  and a `motivation_only_not_main_table_sota` claim scope for this script.
 - C-CRP hyperparameter curve script entry now exists:
   `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`. It consumes
   validation `valid_ccrp_sweep.csv` artifacts and is not a completed paper

@@ -6,9 +6,9 @@ review.
 
 ## Current Constraint
 
-Do not start these runs while the active Home `rlmrec_graphcl` official row is
-running. The current server row has runner PID `3178395`, adapter PID
-`3178403`, and log `baselines_new_domains_home_rlmrec_20260603_2028.log`.
+Do not start these runs while the active Home `llm2rec_sasrec` official row is
+running. The current server row has runner PID `3236678`, adapter PID
+`3236688`, and log `baselines_new_domains_home_llm2rec_20260604_071902.log`.
 Queue the work only after that row completes and passes evidence gates, or
 after an audited failure/recovery decision frees the GPU.
 
@@ -56,6 +56,9 @@ Numeric gates:
   the selected methods.
 - Event-level joins must retain at least 99.9% of the C-CRP event rows; lower
   retention is a blocker unless explained.
+- Ranking eval inputs must have unique event IDs, no eval events outside the
+  C-CRP uncertainty input, finite positive integer ranks, and `num_candidates`
+  equal to the expected candidate count whenever that column is present.
 - The figure must be backed by tabular data and not by manual screenshot-only
   inspection.
 
@@ -88,6 +91,7 @@ python scripts/analysis/main_build_uncertainty_observation_study.py \
   --method_eval proex=outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \
   --output_dir outputs/summary/paper_critical/observation_sports \
   --expected_events 10000 \
+  --expected_candidates_per_event 101 \
   --min_join_rate 0.999
 ```
 
@@ -96,6 +100,11 @@ Do not pass final C-CRP `scores.csv` if it only contains
 score-only files without an uncertainty column. If necessary, regenerate the
 C-CRP signal rows from saved non-test-selected inputs without re-querying the
 LLM, then record that command and sha256 in the provenance.
+As of 2026-06-04, the script also writes
+`artifact_class=paper_critical_observation_motivation`,
+`paper_claim_scope=motivation_only_not_main_table_sota`, full
+MRR/HR@5/@10/@20/NDCG@5/@10/@20 metric requirements, and explicit claim limits
+into provenance.
 
 Discovery status (2026-06-03): a read-only server inventory found only one
 complete C-CRP selector provenance/scored-row package:

@@ -60,6 +60,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ks", default="5,10,20")
     parser.add_argument("--primary_metric", default="NDCG@10")
     parser.add_argument("--expected_events", type=int, default=10000)
+    parser.add_argument(
+        "--expected_candidates_per_event",
+        type=int,
+        default=101,
+        help="If ranking eval records include num_candidates, require this exact candidate count. Use 0 to disable.",
+    )
     parser.add_argument("--min_join_rate", type=float, default=0.999)
     parser.add_argument("--skip_plot", action="store_true")
     return parser.parse_args()
@@ -231,17 +237,50 @@ def _metric_from_rank(rank: int, metric: str) -> float:
     raise ValueError(f"Unsupported metric: {metric}")
 
 
-def load_method_eval(path: str | Path, *, method: str, ks: list[int]) -> pd.DataFrame:
+def load_method_eval(
+    path: str | Path,
+    *,
+    method: str,
+    ks: list[int],
+    expected_candidates_per_event: int = 0,
+) -> pd.DataFrame:
     df = _read_table(path)
     if df.empty:
         raise ValueError(f"Empty method eval file: {path}")
     event_column = _event_col(df)
     if "positive_rank" not in df.columns:
         raise ValueError(f"Method eval file lacks positive_rank: {path}")
+
+    event_ids = df[event_column].map(_text)
+    duplicate_events = sorted({event_id for event_id in event_ids[event_ids.duplicated()].tolist() if event_id})
+    if duplicate_events:
+        preview = ", ".join(duplicate_events[:5])
+        raise ValueError(f"{method} eval file has duplicate event_id rows: {preview}")
+
     rows: list[dict[str, Any]] = []
     for idx, record in enumerate(df.to_dict(orient="records")):
         event_id = _text(record.get(event_column)) or str(idx)
-        rank = int(float(record["positive_rank"]))
+        rank_float = _finite_float(record["positive_rank"])
+        if not math.isfinite(rank_float) or rank_float < 1 or abs(rank_float - round(rank_float)) > 1e-9:
+            raise ValueError(f"{method} has invalid positive_rank={record.get('positive_rank')!r} for event {event_id}")
+        rank = int(round(rank_float))
+        num_candidates = None
+        if "num_candidates" in df.columns:
+            num_candidates_float = _finite_float(record.get("num_candidates"))
+            if (
+                not math.isfinite(num_candidates_float)
+                or num_candidates_float < 1
+                or abs(num_candidates_float - round(num_candidates_float)) > 1e-9
+            ):
+                raise ValueError(f"{method} has invalid num_candidates={record.get('num_candidates')!r} for event {event_id}")
+            num_candidates = int(round(num_candidates_float))
+            if expected_candidates_per_event > 0 and num_candidates != expected_candidates_per_event:
+                raise ValueError(
+                    f"{method} event {event_id} has num_candidates={num_candidates}, "
+                    f"expected {expected_candidates_per_event}"
+                )
+            if rank > num_candidates:
+                raise ValueError(f"{method} event {event_id} has positive_rank={rank} beyond num_candidates={num_candidates}")
         row: dict[str, Any] = {
             "event_id": event_id,
             "method": method,
@@ -283,6 +322,7 @@ def build_observation_tables(
     n_bins: int,
     ks: list[int],
     expected_events: int,
+    expected_candidates_per_event: int,
     min_join_rate: float,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any]]:
     event_uncertainty, uncertainty_summary = load_event_uncertainty(
@@ -302,8 +342,17 @@ def build_observation_tables(
     input_paths: dict[str, str] = {"uncertainty_scores": uncertainty_scores_path, "ccrp_eval": ccrp_eval_path}
     metrics = ["MRR"] + [f"HR@{k}" for k in ks] + [f"NDCG@{k}" for k in ks]
     for method, path in _parse_method_eval_specs(method_eval_specs, ccrp_eval_path):
-        method_eval = load_method_eval(path, method=method, ks=ks)
+        method_eval = load_method_eval(
+            path,
+            method=method,
+            ks=ks,
+            expected_candidates_per_event=expected_candidates_per_event,
+        )
         joined = binned.merge(method_eval, on="event_id", how="inner")
+        uncertainty_event_ids = set(binned["event_id"].tolist())
+        method_event_ids = set(method_eval["event_id"].tolist())
+        missing_eval_events = len(uncertainty_event_ids - method_event_ids)
+        extra_eval_events = len(method_event_ids - uncertainty_event_ids)
         join_rate = float(len(joined) / len(binned)) if len(binned) else 0.0
         join_report.append(
             {
@@ -312,9 +361,17 @@ def build_observation_tables(
                 "method_eval_rows": int(len(method_eval)),
                 "joined_events": int(len(joined)),
                 "ccrp_uncertainty_events": int(len(binned)),
+                "missing_eval_events": int(missing_eval_events),
+                "extra_eval_events": int(extra_eval_events),
+                "exact_event_match": bool(missing_eval_events == 0 and extra_eval_events == 0),
                 "join_rate": join_rate,
             }
         )
+        if extra_eval_events:
+            raise ValueError(
+                f"{method} has {extra_eval_events} eval events not present in the C-CRP uncertainty input. "
+                "Resolve the same-candidate event alignment before using the motivation study in the paper."
+            )
         if join_rate < min_join_rate:
             raise ValueError(f"{method} join_rate={join_rate:.6f} below min_join_rate={min_join_rate:.6f}")
         joined["domain"] = domain
@@ -359,7 +416,14 @@ def build_observation_tables(
         summary_rows.append(row)
 
     provenance = {
+        "artifact_class": "paper_critical_observation_motivation",
         "status_label": "paper_critical_observation_ready",
+        "paper_claim_scope": "motivation_only_not_main_table_sota",
+        "claim_limits": [
+            "Representative uncertainty-behavior evidence only.",
+            "Does not replace full official-baseline comparison, ablation, or paired statistical gates.",
+            "Requires real event-level uncertainty fields; score-only C-CRP outputs are rejected.",
+        ],
         "domain": domain,
         "git_commit": _git_commit(),
         "command": " ".join(sys.argv),
@@ -368,8 +432,10 @@ def build_observation_tables(
         "uncertainty_summary": uncertainty_summary,
         "join_report": join_report,
         "expected_events": expected_events,
+        "expected_candidates_per_event": expected_candidates_per_event,
         "min_join_rate": min_join_rate,
         "ks": ks,
+        "required_metrics": metrics,
     }
     return event_bins, pd.DataFrame(summary_rows), provenance
 
@@ -440,6 +506,7 @@ def main() -> None:
         n_bins=args.n_bins,
         ks=ks,
         expected_events=args.expected_events,
+        expected_candidates_per_event=args.expected_candidates_per_event,
         min_join_rate=args.min_join_rate,
     )
     _write_csv(output_dir / "observation_event_bins.csv", event_bins)

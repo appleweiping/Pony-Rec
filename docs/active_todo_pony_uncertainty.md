@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 08:40 CST
+Last updated: 2026-06-04 09:02 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -87,6 +87,15 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `ccrp_uncertainty`. Therefore paper-ready uncertainty rows cannot be
    rebuilt from formal `scores.csv` alone; the selector route still requires
    real valid/test signal paths.
+   Observation-builder guard hardening on 2026-06-04 09:02 CST: the script now
+   rejects duplicate ranking-eval events, eval events not present in the C-CRP
+   uncertainty input, invalid positive ranks, and `num_candidates` mismatches
+   when ranking records expose that column. Its provenance now records
+   `artifact_class=paper_critical_observation_motivation`,
+   `paper_claim_scope=motivation_only_not_main_table_sota`, the required full
+   metric set (`MRR`, HR@5/@10/@20, NDCG@5/@10/@20), expected candidate count,
+   and explicit claim limits. This strengthens the future motivation figure
+   gate but does not remove the current missing-signal-row blocker.
    Discovery helper:
    `scripts/audit/main_discover_ccrp_uncertainty_sources.py`, which scans CSV
    and JSONL headers for domain-specific C-CRP/shadow/signal/scored artifacts

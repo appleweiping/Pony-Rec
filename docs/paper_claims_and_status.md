@@ -76,13 +76,22 @@ also include:
     generated shell exits before running commands and remains
     `planning_only_not_executed` until real full-scale signal paths pass audit.
     Consolidated module audit entry:
-    `scripts/audit/main_audit_paper_critical_modules.py` writes
+   `scripts/audit/main_audit_paper_critical_modules.py` writes
     `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`
     without running experiments. The current audit reports
     `paper_ready=false`, `framework_overview_scaffold_ready=true`,
     `guarded_plan_ready=true`, and `signal_rows_available=false`, so the
     observation, component-ablation, and hyperparameter modules remain blocked
     by missing full-scale uncertainty or recomputable signal rows.
+   Observation-builder guard hardening on 2026-06-04: the motivation script now
+   rejects duplicate ranking-eval events, eval events absent from the C-CRP
+   uncertainty input, invalid positive ranks, and `num_candidates` mismatches
+   when ranking records include that column. Its provenance labels the output
+   as `artifact_class=paper_critical_observation_motivation` with
+   `paper_claim_scope=motivation_only_not_main_table_sota`, records the full
+   required metric set (MRR, HR@5/@10/@20, NDCG@5/@10/@20), and includes
+   explicit claim limits so representative motivation evidence cannot be
+   mistaken for main-table SOTA evidence.
 2. A component ablation study over every nontrivial C-CRP design component
    found in the implementation/docs. At minimum, audit score mode, boundary
    uncertainty (`without_boundary_uncertainty`), calibration gap
