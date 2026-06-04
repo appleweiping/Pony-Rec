@@ -394,7 +394,7 @@ When in doubt, downgrade the claim, not the evidence standard.
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
-Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 8/8 + gate✓ with C-CRP rank 1 on all 7 metrics and 56/56 positive Holm-significant paired tests; tools 1/8 with proex_profile gated✓; next tools row pending fresh process/GPU/disk preflight; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
+Phase 2: 8 official baselines on 4 new domains (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 8/8 + gate✓ with C-CRP rank 1 on all 7 metrics and 56/56 positive Holm-significant paired tests; tools 1/8 with proex_profile gated✓ and promax_profile active since 2026-06-04 16:46 CST, runner PID 3279573, adapter PID 3279582; scripts/run_baselines_new_domains.sh; SETRec excluded while blocked; single-domain loop; full @5/@10/@20+MRR import after each score audit)
 Phase 2.5: Paper-critical modules before readiness claim: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)

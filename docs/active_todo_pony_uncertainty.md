@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 16:40 CST
+Last updated: 2026-06-04 16:50 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1290,6 +1290,32 @@ checks show no matching Python experiment process, GPU idle, and `/` at about
 `12G` free / `95%` used. Tools is now 1/8 official rows complete. Next action:
 fresh process/GPU/disk/duplicate-output preflight, then launch the next Tools
 single-row official baseline; do not batch multiple rows.
+
+Tools ProMax launch checkpoint 2026-06-04 16:50 CST: after the ProEx gates,
+local package, commit/push, and cleanup completed, a fresh preflight found no
+matching experiment process, GPU idle, `/` at about `12G` free / `95%` used,
+and no existing Tools ProMax final output, adapter directory, PID, or log.
+Tools `promax_profile` was launched as the second Tools single-row official
+baseline with:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE=promax_profile TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh
+```
+
+The SSH wrapper timed out while backgrounding, so PID files were written after
+process inspection. Current monitor target: runner PID `3279573`, adapter PID
+`3279582`, PID files
+`baselines_new_domains_tools_promax_20260604_164630.runner.pid` and
+`baselines_new_domains_tools_promax_20260604_164630.adapter.pid`, and log
+`baselines_new_domains_tools_promax_20260604_164630.log`. Stable checkpoint:
+exactly one matching ProMax adapter process was active, Qwen3 `hf_mean_pool`
+had reached `1336/269711`, GPU was `96%` with `15947 MiB / 49140 MiB`, disk
+was about `11G` free / `95%` used, the adapter directory was about `1005M`,
+and final output was still placeholder-only. No `DONE`, Traceback, OOM,
+no-space, blocker, or failure markers were present. Do not start another
+baseline while this row is active. If it completes, run server-final audit,
+server large-artifact manifest, local-light sync, local-light audit, docs/memory
+update, and related-only commit/push before the next row.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and

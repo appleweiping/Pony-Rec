@@ -157,9 +157,16 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/baselines/paper_adapters/tools_large10000_100neg_proex_official_adapter`
   was removed after path checks, restoring `/` to about `12G` free / `95%`
   used while preserving final scores, provenance, audits, imported tables, and
-  `proex_official_model.pt`. Tools is now 1/8 official rows complete; start
-  the next Tools row only after a fresh process/GPU/disk/duplicate-output
-  preflight.
+  `proex_official_model.pt`. Tools is now 1/8 official rows complete. After a
+  fresh process/GPU/disk/duplicate-output preflight, Tools `promax_profile`
+  launched at 2026-06-04 16:46 CST as the second Tools row with runner PID
+  `3279573`, adapter PID `3279582`, and log
+  `baselines_new_domains_tools_promax_20260604_164630.log`. At the first
+  stable check it was in Qwen3 `hf_mean_pool` at `1336/269711`, GPU was `96%`
+  with `15947 MiB / 49140 MiB`, disk was about `11G` free / `95%` used, no
+  fatal markers were present, and the final output directory was still
+  placeholder-only. Do not start another Tools row until this row completes or
+  fails and is gated.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

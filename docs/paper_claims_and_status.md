@@ -330,8 +330,13 @@ same-candidate tests before any paper-wide SOTA claim.
    `prediction_deletion_manifest.json`. The completed intermediate adapter was
    removed after final evidence and local backup passed, recovering `/` to
    about `12G` free / `95%` used while preserving final evidence. Tools is now
-   1/8 complete; the next action is a fresh preflight followed by the next
-   single-row Tools official baseline. Home
+   1/8 complete. After a fresh process/GPU/disk/duplicate-output preflight,
+   Tools `promax_profile` launched at 2026-06-04 16:46 CST as the second
+   single-row Tools official baseline with runner PID `3279573`, adapter PID
+   `3279582`, and log
+   `baselines_new_domains_tools_promax_20260604_164630.log`; the first stable
+   check showed Qwen3 `hf_mean_pool` at `1336/269711`, GPU `96%`, disk about
+   `11G` free / `95%` used, and no fatal markers. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.
