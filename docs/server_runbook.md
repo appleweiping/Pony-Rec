@@ -272,6 +272,15 @@ certificate for a missing prediction JSONL. Do not remove `scores.csv`, final
 provenance, score audits, run summaries, imported `tables/`, or models/checkpoints
 under this shortcut.
 
+For imported internal C-CRP rows, the analogous disk-pressure exception is
+allowed only after the domain gate has passed, the raw C-CRP `report.json` and
+`user_ranks.jsonl` plus imported `tables/` have been copied locally, and a
+row-local `prediction_deletion_manifest.json` records the deleted
+`predictions/rank_predictions.jsonl` sha256, byte size, and 10,000-line count.
+The domain gate and comparison builder accept that manifest only for internal
+C-CRP imported predictions; official rows still require
+`server_final_evidence_audit.json`.
+
 ## LLM2Rec Single-Domain Production Loop
 
 LLM2Rec is the first official-code-level adapter wired for execution. Its run
@@ -326,9 +335,11 @@ the method-level and final cross-baseline comparison tables have been rebuilt
 and archived. If storage is tight, delete predictions or large model/adapter
 intermediates first, but do not remove the imported summary directory in a way
 that makes a completed domain disappear from later comparisons.
-For deleted prediction JSONLs, keep the completed row's
-`server_final_evidence_audit.json`; it is the only accepted certificate that
-the prediction file existed and had the expected 10,000-line count.
+For deleted official-row prediction JSONLs, keep the completed row's
+`server_final_evidence_audit.json`; it is the accepted certificate that the
+prediction file existed and had the expected 10,000-line count. For deleted
+internal C-CRP imported prediction JSONLs, keep
+`prediction_deletion_manifest.json` beside the imported `tables/` directory.
 
 After copying a lightweight local evidence package, run the package audit before
 recording the row as safely backed up:

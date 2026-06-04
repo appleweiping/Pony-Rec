@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 13:50 CST
+Last updated: 2026-06-04 14:20 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -252,6 +252,14 @@ committed and a fresh process/GPU/disk preflight plus storage decision passes.
   certifies the missing prediction file's original line count. This exception
   does not cover `scores.csv`, provenance, score audits, run summaries,
   imported `tables/`, models, checkpoints, or local evidence packages.
+- Internal C-CRP disk policy update: after a domain gate passes and local light
+  evidence has raw `report.json`, raw `user_ranks.jsonl`, and imported
+  `tables/`, the server-only imported
+  `predictions/rank_predictions.jsonl` may be deleted only with a row-local
+  `prediction_deletion_manifest.json` recording sha256, byte size, and 10,000
+  lines. The patched domain gate and comparison builder accept this manifest
+  only for internal C-CRP imports; official rows still require
+  `server_final_evidence_audit.json`.
 - Previous completed home row: `irllrec_intent`, completed 2026-06-03 20:05 CST
   with `implementation_status=official_completed`, `blockers=[]`, exact
   `score_coverage_rate=1.0`, server-final audit PASS, lightweight sync PASS,
@@ -1191,6 +1199,29 @@ and `max_holm_p_value=1.0216927255359559e-08`. This supports a Home-domain
 passed gate only; paper-wide SOTA wording remains blocked until Tools is
 complete and all paper-critical modules/review gates pass.
 
+Tools storage preflight cleanup 2026-06-04 14:20 CST: after confirming no
+active Pony/C-CRP/baseline/uncertainty Python process, idle GPU, and Home gate
+evidence present, disk was only about `7.9G` free. A read-only large-file audit
+identified final models/checkpoints/task data as protected. Cleanup removed
+only three server-only C-CRP imported prediction JSONLs for already
+domain-gated sports/toys/home after writing and syncing row-local
+`prediction_deletion_manifest.json` files:
+`outputs/{sports,toys,home}_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/prediction_deletion_manifest.json`.
+The deleted files were sports `685174767` bytes
+(`6ed1b78fbd5b056e4ee50c13bdcbaaa08c533bc9a6c1395188c97cc61390d783`),
+toys `801921148` bytes
+(`653af0d46c253bb84e58b83e22847b42c4bd8831b0490092417666fd1a5390db`),
+and home `744081868` bytes
+(`f70fd500113dfe3465e0dc373860fe4a690ec7c58badd63c64941207d668688a`).
+Post-cleanup domain gates for sports/toys/home passed using the new manifest
+certificate, and a Home comparison-builder smoke with `n_bootstrap=0` also
+passed. Four obsolete home-root transfer archives were then deleted with
+manifest `outputs/summary/server_home_root_archive_cleanup_for_tools_20260604.{json,sha256}`.
+Final scores, raw C-CRP outputs, imported `tables/`, official evidence,
+models/checkpoints, task data, source/config/docs, and other project
+directories were preserved. Final preflight: no matching experiment process,
+GPU idle, and `/` at `11,504,844,800` bytes free (`11G`, `95%` used).
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -1362,9 +1393,11 @@ evidence is under
 ## Required Next Actions
 
 1. Before launching Tools official baselines, run a fresh process/GPU/disk
-   preflight and a storage decision. Disk is still in warning state at about
-   `7.9G` free after the Home C-CRP import/comparison, so do not start Tools
-   until there is enough safe space or an explicit storage plan.
+   preflight and a storage decision. Disk is now above the literal 10GB warning
+   threshold at `11,504,844,800` bytes free after cleanup, but this is still
+   tight for storage-heavy LLMEmb/LLM2Rec/LLM-ESR rows. Prefer starting Tools
+   with a smaller single row such as `proex_profile`, then gate, local-sync,
+   clean its temporary adapter, and reassess before the next row.
 2. Run Tools as the same disk-aware single-domain production loop, one
    method-row at a time, with no parallel baseline launches.
 3. After each completed Tools row, verify full HR@5/@10/@20,

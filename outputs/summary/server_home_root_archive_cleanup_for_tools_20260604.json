@@ -1,0 +1,41 @@
+{
+  "created_at_utc": "2026-06-04T06:18:45.093477+00:00",
+  "failures": [],
+  "files": [
+    {
+      "deleted": true,
+      "path": "/home/ajifang/backup_official_results.tar.gz",
+      "sha256": "00e830ebcced69c171c4f46ee921f77e57142957e55b858186dca2bbb778e8b2",
+      "size": 550240256
+    },
+    {
+      "deleted": true,
+      "path": "/home/ajifang/week7_5_server_outputs_20260420.tar.gz",
+      "sha256": "8a9f602b720ebc9f8e2bb5e79c64f28c3b50b8afa7c4858820a15febc76ddebe",
+      "size": 163687277
+    },
+    {
+      "deleted": true,
+      "path": "/home/ajifang/codex.tar.gz",
+      "sha256": "886b85e6118c0b43234437ca007fbe923611a53b103d00e0d3ae74aefb20e23a",
+      "size": 87676506
+    },
+    {
+      "deleted": true,
+      "path": "/home/ajifang/week7_server_outputs_20260420.tar.gz",
+      "sha256": "bef063b0b8c8abda01ab4fa60685a254d6b3780c812531b711ea5d8ac13114de",
+      "size": 1785443
+    }
+  ],
+  "mode": "home_root_archive_cleanup_for_tools_preflight",
+  "ok": true,
+  "protected": [
+    "current repo source/config/docs",
+    "outputs/baselines/external_tasks",
+    "official final scores/provenance/audits/imported tables/models",
+    "Qwen model weights and conda environments",
+    "other project directories"
+  ],
+  "reason": "delete obsolete transfer/backup archives after current official evidence was committed, to recover disk before Tools baselines",
+  "sha256_manifest": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/server_home_root_archive_cleanup_for_tools_20260604.sha256"
+}

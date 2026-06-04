@@ -21,6 +21,7 @@ OFFICIAL_METHOD_DIRS = {
     "llm2rec_sasrec": "{exp}_llm2rec_sasrec_official_qwen3base_same_candidate",
     "llmesr_sasrec": "{exp}_llmesr_sasrec_official_qwen3base_same_candidate",
 }
+PREDICTION_DELETION_MANIFEST = "prediction_deletion_manifest.json"
 
 
 def parse_args() -> argparse.Namespace:
@@ -73,10 +74,45 @@ def _line_count(path: Path) -> int:
         return sum(1 for _ in fh)
 
 
-def _certified_prediction_line_count(base_dir: Path) -> tuple[int | None, str]:
+def _certified_deleted_prediction_line_count(base_dir: Path) -> tuple[int | None, str]:
+    manifest_path = base_dir / PREDICTION_DELETION_MANIFEST
+    if not manifest_path.exists():
+        return None, ""
+    try:
+        with manifest_path.open("r", encoding="utf-8") as fh:
+            manifest = json.load(fh)
+    except Exception:
+        return None, ""
+    files = manifest.get("files") if isinstance(manifest.get("files"), dict) else {}
+    row = files.get("predictions/rank_predictions.jsonl")
+    if not isinstance(row, dict):
+        return None, ""
+    if (
+        manifest.get("mode") == "post_domain_gate_prediction_cleanup"
+        and manifest.get("ok") is True
+        and manifest.get("failures") == []
+        and row.get("deleted") is True
+        and row.get("lines") is not None
+        and row.get("sha256")
+        and row.get("size")
+    ):
+        return int(row["lines"]), "prediction_deletion_manifest"
+    return None, ""
+
+
+def _certified_prediction_line_count(
+    base_dir: Path,
+    *,
+    allow_deletion_manifest: bool = False,
+) -> tuple[int | None, str]:
     prediction_path = base_dir / "predictions" / "rank_predictions.jsonl"
     if prediction_path.exists() and prediction_path.is_file():
         return _line_count(prediction_path), "file"
+
+    if allow_deletion_manifest:
+        certified_lines, certified_source = _certified_deleted_prediction_line_count(base_dir)
+        if certified_lines is not None:
+            return certified_lines, certified_source
 
     audit_path = base_dir / "server_final_evidence_audit.json"
     if not audit_path.exists():
@@ -271,7 +307,10 @@ def _build_comparison_rows(
             "scores_csv_lines": _line_count(Path(info["scores_path"])),
             "ranking_eval_records_csv_lines": _line_count(Path(info["eval_path"])),
         }
-        prediction_lines, prediction_source = _certified_prediction_line_count(Path(info["dir"]))
+        prediction_lines, prediction_source = _certified_prediction_line_count(
+            Path(info["dir"]),
+            allow_deletion_manifest=info["kind"] == "internal_method",
+        )
         row["predictions_jsonl_lines"] = prediction_lines
         row["predictions_jsonl_line_source"] = prediction_source
         if row["scores_csv_lines"] != expected_score_lines:

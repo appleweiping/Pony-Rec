@@ -101,6 +101,13 @@ prediction line-count certificate. This exception does not apply to
 `scores.csv`, final provenance, score audits, run summaries, imported `tables/`,
 or method checkpoints/models.
 
+For imported internal C-CRP rows, post-domain-gate disk cleanup may remove the
+server-only imported `predictions/rank_predictions.jsonl` only after
+`prediction_deletion_manifest.json` is written beside the imported `tables/`
+directory with sha256, byte size, and line count. This manifest is accepted
+only for internal C-CRP imports; official rows still require the stricter
+`server_final_evidence_audit.json` certificate.
+
 ## Reliability proxy audit
 
 The old "baseline confidence formulation audit" is renamed:

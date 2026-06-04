@@ -43,6 +43,8 @@ CCRP_REQUIRED_IMPORTED_FILES = (
     "tables/ranking_eval_records.csv",
 )
 
+PREDICTION_DELETION_MANIFEST = "prediction_deletion_manifest.json"
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -142,6 +144,44 @@ def _certified_missing_prediction_row(evidence_dir: Path, rel_path: str) -> dict
                 "certified_missing": True,
                 "certified_by": str(audit_path),
                 "certified_original_size": audit_row.get("size", 0),
+            }
+        )
+    return row
+
+
+def _certified_deleted_prediction_row(evidence_dir: Path, rel_path: str) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "present": False,
+        "size": 0,
+    }
+    if rel_path != "predictions/rank_predictions.jsonl":
+        return row
+
+    manifest_path = evidence_dir / PREDICTION_DELETION_MANIFEST
+    if not manifest_path.exists():
+        return row
+    try:
+        manifest = _load_json(manifest_path)
+    except Exception:
+        return row
+    files = manifest.get("files") if isinstance(manifest.get("files"), dict) else {}
+    manifest_row = files.get(rel_path) if isinstance(files.get(rel_path), dict) else {}
+    if (
+        manifest.get("mode") == "post_domain_gate_prediction_cleanup"
+        and manifest.get("ok") is True
+        and manifest.get("failures") == []
+        and manifest_row.get("deleted") is True
+        and manifest_row.get("lines") is not None
+        and manifest_row.get("sha256")
+        and manifest_row.get("size")
+    ):
+        row.update(
+            {
+                "lines": manifest_row.get("lines"),
+                "certified_missing": True,
+                "certified_by": str(manifest_path),
+                "certified_original_size": manifest_row.get("size", 0),
+                "certified_sha256": manifest_row.get("sha256", ""),
             }
         )
     return row
@@ -377,6 +417,7 @@ def audit_ccrp(
     imported_dir = root / "outputs" / f"{exp}_ccrp_v3_qwen3base_pointwise_same_candidate"
     expected_score_rows = expected_users * expected_candidates_per_user
     failures: list[str] = []
+    warnings: list[str] = []
     files: dict[str, Any] = {}
 
     for rel_path in ("report.json", "scores.csv", "user_ranks.jsonl"):
@@ -386,9 +427,13 @@ def audit_ccrp(
             failures.append(f"missing_raw_file:{rel_path}")
     for rel_path in CCRP_REQUIRED_IMPORTED_FILES:
         row = _basic_file_row(imported_dir / rel_path)
+        if not row["present"] and rel_path == "predictions/rank_predictions.jsonl":
+            row = _certified_deleted_prediction_row(imported_dir, rel_path)
         files[f"imported/{rel_path}"] = row
-        if not row["present"]:
+        if not row["present"] and not row.get("certified_missing"):
             failures.append(f"missing_imported_file:{rel_path}")
+        if row.get("certified_missing"):
+            warnings.append(f"missing_imported_file_certified_by_prediction_deletion_manifest:{rel_path}")
 
     if files.get("raw/scores.csv", {}).get("lines") != expected_score_rows + 1:
         failures.append("raw_scores_csv_line_count_mismatch")
@@ -428,7 +473,7 @@ def audit_ccrp(
         "imported_dir": str(imported_dir),
         "ok": not failures,
         "failures": failures,
-        "warnings": [],
+        "warnings": warnings,
         "metrics": {metric: metrics.get(metric, "") for metric in REQUIRED_METRICS}
         | {
             "sample_count": metrics.get("sample_count", ""),

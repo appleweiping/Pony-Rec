@@ -1,0 +1,30 @@
+{
+  "created_at_utc": "2026-06-04T06:12:20.640420+00:00",
+  "deleted_at_utc": "2026-06-04T06:12:20.640420+00:00",
+  "domain": "home",
+  "failures": [],
+  "files": {
+    "predictions/rank_predictions.jsonl": {
+      "deleted": true,
+      "lines": 10000,
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/predictions/rank_predictions.jsonl",
+      "sha256": "f70fd500113dfe3465e0dc373860fe4a690ec7c58badd63c64941207d668688a",
+      "size": 744081868
+    }
+  },
+  "gate_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/home_official_ccrp_gate_20260604.json",
+  "local_evidence_note": "raw report/user_ranks and imported tables were copied locally; scores.csv remains server-side protected",
+  "mode": "post_domain_gate_prediction_cleanup",
+  "ok": true,
+  "protected_files": [
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/external_score_coverage.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_exposure_distribution.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_metrics.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/same_candidate_external_baseline_summary.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3/scores.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3/report.json",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_ccrp_v3/user_ranks.jsonl"
+  ],
+  "reason": "recover disk before Tools official baselines after domain gate and local lightweight evidence passed"
+}

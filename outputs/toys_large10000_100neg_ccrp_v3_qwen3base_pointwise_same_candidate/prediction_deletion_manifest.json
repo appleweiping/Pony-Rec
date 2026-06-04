@@ -1,0 +1,30 @@
+{
+  "created_at_utc": "2026-06-04T06:12:19.094502+00:00",
+  "deleted_at_utc": "2026-06-04T06:12:19.094502+00:00",
+  "domain": "toys",
+  "failures": [],
+  "files": {
+    "predictions/rank_predictions.jsonl": {
+      "deleted": true,
+      "lines": 10000,
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/predictions/rank_predictions.jsonl",
+      "sha256": "653af0d46c253bb84e58b83e22847b42c4bd8831b0490092417666fd1a5390db",
+      "size": 801921148
+    }
+  },
+  "gate_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/toys_official_gate_final_20260602_1900.json",
+  "local_evidence_note": "raw report/user_ranks and imported tables were copied locally; scores.csv remains server-side protected",
+  "mode": "post_domain_gate_prediction_cleanup",
+  "ok": true,
+  "protected_files": [
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/external_score_coverage.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_exposure_distribution.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_metrics.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/same_candidate_external_baseline_summary.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3/scores.csv",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3/report.json",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_ccrp_v3/user_ranks.jsonl"
+  ],
+  "reason": "recover disk before Tools official baselines after domain gate and local lightweight evidence passed"
+}
