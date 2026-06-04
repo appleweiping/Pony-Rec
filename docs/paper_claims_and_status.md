@@ -303,11 +303,11 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools now has 4/8 official rows gated after
-`proex_profile`, `promax_profile`, `elmrec_graph`, and `llmemb`, with
-`irllrec_intent` active but not yet completed, so Tools still needs four
-completed official rows plus paired same-candidate tests before any paper-wide
-SOTA claim.
+domain set is complete; Tools now has 5/8 official rows gated after
+`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`, and
+`irllrec_intent`, so Tools still needs `rlmrec_graphcl`, `llm2rec_sasrec`, and
+`llmesr_sasrec` plus paired same-candidate tests before any paper-wide SOTA
+claim.
 
 ### Remaining for paper submission
 
@@ -416,22 +416,35 @@ SOTA claim.
    emergency disk approval after sha256/size manifesting; local record:
    `outputs/summary/home_llm2rec_checkpoint_deletion_manifest_20260604.json`.
    Final scores, provenance, audits, imported tables, and model were preserved,
-   and post-cleanup `/` returned to about `15G` free / `93%` used. Tools is now
-   4/8 complete and needs four more official rows plus the Tools
-   domain/comparison/paired-test gates. After a fresh preflight, Tools
+   and post-cleanup `/` returned to about `15G` free / `93%` used. After a
+   fresh preflight, Tools
    `irllrec_intent` launched at 2026-06-05 01:04 CST as the fifth single-row
    Tools official baseline with runner PID `3326805`, adapter PID `3326813`,
    log `baselines_new_domains_tools_irllrec_20260605_0058.log`, and heartbeat
    `monitor-tools-irllrec`; its launch snapshot
    `outputs/summary/tools_irllrec_launch_monitor_20260605.json` shows Qwen3
    embedding progress `2056/269711`, GPU `95%`, disk `13.34G` free, and no
-   failure markers. A 2026-06-05 05:02 CST monitor check found runner PID
-   `3326805` and adapter PID `3326813` still alive, GPU active with
-   `16247 MiB / 49140 MiB`, Qwen3 embedding complete (`269711/269711`),
-   training advanced to `epoch=2720` with latest loss `0.656919`, disk about
-   `9.1G` free / `96%` used, no duplicate adapter, no fatal/OOM/no-space
-   markers, and no final scores/provenance/tables yet. It is active
-   monitor-only evidence, not a completed row.
+   failure markers. It completed normally at 2026-06-05 05:19 CST with
+   `implementation_status=official_completed`, `blockers=[]`, exact
+   `score_coverage_rate=1.0`, score audit/imported tables, server-final audit,
+   server large-artifact manifest, lightweight local sync, and local-light
+   audit all passing. Full metrics over 10,000 users and 101 candidates are
+   HR@5/10/20 `0.102 / 0.1651 / 0.3095`, NDCG@5/10/20
+   `0.06504709833452535 / 0.08525707170530923 / 0.12100829406900945`, and MRR
+   `0.08670154590435823`; `scores.csv` has `1,010,001` lines, predictions have
+   `10,000` lines, and `tables/ranking_eval_records.csv` has `10,001` lines.
+   The local lightweight package is
+   `outputs/baselines/official_adapters/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`.
+   Server-only `scores.csv`, predictions, and `irllrec_official_model.pt` are
+   covered by `server_large_artifact_manifest.*`; provenance records the
+   IRLLRec scalability bridge `deterministic_node_cap`. The completed
+   intermediate adapter was removed after gates and local backup passed, with
+   cleanup manifest
+   `outputs/summary/tools_irllrec_completed_adapter_cleanup_manifest_20260605.sha256`,
+   recovering `/` to about `14G` free / `93%` used while preserving final
+   evidence. Tools is now 5/8 complete and still needs `rlmrec_graphcl`,
+   `llm2rec_sasrec`, and `llmesr_sasrec` plus the Tools
+   domain/comparison/paired-test gates.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

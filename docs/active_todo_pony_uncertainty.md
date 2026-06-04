@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 05:02 CST
+Last updated: 2026-06-05 05:29 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1634,6 +1634,40 @@ latest loss `0.656919`. Log scans still showed no completion marker and no
 fatal/OOM/no-space marker, and the final evidence directory remained
 placeholder-only (`4.0K`). Disk stayed in warning state at about `9.1G` free /
 `96%` used. No gates, cleanup, or new experiments were run.
+Monitor update 2026-06-05 05:12 CST: runner PID `3326805` and adapter PID
+`3326813` remained alive, with one matching adapter process and active GPU
+(`67-100%`, `16247 MiB / 49140 MiB` across samples). Qwen3 embedding stayed
+complete (`269711/269711`) and official training advanced to `epoch=2890` with
+latest loss `0.657135`. Log scans still showed no completion marker and no
+fatal/OOM/no-space marker, and the final evidence directory remained
+placeholder-only (`4.0K`). Disk stayed in warning state at about `9.1G` free /
+`96%` used. No gates, cleanup, or new experiments were run.
+Tools IRLLRec completion/gate checkpoint 2026-06-05 05:29 CST:
+`irllrec_intent` completed normally at 2026-06-05 05:19:06 CST with log marker
+`DONE irllrec_intent on tools` and wrapper marker `All baseline runs complete`.
+The adapter reached `epoch=3000` with latest loss `0.656947`, exported
+`implementation_status=official_completed`, `blockers=[]`, exact
+`score_coverage_rate=1.0`, score audit/imported tables, server-final audit,
+server large-artifact manifest, lightweight local sync, and local-light audit
+all passing. Full metrics over 10,000 users and 101 candidates are
+HR@5/10/20 `0.102 / 0.1651 / 0.3095`, NDCG@5/10/20
+`0.06504709833452535 / 0.08525707170530923 / 0.12100829406900945`, and MRR
+`0.08670154590435823`; `scores.csv` has `1,010,001` lines, predictions have
+`10,000` lines, and `tables/ranking_eval_records.csv` has `10,001` lines.
+The local lightweight package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/`.
+Server-only `scores.csv`, predictions, and `irllrec_official_model.pt` are
+covered by `server_large_artifact_manifest.*`; the provenance records the
+IRLLRec scalability bridge `deterministic_node_cap` for the all-node
+contrastive term. After gates and local-light backup passed, the completed
+intermediate adapter
+`outputs/baselines/paper_adapters/tools_large10000_100neg_irllrec_official_adapter`
+was removed with sha256 manifest
+`outputs/summary/tools_irllrec_completed_adapter_cleanup_manifest_20260605.sha256`,
+recovering `/` to about `14G` free / `93%` used while preserving all final
+scores, provenance, audits, imported tables, predictions, and model. Tools is
+now 5/8 official rows gated; remaining rows are `rlmrec_graphcl`,
+`llm2rec_sasrec`, and `llmesr_sasrec`.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1805,20 +1839,16 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active Tools `irllrec_intent` row: runner PID `3326805`,
-   adapter PID `3326813`, log
-   `baselines_new_domains_tools_irllrec_20260605_0058.log`, and heartbeat
-   `monitor-tools-irllrec`. Notify on completion, failure, duplicate process,
-   dead PID, disk below 10G free, or disk at/above 97% used. Do not start
-   another baseline while this row is active. Current monitor status as of
-   2026-06-05 05:02 CST is disk-warning active training, not completed row.
-2. After Tools `irllrec_intent` completes, run the established row gates before
-   marking it official: score audit/import, server-final audit, server
+1. Launch the next single Tools official row only after a fresh preflight
+   confirms no active baseline process, GPU idle/available, enough disk, and no
+   existing conflicting final/adapter/log paths. The next row should be
+   `rlmrec_graphcl`, not a batch:
+   `DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=rlmrec_graphcl bash scripts/run_baselines_new_domains.sh`.
+2. After each remaining Tools row completes, run the established row gates
+   before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
    docs/memory, related-only commit/push, and then clean only eligible
-   completed intermediate artifacts if disk remains tight. The prepared
-   planning-only gate package is
-   `outputs/summary/official_completion_gate_plan/tools_irllrec_intent_completion_gates_20260605.{json,ps1}`.
+   completed intermediate artifacts if disk remains tight.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
