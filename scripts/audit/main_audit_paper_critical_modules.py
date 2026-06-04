@@ -300,8 +300,9 @@ def build_module_audit(root: str | Path = ".") -> dict[str, Any]:
         "component_inventory": component_inventory,
         "modules": modules,
         "next_action": (
-            "Keep the active Home LLM2Rec run protected. For paper-critical C-CRP modules, locate or regenerate "
-            "full-scale valid/test uncertainty signal rows before running observation, ablation, or hyperparameter claims."
+            "Keep the active official baseline row protected until it completes and passes gates. For paper-critical "
+            "C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running "
+            "observation, ablation, or hyperparameter claims."
         ),
     }
 

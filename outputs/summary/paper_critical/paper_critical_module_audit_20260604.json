@@ -1,7 +1,7 @@
 {
   "ok": true,
   "paper_ready": false,
-  "generated_at_utc": "2026-06-04T00:42:37+00:00",
+  "generated_at_utc": "2026-06-04T03:41:34+00:00",
   "root": "D:\\Research\\Uncertainty",
   "summary": {
     "framework_overview_scaffold_ready": true,
@@ -222,5 +222,5 @@
       }
     }
   },
-  "next_action": "Keep the active Home LLM2Rec run protected. For paper-critical C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running observation, ablation, or hyperparameter claims."
+  "next_action": "Keep the active official baseline row protected until it completes and passes gates. For paper-critical C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running observation, ablation, or hyperparameter claims."
 }

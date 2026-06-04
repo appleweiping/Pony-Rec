@@ -1,6 +1,6 @@
 # Paper-Critical Module Audit
 
-- Generated UTC: `2026-06-04T00:42:37+00:00`
+- Generated UTC: `2026-06-04T03:41:34+00:00`
 - Paper ready: `False`
 - Signal rows available: `False`
 - Framework overview scaffold ready: `True`
@@ -20,4 +20,4 @@
 
 ## Next Action
 
-Keep the active Home LLM2Rec run protected. For paper-critical C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running observation, ablation, or hyperparameter claims.
+Keep the active official baseline row protected until it completes and passes gates. For paper-critical C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running observation, ablation, or hyperparameter claims.
