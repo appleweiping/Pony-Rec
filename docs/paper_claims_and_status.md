@@ -472,6 +472,20 @@ same-candidate tests before any paper-wide SOTA claim.
    still about `12.35G` free / `94%` used, and no completion/failure markers or
    final scores/provenance/tables. This is active monitor-only evidence, not a
    completed row.
+   A 2026-06-05 07:02 CST follow-up found Qwen3 embedding complete
+   (`269711/269711`) and official RLMRec training started, latest observed at
+   `epoch=110` with train loss `1.519527`. The same runner/adapter PIDs were
+   alive and unique, GPU was active, final RLMRec evidence remained
+   placeholder-only, and no completion/failure marker or final
+   scores/provenance/tables existed. Disk fell below the warning line to about
+   `8.6G` free / `96%` used as the active adapter grew to about `5.2G`; after
+   verifying server-final and local-light evidence for completed Tools IRLLRec,
+   Codex removed only its server-side `predictions/rank_predictions.jsonl`
+   with sha256 manifest
+   `outputs/summary/tools_irllrec_prediction_cleanup_manifest_20260605.sha256`.
+   Scores, provenance, audits, imported tables, and model were preserved; disk
+   recovered only to about `9.3G` free, still below the 10G warning threshold.
+   This is active monitor-only evidence, not a completed RLMRec row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

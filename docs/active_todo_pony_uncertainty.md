@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 06:33 CST
+Last updated: 2026-06-05 07:02 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1730,6 +1730,29 @@ completion marker and no fatal/OOM/no-space marker, the active adapter
 directory remained about `1005M`, and the final evidence directory remained
 placeholder-only (`4.0K`). Disk was about `12.35G` free / `94%` used, above
 the 10G warning threshold. No gates, cleanup, or new experiments were run.
+Monitor/storage update 2026-06-05 07:02 CST: runner PID `3347729` and adapter
+PID `3347738` remained alive, with exactly one matching RLMRec adapter process.
+Qwen3 embedding completed (`269711/269711`) and official RLMRec training
+entered the graph stage; latest observed training line was
+`[rlmrec-official] epoch=110 train_loss=1.519527`. GPU remained active with
+`24679 MiB / 49140 MiB` resident; the active adapter grew to about `5.2G`
+(`llm_esr/handled/itm_emb_np.pkl` about `4.1G`), final RLMRec evidence was
+still placeholder-only (`4.0K`), and no completion/failure marker or final
+scores/provenance/tables existed yet. Disk crossed the warning line, first
+falling to about `8.6G` free / `96%` used. A large-file audit found no safe deletion
+inside the active RLMRec adapter, protected same-candidate task packages, or
+final model/checkpoint artifacts. The only policy-eligible emergency cleanup
+was the completed Tools IRLLRec server prediction JSONL: server-final audit
+proved it existed with `10,000` lines, local-light audit had already passed
+with `tables/ranking_eval_records.csv` preserved locally, and final scores,
+provenance, audits, tables, and model stayed untouched. Codex wrote sha256
+manifest `outputs/summary/tools_irllrec_prediction_cleanup_manifest_20260605.sha256`
+and removed only
+`outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl`,
+recovering disk to about `9.3G` free / `96%` used. This remains below the
+10G warning threshold, so continue monitoring closely and do not start another
+baseline. An attempted Electronics ELMRec prediction cleanup was rejected
+because that older directory lacked server-final provenance/scores proof.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1905,7 +1928,10 @@ evidence is under
    PID `3347738`, log `baselines_new_domains_tools_rlmrec_20260605_054158.log`,
    and heartbeat `monitor-tools-rlmrec`. Notify on completion, failure,
    duplicate process, dead PID, disk below 10G free, or disk at/above 97% used.
-   Do not start another baseline while this row is active.
+   Disk is currently below the 10G warning threshold after the one eligible
+   IRLLRec prediction cleanup, so watch for further growth but do not delete
+   active RLMRec adapter files. Do not start another baseline while this row is
+   active.
 2. After each remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,

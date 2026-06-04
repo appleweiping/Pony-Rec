@@ -285,6 +285,19 @@ The repository is now in M5 (multi-domain SOTA validation):
   still about `12.35G` free / `94%` used, and no completion/failure markers or
   final scores/provenance/tables. This is active monitor-only evidence, not a
   completed row.
+  A 2026-06-05 07:02 CST follow-up found Qwen3 embedding complete
+  (`269711/269711`) and RLMRec official training started, latest observed at
+  `epoch=110` with train loss `1.519527`. The same PIDs were alive and unique,
+  GPU remained active with `24679 MiB / 49140 MiB` resident, the active
+  adapter was about `5.2G`, and final RLMRec evidence remained placeholder-only.
+  Disk fell below the warning line to about `8.6G` free / `96%` used. After
+  confirming completed Tools IRLLRec server-final and local-light evidence,
+  Codex removed only its server-side `predictions/rank_predictions.jsonl` with
+  sha256 manifest
+  `outputs/summary/tools_irllrec_prediction_cleanup_manifest_20260605.sha256`;
+  final scores/provenance/audits/tables/model were preserved. Disk recovered
+  only to about `9.3G` free, so the active row still needs close disk
+  monitoring and no next baseline should start.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
