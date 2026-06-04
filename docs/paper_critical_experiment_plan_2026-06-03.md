@@ -6,11 +6,16 @@ review.
 
 ## Current Constraint
 
-Do not start these runs while the active Home `llmesr_sasrec` official row is
-running. The current server row has wrapper PID `3248921`, adapter PID
-`3248934`, and log `baselines_new_domains_home_llmesr_20260604_1015.log`.
-Queue the work only after that row completes and passes evidence gates, or
-after an audited failure/recovery decision frees the GPU.
+Do not start these runs while the active Tools `proex_profile` official row is
+running. The protected server process is adapter PID `3269572`, PID file
+`baselines_new_domains_tools_proex_20260604_142548.adapter.pid`, and log
+`baselines_new_domains_tools_proex_20260604_142548.log`. At the 2026-06-04
+14:47 CST monitor checkpoint, exactly one matching adapter process was active,
+Qwen3 `hf_mean_pool` progress was `69400/269711`, GPU use was normal for the
+run, `/` had `10,950,942,720` bytes free (`95%` used), and no failure markers
+were present. Queue paper-critical server work only after this row completes
+and passes evidence gates, or after an audited failure/recovery decision frees
+the GPU.
 
 All experiment execution runs on `pony-rec-gpu`. Local work is limited to
 planning, code review, documentation, plotting design, and version control.
@@ -68,8 +73,8 @@ Implementation anchor:
 - `scripts/audit/main_discover_ccrp_uncertainty_sources.py` for scanning
   candidate artifact headers before choosing paths for the stricter audit.
 - `scripts/audit/main_plan_ccrp_signal_generation.py` for producing a
-  guarded, non-executing Sports/Toys command plan after the active Home
-  LLM-ESR gates pass.
+  guarded, non-executing Sports/Toys command plan after the active official
+  baseline row gates pass.
   Generated shell plans start with `exit 2` and retain
   `TODO_*_CCRP_SIGNAL_JSONL_OR_CSV` placeholders until real full-scale signal
   artifacts have passed audit.
@@ -474,7 +479,9 @@ report a proposed deletion list before acting.
 
 ## ARIS Plan Audit
 
-Verdict: PROCEED after current Home LLM-ESR row is resolved.
+Verdict: PROCEED after the current Tools ProEx row is resolved and the required
+full-scale C-CRP signal rows are located or regenerated without LLM re-query
+leakage.
 
 Evidence quality: 8/10. The modules target reviewer-critical motivation,
 component necessity, and hyperparameter stability.
@@ -492,6 +499,6 @@ Paper potential: 8/10. These modules directly address likely top-conference
 objections about motivation, non-stitching novelty, ablation completeness, and
 overfitting.
 
-Blocking issue: do not start these server runs until Home LLM-ESR is complete
-or cleanly failed, and do not proceed if the required C-CRP signal rows cannot
-be located or regenerated without LLM re-query leakage.
+Blocking issue: do not start these server runs until the active Tools ProEx row
+is complete/gated or cleanly failed, and do not proceed if the required C-CRP
+signal rows cannot be located or regenerated without LLM re-query leakage.
