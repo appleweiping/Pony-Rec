@@ -11,6 +11,7 @@ from typing import Any
 PAPER_CRITICAL_DIR = Path("outputs/summary/paper_critical")
 FRAMEWORK_DIR = PAPER_CRITICAL_DIR / "framework_overview"
 PLAN_DIR = PAPER_CRITICAL_DIR / "ccrp_signal_generation_plan"
+COMPONENT_INVENTORY_DIR = PAPER_CRITICAL_DIR / "ccrp_component_inventory"
 DOMAINS = ("sports", "toys", "home", "tools")
 
 
@@ -190,11 +191,60 @@ def audit_guarded_signal_plan(root: Path) -> dict[str, Any]:
     }
 
 
+def audit_component_inventory(root: Path) -> dict[str, Any]:
+    inventory_json = root / COMPONENT_INVENTORY_DIR / "ccrp_component_inventory_20260604.json"
+    inventory_md = root / COMPONENT_INVENTORY_DIR / "ccrp_component_inventory_20260604.md"
+    failures: list[str] = []
+    payload: dict[str, Any] = {}
+    if not inventory_json.exists():
+        failures.append("missing_component_inventory_json")
+    else:
+        payload = _read_json(inventory_json)
+        if payload.get("status_label") != "paper_critical_ccrp_component_inventory":
+            failures.append("component_inventory_status_label_mismatch")
+        if payload.get("paper_claim_ready") is not False:
+            failures.append("component_inventory_should_not_mark_paper_ready")
+        if payload.get("component_count", 0) < 10:
+            failures.append("component_inventory_too_small")
+        if payload.get("formula_alignment", {}).get("figure_formula_contains_multiplicative_form") is not True:
+            failures.append("component_inventory_formula_alignment_failed")
+        ids = {component.get("id") for component in payload.get("components", [])}
+        required_ids = {
+            "boundary_uncertainty",
+            "calibration_gap",
+            "evidence_support_insufficiency",
+            "counterevidence",
+            "risk_penalty",
+            "eta_risk_exponent",
+            "confidence_weight",
+            "uncertainty_weight_triple",
+            "raw_vs_calibrated_posterior",
+            "temperature_prompt_variants",
+        }
+        missing = sorted(required_ids - ids)
+        if missing:
+            failures.append("component_inventory_missing:" + ",".join(missing))
+    if not inventory_md.exists():
+        failures.append("missing_component_inventory_markdown")
+    elif inventory_md.stat().st_size <= 0:
+        failures.append("empty_component_inventory_markdown")
+    return {
+        "status": "inventory_ready_not_executed" if not failures else "incomplete",
+        "paper_claim_ready": False,
+        "files": {"json": str(inventory_json), "markdown": str(inventory_md)},
+        "component_count": payload.get("component_count", 0),
+        "blocked_by": payload.get("blocked_by", []),
+        "formula_alignment": payload.get("formula_alignment", {}),
+        "failures": failures,
+    }
+
+
 def build_module_audit(root: str | Path = ".") -> dict[str, Any]:
     repo = Path(root).resolve()
     signal_state = audit_signal_source_state(repo)
     guarded_plan = audit_guarded_signal_plan(repo)
     framework = audit_framework_overview(repo)
+    component_inventory = audit_component_inventory(repo)
 
     signal_blockers = list(signal_state["failures"])
     modules = {
@@ -213,8 +263,9 @@ def build_module_audit(root: str | Path = ".") -> dict[str, Any]:
             else "ready_for_validation_selection_run",
             "paper_claim_ready": False,
             "required_next_gate": "run_leave_one_component_out_after_signal_rows_exist",
-            "blockers": signal_blockers,
+            "blockers": signal_blockers + component_inventory["failures"],
             "script": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+            "inventory": component_inventory,
         },
         "hyperparameter_analysis": {
             "status": "blocked_missing_signal_rows"
@@ -229,18 +280,24 @@ def build_module_audit(root: str | Path = ".") -> dict[str, Any]:
     }
     paper_ready = all(module.get("paper_claim_ready") is True for module in modules.values())
     return {
-        "ok": framework["artifact_scaffold_ready"] and guarded_plan["status"] == "guarded_plan_ready_not_executable",
+        "ok": (
+            framework["artifact_scaffold_ready"]
+            and guarded_plan["status"] == "guarded_plan_ready_not_executable"
+            and component_inventory["status"] == "inventory_ready_not_executed"
+        ),
         "paper_ready": paper_ready,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "root": str(repo),
         "summary": {
             "framework_overview_scaffold_ready": framework["artifact_scaffold_ready"],
+            "component_inventory_ready": component_inventory["status"] == "inventory_ready_not_executed",
             "signal_rows_available": signal_state["status"] != "blocked_missing_signal_rows",
             "guarded_plan_ready": guarded_plan["status"] == "guarded_plan_ready_not_executable",
             "paper_claims_ready": paper_ready,
         },
         "signal_source_state": signal_state,
         "guarded_signal_plan": guarded_plan,
+        "component_inventory": component_inventory,
         "modules": modules,
         "next_action": (
             "Keep the active Home LLM2Rec run protected. For paper-critical C-CRP modules, locate or regenerate "
@@ -257,6 +314,7 @@ def write_markdown(path: str | Path, audit: dict[str, Any]) -> None:
         f"- Paper ready: `{audit['paper_ready']}`",
         f"- Signal rows available: `{audit['summary']['signal_rows_available']}`",
         f"- Framework overview scaffold ready: `{audit['summary']['framework_overview_scaffold_ready']}`",
+        f"- Component inventory ready: `{audit['summary']['component_inventory_ready']}`",
         f"- Guarded plan ready: `{audit['summary']['guarded_plan_ready']}`",
         "",
         "## Module Status",

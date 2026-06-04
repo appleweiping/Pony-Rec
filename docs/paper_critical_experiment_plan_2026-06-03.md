@@ -226,6 +226,16 @@ Components to ablate or compare:
 - C-CRP weight triples: default `0.5,0.3,0.2` plus a small validation-only
   sensitivity grid.
 
+Inventory status (2026-06-04): local helper
+`scripts/audit/main_build_ccrp_component_inventory.py` writes
+`outputs/summary/paper_critical/ccrp_component_inventory/ccrp_component_inventory_20260604.{json,md}`.
+It covers the current executable selector handles plus two conceptual risks
+that are not currently executable LOO handles: raw-vs-calibrated posterior and
+temperature/prompt variants. Do not claim those conceptual items as completed
+ablations unless new audited handles are implemented. The inventory also
+records that the current C-CRP risk formula is multiplicative:
+`base_score * ((1 - uncertainty) ** eta)`.
+
 Protocol:
 
 - Use validation-only selection for any selected C-CRP configuration.
@@ -370,6 +380,11 @@ Required content:
   evidence insufficiency/counterevidence;
 - risk-adjusted candidate ranking;
 - shared metric importer and evidence gates.
+
+The risk formula shown in the figure must match `src/shadow/ccrp.py`: current
+C-CRP uses multiplicative risk adjustment,
+`base_score * ((1 - uncertainty) ** eta)`, not a subtractive
+`posterior - eta * uncertainty` formula.
 
 Output:
 

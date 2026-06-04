@@ -150,13 +150,21 @@ The repository is now in M5 (multi-domain SOTA validation):
   result until Sports/Toys sweeps produce at least three values per plotted
   control with validation/test separation, `--test_sweep_csv` reporting, and
   provenance.
+- C-CRP component inventory helper now exists:
+  `scripts/audit/main_build_ccrp_component_inventory.py`. Current artifact
+  `outputs/summary/paper_critical/ccrp_component_inventory/ccrp_component_inventory_20260604.{json,md}`
+  covers 12 current C-CRP component/handle/risk entries and records the
+  code-matched multiplicative risk formula
+  `base_score * ((1 - uncertainty) ** eta)`. This is an audit scaffold, not an
+  executed ablation result; paper-facing component claims remain blocked until
+  full-scale valid/test signal rows exist.
 - Framework overview figure builder now exists:
   `scripts/analysis/main_build_framework_overview_figure.py`. It exports SVG
   editable source plus PDF/PNG/caption/provenance. As of 2026-06-04 04:43 CST,
   the draft local package exists at
   `outputs/summary/paper_critical/framework_overview/` with a sha256 manifest.
-  It was regenerated at 2026-06-04 07:32 CST against git commit `8f972ca`;
-  `tests/test_framework_overview_figure.py` passed and the PNG was visually
+  It was regenerated at 2026-06-04 08:40 CST with the code-matched
+  multiplicative risk formula; relevant tests passed and the PNG was visually
   checked as nonblank/readable. It must keep the claim boundary as controlled
   same-candidate ranking rather than full-catalog or generative-title
   recommendation and still needs final paper-layout/reviewer polish.
@@ -164,8 +172,9 @@ The repository is now in M5 (multi-domain SOTA validation):
   `scripts/audit/main_audit_paper_critical_modules.py`. Current artifact
   `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`
   reports `paper_ready=false`, `framework_overview_scaffold_ready=true`,
-  `guarded_plan_ready=true`, and `signal_rows_available=false`; observation,
-  ablation, and hyperparameter modules remain blocked until full-scale
+  `component_inventory_ready=true`, `guarded_plan_ready=true`, and
+  `signal_rows_available=false`; observation, ablation, and hyperparameter
+  modules remain blocked until full-scale
   uncertainty or recomputable signal rows are located or regenerated.
 
 ### C-CRP v3 Results (all domains)

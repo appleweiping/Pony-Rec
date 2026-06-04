@@ -1,0 +1,560 @@
+{
+  "status_label": "paper_critical_ccrp_component_inventory",
+  "paper_claim_ready": false,
+  "generated_at_utc": "2026-06-04T00:42:39+00:00",
+  "git_commit": "66aa27dad19cfe46496a15e14315ce5016a59be9",
+  "component_count": 12,
+  "ablation_handles_from_code": [
+    "full",
+    "without_boundary_uncertainty",
+    "without_calibration_gap",
+    "without_counterevidence",
+    "without_evidence_support",
+    "without_risk_penalty"
+  ],
+  "score_modes_from_code": [
+    "confidence_only",
+    "confidence_plus_evidence",
+    "evidence_only",
+    "full"
+  ],
+  "blocked_by": [
+    "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+  ],
+  "formula_alignment": {
+    "code_formula": "base_score * ((1 - uncertainty) ** eta)",
+    "figure_formula_contains_multiplicative_form": true,
+    "source_refs": [
+      {
+        "path": "src/shadow/ccrp.py",
+        "line": 141,
+        "needle": "risk_adjusted_score = base_score *",
+        "present": true
+      },
+      {
+        "path": "scripts/analysis/main_build_framework_overview_figure.py",
+        "line": 144,
+        "needle": "risk_score",
+        "present": true
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "calibrated_posterior_base",
+      "label": "Calibrated relevance posterior",
+      "kind": "base_signal",
+      "role": "Provides the calibrated posterior used by full C-CRP and confidence-only rows.",
+      "selector_handle": "score_mode=confidence_only or score_mode=full",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "relevance_probability",
+        "calibrated_relevance_probability"
+      ],
+      "generated_columns": [
+        "ccrp_raw_probability",
+        "ccrp_calibrated_probability",
+        "ccrp_base_score"
+      ],
+      "validation_controls": {
+        "score_modes": [
+          "confidence_only",
+          "confidence_plus_evidence",
+          "evidence_only",
+          "full"
+        ]
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 106,
+          "needle": "calibrated_relevance_probability",
+          "present": true
+        },
+        {
+          "path": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+          "line": 181,
+          "needle": "--score_modes",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "If calibrated_relevance_probability is absent, code falls back to calibrated_confidence or raw probability; provenance must report which source was used."
+      ]
+    },
+    {
+      "id": "score_mode_family",
+      "label": "Score-mode family",
+      "kind": "mode_comparison",
+      "role": "Separates posterior-only, evidence-only, blended, and full C-CRP scoring behavior.",
+      "selector_handle": "score_modes=confidence_only,evidence_only,confidence_plus_evidence,full",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "relevance_probability",
+        "calibrated_relevance_probability",
+        "evidence_support"
+      ],
+      "generated_columns": [
+        "ccrp_score_mode",
+        "ccrp_base_score",
+        "ccrp_risk_adjusted_score"
+      ],
+      "validation_controls": {
+        "score_modes": [
+          "confidence_only",
+          "confidence_plus_evidence",
+          "evidence_only",
+          "full"
+        ]
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 43,
+          "needle": "CCRP_SCORE_MODES",
+          "present": true
+        },
+        {
+          "path": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+          "line": 181,
+          "needle": "--score_modes",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "confidence_only and evidence_only bypass the risk penalty in current code, so they are mode baselines rather than leave-one-risk-component ablations."
+      ]
+    },
+    {
+      "id": "boundary_uncertainty",
+      "label": "Boundary ambiguity",
+      "kind": "leave_one_component_out",
+      "role": "Measures uncertainty near the calibrated posterior decision boundary.",
+      "selector_handle": "ablation=without_boundary_uncertainty",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "calibrated_relevance_probability"
+      ],
+      "generated_columns": [
+        "ccrp_boundary_uncertainty",
+        "ccrp_weight_boundary",
+        "ccrp_uncertainty"
+      ],
+      "validation_controls": {
+        "ablation_handle": "without_boundary_uncertainty"
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 117,
+          "needle": "boundary_uncertainty =",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 36,
+          "needle": "without_boundary_uncertainty",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "Current leave-one-out handling renormalizes the remaining uncertainty weights, so this is not an all-else-identical zeroing experiment."
+      ]
+    },
+    {
+      "id": "calibration_gap",
+      "label": "Calibration gap",
+      "kind": "leave_one_component_out",
+      "role": "Penalizes disagreement between raw and calibrated relevance probability.",
+      "selector_handle": "ablation=without_calibration_gap",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "relevance_probability",
+        "calibrated_relevance_probability"
+      ],
+      "generated_columns": [
+        "ccrp_calibration_gap",
+        "ccrp_weight_calibration_gap",
+        "ccrp_uncertainty"
+      ],
+      "validation_controls": {
+        "ablation_handle": "without_calibration_gap"
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 118,
+          "needle": "calibration_gap =",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 37,
+          "needle": "without_calibration_gap",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "This ablates the calibration-gap uncertainty term, not calibrated posterior use itself.",
+        "Current leave-one-out handling renormalizes remaining uncertainty weights."
+      ]
+    },
+    {
+      "id": "evidence_support_insufficiency",
+      "label": "Evidence support / insufficiency",
+      "kind": "leave_one_component_out",
+      "role": "Uses support minus counterevidence to model whether the posterior is backed by task-grounded evidence.",
+      "selector_handle": "ablation=without_evidence_support",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "evidence_support"
+      ],
+      "generated_columns": [
+        "ccrp_evidence_score",
+        "ccrp_evidence_uncertainty",
+        "ccrp_weight_evidence"
+      ],
+      "validation_controls": {
+        "ablation_handle": "without_evidence_support"
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 111,
+          "needle": "evidence_support =",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 119,
+          "needle": "evidence_uncertainty =",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 38,
+          "needle": "without_evidence_support",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "If evidence_support is absent, code falls back to evidence or 0.0; a paper row must verify real support columns exist.",
+        "In evidence_only and confidence_plus_evidence modes, evidence may still enter base_score; isolate evidence-insufficiency claims under a fixed full-mode protocol."
+      ]
+    },
+    {
+      "id": "counterevidence",
+      "label": "Counterevidence",
+      "kind": "leave_one_component_out",
+      "role": "Subtracts contradictory evidence from support before evidence insufficiency is computed.",
+      "selector_handle": "ablation=without_counterevidence",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "counterevidence_strength"
+      ],
+      "generated_columns": [
+        "ccrp_evidence_score",
+        "ccrp_evidence_uncertainty",
+        "ccrp_uncertainty"
+      ],
+      "validation_controls": {
+        "ablation_handle": "without_counterevidence"
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 112,
+          "needle": "counterevidence =",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 39,
+          "needle": "without_counterevidence",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "The ablation is a no-op if source rows do not contain counterevidence_strength/counterevidence; audit source columns before claiming this component matters."
+      ]
+    },
+    {
+      "id": "risk_penalty",
+      "label": "Risk penalty",
+      "kind": "leave_one_component_out",
+      "role": "Turns uncertainty into the final risk-adjusted ranking score.",
+      "selector_handle": "ablation=without_risk_penalty",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "relevance_probability",
+        "calibrated_relevance_probability",
+        "evidence_support"
+      ],
+      "generated_columns": [
+        "ccrp_uncertainty",
+        "ccrp_base_score",
+        "ccrp_risk_adjusted_score"
+      ],
+      "validation_controls": {
+        "ablation_handle": "without_risk_penalty"
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 141,
+          "needle": "risk_adjusted_score = base_score *",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 40,
+          "needle": "without_risk_penalty",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "Current implementation uses multiplicative risk adjustment: base_score * ((1 - uncertainty) ** eta). Paper figures/text must not describe it as a subtractive posterior - eta * uncertainty formula unless code changes.",
+        "Eta has no ranking effect for confidence_only or evidence_only rows because those modes bypass the risk penalty."
+      ]
+    },
+    {
+      "id": "eta_risk_exponent",
+      "label": "Eta risk exponent",
+      "kind": "hyperparameter",
+      "role": "Controls the strength of multiplicative uncertainty punishment.",
+      "selector_handle": "--etas",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "ccrp_uncertainty_inputs"
+      ],
+      "generated_columns": [
+        "ccrp_risk_adjusted_score"
+      ],
+      "validation_controls": {
+        "default_grid": [
+          0.5,
+          1.0,
+          2.0
+        ]
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 141,
+          "needle": "max(0.0, float(eta))",
+          "present": true
+        },
+        {
+          "path": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+          "line": 189,
+          "needle": "--etas",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "Eta is meaningful only when risk penalty is active; report mode/ablation filters for eta curves."
+      ]
+    },
+    {
+      "id": "confidence_weight",
+      "label": "Confidence/evidence blend weight",
+      "kind": "hyperparameter",
+      "role": "Controls calibrated-posterior vs evidence-score blend for confidence_plus_evidence mode.",
+      "selector_handle": "--confidence_weights",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "calibrated_relevance_probability",
+        "evidence_support"
+      ],
+      "generated_columns": [
+        "ccrp_confidence_weight",
+        "ccrp_base_score"
+      ],
+      "validation_controls": {
+        "default_grid": [
+          0.5,
+          0.7,
+          0.9
+        ]
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 134,
+          "needle": "confidence_weight * calibrated_probability",
+          "present": true
+        },
+        {
+          "path": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+          "line": 190,
+          "needle": "--confidence_weights",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "Selector evaluates extra confidence_weight values only for confidence_plus_evidence mode."
+      ]
+    },
+    {
+      "id": "uncertainty_weight_triple",
+      "label": "Uncertainty weight triple",
+      "kind": "hyperparameter",
+      "role": "Controls boundary, calibration-gap, and evidence-insufficiency contributions to total uncertainty.",
+      "selector_handle": "--weight_grid",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "calibrated_relevance_probability",
+        "relevance_probability",
+        "evidence_support"
+      ],
+      "generated_columns": [
+        "ccrp_weight_boundary",
+        "ccrp_weight_calibration_gap",
+        "ccrp_weight_evidence",
+        "ccrp_uncertainty"
+      ],
+      "validation_controls": {
+        "default": [
+          0.5,
+          0.3,
+          0.2
+        ],
+        "planned_grid": [
+          [
+            0.5,
+            0.3,
+            0.2
+          ],
+          [
+            0.7,
+            0.2,
+            0.1
+          ],
+          [
+            0.4,
+            0.4,
+            0.2
+          ],
+          [
+            0.4,
+            0.2,
+            0.4
+          ]
+        ]
+      },
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 18,
+          "needle": "class CcrpWeights",
+          "present": true
+        },
+        {
+          "path": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+          "line": 42,
+          "needle": "--weight_grid",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "Grid search must be validation-only; test-set selection would invalidate the component evidence.",
+        "Removed-component ablations renormalize remaining weights, so interpret them as redistributed uncertainty mass."
+      ]
+    },
+    {
+      "id": "raw_vs_calibrated_posterior",
+      "label": "Raw posterior versus calibrated posterior",
+      "kind": "conceptual_not_currently_executable",
+      "role": "Would test whether validation-only calibration itself is necessary for C-CRP.",
+      "selector_handle": "no_current_cli_handle",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "relevance_probability",
+        "calibrated_relevance_probability"
+      ],
+      "generated_columns": [
+        "ccrp_raw_probability",
+        "ccrp_calibrated_probability"
+      ],
+      "validation_controls": {},
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 98,
+          "needle": "raw_probability =",
+          "present": true
+        },
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 104,
+          "needle": "calibrated_probability =",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "No current selector handle replaces calibrated posterior with raw posterior throughout C-CRP; do not count this as an executed LOO ablation unless a handle is implemented and audited."
+      ]
+    },
+    {
+      "id": "temperature_prompt_variants",
+      "label": "Temperature / prompt variants",
+      "kind": "conceptual_or_separate_runner",
+      "role": "Nearby diagnostic runners may vary generation settings, but they are not part of the current C-CRP uncertainty-decomposition selector.",
+      "selector_handle": "not_part_of_main_select_ccrp_variant_on_valid",
+      "implementation_status": "implemented_in_current_code",
+      "paper_execution_status": "requires_full_scale_signal_rows",
+      "current_blocker": "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+      "required_signal_columns": [
+        "not_applicable_to_current_selector"
+      ],
+      "generated_columns": [],
+      "validation_controls": {},
+      "source_refs": [
+        {
+          "path": "docs/paper_critical_experiment_plan_2026-06-03.md",
+          "line": null,
+          "needle": "Temperature",
+          "present": false
+        },
+        {
+          "path": "experiments/rsc/run_ccrp_v3_temperature.py",
+          "line": 1,
+          "needle": "temperature scaling",
+          "present": true
+        }
+      ],
+      "risk_notes": [
+        "Treat temperature/prompt studies as separate diagnostics unless they emit full-scale uncertainty signal rows and pass the same candidate/provenance gates."
+      ]
+    }
+  ],
+  "overclaim_risks": [
+    "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+    "Do not report component ablations from score-only formal C-CRP scores.",
+    "Do not claim counterevidence contribution unless source rows contain a non-empty counterevidence column.",
+    "Do not claim raw-vs-calibrated posterior or temperature/prompt variants as completed C-CRP LOO ablations without new audited handles."
+  ],
+  "next_gate": "locate_or_regenerate_full_scale_valid_test_signal_rows_then_run_validation_selector"
+}

@@ -98,15 +98,48 @@ def _seed_guarded_plan(root: Path) -> None:
     )
 
 
+def _seed_component_inventory(root: Path) -> None:
+    base = root / "outputs/summary/paper_critical/ccrp_component_inventory"
+    components = [
+        {"id": "boundary_uncertainty"},
+        {"id": "calibration_gap"},
+        {"id": "evidence_support_insufficiency"},
+        {"id": "counterevidence"},
+        {"id": "risk_penalty"},
+        {"id": "eta_risk_exponent"},
+        {"id": "confidence_weight"},
+        {"id": "uncertainty_weight_triple"},
+        {"id": "raw_vs_calibrated_posterior"},
+        {"id": "temperature_prompt_variants"},
+    ]
+    _write(
+        base / "ccrp_component_inventory_20260604.json",
+        json.dumps(
+            {
+                "status_label": "paper_critical_ccrp_component_inventory",
+                "paper_claim_ready": False,
+                "component_count": len(components),
+                "blocked_by": ["missing_full_scale_uncertainty_or_recomputable_signal_rows"],
+                "formula_alignment": {"figure_formula_contains_multiplicative_form": True},
+                "components": components,
+            }
+        )
+        + "\n",
+    )
+    _write(base / "ccrp_component_inventory_20260604.md", "# C-CRP Component Inventory\n")
+
+
 def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_inventory(tmp_path)
 
     audit = build_module_audit(tmp_path)
 
     assert audit["ok"] is True
     assert audit["paper_ready"] is False
+    assert audit["summary"]["component_inventory_ready"] is True
     assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is True
     assert audit["modules"]["observation_motivation"]["status"] == "blocked_missing_signal_rows"
     assert audit["modules"]["component_ablation"]["status"] == "blocked_missing_signal_rows"
@@ -119,6 +152,7 @@ def test_audit_detects_framework_manifest_mismatch(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_inventory(tmp_path)
     _write(tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview.svg", "<svg>changed</svg>\n")
 
     audit = build_module_audit(tmp_path)
@@ -132,6 +166,7 @@ def test_write_markdown_summary(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_inventory(tmp_path)
     audit = build_module_audit(tmp_path)
     output = tmp_path / "audit.md"
 
@@ -141,3 +176,4 @@ def test_write_markdown_summary(tmp_path):
     assert "Paper-Critical Module Audit" in text
     assert "`observation_motivation`" in text
     assert "blocked_missing_signal_rows" in text
+    assert "Component inventory ready" in text

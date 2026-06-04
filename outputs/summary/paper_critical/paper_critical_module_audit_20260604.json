@@ -1,10 +1,11 @@
 {
   "ok": true,
   "paper_ready": false,
-  "generated_at_utc": "2026-06-03T23:49:08+00:00",
+  "generated_at_utc": "2026-06-04T00:42:37+00:00",
   "root": "D:\\Research\\Uncertainty",
   "summary": {
     "framework_overview_scaffold_ready": true,
+    "component_inventory_ready": true,
     "signal_rows_available": false,
     "guarded_plan_ready": true,
     "paper_claims_ready": false
@@ -81,6 +82,37 @@
     "current_blocker": "Full-scale C-CRP Sports/Toys/Home/Tools artifacts visible so far are score-only; valid/test signal rows with evidence and counterevidence must be located or regenerated from saved non-test-selected inputs before observation, ablation, or hyperparameter claims.",
     "failures": []
   },
+  "component_inventory": {
+    "status": "inventory_ready_not_executed",
+    "paper_claim_ready": false,
+    "files": {
+      "json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.json",
+      "markdown": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.md"
+    },
+    "component_count": 12,
+    "blocked_by": [
+      "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+    ],
+    "formula_alignment": {
+      "code_formula": "base_score * ((1 - uncertainty) ** eta)",
+      "figure_formula_contains_multiplicative_form": true,
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 141,
+          "needle": "risk_adjusted_score = base_score *",
+          "present": true
+        },
+        {
+          "path": "scripts/analysis/main_build_framework_overview_figure.py",
+          "line": 144,
+          "needle": "risk_score",
+          "present": true
+        }
+      ]
+    },
+    "failures": []
+  },
   "modules": {
     "observation_motivation": {
       "status": "blocked_missing_signal_rows",
@@ -98,7 +130,38 @@
       "blockers": [
         "missing_full_scale_uncertainty_or_recomputable_signal_rows"
       ],
-      "script": "scripts/misc/main_select_ccrp_variant_on_valid.py"
+      "script": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+      "inventory": {
+        "status": "inventory_ready_not_executed",
+        "paper_claim_ready": false,
+        "files": {
+          "json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.json",
+          "markdown": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.md"
+        },
+        "component_count": 12,
+        "blocked_by": [
+          "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+        ],
+        "formula_alignment": {
+          "code_formula": "base_score * ((1 - uncertainty) ** eta)",
+          "figure_formula_contains_multiplicative_form": true,
+          "source_refs": [
+            {
+              "path": "src/shadow/ccrp.py",
+              "line": 141,
+              "needle": "risk_adjusted_score = base_score *",
+              "present": true
+            },
+            {
+              "path": "scripts/analysis/main_build_framework_overview_figure.py",
+              "line": 144,
+              "needle": "risk_score",
+              "present": true
+            }
+          ]
+        },
+        "failures": []
+      }
     },
     "hyperparameter_analysis": {
       "status": "blocked_missing_signal_rows",
@@ -127,18 +190,18 @@
       },
       "manifest_checks": {
         "framework_overview.svg": {
-          "expected": "f3e16d385109b6fe01b0c066e64c0b3380ad64586bc8dadf07cccdcef9353b97",
-          "actual": "f3e16d385109b6fe01b0c066e64c0b3380ad64586bc8dadf07cccdcef9353b97",
+          "expected": "cfd31b94b8c975f304015b0c8a095b51011e8fa1a0fecc9522d3ed4f53ab5cbd",
+          "actual": "cfd31b94b8c975f304015b0c8a095b51011e8fa1a0fecc9522d3ed4f53ab5cbd",
           "ok": true
         },
         "framework_overview.pdf": {
-          "expected": "67c560668f233737f52b403ef535d8e0a4b626e3d84198d8b1a3504974484878",
-          "actual": "67c560668f233737f52b403ef535d8e0a4b626e3d84198d8b1a3504974484878",
+          "expected": "5ab33f1d62783cb9a5bd8df1278090be2a1efd4d6a134aa8ac5523dafd70a2a5",
+          "actual": "5ab33f1d62783cb9a5bd8df1278090be2a1efd4d6a134aa8ac5523dafd70a2a5",
           "ok": true
         },
         "framework_overview.png": {
-          "expected": "1ef47dd5739031b0a98c49ac738e42269b5329c700cb079649b62d499ae4e158",
-          "actual": "1ef47dd5739031b0a98c49ac738e42269b5329c700cb079649b62d499ae4e158",
+          "expected": "c81bb781ef7cc7bd988c8a8cc1464ffc14900a5df4b7b0a383f3d0ff4fa1eb0f",
+          "actual": "c81bb781ef7cc7bd988c8a8cc1464ffc14900a5df4b7b0a383f3d0ff4fa1eb0f",
           "ok": true
         },
         "framework_overview_caption.md": {
@@ -147,15 +210,15 @@
           "ok": true
         },
         "framework_overview_provenance.json": {
-          "expected": "3d41aacd0d74caf66474d5b3dd5eca144c9f0d9ffe5ab0b30e1c877318c52ffb",
-          "actual": "3d41aacd0d74caf66474d5b3dd5eca144c9f0d9ffe5ab0b30e1c877318c52ffb",
+          "expected": "28ca0670059a349e7d88f7b2cf0c286ca30d059978c6b7c335db21df1ad0287d",
+          "actual": "28ca0670059a349e7d88f7b2cf0c286ca30d059978c6b7c335db21df1ad0287d",
           "ok": true
         }
       },
       "provenance": {
         "status_label": "paper_critical_framework_overview_draft",
-        "git_commit": "8f972ca000955c3067885e0d23d8529e6ae5a29e",
-        "generated_at_utc": "2026-06-03T23:32:07+00:00"
+        "git_commit": "66aa27dad19cfe46496a15e14315ce5016a59be9",
+        "generated_at_utc": "2026-06-04T00:36:30+00:00"
       }
     }
   },

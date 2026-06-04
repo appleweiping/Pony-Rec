@@ -141,7 +141,7 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         ),
         (
             "Risk-adjusted ranking",
-            "risk_score = posterior\n- eta * uncertainty\nExact score export\nRanked list",
+            "risk_score = base_score\n* (1 - uncertainty)^eta\nExact score export\nRanked list",
             face_d,
         ),
     ]

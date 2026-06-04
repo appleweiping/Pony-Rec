@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 08:21 CST
+Last updated: 2026-06-04 08:40 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -119,8 +119,9 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    paper-critical module state without running experiments. Current artifact:
    `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`.
    It reports `paper_ready=false`, `framework_overview_scaffold_ready=true`,
-   `guarded_plan_ready=true`, and `signal_rows_available=false`; therefore the
-   observation, ablation, and hyperparameter modules remain blocked by
+   `component_inventory_ready=true`, `guarded_plan_ready=true`, and
+   `signal_rows_available=false`; therefore the observation, ablation, and
+   hyperparameter modules remain blocked by
    `missing_full_scale_uncertainty_or_recomputable_signal_rows`.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
@@ -131,7 +132,16 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    (`without_evidence_support`), counterevidence, risk penalty, eta,
    confidence weight, and the C-CRP weight triple. If removing a component is
    neutral or better, report it honestly and mark the component as weak or
-   needing redesign.
+   needing redesign. Inventory helper:
+   `scripts/audit/main_build_ccrp_component_inventory.py`; current artifact
+   `outputs/summary/paper_critical/ccrp_component_inventory/ccrp_component_inventory_20260604.{json,md}`
+   covers 12 items: the executable score modes/LOO handles/hyperparameters plus
+   two conceptual-not-currently-executable risks (`raw_vs_calibrated_posterior`
+   and `temperature_prompt_variants`). The inventory records that all
+   paper-facing execution remains blocked by
+   `missing_full_scale_uncertainty_or_recomputable_signal_rows`, and that
+   temperature/prompt variants or raw-vs-calibrated posterior must not be
+   claimed as completed LOO ablations without new audited handles.
 3. Hyperparameter analysis: sweep actual method controls rather than cosmetic
    knobs. Candidate controls include eta, confidence weight, C-CRP weight
    triples, uncertainty thresholds/gates, anchor conflict penalties, and any
@@ -152,15 +162,17 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `outputs/summary/paper_critical/framework_overview/` with SVG, PDF, PNG,
    caption, provenance, and `framework_overview_manifest.sha256`. The draft
    now labels the risk score formula as
-   `risk_score = posterior - eta * uncertainty` and includes counterevidence
-   in the C-CRP uncertainty box; it
+   `risk_score = base_score * (1 - uncertainty)^eta`, matching
+   `src/shadow/ccrp.py`, and includes counterevidence in the C-CRP uncertainty
+   box; it
    still needs final paper-layout/reviewer polish before camera-ready use. On
-   2026-06-04 07:32 CST, the package was regenerated from
-   `scripts/analysis/main_build_framework_overview_figure.py` at git commit
-   `8f972ca`, `tests/test_framework_overview_figure.py` passed, and the PNG was
-   visually checked as nonblank/readable. This completes the current draft
-   scaffold for the framework-overview paper-critical module, but not final
-   camera-ready reviewer polish.
+   2026-06-04 08:40 CST, the package was regenerated from
+   `scripts/analysis/main_build_framework_overview_figure.py` with the
+   code-matched multiplicative risk formula, `tests/test_framework_overview_figure.py`
+   passed as part of the 9-test paper-critical check, and the PNG was visually
+   checked as nonblank/readable. This completes the current draft scaffold for
+   the framework-overview paper-critical module, but not final camera-ready
+   reviewer polish.
 
 Evidence packaging for these modules follows the same lightweight-but-complete
 standard as official rows: keep selected metrics CSV/JSON, final tables, plots,
@@ -298,7 +310,12 @@ passes gates, or fails with an audited recovery decision.
   GPU was `98%` with `16285 MiB / 49140 MiB`, `/` had about `17.17G` free and
   `91%` used, the intermediate adapter directory was `1.3G`, the final output
   directory remained `4.0K`, and `should_notify=false` with no completion,
-  failure, disk danger, or duplicate-run reason.
+  failure, disk danger, or duplicate-run reason. At the 2026-06-04 08:40 CST
+  continuation monitor, the same tracked PIDs remained alive, exactly one
+  matching adapter Python process was present, Qwen3 embedding progress reached
+  `283088/568891` (`0.4976`), GPU was `96%` with `16285 MiB / 49140 MiB`, `/`
+  had about `17.17G` free and `91%` used, output sizes remained `1.3G` adapter
+  and `4.0K` final directory, and `should_notify=false`.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -1031,7 +1048,7 @@ set is complete.
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery |
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery and adapter cleanup |
 | `rlmrec_graphcl` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llm2rec_sasrec` | active | launched 2026-06-04 07:19 CST after RLMRec adapter cleanup; runner PID `3236678`, adapter PID `3236688`, log `baselines_new_domains_home_llm2rec_20260604_071902.log`; robust monitor at 2026-06-04 08:01 CST saw Qwen3 embedding progress `182792/568891`, one matching adapter Python process, no completion/failure/disk/duplicate-run notification reason; not table-eligible yet |
+| `llm2rec_sasrec` | active | launched 2026-06-04 07:19 CST after RLMRec adapter cleanup; runner PID `3236678`, adapter PID `3236688`, log `baselines_new_domains_home_llm2rec_20260604_071902.log`; robust monitor at 2026-06-04 08:40 CST saw Qwen3 embedding progress `283088/568891`, one matching adapter Python process, no completion/failure/disk/duplicate-run notification reason; not table-eligible yet |
 | `llmesr_sasrec` | pending | do not launch until Home LLM2Rec completes, is packaged/audited locally, and disk has enough margin |
 
 Home official baselines are now 6/8 complete (`proex_profile`,

@@ -23,8 +23,8 @@ def test_build_framework_overview_figure_outputs_editable_and_export_files(tmp_p
     assert "controlled same-candidate" in caption
     assert "full-catalog" not in caption.lower()
     svg = (tmp_path / "framework_overview.svg").read_text(encoding="utf-8")
-    assert "risk_score = posterior" in svg
-    assert "- eta * uncertainty" in svg
+    assert "risk_score = base_score" in svg
+    assert "* (1 - uncertainty)^eta" in svg
     assert "Counterevidence" in svg
     assert all(line == line.rstrip() for line in svg.splitlines())
     manifest = (tmp_path / "framework_overview_manifest.sha256").read_text(encoding="utf-8")
