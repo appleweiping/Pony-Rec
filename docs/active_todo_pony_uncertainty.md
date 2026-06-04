@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 16:56 CST
+Last updated: 2026-06-04 20:15 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1288,9 +1288,8 @@ completed intermediate adapter
 was then removed after resolved-path checks. Final scores, provenance, audits,
 imported `tables/`, and `proex_official_model.pt` were preserved. Post-cleanup
 checks show no matching Python experiment process, GPU idle, and `/` at about
-`12G` free / `95%` used. Tools is now 1/8 official rows complete. Next action:
-fresh process/GPU/disk/duplicate-output preflight, then launch the next Tools
-single-row official baseline; do not batch multiple rows.
+`12G` free / `95%` used. At this checkpoint, Tools was 1/8 official rows
+complete and the next action was a fresh single-row ProMax preflight.
 
 Tools ProMax launch checkpoint 2026-06-04 16:50 CST: after the ProEx gates,
 local package, commit/push, and cleanup completed, a fresh preflight found no
@@ -1304,27 +1303,58 @@ nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE=promax_profile TRAIN_METH
 ```
 
 The SSH wrapper timed out while backgrounding, so PID files were written after
-process inspection. Current monitor target: runner PID `3279573`, adapter PID
+process inspection. Initial monitor target: runner PID `3279573`, adapter PID
 `3279582`, PID files
 `baselines_new_domains_tools_promax_20260604_164630.runner.pid` and
 `baselines_new_domains_tools_promax_20260604_164630.adapter.pid`, and log
-`baselines_new_domains_tools_promax_20260604_164630.log`. Stable checkpoint:
-exactly one matching ProMax adapter process was active, Qwen3 `hf_mean_pool`
-had reached `1336/269711`, GPU was `96%` with `15947 MiB / 49140 MiB`, disk
-was about `11G` free / `95%` used, the adapter directory was about `1005M`,
-and final output was still placeholder-only. No `DONE`, Traceback, OOM,
-no-space, blocker, or failure markers were present. Do not start another
-baseline while this row is active. If it completes, run server-final audit,
-server large-artifact manifest, local-light sync, local-light audit, docs/memory
-update, and related-only commit/push before the next row.
-Guarded completion-gate plan for this active ProMax row:
-`outputs/summary/official_completion_gate_plan/tools_promax_profile_completion_gates_20260604.{json,ps1}`.
-It records the required order (server-final audit, server large-artifact
-manifest, local-light sync, local-light audit), starts with a PowerShell
-`throw`, and must remain planning-only until the runner exits normally and no
-duplicate matching process exists. Verification:
-`python -m pytest tests\test_plan_official_completion_gates.py` passed with
-`3 passed`.
+`baselines_new_domains_tools_promax_20260604_164630.log`. Stable launch
+checkpoint: exactly one matching ProMax adapter process was active, Qwen3
+`hf_mean_pool` had reached `1336/269711`, GPU was `96%` with
+`15947 MiB / 49140 MiB`, disk was about `11G` free / `95%` used, the adapter
+directory was about `1005M`, and final output was still placeholder-only. No
+`DONE`, Traceback, OOM, no-space, blocker, or failure markers were present.
+The guarded completion-gate plan
+`outputs/summary/official_completion_gate_plan/tools_promax_profile_completion_gates_20260604.{json,ps1}`
+was verified by `python -m pytest tests\test_plan_official_completion_gates.py`
+(`3 passed`) before the row completed.
+
+Tools ProMax completion/gate checkpoint 2026-06-04 20:15 CST:
+`promax_profile` completed at 2026-06-04 19:59 CST as the second Tools
+official row. Final provenance records `implementation_status=official_completed`,
+`blockers=[]`, and exact `score_coverage_rate=1.0`. Server-final audit,
+server large-artifact sha256 manifest, lightweight local sync, and local-light
+audit all passed. Full metrics over 10,000 users and 101 candidates are
+HR@5/10/20 `0.056 / 0.1046 / 0.2018`, NDCG@5/10/20
+`0.03468275603534166 / 0.05029722685396016 / 0.07458228366305956`, and MRR
+`0.056527355267188224`. Row counts passed for `scores.csv` (`1,010,001`
+lines), predictions (`10,000` lines before post-gate deletion), and
+`tables/ranking_eval_records.csv` (`10,001` lines). The local lightweight
+evidence package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`
+and includes final provenance, score audits, run summary, server-final audit,
+server large-artifact manifest, imported metric/coverage/exposure/eval-record
+tables, local sync manifest, local-light audit, and the post-gate prediction
+deletion manifest. The large-artifact manifest records server-side `scores.csv`
+sha256 `2a9797b945fef73e76a1db18efe7ef037f2b47732c29ebaaf44ece01b33ac781`,
+prediction JSONL sha256
+`b2123ea945285b9ee7ca940819382191fbae6af945cee09fb741b7c5ca95c717`, and
+`promax_official_model.pt` sha256
+`c0e17d003ba1e055e65d38dfac4dc96483f4a8744e201e3daf168a71f31890fc`.
+Under disk pressure (`4.9G` free / `98%` used after completion), the
+server-only prediction JSONL was removed only after the server-final and
+local-light gates passed; its row-local deletion manifest records
+`796026115` bytes, `10,000` lines, and the prediction sha256 above. The
+completed intermediate adapter
+`outputs/baselines/paper_adapters/tools_large10000_100neg_promax_official_adapter`
+was then removed after resolved-path checks and manifesting:
+`outputs/summary/tools_promax_completed_adapter_cleanup_manifest_20260604.sha256`
+and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`.
+Final scores, provenance, audits, imported `tables/`, and
+`promax_official_model.pt` were preserved. Post-cleanup checks show no
+matching Python experiment process, GPU idle, and `/` at about `11G` free /
+`95%` used. Tools is now 2/8 official rows complete. Next action: fresh
+process/GPU/disk/duplicate-output preflight, then launch the next Tools
+single-row official baseline; do not batch multiple rows.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1496,15 +1526,14 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active Tools `proex_profile` row (`3269572`,
-   `baselines_new_domains_tools_proex_20260604_142548.log`). Notify on
-   completion, failure, duplicate process, dead PID, or disk below 10G/at or
-   above 97% used. Do not start another baseline while this row is active.
-2. If Tools `proex_profile` completes, run the established row gates before
-   marking it official: score audit/import, server-final audit, server
-   large-artifact sha256 manifest, local-light sync, local-light audit,
-   docs/memory, related-only commit/push, and then clean the completed
-   temporary adapter if disk remains tight.
+1. Before launching the next Tools row, run a fresh process/GPU/disk and
+   duplicate-output preflight. Tools currently has two gated official rows:
+   `proex_profile` and `promax_profile`; six official rows remain.
+2. Launch only one next Tools official row if the preflight is clean. After it
+   completes, run the established row gates before marking it official: score
+   audit/import, server-final audit, server large-artifact sha256 manifest,
+   local-light sync, local-light audit, docs/memory, related-only commit/push,
+   and then clean the completed temporary adapter if disk remains tight.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

@@ -299,8 +299,8 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools now has 1/8 official rows gated after
-`proex_profile`, so Tools still needs seven completed official rows plus paired
+domain set is complete; Tools now has 2/8 official rows gated after
+`proex_profile` and `promax_profile`, so Tools still needs six completed official rows plus paired
 same-candidate tests before any paper-wide SOTA claim.
 
 ### Remaining for paper submission
@@ -330,14 +330,37 @@ same-candidate tests before any paper-wide SOTA claim.
    `server_large_artifact_manifest.sha256` and
    `prediction_deletion_manifest.json`. The completed intermediate adapter was
    removed after final evidence and local backup passed, recovering `/` to
-   about `12G` free / `95%` used while preserving final evidence. Tools is now
-   1/8 complete. After a fresh process/GPU/disk/duplicate-output preflight,
-   Tools `promax_profile` launched at 2026-06-04 16:46 CST as the second
-   single-row Tools official baseline with runner PID `3279573`, adapter PID
-   `3279582`, and log
-   `baselines_new_domains_tools_promax_20260604_164630.log`; the first stable
-   check showed Qwen3 `hf_mean_pool` at `1336/269711`, GPU `96%`, disk about
-   `11G` free / `95%` used, and no fatal markers. Home
+   about `12G` free / `95%` used while preserving final evidence. Tools
+   `promax_profile` launched at 2026-06-04 16:46 CST as the second single-row
+   Tools official baseline with runner PID `3279573`, adapter PID `3279582`,
+   and log `baselines_new_domains_tools_promax_20260604_164630.log`, then
+   completed at 2026-06-04 19:59 CST with `implementation_status=official_completed`,
+   `blockers=[]`, exact `score_coverage_rate=1.0`, score audit/imported
+   tables, server-final audit, server large-artifact sha256 manifest,
+   lightweight local sync, and local-light audit all passing. Full metrics over
+   10,000 users and 101 candidates are HR@5/10/20
+   `0.056 / 0.1046 / 0.2018`, NDCG@5/10/20
+   `0.03468275603534166 / 0.05029722685396016 / 0.07458228366305956`, and MRR
+   `0.056527355267188224`; `scores.csv` has `1,010,001` lines, predictions
+   had `10,000` lines before post-gate deletion, and
+   `tables/ranking_eval_records.csv` has `10,001` lines. The local
+   lightweight package is
+   `outputs/baselines/official_adapters/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`.
+   Server-only `scores.csv`, deleted prediction metadata, and
+   `promax_official_model.pt` are covered by
+   `server_large_artifact_manifest.sha256` and
+   `prediction_deletion_manifest.json`; the manifest records sha256 values
+   `2a9797b945fef73e76a1db18efe7ef037f2b47732c29ebaaf44ece01b33ac781`
+   for scores, `b2123ea945285b9ee7ca940819382191fbae6af945cee09fb741b7c5ca95c717`
+   for the deleted prediction JSONL, and
+   `c0e17d003ba1e055e65d38dfac4dc96483f4a8744e201e3daf168a71f31890fc`
+   for the final model. The completed ProMax intermediate adapter was removed
+   after final evidence and local backup passed, with cleanup manifests
+   `outputs/summary/tools_promax_completed_adapter_cleanup_manifest_20260604.sha256`
+   and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`;
+   final scores, provenance, audits, imported tables, and model were preserved.
+   Tools is now 2/8 complete and needs six more official rows plus the Tools
+   domain/comparison/paired-test gates. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.

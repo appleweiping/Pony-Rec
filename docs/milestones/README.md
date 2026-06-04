@@ -157,16 +157,32 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/baselines/paper_adapters/tools_large10000_100neg_proex_official_adapter`
   was removed after path checks, restoring `/` to about `12G` free / `95%`
   used while preserving final scores, provenance, audits, imported tables, and
-  `proex_official_model.pt`. Tools is now 1/8 official rows complete. After a
-  fresh process/GPU/disk/duplicate-output preflight, Tools `promax_profile`
-  launched at 2026-06-04 16:46 CST as the second Tools row with runner PID
-  `3279573`, adapter PID `3279582`, and log
-  `baselines_new_domains_tools_promax_20260604_164630.log`. At the first
-  stable check it was in Qwen3 `hf_mean_pool` at `1336/269711`, GPU was `96%`
-  with `15947 MiB / 49140 MiB`, disk was about `11G` free / `95%` used, no
-  fatal markers were present, and the final output directory was still
-  placeholder-only. Do not start another Tools row until this row completes or
-  fails and is gated.
+  `proex_official_model.pt`. Tools `promax_profile` launched at
+  2026-06-04 16:46 CST as the second Tools row with runner PID `3279573`,
+  adapter PID `3279582`, and log
+  `baselines_new_domains_tools_promax_20260604_164630.log`; it completed at
+  2026-06-04 19:59 CST with `implementation_status=official_completed`,
+  `blockers=[]`, exact `score_coverage_rate=1.0`, and passing server-final
+  audit, server large-artifact sha256 manifest, lightweight local sync, and
+  local-light audit. Full metrics over 10,000 users and 101 candidates are
+  HR@5/10/20 `0.056 / 0.1046 / 0.2018`, NDCG@5/10/20
+  `0.03468275603534166 / 0.05029722685396016 / 0.07458228366305956`, and MRR
+  `0.056527355267188224`; `scores.csv` has `1,010,001` lines, predictions had
+  `10,000` lines before post-gate deletion, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+  package is
+  `outputs/baselines/official_adapters/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate/`.
+  Server-only `scores.csv`, deleted prediction metadata, and
+  `promax_official_model.pt` are covered by `server_large_artifact_manifest.sha256`
+  and `prediction_deletion_manifest.json`; the completed ProMax intermediate
+  adapter was removed after final evidence and local backup passed, with
+  cleanup manifests
+  `outputs/summary/tools_promax_completed_adapter_cleanup_manifest_20260604.sha256`
+  and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`.
+  Final scores, provenance, audits, imported tables, and model were preserved,
+  and post-cleanup `/` was about `11G` free / `95%` used. Tools is now 2/8
+  official rows complete. Do not start another Tools row without a fresh
+  process/GPU/disk/duplicate-output preflight.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -279,8 +295,9 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports, toys, and home
    each have all eight audited official rows plus C-CRP import,
-   domain/comparison, and paired-test gates complete; Tools `proex_profile` is
-   active as the first Tools official row.
+   domain/comparison, and paired-test gates complete; Tools has two audited
+   official rows complete (`proex_profile`, `promax_profile`) and needs six
+   more rows plus its domain/comparison/paired-test gates.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.
