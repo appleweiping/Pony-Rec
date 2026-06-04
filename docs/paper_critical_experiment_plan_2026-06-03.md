@@ -6,9 +6,9 @@ review.
 
 ## Current Constraint
 
-Do not start these runs while the active Home `llm2rec_sasrec` official row is
-running. The current server row has runner PID `3236678`, adapter PID
-`3236688`, and log `baselines_new_domains_home_llm2rec_20260604_071902.log`.
+Do not start these runs while the active Home `llmesr_sasrec` official row is
+running. The current server row has wrapper PID `3248921`, adapter PID
+`3248934`, and log `baselines_new_domains_home_llmesr_20260604_1015.log`.
 Queue the work only after that row completes and passes evidence gates, or
 after an audited failure/recovery decision frees the GPU.
 
@@ -68,7 +68,8 @@ Implementation anchor:
 - `scripts/audit/main_discover_ccrp_uncertainty_sources.py` for scanning
   candidate artifact headers before choosing paths for the stricter audit.
 - `scripts/audit/main_plan_ccrp_signal_generation.py` for producing a
-  guarded, non-executing Sports/Toys command plan after Home RLMRec gates pass.
+  guarded, non-executing Sports/Toys command plan after the active Home
+  LLM-ESR gates pass.
   Generated shell plans start with `exit 2` and retain
   `TODO_*_CCRP_SIGNAL_JSONL_OR_CSV` placeholders until real full-scale signal
   artifacts have passed audit.
@@ -473,7 +474,7 @@ report a proposed deletion list before acting.
 
 ## ARIS Plan Audit
 
-Verdict: PROCEED after current Home RLMRec row is resolved.
+Verdict: PROCEED after current Home LLM-ESR row is resolved.
 
 Evidence quality: 8/10. The modules target reviewer-critical motivation,
 component necessity, and hyperparameter stability.
@@ -491,6 +492,6 @@ Paper potential: 8/10. These modules directly address likely top-conference
 objections about motivation, non-stitching novelty, ablation completeness, and
 overfitting.
 
-Blocking issue: do not start these server runs until Home RLMRec is complete or
-cleanly failed, and do not proceed if the required C-CRP signal rows cannot be
-located or regenerated without LLM re-query leakage.
+Blocking issue: do not start these server runs until Home LLM-ESR is complete
+or cleanly failed, and do not proceed if the required C-CRP signal rows cannot
+be located or regenerated without LLM re-query leakage.

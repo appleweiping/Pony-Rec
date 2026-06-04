@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 10:05 CST
+Last updated: 2026-06-04 10:35 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -120,8 +120,8 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    discovery, source audit, validation selection, ablation, observation, and
    hyperparameter plotting. The generated shell begins with `exit 2` and uses
    `TODO_*_CCRP_SIGNAL_JSONL_OR_CSV` placeholders, so it cannot accidentally
-   launch work before Home RLMRec gates pass and real full-scale signal paths
-   are filled. Current local plan artifact:
+   launch work before the active Home LLM-ESR gates pass and real full-scale
+   signal paths are filled. Current local plan artifact:
    `outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`.
    Readiness audit helper:
    `scripts/audit/main_audit_paper_critical_modules.py` now consolidates the
@@ -206,12 +206,11 @@ evidence directory. It writes `server_large_artifact_manifest.sha256/json` for
 `scores.csv`, `predictions/rank_predictions.jsonl`, and method-specific
 model/checkpoint artifacts such as `*_official_model.pt`, avoiding brittle
 manual `sha256sum` commands that guess the model filename.
-Operational note from the 2026-06-04 03:31 CST monitor: while Home RLMRec is
-active, do not `git pull` the server checkout. The server working tree is
-still on commit `9ded57b` and behind local/GitHub `6409d98`, so the new
-large-artifact manifest helper is not yet present there. When the active run
-finishes, either perform a safe `git pull --ff-only` after confirming no active
-process and no conflicting worktree state, or run
+Operational note from the 2026-06-04 10:35 CST monitor: while Home LLM-ESR is
+active, do not `git pull` the server checkout. The server working tree may lag
+behind local/GitHub helpers, so when the active run finishes, either perform a
+safe `git pull --ff-only` after confirming no active process and no conflicting
+worktree state, or run
 `scripts/audit/main_remote_server_large_artifact_manifest.py` from the local
 checkout before local-light sync; that wrapper sends the current local helper
 through SSH stdin and does not depend on the server checkout version.
@@ -220,8 +219,9 @@ Guarded completion-gate plan helper:
 JSON plus guarded PowerShell script for a completed official row. The generated
 plan fixes the required order as server-final audit, server large-artifact
 manifest, local-light sync, and local-light audit; it begins with a PowerShell
-`throw` and does not run by default. Current Home RLMRec plan artifact:
-`outputs/summary/official_completion_gate_plan/home_rlmrec_graphcl_completion_gates_20260604.*`.
+`throw` and does not run by default. The current checked-in plan artifact still
+targets the completed Home RLMRec row; generate a fresh Home LLM-ESR plan only
+after `llmesr_sasrec` completes.
 
 Remote monitor helper:
 `scripts/audit/main_remote_baseline_monitor_snapshot.py` captures active-row
@@ -232,11 +232,11 @@ completion/failure markers, GPU, disk, output sizes, and `should_notify` only
 for completion, failure, disk danger, duplicate-run risk, or dead tracked PIDs.
 For recurring heartbeats, pass `--output_json_on_notify_only` so quiet checks
 print status without dirtying the tracked snapshot file.
-Current snapshot artifact:
-`outputs/summary/home_llm2rec_monitor_snapshot_20260604.json`.
+Current heartbeat target: Home `llmesr_sasrec`, wrapper PID `3248921`, adapter
+PID `3248934`, log `baselines_new_domains_home_llmesr_20260604_1015.log`.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
-Do not start these server runs until the active Home RLMRec row completes and
+Do not start these server runs until the active Home LLM-ESR row completes and
 passes gates, or fails with an audited recovery decision.
 
 ## Current Server State
@@ -390,7 +390,13 @@ passes gates, or fails with an audited recovery decision.
   score/provenance/import/server-final, server large-artifact manifest,
   local-light sync, local-light audit, full metric/row-count gates, docs/memory
   update, and related-only commit/push pass. Do not start Tools or any parallel
-  row while this runner is active.
+  row while this runner is active. At the 2026-06-04 10:35 CST monitor, both
+  tracked PIDs remained alive, exactly one matching Home LLM-ESR Python adapter
+  process was present, Qwen3 `hf_mean_pool` progress reached `66016/385364`,
+  GPU was `95%` with `16213 MiB / 49140 MiB`, `/` had about `11G` free and
+  `95%` used, the adapter directory was `1.1G`, the final output directory
+  remained `4.0K`, and the log scan found no traceback, OOM, no-space, killed,
+  or duplicate-run signal.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
