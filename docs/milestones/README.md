@@ -237,10 +237,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   `monitor-tools-irllrec`; launch snapshot
   `outputs/summary/tools_irllrec_launch_monitor_20260605.json` shows Qwen3
   embedding progress `2056/269711`, GPU `95%`, disk `13.34G` free, and no
-  failure markers. A 2026-06-05 04:00 CST monitor check found runner PID
+  failure markers. A 2026-06-05 04:10 CST monitor check found runner PID
   `3326805` and adapter PID `3326813` still alive, GPU about `100%` with
-  `16247 MiB / 49140 MiB`, training advanced to `epoch=1740` with latest loss
-  `0.657816`, disk about `9.1G` free / `96%` used, no fatal/OOM/no-space
+  `16247 MiB / 49140 MiB`, Qwen3 embedding complete (`269711/269711`),
+  training advanced to `epoch=1970` with latest loss `0.657435`, disk about
+  `9.1G` free / `96%` used, no duplicate adapter, no fatal/OOM/no-space
   markers, and no final scores/provenance/tables yet. It is active
   monitor-only evidence, not a completed row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
