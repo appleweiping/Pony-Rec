@@ -121,7 +121,10 @@ The repository is now in M5 (multi-domain SOTA validation):
   the completed RLMRec intermediate adapter recovered disk to about `19G` free,
   Home `llm2rec_sasrec` launched at 2026-06-04 07:19 CST as the seventh Home
   row and entered Qwen3 embedding under runner PID `3236678` / adapter PID
-  `3236688`. Tools remains pending.
+  `3236688`. A robust SSH-stdin monitor snapshot at 2026-06-04 08:01 CST saw
+  progress `182792/568891`, one matching adapter Python process, no
+  completion/failure/disk/duplicate-run notification reason, and `/` at about
+  `17.17G` free / `91%` used. Tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -213,8 +216,9 @@ not as a reason to silently rerun completed metric rows.
    all eight audited official rows plus domain/comparison/paired-test gates
    complete; home has 6/8 audited official rows complete after RLMRec passed
    server-final, server large-artifact manifest, local sync, and local-light
-   evidence gates; home `llm2rec_sasrec` is active as the seventh Home row;
-   tools remains pending.
+   evidence gates; home `llm2rec_sasrec` is active as the seventh Home row and
+   reached `182792/568891` Qwen3 embedding progress at the 2026-06-04 08:01 CST
+   robust monitor snapshot with no notification reason; tools remains pending.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 07:47 CST
+Last updated: 2026-06-04 08:03 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -193,6 +193,16 @@ manifest, local-light sync, and local-light audit; it begins with a PowerShell
 `throw` and does not run by default. Current Home RLMRec plan artifact:
 `outputs/summary/official_completion_gate_plan/home_rlmrec_graphcl_completion_gates_20260604.*`.
 
+Remote monitor helper:
+`scripts/audit/main_remote_baseline_monitor_snapshot.py` captures active-row
+state through SSH stdin so it does not depend on the stale server checkout or
+fragile shell quoting. It reports tracked PID liveness, matching Python
+processes with the monitor helper itself filtered out, log progress,
+completion/failure markers, GPU, disk, output sizes, and `should_notify` only
+for completion, failure, disk danger, duplicate-run risk, or dead tracked PIDs.
+Current snapshot artifact:
+`outputs/summary/home_llm2rec_monitor_snapshot_20260604.json`.
+
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start these server runs until the active Home RLMRec row completes and
 passes gates, or fails with an audited recovery decision.
@@ -280,7 +290,13 @@ passes gates, or fails with an audited recovery decision.
   is not table-eligible until final score/provenance/import/server-final,
   server large-artifact manifest, local-light sync, local-light audit, and full
   metric/row-count gates pass. Do not start `llmesr_sasrec` while this runner
-  is active.
+  is active. At the 2026-06-04 08:01 CST robust monitor snapshot, both tracked
+  PIDs were alive, exactly one matching Home LLM2Rec Python adapter process was
+  present, Qwen3 `hf_mean_pool` progress reached `182792/568891` (`0.3213`),
+  GPU was `98%` with `16285 MiB / 49140 MiB`, `/` had about `17.17G` free and
+  `91%` used, the intermediate adapter directory was `1.3G`, the final output
+  directory remained `4.0K`, and `should_notify=false` with no completion,
+  failure, disk danger, or duplicate-run reason.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -1013,7 +1029,7 @@ set is complete.
 | `llmemb` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery |
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery and adapter cleanup |
 | `rlmrec_graphcl` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
-| `llm2rec_sasrec` | active | launched 2026-06-04 07:19 CST after RLMRec adapter cleanup; runner PID `3236678`, adapter PID `3236688`, log `baselines_new_domains_home_llm2rec_20260604_071902.log`; early Qwen3 embedding progress about `944/568891`; not table-eligible yet |
+| `llm2rec_sasrec` | active | launched 2026-06-04 07:19 CST after RLMRec adapter cleanup; runner PID `3236678`, adapter PID `3236688`, log `baselines_new_domains_home_llm2rec_20260604_071902.log`; robust monitor at 2026-06-04 08:01 CST saw Qwen3 embedding progress `182792/568891`, one matching adapter Python process, no completion/failure/disk/duplicate-run notification reason; not table-eligible yet |
 | `llmesr_sasrec` | pending | do not launch until Home LLM2Rec completes, is packaged/audited locally, and disk has enough margin |
 
 Home official baselines are now 6/8 complete (`proex_profile`,
@@ -1193,10 +1209,12 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active home `llm2rec_sasrec` row. Do not launch another
-   baseline while runner PID `3236678` / adapter PID `3236688` are active. Watch
-   disk closely: after launch the adapter directory was about `1.3G`, final
-   output was still a placeholder, and `/` was about `18G` free / `91%` used.
+1. Monitor the active home `llm2rec_sasrec` row with
+   `scripts/audit/main_remote_baseline_monitor_snapshot.py`. Do not launch
+   another baseline while runner PID `3236678` / adapter PID `3236688` are
+   active. Watch disk closely: the latest robust snapshot had the adapter
+   directory about `1.3G`, final output still a placeholder, and `/` about
+   `17.17G` free / `91%` used.
 2. After Home LLM2Rec completes, run the established official-row gates before
    marking it complete: server-final evidence audit, server large-artifact
    sha256 manifest, lightweight local sync, local-light audit, docs/memory

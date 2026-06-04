@@ -46,6 +46,13 @@ PIDs, audit summaries, and missing-file errors.
    sync the lightweight package to local with
    `scripts/audit/main_sync_official_evidence_package.py`
 5. Build comparison table, run stat tests
+6. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
+   failures; do not include it in the main official block unless a future
+   memory-stable run passes all gates.
+7. Run Shadow large-scale diagnostics only after the 100neg task packages are
+   confirmed healthy.
+8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
+   validation gates exist.
 ```
 
 ## Key Scripts
@@ -75,13 +82,26 @@ df -h /home/ajifang
 # Running processes
 ps aux | grep python | grep -v grep
 ```
-   upstream `tokenize_all` CUDA OOM failures and should not be included in the
-   main official block unless a future memory-stable run passes all gates.
-7. Run Shadow large-scale diagnostics only after the 100neg task packages are
-   confirmed healthy.
-8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
-   validation gates exist.
+
+For active official-baseline rows, prefer the local robust SSH-stdin monitor
+when the current local checkout has newer audit helpers than the server:
+
+```powershell
+python scripts\audit\main_remote_baseline_monitor_snapshot.py `
+  --log_path baselines_new_domains_home_llm2rec_20260604_071902.log `
+  --pid 3236678 --pid 3236688 `
+  --process_token llm2rec_sasrec --process_token home `
+  --size_path outputs/baselines/paper_adapters/home_large10000_100neg_llm2rec_official_adapter `
+  --size_path outputs/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate `
+  --output_json outputs\summary\home_llm2rec_monitor_snapshot_20260604.json
 ```
+
+The helper reads the remote log and status directly without shell regex
+pipelines. It reports tracked PID liveness, matching Python processes, latest
+`hf_mean_pool` progress, completion/failure markers, GPU, disk, output sizes,
+and `should_notify`. Treat `should_notify=true` as a handoff trigger: inspect
+the listed `notify_reasons` before deciding whether to run official gates,
+recover from failure, clean disk, or stop a duplicate launch.
 
 ## Safe Nohup Pattern
 
