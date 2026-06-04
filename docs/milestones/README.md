@@ -204,7 +204,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`.
   Final scores, provenance, audits, imported tables, and model were preserved,
   and post-cleanup `/` was about `11G` free / `95%` used. Tools is now 3/8
-  official rows complete.
+  official rows complete. After a fresh preflight, Tools `llmemb` launched at
+  2026-06-04 23:10 CST as the fourth single-row Tools official baseline with
+  runner PID `3317251`, adapter PID `3317260`, and log
+  `baselines_new_domains_tools_llmemb_20260604_231030.log`; it is active
+  monitor-only evidence, not a completed row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

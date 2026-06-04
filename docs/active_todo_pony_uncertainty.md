@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 23:05 CST
+Last updated: 2026-06-04 23:15 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1460,6 +1460,28 @@ about `11G` free / `95%` used. Tools is now 3/8 official rows complete; the
 remaining Tools official rows are `llmemb`, `irllrec_intent`,
 `rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`.
 
+Tools LLMEmb launch checkpoint 2026-06-04 23:15 CST: after the ElmRec gates,
+local package, commit/push, and post-gate cleanup, a fresh preflight found no
+matching experiment Python process, GPU idle, `/` and `/home/ajifang` at about
+`11G` free / `95%` used, no existing Tools `llmemb` final output, and no
+existing Tools LLMEmb adapter path. Tools `llmemb` launched as the fourth
+Tools single-row official baseline with:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE=llmemb TRAIN_METHODS_OVERRIDE= bash scripts/run_baselines_new_domains.sh
+```
+
+Current monitor target: runner PID `3317251`, adapter PID `3317260`, PID files
+`baselines_new_domains_tools_llmemb_20260604_231030.runner.pid` and
+`baselines_new_domains_tools_llmemb_20260604_231030.adapter.pid`, and log
+`baselines_new_domains_tools_llmemb_20260604_231030.log`. Stable launch
+snapshot `outputs/summary/tools_llmemb_launch_monitor_20260604.json` reports
+one matching LLMEmb adapter process, no completion or failure markers, adapter
+directory `1000M`, final output directory placeholder-only, and disk warning
+at about `9.54G` free / `95%` used. Do not start another baseline while this
+row is active. The heartbeat `monitor-home-llm2rec` is retargeted to
+`Monitor Tools LLMEmb`.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -1630,10 +1652,12 @@ evidence is under
 
 ## Required Next Actions
 
-1. Run a fresh no-active-process, GPU, disk, duplicate-output, and server
-   runner preflight before launching exactly one next Tools official row. Do
-   not batch the remaining Tools rows.
-2. After the next Tools row completes, run the established row gates before
+1. Monitor the active Tools `llmemb` row: runner PID `3317251`, adapter PID
+   `3317260`, log `baselines_new_domains_tools_llmemb_20260604_231030.log`.
+   Notify on completion, failure, duplicate process, dead PID, disk below 10G
+   free, or disk at/above 97% used. Do not start another baseline while this
+   row is active.
+2. After Tools `llmemb` completes, run the established row gates before
    marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
    docs/memory, related-only commit/push, and then clean only eligible

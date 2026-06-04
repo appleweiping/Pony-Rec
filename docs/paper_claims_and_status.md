@@ -387,7 +387,11 @@ same-candidate tests before any paper-wide SOTA claim.
    and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`;
    final scores, provenance, audits, imported tables, and model were preserved.
    Tools is now 3/8 complete and needs five more official rows plus the Tools
-   domain/comparison/paired-test gates. Home
+   domain/comparison/paired-test gates. After a clean preflight, Tools
+   `llmemb` launched at 2026-06-04 23:10 CST as the fourth single-row Tools
+   official baseline with runner PID `3317251`, adapter PID `3317260`, and log
+   `baselines_new_domains_tools_llmemb_20260604_231030.log`; it is active
+   monitor-only evidence, not a completed row. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.
