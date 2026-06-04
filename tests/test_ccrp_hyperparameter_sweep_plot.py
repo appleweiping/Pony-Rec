@@ -37,6 +37,9 @@ def test_build_hyperparameter_summary_requires_three_values(tmp_path):
     assert len(summary) == 10
     assert all(row["meets_min_values"] for row in provenance["control_reports"])
     assert provenance["reporting_mode"] == "valid_only"
+    assert provenance["artifact_class"] == "paper_critical_hyperparameter_analysis"
+    assert provenance["status_label"] == "validation_only_hyperparameter_selection_curve"
+    assert provenance["paper_claim_scope"] == "validation_only_not_stability_claim"
     assert summary.loc[
         (summary["control"] == "eta") & (summary["control_value"] == "1"),
         "metric_value",
@@ -60,6 +63,8 @@ def test_build_hyperparameter_summary_reports_valid_and_test_separately(tmp_path
     assert set(summary["split"]) == {"valid", "test"}
     assert len(summary) == 6
     assert provenance["reporting_mode"] == "valid_and_test"
+    assert provenance["status_label"] == "paper_critical_hyperparameter_curve_ready"
+    assert provenance["paper_claim_scope"] == "valid_and_test_stability_curve_candidate"
     assert all(row["curve_values"] == 3 for row in provenance["control_reports"])
 
 
@@ -74,3 +79,39 @@ def test_build_hyperparameter_summary_fails_when_curve_too_short(tmp_path):
 
     with pytest.raises(ValueError, match="below min_values"):
         build_hyperparameter_summary(sweep, controls=["eta"], min_values=3)
+
+
+def test_build_hyperparameter_summary_requires_audit_columns_by_default(tmp_path):
+    sweep = tmp_path / "valid_ccrp_sweep.csv"
+    sweep.write_text(
+        "score_mode,ablation,eta,confidence_weight,weight_grid_label,NDCG@10\n"
+        "full,full,0.5,0.5,\"0.5,0.3,0.2\",0.20\n"
+        "full,full,1.0,0.5,\"0.5,0.3,0.2\",0.24\n"
+        "full,full,2.0,0.5,\"0.5,0.3,0.2\",0.22\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="missing required audit columns"):
+        build_hyperparameter_summary(sweep, controls=["eta"], min_values=3)
+
+
+def test_build_hyperparameter_summary_without_audit_is_diagnostic(tmp_path):
+    sweep = tmp_path / "valid_ccrp_sweep.csv"
+    sweep.write_text(
+        "score_mode,ablation,eta,confidence_weight,weight_grid_label,NDCG@10\n"
+        "full,full,0.5,0.5,\"0.5,0.3,0.2\",0.20\n"
+        "full,full,1.0,0.5,\"0.5,0.3,0.2\",0.24\n"
+        "full,full,2.0,0.5,\"0.5,0.3,0.2\",0.22\n",
+        encoding="utf-8",
+    )
+
+    _, provenance = build_hyperparameter_summary(
+        sweep,
+        controls=["eta"],
+        min_values=3,
+        require_audit_ok=False,
+    )
+
+    assert provenance["status_label"] == "diagnostic_hyperparameter_curve_audit_not_enforced"
+    assert provenance["paper_claim_scope"] == "diagnostic_only_not_paper_stability"
+    assert provenance["audit_summary"]["require_audit_ok"] is False

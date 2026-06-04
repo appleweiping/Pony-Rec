@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 09:02 CST
+Last updated: 2026-06-04 09:21 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -162,6 +162,15 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    when a requested curve has fewer than three values. It supports
    `--test_sweep_csv` so validation and test curves can be reported separately;
    valid-only output is not sufficient for a paper stability claim.
+   Guard hardening on 2026-06-04 09:21 CST: the plotter now requires
+   `audit_ok` and `degeneracy_audit_ok` columns by default, labels valid-only
+   output as `validation_only_hyperparameter_selection_curve` with
+   `paper_claim_scope=validation_only_not_stability_claim`, labels
+   `--no-require_audit_ok` or incomplete curves as diagnostic-only, and reserves
+   `paper_critical_hyperparameter_curve_ready` for audited valid+test curves
+   that meet the minimum value count. This is plotting/provenance guard
+   progress only; actual curves remain blocked by missing full-scale signal
+   rows.
 4. Framework overview figure: prepare a clean paper figure showing the full
    pipeline, where task-grounded uncertainty is estimated, which components
    enter C-CRP, and where risk-adjusted ranking is applied. Script entry:

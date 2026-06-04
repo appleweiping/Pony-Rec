@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
         "--require_audit_ok",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Require audit_ok and degeneracy_audit_ok columns to be true when present.",
+        help="Require audit_ok and degeneracy_audit_ok columns to exist and be true for paper-facing curves.",
     )
     return parser.parse_args()
 
@@ -135,13 +135,23 @@ def _filter_audited_rows(df: pd.DataFrame, *, require_audit_ok: bool) -> tuple[p
     out = df.copy()
     before = len(out)
     dropped = 0
+    required_columns = ("audit_ok", "degeneracy_audit_ok")
+    missing_columns = [column for column in required_columns if column not in out.columns]
+    if require_audit_ok and missing_columns:
+        raise ValueError(f"Sweep CSV missing required audit columns: {missing_columns}")
     if require_audit_ok:
-        for column in ("audit_ok", "degeneracy_audit_ok"):
-            if column in out.columns:
-                mask = out[column].map(_as_bool)
-                dropped += int((~mask).sum())
-                out = out[mask].copy()
-    return out, {"input_rows": int(before), "audited_rows": int(len(out)), "dropped_audit_rows": int(dropped)}
+        for column in required_columns:
+            mask = out[column].map(_as_bool)
+            dropped += int((~mask).sum())
+            out = out[mask].copy()
+    return out, {
+        "input_rows": int(before),
+        "audited_rows": int(len(out)),
+        "dropped_audit_rows": int(dropped),
+        "require_audit_ok": bool(require_audit_ok),
+        "required_audit_columns": list(required_columns),
+        "missing_audit_columns": missing_columns,
+    }
 
 
 def _filter_exact(df: pd.DataFrame, column: str, value: Any) -> pd.DataFrame:
@@ -207,6 +217,42 @@ def _curve_source(
     else:
         raise ValueError(f"Unsupported control: {control}")
     return out
+
+
+def _evidence_label(
+    *,
+    reporting_mode: str,
+    allow_incomplete: bool,
+    require_audit_ok: bool,
+    control_reports: list[dict[str, Any]],
+) -> dict[str, Any]:
+    incomplete_controls = [
+        {"split": row["split"], "control": row["control"], "curve_values": row["curve_values"]}
+        for row in control_reports
+        if not bool(row.get("meets_min_values"))
+    ]
+    if not require_audit_ok:
+        status_label = "diagnostic_hyperparameter_curve_audit_not_enforced"
+        claim_scope = "diagnostic_only_not_paper_stability"
+    elif incomplete_controls or allow_incomplete:
+        status_label = "diagnostic_hyperparameter_curve_incomplete"
+        claim_scope = "diagnostic_only_not_paper_stability"
+    elif reporting_mode == "valid_only":
+        status_label = "validation_only_hyperparameter_selection_curve"
+        claim_scope = "validation_only_not_stability_claim"
+    else:
+        status_label = "paper_critical_hyperparameter_curve_ready"
+        claim_scope = "valid_and_test_stability_curve_candidate"
+    return {
+        "status_label": status_label,
+        "paper_claim_scope": claim_scope,
+        "incomplete_controls": incomplete_controls,
+        "claim_limits": [
+            "Hyperparameter curves do not replace official-baseline, ablation, or paired-test gates.",
+            "Validation-only curves support selection/protocol transparency, not paper-facing stability claims.",
+            "Diagnostic or audit-not-enforced curves must not be used as main paper evidence.",
+        ],
+    }
 
 
 def build_hyperparameter_summary(
@@ -279,15 +325,24 @@ def build_hyperparameter_summary(
     if not summary_frames:
         raise ValueError("No hyperparameter curves could be built from the sweep.")
     summary = pd.concat(summary_frames, ignore_index=True)
+    reporting_mode = "valid_and_test" if test_path else "valid_only"
+    evidence_label = _evidence_label(
+        reporting_mode=reporting_mode,
+        allow_incomplete=allow_incomplete,
+        require_audit_ok=require_audit_ok,
+        control_reports=control_reports,
+    )
     provenance = {
-        "status_label": "paper_critical_hyperparameter_curve_ready",
+        "artifact_class": "paper_critical_hyperparameter_analysis",
+        **evidence_label,
         "domain": domain,
         "git_commit": _git_commit(),
+        "command": " ".join(sys.argv),
         "sweep_csv": str(path),
         "sweep_sha256": sha256_file(path),
         "test_sweep_csv": str(test_path) if test_path else "",
         "test_sweep_sha256": sha256_file(test_path) if test_path else "",
-        "reporting_mode": "valid_and_test" if test_path else "valid_only",
+        "reporting_mode": reporting_mode,
         "metric": metric,
         "filters": {
             "score_mode": score_mode,

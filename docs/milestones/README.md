@@ -152,7 +152,9 @@ The repository is now in M5 (multi-domain SOTA validation):
   validation `valid_ccrp_sweep.csv` artifacts and is not a completed paper
   result until Sports/Toys sweeps produce at least three values per plotted
   control with validation/test separation, `--test_sweep_csv` reporting, and
-  provenance.
+  provenance. Guard hardening on 2026-06-04 now downgrades valid-only,
+  incomplete, or audit-not-enforced curves through explicit status labels and
+  paper-claim scopes.
 - C-CRP component inventory helper now exists:
   `scripts/audit/main_build_ccrp_component_inventory.py`. Current artifact
   `outputs/summary/paper_critical/ccrp_component_inventory/ccrp_component_inventory_20260604.{json,md}`

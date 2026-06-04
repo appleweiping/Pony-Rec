@@ -335,6 +335,9 @@ Required plots:
 - `fig_hyper_weight_simplex_or_lines.pdf/png`
 - `fig_hyper_temperature_curve.pdf/png` if temperature is an active control
 - SRPD learning-rate/lambda curves only if SRPD is used in the paper story.
+- `ccrp_hyperparameter_curve_summary.csv` and
+  `ccrp_hyperparameter_curve_provenance.json` with sweep paths, hashes, fixed
+  controls, min-values gate, status label, and paper-claim scope.
 
 Implementation anchor:
 
@@ -366,12 +369,19 @@ marked `valid_only`, which is useful for planning but not sufficient for the
 paper stability claim. The script fails by default when any requested curve has
 fewer than three values. Use `--allow_incomplete` only for diagnostic output
 that will not support a paper stability claim.
+As of 2026-06-04, the plotter requires `audit_ok` and
+`degeneracy_audit_ok` columns by default; use `--no-require_audit_ok` only for
+diagnostic output. Provenance labels valid-only output as
+`validation_only_hyperparameter_selection_curve`, labels incomplete or
+audit-not-enforced output as diagnostic-only, and only labels audited valid+test
+curves as `paper_critical_hyperparameter_curve_ready`.
 
 Numeric gates:
 
 - Curves must report validation and test separately.
 - A single selected setting is not enough; at least three values per plotted
   control are required.
+- Audit columns must exist and pass for paper-facing curves.
 - If the method is only good at one isolated value, downgrade the stability
   claim and report sensitivity.
 

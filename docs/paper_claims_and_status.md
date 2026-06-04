@@ -109,7 +109,12 @@ also include:
    validation `valid_ccrp_sweep.csv` outputs and requiring at least three values
    per paper-facing curve by default. Paper-facing stability wording requires
    validation and test curves to be reported separately, using `--test_sweep_csv`
-   when the test sweep is available.
+   when the test sweep is available. Guard hardening on 2026-06-04 requires
+   `audit_ok` and `degeneracy_audit_ok` columns by default, labels valid-only
+   outputs as `validation_only_hyperparameter_selection_curve` with
+   `paper_claim_scope=validation_only_not_stability_claim`, labels incomplete
+   or audit-not-enforced curves as diagnostic-only, and reserves
+   `paper_critical_hyperparameter_curve_ready` for audited valid+test curves.
 4. A clean framework overview figure showing the full pipeline and where
    uncertainty and C-CRP components enter the ranking decision. Figure builder:
    `scripts/analysis/main_build_framework_overview_figure.py`; generated SVG
