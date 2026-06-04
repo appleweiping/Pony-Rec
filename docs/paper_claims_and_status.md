@@ -360,7 +360,14 @@ same-candidate tests before any paper-wide SOTA claim.
    and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`;
    final scores, provenance, audits, imported tables, and model were preserved.
    Tools is now 2/8 complete and needs six more official rows plus the Tools
-   domain/comparison/paired-test gates. Home
+   domain/comparison/paired-test gates. After a clean no-active-process,
+   idle-GPU, duplicate-output preflight, Tools `elmrec_graph` launched at
+   2026-06-04 20:46 CST as the third single-row Tools official baseline with
+   runner PID `3301337`, adapter PID `3301345`, and log
+   `baselines_new_domains_tools_elmrec_20260604_204602.log`. The stable launch
+   snapshot shows Qwen3 `hf_mean_pool` at `7880/269711`, GPU `96%`, adapter
+   directory `1005M`, no fatal markers, and disk warning at about `9.85G` free
+   / `95%` used. It is active monitor-only evidence, not a completed row. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 20:15 CST
+Last updated: 2026-06-04 20:55 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1356,6 +1356,36 @@ matching Python experiment process, GPU idle, and `/` at about `11G` free /
 process/GPU/disk/duplicate-output preflight, then launch the next Tools
 single-row official baseline; do not batch multiple rows.
 
+Tools ElmRec launch checkpoint 2026-06-04 20:55 CST: after the ProMax gates,
+local package, commit/push, cleanup, and heartbeat retarget completed, a fresh
+preflight found no matching experiment process, GPU idle, `/` and
+`/home/ajifang` at about `11G` free / `95%` used, no existing Tools
+`elmrec_graph` final output, and no existing ElmRec adapter path, log, or PID
+file. Server worktree is dirty and behind local `main`, so no server pull was
+attempted; the server-side runner was inspected directly and has the
+`elmrec_graph` branch plus override validation. Tools `elmrec_graph` was
+launched as the third Tools single-row official baseline with:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=elmrec_graph bash scripts/run_baselines_new_domains.sh
+```
+
+The SSH wrapper timed out while backgrounding, so PID files were written after
+process inspection. Current monitor target: runner PID `3301337`, adapter PID
+`3301345`, PID files
+`baselines_new_domains_tools_elmrec_20260604_204602.runner.pid` and
+`baselines_new_domains_tools_elmrec_20260604_204602.adapter.pid`, and log
+`baselines_new_domains_tools_elmrec_20260604_204602.log`. Stable launch
+snapshot `outputs/summary/tools_elmrec_launch_monitor_20260604.json` reports
+exactly one matching ElmRec adapter process, Qwen3 `hf_mean_pool` progress
+`7880/269711`, GPU `96%` with `16091 MiB / 49140 MiB`, adapter directory
+`1005M`, and no `DONE`, Traceback, OOM, no-space, blocker, or failure markers.
+Disk is already below the warning line at about `9.85G` free / `95%` used, so
+monitor disk closely. Do not start another baseline while this row is active.
+If it completes, run server-final audit, server large-artifact manifest,
+local-light sync, local-light audit, docs/memory update, and related-only
+commit/push before the next row.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -1526,14 +1556,16 @@ evidence is under
 
 ## Required Next Actions
 
-1. Before launching the next Tools row, run a fresh process/GPU/disk and
-   duplicate-output preflight. Tools currently has two gated official rows:
-   `proex_profile` and `promax_profile`; six official rows remain.
-2. Launch only one next Tools official row if the preflight is clean. After it
-   completes, run the established row gates before marking it official: score
-   audit/import, server-final audit, server large-artifact sha256 manifest,
-   local-light sync, local-light audit, docs/memory, related-only commit/push,
-   and then clean the completed temporary adapter if disk remains tight.
+1. Monitor the active Tools `elmrec_graph` row: runner PID `3301337`, adapter
+   PID `3301345`, log `baselines_new_domains_tools_elmrec_20260604_204602.log`.
+   Notify on completion, failure, duplicate process, dead PID, disk below 10G
+   free, or disk at/above 97% used. Do not start another baseline while this
+   row is active.
+2. If Tools `elmrec_graph` completes, run the established row gates before
+   marking it official: score audit/import, server-final audit, server
+   large-artifact sha256 manifest, local-light sync, local-light audit,
+   docs/memory, related-only commit/push, and then clean the completed
+   temporary adapter if disk remains tight.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

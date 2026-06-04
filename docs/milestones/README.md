@@ -181,8 +181,14 @@ The repository is now in M5 (multi-domain SOTA validation):
   and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`.
   Final scores, provenance, audits, imported tables, and model were preserved,
   and post-cleanup `/` was about `11G` free / `95%` used. Tools is now 2/8
-  official rows complete. Do not start another Tools row without a fresh
-  process/GPU/disk/duplicate-output preflight.
+  official rows complete. After a fresh no-active-process, idle-GPU, and
+  duplicate-output preflight, Tools `elmrec_graph` launched at
+  2026-06-04 20:46 CST as the third single-row Tools official baseline with
+  runner PID `3301337`, adapter PID `3301345`, and log
+  `baselines_new_domains_tools_elmrec_20260604_204602.log`. The stable launch
+  snapshot shows Qwen3 `hf_mean_pool` at `7880/269711`, GPU `96%`, adapter
+  directory `1005M`, no fatal markers, and disk warning at about `9.85G` free
+  / `95%` used. Do not start another Tools row while this row is active.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -296,8 +302,9 @@ not as a reason to silently rerun completed metric rows.
 2. 8 official baselines on 4 new domains (Phase 2) — sports, toys, and home
    each have all eight audited official rows plus C-CRP import,
    domain/comparison, and paired-test gates complete; Tools has two audited
-   official rows complete (`proex_profile`, `promax_profile`) and needs six
-   more rows plus its domain/comparison/paired-test gates.
+   official rows complete (`proex_profile`, `promax_profile`), with
+   `elmrec_graph` active as the third Tools row, and still needs six completed
+   remaining rows plus its domain/comparison/paired-test gates.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

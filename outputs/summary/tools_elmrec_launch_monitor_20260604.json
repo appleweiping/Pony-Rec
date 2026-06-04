@@ -1,0 +1,95 @@
+{
+  "ok": true,
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "log_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/baselines_new_domains_tools_elmrec_20260604_204602.log",
+  "tail_lines": [
+    "[hf_mean_pool] encoded 7568/269711",
+    "[hf_mean_pool] encoded 7576/269711",
+    "[hf_mean_pool] encoded 7584/269711",
+    "[hf_mean_pool] encoded 7592/269711",
+    "[hf_mean_pool] encoded 7600/269711",
+    "[hf_mean_pool] encoded 7608/269711",
+    "[hf_mean_pool] encoded 7616/269711",
+    "[hf_mean_pool] encoded 7624/269711",
+    "[hf_mean_pool] encoded 7632/269711",
+    "[hf_mean_pool] encoded 7640/269711",
+    "[hf_mean_pool] encoded 7648/269711",
+    "[hf_mean_pool] encoded 7656/269711",
+    "[hf_mean_pool] encoded 7664/269711",
+    "[hf_mean_pool] encoded 7672/269711",
+    "[hf_mean_pool] encoded 7680/269711",
+    "[hf_mean_pool] encoded 7688/269711",
+    "[hf_mean_pool] encoded 7696/269711",
+    "[hf_mean_pool] encoded 7704/269711",
+    "[hf_mean_pool] encoded 7712/269711",
+    "[hf_mean_pool] encoded 7720/269711",
+    "[hf_mean_pool] encoded 7728/269711",
+    "[hf_mean_pool] encoded 7736/269711",
+    "[hf_mean_pool] encoded 7744/269711",
+    "[hf_mean_pool] encoded 7752/269711",
+    "[hf_mean_pool] encoded 7760/269711",
+    "[hf_mean_pool] encoded 7768/269711",
+    "[hf_mean_pool] encoded 7776/269711",
+    "[hf_mean_pool] encoded 7784/269711",
+    "[hf_mean_pool] encoded 7792/269711",
+    "[hf_mean_pool] encoded 7800/269711",
+    "[hf_mean_pool] encoded 7808/269711",
+    "[hf_mean_pool] encoded 7816/269711",
+    "[hf_mean_pool] encoded 7824/269711",
+    "[hf_mean_pool] encoded 7832/269711",
+    "[hf_mean_pool] encoded 7840/269711",
+    "[hf_mean_pool] encoded 7848/269711",
+    "[hf_mean_pool] encoded 7856/269711",
+    "[hf_mean_pool] encoded 7864/269711",
+    "[hf_mean_pool] encoded 7872/269711",
+    "[hf_mean_pool] encoded 7880/269711"
+  ],
+  "log_analysis": {
+    "progress": {
+      "current": 7880,
+      "total": 269711,
+      "fraction": 0.02921645761574426,
+      "line": "[hf_mean_pool] encoded 7880/269711"
+    },
+    "completion_detected": false,
+    "completion_lines": [],
+    "failure_detected": false,
+    "error_hits": []
+  },
+  "processes": [
+    {
+      "pid": 3301345,
+      "alive": true,
+      "ps": "3301345 3301337 Rl         04:16  103  1.8 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_elmrec_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto",
+      "stderr": ""
+    }
+  ],
+  "matching_python_processes": [
+    "ajifang  3301345  103  1.8 30239184 2289840 ?    Rl   20:46   4:25 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_elmrec_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto"
+  ],
+  "disk": {
+    "path": "/",
+    "ok": true,
+    "free_gb": 9.849563598632812,
+    "used_pct": 95.0,
+    "danger": true,
+    "raw": "文件系统        1024的块      已用     可用 容量 挂载点\n/dev/vda5      204794888 183991096 10328016  95% /"
+  },
+  "gpu": {
+    "ok": true,
+    "raw": "96 %, 16091 MiB, 49140 MiB",
+    "stderr": ""
+  },
+  "sizes": [
+    {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_elmrec_official_adapter",
+      "ok": true,
+      "raw": "1005M\t/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_elmrec_official_adapter",
+      "stderr": ""
+    }
+  ],
+  "should_notify": true,
+  "notify_reasons": [
+    "disk_danger"
+  ]
+}
