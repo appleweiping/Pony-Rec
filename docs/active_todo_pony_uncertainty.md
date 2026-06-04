@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 16:50 CST
+Last updated: 2026-06-04 16:56 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1316,6 +1316,14 @@ no-space, blocker, or failure markers were present. Do not start another
 baseline while this row is active. If it completes, run server-final audit,
 server large-artifact manifest, local-light sync, local-light audit, docs/memory
 update, and related-only commit/push before the next row.
+Guarded completion-gate plan for this active ProMax row:
+`outputs/summary/official_completion_gate_plan/tools_promax_profile_completion_gates_20260604.{json,ps1}`.
+It records the required order (server-final audit, server large-artifact
+manifest, local-light sync, local-light audit), starts with a PowerShell
+`throw`, and must remain planning-only until the runner exits normally and no
+duplicate matching process exists. Verification:
+`python -m pytest tests\test_plan_official_completion_gates.py` passed with
+`3 passed`.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
