@@ -118,9 +118,14 @@ The repository is now in M5 (multi-domain SOTA validation):
   completed at 2026-06-04 09:49 CST after a disk-full partial-copy recovery,
   with full `@5/@10/@20 + MRR` metrics, exact score coverage, row counts,
   server-final audit, server large-artifact sha256 manifest, local-light audit,
-  and post-gate prediction JSONL deletion manifest. Remaining Home row is
-  `llmesr_sasrec`, but `/` is still about `1.2G` free / `100%` used, so the
-  next row must wait for a documented storage decision. Tools remains pending.
+  and post-gate prediction JSONL deletion manifest. The completed LLM2Rec
+  intermediate adapter was then removed with sha256 cleanup manifest, restoring
+  `/` to about `12G` free / `95%` used. The remaining Home row,
+  `llmesr_sasrec`, launched at 2026-06-04 10:14 CST under wrapper PID
+  `3248921` / adapter PID `3248934` with log
+  `baselines_new_domains_home_llmesr_20260604_1015.log`; it is not
+  table-eligible until final score/provenance/import/server/local gates pass.
+  Tools remains pending.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -226,8 +231,8 @@ not as a reason to silently rerun completed metric rows.
    all eight audited official rows plus domain/comparison/paired-test gates
    complete; home has 7/8 audited official rows complete after LLM2Rec passed
    score audit/import, server-final audit, server large-artifact manifest,
-   local sync, and local-light evidence gates; home `llmesr_sasrec` is pending
-   on a storage decision because `/` remains about `1.2G` free / `100%` used;
+   local sync, and local-light evidence gates; home `llmesr_sasrec` is active
+   as the eighth Home row under wrapper PID `3248921` / adapter PID `3248934`;
    tools remains pending.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview

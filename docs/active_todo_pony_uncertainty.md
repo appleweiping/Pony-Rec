@@ -365,9 +365,32 @@ passes gates, or fails with an audited recovery decision.
   local-light gates passed, with sha256/line-count manifest
   `outputs/summary/home_llm2rec_prediction_deleted_after_gates_20260604.sha256`.
   Scores, provenance, score audits, run summary, imported tables, checkpoint,
-  embedding, and local evidence were preserved. `/` is still only about `1.2G`
-  free / `100%` used, so do not start Home `llmesr_sasrec` until a documented
-  storage decision frees enough space.
+  embedding, and local evidence were preserved. The completed non-final
+  LLM2Rec intermediate adapter
+  `outputs/baselines/paper_adapters/home_large10000_100neg_llm2rec_official_adapter`
+  and its upstream symlink were then removed after exact realpath/symlink
+  checks and sha256 manifest
+  `outputs/summary/home_llm2rec_completed_adapter_cleanup_manifest_20260604.sha256`.
+  This recovered `/` from about `1.2G` free / `100%` used to about `12G` free /
+  `95%` used without touching final scores, provenance, audits, imported
+  tables, final checkpoint, or local evidence.
+- Active runner: home `llmesr_sasrec` official row, launched 2026-06-04
+  10:14 CST after confirming no active experiment process, no existing Home
+  LLM-ESR final output directory, no existing Home LLM-ESR adapter directory,
+  and disk recovered to about `12G` free / `95%` used. Wrapper bash PID
+  `3248921`, adapter PID `3248934`, log
+  `baselines_new_domains_home_llmesr_20260604_1015.log`. The script correctly
+  skipped completed Home `llmemb`, `proex_profile`, and `promax_profile`, then
+  started only `llmesr_sasrec`. At first stable checks there was exactly one
+  matching LLM-ESR Python adapter process; the run entered Qwen3
+  `hf_mean_pool` embedding and reached about `6768/385364`, GPU was about
+  `96%` with `16067 MiB / 49140 MiB`, the adapter directory was about `1.1G`,
+  the final output directory was still a placeholder, and `/` was about `11G`
+  free / `95%` used. This row is not table-eligible until final
+  score/provenance/import/server-final, server large-artifact manifest,
+  local-light sync, local-light audit, full metric/row-count gates, docs/memory
+  update, and related-only commit/push pass. Do not start Tools or any parallel
+  row while this runner is active.
 - Disk rescue during active home `irllrec_intent`: at the 2026-06-03 17:21 CST
   heartbeat, the row was active after completing Qwen3 embedding and had
   reached official training epoch `1220`, but disk had fallen to about `30M`
@@ -1101,9 +1124,9 @@ set is complete.
 | `irllrec_intent` | complete | server-final package PASS; local lightweight package PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery and adapter cleanup |
 | `rlmrec_graphcl` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded |
 | `llm2rec_sasrec` | complete | server-final package PASS; server large-artifact sha256 manifest PASS; local lightweight package PASS; local-light audit PASS; full @5/@10/@20 + MRR metrics and row counts recorded after disk-full recovery; post-gate server prediction JSONL deleted with sha256 manifest while preserving scores/provenance/audits/tables/checkpoint |
-| `llmesr_sasrec` | pending | do not launch until a documented storage decision frees enough margin; `/` was still about `1.2G` free / `100%` used after Home LLM2Rec gates |
+| `llmesr_sasrec` | active | launched 2026-06-04 10:14 CST as the final Home row after Home LLM2Rec adapter cleanup recovered `/` to about `12G` free; wrapper PID `3248921`, adapter PID `3248934`, log `baselines_new_domains_home_llmesr_20260604_1015.log`; not table-eligible yet |
 
-Home official baselines are now 7/8 complete (`proex_profile`,
+Home official baselines are now 7/8 complete with the 8th row active (`proex_profile`,
 `promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
 `rlmrec_graphcl`, `llm2rec_sasrec`). All completed rows passed final provenance, exact score
 coverage, server-final package audit, lightweight local sync, local-light
@@ -1280,17 +1303,17 @@ evidence is under
 
 ## Required Next Actions
 
-1. Resolve the current server disk blocker before launching another baseline:
-   Home `llm2rec_sasrec` is complete and gated, but `/` remains about `1.2G`
-   free / `100%` used. The next action is a read-only large-artifact audit and
-   a documented storage decision for protected checkpoint/embedding/archive
-   candidates; do not delete scores, provenance, audits, imported tables,
-   current evidence packages, or other-project files.
-2. After disk margin is restored, launch only Home `llmesr_sasrec` as the next
-   single-row official baseline. Do not start Tools or any parallel row until
-   Home `llmesr_sasrec` completes and passes score audit/import, server-final
-   evidence audit, server large-artifact manifest, lightweight local sync,
-   local-light audit, docs/memory update, and related-only commit/push.
+1. Monitor the active Home `llmesr_sasrec` row under wrapper PID `3248921` /
+   adapter PID `3248934` with log
+   `baselines_new_domains_home_llmesr_20260604_1015.log`. Report immediately
+   only for completion, failure, disk danger (`/` under 10G free or at/above
+   97% used), duplicate-run risk, dead tracked PID without completion, or a
+   clear next action.
+2. When Home `llmesr_sasrec` completes, run score audit/import if needed,
+   server-final evidence audit, server large-artifact manifest, lightweight
+   local sync, local-light audit, docs/memory update, and related-only
+   commit/push before marking Home 8/8 complete. Do not start Tools or any
+   parallel row until those gates pass.
 3. After each completed home/tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

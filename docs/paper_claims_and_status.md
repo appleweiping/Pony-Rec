@@ -327,8 +327,15 @@ same-candidate tests.
    `outputs/baselines/official_adapters/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
    The post-gate server prediction deletion manifest is
    `outputs/summary/home_llm2rec_prediction_deleted_after_gates_20260604.sha256`.
-   Do not launch Home `llmesr_sasrec` until disk is recovered from the current
-   danger state (`/` about `1.2G` free / `100%` used). Toys
+   The completed LLM2Rec intermediate adapter and upstream symlink were then
+   removed with sha256 cleanup manifest
+   `outputs/summary/home_llm2rec_completed_adapter_cleanup_manifest_20260604.sha256`,
+   recovering `/` to about `12G` free / `95%` used without touching final
+   evidence. Home `llmesr_sasrec` launched at 2026-06-04 10:14 CST as the
+   eighth Home row under wrapper PID `3248921` / adapter PID `3248934` with
+   log `baselines_new_domains_home_llmesr_20260604_1015.log`; it is not
+   table-eligible until score/provenance/import/server/local evidence gates
+   pass. Toys
    `llmesr_sasrec` completed at 2026-06-02 18:59 CST after a disk-full
    recovery as `implementation_status=official_completed`, `blockers=[]`, and
    `score_coverage_rate=1.0`. Full metrics over 10,000 users and 101
