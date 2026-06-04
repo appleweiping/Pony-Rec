@@ -425,10 +425,10 @@ SOTA claim.
    `monitor-tools-irllrec`; its launch snapshot
    `outputs/summary/tools_irllrec_launch_monitor_20260605.json` shows Qwen3
    embedding progress `2056/269711`, GPU `95%`, disk `13.34G` free, and no
-   failure markers. A 2026-06-05 04:28 CST monitor check found runner PID
+   failure markers. A 2026-06-05 04:34 CST monitor check found runner PID
    `3326805` and adapter PID `3326813` still alive, GPU about `100%` with
    `16247 MiB / 49140 MiB`, Qwen3 embedding complete (`269711/269711`),
-   training advanced to `epoch=2200` with latest loss `0.656818`, disk about
+   training advanced to `epoch=2300` with latest loss `0.658179`, disk about
    `9.1G` free / `96%` used, no duplicate adapter, no fatal/OOM/no-space
    markers, and no final scores/provenance/tables yet. It is active
    monitor-only evidence, not a completed row.
