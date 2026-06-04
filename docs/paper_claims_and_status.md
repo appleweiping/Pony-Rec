@@ -305,9 +305,9 @@ table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
 domain set is complete; Tools now has 5/8 official rows gated after
 `proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`, and
-`irllrec_intent`, so Tools still needs `rlmrec_graphcl`, `llm2rec_sasrec`, and
-`llmesr_sasrec` plus paired same-candidate tests before any paper-wide SOTA
-claim.
+`irllrec_intent`, with `rlmrec_graphcl` active but not yet gated, so Tools
+still needs active RLMRec plus `llm2rec_sasrec` and `llmesr_sasrec` plus paired
+same-candidate tests before any paper-wide SOTA claim.
 
 ### Remaining for paper submission
 
@@ -444,7 +444,17 @@ claim.
    recovering `/` to about `14G` free / `93%` used while preserving final
    evidence. Tools is now 5/8 complete and still needs `rlmrec_graphcl`,
    `llm2rec_sasrec`, and `llmesr_sasrec` plus the Tools
-   domain/comparison/paired-test gates.
+   domain/comparison/paired-test gates. After a fresh preflight, Tools
+   `rlmrec_graphcl` launched at 2026-06-05 05:41 CST as the sixth single-row
+   Tools official baseline with runner PID `3347729`, adapter PID `3347738`,
+   log `baselines_new_domains_tools_rlmrec_20260605_054158.log`, heartbeat
+   `monitor-tools-rlmrec`, guarded completion-gate plan
+   `outputs/summary/official_completion_gate_plan/tools_rlmrec_graphcl_completion_gates_20260605.{json,ps1}`,
+   and launch snapshot `outputs/summary/tools_rlmrec_launch_monitor_20260605.json`.
+   The launch snapshot found one matching adapter process, no completion or
+   failure markers, adapter dir about `1000M`, final output placeholder-only,
+   and disk about `12.35G` free / `94%` used. This is active monitor-only
+   evidence, not a completed row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

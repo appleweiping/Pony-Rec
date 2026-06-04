@@ -257,7 +257,17 @@ The repository is now in M5 (multi-domain SOTA validation):
   recovering `/` to about `14G` free / `93%` used while preserving final
   evidence. Tools is now 5/8 complete and still needs `rlmrec_graphcl`,
   `llm2rec_sasrec`, and `llmesr_sasrec` plus the Tools
-  domain/comparison/paired-test gates.
+  domain/comparison/paired-test gates. After a fresh preflight, Tools
+  `rlmrec_graphcl` launched at 2026-06-05 05:41 CST as the sixth single-row
+  Tools official baseline with runner PID `3347729`, adapter PID `3347738`,
+  log `baselines_new_domains_tools_rlmrec_20260605_054158.log`, heartbeat
+  `monitor-tools-rlmrec`, guarded completion-gate plan
+  `outputs/summary/official_completion_gate_plan/tools_rlmrec_graphcl_completion_gates_20260605.{json,ps1}`,
+  and launch snapshot `outputs/summary/tools_rlmrec_launch_monitor_20260605.json`.
+  The launch snapshot found one matching adapter process, no completion or
+  failure markers, adapter dir about `1000M`, final output placeholder-only,
+  and disk about `12.35G` free / `94%` used. This is active monitor-only
+  evidence, not a completed row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

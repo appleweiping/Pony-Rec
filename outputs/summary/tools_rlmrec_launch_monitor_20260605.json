@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "log_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/baselines_new_domains_tools_rlmrec_20260605_054158.log",
+  "tail_lines": [
+    "[2026-06-05 05:41:58] === Starting baseline runs on new domains ===",
+    "[2026-06-05 05:41:58] Python: /home/ajifang/miniconda3/bin/python",
+    "[2026-06-05 05:41:58] Domains: tools",
+    "[2026-06-05 05:41:58] Fast methods: ",
+    "[2026-06-05 05:41:58] Training methods: rlmrec_graphcl",
+    "[2026-06-05 05:41:58] START rlmrec_graphcl on tools"
+  ],
+  "log_analysis": {
+    "progress": {},
+    "completion_detected": false,
+    "completion_lines": [],
+    "failure_detected": false,
+    "error_hits": []
+  },
+  "processes": [
+    {
+      "pid": 3347729,
+      "alive": true,
+      "ps": "3347729       1 S          01:56  0.0  0.0 bash scripts/run_baselines_new_domains.sh",
+      "stderr": ""
+    },
+    {
+      "pid": 3347738,
+      "alive": true,
+      "ps": "3347738 3347729 R          01:56 99.8  2.2 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_rlmrec_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto",
+      "stderr": ""
+    }
+  ],
+  "matching_python_processes": [
+    "ajifang  3347738 99.8  2.2 2834976 2795208 ?     R    05:41   1:55 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_rlmrec_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto"
+  ],
+  "disk": {
+    "path": "/",
+    "ok": true,
+    "free_gb": 12.353813171386719,
+    "used_pct": 94.0,
+    "danger": false,
+    "raw": "文件系统        1024的块      已用     可用 容量 挂载点\n/dev/vda5      204794888 181365200 12953912  94% /"
+  },
+  "gpu": {
+    "ok": true,
+    "raw": "0 %, 15 MiB, 49140 MiB",
+    "stderr": ""
+  },
+  "sizes": [
+    {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_rlmrec_official_adapter",
+      "ok": true,
+      "raw": "1000M\t/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_rlmrec_official_adapter",
+      "stderr": ""
+    },
+    {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate",
+      "ok": true,
+      "raw": "4.0K\t/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate",
+      "stderr": ""
+    }
+  ],
+  "should_notify": false,
+  "notify_reasons": []
+}

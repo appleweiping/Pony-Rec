@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 05:29 CST
+Last updated: 2026-06-05 05:44 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1668,6 +1668,28 @@ recovering `/` to about `14G` free / `93%` used while preserving all final
 scores, provenance, audits, imported tables, predictions, and model. Tools is
 now 5/8 official rows gated; remaining rows are `rlmrec_graphcl`,
 `llm2rec_sasrec`, and `llmesr_sasrec`.
+Tools RLMRec launch checkpoint 2026-06-05 05:44 CST: after the IRLLRec
+gate/package/cleanup commit and a fresh preflight, Codex verified no active
+project Python process, GPU idle (`0%`, `15 MiB / 49140 MiB`), `/` about `14G`
+free / `93%` used, and no existing Tools `rlmrec_graphcl` final output,
+adapter, log, or PID path. Launched exactly one row:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=rlmrec_graphcl bash scripts/run_baselines_new_domains.sh
+```
+
+Current monitor target: runner PID `3347729`, adapter PID `3347738`, log
+`baselines_new_domains_tools_rlmrec_20260605_054158.log`, and heartbeat
+`monitor-tools-rlmrec`. The launch wrapper printed a trailing shell syntax
+error after the background launch, but a follow-up process check confirmed the
+runner and adapter are live and unique, so Codex did not relaunch. Guarded
+completion-gate plan:
+`outputs/summary/official_completion_gate_plan/tools_rlmrec_graphcl_completion_gates_20260605.{json,ps1}`.
+Initial robust monitor snapshot
+`outputs/summary/tools_rlmrec_launch_monitor_20260605.json` reports one
+matching adapter process, no completion/failure markers, adapter dir about
+`1000M`, final output placeholder-only (`4.0K`), and disk about `12.35G` free /
+`94%` used. Do not start another Tools row while RLMRec is active.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1839,11 +1861,11 @@ evidence is under
 
 ## Required Next Actions
 
-1. Launch the next single Tools official row only after a fresh preflight
-   confirms no active baseline process, GPU idle/available, enough disk, and no
-   existing conflicting final/adapter/log paths. The next row should be
-   `rlmrec_graphcl`, not a batch:
-   `DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=rlmrec_graphcl bash scripts/run_baselines_new_domains.sh`.
+1. Monitor the active Tools `rlmrec_graphcl` row: runner PID `3347729`, adapter
+   PID `3347738`, log `baselines_new_domains_tools_rlmrec_20260605_054158.log`,
+   and heartbeat `monitor-tools-rlmrec`. Notify on completion, failure,
+   duplicate process, dead PID, disk below 10G free, or disk at/above 97% used.
+   Do not start another baseline while this row is active.
 2. After each remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
