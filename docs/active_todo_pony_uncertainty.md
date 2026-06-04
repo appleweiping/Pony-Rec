@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 14:31 CST
+Last updated: 2026-06-04 15:02 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1246,6 +1246,20 @@ directories while preserving the active Tools ProEx adapter. Manifest:
 `outputs/summary/inactive_paper_adapters_cleanup_for_tools_proex_20260604.{json,sha256}`.
 Post-cleanup `/` was `10,951,237,632` bytes free (`95%` used). Do not start
 another baseline while this row is active.
+
+Tools ProEx monitor checkpoint 2026-06-04 15:02 CST: adapter PID `3269572`
+remained the only matching active experiment process, Qwen3 `hf_mean_pool`
+progress had reached `138656/269711`, GPU was `96%` with
+`16213 MiB / 49140 MiB`, `/` had `10,950,553,600` bytes free (`95%` used),
+the active adapter directory was still about `1005M`, and the final output
+directory was still placeholder-empty. No `DONE`, Traceback, OOM, no-space,
+blocker, or failure markers were present. A guarded, non-executing completion
+gate plan for this row was generated at
+`outputs/summary/official_completion_gate_plan/tools_proex_profile_completion_gates_20260604.{json,ps1}`.
+The PowerShell file starts with a `throw` and records the required order:
+server-final audit, server large-artifact sha256 manifest, local-light sync,
+then local-light audit. It must not be used until the active runner exits
+normally and no duplicate process is present.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and

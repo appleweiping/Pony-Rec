@@ -1,0 +1,43 @@
+{
+  "artifact_class": "official_completion_gate_plan",
+  "commands": {
+    "local_light_audit": "python scripts\\audit\\main_audit_official_evidence_package.py `\n  --evidence_dir outputs\\baselines\\official_adapters\\tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate `\n  --mode local_light `\n  --expected_users 10000 `\n  --expected_candidates_per_user 101 `\n  --output_json outputs\\baselines\\official_adapters\\tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\local_light_evidence_audit.json `\n  --quiet",
+    "local_light_sync": "python scripts\\audit\\main_sync_official_evidence_package.py `\n  --remote_evidence_dir outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate `\n  --local_evidence_dir outputs\\baselines\\official_adapters\\tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate `\n  --copy `\n  --quiet",
+    "server_final_audit": "python scripts\\audit\\main_remote_official_evidence_audit.py `\n  --remote_evidence_dir outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate `\n  --mode server_final `\n  --expected_users 10000 `\n  --expected_candidates_per_user 101 `\n  --quiet",
+    "server_large_artifact_manifest": "python scripts\\audit\\main_remote_server_large_artifact_manifest.py `\n  --remote_evidence_dir outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate `\n  --quiet"
+  },
+  "domain": "tools",
+  "exp_prefix": "tools_large10000_100neg",
+  "expected_candidates_per_user": 101,
+  "expected_score_rows": 1010000,
+  "expected_users": 10000,
+  "gate_order": [
+    "server_final_audit",
+    "server_large_artifact_manifest",
+    "local_light_sync",
+    "local_light_audit"
+  ],
+  "git_commit": "94be9c3929ac2b46e32f27ff913eae95edf1a7df",
+  "git_status_short_relevant_at_generation": "",
+  "git_worktree_dirty_at_generation": true,
+  "local_evidence_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+  "method": "proex_profile",
+  "plan_id": "tools_proex_profile_completion_gates_20260604",
+  "postconditions_before_claim": [
+    "server_final_evidence_audit.json has ok=true.",
+    "server_large_artifact_manifest.sha256/json exist and cover server-only large artifacts.",
+    "light_evidence_sync_manifest.json has ok=true in the local evidence package.",
+    "local_light_evidence_audit.json has ok=true.",
+    "Canonical docs and shared memory are updated with full metrics, row counts, paths, and blockers."
+  ],
+  "preconditions": [
+    "The active method-domain runner has exited normally.",
+    "No duplicate matching Python process is active.",
+    "The remote evidence directory contains final scores, provenance, imported tables, and predictions.",
+    "Do not start the next baseline until every gate in gate_order passes."
+  ],
+  "remote_evidence_dir": "outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+  "status_label": "planning_only_not_executed",
+  "will_mark_official": false,
+  "will_start_experiment": false
+}
