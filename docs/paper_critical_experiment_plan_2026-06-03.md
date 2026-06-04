@@ -6,16 +6,19 @@ review.
 
 ## Current Constraint
 
-Do not start these runs while the active Tools `proex_profile` official row is
-running. The protected server process is adapter PID `3269572`, PID file
-`baselines_new_domains_tools_proex_20260604_142548.adapter.pid`, and log
-`baselines_new_domains_tools_proex_20260604_142548.log`. At the 2026-06-04
-14:47 CST monitor checkpoint, exactly one matching adapter process was active,
-Qwen3 `hf_mean_pool` progress was `69400/269711`, GPU use was normal for the
-run, `/` had `10,950,942,720` bytes free (`95%` used), and no failure markers
-were present. Queue paper-critical server work only after this row completes
-and passes evidence gates, or after an audited failure/recovery decision frees
-the GPU.
+Do not start these runs while the active Tools `promax_profile` official row is
+running. Tools `proex_profile` has completed and passed server-final,
+large-artifact, local-light sync, and local-light audit gates; the protected
+server process is now runner PID `3279573` and adapter PID `3279582`, with PID
+files `baselines_new_domains_tools_promax_20260604_164630.runner.pid` and
+`baselines_new_domains_tools_promax_20260604_164630.adapter.pid`, and log
+`baselines_new_domains_tools_promax_20260604_164630.log`. At the 2026-06-04
+17:19 CST monitor checkpoint, exactly one matching ProMax adapter process was
+active, Qwen3 `hf_mean_pool` progress was `134256/269711`, GPU use was normal
+for the run, `/` had `10,764,537,856` bytes free (`95%` used), and no failure
+markers were present. Queue paper-critical server work only after this row
+completes and passes evidence gates, or after an audited failure/recovery
+decision frees the GPU.
 
 All experiment execution runs on `pony-rec-gpu`. Local work is limited to
 planning, code review, documentation, plotting design, and version control.
