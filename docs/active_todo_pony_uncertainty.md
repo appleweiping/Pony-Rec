@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 03:13 CST
+Last updated: 2026-06-05 03:27 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -137,6 +137,15 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `signal_rows_available=false`; therefore the observation, ablation, and
    hyperparameter modules remain blocked by
    `missing_full_scale_uncertainty_or_recomputable_signal_rows`.
+   Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
+   active and untouched, Codex reran the local paper-critical tooling audit
+   (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and
+   focused tests:
+   `python -m pytest tests\test_audit_paper_critical_modules.py tests\test_framework_overview_figure.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_build_ccrp_component_inventory.py`
+   (`19 passed`). The audit summary remained `ok=true`, `paper_ready=false`,
+   `framework_overview_scaffold_ready=true`, `component_inventory_ready=true`,
+   `guarded_plan_ready=true`, and `signal_rows_available=false`; no local or
+   server experiment was launched.
 2. Component ablation: identify every nontrivial C-CRP component from the
    implementation and docs, then run leave-one-component-out variants under the
    same candidate protocol and validation/test discipline. Known component

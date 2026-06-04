@@ -303,9 +303,11 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools now has 3/8 official rows gated after
-`proex_profile`, `promax_profile`, and `elmrec_graph`, so Tools still needs five completed official rows plus paired
-same-candidate tests before any paper-wide SOTA claim.
+domain set is complete; Tools now has 4/8 official rows gated after
+`proex_profile`, `promax_profile`, `elmrec_graph`, and `llmemb`, with
+`irllrec_intent` active but not yet completed, so Tools still needs four
+completed official rows plus paired same-candidate tests before any paper-wide
+SOTA claim.
 
 ### Remaining for paper submission
 

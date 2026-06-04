@@ -259,6 +259,15 @@ The repository is now in M5 (multi-domain SOTA validation):
   row-count, join-rate, table, figure, and provenance gates.
   Fixed-filter discovery/full audits on 2026-06-04 found no paper-ready or
   recomputable full-scale new-domain C-CRP signal rows under visible server
+  artifacts. A 2026-06-05 03:27 CST local verification reran
+  `scripts/audit/main_audit_paper_critical_modules.py --root .` and the focused
+  paper-critical tests
+  (`tests\test_audit_paper_critical_modules.py`,
+  `tests\test_framework_overview_figure.py`,
+  `tests\test_uncertainty_observation_study.py`,
+  `tests\test_ccrp_hyperparameter_sweep_plot.py`,
+  `tests\test_build_ccrp_component_inventory.py`), with `19 passed`; the audit
+  still reports `paper_ready=false` and `signal_rows_available=false`.
   outputs; Sports/Toys/Home/Tools formal `scores.csv` files are complete for
   ranking import but score-only for uncertainty analysis. A project-root broad
   scan also found no additional matching signal rows outside `outputs/`.
