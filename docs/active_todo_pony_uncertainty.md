@@ -1509,6 +1509,29 @@ Tools official row, likely `irllrec_intent`, not a batch. The stale
 `Monitor Tools LLMEmb` heartbeat (`monitor-home-llm2rec`) was deleted after
 completion.
 
+Tools IRLLRec launch checkpoint 2026-06-05 01:07 CST: after the Tools LLMEmb
+commit/push and a fresh preflight, Codex verified no matching experiment
+Python process, GPU idle, `/home/ajifang` at about `15G` free / `93%` used, no
+existing Tools `irllrec_intent` final output, no existing Tools IRLLRec adapter
+path, and no existing Tools IRLLRec log/PID files. Launched exactly one row:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=irllrec_intent bash scripts/run_baselines_new_domains.sh
+```
+
+The SSH launch wrapper timed out while backgrounding, so Codex did not retry;
+it inspected the process tree and wrote PID files after confirming the active
+run. Current monitor target: runner PID `3326805`, adapter PID `3326813`, PID
+files `baselines_new_domains_tools_irllrec_20260605_0058.runner.pid` and
+`baselines_new_domains_tools_irllrec_20260605_0058.adapter.pid`, and log
+`baselines_new_domains_tools_irllrec_20260605_0058.log`. Clean launch snapshot
+`outputs/summary/tools_irllrec_launch_monitor_20260605.json` reports one
+matching IRLLRec adapter process, Qwen3 `hf_mean_pool` progress `2056/269711`
+(`0.007622974220554594`), GPU `95%` with `15947 MiB / 49140 MiB`, adapter dir
+`1005M`, final output placeholder-only, disk `13.34G` free / `93%` used, and
+no completion/failure markers. Heartbeat `monitor-tools-irllrec` is active.
+Do not start another Tools row while IRLLRec is active.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -1679,13 +1702,17 @@ evidence is under
 
 ## Required Next Actions
 
-1. Before launching the next Tools row, run a fresh process/GPU/disk and
-   duplicate-output preflight on `pony-rec-gpu`. Do not launch if any
-   Pony/C-CRP/baseline/uncertainty process is active.
-2. Launch exactly one next Tools official row, likely `irllrec_intent`, using
-   the single-domain production loop:
-   `DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=irllrec_intent bash scripts/run_baselines_new_domains.sh`.
-   Monitor PID/log/disk and do not start another baseline while it is active.
+1. Monitor the active Tools `irllrec_intent` row: runner PID `3326805`,
+   adapter PID `3326813`, log
+   `baselines_new_domains_tools_irllrec_20260605_0058.log`, and heartbeat
+   `monitor-tools-irllrec`. Notify on completion, failure, duplicate process,
+   dead PID, disk below 10G free, or disk at/above 97% used. Do not start
+   another baseline while this row is active.
+2. After Tools `irllrec_intent` completes, run the established row gates before
+   marking it official: score audit/import, server-final audit, server
+   large-artifact sha256 manifest, local-light sync, local-light audit,
+   docs/memory, related-only commit/push, and then clean only eligible
+   completed intermediate artifacts if disk remains tight.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

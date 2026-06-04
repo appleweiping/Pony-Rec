@@ -230,7 +230,14 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/summary/home_llm2rec_checkpoint_deletion_manifest_20260604.json`.
   Final scores, provenance, audits, imported tables, and model were preserved,
   and post-cleanup `/` was about `15G` free / `93%` used. Tools is now 4/8
-  official rows complete.
+  official rows complete. Tools `irllrec_intent` launched at
+  2026-06-05 01:04 CST as the fifth single-row Tools official baseline with
+  runner PID `3326805`, adapter PID `3326813`, log
+  `baselines_new_domains_tools_irllrec_20260605_0058.log`, and heartbeat
+  `monitor-tools-irllrec`; launch snapshot
+  `outputs/summary/tools_irllrec_launch_monitor_20260605.json` shows Qwen3
+  embedding progress `2056/269711`, GPU `95%`, disk `13.34G` free, and no
+  failure markers. It is active monitor-only evidence, not a completed row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

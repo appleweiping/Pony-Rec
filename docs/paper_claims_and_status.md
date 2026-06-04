@@ -412,7 +412,15 @@ same-candidate tests before any paper-wide SOTA claim.
    Final scores, provenance, audits, imported tables, and model were preserved,
    and post-cleanup `/` returned to about `15G` free / `93%` used. Tools is now
    4/8 complete and needs four more official rows plus the Tools
-   domain/comparison/paired-test gates. Home
+   domain/comparison/paired-test gates. After a fresh preflight, Tools
+   `irllrec_intent` launched at 2026-06-05 01:04 CST as the fifth single-row
+   Tools official baseline with runner PID `3326805`, adapter PID `3326813`,
+   log `baselines_new_domains_tools_irllrec_20260605_0058.log`, and heartbeat
+   `monitor-tools-irllrec`; its launch snapshot
+   `outputs/summary/tools_irllrec_launch_monitor_20260605.json` shows Qwen3
+   embedding progress `2056/269711`, GPU `95%`, disk `13.34G` free, and no
+   failure markers. It is active monitor-only evidence, not a completed row.
+   Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.
