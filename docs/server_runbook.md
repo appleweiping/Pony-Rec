@@ -207,15 +207,17 @@ so the required sequence is explicit before running anything:
 
 ```powershell
 python scripts\audit\main_plan_official_completion_gates.py `
-  --domain home `
-  --method rlmrec_graphcl `
+  --domain <domain> `
+  --method <method> `
   --output_dir outputs\summary\official_completion_gate_plan `
-  --plan_id home_rlmrec_graphcl_completion_gates_20260604
+  --plan_id <domain>_<method>_completion_gates_<date>
 ```
 
 The generated PowerShell file starts with a `throw`, so it is documentation
 until the active runner has exited normally and the preconditions have been
 checked. It must not be used to start the next baseline.
+For the active Tools IRLLRec row, the current local plan artifact is
+`outputs/summary/official_completion_gate_plan/tools_irllrec_intent_completion_gates_20260605.{json,ps1}`.
 
 After a row has passed the server-final evidence audit, first record the
 server-only large artifacts on the server. From the local repository, prefer

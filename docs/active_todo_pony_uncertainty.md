@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 01:50 CST
+Last updated: 2026-06-05 01:59 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1536,6 +1536,12 @@ matching IRLLRec adapter process, Qwen3 `hf_mean_pool` progress `2056/269711`
 `1005M`, final output placeholder-only, disk `13.34G` free / `93%` used, and
 no completion/failure markers. Heartbeat `monitor-tools-irllrec` is active.
 Do not start another Tools row while IRLLRec is active.
+Guarded completion-gate plan prepared at 2026-06-05 01:59 CST:
+`outputs/summary/official_completion_gate_plan/tools_irllrec_intent_completion_gates_20260605.{json,ps1}`.
+The plan is `planning_only_not_executed`, starts with a PowerShell `throw`,
+records the required server-final audit -> server large-artifact manifest ->
+local-light sync -> local-light audit order, and must not be used until the
+active runner exits normally.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1717,7 +1723,9 @@ evidence is under
    marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
    docs/memory, related-only commit/push, and then clean only eligible
-   completed intermediate artifacts if disk remains tight.
+   completed intermediate artifacts if disk remains tight. The prepared
+   planning-only gate package is
+   `outputs/summary/official_completion_gate_plan/tools_irllrec_intent_completion_gates_20260605.{json,ps1}`.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
