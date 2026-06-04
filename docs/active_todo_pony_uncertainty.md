@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 21:15 CST
+Last updated: 2026-06-04 22:05 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1400,6 +1400,30 @@ active ElmRec adapter files; no cleanup was performed while the row is active.
 GPT-5.5 xhigh sidecar Noether independently confirmed the monitor-only
 sequence, the post-completion gate order, and that the server ELMRec checkout
 matches pinned commit `b28c4f786d89fb8473ab358e12a882b30259f627`.
+
+Tools ElmRec monitor checkpoint 2026-06-04 22:05 CST: the row is still active
+and no gates have been run. The latest robust SSH-stdin monitor snapshot shows
+Qwen3 embedding finished at `269711/269711`, then the adapter entered official
+ELMRec training. The log contains the expected sparse tensor invariant
+`UserWarning` followed by `[elmrec-official] epoch=1 train_loss=0.189466`,
+`epoch=5 train_loss=0.110476`, `epoch=10 train_loss=0.065513`,
+`epoch=15 train_loss=0.041795`, and `epoch=20 train_loss=0.046937`; this is
+healthy progress, not a failure marker. Runner PID `3301337` and adapter PID
+`3301345` remain alive, GPU is active at about `96%` with `16245 MiB / 49140
+MiB`, the final evidence directory is still placeholder-only, and there is no
+`scores.csv`, completion marker, Traceback, OOM, no-space, blocker, or failure
+marker. Disk is now danger-level at about `5.67G` free / `97%` used. The
+active adapter directory is `5.2G`; recent writes include
+`llm_esr/handled/itm_emb_np.pkl` (`4,418,945,194` bytes),
+`pca64_itm_emb_np.pkl` (`69,046,181` bytes), `llmesr_embedding_metadata.json`,
+and `elmrec/handled/elmrec_bridge_manifest.json`. A read-only storage audit
+found the largest space consumers are protected completed official evidence,
+same-candidate task packages, final checkpoints/embeddings, and the active
+ElmRec adapter. No cleanup was performed. Since the ELMRec official adapter
+defaults to `100` epochs with logs every `5`, `epoch=20` is an early training
+checkpoint; continue monitoring and do not start another baseline. If disk
+drops further or a no-space marker appears, propose an exact cleanup candidate
+with artifact-protection reasoning before deleting anything.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
