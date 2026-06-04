@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 04:46 CST
+Last updated: 2026-06-05 04:53 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1619,6 +1619,13 @@ to `epoch=2500` with latest loss `0.658937`. Log scans still showed no
 completion marker and no fatal/OOM/no-space marker, and the final evidence
 directory remained placeholder-only (`4.0K`). Disk stayed in warning state at
 about `9.1G` free / `96%` used. No gates, cleanup, or new experiments were run.
+Monitor update 2026-06-05 04:53 CST: runner PID `3326805` and adapter PID
+`3326813` remained alive, with one matching adapter process and active GPU
+(`70-99%`, `16247 MiB / 49140 MiB` across samples). Official training advanced
+to `epoch=2600` with latest loss `0.656922`. Log scans still showed no
+completion marker and no fatal/OOM/no-space marker, and the final evidence
+directory remained placeholder-only (`4.0K`). Disk stayed in warning state at
+about `9.1G` free / `96%` used. No gates, cleanup, or new experiments were run.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
@@ -1796,7 +1803,7 @@ evidence is under
    `monitor-tools-irllrec`. Notify on completion, failure, duplicate process,
    dead PID, disk below 10G free, or disk at/above 97% used. Do not start
    another baseline while this row is active. Current monitor status as of
-   2026-06-05 04:46 CST is disk-warning active training, not completed row.
+   2026-06-05 04:53 CST is disk-warning active training, not completed row.
 2. After Tools `irllrec_intent` completes, run the established row gates before
    marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
