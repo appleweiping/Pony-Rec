@@ -180,15 +180,31 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/summary/tools_promax_completed_adapter_cleanup_manifest_20260604.sha256`
   and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`.
   Final scores, provenance, audits, imported tables, and model were preserved,
-  and post-cleanup `/` was about `11G` free / `95%` used. Tools is now 2/8
-  official rows complete. After a fresh no-active-process, idle-GPU, and
-  duplicate-output preflight, Tools `elmrec_graph` launched at
-  2026-06-04 20:46 CST as the third single-row Tools official baseline with
-  runner PID `3301337`, adapter PID `3301345`, and log
-  `baselines_new_domains_tools_elmrec_20260604_204602.log`. The stable launch
-  snapshot shows Qwen3 `hf_mean_pool` at `7880/269711`, GPU `96%`, adapter
-  directory `1005M`, no fatal markers, and disk warning at about `9.85G` free
-  / `95%` used. Do not start another Tools row while this row is active.
+  and post-cleanup `/` was about `11G` free / `95%` used. Tools `elmrec_graph`
+  launched at 2026-06-04 20:46 CST as the third single-row Tools official
+  baseline with runner PID `3301337`, adapter PID `3301345`, and log
+  `baselines_new_domains_tools_elmrec_20260604_204602.log`; it completed at
+  2026-06-04 22:39 CST with `implementation_status=official_completed`,
+  `blockers=[]`, exact `score_coverage_rate=1.0`, and passing server-final
+  audit, server large-artifact sha256 manifest, lightweight local sync, and
+  local-light audit. Full metrics over 10,000 users and 101 candidates are
+  HR@5/10/20 `0.0501 / 0.101 / 0.2101`, NDCG@5/10/20
+  `0.029656030656687697 / 0.045870649973376774 / 0.07316592297455926`, and MRR
+  `0.05237582779698271`; `scores.csv` has `1,010,001` lines, predictions had
+  `10,000` lines before post-gate deletion, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+  package is
+  `outputs/baselines/official_adapters/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+  Server-only `scores.csv`, deleted prediction metadata, and
+  `elmrec_official_model.pt` are covered by `server_large_artifact_manifest.*`
+  and `prediction_deletion_manifest.json`; the completed ElmRec intermediate
+  adapter was removed after final evidence and local backup passed, with
+  cleanup manifests
+  `outputs/summary/tools_elmrec_completed_adapter_cleanup_manifest_20260604.sha256`
+  and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`.
+  Final scores, provenance, audits, imported tables, and model were preserved,
+  and post-cleanup `/` was about `11G` free / `95%` used. Tools is now 3/8
+  official rows complete.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

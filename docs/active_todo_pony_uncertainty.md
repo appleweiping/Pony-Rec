@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 22:05 CST
+Last updated: 2026-06-04 23:05 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1425,6 +1425,41 @@ checkpoint; continue monitoring and do not start another baseline. If disk
 drops further or a no-space marker appears, propose an exact cleanup candidate
 with artifact-protection reasoning before deleting anything.
 
+Tools ElmRec completion/gate checkpoint 2026-06-04 23:05 CST: Tools
+`elmrec_graph` completed as the third Tools official row. The wrapper log
+`baselines_new_domains_tools_elmrec_20260604_204602.log` ended with
+`DONE elmrec_graph on tools` and `=== All baseline runs complete ===`.
+Final provenance records `implementation_status=official_completed`,
+`blockers=[]`, `official_repo_commit=b28c4f786d89fb8473ab358e12a882b30259f627`,
+and exact `score_coverage_rate=1.0`. Codex ran the required sequence:
+server-final audit PASS, server large-artifact manifest PASS, lightweight
+local sync PASS, and local-light audit PASS. Full metrics over 10,000 users
+and 101 candidates are HR@5/10/20 `0.0501 / 0.101 / 0.2101`,
+NDCG@5/10/20 `0.029656030656687697 / 0.045870649973376774 /
+0.07316592297455926`, and MRR `0.05237582779698271`; `scores.csv` has
+`1,010,001` lines, predictions had `10,000` lines before post-gate deletion,
+and `tables/ranking_eval_records.csv` has `10,001` lines. The local
+lightweight package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+Server-only `scores.csv`, deleted prediction metadata, and
+`elmrec_official_model.pt` are covered by `server_large_artifact_manifest.*`
+and `prediction_deletion_manifest.json`; the manifest records sha256 values
+`13e8aa52ed5c69fa8c9b04006907b907043dd5fbc26b1829e3542d2ed58b050c` for
+scores, `d49457a2d7fc7a5877f565f51913f7110fac438bd6cadd871a8e2da68237c4fd`
+for the deleted prediction JSONL, and
+`637e253d09007a93dfa1fc3f78ba4209b2d052b76a22f629e6e1ad8bf375a22d` for the
+final model. After all gates and local sync passed, Codex removed only the
+server-side prediction JSONL and completed intermediate adapter
+`outputs/baselines/paper_adapters/tools_large10000_100neg_elmrec_official_adapter`.
+Cleanup manifests were synced locally as
+`outputs/summary/tools_elmrec_completed_adapter_cleanup_manifest_20260604.sha256`
+and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`.
+Final scores, provenance, audits, imported tables, and model were preserved.
+Post-cleanup checks show no matching Python experiment process and `/` back to
+about `11G` free / `95%` used. Tools is now 3/8 official rows complete; the
+remaining Tools official rows are `llmemb`, `irllrec_intent`,
+`rlmrec_graphcl`, `llm2rec_sasrec`, and `llmesr_sasrec`.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -1595,16 +1630,14 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active Tools `elmrec_graph` row: runner PID `3301337`, adapter
-   PID `3301345`, log `baselines_new_domains_tools_elmrec_20260604_204602.log`.
-   Notify on completion, failure, duplicate process, dead PID, disk below 10G
-   free, or disk at/above 97% used. Do not start another baseline while this
-   row is active.
-2. If Tools `elmrec_graph` completes, run the established row gates before
+1. Run a fresh no-active-process, GPU, disk, duplicate-output, and server
+   runner preflight before launching exactly one next Tools official row. Do
+   not batch the remaining Tools rows.
+2. After the next Tools row completes, run the established row gates before
    marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
-   docs/memory, related-only commit/push, and then clean the completed
-   temporary adapter if disk remains tight.
+   docs/memory, related-only commit/push, and then clean only eligible
+   completed intermediate artifacts if disk remains tight.
 3. After each completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,

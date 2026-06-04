@@ -299,8 +299,8 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools now has 2/8 official rows gated after
-`proex_profile` and `promax_profile`, so Tools still needs six completed official rows plus paired
+domain set is complete; Tools now has 3/8 official rows gated after
+`proex_profile`, `promax_profile`, and `elmrec_graph`, so Tools still needs five completed official rows plus paired
 same-candidate tests before any paper-wide SOTA claim.
 
 ### Remaining for paper submission
@@ -359,15 +359,35 @@ same-candidate tests before any paper-wide SOTA claim.
    `outputs/summary/tools_promax_completed_adapter_cleanup_manifest_20260604.sha256`
    and `outputs/summary/tools_promax_completed_adapter_cleanup_du_20260604.txt`;
    final scores, provenance, audits, imported tables, and model were preserved.
-   Tools is now 2/8 complete and needs six more official rows plus the Tools
-   domain/comparison/paired-test gates. After a clean no-active-process,
-   idle-GPU, duplicate-output preflight, Tools `elmrec_graph` launched at
-   2026-06-04 20:46 CST as the third single-row Tools official baseline with
-   runner PID `3301337`, adapter PID `3301345`, and log
-   `baselines_new_domains_tools_elmrec_20260604_204602.log`. The stable launch
-   snapshot shows Qwen3 `hf_mean_pool` at `7880/269711`, GPU `96%`, adapter
-   directory `1005M`, no fatal markers, and disk warning at about `9.85G` free
-   / `95%` used. It is active monitor-only evidence, not a completed row. Home
+   Tools `elmrec_graph` launched at 2026-06-04 20:46 CST as the third
+   single-row Tools official baseline with runner PID `3301337`, adapter PID
+   `3301345`, and log `baselines_new_domains_tools_elmrec_20260604_204602.log`.
+   It completed at 2026-06-04 22:39 CST with
+   `implementation_status=official_completed`, `blockers=[]`, exact
+   `score_coverage_rate=1.0`, score audit/imported tables, server-final audit,
+   server large-artifact sha256 manifest, lightweight local sync, and
+   local-light audit all passing. Full metrics over 10,000 users and 101
+   candidates are HR@5/10/20 `0.0501 / 0.101 / 0.2101`, NDCG@5/10/20
+   `0.029656030656687697 / 0.045870649973376774 / 0.07316592297455926`, and
+   MRR `0.05237582779698271`; `scores.csv` has `1,010,001` lines,
+   predictions had `10,000` lines before post-gate deletion, and
+   `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+   package is
+   `outputs/baselines/official_adapters/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/`.
+   Server-only `scores.csv`, deleted prediction metadata, and
+   `elmrec_official_model.pt` are covered by `server_large_artifact_manifest.*`
+   and `prediction_deletion_manifest.json`; the manifest records sha256 values
+   `13e8aa52ed5c69fa8c9b04006907b907043dd5fbc26b1829e3542d2ed58b050c` for
+   scores, `d49457a2d7fc7a5877f565f51913f7110fac438bd6cadd871a8e2da68237c4fd`
+   for the deleted prediction JSONL, and
+   `637e253d09007a93dfa1fc3f78ba4209b2d052b76a22f629e6e1ad8bf375a22d` for the
+   final model. The completed ElmRec intermediate adapter was removed after
+   final evidence and local backup passed, with cleanup manifests
+   `outputs/summary/tools_elmrec_completed_adapter_cleanup_manifest_20260604.sha256`
+   and `outputs/summary/tools_elmrec_completed_adapter_cleanup_du_20260604.txt`;
+   final scores, provenance, audits, imported tables, and model were preserved.
+   Tools is now 3/8 complete and needs five more official rows plus the Tools
+   domain/comparison/paired-test gates. Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
    large-artifact manifest, lightweight local sync, and local-light audit.
