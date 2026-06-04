@@ -93,15 +93,18 @@ python scripts\audit\main_remote_baseline_monitor_snapshot.py `
   --process_token llm2rec_sasrec --process_token home `
   --size_path outputs/baselines/paper_adapters/home_large10000_100neg_llm2rec_official_adapter `
   --size_path outputs/home_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate `
-  --output_json outputs\summary\home_llm2rec_monitor_snapshot_20260604.json
+  --output_json outputs\summary\home_llm2rec_monitor_snapshot_20260604.json `
+  --output_json_on_notify_only
 ```
 
 The helper reads the remote log and status directly without shell regex
 pipelines. It reports tracked PID liveness, matching Python processes, latest
 `hf_mean_pool` progress, completion/failure markers, GPU, disk, output sizes,
-and `should_notify`. Treat `should_notify=true` as a handoff trigger: inspect
-the listed `notify_reasons` before deciding whether to run official gates,
-recover from failure, clean disk, or stop a duplicate launch.
+and `should_notify`. With `--output_json_on_notify_only`, quiet checks print to
+stdout but do not dirty the working tree by overwriting the snapshot file.
+Treat `should_notify=true` as a handoff trigger: inspect the listed
+`notify_reasons` before deciding whether to run official gates, recover from
+failure, clean disk, or stop a duplicate launch.
 
 ## Safe Nohup Pattern
 

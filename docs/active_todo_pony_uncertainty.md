@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-04 08:03 CST
+Last updated: 2026-06-04 08:21 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -200,6 +200,8 @@ fragile shell quoting. It reports tracked PID liveness, matching Python
 processes with the monitor helper itself filtered out, log progress,
 completion/failure markers, GPU, disk, output sizes, and `should_notify` only
 for completion, failure, disk danger, duplicate-run risk, or dead tracked PIDs.
+For recurring heartbeats, pass `--output_json_on_notify_only` so quiet checks
+print status without dirtying the tracked snapshot file.
 Current snapshot artifact:
 `outputs/summary/home_llm2rec_monitor_snapshot_20260604.json`.
 

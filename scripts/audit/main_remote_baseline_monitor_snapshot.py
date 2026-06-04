@@ -252,6 +252,16 @@ def run_remote_monitor(args: argparse.Namespace, *, helper_path: Path = HELPER_P
     )
 
 
+def should_write_output_json(stdout: str, *, on_notify_only: bool) -> bool:
+    if not on_notify_only:
+        return True
+    try:
+        snapshot = json.loads(stdout)
+    except json.JSONDecodeError:
+        return True
+    return bool(snapshot.get("should_notify"))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Capture a robust remote baseline monitor snapshot via SSH stdin.")
     parser.add_argument("--_remote_helper", action="store_true", help=argparse.SUPPRESS)
@@ -269,6 +279,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--disk_used_danger_pct", type=float, default=97.0)
     parser.add_argument("--expected_matching_python_processes", type=int, default=1)
     parser.add_argument("--output_json", default="")
+    parser.add_argument(
+        "--output_json_on_notify_only",
+        action="store_true",
+        help="When set, write --output_json only if the snapshot asks for notification.",
+    )
     return parser.parse_args()
 
 
@@ -283,7 +298,12 @@ def main() -> int:
         sys.stderr.write(result.stderr)
     if result.stdout:
         sys.stdout.write(result.stdout)
-    if result.returncode == 0 and result.stdout and args.output_json:
+    if (
+        result.returncode == 0
+        and result.stdout
+        and args.output_json
+        and should_write_output_json(result.stdout, on_notify_only=args.output_json_on_notify_only)
+    ):
         output = Path(args.output_json)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(result.stdout, encoding="utf-8", newline="\n")

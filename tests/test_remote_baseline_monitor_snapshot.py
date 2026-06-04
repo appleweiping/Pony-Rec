@@ -7,6 +7,7 @@ from scripts.audit.main_remote_baseline_monitor_snapshot import (
     analyze_log_lines,
     build_remote_command,
     run_remote_monitor,
+    should_write_output_json,
 )
 
 
@@ -171,3 +172,19 @@ def test_matching_python_processes_ignores_monitor_helper(monkeypatch):
     assert _matching_python_processes(["llm2rec", "home"]) == [
         "u 100 0.0 python scripts/adapters/main_run_llm2rec.py --domain home"
     ]
+
+
+def test_should_write_output_json_keeps_manual_snapshot_mode():
+    assert should_write_output_json('{"should_notify": false}', on_notify_only=False) is True
+
+
+def test_should_write_output_json_skips_quiet_notify_only_snapshot():
+    assert should_write_output_json('{"should_notify": false}', on_notify_only=True) is False
+
+
+def test_should_write_output_json_writes_notify_snapshot():
+    assert should_write_output_json('{"should_notify": true}', on_notify_only=True) is True
+
+
+def test_should_write_output_json_writes_unparseable_snapshot_for_diagnosis():
+    assert should_write_output_json("not json", on_notify_only=True) is True
