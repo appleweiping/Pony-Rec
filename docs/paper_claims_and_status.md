@@ -539,6 +539,13 @@ The audit remains `ok=true` for the framework package while preserving
 `paper_ready=false` because signal rows and the Phase 2.5 storage gate are
 still blocked. No experiment or cleanup was run.
 
+Framework producer-test hardening on 2026-06-06 05:23 CST: the figure-builder
+test now verifies the conservative caption phrase, caption/provenance
+consistency, and the provenance claim limit that the framework figure does not
+complete observation, ablation, or hyperparameter evidence. Focused tests
+passed (`9 passed`). This protects the figure generator side of the same
+claim-boundary guard; it does not alter paper readiness.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

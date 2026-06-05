@@ -186,6 +186,12 @@ It passes with framework status `review_ready` while preserving
 `paper_ready=false`, `signal_rows_available=false`, and
 `phase2_5_storage_launch_allowed=false`.
 
+The 2026-06-06 05:23 CST producer-test hardening tightened
+`tests/test_framework_overview_figure.py` to verify the conservative caption
+phrase, caption/provenance equality, and the claim limit that the framework
+figure does not complete observation, component-ablation, or hyperparameter
+evidence. This keeps the figure generator aligned with the stricter audit.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter

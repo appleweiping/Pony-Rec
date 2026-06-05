@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 05:18 CST
+Last updated: 2026-06-06 05:23 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2965,6 +2965,16 @@ It reports `ok=true`, framework status `review_ready`, empty framework
 blockers, `paper_ready=false`, `signal_rows_available=false`, and
 `phase2_5_storage_launch_allowed=false`. This is audit hardening only; no
 cleanup, deletion, experiment launch, or baseline launch occurred.
+
+Framework producer-test hardening: at 2026-06-06 05:23 CST, Codex tightened
+`tests/test_framework_overview_figure.py` so the figure generator test now
+asserts the caption contains `required gates before a paper-ready claim`, the
+caption file matches the provenance caption, and the provenance retains the
+claim limit that the figure does not complete observation, ablation, or
+hyperparameter evidence. Focused verification:
+`python -m pytest tests\test_framework_overview_figure.py tests\test_audit_paper_critical_modules.py`
+(`9 passed`). This was a local test guardrail only; no cleanup, deletion,
+experiment launch, or baseline launch occurred.
 
 ## Required Next Actions
 

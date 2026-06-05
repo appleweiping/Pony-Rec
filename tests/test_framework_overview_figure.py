@@ -21,6 +21,7 @@ def test_build_framework_overview_figure_outputs_editable_and_export_files(tmp_p
 
     caption = (tmp_path / "framework_overview_caption.md").read_text(encoding="utf-8")
     assert "controlled same-candidate" in caption
+    assert "required gates before a paper-ready claim" in caption
     assert "full-catalog" not in caption.lower()
     svg = (tmp_path / "framework_overview.svg").read_text(encoding="utf-8")
     assert "risk_score = base_score" in svg
@@ -36,7 +37,9 @@ def test_build_framework_overview_figure_outputs_editable_and_export_files(tmp_p
     assert saved["status_label"] == "paper_critical_framework_overview_review_ready"
     assert saved["paper_claim_ready"] is True
     assert saved["claim_boundary"] == "controlled_same_candidate_ranking_not_full_catalog"
+    assert saved["caption"] == caption.strip()
     assert "not_substitute_for_observation_ablation_or_hyperparameter" in saved["module_scope"]
     assert saved["evidence_gate_status"]["observation_motivation"] == "required_not_claimed_by_figure"
+    assert saved["claim_limits"][-1] == "Does not make observation, ablation, or hyperparameter evidence complete."
     assert saved["formula_alignment"]["matches_src_shadow_ccrp_multiplicative_form"] is True
     assert saved["command"].startswith("python scripts/analysis/main_build_framework_overview_figure.py")
