@@ -1768,6 +1768,16 @@ found no safe cleanup candidate: the large files were active RLMRec
 intermediates, protected same-candidate task packages, completed evidence or
 checkpoints, or an older prediction file without deletion proof. Do not start
 another Tools row while this active RLMRec row is training.
+Monitor update 2026-06-05 08:46 CST: runner PID `3347729` and adapter PID
+`3347738` remained alive and unique, with exactly one matching RLMRec adapter
+process. The active log crossed `[rlmrec-official] epoch=1000
+train_loss=1.505931` on the default `3000`-epoch official path. This is a
+material monitor checkpoint only, not a completed row: final RLMRec evidence
+remained placeholder-only (`4.0K`), with no final `scores.csv`, provenance,
+score audit, imported tables, predictions, completion marker, OOM/no-space,
+killed, traceback, or error marker. Disk remained warning-level at about
+`9.3G` free / `96%` used, and no new safe cleanup candidate was identified.
+Continue monitoring; do not start another Tools row while RLMRec is active.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
