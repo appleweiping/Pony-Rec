@@ -212,6 +212,15 @@ file identity plus valid hash evidence: either checked `sha256` status or
 matching local/server or expected/actual SHA-256 values. Regression tests cover
 the rejected vague shape and the accepted `manifest_checks` equality shape.
 
+The 2026-06-06 05:54 CST hyperparameter package hardening used a GPT-5.5 xhigh
+sidecar audit and tightened the package gate so hyperparameter stability
+evidence must be proven by the summary CSV itself. The audit now requires
+valid/test rows, at least three distinct values per expected control and split,
+metric consistency, row-level audit/degeneracy/coverage/key-count evidence,
+one fixed-filter source row per plotted point, no duplicate curve points, real
+distinct valid/test sweep SHA-256 hashes, a supported full-metric-set metric,
+and consistency between `control_reports.curve_values` and the summary rows.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter

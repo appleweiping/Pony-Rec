@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 05:45 CST
+Last updated: 2026-06-06 05:54 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -3019,6 +3019,29 @@ expected/actual equality. Focused verification:
 (`24 passed`) and
 `python -m pytest tests\test_local_server_evidence_consistency.py`
 (`5 passed`). No cleanup, deletion, experiment launch, or baseline launch
+occurred.
+
+Hyperparameter package summary-shape hardening: at 2026-06-06 05:54 CST, Codex
+used a GPT-5.5 xhigh sidecar audit and tightened
+`scripts/audit/main_audit_phase2_5_module_package.py` so a future
+hyperparameter-analysis package must prove valid/test coverage from
+`ccrp_hyperparameter_curve_summary.csv` itself, not only from provenance
+`control_reports`. The audit now requires a provenance `metric`, a
+`min_values>=3` gate, valid and test rows for every expected control, at least
+three distinct `control_value` entries per expected control and split, metric
+name consistency, row-level `audit_ok`, `degeneracy_audit_ok`,
+`score_coverage_rate=1.0`, expected `candidate_key_count`, one fixed-filter
+source row per plotted point via `candidate_rows_for_value=1`, no duplicate
+`(split, control, control_value)` curve points, real 64-hex valid/test sweep
+hashes, distinct valid/test sweep hashes, a metric from the project full-metric
+set, and matching `control_reports.curve_values` versus the CSV. Regression
+tests reject missing row-audit columns, false audit flags, incomplete
+coverage/key counts, reused valid/test hashes, missing valid-sweep hashes,
+best-of-many curve points, duplicate curve points, unsupported metrics, a
+missing-test summary, and too-short curves even when provenance claims
+`paper_critical_hyperparameter_curve_ready`. Focused verification:
+`python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_ccrp_hyperparameter_sweep_plot.py`
+(`36 passed`). No cleanup, deletion, experiment launch, or baseline launch
 occurred.
 
 ## Required Next Actions

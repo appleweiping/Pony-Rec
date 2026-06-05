@@ -36,6 +36,7 @@ SERVER_COMPARISON_FILES = (
 CONFIG_FILES = ("config.json", "run_config.json", "selected_valid_config.json", "selected_hyperparameters.json")
 DEFAULT_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
 SEED_KEYS = ("seed", "seeds", "random_seed", "random_seeds", "seed_list")
+HYPERPARAMETER_SUMMARY_AUDIT_COLUMNS = ("audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count")
 SHA256_HEX_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 HASH_EQUALITY_PAIRS = (
     ("local_sha256", "server_sha256"),
@@ -361,6 +362,77 @@ def _check_scalar_metric_values(rows: list[dict[str, str]], failures: list[str],
             failures.append(f"{context}:metric_out_of_range:{idx}:{column}:{raw}")
 
 
+def _hyperparameter_summary_value_counts(
+    rows: list[dict[str, str]],
+    *,
+    expected_controls: tuple[str, ...],
+    expected_metric: str,
+    min_values: int,
+    failures: list[str],
+) -> dict[tuple[str, str], int]:
+    allowed_splits = {"valid", "test"}
+    grouped: dict[tuple[str, str], set[str]] = {}
+    expected_control_set = set(expected_controls)
+    seen_points: set[tuple[str, str, str]] = set()
+    for idx, row in enumerate(rows):
+        split = str(row.get("split", "")).strip()
+        control = str(row.get("control", "")).strip()
+        control_value = str(row.get("control_value", "")).strip()
+        metric_name = str(row.get("metric_name", "")).strip()
+        if split not in allowed_splits:
+            failures.append(f"hyperparameter_summary_unexpected_split:{idx}:{split}")
+        if not control_value:
+            failures.append(f"hyperparameter_summary_empty_control_value:{idx}:{split}:{control}")
+        if expected_metric and metric_name != expected_metric:
+            failures.append(f"hyperparameter_summary_unexpected_metric:{idx}:{metric_name}!={expected_metric}")
+        if split in allowed_splits and control in expected_control_set and control_value:
+            point_key = (split, control, control_value)
+            if point_key in seen_points:
+                failures.append(f"hyperparameter_summary_duplicate_curve_point:{split}:{control}:{control_value}")
+            seen_points.add(point_key)
+            grouped.setdefault((split, control), set()).add(control_value)
+        candidate_rows_for_value = _as_int(row.get("candidate_rows_for_value"), default=-1)
+        if candidate_rows_for_value != 1:
+            failures.append(f"hyperparameter_summary_candidate_rows_for_value:{idx}:{candidate_rows_for_value}!=1")
+
+    counts = {key: len(values) for key, values in grouped.items()}
+    for split in ("valid", "test"):
+        for control in expected_controls:
+            count = counts.get((split, control), 0)
+            if count == 0:
+                failures.append(f"hyperparameter_summary_missing_split_control:{split}:{control}")
+            elif count < min_values:
+                failures.append(f"hyperparameter_summary_control_too_short:{split}:{control}:{count}<{min_values}")
+    return counts
+
+
+def _check_hyperparameter_summary_audit_columns(
+    header: list[str],
+    rows: list[dict[str, str]],
+    failures: list[str],
+    *,
+    expected_candidate_key_count: int,
+) -> None:
+    for column in HYPERPARAMETER_SUMMARY_AUDIT_COLUMNS:
+        if column not in header:
+            failures.append(f"hyperparameter_summary_missing_audit_column:{column}")
+    if any(column not in header for column in HYPERPARAMETER_SUMMARY_AUDIT_COLUMNS):
+        return
+    for idx, row in enumerate(rows):
+        if not _as_bool(row.get("audit_ok")):
+            failures.append(f"hyperparameter_summary_audit_false:{idx}:audit_ok")
+        if not _as_bool(row.get("degeneracy_audit_ok")):
+            failures.append(f"hyperparameter_summary_audit_false:{idx}:degeneracy_audit_ok")
+        coverage = _as_float(row.get("score_coverage_rate"))
+        if not math.isfinite(coverage) or abs(coverage - 1.0) > 1e-12:
+            failures.append(f"hyperparameter_summary_score_coverage_not_one:{idx}:{row.get('score_coverage_rate')}")
+        key_count = _as_int(row.get("candidate_key_count"), default=-1)
+        if expected_candidate_key_count > 0 and key_count != expected_candidate_key_count:
+            failures.append(
+                f"hyperparameter_summary_candidate_key_count:{idx}:{key_count}!={expected_candidate_key_count}"
+            )
+
+
 def _path_inside(path: Path, root: Path) -> bool:
     try:
         path.resolve().relative_to(root.resolve())
@@ -635,7 +707,14 @@ def _audit_component_ablation(
     }
 
 
-def _audit_hyperparameter(base: Path, *, expected_controls: tuple[str, ...], min_plot_files: int) -> dict[str, Any]:
+def _audit_hyperparameter(
+    base: Path,
+    *,
+    expected_events: int,
+    expected_candidates_per_event: int,
+    expected_controls: tuple[str, ...],
+    min_plot_files: int,
+) -> dict[str, Any]:
     failures: list[str] = []
     warnings: list[str] = []
     summary_header, summary_rows = _load_required_csv(base, "ccrp_hyperparameter_curve_summary.csv", failures)
@@ -646,6 +725,12 @@ def _audit_hyperparameter(base: Path, *, expected_controls: tuple[str, ...], min
         if column not in summary_header:
             failures.append(f"hyperparameter_summary_missing_column:{column}")
     _check_scalar_metric_values(summary_rows, failures, context="hyperparameter_summary", column="metric_value")
+    _check_hyperparameter_summary_audit_columns(
+        summary_header,
+        summary_rows,
+        failures,
+        expected_candidate_key_count=expected_events * expected_candidates_per_event,
+    )
     if provenance.get("artifact_class") != "paper_critical_hyperparameter_analysis":
         failures.append("hyperparameter:unexpected_artifact_class")
     if provenance.get("status_label") != "paper_critical_hyperparameter_curve_ready":
@@ -654,8 +739,28 @@ def _audit_hyperparameter(base: Path, *, expected_controls: tuple[str, ...], min
         failures.append("hyperparameter:unexpected_paper_claim_scope")
     if provenance.get("reporting_mode") != "valid_and_test":
         failures.append("hyperparameter:not_valid_and_test")
-    if not str(provenance.get("test_sweep_sha256", "")).strip():
+    sweep_sha_raw = str(provenance.get("sweep_sha256", "")).strip()
+    test_sweep_sha_raw = str(provenance.get("test_sweep_sha256", "")).strip()
+    sweep_sha = _clean_sha256(sweep_sha_raw)
+    test_sweep_sha = _clean_sha256(test_sweep_sha_raw)
+    if not sweep_sha_raw:
+        failures.append("hyperparameter:missing_sweep_sha256")
+    elif not sweep_sha:
+        failures.append(f"hyperparameter:invalid_sweep_sha256:{sweep_sha_raw}")
+    if not test_sweep_sha_raw:
         failures.append("hyperparameter:missing_test_sweep_sha256")
+    elif not test_sweep_sha:
+        failures.append(f"hyperparameter:invalid_test_sweep_sha256:{test_sweep_sha_raw}")
+    if sweep_sha and test_sweep_sha and sweep_sha == test_sweep_sha:
+        failures.append("hyperparameter:valid_test_sweep_hash_equal")
+    expected_metric = str(provenance.get("metric", "")).strip()
+    if not expected_metric:
+        failures.append("hyperparameter:missing_metric")
+    elif expected_metric not in FULL_METRICS:
+        failures.append(f"hyperparameter:unsupported_metric:{expected_metric}")
+    min_values = _as_int(provenance.get("min_values"), default=-1)
+    if min_values < 3:
+        failures.append(f"hyperparameter:min_values_too_low:{provenance.get('min_values')}")
     audit_summary = provenance.get("audit_summary", {})
     if not isinstance(audit_summary, dict):
         failures.append("hyperparameter:missing_audit_summary")
@@ -668,7 +773,16 @@ def _audit_hyperparameter(base: Path, *, expected_controls: tuple[str, ...], min
         failures.append("hyperparameter:no_audited_rows")
     if int(audit_summary.get("dropped_audit_rows") or 0) != 0:
         failures.append(f"hyperparameter:dropped_audit_rows:{audit_summary.get('dropped_audit_rows')}")
+    if 0 < int(audit_summary.get("audited_rows") or 0) < len(summary_rows):
+        failures.append(f"hyperparameter:audited_rows_less_than_summary:{audit_summary.get('audited_rows')}<{len(summary_rows)}")
     controls = [str(control) for control in provenance.get("controls", [])]
+    summary_value_counts = _hyperparameter_summary_value_counts(
+        summary_rows,
+        expected_controls=expected_controls,
+        expected_metric=expected_metric,
+        min_values=max(min_values, 3),
+        failures=failures,
+    )
     for control in expected_controls:
         if control not in controls:
             failures.append(f"hyperparameter_missing_expected_control:{control}")
@@ -686,6 +800,15 @@ def _audit_hyperparameter(base: Path, *, expected_controls: tuple[str, ...], min
     for row in provenance.get("control_reports", []):
         if row.get("meets_min_values") is not True:
             failures.append(f"hyperparameter_control_too_short:{row.get('split')}:{row.get('control')}")
+        split = str(row.get("split", "")).strip()
+        control = str(row.get("control", "")).strip()
+        if split in {"valid", "test"} and control in set(expected_controls):
+            reported_values = _as_int(row.get("curve_values"), default=-1)
+            summary_values = summary_value_counts.get((split, control), 0)
+            if reported_values != summary_values:
+                failures.append(
+                    f"hyperparameter_control_report_value_mismatch:{split}:{control}:{reported_values}!={summary_values}"
+                )
     figures = _check_figures(
         base,
         provenance,
@@ -755,6 +878,8 @@ def build_audit(
     elif module == "hyperparameter_analysis":
         module_audit = _audit_hyperparameter(
             base,
+            expected_events=expected_events,
+            expected_candidates_per_event=expected_candidates_per_event,
             expected_controls=expected_controls,
             min_plot_files=min_plot_files,
         )

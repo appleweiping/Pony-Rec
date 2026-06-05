@@ -580,6 +580,28 @@ and `manifest_checks` expected/actual equality. Focused tests passed
 hardening only; paper readiness still requires full-scale uncertainty signal
 rows and a cleared Phase 2.5 storage gate.
 
+Hyperparameter package summary-shape hardening on 2026-06-06 05:54 CST: after
+GPT-5.5 xhigh sidecar review, the completed-module package audit now verifies
+`ccrp_hyperparameter_curve_summary.csv` directly for paper-facing stability
+evidence. It requires provenance to declare the plotted `metric` and a
+`min_values>=3` gate, requires both `valid` and `test` split rows for every
+expected control, requires at least three distinct `control_value` entries per
+expected control and split, checks metric-name consistency, requires row-level
+`audit_ok`, `degeneracy_audit_ok`, exact `score_coverage_rate=1.0`, expected
+`candidate_key_count`, one fixed-filter source row per plotted point via
+`candidate_rows_for_value=1`, no duplicate `(split, control, control_value)`
+curve points, real 64-hex valid/test sweep hashes, different valid/test hashes,
+a plotted metric from the project full-metric set, and cross-checks provenance
+`control_reports.curve_values` against the summary CSV. Regression coverage
+rejects missing row-audit columns, false audit flags, incomplete coverage/key
+counts, reused valid/test hashes, missing valid-sweep hashes, best-of-many
+curve points, duplicate curve points, unsupported metrics, a missing-test
+summary, and too-short curves even when provenance claims
+`paper_critical_hyperparameter_curve_ready`. Focused tests passed
+(`36 passed`). This is still only local evidence-gate hardening; the real
+hyperparameter module remains blocked until full-scale uncertainty signal rows
+exist and the Phase 2.5 storage gate clears.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

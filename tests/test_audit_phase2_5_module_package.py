@@ -22,6 +22,8 @@ ABLATIONS = (
     "without_risk_penalty",
 )
 TEST_SHA256 = "a" * 64
+TEST_SHA256_B = "b" * 64
+DEFAULT_KEY_COUNT = 10000 * 101
 
 
 def _write(path: Path, text: str) -> Path:
@@ -294,16 +296,16 @@ def test_component_ablation_package_audit_rejects_bad_coverage_totals(tmp_path):
     assert "external_score_coverage_matched_candidates:ccrp:101!=202" in audit["failures"]
 
 
-def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
-    _general_files(tmp_path)
+def _complete_hyperparameter_package(root: Path) -> None:
+    _general_files(root)
     rows = []
     for split in ("valid", "test"):
         for control in ("eta", "confidence_weight", "weight_grid_label"):
             for value in ("0.5", "1.0", "2.0"):
-                rows.append(f"{split},{control},{value},NDCG@10,0.2\n")
+                rows.append(f"{split},{control},{value},NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n")
     _write(
-        tmp_path / "ccrp_hyperparameter_curve_summary.csv",
-        "split,control,control_value,metric_name,metric_value\n"
+        root / "ccrp_hyperparameter_curve_summary.csv",
+        "split,control,control_value,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
         + "".join(rows),
     )
     figures = []
@@ -311,9 +313,9 @@ def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
         for suffix, body in (("png", "png"), ("pdf", "%PDF")):
             name = f"{stem}.{suffix}"
             figures.append(name)
-            _write(tmp_path / name, body)
+            _write(root / name, body)
     _json(
-        tmp_path / "ccrp_hyperparameter_curve_provenance.json",
+        root / "ccrp_hyperparameter_curve_provenance.json",
         {
             "artifact_class": "paper_critical_hyperparameter_analysis",
             "status_label": "paper_critical_hyperparameter_curve_ready",
@@ -321,8 +323,10 @@ def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
             "reporting_mode": "valid_and_test",
             "git_commit": "abc123",
             "command": "python hyper.py",
-            "sweep_sha256": "a",
-            "test_sweep_sha256": "b",
+            "sweep_sha256": TEST_SHA256,
+            "test_sweep_sha256": TEST_SHA256_B,
+            "metric": "NDCG@10",
+            "min_values": 3,
             "controls": ["eta", "confidence_weight", "weight_grid_label"],
             "filters": {"score_mode": "full", "ablation": "full"},
             "audit_summary": {
@@ -340,23 +344,144 @@ def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
         },
     )
 
+
+def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+
     audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
 
     assert audit["ok"] is True
     assert audit["paper_claim_ready"] is True
 
 
-def test_hyperparameter_package_audit_requires_expected_controls(tmp_path):
-    _general_files(tmp_path)
+def test_hyperparameter_package_audit_rejects_missing_row_audit_columns(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    rows = []
+    for split in ("valid", "test"):
+        for control in ("eta", "confidence_weight", "weight_grid_label"):
+            for value in ("0.5", "1.0", "2.0"):
+                rows.append(f"{split},{control},{value},NDCG@10,0.2\n")
     _write(
         tmp_path / "ccrp_hyperparameter_curve_summary.csv",
         "split,control,control_value,metric_name,metric_value\n"
-        "valid,eta,0.5,NDCG@10,0.2\n"
-        "valid,eta,1.0,NDCG@10,0.3\n"
-        "valid,eta,2.0,NDCG@10,0.25\n"
-        "test,eta,0.5,NDCG@10,0.19\n"
-        "test,eta,1.0,NDCG@10,0.29\n"
-        "test,eta,2.0,NDCG@10,0.24\n",
+        + "".join(rows),
+    )
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_summary_missing_audit_column:audit_ok" in audit["failures"]
+    assert "hyperparameter_summary_missing_audit_column:score_coverage_rate" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_false_row_audit_and_coverage(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    text = (tmp_path / "ccrp_hyperparameter_curve_summary.csv").read_text(encoding="utf-8")
+    text = text.replace(f"0.2,true,true,1.0,{DEFAULT_KEY_COUNT}", f"0.2,false,false,0.5,{DEFAULT_KEY_COUNT - 1}", 1)
+    (tmp_path / "ccrp_hyperparameter_curve_summary.csv").write_text(text, encoding="utf-8")
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_summary_audit_false:0:audit_ok" in audit["failures"]
+    assert "hyperparameter_summary_audit_false:0:degeneracy_audit_ok" in audit["failures"]
+    assert "hyperparameter_summary_score_coverage_not_one:0:0.5" in audit["failures"]
+    assert f"hyperparameter_summary_candidate_key_count:0:{DEFAULT_KEY_COUNT - 1}!={DEFAULT_KEY_COUNT}" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_same_valid_test_sweep_hash(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["test_sweep_sha256"] = provenance["sweep_sha256"]
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter:valid_test_sweep_hash_equal" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_missing_valid_sweep_hash(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["sweep_sha256"] = ""
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter:missing_sweep_sha256" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_test_best_of_many_curve_points(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    text = (tmp_path / "ccrp_hyperparameter_curve_summary.csv").read_text(encoding="utf-8")
+    text = text.replace(f"test,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1", f"test,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},2", 1)
+    (tmp_path / "ccrp_hyperparameter_curve_summary.csv").write_text(text, encoding="utf-8")
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_summary_candidate_rows_for_value:9:2!=1" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_duplicate_curve_points(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_summary.csv"
+    text = path.read_text(encoding="utf-8")
+    duplicate = f"valid,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+    path.write_text(text + duplicate, encoding="utf-8")
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_summary_duplicate_curve_point:valid:eta:0.5" in audit["failures"]
+    assert "hyperparameter_control_report_value_mismatch:valid:eta:3!=3" not in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_unknown_metric_name(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["metric"] = "AUC"
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter:unsupported_metric:AUC" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_summary_missing_test_rows(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    rows = []
+    for control in ("eta", "confidence_weight", "weight_grid_label"):
+        for value in ("0.5", "1.0", "2.0"):
+            rows.append(f"valid,{control},{value},NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n")
+    _write(
+        tmp_path / "ccrp_hyperparameter_curve_summary.csv",
+        "split,control,control_value,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
+        + "".join(rows),
+    )
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_summary_missing_split_control:test:eta" in audit["failures"]
+    assert "hyperparameter_control_report_value_mismatch:test:eta:3!=0" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_too_short_summary_curve(tmp_path):
+    _general_files(tmp_path)
+    _write(
+        tmp_path / "ccrp_hyperparameter_curve_summary.csv",
+        "split,control,control_value,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
+        f"valid,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"valid,eta,1.0,NDCG@10,0.3,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,0.5,NDCG@10,0.19,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,1.0,NDCG@10,0.29,true,true,1.0,{DEFAULT_KEY_COUNT},1\n",
     )
     _write(tmp_path / "fig_hyper_eta_curve.png", "png")
     _write(tmp_path / "fig_hyper_eta_curve.pdf", "%PDF")
@@ -369,8 +494,60 @@ def test_hyperparameter_package_audit_requires_expected_controls(tmp_path):
             "reporting_mode": "valid_and_test",
             "git_commit": "abc123",
             "command": "python hyper.py",
-            "sweep_sha256": "a",
-            "test_sweep_sha256": "b",
+            "sweep_sha256": TEST_SHA256,
+            "test_sweep_sha256": TEST_SHA256_B,
+            "metric": "NDCG@10",
+            "min_values": 3,
+            "controls": ["eta"],
+            "filters": {"score_mode": "full", "ablation": "full"},
+            "audit_summary": {
+                "require_audit_ok": True,
+                "missing_audit_columns": [],
+                "audited_rows": 4,
+                "dropped_audit_rows": 0,
+            },
+            "control_reports": [
+                {"split": "valid", "control": "eta", "curve_values": 2, "meets_min_values": True},
+                {"split": "test", "control": "eta", "curve_values": 2, "meets_min_values": True},
+            ],
+            "figure_paths": ["fig_hyper_eta_curve.png", "fig_hyper_eta_curve.pdf"],
+        },
+    )
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path, expected_controls=("eta",))
+
+    assert audit["ok"] is False
+    assert "hyperparameter_summary_control_too_short:valid:eta:2<3" in audit["failures"]
+    assert "hyperparameter_summary_control_too_short:test:eta:2<3" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_requires_expected_controls(tmp_path):
+    _general_files(tmp_path)
+    _write(
+        tmp_path / "ccrp_hyperparameter_curve_summary.csv",
+        "split,control,control_value,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
+        f"valid,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"valid,eta,1.0,NDCG@10,0.3,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"valid,eta,2.0,NDCG@10,0.25,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,0.5,NDCG@10,0.19,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,1.0,NDCG@10,0.29,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,2.0,NDCG@10,0.24,true,true,1.0,{DEFAULT_KEY_COUNT},1\n",
+    )
+    _write(tmp_path / "fig_hyper_eta_curve.png", "png")
+    _write(tmp_path / "fig_hyper_eta_curve.pdf", "%PDF")
+    _json(
+        tmp_path / "ccrp_hyperparameter_curve_provenance.json",
+        {
+            "artifact_class": "paper_critical_hyperparameter_analysis",
+            "status_label": "paper_critical_hyperparameter_curve_ready",
+            "paper_claim_scope": "valid_and_test_stability_curve_candidate",
+            "reporting_mode": "valid_and_test",
+            "git_commit": "abc123",
+            "command": "python hyper.py",
+            "sweep_sha256": TEST_SHA256,
+            "test_sweep_sha256": TEST_SHA256_B,
+            "metric": "NDCG@10",
+            "min_values": 3,
             "controls": ["eta"],
             "filters": {"score_mode": "full", "ablation": "full"},
             "audit_summary": {
@@ -398,13 +575,13 @@ def test_hyperparameter_package_audit_rejects_out_of_range_metric_values(tmp_pat
     _general_files(tmp_path)
     _write(
         tmp_path / "ccrp_hyperparameter_curve_summary.csv",
-        "split,control,control_value,metric_name,metric_value\n"
-        "valid,eta,0.5,NDCG@10,1.5\n"
-        "valid,eta,1.0,NDCG@10,0.3\n"
-        "valid,eta,2.0,NDCG@10,0.25\n"
-        "test,eta,0.5,NDCG@10,0.19\n"
-        "test,eta,1.0,NDCG@10,0.29\n"
-        "test,eta,2.0,NDCG@10,0.24\n",
+        "split,control,control_value,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
+        f"valid,eta,0.5,NDCG@10,1.5,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"valid,eta,1.0,NDCG@10,0.3,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"valid,eta,2.0,NDCG@10,0.25,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,0.5,NDCG@10,0.19,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,1.0,NDCG@10,0.29,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+        f"test,eta,2.0,NDCG@10,0.24,true,true,1.0,{DEFAULT_KEY_COUNT},1\n",
     )
     _write(tmp_path / "fig_hyper_eta_curve.png", "png")
     _write(tmp_path / "fig_hyper_eta_curve.pdf", "%PDF")
@@ -417,8 +594,10 @@ def test_hyperparameter_package_audit_rejects_out_of_range_metric_values(tmp_pat
             "reporting_mode": "valid_and_test",
             "git_commit": "abc123",
             "command": "python hyper.py",
-            "sweep_sha256": "a",
-            "test_sweep_sha256": "b",
+            "sweep_sha256": TEST_SHA256,
+            "test_sweep_sha256": TEST_SHA256_B,
+            "metric": "NDCG@10",
+            "min_values": 3,
             "controls": ["eta"],
             "filters": {"score_mode": "full", "ablation": "full"},
             "audit_summary": {
