@@ -2684,6 +2684,22 @@ candidate is the completed Tools LLM2Rec upstream embedding cache:
 `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
 No deletion was performed and no experiment was launched.
 
+Current retention decision packet: at 2026-06-06 02:00 CST, after another
+clean server preflight (no matching project Python process, GPU idle, `/` at
+`12,406,620,160` free bytes / `94%` used), Codex refreshed the read-only
+storage audit and generated a non-destructive approval-decision packet for the
+same lowest-risk high-yield candidate. Artifacts:
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0200.{json,md,sha256}`
+and
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.{json,sh,md,sha256}`.
+The packet is tied to the current storage audit via `--retention_audit_json`,
+reports `will_delete=false`, `will_start_experiment=false`,
+`requires_explicit_approval=true`, expected post-delete free bytes
+`18,069,307,520`, and `expected_to_clear_min_free_gate=true`. Its generated
+shell keeps `exit 2` before `sha256sum` and `rm --`; the Markdown memo is only
+a decision surface, not approval. No deletion, manifesting, or experiment
+launch occurred.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

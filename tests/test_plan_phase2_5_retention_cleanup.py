@@ -1,4 +1,40 @@
-from scripts.audit.main_plan_phase2_5_retention_cleanup import build_plan, guarded_shell_script
+import json
+
+from scripts.audit.main_plan_phase2_5_retention_cleanup import (
+    build_plan,
+    decision_markdown,
+    guarded_shell_script,
+)
+
+
+def _write_retention_audit(path, *, target_path=None):
+    target = target_path or (
+        "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/"
+        "pony_qwen3_8b_title_item_embs.npy"
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(
+            {
+                "phase2_5_disk_gate": {
+                    "current_free_bytes": 12_406_644_736,
+                    "required_free_bytes_min": 16_106_127_360,
+                    "experiment_launch_allowed": False,
+                },
+                "recommended_approval_candidate": {
+                    "path": target,
+                    "size_bytes": 5_662_687_360,
+                    "retention_risk_tier": "approval_required_external_embedding_cache",
+                    "retention_risk_rank": 20,
+                    "expected_free_bytes_after_delete": 18_069_332_096,
+                    "would_clear_min_free_gate": True,
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return path
 
 
 def test_retention_plan_defaults_to_non_executing_tools_embedding():
@@ -77,6 +113,54 @@ def test_retention_plan_records_required_guards_and_postconditions():
     assert "outputs/*_same_candidate/*.pt" in plan["protected_paths"]
     assert "post_delete_domain_gate_json" in plan["manifest_outputs_if_executed"]
     assert "post_delete_comparison_dir" in plan["manifest_outputs_if_executed"]
+
+
+def test_retention_plan_can_consume_current_storage_audit(tmp_path):
+    audit_path = _write_retention_audit(tmp_path / "storage.json")
+    plan = build_plan(
+        candidate="tools_llm2rec_upstream_embedding",
+        min_free_gib=15,
+        output_dir="outputs/summary/paper_critical/retention_cleanup_plan",
+        plan_id="test_plan",
+        retention_audit_json=audit_path,
+    )
+
+    assert plan["ranked_retention_audit_source"].endswith("storage.json")
+    assert plan["ranked_audit_current_free_bytes"] == 12_406_644_736
+    assert plan["ranked_audit_expected_free_bytes_after_delete"] == 18_069_332_096
+    assert plan["expected_to_clear_min_free_gate"] is True
+    assert plan["will_delete"] is False
+    assert plan["requires_explicit_approval"] is True
+
+
+def test_retention_plan_rejects_audit_with_different_recommended_target(tmp_path):
+    audit_path = _write_retention_audit(tmp_path / "storage.json", target_path="/tmp/other.npy")
+
+    try:
+        build_plan(
+            candidate="tools_llm2rec_upstream_embedding",
+            retention_audit_json=audit_path,
+        )
+    except ValueError as exc:
+        assert "different target" in str(exc)
+    else:
+        raise AssertionError("expected target mismatch to fail")
+
+
+def test_decision_markdown_is_non_destructive():
+    plan = build_plan(
+        candidate="tools_llm2rec_upstream_embedding",
+        current_free_bytes=12_407_414_784,
+        min_free_gib=15,
+        output_dir="outputs/summary/paper_critical/retention_cleanup_plan",
+        plan_id="test_plan",
+    )
+    text = decision_markdown(plan)
+
+    assert "Will delete now: `False`" in text
+    assert "Requires explicit approval: `True`" in text
+    assert "rm --" not in text
+    assert "Deletion remains prohibited" in text
 
 
 def test_guarded_shell_exits_before_any_delete_or_manifest_command():

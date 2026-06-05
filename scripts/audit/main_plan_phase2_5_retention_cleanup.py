@@ -81,8 +81,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min_free_gib", type=float, default=DEFAULT_MIN_FREE_GIB)
     parser.add_argument("--output_dir", default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--plan_id", default="")
+    parser.add_argument("--retention_audit_json", default="")
     parser.add_argument("--output_json", default="")
     parser.add_argument("--output_sh", default="")
+    parser.add_argument("--output_md", default="")
     return parser.parse_args()
 
 
@@ -130,6 +132,48 @@ def _candidate(candidate_id: str) -> dict[str, Any]:
         raise ValueError(f"unknown candidate {value!r}; known candidates: {known}") from exc
 
 
+def _read_json(path: str | Path) -> dict[str, Any]:
+    with Path(path).open("r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+    if not isinstance(payload, dict):
+        raise ValueError(f"expected JSON object: {path}")
+    return payload
+
+
+def _apply_retention_audit(item: dict[str, Any], retention_audit_json: str | Path | None) -> dict[str, Any]:
+    if not retention_audit_json:
+        return item
+    audit_path = str(retention_audit_json).replace("\\", "/")
+    audit = _read_json(retention_audit_json)
+    recommended = audit.get("recommended_approval_candidate") or {}
+    if not recommended:
+        raise ValueError(f"retention audit has no recommended_approval_candidate: {retention_audit_json}")
+    expected_path = str(item["target_path"])
+    recommended_path = str(recommended.get("path", ""))
+    if recommended_path != expected_path:
+        raise ValueError(
+            "retention audit recommended a different target: "
+            f"{recommended_path!r} != configured {expected_path!r}"
+        )
+    phase_gate = audit.get("phase2_5_disk_gate") or {}
+    current_free = int(phase_gate.get("current_free_bytes") or 0)
+    expected_after = int(recommended.get("expected_free_bytes_after_delete") or current_free + int(item["expected_size_bytes"]))
+    updated = dict(item)
+    updated.update(
+        {
+            "retention_audit_source": audit_path,
+            "ranked_retention_audit_source": audit_path,
+            "recommended_by_ranked_audit": True,
+            "retention_risk_tier": recommended.get("retention_risk_tier", item["retention_risk_tier"]),
+            "retention_risk_rank": int(recommended.get("retention_risk_rank", item["retention_risk_rank"])),
+            "ranked_audit_current_free_bytes": current_free,
+            "ranked_audit_expected_free_bytes_after_delete": expected_after,
+            "ranked_audit_would_clear_min_free_gate": bool(recommended.get("would_clear_min_free_gate")),
+        }
+    )
+    return updated
+
+
 def _min_free_bytes(min_free_gib: float) -> int:
     return int(float(min_free_gib) * BYTES_PER_GIB)
 
@@ -146,10 +190,14 @@ def build_plan(
     min_free_gib: float = DEFAULT_MIN_FREE_GIB,
     output_dir: str = DEFAULT_OUTPUT_DIR,
     plan_id: str = "",
+    retention_audit_json: str | Path | None = None,
 ) -> dict[str, Any]:
-    item = _candidate(candidate)
+    item = _apply_retention_audit(_candidate(candidate), retention_audit_json)
     min_free_bytes = _min_free_bytes(min_free_gib)
-    expected_after_delete = int(current_free_bytes) + int(item["expected_size_bytes"]) if current_free_bytes else None
+    effective_current_free_bytes = int(current_free_bytes) or int(item.get("ranked_audit_current_free_bytes") or 0)
+    expected_after_delete = (
+        effective_current_free_bytes + int(item["expected_size_bytes"]) if effective_current_free_bytes else None
+    )
     plan_id = plan_id or f"{item['candidate']}_retention_cleanup_plan"
     manifest_base = _manifest_base(item["candidate"])
     expected_size = int(item["expected_size_bytes"])
@@ -264,7 +312,7 @@ def build_plan(
         "candidate": item,
         "remote_project": remote_project,
         "output_dir": output_dir,
-        "current_free_bytes": int(current_free_bytes),
+        "current_free_bytes": effective_current_free_bytes,
         "min_free_gib": float(min_free_gib),
         "min_free_bytes": min_free_bytes,
         "expected_free_bytes_after_delete": expected_after_delete,
@@ -381,6 +429,64 @@ def write_plan_files(plan: dict[str, Any], *, output_json: str | Path, output_sh
     return {"json": str(json_path), "shell": str(sh_path)}
 
 
+def decision_markdown(plan: dict[str, Any]) -> str:
+    item = plan["candidate"]
+    lines = [
+        "# Phase 2.5 Retention Decision Packet",
+        "",
+        f"- Plan ID: `{plan['plan_id']}`",
+        f"- Status: `{plan['status_label']}`",
+        f"- Will delete now: `{plan['will_delete']}`",
+        f"- Will start experiment: `{plan['will_start_experiment']}`",
+        f"- Requires explicit approval: `{plan['requires_explicit_approval']}`",
+        f"- Approval token required: `{plan['approval_token_required']}`",
+        "",
+        "## Candidate",
+        "",
+        f"- Description: {item['description']}",
+        f"- Target path: `{item['target_path']}`",
+        f"- Expected size bytes: `{item['expected_size_bytes']}`",
+        f"- Expected sha256: `{item['expected_sha256']}`",
+        f"- Risk tier: `{plan['retention_risk_tier']}`",
+        f"- Risk rank: `{plan['retention_risk_rank']}`",
+        f"- Retention audit source: `{plan['ranked_retention_audit_source']}`",
+        f"- Current free bytes: `{plan['current_free_bytes']}`",
+        f"- Expected free bytes after delete: `{plan['expected_free_bytes_after_delete']}`",
+        f"- Clears 15GiB floor: `{plan['expected_to_clear_min_free_gate']}`",
+        "",
+        "## Required Preconditions",
+        "",
+    ]
+    lines.extend(f"- {item}" for item in plan["preconditions_before_removing_script_guard"])
+    lines.extend(
+        [
+            "",
+            "## Required Postconditions",
+            "",
+        ]
+    )
+    lines.extend(f"- {item}" for item in plan["postconditions_after_delete"])
+    lines.extend(
+        [
+            "",
+            "## Verdict",
+            "",
+            "This packet is non-destructive. Deletion remains prohibited until the exact target is approved, "
+            "the approval token is set, the generated shell guard is deliberately removed, and all manifest/gate "
+            "checks in the packet are run successfully.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def write_decision_markdown(plan: dict[str, Any], *, output_md: str | Path) -> str:
+    md_path = Path(output_md)
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.write_text(decision_markdown(plan), encoding="utf-8")
+    return str(md_path)
+
+
 def main() -> None:
     args = parse_args()
     output_dir = args.output_dir.rstrip("/\\")
@@ -394,8 +500,11 @@ def main() -> None:
         min_free_gib=args.min_free_gib,
         output_dir=output_dir,
         plan_id=plan_id,
+        retention_audit_json=args.retention_audit_json or None,
     )
     outputs = write_plan_files(plan, output_json=output_json, output_sh=output_sh)
+    if args.output_md:
+        outputs["markdown"] = write_decision_markdown(plan, output_md=args.output_md)
     print(
         json.dumps(
             {

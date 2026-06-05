@@ -242,6 +242,19 @@ also include:
     deleting it would clear the minimum gate but still requires explicit
     archive/retention approval and post-delete gate checks. No deletion was
     performed and no experiment was launched.
+    Current non-destructive retention decision packet on 2026-06-06 02:00 CST:
+    `scripts/audit/main_plan_phase2_5_retention_cleanup.py` now accepts
+    `--retention_audit_json` and can emit a Markdown approval-decision memo.
+    Fresh storage audit:
+    `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0200.{json,md,sha256}`.
+    Current guarded packet:
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.{json,sh,md,sha256}`.
+    The packet records `will_delete=false`, `will_start_experiment=false`,
+    `requires_explicit_approval=true`, current free bytes `12,406,620,160`,
+    expected free bytes after deleting the candidate `18,069,307,520`, and
+    `expected_to_clear_min_free_gate=true`. The generated shell still exits
+    before `sha256sum` and `rm --`, so no manifesting, deletion, or experiment
+    launch occurred.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

@@ -117,6 +117,23 @@ upstream embedding as `recommended_by_ranked_audit=true` with risk tier
 explicit archive/retention approval, exact sha256/size manifesting, and
 post-delete domain/comparison gates.
 
+For a current approval-decision packet tied to a fresh storage audit, pass the
+audit artifact and request a Markdown memo:
+
+```powershell
+python scripts\audit\main_plan_phase2_5_retention_cleanup.py `
+  --retention_audit_json outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260606_0200.json `
+  --output_dir outputs\summary\paper_critical\retention_cleanup_plan_20260606_current `
+  --plan_id tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200 `
+  --output_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.json `
+  --output_sh outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.sh `
+  --output_md outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.md
+```
+
+The generated shell is still intentionally non-runnable as generated: `exit 2`
+precedes sha256 manifesting and `rm --`. The Markdown packet is the user-facing
+retention-decision surface, not an approval by itself.
+
 After local-light packages are copied, run a local/server evidence consistency
 audit over the completed domain before relying on the package for later paper
 work. This reads local files and copied server manifests only:

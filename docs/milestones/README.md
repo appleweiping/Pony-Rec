@@ -91,6 +91,12 @@ component inventory, and guarded planning are ready, while paper readiness
 remains false because full-scale uncertainty signal rows are absent and the
 Phase 2.5 storage gate is still closed.
 
+The 2026-06-06 02:00 CST retention decision packet
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.{json,sh,md,sha256}`
+is the current non-destructive approval surface for clearing the storage gate:
+it cites the fresh storage audit, exits before `sha256sum` or `rm --`, and
+requires explicit archive/retention approval before any cleanup can occur.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:
