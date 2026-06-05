@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 00:18 CST
+Last updated: 2026-06-06 00:30 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -271,6 +271,30 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `18,070,102,144` bytes and clear the minimum gate. This is only a ranked
    decision surface; deletion still requires the existing approval token path,
    sha256/size manifesting, and post-delete domain/comparison gates.
+   Ranked guarded plan refresh 2026-06-06 00:30 CST: after a fresh read-only
+   preflight still found no matching project Python process, GPU idle, and `/`
+   at `12,407,390,208` free bytes / `94%` used, Codex updated
+   `scripts/audit/main_plan_phase2_5_retention_cleanup.py` so the guarded
+   approval plan cites the ranked audit explicitly. New artifact:
+   `outputs/summary/paper_critical/retention_cleanup_plan_20260606/tools_llm2rec_upstream_embedding_ranked_retention_cleanup_plan_20260606.{json,sh,sha256}`.
+   The JSON records `ranked_retention_audit_source`,
+   `recommended_by_ranked_audit=true`, tier
+   `approval_required_external_embedding_cache`, rank `20`, ranked-audit
+   `current_free_bytes=12,407,414,784`, and
+   `expected_free_bytes_after_delete=18,070,102,144`. The generated shell still
+   exits with `exit 2` before `sha256sum` or `rm --`, records
+   `will_delete=false`, `will_delete_files=false`, and
+   `requires_explicit_approval=true`. No deletion or experiment launch was
+   performed. Verification:
+   `python -m pytest tests\test_audit_paper_critical_modules.py
+   tests\test_plan_ccrp_signal_generation.py
+   tests\test_build_ccrp_component_inventory.py
+   tests\test_uncertainty_observation_study.py
+   tests\test_ccrp_hyperparameter_sweep_plot.py
+   tests\test_framework_overview_figure.py
+   tests\test_plan_phase2_5_retention_cleanup.py
+   tests\test_audit_phase2_5_storage_retention.py
+   tests\test_cleanup_phase2_5_safe_now_remnants.py` (`29 passed`).
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

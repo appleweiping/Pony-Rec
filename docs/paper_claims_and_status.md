@@ -168,6 +168,23 @@ also include:
     archive/retention approval and the guarded manifest/gate sequence, but it
     would raise expected free space to `18,070,102,144` bytes and clear the
     minimum Phase 2.5 gate.
+    Guarded ranked-plan refresh on 2026-06-06 00:30 CST:
+    `scripts/audit/main_plan_phase2_5_retention_cleanup.py` now carries the
+    ranked audit metadata directly. New planning-only artifact:
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606/tools_llm2rec_upstream_embedding_ranked_retention_cleanup_plan_20260606.{json,sh,sha256}`.
+    It records `recommended_by_ranked_audit=true`,
+    `retention_risk_tier=approval_required_external_embedding_cache`,
+    `retention_risk_rank=20`,
+    `ranked_audit_current_free_bytes=12,407,414,784`, and
+    `ranked_audit_expected_free_bytes_after_delete=18,070,102,144`. The
+    generated shell still exits with `exit 2` before any manifest or delete
+    command, and the JSON remains `will_delete=false`,
+    `will_delete_files=false`, `requires_explicit_approval=true`. A fresh
+    read-only preflight immediately before the refresh found no matching
+    project Python process, GPU idle, and `/` at `12,407,390,208` free bytes /
+    `94%` used. No deletion was performed and no Phase 2.5 experiment was
+    launched. Guard verification passed with the broader paper-critical suite
+    (`29 passed`).
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

@@ -4,7 +4,7 @@ from scripts.audit.main_plan_phase2_5_retention_cleanup import build_plan, guard
 def test_retention_plan_defaults_to_non_executing_tools_embedding():
     plan = build_plan(
         candidate="tools_llm2rec_upstream_embedding",
-        current_free_bytes=12_342_779_904,
+        current_free_bytes=12_407_414_784,
         min_free_gib=15,
         output_dir="outputs/summary/paper_critical/retention_cleanup_plan",
         plan_id="test_plan",
@@ -18,6 +18,15 @@ def test_retention_plan_defaults_to_non_executing_tools_embedding():
     assert plan["phase2_5_experiment_launch_allowed_after_cleanup"] is False
     assert plan["requires_explicit_approval"] is True
     assert plan["retention_decision_state"] == "preserve_by_default"
+    assert plan["ranked_retention_audit_source"].endswith(
+        "server_storage_phase2_5_retention_audit_ranked_20260606.json"
+    )
+    assert plan["recommended_by_ranked_audit"] is True
+    assert plan["retention_risk_tier"] == "approval_required_external_embedding_cache"
+    assert plan["retention_risk_rank"] == 20
+    assert plan["ranked_audit_current_free_bytes"] == 12_407_414_784
+    assert plan["ranked_audit_expected_free_bytes_after_delete"] == 18_070_102_144
+    assert plan["ranked_audit_would_clear_min_free_gate"] is True
     assert plan["candidate"]["target_path"].endswith("pony_qwen3_8b_title_item_embs.npy")
     assert plan["candidate"]["expected_size_bytes"] == 5_662_687_360
     assert plan["candidate"]["expected_sha256"] == (
@@ -25,7 +34,13 @@ def test_retention_plan_defaults_to_non_executing_tools_embedding():
     )
     assert plan["candidate"]["classification"] == "NEEDS_APPROVAL_OR_ARCHIVE_DECISION"
     assert "fairness_provenance.json" in plan["candidate"]["provenance_sha256_source"]
-    assert "server_storage_phase2_5_retention_audit" in plan["candidate"]["retention_audit_source"]
+    assert plan["candidate"]["retention_audit_source"].endswith(
+        "server_storage_phase2_5_retention_audit_ranked_20260606.json"
+    )
+    assert plan["candidate"]["prior_retention_audit_source"].endswith(
+        "server_storage_phase2_5_retention_audit_20260605.json"
+    )
+    assert plan["expected_free_bytes_after_delete"] == 18_070_102_144
     assert plan["expected_to_clear_min_free_gate"] is True
     assert "APPROVE_DELETE_COMPLETED_TOOLS_LLM2REC_UPSTREAM_EMBEDDING_20260605" == plan["approval_token_required"]
 
@@ -33,7 +48,7 @@ def test_retention_plan_defaults_to_non_executing_tools_embedding():
 def test_retention_plan_records_required_guards_and_postconditions():
     plan = build_plan(
         candidate="tools_llm2rec_upstream_embedding",
-        current_free_bytes=12_342_779_904,
+        current_free_bytes=12_407_414_784,
         min_free_gib=15,
         output_dir="outputs/summary/paper_critical/retention_cleanup_plan",
         plan_id="test_plan",
@@ -52,7 +67,11 @@ def test_retention_plan_records_required_guards_and_postconditions():
     assert "Target sha256 matches expected_sha256 from provenance before deletion." in plan[
         "preconditions_before_removing_script_guard"
     ]
+    assert "The ranked retention audit recommendation is accepted for this exact target." in plan[
+        "preconditions_before_removing_script_guard"
+    ]
     assert "score_coverage_rate=1.0" in " ".join(plan["preconditions_before_removing_script_guard"])
+    assert "Deletion remains prohibited" in plan["approval_required_reminder"]
     assert "outputs/baselines/external_tasks/" in plan["protected_paths"]
     assert "/home/ajifang/models/Qwen/" in plan["protected_paths"]
     assert "outputs/*_same_candidate/*.pt" in plan["protected_paths"]
@@ -63,7 +82,7 @@ def test_retention_plan_records_required_guards_and_postconditions():
 def test_guarded_shell_exits_before_any_delete_or_manifest_command():
     plan = build_plan(
         candidate="tools_llm2rec_upstream_embedding",
-        current_free_bytes=12_342_779_904,
+        current_free_bytes=12_407_414_784,
         min_free_gib=15,
         output_dir="outputs/summary/paper_critical/retention_cleanup_plan",
         plan_id="test_plan",

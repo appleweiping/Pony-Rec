@@ -615,6 +615,17 @@ The repository is now in M5 (multi-domain SOTA validation):
   requires explicit archive/retention approval and the guarded manifest/gate
   sequence before deletion. Evidence:
   `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_ranked_20260606.{json,md,sha256}`.
+  The guarded retention plan was refreshed at 2026-06-06 00:30 CST under
+  `outputs/summary/paper_critical/retention_cleanup_plan_20260606/` so the
+  plan artifact directly cites the ranked audit, records
+  `recommended_by_ranked_audit=true`, risk tier
+  `approval_required_external_embedding_cache`, rank `20`, and expected
+  post-approval free space `18,070,102,144` bytes. The generated shell still
+  exits with `exit 2` before any manifest or delete command, and the JSON
+  remains `will_delete=false` / `requires_explicit_approval=true`. A fresh
+  read-only preflight before refresh found no matching project Python process,
+  GPU idle, and `/` at `12,407,390,208` free bytes / `94%` used. No deletion
+  was performed and no Phase 2.5 experiment was launched.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

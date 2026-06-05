@@ -13,6 +13,16 @@ DEFAULT_OUTPUT_DIR = "outputs/summary/paper_critical/retention_cleanup_plan"
 DEFAULT_REMOTE_PROJECT = "/home/ajifang/projects/pony-rec-rescue-shadow-v6"
 DEFAULT_MIN_FREE_GIB = 15
 BYTES_PER_GIB = 1024**3
+RANKED_RETENTION_AUDIT_SOURCE = (
+    "outputs/summary/paper_critical/"
+    "server_storage_phase2_5_retention_audit_ranked_20260606.json"
+)
+PRIOR_RETENTION_AUDIT_SOURCE = (
+    "outputs/summary/paper_critical/"
+    "server_storage_phase2_5_retention_audit_20260605.json"
+)
+RANKED_AUDIT_CURRENT_FREE_BYTES = 12_407_414_784
+RANKED_AUDIT_EXPECTED_FREE_AFTER_DELETE = 18_070_102_144
 
 
 RETENTION_CANDIDATES: dict[str, dict[str, Any]] = {
@@ -25,10 +35,15 @@ RETENTION_CANDIDATES: dict[str, dict[str, Any]] = {
         "method": "llm2rec_sasrec",
         "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
         "retention_decision_state": "preserve_by_default",
-        "retention_audit_source": (
-            "outputs/summary/paper_critical/"
-            "server_storage_phase2_5_retention_audit_20260605.json"
-        ),
+        "retention_audit_source": RANKED_RETENTION_AUDIT_SOURCE,
+        "ranked_retention_audit_source": RANKED_RETENTION_AUDIT_SOURCE,
+        "prior_retention_audit_source": PRIOR_RETENTION_AUDIT_SOURCE,
+        "recommended_by_ranked_audit": True,
+        "retention_risk_tier": "approval_required_external_embedding_cache",
+        "retention_risk_rank": 20,
+        "ranked_audit_current_free_bytes": RANKED_AUDIT_CURRENT_FREE_BYTES,
+        "ranked_audit_expected_free_bytes_after_delete": RANKED_AUDIT_EXPECTED_FREE_AFTER_DELETE,
+        "ranked_audit_would_clear_min_free_gate": True,
         "provenance_sha256_source": (
             "outputs/baselines/official_adapters/"
             "tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/"
@@ -38,7 +53,9 @@ RETENTION_CANDIDATES: dict[str, dict[str, Any]] = {
         "decision_rationale": (
             "This artifact is outside the final evidence directory and is referenced by the completed "
             "Tools LLM2Rec run summary. It can recover enough disk for Phase 2.5, but deletion must be "
-            "an explicit retention decision with sha256/size manifesting and post-delete gate checks."
+            "an explicit retention decision with sha256/size manifesting and post-delete gate checks. "
+            "The ranked read-only retention audit identifies it as the lowest-risk high-yield "
+            "approval-required candidate under the current policy."
         ),
         "protected_evidence_dir": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
         "local_evidence_dir": (
@@ -230,6 +247,20 @@ def build_plan(
         "requires_explicit_approval": True,
         "approval_token_required": approval_token,
         "retention_decision_state": item["retention_decision_state"],
+        "ranked_retention_audit_source": item["ranked_retention_audit_source"],
+        "recommended_by_ranked_audit": bool(item["recommended_by_ranked_audit"]),
+        "retention_risk_tier": item["retention_risk_tier"],
+        "retention_risk_rank": int(item["retention_risk_rank"]),
+        "ranked_audit_current_free_bytes": int(item["ranked_audit_current_free_bytes"]),
+        "ranked_audit_expected_free_bytes_after_delete": int(
+            item["ranked_audit_expected_free_bytes_after_delete"]
+        ),
+        "ranked_audit_would_clear_min_free_gate": bool(item["ranked_audit_would_clear_min_free_gate"]),
+        "approval_required_reminder": (
+            "This plan is a ranked decision surface only. Deletion remains prohibited until the user "
+            "approves this exact target, the approval token is set, pre-delete sha256/size manifests "
+            "are written, and post-delete domain/comparison gates pass."
+        ),
         "candidate": item,
         "remote_project": remote_project,
         "output_dir": output_dir,
@@ -248,6 +279,7 @@ def build_plan(
         "commands": commands,
         "preconditions_before_removing_script_guard": [
             "User explicitly approves this exact target and records the retention/archive decision.",
+            "The ranked retention audit recommendation is accepted for this exact target.",
             "User records that no cheap rerun/resume need depends on this embedding.",
             "No relevant Python experiment or matching baseline process is active.",
             "Target realpath exactly matches the plan target_path and size is at least expected_size_bytes.",

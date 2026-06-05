@@ -97,6 +97,24 @@ python scripts\audit\main_audit_phase2_5_storage_retention.py `
   --output_md outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260605.md
 ```
 
+If the audit recommends an approval-required artifact, generate a guarded
+planning artifact before any retention decision is acted on. The generated
+shell exits with `exit 2`; it is a decision surface, not an execution script:
+
+```powershell
+python scripts\audit\main_plan_phase2_5_retention_cleanup.py `
+  --candidate tools_llm2rec_upstream_embedding `
+  --current_free_bytes 12407414784 `
+  --output_dir outputs\summary\paper_critical\retention_cleanup_plan_20260606 `
+  --plan_id tools_llm2rec_upstream_embedding_ranked_retention_cleanup_plan_20260606
+```
+
+The 2026-06-06 ranked plan artifact records the completed Tools LLM2Rec
+upstream embedding as `recommended_by_ranked_audit=true` with risk tier
+`approval_required_external_embedding_cache`, but deletion still requires an
+explicit archive/retention approval, exact sha256/size manifesting, and
+post-delete domain/comparison gates.
+
 For active official-baseline rows, prefer the local robust SSH-stdin monitor
 when the current local checkout has newer audit helpers than the server:
 
