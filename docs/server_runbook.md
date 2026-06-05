@@ -77,6 +77,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_local_server_evidence_consistency.py` | Local-only consistency audit comparing lightweight evidence packages against copied server large-artifact manifests; catches missing local files and accidental local bulk artifacts |
 | `scripts/audit/main_audit_paper_critical_modules.py` | Local paper-critical go/no-go audit; integrates signal-row readiness, guarded plan, framework figure, component inventory, observation/component/hyperparameter execution support, four-domain evidence consistency, and the current Phase 2.5 storage gate when artifact paths are supplied |
 | `scripts/audit/main_audit_phase2_5_module_package.py` | Local-only package audit for completed Phase 2.5 observation, component-ablation, and hyperparameter modules; enforces command/log/config/hash/row-count/plot/provenance/local-server evidence before paper claims |
+| `scripts/audit/main_sync_ccrp_signal_evidence_package.py` | Copies and audits completed Phase 2.5 C-CRP signal-row packages from pony-rec-gpu; verifies local/server size and sha256, row counts, provenance counts, parse-failure rate, and source-audit candidate-key coverage |
 | `scripts/audit/main_plan_ccrp_signal_generation.py` | Guarded, non-executing Phase 2.5 C-CRP signal-row plan; records discovery, source audit, validation selection, component-ablation summary, observation, hyperparameter, and module-package audit commands while generated shell exits before execution |
 | `scripts/analysis/main_build_ccrp_component_ablation_summary.py` | Builds the paper-critical C-CRP leave-one-component-out summary from a frozen validation-selected selector package; writes summary/provenance/figures and fails closed on missing validation metadata, non-full score mode by default, missing ablations, coverage, or audit failures |
 | `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` | Local-only audit for a Phase 2.5 retention decision packet; verifies the plan, shell guard, markdown memo, sha256 manifest, and storage-audit target agreement without SSH or deletion |
@@ -463,6 +464,27 @@ copies final and inspect provenance, score audits, run summaries, imported
 `scores.csv`, `predictions/`, checkpoints, embeddings, and other large binary
 artifacts by default, so those remain server-side unless a separate archive
 decision is recorded.
+
+For completed Phase 2.5 C-CRP signal-row packages, first run the source audit on
+the server against the matching split's `candidate_items.csv`, then sync the
+signal package locally with the dedicated helper:
+
+```powershell
+python scripts\audit\main_sync_ccrp_signal_evidence_package.py `
+  --remote_signal_dir outputs/summary/paper_critical/<PLAN>/ccrp_signal_rows_<domain> `
+  --remote_extra_file ccrp_signal_rows_<domain>_<split>_<timestamp>.log `
+  --local_package_dir outputs\summary\paper_critical\<PLAN>\ccrp_signal_rows_<domain> `
+  --copy `
+  --quiet
+```
+
+The helper intentionally treats `*_ccrp_signal_rows.csv` as primary Phase 2.5
+evidence rather than disposable bulk output. It still enforces a size ceiling,
+records excluded files, verifies copied file hashes, and writes
+`signal_evidence_sync_manifest.json` plus
+`signal_evidence_package_audit.json`. A package is not selector-, observation-,
+ablation-, or hyperparameter-eligible unless the source audit and package audit
+both pass.
 
 If disk pressure threatens the next active row after `server_final` and
 `local_light` audits have passed, a completed row's

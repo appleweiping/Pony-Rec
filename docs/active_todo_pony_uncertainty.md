@@ -3154,6 +3154,27 @@ against the Sports valid `candidate_items.csv` before selector use; do not use
 test, observation, ablation, or hyperparameter modules until their own gates
 pass.
 
+Phase 2.5 signal-row local packaging hardening: at the 2026-06-06 07:40 CST
+monitor, Sports valid signal-row PID `3543564` was still the only matching
+process, GPU was active at `94%` with `42863 MiB / 49140 MiB`, `/` had
+`25,982,668,800` bytes free / `87%` used, fatal log scan remained clean, and
+the first chunk had reached `25149/505000` processed prompts. No final
+`valid_ccrp_signal_rows.csv` or provenance file existed yet. While waiting,
+Codex added `scripts/audit/main_sync_ccrp_signal_evidence_package.py`, a
+dedicated post-completion local sync/package audit helper for Phase 2.5 signal
+rows. It copies allowed signal evidence from pony-rec-gpu, treats
+`*_ccrp_signal_rows.csv` as primary evidence with a size ceiling, verifies
+server/local size and sha256, and writes `signal_evidence_sync_manifest.json`
+plus `signal_evidence_package_audit.json`. The audit checks row counts,
+provenance counts, parse-failure rate, source-audit candidate-key coverage,
+and hash evidence before any selector/observation/ablation/hyperparameter use.
+Focused verification passed:
+`python -m pytest tests\test_sync_ccrp_signal_evidence_package.py tests\test_ccrp_v3_signal_rows_runner.py tests\test_ccrp_uncertainty_source_audit.py tests\test_audit_phase2_5_module_package.py -q`
+(`40 passed`) and
+`python -m py_compile scripts\audit\main_sync_ccrp_signal_evidence_package.py scripts\audit\main_audit_ccrp_uncertainty_sources.py experiments\rsc\run_ccrp_v3_signal_rows.py`.
+No server process was stopped, no new experiment was launched, and the running
+valid-split job remains not paper-ready until completion and audits pass.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory

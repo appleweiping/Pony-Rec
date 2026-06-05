@@ -178,6 +178,20 @@ completion, the valid signal rows must pass candidate-key coverage/provenance
 audit against Sports valid `candidate_items.csv` before any selector,
 observation, ablation, hyperparameter, or test use.
 
+At the 2026-06-06 07:40 CST monitor, the Sports valid signal-row job was still
+active and unique under PID `3543564`; GPU was active, root disk was safe at
+`25,982,668,800` bytes free / `87%` used, fatal scan was clean, and the first
+chunk had reached `25149/505000` processed prompts with no final output files
+yet. During this wait, Codex added
+`scripts/audit/main_sync_ccrp_signal_evidence_package.py` plus
+`tests/test_sync_ccrp_signal_evidence_package.py` to make the post-completion
+local package path explicit. The helper copies Phase 2.5 signal evidence from
+pony-rec-gpu, verifies server/local hashes, and audits signal row counts,
+provenance, parse failures, source-audit candidate-key coverage, and local
+hash evidence before selector/observation/ablation/hyperparameter consumption.
+Focused verification passed with `40 passed`; no experiment was stopped or
+launched, and the running valid-split row is still not paper-ready evidence.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test

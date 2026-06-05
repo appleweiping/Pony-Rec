@@ -147,6 +147,21 @@ also include:
     source audit against the Sports valid `candidate_items.csv` before selector
     use; test/observation/ablation/hyperparameter use remains blocked until the
     relevant gates pass.
+    Packaging hardening while the row is active: at the 2026-06-06 07:40 CST
+    monitor, PID `3543564` was still unique and healthy, GPU was `94%`,
+    root disk had `25,982,668,800` bytes free / `87%` used, fatal log scan was
+    clean, and the first chunk had reached `25149/505000` processed prompts.
+    Codex added `scripts/audit/main_sync_ccrp_signal_evidence_package.py` so
+    completed signal rows are synced into a local lightweight-but-complete
+    package with server/local sha256 checks, row-count/provenance checks,
+    parse-failure checks, and source-audit candidate-key coverage checks before
+    any paper-critical module consumes them. Verification passed with
+    `tests\test_sync_ccrp_signal_evidence_package.py`,
+    `tests\test_ccrp_v3_signal_rows_runner.py`, and
+    `tests\test_ccrp_uncertainty_source_audit.py`, plus the Phase 2.5 module
+    package auditor tests (`40 passed`). This changes packaging discipline
+    only; it does not mark the running signal row complete and does not create
+    paper-ready evidence.
     Paper-facing comparison ledger checkpoint on 2026-06-06 02:35-02:40 CST:
     a GPT-5.5 xhigh read-only sidecar reviewer confirmed the compact
     four-domain comparison certificate was supported but lacked a strict
