@@ -495,6 +495,23 @@ The repository is now in M5 (multi-domain SOTA validation):
   adapter metadata were preserved; disk recovered to `11,772,899,328` bytes
   free / `95%` used. Tools is now 7/8 official rows gated; the remaining row
   is `llmesr_sasrec`.
+  After a fresh no-process/GPU/disk/duplicate-output preflight, the final Tools
+  official row `llmesr_sasrec` launched at 2026-06-05 18:52 CST with runner PID
+  `3440278`, adapter PID `3440287`, log
+  `baselines_new_domains_tools_llmesr_20260605_185250.log`, pidfile
+  `outputs/summary/tools_llmesr_launch_20260605_185250.pid`, launch snapshot
+  `outputs/summary/tools_llmesr_launch_monitor_20260605_185250.json`, and
+  heartbeat `monitor-tools-llm-esr`. The 18:57 CST stable follow-up showed
+  exactly one LLM-ESR adapter process, no training child yet, GPU `99%` /
+  `16091 MiB`, embedding progress about `11288/269711`, no failure markers,
+  final output placeholder-only, and adapter dir about `1005M`. Because adapter
+  staging pushed disk below the strict 10 GiB guard, only non-project caches
+  were cleaned (`.cache`, `.codex/.tmp`, Chrome GPU cache, and inactive
+  `.cursor-server/bin` after verifying no Cursor process). No project evidence,
+  checkpoints, embeddings, task splits, configs, or other project files were
+  deleted. Cache-cleanup record:
+  `outputs/summary/tools_llmesr_launch_cache_cleanup_20260605.txt`.
+  Post-cleanup disk was `10,866,053,120` bytes free / `95%` used.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

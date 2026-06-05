@@ -1,0 +1,13 @@
+{
+  "launch_time_cst": "2026-06-05 18:52:56 CST",
+  "domain": "tools",
+  "method": "llmesr_sasrec",
+  "runner_pid": 3440278,
+  "log": "baselines_new_domains_tools_llmesr_20260605_185250.log",
+  "pidfile": "outputs/summary/tools_llmesr_launch_20260605_185250.pid",
+  "ps": "    PID    PPID STAT     ELAPSED CMD\n3440278 3440272 S          00:06 bash scripts/run_baselines_new_domains.sh\n",
+  "matching_python": "3440287 3440278 R          00:06 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_llmesr_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto\n",
+  "disk": "文件系统        大小  已用  可用 已用% 挂载点\n/dev/vda5       196G  175G   11G   95% /\n/dev/vda5      209709965312 187335749632 11647021056   95% /\n",
+  "gpu": "0, 15\n",
+  "log_tail": "[2026-06-05 18:52:50] === Starting baseline runs on new domains ===\n[2026-06-05 18:52:50] Python: /home/ajifang/miniconda3/bin/python\n[2026-06-05 18:52:50] Domains: tools\n[2026-06-05 18:52:50] Fast methods: \n[2026-06-05 18:52:50] Training methods: llmesr_sasrec\n[2026-06-05 18:52:50] START llmesr_sasrec on tools\n"
+}

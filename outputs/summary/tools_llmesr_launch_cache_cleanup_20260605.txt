@@ -1,0 +1,6 @@
+=== before ===
+/dev/vda5      209709965312 188336812032 10645958656   95% /
+323M	/home/ajifang/.cursor-server/bin
+=== after ===
+/dev/vda5      209709965312 187998797824 10983972864   95% /
+21M	/home/ajifang/.cursor-server

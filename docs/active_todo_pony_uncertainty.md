@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 18:46 CST
+Last updated: 2026-06-05 18:57 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2260,12 +2260,43 @@ removed total size `1,100,523,516` bytes. Post-cleanup disk is
 rechecked: `scores.csv` `1,010,001` lines, `ranking_eval_records.csv`
 `10,001` lines, provenance and score audit present.
 
+Tools LLM-ESR launch checkpoint: after Tools LLM2Rec gates and cleanup, a fresh
+process/GPU/disk/duplicate-output preflight at 2026-06-05 18:52 CST found no
+active experiment Python process, GPU idle, disk `11,647,037,440` bytes free /
+`95%` used, and no existing Tools LLM-ESR output or adapter directory. Exactly
+one final Tools row was launched with:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=llmesr_sasrec bash scripts/run_baselines_new_domains.sh > baselines_new_domains_tools_llmesr_20260605_185250.log 2>&1 &
+```
+
+Runner PID is `3440278`, adapter PID is `3440287`, log is
+`baselines_new_domains_tools_llmesr_20260605_185250.log`, pidfile is
+`outputs/summary/tools_llmesr_launch_20260605_185250.pid`, launch snapshot is
+`outputs/summary/tools_llmesr_launch_monitor_20260605_185250.json`, and
+heartbeat is `monitor-tools-llm-esr`. A stable 18:57 CST follow-up confirmed
+the runner and adapter were alive, duplicate counts were exactly one LLM-ESR
+adapter and zero `ToolsSameCandidate100Neg` training child, GPU was active at
+`99%` / `16091 MiB`, embedding progress had reached about `11288/269711`, no
+completion/failure/OOM/no-space markers were present, the final output
+directory was placeholder-only, and the adapter directory was about `1005M`.
+Because adapter staging pushed disk below the strict 10 GiB guard, only
+non-project caches were cleaned: `.cache`, `.codex/.tmp`, Google Chrome GPU
+cache, and inactive `.cursor-server/bin` after verifying no Cursor process.
+No project outputs, evidence, checkpoints, embeddings, task splits, source
+code, configs, or other project files were deleted. Cache-cleanup record:
+`outputs/summary/tools_llmesr_launch_cache_cleanup_20260605.txt`. Post-cleanup
+disk was `10,866,053,120` bytes free / `95%` used at the 18:57 follow-up.
+
 ## Required Next Actions
 
-1. Tools `llm2rec_sasrec` is now official-completed and gated. Before launching
-   the last Tools row (`llmesr_sasrec`), run a fresh process/GPU/disk preflight,
-   verify no active baseline process and no duplicate output risk, and confirm
-   disk margin is acceptable for another storage-heavy SASRec-style row.
+1. Monitor the active Tools `llmesr_sasrec` row: runner PID `3440278`, adapter
+   PID `3440287`, log `baselines_new_domains_tools_llmesr_20260605_185250.log`,
+   pidfile `outputs/summary/tools_llmesr_launch_20260605_185250.pid`, launch
+   snapshot `outputs/summary/tools_llmesr_launch_monitor_20260605_185250.json`,
+   heartbeat `monitor-tools-llm-esr`. Notify on completion, failure, duplicate
+   process, dead tracked PID, disk below `10G` free, or disk at/above `97%`
+   used. Do not start another baseline while this row is active.
 2. After the remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
