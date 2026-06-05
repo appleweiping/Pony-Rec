@@ -70,6 +70,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_local_server_evidence_consistency.py` | Local-only consistency audit comparing lightweight evidence packages against copied server large-artifact manifests; catches missing local files and accidental local bulk artifacts |
 | `scripts/audit/main_audit_paper_critical_modules.py` | Local paper-critical go/no-go audit; integrates signal-row readiness, guarded plan, framework figure, component inventory, four-domain evidence consistency, and the current Phase 2.5 storage gate when artifact paths are supplied |
 | `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` | Local-only audit for a Phase 2.5 retention decision packet; verifies the plan, shell guard, markdown memo, sha256 manifest, and storage-audit target agreement without SSH or deletion |
+| `scripts/audit/main_execute_phase2_5_retention_cleanup.py` | Fail-closed retention cleanup action renderer/executor; defaults to dry-run, validates the plan, packet audit, and live preapproval audit, and requires `--execute` plus the exact approval token before any remote command runs |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring
@@ -167,6 +168,26 @@ sha256 match, row provenance is `official_completed` with `blockers=[]` and
 `score_coverage_rate=1.0`, and server-final evidence remains `ok=true`. Its
 only failure is `disk_below_min_free_before_cleanup`, which is the condition the
 approved cleanup would address.
+
+Before executing any approved cleanup, render the guarded action in dry-run mode
+against the latest plan, packet audit, and live preapproval audit:
+
+```powershell
+python scripts\audit\main_execute_phase2_5_retention_cleanup.py `
+  --plan_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.json `
+  --packet_audit_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.json `
+  --preapproval_audit_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0225.json `
+  --output_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.json `
+  --output_md outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.md
+```
+
+The 2026-06-06 02:25 CST dry-run action reports `ok=true`,
+`will_delete=false`, and `execution_status=dry_run_no_remote_commands`. Execute
+mode is only allowed after explicit archive/retention approval for the exact
+target, with `--execute --approval_token <exact token>`, and still performs the
+ordered pre-delete manifest, exact-target delete, disk check, domain gate, and
+comparison gate sequence. Do not use execute mode merely because the dry-run
+passes.
 
 After local-light packages are copied, run a local/server evidence consistency
 audit over the completed domain before relying on the package for later paper

@@ -277,6 +277,18 @@ also include:
     `blockers=[]` and `score_coverage_rate=1.0`, and server-final evidence is
     `ok=true` with scores, prediction, and ranking eval records present. This
     strengthens the approval surface but still does not authorize deletion.
+    Guarded cleanup dry-run action on 2026-06-06 02:25 CST:
+    `scripts/audit/main_execute_phase2_5_retention_cleanup.py` validates the
+    retention plan, packet audit, and a fresh live preapproval audit before
+    rendering the ordered cleanup steps. Fresh artifacts:
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0225.{json,md}`,
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.{json,md}`,
+    and
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.sha256`.
+    The action artifact reports `mode=dry_run`, `ok=true`,
+    `will_delete=false`, and
+    `execution_status=dry_run_no_remote_commands`. No cleanup command was
+    executed, no artifact was deleted, and no experiment was launched.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

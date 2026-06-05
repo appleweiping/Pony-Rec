@@ -103,6 +103,12 @@ The live read-only pre-approval audit
 `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0212.{json,md,sha256}`
 then verifies the current server target size/hash and completed-row evidence;
 its only failure is the expected `disk_below_min_free_before_cleanup`.
+The follow-up guarded action dry-run
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.{json,md,sha256}`
+validates the plan, packet audit, and a fresh 02:25 live preapproval audit, but
+reports `will_delete=false` and
+`execution_status=dry_run_no_remote_commands`. No cleanup or experiment launch
+occurred.
 
 ## Stable Agent Roles
 

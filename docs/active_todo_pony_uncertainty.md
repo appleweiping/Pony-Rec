@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 00:50 CST
+Last updated: 2026-06-06 02:25 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2726,6 +2726,21 @@ prediction, and ranking eval records present. This is still not approval to
 delete; it proves the approval packet is live-state consistent except for the
 disk condition it is meant to resolve.
 
+Guarded cleanup dry-run action: at 2026-06-06 02:25 CST, a fresh server
+preflight again found no matching project Python process, GPU idle, and `/` at
+about `12.41GB` free / `94%` used. Codex added
+`scripts/audit/main_execute_phase2_5_retention_cleanup.py`, which validates the
+02:00 plan, the 02:05 packet audit, and a fresh 02:25 live preapproval audit
+before rendering the ordered cleanup steps. Default mode is dry-run and runs no
+remote command. Current artifacts:
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0225.{json,md}`,
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.{json,md}`,
+and
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_cleanup_action_dry_run_20260606_0225.sha256`.
+The dry-run reports `ok=true`, `will_delete=false`, and
+`execution_status=dry_run_no_remote_commands`; no deletion, manifesting,
+post-delete gate run, or experiment launch occurred.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -2742,10 +2757,11 @@ disk condition it is meant to resolve.
 4. Before any new server work, run a fresh process/GPU/disk preflight. Current
    disk remains around `12.41GB` free / `94%` used and below the Phase 2.5
    launch floor. Either expand disk or make an explicit archive/retention
-   decision for the audited lowest-risk high-yield candidate before signal-row
-   regeneration. Preserve scores, provenance, audits, imported tables, C-CRP raw
-   reports/ranks, checkpoints/models, and embeddings unless a separate archive
-   decision explicitly allows deletion.
+   decision for the audited lowest-risk high-yield candidate, then use the
+   guarded action script only with `--execute` and the exact approval token.
+   Preserve scores, provenance, audits, imported tables, C-CRP raw reports/ranks,
+   checkpoints/models, and embeddings unless a separate archive decision
+   explicitly allows deletion.
 5. Only after comparisons, paper-critical modules, provenance, statistical
    tests, and figure checks are complete, move to ARIS paper writing and
    GPT-5.5/Codex xhigh review. The review loop must reach at least 8/10 before
