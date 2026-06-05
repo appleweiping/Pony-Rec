@@ -527,6 +527,19 @@ same-candidate tests before any paper-wide SOTA claim.
    active RLMRec intermediates, protected task splits, retained completed
    checkpoints/evidence, or historical C-CRP/fusion summaries. This remains
    active monitor-only evidence, not a completed RLMRec row.
+   A 2026-06-05 11:49 CST follow-up found the same runner/adapter PIDs alive
+   and unique, with official RLMRec training past the five-sixths monitor
+   checkpoint at epoch `2610/3000`; the epoch `2600` loss was `1.505511` and
+   the latest epoch `2610` loss was `1.504630`. Final RLMRec evidence still
+   remained placeholder-only (`4.0K`) with no final scores, provenance, score
+   audit, imported tables, predictions, completion marker, OOM/no-space,
+   killed, traceback, or error marker. Disk remained warning-level at about
+   `9.3G` free / `96%` used; a repeat large-file/cache/temp/archive and
+   prediction cleanup audit found no safe deletion target because visible
+   reclaimable candidates were active RLMRec intermediates, protected task
+   splits, retained completed checkpoints/evidence, or the legacy Electronics
+   ELMRec prediction JSONL without server-final/local-light deletion proof.
+   This remains active monitor-only evidence, not a completed RLMRec row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

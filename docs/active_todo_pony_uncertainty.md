@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 08:01 CST
+Last updated: 2026-06-05 11:49 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1811,6 +1811,23 @@ protected task splits, retained completed checkpoints/evidence, or historical
 C-CRP/fusion summaries that are not disposable without a separate archive
 decision. Continue monitoring; do not start another Tools row while RLMRec is
 active.
+
+Monitor update 2026-06-05 11:49 CST: runner PID `3347729` and adapter PID
+`3347738` remained alive and unique, with exactly one matching RLMRec adapter
+process and zero matching IRLLRec/LLM2Rec/LLM-ESR adapter processes. Official
+RLMRec training crossed the five-sixths monitor checkpoint on the default
+`3000`-epoch path: latest observed epoch `2610/3000` had train loss
+`1.504630`, after epoch `2600` loss `1.505511`. This remains active
+monitor-only evidence, not a completed or table-eligible row: final RLMRec
+evidence stayed placeholder-only (`4.0K`) with no final scores, provenance,
+score audit, imported tables, predictions, completion marker, OOM/no-space,
+killed, traceback, or error marker. Disk remained warning-level at about
+`9.3G` free / `96%` used. A repeat cleanup audit found no safe deletion target:
+caches/tmp were small, no temp/archive/part/core files were present, and the
+largest files were active RLMRec intermediates, protected task splits, retained
+completed checkpoints/evidence, or the legacy Electronics ELMRec prediction
+JSONL without server-final/local-light deletion proof. Continue monitoring; do
+not start another Tools row while RLMRec is active.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
