@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 05:05 CST
+Last updated: 2026-06-06 05:18 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2950,6 +2950,21 @@ reports `ok=true`, `framework_overview_scaffold_ready=true`, framework status
 `review_ready`, and `paper_ready=false` because full-scale signal rows remain
 missing and the Phase 2.5 storage gate is still closed. No cleanup, deletion,
 experiment launch, or baseline launch occurred.
+
+Framework overclaim guard hardening: at 2026-06-06 05:18 CST, Codex used a
+GPT-5.5 xhigh sidecar audit to extend
+`scripts/audit/main_audit_paper_critical_modules.py` so the consolidated module
+audit fails closed if the framework caption, SVG, provenance caption,
+provenance claim limits, or `evidence_gate_status` imply the observation,
+component-ablation, or hyperparameter modules are complete. New regression
+coverage in `tests/test_audit_paper_critical_modules.py` checks caption
+overclaim, SVG overclaim, claim-limit removal, and gate-status mismatch.
+Fresh audit artifact:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_framework_overclaim_guards_20260606_0518.{json,md,sha256}`.
+It reports `ok=true`, framework status `review_ready`, empty framework
+blockers, `paper_ready=false`, `signal_rows_available=false`, and
+`phase2_5_storage_launch_allowed=false`. This is audit hardening only; no
+cleanup, deletion, experiment launch, or baseline launch occurred.
 
 ## Required Next Actions
 

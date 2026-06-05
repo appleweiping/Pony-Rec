@@ -176,6 +176,16 @@ passes with framework status `review_ready` but keeps `paper_ready=false`
 because signal rows and storage remain blocked. No experiment or cleanup was
 run.
 
+The 2026-06-06 05:18 CST framework overclaim guard hardening extended the
+consolidated paper-critical audit so the framework figure cannot pass if its
+caption, SVG text, provenance caption, claim limits, or `evidence_gate_status`
+claim that the still-blocked observation, component-ablation, or hyperparameter
+modules are complete. Fresh audit artifact:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_framework_overclaim_guards_20260606_0518.{json,md,sha256}`.
+It passes with framework status `review_ready` while preserving
+`paper_ready=false`, `signal_rows_available=false`, and
+`phase2_5_storage_launch_allowed=false`.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter

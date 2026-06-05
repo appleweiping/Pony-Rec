@@ -525,6 +525,20 @@ observation, component-ablation, and hyperparameter modules still require
 full-scale uncertainty signal rows and the storage gate remains closed. No
 experiment or cleanup was run.
 
+Framework overclaim guard hardening on 2026-06-06 05:18 CST: the consolidated
+paper-critical module audit now enforces that the framework overview does not
+claim completion of the still-blocked observation/motivation,
+component-ablation, or hyperparameter modules. It checks required caption and
+SVG phrases, forbids completion wording in those fields, verifies the
+provenance caption matches the caption file, requires the
+`Does not make observation, ablation, or hyperparameter evidence complete.`
+claim limit, and requires every `evidence_gate_status` entry to be
+`required_not_claimed_by_figure`. Fresh artifact:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_framework_overclaim_guards_20260606_0518.{json,md,sha256}`.
+The audit remains `ok=true` for the framework package while preserving
+`paper_ready=false` because signal rows and the Phase 2.5 storage gate are
+still blocked. No experiment or cleanup was run.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 
