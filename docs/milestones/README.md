@@ -398,6 +398,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   `[hf_mean_pool] encoded 3888/345622`, GPU about `95%` / `16089 MiB`, adapter
   dir `1.1G`, final output placeholder-only, and disk about `12G` free / `94%`
   used. This is active monitor-only evidence, not a completed row.
+  A 2026-06-05 13:57 CST follow-up found the same runner/adapter alive, cleared
+  three stale diagnostic grep/bash processes that were creating false duplicate
+  matches, and observed embedding progress around
+  `[hf_mean_pool] encoded 53296/345622`; disk remained about `12G` free / `94%`
+  used and no failure/completion marker was present. Snapshot:
+  `outputs/summary/tools_llm2rec_monitor_checkpoint_20260605_1355.json`.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

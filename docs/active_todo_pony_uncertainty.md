@@ -1915,6 +1915,21 @@ evidence, not a completed or table-eligible row. Do not start another baseline
 while this row is active; alert if disk falls below `10G` free or reaches
 `97%` used.
 
+Tools LLM2Rec monitor checkpoint 2026-06-05 13:57 CST: runner PID `3413921`
+and adapter PID `3413930` remained alive. A duplicate-process audit initially
+matched three stale shell diagnostics from earlier grep/find checks
+(`3412219/3412220`, `3413516/3413517`, `3413819/3413820`); after verifying via
+`ps`/`pstree` that they were abandoned diagnostics and not experiment
+processes, those six stale diagnostic PIDs were killed to avoid false duplicate
+alerts. Exactly one real LLM2Rec adapter process remained. The active log
+showed Qwen3 embedding progress around `[hf_mean_pool] encoded 53296/345622`,
+with no `Traceback`, OOM, no-space, killed, exact-one-positive, completion, or
+blocked markers. GPU was about `95%` / `16199 MiB`, adapter dir `1.1G`, final
+output placeholder-only, and disk `12G` free / `94%` used
+(`12,711,534,592` bytes free). Snapshot:
+`outputs/summary/tools_llm2rec_monitor_checkpoint_20260605_1355.json`. This is
+still active monitor-only evidence.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,

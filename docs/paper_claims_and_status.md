@@ -591,6 +591,12 @@ claim.
    `16089 MiB`, adapter directory `1.1G`, final output placeholder-only, and
    disk about `12G` free / `94%` used. This is active monitor-only evidence,
    not a completed or table-eligible row.
+   A 2026-06-05 13:57 CST follow-up found the same runner/adapter alive, cleared
+   three stale diagnostic grep/bash processes that were causing false duplicate
+   matches, and observed Qwen3 embedding progress around
+   `[hf_mean_pool] encoded 53296/345622`; disk remained about `12G` free /
+   `94%` used and no failure/completion marker was present. Snapshot:
+   `outputs/summary/tools_llm2rec_monitor_checkpoint_20260605_1355.json`.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
