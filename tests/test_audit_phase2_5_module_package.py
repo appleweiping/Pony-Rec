@@ -21,6 +21,7 @@ ABLATIONS = (
     "without_counterevidence",
     "without_risk_penalty",
 )
+TEST_SHA256 = "a" * 64
 
 
 def _write(path: Path, text: str) -> Path:
@@ -46,7 +47,15 @@ def _general_files(root: Path) -> None:
                 {
                     "path": "tables/ranking_metrics.csv",
                     "ok": True,
-                    "files": {"tables/ranking_metrics.csv": {"present": True, "size": 10}},
+                    "local_sha256": TEST_SHA256,
+                    "server_sha256": TEST_SHA256,
+                    "files": {
+                        "tables/ranking_metrics.csv": {
+                            "ok": True,
+                            "local_sha256": TEST_SHA256,
+                            "server_sha256": TEST_SHA256,
+                        }
+                    },
                 }
             ],
         },
@@ -104,6 +113,52 @@ def _metric_values(prefix: list[object]) -> list[object]:
 
 def test_observation_package_audit_accepts_complete_package(tmp_path):
     _complete_observation_package(tmp_path)
+
+    audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is True
+    assert audit["paper_claim_ready"] is True
+
+
+def test_observation_package_audit_rejects_vague_manifest_comparison(tmp_path):
+    _complete_observation_package(tmp_path)
+    _json(
+        tmp_path / "local_server_manifest_comparison.json",
+        {
+            "ok": True,
+            "row_count": 1,
+            "ok_count": 1,
+            "rows": [
+                {
+                    "path": "tables/ranking_metrics.csv",
+                    "ok": True,
+                    "files": {"tables/ranking_metrics.csv": {"present": True, "size": 10}},
+                }
+            ],
+        },
+    )
+
+    audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "local_server_manifest_comparison_lacks_evidence:local_server_manifest_comparison.json" in audit["failures"]
+
+
+def test_observation_package_audit_accepts_manifest_check_hash_equality(tmp_path):
+    _complete_observation_package(tmp_path)
+    _json(
+        tmp_path / "local_server_manifest_comparison.json",
+        {
+            "ok": True,
+            "manifest_checks": {
+                "ranking_metrics.csv": {
+                    "expected": TEST_SHA256,
+                    "actual": TEST_SHA256,
+                    "ok": True,
+                }
+            },
+        },
+    )
 
     audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
 

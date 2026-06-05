@@ -6,6 +6,7 @@ import json
 from datetime import datetime, timezone
 import math
 from pathlib import Path
+import re
 from typing import Any
 
 
@@ -35,6 +36,35 @@ SERVER_COMPARISON_FILES = (
 CONFIG_FILES = ("config.json", "run_config.json", "selected_valid_config.json", "selected_hyperparameters.json")
 DEFAULT_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
 SEED_KEYS = ("seed", "seeds", "random_seed", "random_seeds", "seed_list")
+SHA256_HEX_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+HASH_EQUALITY_PAIRS = (
+    ("local_sha256", "server_sha256"),
+    ("local_hash", "server_hash"),
+    ("local_digest", "server_digest"),
+    ("expected_sha256", "actual_sha256"),
+    ("expected_hash", "actual_hash"),
+    ("expected_digest", "actual_digest"),
+    ("expected", "actual"),
+)
+FILE_IDENTITY_KEYS = (
+    "path",
+    "rel_path",
+    "relative_path",
+    "file",
+    "file_path",
+    "name",
+    "local_path",
+    "server_path",
+)
+HASH_EVIDENCE_CONTAINER_KEYS = {
+    "checked_files",
+    "files",
+    "manifest_checks",
+    "rows",
+    "artifacts",
+    "light_sync_manifest",
+    "server_large_artifact_manifest",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -204,26 +234,60 @@ def _scan_log_snippets(base: Path, failures: list[str]) -> None:
                 failures.append(f"log_snippet_contains_failure_marker:{name}:{marker}")
 
 
-def _comparison_has_substance(comparison: dict[str, Any]) -> bool:
-    checked_files = comparison.get("checked_files")
-    if isinstance(checked_files, list) and any(row.get("sha256") or row.get("sha256_ok") for row in checked_files if isinstance(row, dict)):
-        return True
-    files = comparison.get("files")
-    if isinstance(files, dict) and files:
-        return True
-    manifest_checks = comparison.get("manifest_checks")
-    if isinstance(manifest_checks, dict) and any(isinstance(row, dict) and row.get("ok") for row in manifest_checks.values()):
-        return True
-    rows = comparison.get("rows")
-    if isinstance(rows, list):
-        for row in rows:
-            if not isinstance(row, dict):
-                continue
-            if row.get("files") or row.get("light_sync_manifest") or row.get("server_large_artifact_manifest"):
-                return True
-    if int(comparison.get("row_count") or 0) > 0 and int(comparison.get("ok_count") or 0) > 0 and files:
+def _clean_sha256(value: Any) -> str:
+    text = str(value or "").strip()
+    if SHA256_HEX_RE.fullmatch(text):
+        return text.lower()
+    return ""
+
+
+def _record_status_allows(record: dict[str, Any]) -> bool:
+    for key in ("ok", "sha256_ok", "hash_ok", "size_ok", "present", "exists", "local_present", "server_present"):
+        if key in record and not _as_bool(record.get(key)):
+            return False
+    return True
+
+
+def _has_file_identity(record: dict[str, Any]) -> bool:
+    return any(str(record.get(key, "")).strip() for key in FILE_IDENTITY_KEYS)
+
+
+def _record_has_hash_evidence(record: dict[str, Any]) -> bool:
+    if not _record_status_allows(record) or not _has_file_identity(record):
+        return False
+    for left_key, right_key in HASH_EQUALITY_PAIRS:
+        left_hash = _clean_sha256(record.get(left_key))
+        right_hash = _clean_sha256(record.get(right_key))
+        if left_hash and left_hash == right_hash:
+            return True
+    sha256 = _clean_sha256(record.get("sha256"))
+    if sha256 and (_as_bool(record.get("sha256_ok")) or _as_bool(record.get("hash_ok"))):
         return True
     return False
+
+
+def _node_has_hash_evidence(value: Any, *, inherited_path: str = "") -> bool:
+    if isinstance(value, list):
+        return any(_node_has_hash_evidence(item, inherited_path=inherited_path) for item in value)
+    if not isinstance(value, dict):
+        return False
+
+    record = dict(value)
+    if inherited_path and not _has_file_identity(record):
+        record["rel_path"] = inherited_path
+    if _record_has_hash_evidence(record):
+        return True
+
+    for key, child in value.items():
+        key_text = str(key)
+        child_path = "" if key_text in HASH_EVIDENCE_CONTAINER_KEYS else key_text
+        if _node_has_hash_evidence(child, inherited_path=child_path):
+            return True
+    return False
+
+
+def _comparison_has_substance(comparison: dict[str, Any]) -> bool:
+    return _node_has_hash_evidence(comparison)
 
 
 def _check_general_package(base: Path, provenance: dict[str, Any], failures: list[str], warnings: list[str]) -> None:

@@ -4,6 +4,9 @@ from scripts.analysis.main_build_ccrp_component_ablation_summary import build_co
 from scripts.audit.main_audit_phase2_5_module_package import build_audit
 
 
+TEST_SHA256 = "a" * 64
+
+
 def _write(path, text):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
@@ -80,7 +83,21 @@ def _seed_package_audit_extras(root):
             "ok": True,
             "row_count": 1,
             "ok_count": 1,
-            "rows": [{"files": {"tables/ranking_metrics.csv": {"present": True, "size": 10}}}],
+            "rows": [
+                {
+                    "path": "tables/ranking_metrics.csv",
+                    "ok": True,
+                    "local_sha256": TEST_SHA256,
+                    "server_sha256": TEST_SHA256,
+                    "files": {
+                        "tables/ranking_metrics.csv": {
+                            "ok": True,
+                            "local_sha256": TEST_SHA256,
+                            "server_sha256": TEST_SHA256,
+                        }
+                    },
+                }
+            ],
         },
     )
     _write(

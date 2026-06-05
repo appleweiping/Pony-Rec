@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 05:36 CST
+Last updated: 2026-06-06 05:45 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -3004,6 +3004,21 @@ same-schema/internal-ablation status labels. Regression tests cover bad ranking
 row count and bad coverage totals. Focused verification:
 `python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py`
 (`20 passed`). No cleanup, deletion, experiment launch, or baseline launch
+occurred.
+
+Phase 2.5 package manifest-hash hardening: at 2026-06-06 05:45 CST, Codex
+tightened `scripts/audit/main_audit_phase2_5_module_package.py` so future
+completed module packages cannot pass the local/server manifest-comparison
+gate with only `ok=true`, file presence, or file size. The comparison must now
+contain a concrete file identity plus either a valid checked `sha256` with
+`sha256_ok`/`hash_ok`, or matching 64-character local/server or
+expected/actual SHA-256 values. Regression tests reject the old presence-only
+shape and accept both row-level local/server equality and `manifest_checks`
+expected/actual equality. Focused verification:
+`python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_component_ablation_summary.py`
+(`24 passed`) and
+`python -m pytest tests\test_local_server_evidence_consistency.py`
+(`5 passed`). No cleanup, deletion, experiment launch, or baseline launch
 occurred.
 
 ## Required Next Actions

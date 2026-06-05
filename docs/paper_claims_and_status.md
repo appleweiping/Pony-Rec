@@ -567,6 +567,19 @@ it also rejects unexpected status labels in the same-candidate summary. Focused
 tests passed (`20 passed`). This prepares the package gate for real full-scale
 ablation evidence after signal rows and storage are unblocked.
 
+Phase 2.5 package manifest-hash hardening on 2026-06-06 05:45 CST: the
+completed-module package audit now rejects local/server manifest comparisons
+that only report `ok=true`, file presence, row counts, or file sizes. A package
+must provide at least one concrete file identity plus valid hash evidence:
+either a checked 64-character `sha256` with `sha256_ok`/`hash_ok`, or matching
+local/server or expected/actual SHA-256 values. Regression coverage rejects the
+old presence-only shape and accepts both row-level local/server hash equality
+and `manifest_checks` expected/actual equality. Focused tests passed
+(`24 passed` for the package/critical-module/component-builder suite, plus
+`5 passed` for local/server consistency). This is local evidence-gate
+hardening only; paper readiness still requires full-scale uncertainty signal
+rows and a cleared Phase 2.5 storage gate.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

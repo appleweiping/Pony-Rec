@@ -205,6 +205,13 @@ totals, matched-candidate totals, and allowed same-candidate summary status
 labels. This prevents a future component-ablation package from passing with
 present but incomplete imported tables.
 
+The 2026-06-06 05:45 CST package manifest-hash hardening tightened the
+local/server manifest-comparison gate for future Phase 2.5 module packages.
+The audit now rejects presence-only or size-only comparison JSON and requires a
+file identity plus valid hash evidence: either checked `sha256` status or
+matching local/server or expected/actual SHA-256 values. Regression tests cover
+the rejected vague shape and the accepted `manifest_checks` equality shape.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter
