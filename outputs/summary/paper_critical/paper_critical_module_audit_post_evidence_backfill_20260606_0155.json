@@ -1,0 +1,290 @@
+{
+  "ok": true,
+  "paper_ready": false,
+  "generated_at_utc": "2026-06-05T17:53:29+00:00",
+  "root": "D:\\Research\\Uncertainty",
+  "summary": {
+    "framework_overview_scaffold_ready": true,
+    "component_inventory_ready": true,
+    "signal_rows_available": false,
+    "guarded_plan_ready": true,
+    "four_domain_evidence_consistent": true,
+    "phase2_5_storage_launch_allowed": false,
+    "paper_claims_ready": false
+  },
+  "signal_source_state": {
+    "status": "blocked_missing_signal_rows",
+    "paper_ready_uncertainty_source_count": 0,
+    "recomputable_signal_source_count": 0,
+    "score_only_source_count": 4,
+    "exact_coverage_source_count": 4,
+    "domain_audits": {
+      "sports": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_sports_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      },
+      "toys": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_toys_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      },
+      "home": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_home_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      },
+      "tools": {
+        "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_uncertainty_source_audit_tools_fixed_filter_20260604_0502.json",
+        "present": true,
+        "source_count": 1,
+        "paper_ready_uncertainty_rows": 0,
+        "recomputable_signal_rows": 0,
+        "score_only_not_uncertainty": 1,
+        "exact_candidate_coverage_sources": 1
+      }
+    },
+    "formal_trace": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_formal_signal_path_trace_20260604_0535.json",
+      "present": true,
+      "can_rebuild_from_formal_scores_only": false,
+      "blockers": [
+        "formal_runner_does_not_write_scored_rows_with_uncertainty_components",
+        "formal_runner_prompt_does_not_request_evidence_or_counterevidence_fields",
+        "formal_scores_schema_has_no_uncertainty_column"
+      ]
+    },
+    "failures": [
+      "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+    ]
+  },
+  "guarded_signal_plan": {
+    "status": "guarded_plan_ready_not_executable",
+    "paper_claim_ready": false,
+    "files": {
+      "json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan\\ccrp_signal_generation_plan_20260604.json",
+      "shell": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan\\ccrp_signal_generation_plan_20260604.sh"
+    },
+    "domains": [
+      "sports",
+      "toys"
+    ],
+    "current_blocker": "Full-scale C-CRP Sports/Toys/Home/Tools artifacts visible so far are score-only; valid/test signal rows with evidence and counterevidence must be located or regenerated from saved non-test-selected inputs before observation, ablation, or hyperparameter claims.",
+    "failures": []
+  },
+  "component_inventory": {
+    "status": "inventory_ready_not_executed",
+    "paper_claim_ready": false,
+    "files": {
+      "json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.json",
+      "markdown": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.md"
+    },
+    "component_count": 12,
+    "blocked_by": [
+      "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+    ],
+    "formula_alignment": {
+      "code_formula": "base_score * ((1 - uncertainty) ** eta)",
+      "figure_formula_contains_multiplicative_form": true,
+      "source_refs": [
+        {
+          "path": "src/shadow/ccrp.py",
+          "line": 141,
+          "needle": "risk_adjusted_score = base_score *",
+          "present": true
+        },
+        {
+          "path": "scripts/analysis/main_build_framework_overview_figure.py",
+          "line": 144,
+          "needle": "risk_score",
+          "present": true
+        }
+      ]
+    },
+    "failures": []
+  },
+  "evidence_consistency": {
+    "status": "four_domain_evidence_consistent",
+    "paper_claim_ready": true,
+    "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\local_server_evidence_consistency_new_domains_post_backfill_20260606.json",
+    "ok": true,
+    "row_count": 32,
+    "ok_count": 32,
+    "failure_count": 0,
+    "failures": []
+  },
+  "storage_gate": {
+    "status": "blocked_phase2_5_storage_gate",
+    "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\server_storage_phase2_5_retention_audit_current_20260606_0155.json",
+    "experiment_launch_allowed": false,
+    "current_free_bytes": 12406644736,
+    "required_free_bytes_min": 16106127360,
+    "deficit_to_min_free_bytes": 3699482624,
+    "used_pct": 94,
+    "safe_now_total_recoverable_bytes": 0,
+    "recommended_approval_candidate": {
+      "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+      "size_bytes": 5662687360,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_external_embedding_cache",
+      "retention_risk_rank": 20,
+      "reason": "Completed upstream embedding/cache outside the final evidence directory. High-yield, but protected unless an explicit retention/archive decision is recorded.",
+      "expected_free_bytes_after_delete": 18069332096,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    "failures": [
+      "server_disk_below_phase2_5_floor",
+      "phase2_5_experiment_launch_not_allowed"
+    ]
+  },
+  "modules": {
+    "observation_motivation": {
+      "status": "blocked_missing_signal_rows",
+      "paper_claim_ready": false,
+      "required_next_gate": "locate_or_regenerate_valid_test_uncertainty_signal_rows",
+      "blockers": [
+        "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+        "server_disk_below_phase2_5_floor",
+        "phase2_5_experiment_launch_not_allowed"
+      ],
+      "script": "scripts/analysis/main_build_uncertainty_observation_study.py"
+    },
+    "component_ablation": {
+      "status": "blocked_missing_signal_rows",
+      "paper_claim_ready": false,
+      "required_next_gate": "run_leave_one_component_out_after_signal_rows_exist",
+      "blockers": [
+        "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+        "server_disk_below_phase2_5_floor",
+        "phase2_5_experiment_launch_not_allowed"
+      ],
+      "script": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+      "inventory": {
+        "status": "inventory_ready_not_executed",
+        "paper_claim_ready": false,
+        "files": {
+          "json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.json",
+          "markdown": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_component_inventory\\ccrp_component_inventory_20260604.md"
+        },
+        "component_count": 12,
+        "blocked_by": [
+          "missing_full_scale_uncertainty_or_recomputable_signal_rows"
+        ],
+        "formula_alignment": {
+          "code_formula": "base_score * ((1 - uncertainty) ** eta)",
+          "figure_formula_contains_multiplicative_form": true,
+          "source_refs": [
+            {
+              "path": "src/shadow/ccrp.py",
+              "line": 141,
+              "needle": "risk_adjusted_score = base_score *",
+              "present": true
+            },
+            {
+              "path": "scripts/analysis/main_build_framework_overview_figure.py",
+              "line": 144,
+              "needle": "risk_score",
+              "present": true
+            }
+          ]
+        },
+        "failures": []
+      }
+    },
+    "hyperparameter_analysis": {
+      "status": "blocked_missing_signal_rows",
+      "paper_claim_ready": false,
+      "required_next_gate": "build_validation_and_test_curves_after_signal_rows_exist",
+      "blockers": [
+        "missing_full_scale_uncertainty_or_recomputable_signal_rows",
+        "server_disk_below_phase2_5_floor",
+        "phase2_5_experiment_launch_not_allowed"
+      ],
+      "script": "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py"
+    },
+    "framework_overview": {
+      "module": "framework_overview",
+      "status": "review_ready",
+      "artifact_scaffold_ready": true,
+      "paper_claim_ready": true,
+      "remaining_blockers": [],
+      "files": {
+        "framework_overview.svg": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview.svg",
+        "framework_overview.pdf": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview.pdf",
+        "framework_overview.png": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview.png",
+        "framework_overview_caption.md": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_caption.md",
+        "framework_overview_provenance.json": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_provenance.json",
+        "framework_overview_manifest.sha256": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_manifest.sha256"
+      },
+      "manifest_checks": {
+        "framework_overview.svg": {
+          "expected": "c90e14120c72162a224825ba875c705ce61a982be1be82a5eb70c77e2d672e4c",
+          "actual": "c90e14120c72162a224825ba875c705ce61a982be1be82a5eb70c77e2d672e4c",
+          "ok": true
+        },
+        "framework_overview.pdf": {
+          "expected": "5e6e76b978eda42961cf474a7e225300ff33a48714e4737102b9db2cb8f25c32",
+          "actual": "5e6e76b978eda42961cf474a7e225300ff33a48714e4737102b9db2cb8f25c32",
+          "ok": true
+        },
+        "framework_overview.png": {
+          "expected": "c81bb781ef7cc7bd988c8a8cc1464ffc14900a5df4b7b0a383f3d0ff4fa1eb0f",
+          "actual": "c81bb781ef7cc7bd988c8a8cc1464ffc14900a5df4b7b0a383f3d0ff4fa1eb0f",
+          "ok": true
+        },
+        "framework_overview_caption.md": {
+          "expected": "00818669f71c4890feb06d443661935314c4c82fc331535a017e36636750628e",
+          "actual": "00818669f71c4890feb06d443661935314c4c82fc331535a017e36636750628e",
+          "ok": true
+        },
+        "framework_overview_provenance.json": {
+          "expected": "432700febb7c0cd745429d2a088a38df6eb72d67ef0b8915f45b03d81d3f01c7",
+          "actual": "432700febb7c0cd745429d2a088a38df6eb72d67ef0b8915f45b03d81d3f01c7",
+          "ok": true
+        }
+      },
+      "required_label_checks": {
+        "required_labels": [
+          "Same-candidate task",
+          "LLM signal extraction",
+          "Calibration layer",
+          "C-CRP uncertainty",
+          "Risk-adjusted ranking",
+          "Official baseline block",
+          "Paper-critical method evidence",
+          "Shared evidence gates",
+          "risk_score = base_score",
+          "* (1 - uncertainty)^eta"
+        ],
+        "missing_labels": [],
+        "ok": true
+      },
+      "png_dimensions": {
+        "width": 2559,
+        "height": 1378
+      },
+      "provenance": {
+        "status_label": "paper_critical_framework_overview_review_ready",
+        "paper_claim_ready": true,
+        "review_status": "review_ready_not_camera_final_template",
+        "module_scope": "framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence",
+        "git_commit": "999d61e50ce90b1b866b3ac7021b5bc4023346f5",
+        "generated_at_utc": "2026-06-05T15:19:25+00:00"
+      }
+    }
+  },
+  "next_action": "With the official-baseline evidence package consistent, do not start paper-critical C-CRP modules until full-scale valid/test uncertainty signal rows are located or regenerated under the same-candidate protocol and the Phase 2.5 storage gate allows launch. Then run observation, ablation, and hyperparameter gates with validation-only selection and exact score-coverage audits."
+}

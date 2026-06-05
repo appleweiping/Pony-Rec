@@ -221,6 +221,27 @@ also include:
     packaging gap; it does not change scientific metrics, does not start a new
     baseline, and does not unblock Phase 2.5 signal generation while disk
     remains below the launch floor.
+    Consolidated paper-critical go/no-go audit on 2026-06-06 01:55 CST:
+    `scripts/audit/main_audit_paper_critical_modules.py` now consumes both the
+    four-domain local/server evidence consistency artifact and a current
+    Phase 2.5 storage audit. Artifacts:
+    `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0155.{json,md,sha256}`
+    and
+    `outputs/summary/paper_critical/paper_critical_module_audit_post_evidence_backfill_20260606_0155.{json,md,sha256}`.
+    The module audit reports `ok=true`, `paper_ready=false`,
+    `four_domain_evidence_consistent=true`,
+    `framework_overview_scaffold_ready=true`, `component_inventory_ready=true`,
+    `guarded_plan_ready=true`, `signal_rows_available=false`, and
+    `phase2_5_storage_launch_allowed=false`. The storage audit found no active
+    project Python process, GPU idle, `12,406,644,736` free bytes,
+    `3,699,482,624` bytes deficit to the 15GiB floor, no safe-now recoverable
+    bytes, and eight high-yield approval-required candidates. The current
+    lowest-risk candidate remains the completed Tools LLM2Rec upstream embedding
+    cache at
+    `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`;
+    deleting it would clear the minimum gate but still requires explicit
+    archive/retention approval and post-delete gate checks. No deletion was
+    performed and no experiment was launched.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

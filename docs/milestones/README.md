@@ -84,6 +84,13 @@ missing; it does not change the Phase 2.5 blocker that full-scale uncertainty
 signal rows are still needed for the observation, component ablation, and
 hyperparameter-curve modules.
 
+The consolidated 2026-06-06 01:55 CST paper-critical go/no-go artifact
+`outputs/summary/paper_critical/paper_critical_module_audit_post_evidence_backfill_20260606_0155.{json,md,sha256}`
+records the current boundary: evidence consistency, framework overview,
+component inventory, and guarded planning are ready, while paper readiness
+remains false because full-scale uncertainty signal rows are absent and the
+Phase 2.5 storage gate is still closed.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:

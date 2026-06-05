@@ -68,6 +68,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_phase2_5_storage_retention.py` | Read-only SSH storage audit for Phase 2.5 disk gates; classifies safe-now, protected, and approval-required high-yield artifacts and emits a ranked approval recommendation without deleting |
 | `scripts/audit/main_cleanup_phase2_5_safe_now_remnants.py` | Exact-target cleanup helper for audited low-yield Phase 2.5 staging/temp remnants; manifests every file before deletion and never targets final evidence |
 | `scripts/audit/main_audit_local_server_evidence_consistency.py` | Local-only consistency audit comparing lightweight evidence packages against copied server large-artifact manifests; catches missing local files and accidental local bulk artifacts |
+| `scripts/audit/main_audit_paper_critical_modules.py` | Local paper-critical go/no-go audit; integrates signal-row readiness, guarded plan, framework figure, component inventory, four-domain evidence consistency, and the current Phase 2.5 storage gate when artifact paths are supplied |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring
@@ -162,6 +163,21 @@ lines. As of 2026-06-06 01:45 CST, the post-backfill four-domain audit
 `outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.{json,md,sha256}`
 passes for Sports/Toys/Home/Tools: `row_count=32`, `ok_count=32`, and
 `failure_count=0`.
+
+For the consolidated paper-critical go/no-go checkpoint after evidence backfill
+and storage audit, pass both artifacts explicitly:
+
+```powershell
+python scripts\audit\main_audit_paper_critical_modules.py `
+  --evidence_consistency_json outputs\summary\paper_critical\local_server_evidence_consistency_new_domains_post_backfill_20260606.json `
+  --storage_audit_json outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260606_0155.json `
+  --output_json outputs\summary\paper_critical\paper_critical_module_audit_post_evidence_backfill_20260606_0155.json `
+  --output_md outputs\summary\paper_critical\paper_critical_module_audit_post_evidence_backfill_20260606_0155.md
+```
+
+The 2026-06-06 01:55 CST artifact reports the intended go/no-go state:
+four-domain evidence is consistent, but full-scale uncertainty signal rows are
+still absent and `phase2_5_storage_launch_allowed=false`.
 
 For active official-baseline rows, prefer the local robust SSH-stdin monitor
 when the current local checkout has newer audit helpers than the server:

@@ -2665,6 +2665,25 @@ Sports/Toys/Home/Tools. This resolves the local evidence-packaging gap recorded
 at 00:50 CST; it does not alter metrics, row eligibility, or the Phase 2.5
 signal-row blocker.
 
+Consolidated paper-critical go/no-go checkpoint: at 2026-06-06 01:55 CST,
+Codex extended `scripts/audit/main_audit_paper_critical_modules.py` so it
+integrates the four-domain local/server evidence consistency artifact and a
+current Phase 2.5 storage audit. Fresh storage audit:
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0155.{json,md,sha256}`.
+Consolidated module audit:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_evidence_backfill_20260606_0155.{json,md,sha256}`.
+The audit reports `ok=true`, `paper_ready=false`,
+`four_domain_evidence_consistent=true`, `framework_overview_scaffold_ready=true`,
+`component_inventory_ready=true`, `guarded_plan_ready=true`,
+`signal_rows_available=false`, and `phase2_5_storage_launch_allowed=false`.
+Server state in the storage audit: no active project Python process, GPU idle,
+`12,406,644,736` free bytes, `3,699,482,624` bytes deficit to the 15GiB floor,
+zero safe-now recoverable bytes, and eight high-yield candidates requiring
+explicit archive/retention approval. The current lowest-risk high-yield
+candidate is the completed Tools LLM2Rec upstream embedding cache:
+`/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+No deletion was performed and no experiment was launched.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -2679,9 +2698,12 @@ signal-row blocker.
    leave-one-component-out ablation, real hyperparameter curves, and the clean
    framework overview figure.
 4. Before any new server work, run a fresh process/GPU/disk preflight. Current
-   disk remains around `12.34GB` free / `94%` used; preserve scores, provenance,
-   audits, imported tables, C-CRP raw reports/ranks, checkpoints/models, and
-   embeddings unless a separate archive decision explicitly allows deletion.
+   disk remains around `12.41GB` free / `94%` used and below the Phase 2.5
+   launch floor. Either expand disk or make an explicit archive/retention
+   decision for the audited lowest-risk high-yield candidate before signal-row
+   regeneration. Preserve scores, provenance, audits, imported tables, C-CRP raw
+   reports/ranks, checkpoints/models, and embeddings unless a separate archive
+   decision explicitly allows deletion.
 5. Only after comparisons, paper-critical modules, provenance, statistical
    tests, and figure checks are complete, move to ARIS paper writing and
    GPT-5.5/Codex xhigh review. The review loop must reach at least 8/10 before

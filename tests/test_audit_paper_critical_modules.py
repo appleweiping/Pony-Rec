@@ -147,6 +147,51 @@ def _seed_component_inventory(root: Path) -> None:
     _write(base / "ccrp_component_inventory_20260604.md", "# C-CRP Component Inventory\n")
 
 
+def _seed_evidence_consistency(root: Path, *, ok: bool = True) -> Path:
+    path = root / "outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.json"
+    _write(
+        path,
+        json.dumps(
+            {
+                "ok": ok,
+                "row_count": 32,
+                "ok_count": 32 if ok else 31,
+                "failure_count": 0 if ok else 1,
+                "failures": [] if ok else ["example_failure"],
+            }
+        )
+        + "\n",
+    )
+    return path
+
+
+def _seed_storage_audit(root: Path, *, launch_allowed: bool = False) -> Path:
+    path = root / "outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606.json"
+    current_free = 18_000_000_000 if launch_allowed else 12_000_000_000
+    required_free = 16_106_127_360
+    _write(
+        path,
+        json.dumps(
+            {
+                "server": {
+                    "relevant_python_processes": [],
+                    "disk": {"free_bytes": current_free, "used_pct": 93 if launch_allowed else 94},
+                },
+                "phase2_5_disk_gate": {
+                    "current_free_bytes": current_free,
+                    "required_free_bytes_min": required_free,
+                    "deficit_to_min_free_bytes": max(required_free - current_free, 0),
+                    "experiment_launch_allowed": launch_allowed,
+                },
+                "safe_now_total_recoverable_bytes": 0,
+                "recommended_approval_candidate": None,
+            }
+        )
+        + "\n",
+    )
+    return path
+
+
 def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
@@ -158,6 +203,8 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     assert audit["ok"] is True
     assert audit["paper_ready"] is False
     assert audit["summary"]["component_inventory_ready"] is True
+    assert audit["summary"]["four_domain_evidence_consistent"] is False
+    assert audit["summary"]["phase2_5_storage_launch_allowed"] is False
     assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is True
     assert audit["modules"]["framework_overview"]["paper_claim_ready"] is True
     assert audit["modules"]["framework_overview"]["status"] == "review_ready"
@@ -166,6 +213,28 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     assert audit["modules"]["hyperparameter_analysis"]["status"] == "blocked_missing_signal_rows"
     assert audit["signal_source_state"]["score_only_source_count"] == 4
     assert audit["guarded_signal_plan"]["status"] == "guarded_plan_ready_not_executable"
+    assert "missing_phase2_5_storage_audit" in audit["modules"]["observation_motivation"]["blockers"]
+
+
+def test_audit_integrates_evidence_consistency_and_storage_gate(tmp_path):
+    _seed_framework_package(tmp_path)
+    _seed_signal_audits(tmp_path)
+    _seed_guarded_plan(tmp_path)
+    _seed_component_inventory(tmp_path)
+    evidence_path = _seed_evidence_consistency(tmp_path, ok=True)
+    storage_path = _seed_storage_audit(tmp_path, launch_allowed=False)
+
+    audit = build_module_audit(
+        tmp_path,
+        evidence_consistency_json=evidence_path,
+        storage_audit_json=storage_path,
+    )
+
+    assert audit["summary"]["four_domain_evidence_consistent"] is True
+    assert audit["evidence_consistency"]["row_count"] == 32
+    assert audit["summary"]["phase2_5_storage_launch_allowed"] is False
+    assert audit["storage_gate"]["deficit_to_min_free_bytes"] > 0
+    assert "server_disk_below_phase2_5_floor" in audit["modules"]["hyperparameter_analysis"]["blockers"]
 
 
 def test_audit_detects_framework_manifest_mismatch(tmp_path):
