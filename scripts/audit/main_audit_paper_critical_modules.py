@@ -569,6 +569,45 @@ def audit_storage_gate(root: Path, artifact_path: str | Path | None = None) -> d
     }
 
 
+def _storage_action_summary(storage_gate: dict[str, Any]) -> dict[str, Any]:
+    candidate = storage_gate.get("recommended_approval_candidate")
+    if not isinstance(candidate, dict):
+        candidate = {}
+    approval_required = candidate.get("approval_decision_required") is True
+    would_clear = candidate.get("would_clear_min_free_gate") is True
+    safe_now_bytes = int(storage_gate.get("safe_now_total_recoverable_bytes") or 0)
+    return {
+        "storage_safe_now_total_recoverable_bytes": safe_now_bytes,
+        "storage_recommended_candidate_path": str(candidate.get("path") or ""),
+        "storage_recommended_candidate_size_bytes": int(candidate.get("size_bytes") or 0),
+        "storage_recommended_candidate_would_clear_min_free_gate": would_clear,
+        "storage_approval_decision_required": approval_required,
+        "storage_cleanup_decision_required": bool(
+            not storage_gate.get("experiment_launch_allowed")
+            and safe_now_bytes <= 0
+            and approval_required
+            and would_clear
+        ),
+    }
+
+
+def _next_action(signal_state: dict[str, Any], storage_gate: dict[str, Any], storage_action: dict[str, Any]) -> str:
+    if signal_state["status"] == "blocked_missing_signal_rows" and storage_action["storage_cleanup_decision_required"]:
+        return (
+            "Full-scale valid/test uncertainty signal rows remain missing and the Phase 2.5 storage gate is closed. "
+            "The current storage audit found no safe-now recoverable bytes; the approval-required candidate "
+            f"{storage_action['storage_recommended_candidate_path']} would clear the minimum disk gate. "
+            "Record an explicit archive/retention decision before any delete command, then rerun the storage gate "
+            "and only then launch guarded signal-row generation."
+        )
+    return (
+        "With the official-baseline evidence package consistent, do not start paper-critical C-CRP modules until "
+        "full-scale valid/test uncertainty signal rows are located or regenerated under the same-candidate protocol "
+        "and the Phase 2.5 storage gate allows launch. Then run observation, ablation, and hyperparameter gates "
+        "with validation-only selection and exact score-coverage audits."
+    )
+
+
 def build_module_audit(
     root: str | Path = ".",
     *,
@@ -585,6 +624,7 @@ def build_module_audit(
     hyperparameter_execution_support = audit_hyperparameter_execution_support(repo)
     evidence_consistency = audit_evidence_consistency(repo, evidence_consistency_json)
     storage_gate = audit_storage_gate(repo, storage_audit_json)
+    storage_action = _storage_action_summary(storage_gate)
 
     signal_blockers = list(signal_state["failures"])
     launch_blockers = signal_blockers + storage_gate["failures"]
@@ -653,6 +693,7 @@ def build_module_audit(
             "four_domain_evidence_consistent": evidence_consistency["status"] == "four_domain_evidence_consistent",
             "phase2_5_storage_launch_allowed": storage_gate["experiment_launch_allowed"],
             "paper_claims_ready": paper_ready,
+            **storage_action,
         },
         "signal_source_state": signal_state,
         "guarded_signal_plan": guarded_plan,
@@ -662,13 +703,9 @@ def build_module_audit(
         "hyperparameter_execution_support": hyperparameter_execution_support,
         "evidence_consistency": evidence_consistency,
         "storage_gate": storage_gate,
+        "storage_action": storage_action,
         "modules": modules,
-        "next_action": (
-            "With the official-baseline evidence package consistent, do not start paper-critical C-CRP modules until "
-            "full-scale valid/test uncertainty signal rows are located or regenerated under the same-candidate protocol "
-            "and the Phase 2.5 storage gate allows launch. Then run observation, ablation, and hyperparameter gates "
-            "with validation-only selection and exact score-coverage audits."
-        ),
+        "next_action": _next_action(signal_state, storage_gate, storage_action),
     }
 
 
@@ -689,6 +726,11 @@ def write_markdown(path: str | Path, audit: dict[str, Any]) -> None:
         f"- Phase 2.5 storage launch allowed: `{audit['summary']['phase2_5_storage_launch_allowed']}`",
         f"- Storage free bytes: `{audit['storage_gate']['current_free_bytes']}`",
         f"- Storage deficit bytes: `{audit['storage_gate']['deficit_to_min_free_bytes']}`",
+        f"- Storage safe-now recoverable bytes: `{audit['summary']['storage_safe_now_total_recoverable_bytes']}`",
+        f"- Storage approval decision required: `{audit['summary']['storage_approval_decision_required']}`",
+        f"- Storage cleanup decision required: `{audit['summary']['storage_cleanup_decision_required']}`",
+        f"- Storage recommended candidate: `{audit['summary']['storage_recommended_candidate_path']}`",
+        f"- Candidate would clear minimum gate: `{audit['summary']['storage_recommended_candidate_would_clear_min_free_gate']}`",
         "",
         "## Module Status",
         "",

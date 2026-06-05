@@ -841,6 +841,12 @@ The repository is now in M5 (multi-domain SOTA validation):
   `hyperparameter_execution_support_ready=true`,
   `four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
   `phase2_5_storage_launch_allowed=false`.
+  The 2026-06-06 04:40 CST refresh makes the disk decision actionable in the
+  same audit output. Artifact:
+  `outputs/summary/paper_critical/paper_critical_module_audit_storage_actionable_20260606_0440.{json,md,sha256}`.
+  It reports no safe-now recoverable bytes, an approval-required high-yield
+  candidate of `5662687360` bytes, `storage_cleanup_decision_required=true`,
+  and that the candidate would clear the minimum Phase 2.5 disk gate.
 - The guarded C-CRP signal-generation plan now uses generic active-row
   preconditions: no active official baseline row or matching baseline Python
   process may be running before the placeholder signal paths are filled and the

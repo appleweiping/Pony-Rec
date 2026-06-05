@@ -247,6 +247,14 @@ def _seed_storage_audit(root: Path, *, launch_allowed: bool = False) -> Path:
     path = root / "outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606.json"
     current_free = 18_000_000_000 if launch_allowed else 12_000_000_000
     required_free = 16_106_127_360
+    recommended = None
+    if not launch_allowed:
+        recommended = {
+            "path": "/srv/project/cache/pony_qwen3_8b_title_item_embs.npy",
+            "size_bytes": 5_662_687_360,
+            "would_clear_min_free_gate": True,
+            "approval_decision_required": True,
+        }
     _write(
         path,
         json.dumps(
@@ -262,7 +270,7 @@ def _seed_storage_audit(root: Path, *, launch_allowed: bool = False) -> Path:
                     "experiment_launch_allowed": launch_allowed,
                 },
                 "safe_now_total_recoverable_bytes": 0,
-                "recommended_approval_candidate": None,
+                "recommended_approval_candidate": recommended,
             }
         )
         + "\n",
@@ -316,7 +324,12 @@ def test_audit_integrates_evidence_consistency_and_storage_gate(tmp_path):
     assert audit["summary"]["four_domain_evidence_consistent"] is True
     assert audit["evidence_consistency"]["row_count"] == 32
     assert audit["summary"]["phase2_5_storage_launch_allowed"] is False
+    assert audit["summary"]["storage_cleanup_decision_required"] is True
+    assert audit["summary"]["storage_approval_decision_required"] is True
+    assert audit["summary"]["storage_recommended_candidate_would_clear_min_free_gate"] is True
+    assert audit["summary"]["storage_recommended_candidate_size_bytes"] == 5_662_687_360
     assert audit["storage_gate"]["deficit_to_min_free_bytes"] > 0
+    assert "pony_qwen3_8b_title_item_embs.npy" in audit["next_action"]
     assert "server_disk_below_phase2_5_floor" in audit["modules"]["hyperparameter_analysis"]["blockers"]
 
 
@@ -354,3 +367,4 @@ def test_write_markdown_summary(tmp_path):
     assert "Observation execution support ready" in text
     assert "Component-ablation execution support ready" in text
     assert "Hyperparameter execution support ready" in text
+    assert "Storage cleanup decision required" in text

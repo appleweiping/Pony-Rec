@@ -2893,6 +2893,24 @@ verification stayed green:
 (`29 passed`). No cleanup, deletion, experiment launch, or baseline launch
 occurred.
 
+Storage-actionable paper-critical audit: Codex updated
+`scripts/audit/main_audit_paper_critical_modules.py` so the consolidated audit
+surfaces the Phase 2.5 storage decision directly in `summary` and Markdown:
+safe-now recoverable bytes, approval-required candidate path and size, whether
+the candidate would clear the minimum gate, and whether a cleanup/archive
+decision is required. Fresh artifact:
+`outputs/summary/paper_critical/paper_critical_module_audit_storage_actionable_20260606_0440.{json,md,sha256}`.
+It reuses the 04:32 storage audit and reports
+`storage_safe_now_total_recoverable_bytes=0`,
+`storage_recommended_candidate_size_bytes=5662687360`,
+`storage_recommended_candidate_would_clear_min_free_gate=true`,
+`storage_approval_decision_required=true`, and
+`storage_cleanup_decision_required=true`. The recommended candidate remains
+`/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+This is an audit/reporting improvement only: no cleanup, deletion, experiment
+launch, or baseline launch occurred. Focused verification remained
+`29 passed`.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

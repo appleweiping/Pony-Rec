@@ -478,6 +478,19 @@ reports no active experiment, GPU idle, `12,397,707,264` free bytes, no
 safe-now recoverable bytes, and a `3,708,420,096` byte deficit to the 15GiB
 launch floor. No cleanup or experiment was run.
 
+Storage-actionable audit update on 2026-06-06: the consolidated module audit
+now promotes the storage cleanup/archive decision into its top-level summary
+and Markdown. Artifact:
+`outputs/summary/paper_critical/paper_critical_module_audit_storage_actionable_20260606_0440.{json,md,sha256}`.
+It reports `storage_safe_now_total_recoverable_bytes=0`,
+`storage_recommended_candidate_size_bytes=5662687360`,
+`storage_recommended_candidate_would_clear_min_free_gate=true`,
+`storage_approval_decision_required=true`, and
+`storage_cleanup_decision_required=true` for
+`/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+This makes the disk blocker actionable but does not authorize deletion; no
+cleanup or experiment was run.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 
