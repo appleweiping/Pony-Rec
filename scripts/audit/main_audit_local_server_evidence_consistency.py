@@ -228,8 +228,12 @@ def _audit_server_manifest(local_dir: Path, *, allow_local_large: bool) -> tuple
     if manifest.get("failures"):
         failures.append("server_large_artifact_manifest_has_failures")
     rel_paths = {str(row.get("rel_path", "")).replace("\\", "/") for row in manifest.get("files", [])}
+    certified_paths = {
+        str(row.get("rel_path", "")).replace("\\", "/")
+        for row in manifest.get("certified_missing_artifacts", [])
+    }
     for required in SERVER_ONLY_REL_PATHS:
-        if required not in rel_paths:
+        if required not in rel_paths and required not in certified_paths:
             failures.append(f"server_manifest_missing_required_large_artifact:{required}")
     if int(manifest.get("model_artifact_count") or 0) <= 0 and manifest.get("require_model_artifact") is not False:
         failures.append("server_manifest_missing_model_artifact")
@@ -249,8 +253,10 @@ def _audit_server_manifest(local_dir: Path, *, allow_local_large: bool) -> tuple
     summary = {
         "ok": manifest.get("ok"),
         "file_count": manifest.get("file_count"),
+        "certified_missing_artifact_count": manifest.get("certified_missing_artifact_count", 0),
         "model_artifact_count": manifest.get("model_artifact_count"),
         "server_large_rel_paths": sorted(rel_paths),
+        "certified_missing_rel_paths": sorted(certified_paths),
         "local_large_present": local_large_present,
     }
     return failures, warnings, summary

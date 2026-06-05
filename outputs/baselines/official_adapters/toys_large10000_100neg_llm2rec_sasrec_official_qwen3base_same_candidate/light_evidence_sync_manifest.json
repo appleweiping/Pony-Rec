@@ -5,24 +5,24 @@
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
   "local_evidence_dir": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
-  "allowed_file_count": 11,
-  "excluded_file_count": 3,
+  "allowed_file_count": 14,
+  "excluded_file_count": 1,
   "excluded_files_preview": [
-    {
-      "rel_path": "predictions/rank_predictions.jsonl",
-      "size": 816888567
-    },
     {
       "rel_path": "scores.csv",
       "size": 104988987
-    },
-    {
-      "rel_path": "seqrec_ckpt/LLM2Rec_official_qwen3base_toys_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=T-Jun-02-2026_16-06-16-897b80.pth",
-      "size": 4178091523
     }
   ],
   "too_large": [],
   "checked_files": [
+    {
+      "rel_path": "checkpoint_deletion_manifest_20260605_toys_llm2rec.json",
+      "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\checkpoint_deletion_manifest_20260605_toys_llm2rec.json",
+      "size": 2589,
+      "sha256": "7c9a9bcdf7e590e7512d9ce81d194890d34e48ce060c5fa190af18def50b724d",
+      "size_ok": true,
+      "sha256_ok": true
+    },
     {
       "rel_path": "fairness_provenance.json",
       "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\fairness_provenance.json",
@@ -68,6 +68,22 @@
       "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_final_evidence_audit.json",
       "size": 3862,
       "sha256": "e5062db4e853d1ca8d3876881813e33a9d43edf0c25a27bc668f69aba0a87cd0",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1656,
+      "sha256": "ebe4b907ef5610b4a40e3b3adac185f11d292ab5e8351239a8f155508f1d9bc2",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.sha256",
+      "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
+      "size": 77,
+      "sha256": "a94026a51cee7b6e5f35f867798db3b19c9dc95a6b504fe80b245208e0ffc978",
       "size_ok": true,
       "sha256_ok": true
     },

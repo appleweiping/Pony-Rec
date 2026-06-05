@@ -5,13 +5,9 @@
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
   "local_evidence_dir": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
-  "allowed_file_count": 11,
-  "excluded_file_count": 4,
+  "allowed_file_count": 12,
+  "excluded_file_count": 3,
   "excluded_files_preview": [
-    {
-      "rel_path": "predictions/rank_predictions.jsonl",
-      "size": 817847830
-    },
     {
       "rel_path": "proex_official_model.pt",
       "size": 28828145
@@ -68,10 +64,18 @@
       "sha256_ok": true
     },
     {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1986,
+      "sha256": "dcc45b5d6da6d40452798df252d85890f0c6b2c398b2115aa1cec66275de4940",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
       "rel_path": "server_large_artifact_manifest.sha256",
       "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
-      "size": 505,
-      "sha256": "233b93ceb6d54f027abf7bf6878c446e3841a64fa27de986f8f2085365645054",
+      "size": 167,
+      "sha256": "9d5a23348cd55ea275431f143c173dafe76bbb227c5abf095625d63498397a38",
       "size_ok": true,
       "sha256_ok": true
     },

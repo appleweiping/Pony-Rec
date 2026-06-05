@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "irllrec_official_model.pt",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/irllrec_official_model.pt",
+      "size": 62972221,
+      "sha256": "a6c7530231ab7cb1d37eb43bbce5d7abbfb37c13a37575a9b8c426860a88e936"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/scores.csv",
+      "size": 106802404,
+      "sha256": "06b3f42d69e31f5d1b54aa556636e4ba70aa04559bbcad0e91ec64be99eacbbf"
+    }
+  ],
+  "certified_missing_artifacts": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "status": "certified_missing_after_post_gate_cleanup",
+      "certified_by": "server_final_evidence_audit.json",
+      "certified_size": 818701984,
+      "certified_lines": 10000,
+      "sha256": "",
+      "reason": "File is absent at manifest backfill time, but server_final_evidence_audit.json certifies it existed and had the expected line count before approved cleanup."
+    }
+  ],
+  "file_count": 2,
+  "certified_missing_artifact_count": 1,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ],
+  "allow_certified_missing_prediction_jsonl": true,
+  "expected_prediction_lines": 10000
+}

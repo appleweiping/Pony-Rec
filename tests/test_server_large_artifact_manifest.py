@@ -72,3 +72,35 @@ def test_server_large_artifact_manifest_can_include_extra_suffix(tmp_path):
 
     assert result["ok"] is True
     assert "adapter.faiss" in {row["rel_path"] for row in result["files"]}
+
+
+def test_server_large_artifact_manifest_certifies_missing_prediction_from_server_final_audit(tmp_path):
+    evidence = tmp_path / "evidence"
+    _write(evidence / "scores.csv", b"score\n")
+    _write(evidence / "proex_official_model.pt", b"weights")
+    _write(
+        evidence / "server_final_evidence_audit.json",
+        json.dumps(
+            {
+                "ok": True,
+                "files": {
+                    "predictions/rank_predictions.jsonl": {
+                        "present": True,
+                        "size": 1234,
+                        "lines": 10000,
+                    }
+                },
+            }
+        ).encode(),
+    )
+
+    result = build_manifest(
+        evidence_dir=evidence,
+        allow_certified_missing_prediction_jsonl=True,
+    )
+
+    assert result["ok"] is True
+    assert "missing_required_large_artifact:predictions/rank_predictions.jsonl" not in result["failures"]
+    assert result["certified_missing_artifact_count"] == 1
+    assert result["certified_missing_artifacts"][0]["rel_path"] == "predictions/rank_predictions.jsonl"
+    assert result["certified_missing_artifacts"][0]["certified_lines"] == 10000

@@ -2649,6 +2649,22 @@ local raw C-CRP event-level restat is thin for Sports/Toys, so the compact
 bundle relies on copied gate/comparison/paired-test certificates rather than a
 self-contained local raw reproduction package.
 
+Four-new-domain local/server evidence consistency backfill: at 2026-06-06
+01:44 CST, a fresh server preflight found no matching project Python process,
+GPU idle at `0%` / `15 MiB`, and `/` at `12,406,677,504` free bytes / `94%`
+used. No baseline or experiment was launched. Codex regenerated and synced the
+small `server_large_artifact_manifest.{json,sha256}` files for older
+Sports/Toys/Home official local packages, using
+`--allow_certified_missing_prediction_jsonl` only for rows whose
+`server_final_evidence_audit.json` proves the deleted server-only prediction
+JSONL existed with `10,000` lines before approved post-gate cleanup. The
+post-backfill audit
+`outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.{json,md,sha256}`
+reports `ok=true`, `row_count=32`, `ok_count=32`, and `failure_count=0` across
+Sports/Toys/Home/Tools. This resolves the local evidence-packaging gap recorded
+at 00:50 CST; it does not alter metrics, row eligibility, or the Phase 2.5
+signal-row blocker.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

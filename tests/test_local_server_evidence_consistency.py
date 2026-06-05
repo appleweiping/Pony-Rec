@@ -136,6 +136,42 @@ def test_audit_package_fails_when_server_only_large_artifact_is_local(tmp_path):
     assert "server_only_large_artifact_present_locally:scores.csv" in result["failures"]
 
 
+def test_audit_package_accepts_certified_missing_prediction_in_server_manifest(tmp_path):
+    package = tmp_path / "pkg"
+    _write_valid_package(package)
+    manifest_path = package / "server_large_artifact_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["files"] = [
+        row for row in manifest["files"] if row["rel_path"] != "predictions/rank_predictions.jsonl"
+    ]
+    manifest["file_count"] = len(manifest["files"])
+    manifest["certified_missing_artifacts"] = [
+        {
+            "rel_path": "predictions/rank_predictions.jsonl",
+            "status": "certified_missing_after_post_gate_cleanup",
+            "certified_by": "server_final_evidence_audit.json",
+            "certified_size": 100,
+            "certified_lines": 10000,
+        }
+    ]
+    manifest["certified_missing_artifact_count"] = 1
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    sync_manifest_path = package / "light_evidence_sync_manifest.json"
+    sync_manifest = json.loads(sync_manifest_path.read_text(encoding="utf-8"))
+    for row in sync_manifest["checked_files"]:
+        if row["rel_path"] == "server_large_artifact_manifest.json":
+            row["size"] = manifest_path.stat().st_size
+            row["sha256"] = _sha(manifest_path)
+    sync_manifest_path.write_text(json.dumps(sync_manifest), encoding="utf-8")
+
+    result = audit_package(local_dir=package, expected_users=2, expected_candidates_per_user=3)
+
+    assert result["ok"] is True
+    assert result["server_large_artifact_manifest"]["certified_missing_rel_paths"] == [
+        "predictions/rank_predictions.jsonl"
+    ]
+
+
 def test_build_audit_checks_expected_domain_method_rows(tmp_path):
     root = tmp_path
     local_root = root / "outputs" / "baselines" / "official_adapters"

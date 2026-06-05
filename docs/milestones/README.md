@@ -71,6 +71,19 @@ The repository is currently between M4 and M5:
   baselines, Shadow large-scale diagnostics, and LoRA/generative modules are
   completed under the same protocol.
 
+## Current Evidence Integrity (updated 2026-06-06)
+
+Sports, Toys, Home, and Tools now have all eight new-domain official-code-level
+baseline rows plus C-CRP domain/comparison/paired-test gates complete under the
+10k-user/101-candidate same-candidate protocol. The local/server evidence
+consistency backfill
+`outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.{json,md,sha256}`
+passes for all `32/32` official rows. This resolves the local packaging gap for
+older Sports/Toys/Home rows whose small copied server-large manifests were
+missing; it does not change the Phase 2.5 blocker that full-scale uncertainty
+signal rows are still needed for the observation, component ablation, and
+hyperparameter-curve modules.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:

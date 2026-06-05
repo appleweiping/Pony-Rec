@@ -60,6 +60,16 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Require at least one model/checkpoint artifact such as *_official_model.pt.",
     )
+    parser.add_argument(
+        "--allow_certified_missing_prediction_jsonl",
+        action="store_true",
+        help=(
+            "Allow predictions/rank_predictions.jsonl to be absent now when "
+            "server_final_evidence_audit.json certifies it existed with the "
+            "expected line count. This is for post-gate disk cleanup backfills."
+        ),
+    )
+    parser.add_argument("--expected_prediction_lines", type=int, default=10000)
     parser.add_argument("--quiet", action="store_true")
     return parser.parse_args()
 
@@ -100,33 +110,92 @@ def _file_row(evidence_dir: Path, path: Path) -> dict[str, Any]:
     }
 
 
+def _load_json(path: Path) -> dict[str, Any]:
+    with path.open("r", encoding="utf-8") as fh:
+        data = json.load(fh)
+    if not isinstance(data, dict):
+        raise ValueError(f"expected JSON object: {path}")
+    return data
+
+
+def _certify_missing_prediction(
+    *,
+    evidence_dir: Path,
+    expected_prediction_lines: int,
+) -> dict[str, Any] | None:
+    rel_path = "predictions/rank_predictions.jsonl"
+    audit_path = evidence_dir / "server_final_evidence_audit.json"
+    if not audit_path.exists() or audit_path.stat().st_size <= 0:
+        return None
+    try:
+        audit = _load_json(audit_path)
+    except Exception:
+        return None
+    if audit.get("ok") is not True:
+        return None
+    file_row = (audit.get("files") or {}).get(rel_path) or {}
+    if file_row.get("present") is not True:
+        return None
+    if int(file_row.get("lines") or -1) != int(expected_prediction_lines):
+        return None
+    size = int(file_row.get("size") or 0)
+    if size <= 0:
+        return None
+    return {
+        "rel_path": rel_path,
+        "path": str(evidence_dir / rel_path),
+        "status": "certified_missing_after_post_gate_cleanup",
+        "certified_by": "server_final_evidence_audit.json",
+        "certified_size": size,
+        "certified_lines": int(expected_prediction_lines),
+        "sha256": "",
+        "reason": (
+            "File is absent at manifest backfill time, but server_final_evidence_audit.json "
+            "certifies it existed and had the expected line count before approved cleanup."
+        ),
+    }
+
+
 def build_manifest(
     *,
     evidence_dir: str | Path,
     include_suffixes: list[str] | None = None,
     require_model_artifact: bool = True,
+    allow_certified_missing_prediction_jsonl: bool = False,
+    expected_prediction_lines: int = 10000,
 ) -> dict[str, Any]:
     base = Path(evidence_dir).expanduser()
     suffixes = _normalized_suffixes(include_suffixes or [])
     failures: list[str] = []
     warnings: list[str] = []
     files_by_rel: dict[str, dict[str, Any]] = {}
+    certified_missing: list[dict[str, Any]] = []
 
     if not base.exists() or not base.is_dir():
         return {
             "ok": False,
             "evidence_dir": str(base),
             "files": [],
+            "certified_missing_artifacts": certified_missing,
             "failures": ["missing_evidence_dir"],
             "warnings": warnings,
             "required_relative_files": list(REQUIRED_RELATIVE_FILES),
             "require_model_artifact": require_model_artifact,
             "include_suffixes": list(suffixes),
+            "allow_certified_missing_prediction_jsonl": allow_certified_missing_prediction_jsonl,
         }
 
     for rel_path in REQUIRED_RELATIVE_FILES:
         path = base / rel_path
         if not path.exists() or not path.is_file() or path.stat().st_size <= 0:
+            if rel_path == "predictions/rank_predictions.jsonl" and allow_certified_missing_prediction_jsonl:
+                certified = _certify_missing_prediction(
+                    evidence_dir=base,
+                    expected_prediction_lines=expected_prediction_lines,
+                )
+                if certified:
+                    certified_missing.append(certified)
+                    continue
             failures.append(f"missing_required_large_artifact:{rel_path}")
             continue
         files_by_rel[rel_path] = _file_row(base, path)
@@ -156,13 +225,17 @@ def build_manifest(
         "ok": not failures,
         "evidence_dir": str(base),
         "files": files,
+        "certified_missing_artifacts": certified_missing,
         "file_count": len(files),
+        "certified_missing_artifact_count": len(certified_missing),
         "model_artifact_count": model_artifact_count,
         "failures": failures,
         "warnings": warnings,
         "required_relative_files": list(REQUIRED_RELATIVE_FILES),
         "require_model_artifact": require_model_artifact,
         "include_suffixes": list(suffixes),
+        "allow_certified_missing_prediction_jsonl": allow_certified_missing_prediction_jsonl,
+        "expected_prediction_lines": int(expected_prediction_lines),
     }
 
 
@@ -184,6 +257,8 @@ def main() -> int:
         evidence_dir=evidence_dir,
         include_suffixes=args.include_suffix,
         require_model_artifact=bool(args.require_model_artifact),
+        allow_certified_missing_prediction_jsonl=bool(args.allow_certified_missing_prediction_jsonl),
+        expected_prediction_lines=int(args.expected_prediction_lines),
     )
     output_sha256 = (
         Path(args.output_sha256).expanduser()

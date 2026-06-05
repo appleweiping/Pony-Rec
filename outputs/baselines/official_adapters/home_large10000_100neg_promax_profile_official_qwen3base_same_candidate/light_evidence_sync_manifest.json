@@ -5,13 +5,9 @@
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_promax_profile_official_qwen3base_same_candidate",
   "local_evidence_dir": "outputs\\baselines\\official_adapters\\home_large10000_100neg_promax_profile_official_qwen3base_same_candidate",
-  "allowed_file_count": 11,
-  "excluded_file_count": 3,
+  "allowed_file_count": 13,
+  "excluded_file_count": 2,
   "excluded_files_preview": [
-    {
-      "rel_path": "predictions/rank_predictions.jsonl",
-      "size": 749276394
-    },
     {
       "rel_path": "promax_official_model.pt",
       "size": 50610517
@@ -28,6 +24,14 @@
       "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_promax_profile_official_qwen3base_same_candidate\\fairness_provenance.json",
       "size": 8818,
       "sha256": "59f0391042a932a89ecf7deffc69cc1989642e19e316a2131bb517b6ff40534a",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "promax_completed_adapter_cleanup_manifest_20260602.sha256",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_promax_profile_official_qwen3base_same_candidate\\promax_completed_adapter_cleanup_manifest_20260602.sha256",
+      "size": 3840,
+      "sha256": "8b057ae8edd57f6a8b0b6ca491b2e56d3a0e7c796bc4276dfa64e2ae5ad9a242",
       "size_ok": true,
       "sha256_ok": true
     },
@@ -64,10 +68,18 @@
       "sha256_ok": true
     },
     {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_promax_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1991,
+      "sha256": "48f273a00bd6b25647a81b5c9b7388ca529e9f67632a982456392795f3d1c7b9",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
       "rel_path": "server_large_artifact_manifest.sha256",
       "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_promax_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
-      "size": 509,
-      "sha256": "39162dfbff2ea087be92e1158fd7fd7c31ca2550a02d0f7f7ee2e34cad4a3669",
+      "size": 168,
+      "sha256": "ffcf4ffd8cdef313ef8d685646b24b5a10159caf3fd8aaa7a8cfa1f3af3a7221",
       "size_ok": true,
       "sha256_ok": true
     },

@@ -23,6 +23,8 @@ def test_build_remote_command_passes_helper_args():
         remote_evidence_dir="outputs/run",
         include_suffix=["faiss"],
         require_model_artifact=False,
+        allow_certified_missing_prediction_jsonl=True,
+        expected_prediction_lines=5000,
         quiet=True,
     )
 
@@ -36,6 +38,9 @@ def test_build_remote_command_passes_helper_args():
         "--include_suffix",
         "faiss",
         "--no-require_model_artifact",
+        "--allow_certified_missing_prediction_jsonl",
+        "--expected_prediction_lines",
+        "5000",
         "--quiet",
     ]
 
@@ -61,6 +66,8 @@ def test_run_remote_manifest_sends_local_helper_source(monkeypatch, tmp_path):
         remote_evidence_dir="outputs/run",
         include_suffix=[],
         require_model_artifact=True,
+        allow_certified_missing_prediction_jsonl=False,
+        expected_prediction_lines=10000,
         quiet=False,
     )
 
@@ -75,6 +82,8 @@ def test_run_remote_manifest_sends_local_helper_source(monkeypatch, tmp_path):
         "--evidence_dir",
         "/repo/outputs/run",
         "--require_model_artifact",
+        "--expected_prediction_lines",
+        "10000",
     ]
     assert captured["input"] == "print('helper')\n"
     assert captured["text"] is True

@@ -5,16 +5,12 @@
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
   "local_evidence_dir": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
-  "allowed_file_count": 11,
-  "excluded_file_count": 4,
+  "allowed_file_count": 12,
+  "excluded_file_count": 3,
   "excluded_files_preview": [
     {
       "rel_path": "irllrec_official_model.pt",
       "size": 62972221
-    },
-    {
-      "rel_path": "predictions/rank_predictions.jsonl",
-      "size": 818701984
     },
     {
       "rel_path": "scores.csv",
@@ -68,10 +64,18 @@
       "sha256_ok": true
     },
     {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1994,
+      "sha256": "1abf112feb838a922cbac55e35c544e196945a4ed468acfb23e26f87c509ae25",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
       "rel_path": "server_large_artifact_manifest.sha256",
       "local_path": "outputs\\baselines\\official_adapters\\toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
-      "size": 270,
-      "sha256": "fcddcfa640bc7fcc8d937774c896ec53f7452249332128695e07d9fa2eeb9c92",
+      "size": 169,
+      "sha256": "2f6efa9bbe9e30edea2d2f0deff198ec30c8d241916cee3981b1ea95d0cddf8b",
       "size_ok": true,
       "sha256_ok": true
     },

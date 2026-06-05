@@ -5,16 +5,12 @@
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate",
   "local_evidence_dir": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llmemb_official_qwen3base_same_candidate",
-  "allowed_file_count": 11,
-  "excluded_file_count": 3,
+  "allowed_file_count": 13,
+  "excluded_file_count": 2,
   "excluded_files_preview": [
     {
       "rel_path": "llmemb_official_model.pt",
       "size": 3919354786
-    },
-    {
-      "rel_path": "predictions/rank_predictions.jsonl",
-      "size": 700202469
     },
     {
       "rel_path": "scores.csv",
@@ -68,6 +64,22 @@
       "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llmemb_official_qwen3base_same_candidate\\server_final_evidence_audit.json",
       "size": 3767,
       "sha256": "0eb920a719144d2e88f510651d36430cf524de1ca9e8cf512ca7ab4c56d411a2",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llmemb_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1970,
+      "sha256": "504b9ea2f383fb1a938bc2ae39f2d3e92202bb8609508af5bc81cb5f515e9f65",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.sha256",
+      "local_path": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_llmemb_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
+      "size": 168,
+      "sha256": "e0704f38716b3761b22bf903547cbe45ef2ded8da501cc99271b6152ec4d967a",
       "size_ok": true,
       "sha256_ok": true
     },

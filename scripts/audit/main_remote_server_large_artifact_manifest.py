@@ -37,6 +37,8 @@ def parse_args() -> argparse.Namespace:
         action=argparse.BooleanOptionalAction,
         default=True,
     )
+    parser.add_argument("--allow_certified_missing_prediction_jsonl", action="store_true")
+    parser.add_argument("--expected_prediction_lines", type=int, default=10000)
     parser.add_argument("--quiet", action="store_true")
     return parser.parse_args()
 
@@ -66,6 +68,9 @@ def build_remote_command(args: argparse.Namespace) -> list[str]:
         cmd.append("--require_model_artifact")
     else:
         cmd.append("--no-require_model_artifact")
+    if args.allow_certified_missing_prediction_jsonl:
+        cmd.append("--allow_certified_missing_prediction_jsonl")
+    cmd.extend(["--expected_prediction_lines", str(int(args.expected_prediction_lines))])
     if args.quiet:
         cmd.append("--quiet")
     return cmd

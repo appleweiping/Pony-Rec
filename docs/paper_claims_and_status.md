@@ -210,6 +210,17 @@ also include:
     evidence-integrity action is to backfill or regenerate the small
     server-large manifests for those older rows and rerun this audit. Tools
     remains `8/8` consistent.
+    Post-backfill consistency checkpoint on 2026-06-06 01:45 CST:
+    `outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.{json,md,sha256}`
+    reports `ok=true`, `row_count=32`, `ok_count=32`, and `failure_count=0`
+    after regenerating and syncing the small server-large manifests for the
+    older Sports/Toys/Home rows. Missing server-only prediction JSONLs are
+    accepted only as `certified_missing_after_post_gate_cleanup` when the
+    row-local `server_final_evidence_audit.json` proves the file existed with
+    `10,000` lines before approved cleanup. This fixes the local evidence
+    packaging gap; it does not change scientific metrics, does not start a new
+    baseline, and does not unblock Phase 2.5 signal generation while disk
+    remains below the launch floor.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

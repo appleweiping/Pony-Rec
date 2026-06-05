@@ -145,12 +145,23 @@ The audit should report all expected official rows ok. It fails if a required
 local-light file is missing or hash-mismatched, if the copied server large
 artifact manifest lacks `scores.csv`, `predictions/rank_predictions.jsonl`, or
 a model/checkpoint record, or if server-only bulk files were accidentally copied
-into the local package.
-As of 2026-06-06 00:50 CST, Tools passes `8/8`, while the four-domain audit
-finds older Sports/Toys/Home local packages missing copied server-large
-manifest JSON/SHA files. Treat that as a packaging backfill task, not as a
-baseline failure, if the row's `server_final_evidence_audit.json` and
-provenance still pass.
+into the local package. For older gated rows whose server-only prediction JSONL
+was already removed under the approved post-gate cleanup exception, regenerate
+the server manifest with:
+
+```powershell
+python scripts\audit\main_remote_server_large_artifact_manifest.py `
+  --remote_evidence_dir outputs\<ROW> `
+  --allow_certified_missing_prediction_jsonl `
+  --quiet
+```
+
+This accepts the missing prediction JSONL only when
+`server_final_evidence_audit.json` proves it existed with the expected `10,000`
+lines. As of 2026-06-06 01:45 CST, the post-backfill four-domain audit
+`outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.{json,md,sha256}`
+passes for Sports/Toys/Home/Tools: `row_count=32`, `ok_count=32`, and
+`failure_count=0`.
 
 For active official-baseline rows, prefer the local robust SSH-stdin monitor
 when the current local checkout has newer audit helpers than the server:

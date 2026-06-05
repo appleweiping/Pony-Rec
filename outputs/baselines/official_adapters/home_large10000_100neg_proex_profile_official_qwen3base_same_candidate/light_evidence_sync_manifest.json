@@ -1,17 +1,13 @@
 {
   "ok": true,
-  "copy": false,
+  "copy": true,
   "remote_host": "pony-rec-gpu",
   "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
   "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
   "local_evidence_dir": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
-  "allowed_file_count": 11,
-  "excluded_file_count": 3,
+  "allowed_file_count": 12,
+  "excluded_file_count": 2,
   "excluded_files_preview": [
-    {
-      "rel_path": "predictions/rank_predictions.jsonl",
-      "size": 760028679
-    },
     {
       "rel_path": "proex_official_model.pt",
       "size": 50630385
@@ -64,10 +60,18 @@
       "sha256_ok": true
     },
     {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1986,
+      "sha256": "5f969b2b5125ca984b0b778bdfd8c8d4e08e96d10021be19f42bce98c4caedfb",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
       "rel_path": "server_large_artifact_manifest.sha256",
       "local_path": "outputs\\baselines\\official_adapters\\home_large10000_100neg_proex_profile_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
-      "size": 505,
-      "sha256": "d7ed9dbb1bf37de2033d7254386fdeb2cd3f274bbed7a1df68cc8733a9946ebd",
+      "size": 167,
+      "sha256": "be68ee3b4e2710a0d7e451d186f6410745d32bc4a7d692edf707e862d70e5130",
       "size_ok": true,
       "sha256_ok": true
     },

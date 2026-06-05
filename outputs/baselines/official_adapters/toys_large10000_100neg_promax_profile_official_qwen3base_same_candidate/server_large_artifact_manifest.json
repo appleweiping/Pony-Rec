@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "promax_official_model.pt",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate/promax_official_model.pt",
+      "size": 28808277,
+      "sha256": "70dac35bbfb262d7f878e328adda18d8060537042dd7c50cfcfa472d0eb0a446"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate/scores.csv",
+      "size": 96540707,
+      "sha256": "8eb4d86ec5bce5926edefc16ca59e50cf74a1d7688f5cb995a7fd292af344f8f"
+    }
+  ],
+  "certified_missing_artifacts": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "status": "certified_missing_after_post_gate_cleanup",
+      "certified_by": "server_final_evidence_audit.json",
+      "certified_size": 808440287,
+      "certified_lines": 10000,
+      "sha256": "",
+      "reason": "File is absent at manifest backfill time, but server_final_evidence_audit.json certifies it existed and had the expected line count before approved cleanup."
+    }
+  ],
+  "file_count": 2,
+  "certified_missing_artifact_count": 1,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ],
+  "allow_certified_missing_prediction_jsonl": true,
+  "expected_prediction_lines": 10000
+}
