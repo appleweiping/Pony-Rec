@@ -300,9 +300,10 @@ def build_module_audit(root: str | Path = ".") -> dict[str, Any]:
         "component_inventory": component_inventory,
         "modules": modules,
         "next_action": (
-            "Keep the active official baseline row protected until it completes and passes gates. For paper-critical "
-            "C-CRP modules, locate or regenerate full-scale valid/test uncertainty signal rows before running "
-            "observation, ablation, or hyperparameter claims."
+            "With the official-baseline gate complete, do not start paper-critical C-CRP modules until full-scale "
+            "valid/test uncertainty signal rows are located or regenerated under the same-candidate protocol. "
+            "Then run observation, ablation, and hyperparameter gates with validation-only selection and exact "
+            "score-coverage audits."
         ),
     }
 

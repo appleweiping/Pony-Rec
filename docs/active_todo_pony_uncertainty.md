@@ -137,6 +137,25 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `signal_rows_available=false`; therefore the observation, ablation, and
    hyperparameter modules remain blocked by
    `missing_full_scale_uncertainty_or_recomputable_signal_rows`.
+   Post-Phase2 audit checkpoint 2026-06-05 22:19 CST: after the
+   Sports/Toys/Home/Tools official+C-CRP gate certificate was pushed, Codex
+   generated an all-four-domain guarded signal plan at
+   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_phase2_20260605/`
+   and a current module audit snapshot at
+   `outputs/summary/paper_critical/paper_critical_module_audit_post_phase2_20260605.{json,md}`;
+   hashes are recorded in
+   `outputs/summary/paper_critical/post_phase2_paper_critical_audit_manifest_20260605.sha256`.
+   The plan covers Sports/Toys/Home/Tools, records `will_start_experiment=false`,
+   and the generated shell exits with `exit 2` before any command. The audit
+   remains `paper_ready=false` and `signal_rows_available=false`, with
+   observation, component ablation, and hyperparameter analysis all blocked by
+   `missing_full_scale_uncertainty_or_recomputable_signal_rows`. Focused tests
+   passed:
+   `python -m pytest tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py tests\test_build_ccrp_component_inventory.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py`
+   (`21 passed`). The next server action is not a blind experiment launch: first
+   recover disk above the danger threshold with an audited safe-deletion list,
+   then locate or regenerate full-scale valid/test uncertainty signal rows under
+   the same-candidate protocol.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

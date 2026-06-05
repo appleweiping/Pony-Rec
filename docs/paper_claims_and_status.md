@@ -87,6 +87,18 @@ also include:
     `guarded_plan_ready=true`, and `signal_rows_available=false`, so the
     observation, component-ablation, and hyperparameter modules remain blocked
     by missing full-scale uncertainty or recomputable signal rows.
+    Post-Phase2 checkpoint:
+    `outputs/summary/paper_critical/paper_critical_module_audit_post_phase2_20260605.{json,md}`
+    and
+    `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_phase2_20260605/`
+    update this state after the Sports/Toys/Home/Tools official+C-CRP gate
+    certificate. The guarded plan now covers all four new domains and records
+    `will_start_experiment=false`; the generated shell exits with `exit 2`
+    before any command. The audit still reports `paper_ready=false` and
+    `signal_rows_available=false`, so observation, component ablation, and
+    hyperparameter claims remain blocked until full-scale valid/test
+    uncertainty signal rows are located or regenerated and audited under the
+    same-candidate protocol.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches
