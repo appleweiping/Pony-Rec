@@ -523,6 +523,23 @@ The repository is now in M5 (multi-domain SOTA validation):
   files were deleted. Cleanup record:
   `outputs/summary/tools_llmesr_monitor_cache_cleanup_20260605_1904.txt`.
   Post-cleanup disk was `10,757,963,776` bytes free / `95%` used.
+  A 2026-06-05 19:09-19:13 CST disk-emergency checkpoint found the active
+  Tools `llmesr_sasrec` row still alive with runner PID `3440278` and adapter
+  PID `3440287`, duplicate counts exactly one adapter and zero training child,
+  GPU about `96%` / `16213 MiB`, embedding progress from about `59448/269711`
+  to `77056/269711`, and no final evidence or failure markers. Disk was below
+  the strict 10 GiB guard (`10,633,687,040` bytes free). No safe completed
+  prediction deletion existed, and conda/pip/npm cache cleanup freed `0` bytes
+  (`outputs/summary/tools_llmesr_monitor_conda_cache_cleanup_20260605_1909.txt`).
+  After explicit destructive-action approval, the completed Tools LLM2Rec
+  SASRec checkpoint was deleted only after verifying server-final/local-light
+  gated evidence and writing manifests:
+  `outputs/summary/tools_llm2rec_completed_checkpoint_cleanup_for_llmesr_disk_20260605.{json,sha256}`.
+  The deleted checkpoint was `5,665,876,357` bytes, sha256
+  `8ad7ce0316befeb8ee6b3482546ffe3e301e42e9a6b1e10ee608689ea5ece414`. Final
+  LLM2Rec scores, provenance, score audit, run summary, imported tables,
+  server-final audit, large-artifact manifest, and local-light package were
+  preserved; disk recovered to `16,293,425,152` bytes free / `92%` used.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

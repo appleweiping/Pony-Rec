@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 19:06 CST
+Last updated: 2026-06-05 19:13 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2302,6 +2302,30 @@ outputs, evidence, checkpoints, embeddings, task splits, source code, configs,
 or other project files were deleted. Cleanup record:
 `outputs/summary/tools_llmesr_monitor_cache_cleanup_20260605_1904.txt`.
 Post-cleanup disk was `10,757,963,776` bytes free / `95%` used.
+
+Tools LLM-ESR disk emergency checkpoint: at 2026-06-05 19:09-19:13 CST, the
+active Tools `llmesr_sasrec` row remained alive with runner PID `3440278` and
+adapter PID `3440287`; duplicate counts stayed exactly one LLM-ESR adapter and
+zero `ToolsSameCandidate100Neg` training child. GPU was active around `96%` /
+`16213 MiB`, embedding progress advanced from about `59448/269711` to about
+`77056/269711`, and no final evidence or failure markers were present. Disk
+fell below the strict 10 GiB guard (`10,633,687,040` bytes free). A completed
+prediction audit found no safe prediction deletion: the only remaining large
+prediction was the legacy Electronics ELMRec file whose server-final audit is
+`ok=false`. Re-running conda/pip/npm cache cleanup freed `0` bytes; record:
+`outputs/summary/tools_llmesr_monitor_conda_cache_cleanup_20260605_1909.txt`.
+After explicit destructive-action approval, the completed Tools LLM2Rec SASRec
+checkpoint was deleted only after verifying `server_final_evidence_audit.ok=true`,
+`implementation_status=official_completed`, `blockers=[]`, and
+`score_coverage_rate=1.0`, and after writing sha256/size manifests:
+`outputs/summary/tools_llm2rec_completed_checkpoint_cleanup_for_llmesr_disk_20260605.{json,sha256}`.
+Deleted checkpoint size was `5,665,876,357` bytes with sha256
+`8ad7ce0316befeb8ee6b3482546ffe3e301e42e9a6b1e10ee608689ea5ece414`. Preserved
+Tools LLM2Rec artifacts were rechecked: `scores.csv` `1,010,001` lines,
+`tables/ranking_eval_records.csv` `10,001` lines, provenance, score audit,
+run summary, server-final audit, large-artifact manifest, and local-light
+package. Post-cleanup disk was `16,293,425,152` bytes free / `92%` used, and
+the active LLM-ESR row remained alive.
 
 ## Required Next Actions
 
