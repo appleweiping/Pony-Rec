@@ -303,11 +303,11 @@ paper submission; do not rerun or relabel them without a provenance decision.
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
 table, and sports/toys/home now pass domain-level official-baseline and
 paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools now has 5/8 official rows gated after
-`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`, and
-`irllrec_intent`, with `rlmrec_graphcl` active but not yet gated, so Tools
-still needs active RLMRec plus `llm2rec_sasrec` and `llmesr_sasrec` plus paired
-same-candidate tests before any paper-wide SOTA claim.
+domain set is complete; Tools now has 6/8 official rows gated after
+`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
+and `rlmrec_graphcl`, so Tools still needs `llm2rec_sasrec` and
+`llmesr_sasrec` plus paired same-candidate tests before any paper-wide SOTA
+claim.
 
 ### Remaining for paper submission
 
@@ -540,6 +540,30 @@ same-candidate tests before any paper-wide SOTA claim.
    splits, retained completed checkpoints/evidence, or the legacy Electronics
    ELMRec prediction JSONL without server-final/local-light deletion proof.
    This remains active monitor-only evidence, not a completed RLMRec row.
+   A 2026-06-05 12:49 CST completion/gate pass then recorded Tools
+   `rlmrec_graphcl` as the sixth gated Tools official row. The wrapper log
+   reached epoch `3000/3000` with final train loss `1.505858`, wrote
+   `implementation_status=official_completed`, `blockers=0`, saved predictions
+   and tables, reported `score_coverage_rate=1.000000`, and ended with
+   `DONE rlmrec_graphcl on tools` / `All baseline runs complete`. Server-final
+   audit, server large-artifact manifest, lightweight local sync, and
+   local-light audit all passed. Full metrics over 10,000 users and 101
+   candidates are HR@5/10/20 `0.0784 / 0.1354 / 0.2465`, NDCG@5/10/20
+   `0.05017501611537314 / 0.06838865570840932 / 0.09599330874161652`, and MRR
+   `0.07220064580885768`; `scores.csv` has `1,010,001` lines, predictions had
+   `10,000` lines before post-gate deletion, and
+   `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+   package is
+   `outputs/baselines/official_adapters/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`.
+   Post-gate cleanup removed only the server prediction JSONL and completed
+   intermediate adapter directory with manifests
+   `prediction_deletion_manifest.json`,
+   `outputs/summary/tools_rlmrec_completed_adapter_cleanup_manifest_20260605.sha256`,
+   and `outputs/summary/tools_rlmrec_completed_adapter_cleanup_du_20260605.txt`,
+   preserving final scores, provenance, audits, imported tables, model,
+   manifests, and local evidence. Disk recovered to about `15G` free / `93%`
+   used. Tools is now 6/8 official rows gated and still needs `llm2rec_sasrec`,
+   `llmesr_sasrec`, and the Tools domain/comparison/paired-test gates.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

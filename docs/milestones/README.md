@@ -349,6 +349,30 @@ The repository is now in M5 (multi-domain SOTA validation):
   checkpoints/evidence, or the legacy Electronics ELMRec prediction JSONL
   without server-final/local-light deletion proof. This remains active
   monitor-only evidence, not a completed RLMRec row.
+  A 2026-06-05 12:49 CST completion/gate pass then recorded Tools
+  `rlmrec_graphcl` as the sixth gated Tools official row. The wrapper log
+  reached epoch `3000/3000` with final train loss `1.505858`, wrote
+  `implementation_status=official_completed`, `blockers=0`, saved predictions
+  and tables, reported `score_coverage_rate=1.000000`, and ended with
+  `DONE rlmrec_graphcl on tools` / `All baseline runs complete`. Server-final
+  audit, server large-artifact manifest, lightweight local sync, and
+  local-light audit all passed. Full metrics over 10,000 users and 101
+  candidates are HR@5/10/20 `0.0784 / 0.1354 / 0.2465`, NDCG@5/10/20
+  `0.05017501611537314 / 0.06838865570840932 / 0.09599330874161652`, and MRR
+  `0.07220064580885768`; `scores.csv` has `1,010,001` lines, predictions had
+  `10,000` lines before post-gate deletion, and
+  `tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+  package is
+  `outputs/baselines/official_adapters/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`.
+  Post-gate cleanup removed only the server prediction JSONL and completed
+  intermediate adapter directory with manifests
+  `prediction_deletion_manifest.json`,
+  `outputs/summary/tools_rlmrec_completed_adapter_cleanup_manifest_20260605.sha256`,
+  and `outputs/summary/tools_rlmrec_completed_adapter_cleanup_du_20260605.txt`,
+  preserving final scores, provenance, audits, imported tables, model,
+  manifests, and local evidence. Disk recovered to about `15G` free / `93%`
+  used. Tools is now 6/8 official rows gated and still needs `llm2rec_sasrec`,
+  `llmesr_sasrec`, and the Tools domain/comparison/paired-test gates.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
@@ -476,10 +500,11 @@ not as a reason to silently rerun completed metric rows.
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
 2. 8 official baselines on 4 new domains (Phase 2) — sports, toys, and home
    each have all eight audited official rows plus C-CRP import,
-   domain/comparison, and paired-test gates complete; Tools has two audited
-   official rows complete (`proex_profile`, `promax_profile`), with
-   `elmrec_graph` active as the third Tools row, and still needs six completed
-   remaining rows plus its domain/comparison/paired-test gates.
+   domain/comparison, and paired-test gates complete; Tools has six audited
+   official rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`,
+   `llmemb`, `irllrec_intent`, `rlmrec_graphcl`) and still needs
+   `llm2rec_sasrec`, `llmesr_sasrec`, and its domain/comparison/paired-test
+   gates.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 11:49 CST
+Last updated: 2026-06-05 12:49 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1828,6 +1828,39 @@ largest files were active RLMRec intermediates, protected task splits, retained
 completed checkpoints/evidence, or the legacy Electronics ELMRec prediction
 JSONL without server-final/local-light deletion proof. Continue monitoring; do
 not start another Tools row while RLMRec is active.
+
+Tools RLMRec completion/gate checkpoint 2026-06-05 12:49 CST: Tools
+`rlmrec_graphcl` completed as the sixth Tools official row. The wrapper log
+`baselines_new_domains_tools_rlmrec_20260605_054158.log` reached
+`[rlmrec-official] epoch=3000 train_loss=1.505858`, then wrote
+`implementation_status=official_completed`, `blockers=0`, saved predictions
+and tables, recorded `score_coverage_rate=1.000000`, and ended with
+`DONE rlmrec_graphcl on tools` / `All baseline runs complete`. Server-final
+audit, server large-artifact manifest, lightweight local sync, and local-light
+audit all passed. Full metrics over 10,000 users and 101 candidates are
+HR@5/10/20 `0.0784 / 0.1354 / 0.2465`, NDCG@5/10/20
+`0.05017501611537314 / 0.06838865570840932 / 0.09599330874161652`, and MRR
+`0.07220064580885768`. Row counts: `scores.csv` has `1,010,001` lines,
+predictions had `10,000` lines before post-gate deletion, and
+`tables/ranking_eval_records.csv` has `10,001` lines. The local lightweight
+package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/`;
+it includes provenance, score audits, run summary, server-final audit, server
+large-artifact manifest, imported tables, ranking records, and the wrapper log
+copied from the server. Server-only `scores.csv`, deleted prediction metadata,
+and `rlmrec_official_model.pt` are covered by `server_large_artifact_manifest.*`
+and `prediction_deletion_manifest.json`; the deleted prediction sha256 is
+`73ba3bf4adffe3efd49bb59967ea5a692e44a5f796e743afc50d2dd830b4f6b7`.
+After gates and local backup passed, Codex removed only the server prediction
+JSONL and the completed intermediate adapter directory
+`outputs/baselines/paper_adapters/tools_large10000_100neg_rlmrec_official_adapter`
+with manifests
+`outputs/summary/tools_rlmrec_completed_adapter_cleanup_manifest_20260605.sha256`
+and `outputs/summary/tools_rlmrec_completed_adapter_cleanup_du_20260605.txt`.
+Final scores, provenance, audits, imported tables, model, server manifests, and
+local evidence were preserved; `/` recovered to about `15G` free / `93%` used.
+Tools is now 6/8 official rows gated; remaining rows are `llm2rec_sasrec` and
+`llmesr_sasrec`, followed by the Tools domain/comparison/paired-test gates.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
