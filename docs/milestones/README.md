@@ -145,6 +145,21 @@ post-delete gate, baseline launch, or Phase 2.5 experiment launch occurred.
 Checkpoint manifest:
 `outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
 
+The 2026-06-06 04:47 CST retention-decision refresh regenerated the same
+approval-required packet against the latest 04:32 storage audit. Fresh artifacts
+are in
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0447/`,
+with checkpoint manifest
+`outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0447.sha256`.
+The packet audit passes with no failures. Live preapproval remains ready except
+for `disk_below_min_free_before_cleanup`: no active project Python process,
+target size and sha256 match provenance, completed Tools LLM2Rec evidence is
+present, and disk remains below the 15GiB launch floor at `12397662208` free
+bytes / `94%` used. The action audit is dry-run only
+(`will_delete=false`, `execution_status=dry_run_no_remote_commands`). No
+cleanup, deletion, post-delete gate, baseline launch, or Phase 2.5 experiment
+launch occurred.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter

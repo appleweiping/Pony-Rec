@@ -491,6 +491,23 @@ It reports `storage_safe_now_total_recoverable_bytes=0`,
 This makes the disk blocker actionable but does not authorize deletion; no
 cleanup or experiment was run.
 
+Retention-decision checkpoint refresh on 2026-06-06 04:47 CST: Codex
+regenerated the guarded approval packet under
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0447/`
+using the 04:32 storage audit as its source, and recorded
+`outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0447.sha256`.
+The packet remains non-destructive: `will_delete=false`,
+`requires_explicit_approval=true`, and the packet audit reports `ok=true` with
+no failures. The live read-only preapproval audit confirms target size
+`5662687360`, matching sha256
+`306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`, no active
+project Python process, completed Tools LLM2Rec evidence still present, and
+`preapproval_checks_ready_except_disk=true` with only
+`disk_below_min_free_before_cleanup`. The dry-run action audit reports
+`execution_status=dry_run_no_remote_commands` and `will_delete=false`. This
+does not unblock paper-critical signal generation until the disk expansion or
+explicit archive/retention decision is made.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

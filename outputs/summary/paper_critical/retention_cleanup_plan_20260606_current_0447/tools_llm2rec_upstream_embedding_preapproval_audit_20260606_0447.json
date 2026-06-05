@@ -1,0 +1,60 @@
+{
+  "schema_version": "2026-06-06.retention_preapproval.v1",
+  "created_at_utc": "2026-06-05T20:49:10+00:00",
+  "mode": "read_only_remote_phase2_5_retention_preapproval_audit",
+  "read_only": true,
+  "will_delete": false,
+  "will_start_experiment": false,
+  "remote": "pony-rec-gpu",
+  "plan_json": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current_0447\\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0447.json",
+  "target_path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+  "expected_size_bytes": 5662687360,
+  "actual_size_bytes": 5662687360,
+  "expected_sha256": "306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e",
+  "actual_sha256": "306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e",
+  "disk": {
+    "filesystem": "/dev/vda5",
+    "blocks_1b": 209709965312,
+    "used_bytes": 186585108480,
+    "free_bytes": 12397662208,
+    "used_pct": 94,
+    "mount": "/",
+    "raw": "/dev/vda5      209709965312 186585108480 12397662208   94% /"
+  },
+  "min_free_bytes": 16106127360,
+  "active_process_count": 0,
+  "evidence_file_lines": [
+    "8512 /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+    "4514 /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+    "42271231 /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+    "104999203 /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv"
+  ],
+  "fairness_provenance": {
+    "blockers": [],
+    "implementation_status": "official_completed",
+    "qwen3_item_embedding_sha256": "306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e",
+    "score_coverage_rate": 1.0
+  },
+  "server_final_audit": {
+    "ok": true,
+    "prediction_present": true,
+    "ranking_eval_records_present": true,
+    "scores_present": true
+  },
+  "preapproval_checks_ready_except_disk": true,
+  "ok": false,
+  "failures": [
+    "disk_below_min_free_before_cleanup"
+  ],
+  "commands_executed_read_only": {
+    "processes": "cd /home/ajifang/projects/pony-rec-rescue-shadow-v6 && ps aux | grep python | grep -v grep | grep -i 'pony-rec\\|ccrp\\|baseline\\|uncertainty' || true",
+    "gpu": "nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader",
+    "disk": "df -B1 /",
+    "target_realpath": "realpath /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "target_stat": "stat -c '%s %n' /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "target_sha256": "sha256sum /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "evidence_files": "if test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json; then stat -c '%s %n' /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json; else echo MISSING /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json; fi ; if test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json; then stat -c '%s %n' /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json; else echo MISSING /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json; fi ; if test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv; then stat -c '%s %n' /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv; else echo MISSING /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv; fi ; if test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv; then stat -c '%s %n' /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv; else echo MISSING /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv; fi",
+    "fairness_provenance": "/home/ajifang/miniconda3/bin/python -c 'import json,sys;p=sys.argv[1];d=json.load(open(p,encoding='\"'\"'utf-8'\"'\"'));print(json.dumps({'\"'\"'implementation_status'\"'\"':d.get('\"'\"'implementation_status'\"'\"'),'\"'\"'blockers'\"'\"':d.get('\"'\"'blockers'\"'\"'),'\"'\"'score_coverage_rate'\"'\"':d.get('\"'\"'score_coverage_rate'\"'\"'),'\"'\"'qwen3_item_embedding_sha256'\"'\"':d.get('\"'\"'qwen3_item_embedding_sha256'\"'\"')},sort_keys=True))' /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+    "server_final_audit": "/home/ajifang/miniconda3/bin/python -c 'import json,sys;p=sys.argv[1];d=json.load(open(p,encoding='\"'\"'utf-8'\"'\"'));files=d.get('\"'\"'files'\"'\"') or {};print(json.dumps({'\"'\"'ok'\"'\"':d.get('\"'\"'ok'\"'\"'),'\"'\"'scores_present'\"'\"':(files.get('\"'\"'scores.csv'\"'\"') or {}).get('\"'\"'present'\"'\"'),'\"'\"'prediction_present'\"'\"':(files.get('\"'\"'predictions/rank_predictions.jsonl'\"'\"') or {}).get('\"'\"'present'\"'\"'),'\"'\"'ranking_eval_records_present'\"'\"':(files.get('\"'\"'tables/ranking_eval_records.csv'\"'\"') or {}).get('\"'\"'present'\"'\"')},sort_keys=True))' /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json"
+  }
+}

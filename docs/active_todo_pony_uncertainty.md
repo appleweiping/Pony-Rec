@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 03:00 CST
+Last updated: 2026-06-06 04:47 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2910,6 +2910,25 @@ It reuses the 04:32 storage audit and reports
 This is an audit/reporting improvement only: no cleanup, deletion, experiment
 launch, or baseline launch occurred. Focused verification remained
 `29 passed`.
+
+Refreshed retention-decision checkpoint: at 2026-06-06 04:47 CST, Codex
+regenerated the guarded Phase 2.5 retention packet against the latest committed
+04:32 storage audit. Fresh artifacts are under
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0447/`,
+with checkpoint manifest
+`outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0447.sha256`.
+The plan reports `will_delete=false`, `requires_explicit_approval=true`,
+`current_free_bytes=12397707264`, and
+`expected_free_bytes_after_delete=18060394624`; the packet audit reports
+`ok=true` and `failures=[]`. The live read-only preapproval audit confirms no
+active project Python process, target size `5662687360`, target sha256
+`306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`,
+completed-row evidence still present, disk `12397662208` free bytes / `94%`
+used, and `preapproval_checks_ready_except_disk=true` with only
+`disk_below_min_free_before_cleanup`. The action audit is dry-run only with
+`will_delete=false`, `execution_status=dry_run_no_remote_commands`, and
+`failures=[]`. No cleanup, deletion, post-delete gate, experiment launch, or
+baseline launch occurred.
 
 ## Required Next Actions
 
