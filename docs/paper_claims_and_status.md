@@ -597,6 +597,23 @@ claim.
    `[hf_mean_pool] encoded 53296/345622`; disk remained about `12G` free /
    `94%` used and no failure/completion marker was present. Snapshot:
    `outputs/summary/tools_llm2rec_monitor_checkpoint_20260605_1355.json`.
+   A 2026-06-05 15:23 CST monitor confirmed the relaunch failed due disk
+   exhaustion rather than completing. Runner PID `3413921` and adapter PID
+   `3413930` had exited, GPU was idle, and
+   `baselines_new_domains_tools_llm2rec_20260605_134355.log` ended with
+   `OSError: [Errno 28] No space left on device` after Qwen3 embedding reached
+   `345622/345622`. The LLM2Rec training log showed `torch.save` failed while
+   saving the SASRec checkpoint, so the partial checkpoint was corrupt. There
+   is no `fairness_provenance.json`, no `scores.csv`, and no score audit; the
+   row is failed and not table-eligible. Emergency cleanup removed only failed
+   or already-repaired artifacts: the corrupt validation CSV backup, failed
+   adapter-side embedding copy, regenerable adapter CSVs, and corrupt partial
+   checkpoint. It preserved the reusable upstream embedding at
+   `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+   Post-cleanup disk is about `8.1G` free / `96%` used, still below the `10G`
+   monitor threshold. Do not import this row and do not start the next baseline
+   until additional audited space is freed; the recovery relaunch should pass
+   the preserved path through `--llm2rec_item_embedding_path`.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

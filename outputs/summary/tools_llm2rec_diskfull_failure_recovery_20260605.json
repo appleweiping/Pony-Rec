@@ -1,0 +1,70 @@
+{
+  "artifact_class": "monitor_failure_recovery_summary",
+  "domain": "tools",
+  "method": "llm2rec_sasrec",
+  "status": "failed_non_table_eligible",
+  "monitor_timestamp_cst": "2026-06-05 15:23",
+  "server": "pony-rec-gpu",
+  "server_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "runner_pid": 3413921,
+  "adapter_pid": 3413930,
+  "log_path": "baselines_new_domains_tools_llm2rec_20260605_134355.log",
+  "failure_markers": [
+    "tracked runner and adapter PIDs exited",
+    "main log ended with OSError: [Errno 28] No space left on device",
+    "training log showed disk exhaustion during torch.save",
+    "no fairness_provenance.json",
+    "no scores.csv",
+    "no llm2rec_official_score_audit.json"
+  ],
+  "table_eligibility": false,
+  "cleanup_performed": [
+    {
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv.corrupt_20260605T051943Z",
+      "size_human": "467M",
+      "reason": "already-manifested corrupt validation CSV backup after repaired CSV passed validation"
+    },
+    {
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_item_embeddings.npy",
+      "size_human": "5.3G",
+      "reason": "failed-row adapter-side embedding copy; recovery can use preserved upstream embedding path"
+    },
+    {
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/candidate_items_mapped.csv",
+      "size_human": "818M",
+      "reason": "regenerable failed-row adapter CSV"
+    },
+    {
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/item_text_seed.csv",
+      "size_human": "233M",
+      "reason": "regenerable failed-row adapter CSV"
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/seqrec_ckpt/LLM2Rec_official_qwen3base_tools_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=T-Jun-05-2026_15-04-36-d7cea2.pth",
+      "size_human": "1.3G",
+      "reason": "corrupt partial checkpoint from interrupted torch.save"
+    }
+  ],
+  "preserved_recovery_artifacts": [
+    {
+      "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+      "size_human": "5.3G",
+      "reason": "reusable upstream LLM2Rec item embedding cache"
+    }
+  ],
+  "post_cleanup_snapshot": {
+    "disk_free_human": "8.1G",
+    "disk_used_percent": "96%",
+    "gpu": "0 %, 15 MiB",
+    "adapter_dir_size": "57M",
+    "final_output_dir_size": "24K",
+    "upstream_embedding_dir_size": "5.3G"
+  },
+  "diagnostic_process_cleanup": [
+    3419143,
+    3419146,
+    3419675,
+    3419684
+  ],
+  "next_action": "Do not start another baseline while disk is below 10G. Free additional audited space, then relaunch exactly one Tools llm2rec_sasrec row with --llm2rec_item_embedding_path pointing to the preserved upstream embedding."
+}

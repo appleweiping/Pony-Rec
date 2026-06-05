@@ -405,6 +405,20 @@ The repository is now in M5 (multi-domain SOTA validation):
   used and no failure/completion marker was present. Snapshot:
   `outputs/summary/tools_llm2rec_monitor_checkpoint_20260605_1355.json`.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
+  A 2026-06-05 15:23 CST monitor then confirmed this Tools LLM2Rec relaunch
+  failed under disk exhaustion, not completion: runner PID `3413921` and
+  adapter PID `3413930` had exited, GPU was idle, the wrapper log ended with
+  `OSError: [Errno 28] No space left on device`, and the training log showed
+  `torch.save` failed while writing the SASRec checkpoint. The row has no
+  provenance, no scores, and no score audit, so it is not table-eligible. Safe
+  emergency cleanup removed the already-manifested corrupt validation backup,
+  failed adapter-side embedding copy, regenerable adapter CSVs, and corrupt
+  partial checkpoint while preserving the upstream embedding cache
+  `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+  Post-cleanup disk is about `8.1G` free / `96%` used, still below the `10G`
+  monitor threshold. Tools remains 6/8 official rows gated; next action is an
+  additional audited storage decision, then exactly one LLM2Rec recovery run
+  using `--llm2rec_item_embedding_path` to reuse the preserved embedding.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

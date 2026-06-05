@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 12:49 CST
+Last updated: 2026-06-05 15:23 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -250,6 +250,36 @@ print status without dirtying the tracked snapshot file.
 Current heartbeat target: Home official-baseline monitoring is complete. Any
 remaining Home runner heartbeat should be deleted or retargeted to the next
 bounded Tools storage/preflight checkpoint.
+
+Tools LLM2Rec disk-full failure checkpoint: at 2026-06-05 15:23 CST, the
+relaunch of Tools `llm2rec_sasrec` from runner PID `3413921` and adapter PID
+`3413930` was confirmed failed, not completed. Both tracked PIDs had exited,
+GPU was idle, and log `baselines_new_domains_tools_llm2rec_20260605_134355.log`
+ended with `OSError: [Errno 28] No space left on device` after the embedding
+pass had reached `[hf_mean_pool] encoded 345622/345622`. The method-specific
+training log also showed disk exhaustion during `torch.save`, so the partial
+SASRec checkpoint was corrupt. No `fairness_provenance.json`, no `scores.csv`,
+and no `llm2rec_official_score_audit.json` existed, so the row is not
+table-eligible and must not be imported.
+
+Emergency cleanup preserved the reusable upstream embedding at
+`/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
+(`5.3G`) and removed only failed or already-repaired artifacts: the corrupt
+validation CSV backup
+`outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv.corrupt_20260605T051943Z`
+(`467M`, sha256 already recorded in the repair manifest), the failed adapter
+copy `llm2rec_item_embeddings.npy` (`5.3G`), regenerated adapter CSVs
+`candidate_items_mapped.csv` (`818M`) and `item_text_seed.csv` (`233M`), and
+the corrupt partial Tools LLM2Rec checkpoint (`1.3G`). Two abandoned diagnostic
+grep/bash trees from timed-out monitor commands were also killed after
+`ps`/`pstree` verification as non-experiment processes. Post-cleanup state:
+`/` is about `8.1G` free / `96%` used, adapter dir is `57M`, final dir is
+`24K`, and the upstream embedding cache is `5.3G`. This remains below the
+`10G` monitor threshold, so do not launch another baseline yet. The next safe
+LLM2Rec recovery should first free additional audited space, then relaunch a
+single Tools `llm2rec_sasrec` row with the preserved embedding passed as
+`--llm2rec_item_embedding_path /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
+so Qwen3 embedding is not regenerated.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start Tools official baselines until the Home domain gate artifacts are
