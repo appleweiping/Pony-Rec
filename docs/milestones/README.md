@@ -86,10 +86,12 @@ hyperparameter-curve modules.
 
 The consolidated 2026-06-06 01:55 CST paper-critical go/no-go artifact
 `outputs/summary/paper_critical/paper_critical_module_audit_post_evidence_backfill_20260606_0155.{json,md,sha256}`
-records the current boundary: evidence consistency, framework overview,
-component inventory, and guarded planning are ready, while paper readiness
-remains false because full-scale uncertainty signal rows are absent and the
-Phase 2.5 storage gate is still closed.
+records a historical boundary: evidence consistency, framework overview,
+component inventory, and guarded planning were ready, while paper readiness
+remained false because full-scale uncertainty signal rows were absent and the
+Phase 2.5 storage gate was still closed at that time. The storage condition was
+later superseded by the 2026-06-06 06:23 CST completed-row model-checkpoint
+cleanup below; the full-scale signal-row blocker remains.
 
 The 2026-06-06 02:00 CST retention decision packet
 `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.{json,sh,md,sha256}`
@@ -110,6 +112,23 @@ reports `will_delete=false` and
 `execution_status=dry_run_no_remote_commands`. No cleanup or experiment launch
 occurred.
 
+At 2026-06-06 06:23-06:25 CST, after explicit user direction to clear server
+storage pressure, Codex performed a bounded cleanup under
+`~/projects/pony-rec-rescue-shadow-v6` only. Two completed Home official-row
+model checkpoints were deleted after verifying server-final audits,
+large-artifact manifests, provenance, scores, score audits, run summaries, and
+imported tables remained present:
+`outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt`
+and
+`outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt`.
+Corrected cleanup record:
+`outputs/summary/server_cleanup/cleanup_large_completed_model_checkpoints_20260605T222339Z.corrected.{summary.txt,tsv}`.
+The cleanup freed `13,259,007,313` bytes and moved `/` to
+`25,656,266,752` bytes free / `88%` used. No data splits, final scores,
+provenance, audits, imported tables, source code, configs, active outputs, or
+other-project files were deleted. Future server work still requires a fresh
+process/GPU/disk preflight.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test
@@ -118,7 +137,9 @@ paths into a 36-row ledger. It reports `ok=true`,
 `comparison_ledger_ready=true`, `official_row_count=32`, and `ccrp_row_count=4`.
 This closes the paper-table evidence-ledger gap for the four-domain official
 comparison, while paper readiness remains blocked by missing full-scale
-uncertainty signal rows and the Phase 2.5 storage gate.
+uncertainty signal rows. The storage-floor violation present at ledger-build
+time was later cleared by the 2026-06-06 06:23 CST completed-row
+model-checkpoint cleanup.
 
 The 2026-06-06 02:55 CST C-CRP local evidence backfill copied the missing
 Sports/Toys `user_ranks.jsonl` files and missing Sports imported C-CRP tables
@@ -127,8 +148,9 @@ post-backfill certificate audit and ledger
 `outputs/summary/paper_critical/*post_ccrp_backfill_20260606_0255*` both report
 `ok=true`, zero failures, and zero warnings. The comparison evidence ledger is
 now locally self-contained for the four-domain C-CRP event/ranking records, but
-paper readiness remains blocked by missing full-scale uncertainty signal rows
-and the Phase 2.5 storage gate.
+paper readiness remains blocked by missing full-scale uncertainty signal rows.
+The storage-floor violation present at this checkpoint was later cleared by
+the 2026-06-06 06:23 CST completed-row model-checkpoint cleanup.
 
 The 2026-06-06 03:00 CST retention-decision checkpoint refreshed the live
 server storage audit and module audit without launching work. Server state was
@@ -220,6 +242,13 @@ metric consistency, row-level audit/degeneracy/coverage/key-count evidence,
 one fixed-filter source row per plotted point, no duplicate curve points, real
 distinct valid/test sweep SHA-256 hashes, a supported full-metric-set metric,
 and consistency between `control_reports.curve_values` and the summary rows.
+
+The 2026-06-06 06:09 CST hyperparameter stability-report hardening extended
+both producer and package audit. The plotter now emits a per-control
+valid/test stability report and downgrades unstable curves to diagnostic
+status; the package audit recomputes the report from the summary CSV, rejects
+mismatches and duplicate/extra controls, and enforces a maximum relative drop
+tolerance of `0.05`.
 
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate

@@ -429,7 +429,7 @@ expected controls (`eta`, `confidence_weight`, and `weight_grid_label` by
 default), valid and test curves, producer audit-summary fields, and
 package-contained figures. This is a packaging gate, not a completed Phase 2.5
 result; the modules still need full-scale signal rows and server execution
-after the storage gate clears.
+after a fresh process/GPU/disk preflight passes.
 
 Component-ablation execution support on 2026-06-06: Codex added
 `scripts/analysis/main_build_ccrp_component_ablation_summary.py`, tightened
@@ -442,8 +442,10 @@ fails closed when validation metadata, full-score-mode eligibility, exact
 coverage, audit/degeneracy flags, or valid-sweep ablation coverage are missing.
 This improves the Phase 2.5 command surface but is not evidence of completed
 component necessity; paper claims remain blocked until full-scale valid/test
-signal rows exist, the module package is synced/audited, and the storage gate
-clears.
+signal rows exist, the module package is synced/audited, and a fresh
+process/GPU/disk preflight passes. The earlier storage-floor violation was
+later superseded by the 2026-06-06 06:23 CST completed-row model-checkpoint
+cleanup.
 
 Consolidated audit hardening on 2026-06-06: `scripts/audit/main_audit_paper_critical_modules.py`
 now verifies the component-ablation execution-support layer explicitly:
@@ -522,8 +524,10 @@ keeps the claim boundary visible and uses the multiplicative C-CRP risk formula
 reports `ok=true`, `framework_overview_scaffold_ready=true`, and framework
 status `review_ready`, while preserving `paper_ready=false` because the
 observation, component-ablation, and hyperparameter modules still require
-full-scale uncertainty signal rows and the storage gate remains closed. No
-experiment or cleanup was run.
+full-scale uncertainty signal rows. The storage condition present at that
+checkpoint was later superseded by the 2026-06-06 06:23 CST completed-row
+model-checkpoint cleanup. No experiment or cleanup was run at the framework
+checkpoint.
 
 Framework overclaim guard hardening on 2026-06-06 05:18 CST: the consolidated
 paper-critical module audit now enforces that the framework overview does not
@@ -536,8 +540,10 @@ claim limit, and requires every `evidence_gate_status` entry to be
 `required_not_claimed_by_figure`. Fresh artifact:
 `outputs/summary/paper_critical/paper_critical_module_audit_post_framework_overclaim_guards_20260606_0518.{json,md,sha256}`.
 The audit remains `ok=true` for the framework package while preserving
-`paper_ready=false` because signal rows and the Phase 2.5 storage gate are
-still blocked. No experiment or cleanup was run.
+`paper_ready=false` because full-scale signal rows are still missing. The
+storage-floor violation present at that checkpoint was later superseded by the
+2026-06-06 06:23 CST completed-row model-checkpoint cleanup. No experiment or
+cleanup was run at the overclaim-guard checkpoint.
 
 Framework producer-test hardening on 2026-06-06 05:23 CST: the figure-builder
 test now verifies the conservative caption phrase, caption/provenance
@@ -555,7 +561,7 @@ prediction JSONL files inside the package, warns on nested large/binary model
 artifacts, and validates full ranking metrics plus hyperparameter curve metric
 values as finite values in `[0,1]`. Focused tests passed (`18 passed`). This is
 local audit hardening only; paper readiness remains blocked by missing
-full-scale signal rows and the Phase 2.5 storage gate.
+full-scale signal rows and a fresh server preflight before any module launch.
 
 Component-ablation package table-count hardening on 2026-06-06 05:36 CST: the
 Phase 2.5 module-package audit now checks imported component-ablation tables
@@ -578,7 +584,7 @@ and `manifest_checks` expected/actual equality. Focused tests passed
 (`24 passed` for the package/critical-module/component-builder suite, plus
 `5 passed` for local/server consistency). This is local evidence-gate
 hardening only; paper readiness still requires full-scale uncertainty signal
-rows and a cleared Phase 2.5 storage gate.
+rows and a fresh process/GPU/disk preflight before any module launch.
 
 Hyperparameter package summary-shape hardening on 2026-06-06 05:54 CST: after
 GPT-5.5 xhigh sidecar review, the completed-module package audit now verifies
@@ -600,7 +606,42 @@ summary, and too-short curves even when provenance claims
 `paper_critical_hyperparameter_curve_ready`. Focused tests passed
 (`36 passed`). This is still only local evidence-gate hardening; the real
 hyperparameter module remains blocked until full-scale uncertainty signal rows
-exist and the Phase 2.5 storage gate clears.
+exist and the resulting package is synced/audited under a fresh server
+preflight.
+
+Hyperparameter stability-report hardening on 2026-06-06 06:09 CST: after
+GPT-5.5 xhigh sidecar review, the hyperparameter curve producer and package
+audit now require an explicit per-control stability report before a package can
+support a paper-facing stability claim. The producer emits valid/test best
+values, test metric at the validation-best value, relative drop from the
+test-best point, test rank of the validation-best value, and
+`stable_within_tolerance`; unstable valid/test curves are downgraded to
+diagnostic status. The package audit recomputes those fields from
+`ccrp_hyperparameter_curve_summary.csv`, rejects mismatched provenance,
+missing/duplicate/extra stability controls, missing valid/test evidence,
+nonfinite metrics, tolerance above `0.05`, and relative drops above tolerance.
+The producer now also requires paper-facing sweep rows to include
+`score_coverage_rate` and `candidate_key_count`. Focused tests passed
+(`41 passed`). This remains evidence-gate hardening only; the real
+hyperparameter analysis still requires full-scale uncertainty signal rows and a
+fresh process/GPU/disk preflight before any module launch.
+
+Server storage cleanup on 2026-06-06 06:23-06:25 CST cleared the immediate
+Phase 2.5 disk-floor violation without deleting paper-table evidence. After
+explicit user direction, Codex deleted only two completed Home official-row
+model checkpoint files:
+`outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt`
+and
+`outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt`.
+The cleanup preserved `scores.csv`, `fairness_provenance.json`, score audits,
+run summaries, imported tables, `server_final_evidence_audit.json`, and
+`server_large_artifact_manifest.json` for both rows. Corrected server cleanup
+record:
+`outputs/summary/server_cleanup/cleanup_large_completed_model_checkpoints_20260605T222339Z.corrected.{summary.txt,tsv}`.
+Freed bytes: `13,259,007,313`; post-cleanup `/` was `25,656,266,752` bytes
+free / `88%` used. Paper readiness remains blocked by missing full-scale
+uncertainty signal rows and module packages, not by the prior 12.4 GB storage
+floor, subject to a fresh process/GPU/disk preflight before launch.
 
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.

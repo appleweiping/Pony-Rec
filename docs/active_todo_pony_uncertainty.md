@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 05:54 CST
+Last updated: 2026-06-06 06:25 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2948,8 +2948,11 @@ evidence gates, and explicit claim boundary. Consolidated audit artifact
 `outputs/summary/paper_critical/paper_critical_module_audit_post_framework_gate_wording_20260606_0505.{json,md,sha256}`
 reports `ok=true`, `framework_overview_scaffold_ready=true`, framework status
 `review_ready`, and `paper_ready=false` because full-scale signal rows remain
-missing and the Phase 2.5 storage gate is still closed. No cleanup, deletion,
-experiment launch, or baseline launch occurred.
+missing and the Phase 2.5 storage gate was still closed at that checkpoint.
+The storage-floor condition was later superseded by the 2026-06-06 06:23 CST
+completed-row model-checkpoint cleanup; full-scale signal rows remain missing.
+No cleanup, deletion, experiment launch, or baseline launch occurred at the
+05:05 CST framework checkpoint.
 
 Framework overclaim guard hardening: at 2026-06-06 05:18 CST, Codex used a
 GPT-5.5 xhigh sidecar audit to extend
@@ -3044,6 +3047,49 @@ missing-test summary, and too-short curves even when provenance claims
 (`36 passed`). No cleanup, deletion, experiment launch, or baseline launch
 occurred.
 
+Hyperparameter stability-report hardening: at 2026-06-06 06:09 CST, Codex used
+a GPT-5.5 xhigh sidecar audit and tightened both the producer and package gate.
+`scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py` now emits a
+per-control `stability_report` with valid/test best values, test metric at the
+validation-best value, relative drop from the test-best point, test rank of the
+validation-best value, and a `stable_within_tolerance` decision; unstable
+valid/test curves are downgraded to diagnostic status rather than
+`paper_critical_hyperparameter_curve_ready`. The producer also requires
+paper-facing sweep rows to carry `score_coverage_rate` and
+`candidate_key_count`. `scripts/audit/main_audit_phase2_5_module_package.py`
+now requires that report, recomputes stability fields from
+`ccrp_hyperparameter_curve_summary.csv`, rejects mismatches, rejects missing,
+duplicate, or unexpected stability controls, and enforces tolerance at or below
+`0.05`. Focused verification:
+`python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_ccrp_hyperparameter_sweep_plot.py`
+(`41 passed`). No cleanup, deletion, experiment launch, or baseline launch
+occurred.
+
+Server storage cleanup: at 2026-06-06 06:23-06:25 CST, after explicit user
+direction to clear the server storage blocker, Codex performed a bounded
+same-project cleanup on `pony-rec-gpu` under
+`~/projects/pony-rec-rescue-shadow-v6` only. No experiment process was active
+and GPU was idle. The cleanup deleted two completed Home official-row model
+checkpoint files after verifying that each row still had
+`server_final_evidence_audit.json`, `server_large_artifact_manifest.json`,
+`fairness_provenance.json`, `scores.csv`, score audit files, and imported
+`tables/*.csv` present:
+`outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt`
+(`6,446,871,382` bytes,
+sha256 `30c0f5bde429cdb1a3aa4670fbf6a83cda13927933a86dcba2a95a3a6457420e`)
+and
+`outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt`
+(`6,812,135,931` bytes,
+sha256 `7838437c283a5be8696c37a4e2555d7daff3416cd00d05a08a4408b2d9fbe64d`).
+The corrected server cleanup record is
+`outputs/summary/server_cleanup/cleanup_large_completed_model_checkpoints_20260605T222339Z.corrected.{summary.txt,tsv}`.
+Total freed bytes: `13,259,007,313`. Post-cleanup `/` was
+`25,656,266,752` bytes free / `88%` used. Verification confirmed both model
+files absent and protected evidence (`scores.csv`, provenance, server-final
+audit, large-artifact manifest, and ranking tables) still present. No data
+splits, source code, canonical configs, final scores, provenance, audits,
+tables, active outputs, or other-project files were deleted.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -3061,14 +3107,12 @@ occurred.
    framework overview figure. After each module package is generated, run
    `scripts/audit/main_audit_phase2_5_module_package.py` for the relevant
    module and do not cite that package until the audit passes.
-4. Before any new server work, run a fresh process/GPU/disk preflight. Current
-   disk remains around `12.41GB` free / `94%` used and below the Phase 2.5
-   launch floor. Either expand disk or make an explicit archive/retention
-   decision for the audited lowest-risk high-yield candidate, then use the
-   guarded action script only with `--execute` and the exact approval token.
-   Preserve scores, provenance, audits, imported tables, C-CRP raw reports/ranks,
-   checkpoints/models, and embeddings unless a separate archive decision
-   explicitly allows deletion.
+4. Before any new server work, run a fresh process/GPU/disk preflight. After
+   the 2026-06-06 06:23 CST cleanup, `/` had `25,656,266,752` bytes free /
+   `88%` used, clearing the prior 15 GiB Phase 2.5 launch-floor violation.
+   Continue to preserve scores, provenance, audits, imported tables, C-CRP raw
+   reports/ranks, active outputs, data splits, configs, and any checkpoint/model
+   not covered by an explicit cleanup manifest and retention decision.
 5. Only after comparisons, paper-critical modules, provenance, statistical
    tests, and figure checks are complete, move to ARIS paper writing and
    GPT-5.5/Codex xhigh review. The review loop must reach at least 8/10 before

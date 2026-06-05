@@ -135,15 +135,21 @@ def _filter_audited_rows(df: pd.DataFrame, *, require_audit_ok: bool) -> tuple[p
     out = df.copy()
     before = len(out)
     dropped = 0
-    required_columns = ("audit_ok", "degeneracy_audit_ok")
+    required_columns = ("audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count")
     missing_columns = [column for column in required_columns if column not in out.columns]
     if require_audit_ok and missing_columns:
         raise ValueError(f"Sweep CSV missing required audit columns: {missing_columns}")
     if require_audit_ok:
-        for column in required_columns:
+        for column in ("audit_ok", "degeneracy_audit_ok"):
             mask = out[column].map(_as_bool)
             dropped += int((~mask).sum())
             out = out[mask].copy()
+        coverage_mask = out["score_coverage_rate"].map(_as_float).sub(1.0).abs() <= 1e-12
+        dropped += int((~coverage_mask).sum())
+        out = out[coverage_mask].copy()
+        key_count_mask = out["candidate_key_count"].map(_as_float) > 0
+        dropped += int((~key_count_mask).sum())
+        out = out[key_count_mask].copy()
     return out, {
         "input_rows": int(before),
         "audited_rows": int(len(out)),
@@ -225,11 +231,17 @@ def _evidence_label(
     allow_incomplete: bool,
     require_audit_ok: bool,
     control_reports: list[dict[str, Any]],
+    stability_report: list[dict[str, Any]],
 ) -> dict[str, Any]:
     incomplete_controls = [
         {"split": row["split"], "control": row["control"], "curve_values": row["curve_values"]}
         for row in control_reports
         if not bool(row.get("meets_min_values"))
+    ]
+    unstable_controls = [
+        {"control": row.get("control"), "relative_drop_from_test_best": row.get("relative_drop_from_test_best")}
+        for row in stability_report
+        if not bool(row.get("stable_within_tolerance"))
     ]
     if not require_audit_ok:
         status_label = "diagnostic_hyperparameter_curve_audit_not_enforced"
@@ -240,6 +252,9 @@ def _evidence_label(
     elif reporting_mode == "valid_only":
         status_label = "validation_only_hyperparameter_selection_curve"
         claim_scope = "validation_only_not_stability_claim"
+    elif unstable_controls:
+        status_label = "valid_and_test_instability_report_not_stability_claim"
+        claim_scope = "diagnostic_only_not_paper_stability"
     else:
         status_label = "paper_critical_hyperparameter_curve_ready"
         claim_scope = "valid_and_test_stability_curve_candidate"
@@ -247,12 +262,89 @@ def _evidence_label(
         "status_label": status_label,
         "paper_claim_scope": claim_scope,
         "incomplete_controls": incomplete_controls,
+        "unstable_controls": unstable_controls,
         "claim_limits": [
             "Hyperparameter curves do not replace official-baseline, ablation, or paired-test gates.",
             "Validation-only curves support selection/protocol transparency, not paper-facing stability claims.",
             "Diagnostic or audit-not-enforced curves must not be used as main paper evidence.",
         ],
     }
+
+
+def _best_curve_row(curve: pd.DataFrame, metric: str) -> dict[str, Any]:
+    metric_values = curve[metric].map(_as_float)
+    best_idx = metric_values.idxmax()
+    return curve.loc[best_idx].to_dict()
+
+
+def _build_stability_report(
+    summary: pd.DataFrame,
+    *,
+    controls: list[str],
+    metric: str,
+    relative_drop_tolerance: float = 0.05,
+) -> list[dict[str, Any]]:
+    report: list[dict[str, Any]] = []
+    for control in controls:
+        control_summary = summary[summary["control"].astype(str) == control].copy()
+        valid = control_summary[control_summary["split"].astype(str) == "valid"].copy()
+        test = control_summary[control_summary["split"].astype(str) == "test"].copy()
+        row: dict[str, Any] = {
+            "control": control,
+            "metric": metric,
+            "relative_drop_tolerance": float(relative_drop_tolerance),
+            "has_valid_and_test": bool(not valid.empty and not test.empty),
+        }
+        if valid.empty or test.empty:
+            row["stable_within_tolerance"] = False
+            row["reason"] = "missing_valid_or_test_curve"
+            report.append(row)
+            continue
+
+        valid_best = _best_curve_row(valid, "metric_value")
+        test_best = _best_curve_row(test, "metric_value")
+        valid_best_value = _text(valid_best.get("control_value"))
+        test_best_value = _text(test_best.get("control_value"))
+        test_at_valid = test[test["control_value"].astype(str) == valid_best_value].copy()
+        if test_at_valid.empty:
+            row.update(
+                {
+                    "valid_best_value": valid_best_value,
+                    "test_best_value": test_best_value,
+                    "stable_within_tolerance": False,
+                    "reason": "valid_best_value_missing_in_test_curve",
+                }
+            )
+            report.append(row)
+            continue
+
+        valid_metric_at_best = _as_float(valid_best.get("metric_value"))
+        test_best_metric = _as_float(test_best.get("metric_value"))
+        test_metric_at_valid_best = _as_float(test_at_valid.iloc[0].get("metric_value"))
+        denominator = abs(test_best_metric)
+        if denominator <= 1e-12:
+            relative_drop = 0.0 if abs(test_best_metric - test_metric_at_valid_best) <= 1e-12 else float("inf")
+        else:
+            relative_drop = max(0.0, (test_best_metric - test_metric_at_valid_best) / denominator)
+        ordered_test = test.assign(_metric_float=test["metric_value"].map(_as_float)).sort_values("_metric_float", ascending=False)
+        test_rank_map = {str(value): int(rank + 1) for rank, value in enumerate(ordered_test["control_value"].astype(str).tolist())}
+        stable = bool(relative_drop <= relative_drop_tolerance)
+        row.update(
+            {
+                "valid_best_value": valid_best_value,
+                "test_best_value": test_best_value,
+                "valid_metric_at_best": float(valid_metric_at_best),
+                "test_best_metric": float(test_best_metric),
+                "test_metric_at_valid_best": float(test_metric_at_valid_best),
+                "relative_drop_from_test_best": float(relative_drop),
+                "test_rank_of_valid_best": test_rank_map.get(valid_best_value),
+                "best_value_match": bool(valid_best_value == test_best_value),
+                "stable_within_tolerance": stable,
+                "reason": "within_tolerance" if stable else "test_drop_exceeds_tolerance",
+            }
+        )
+        report.append(row)
+    return report
 
 
 def build_hyperparameter_summary(
@@ -326,11 +418,13 @@ def build_hyperparameter_summary(
         raise ValueError("No hyperparameter curves could be built from the sweep.")
     summary = pd.concat(summary_frames, ignore_index=True)
     reporting_mode = "valid_and_test" if test_path else "valid_only"
+    stability_report = _build_stability_report(summary, controls=controls, metric=metric)
     evidence_label = _evidence_label(
         reporting_mode=reporting_mode,
         allow_incomplete=allow_incomplete,
         require_audit_ok=require_audit_ok,
         control_reports=control_reports,
+        stability_report=stability_report,
     )
     provenance = {
         "artifact_class": "paper_critical_hyperparameter_analysis",
@@ -356,6 +450,7 @@ def build_hyperparameter_summary(
         "allow_incomplete": allow_incomplete,
         "audit_summary": audit_summary,
         "control_reports": control_reports,
+        "stability_report": stability_report,
     }
     return summary, provenance
 

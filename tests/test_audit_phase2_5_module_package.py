@@ -36,6 +36,28 @@ def _json(path: Path, payload: dict) -> Path:
     return _write(path, json.dumps(payload, indent=2) + "\n")
 
 
+def _stability_report(controls: tuple[str, ...] = ("eta", "confidence_weight", "weight_grid_label")) -> list[dict[str, object]]:
+    return [
+        {
+            "control": control,
+            "metric": "NDCG@10",
+            "relative_drop_tolerance": 0.05,
+            "has_valid_and_test": True,
+            "valid_best_value": "0.5",
+            "test_best_value": "0.5",
+            "valid_metric_at_best": 0.2,
+            "test_best_metric": 0.2,
+            "test_metric_at_valid_best": 0.2,
+            "relative_drop_from_test_best": 0.0,
+            "test_rank_of_valid_best": 1,
+            "best_value_match": True,
+            "stable_within_tolerance": True,
+            "reason": "within_tolerance",
+        }
+        for control in controls
+    ]
+
+
 def _general_files(root: Path) -> None:
     _write(root / "log_snippets.md", "completed cleanly; no fatal markers observed\n")
     _json(root / "run_config.json", {"seed": 13, "expected_users": 2})
@@ -340,6 +362,7 @@ def _complete_hyperparameter_package(root: Path) -> None:
                 for split in ("valid", "test")
                 for control in ("eta", "confidence_weight", "weight_grid_label")
             ],
+            "stability_report": _stability_report(),
             "figure_paths": figures,
         },
     )
@@ -413,6 +436,66 @@ def test_hyperparameter_package_audit_rejects_missing_valid_sweep_hash(tmp_path)
 
     assert audit["ok"] is False
     assert "hyperparameter:missing_sweep_sha256" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_missing_stability_report(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance.pop("stability_report")
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter:missing_stability_report" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_unstable_valid_test_report(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["stability_report"][0]["stable_within_tolerance"] = False
+    provenance["stability_report"][0]["relative_drop_from_test_best"] = 0.2
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_stability_report_not_stable:eta:0.2" in audit["failures"]
+    assert "hyperparameter_stability_drop_exceeds_tolerance:eta:0.2>0.05" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_stability_report_mismatch(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["stability_report"][0]["valid_best_value"] = "2.0"
+    provenance["stability_report"][0]["test_rank_of_valid_best"] = 3
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_stability_report_mismatch:eta:valid_best_value:2.0!=0.5" in audit["failures"]
+    assert "hyperparameter_stability_report_mismatch:eta:test_rank_of_valid_best:3!=1" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_duplicate_and_extra_stability_controls(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["stability_report"].append(dict(provenance["stability_report"][0]))
+    extra = dict(provenance["stability_report"][0])
+    extra["control"] = "temperature"
+    provenance["stability_report"].append(extra)
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_stability_duplicate_control:eta" in audit["failures"]
+    assert "hyperparameter_stability_unexpected_control:temperature" in audit["failures"]
 
 
 def test_hyperparameter_package_audit_rejects_test_best_of_many_curve_points(tmp_path):
@@ -510,6 +593,7 @@ def test_hyperparameter_package_audit_rejects_too_short_summary_curve(tmp_path):
                 {"split": "valid", "control": "eta", "curve_values": 2, "meets_min_values": True},
                 {"split": "test", "control": "eta", "curve_values": 2, "meets_min_values": True},
             ],
+            "stability_report": _stability_report(("eta",)),
             "figure_paths": ["fig_hyper_eta_curve.png", "fig_hyper_eta_curve.pdf"],
         },
     )
@@ -560,6 +644,7 @@ def test_hyperparameter_package_audit_requires_expected_controls(tmp_path):
                 {"split": "valid", "control": "eta", "curve_values": 3, "meets_min_values": True},
                 {"split": "test", "control": "eta", "curve_values": 3, "meets_min_values": True},
             ],
+            "stability_report": _stability_report(("eta",)),
             "figure_paths": ["fig_hyper_eta_curve.png", "fig_hyper_eta_curve.pdf"],
         },
     )
@@ -610,6 +695,7 @@ def test_hyperparameter_package_audit_rejects_out_of_range_metric_values(tmp_pat
                 {"split": "valid", "control": "eta", "curve_values": 3, "meets_min_values": True},
                 {"split": "test", "control": "eta", "curve_values": 3, "meets_min_values": True},
             ],
+            "stability_report": _stability_report(("eta",)),
             "figure_paths": ["fig_hyper_eta_curve.png", "fig_hyper_eta_curve.pdf"],
         },
     )

@@ -37,6 +37,7 @@ CONFIG_FILES = ("config.json", "run_config.json", "selected_valid_config.json", 
 DEFAULT_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
 SEED_KEYS = ("seed", "seeds", "random_seed", "random_seeds", "seed_list")
 HYPERPARAMETER_SUMMARY_AUDIT_COLUMNS = ("audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count")
+MAX_HYPERPARAMETER_RELATIVE_DROP = 0.05
 SHA256_HEX_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 HASH_EQUALITY_PAIRS = (
     ("local_sha256", "server_sha256"),
@@ -433,6 +434,125 @@ def _check_hyperparameter_summary_audit_columns(
             )
 
 
+def _check_hyperparameter_stability_report(
+    provenance: dict[str, Any],
+    *,
+    expected_controls: tuple[str, ...],
+    expected_metric: str,
+    summary_rows: list[dict[str, str]],
+    failures: list[str],
+) -> None:
+    report = provenance.get("stability_report")
+    if not isinstance(report, list):
+        failures.append("hyperparameter:missing_stability_report")
+        return
+    report_by_control: dict[str, dict[str, Any]] = {}
+    for row in report:
+        if not isinstance(row, dict):
+            failures.append("hyperparameter_stability_report_bad_row")
+            continue
+        control = str(row.get("control", "")).strip()
+        if not control:
+            failures.append("hyperparameter_stability_report_empty_control")
+            continue
+        if control in report_by_control:
+            failures.append(f"hyperparameter_stability_duplicate_control:{control}")
+        if control not in set(expected_controls):
+            failures.append(f"hyperparameter_stability_unexpected_control:{control}")
+        report_by_control[control] = row
+    for control in expected_controls:
+        row = report_by_control.get(control)
+        if not row:
+            failures.append(f"hyperparameter_missing_stability_report:{control}")
+            continue
+        expected = _expected_hyperparameter_stability(summary_rows, control=control)
+        if expected:
+            for key in ("valid_best_value", "test_best_value"):
+                actual_text = str(row.get(key, "")).strip()
+                if actual_text != str(expected[key]):
+                    failures.append(f"hyperparameter_stability_report_mismatch:{control}:{key}:{actual_text}!={expected[key]}")
+            for key in ("valid_metric_at_best", "test_best_metric", "test_metric_at_valid_best", "relative_drop_from_test_best"):
+                actual_value = _as_float(row.get(key))
+                expected_value = _as_float(expected[key])
+                if not math.isfinite(actual_value) or abs(actual_value - expected_value) > 1e-9:
+                    failures.append(
+                        f"hyperparameter_stability_report_mismatch:{control}:{key}:{row.get(key)}!={expected_value}"
+                    )
+            actual_rank = _as_int(row.get("test_rank_of_valid_best"), default=-1)
+            if actual_rank != int(expected["test_rank_of_valid_best"]):
+                failures.append(
+                    f"hyperparameter_stability_report_mismatch:{control}:test_rank_of_valid_best:{actual_rank}!={expected['test_rank_of_valid_best']}"
+                )
+        if str(row.get("metric", "")).strip() != expected_metric:
+            failures.append(f"hyperparameter_stability_metric_mismatch:{control}:{row.get('metric')}!={expected_metric}")
+        for key in ("valid_best_value", "test_best_value"):
+            if not str(row.get(key, "")).strip():
+                failures.append(f"hyperparameter_stability_missing_field:{control}:{key}")
+        for key in ("valid_metric_at_best", "test_best_metric", "test_metric_at_valid_best", "relative_drop_from_test_best"):
+            value = _as_float(row.get(key))
+            if not math.isfinite(value):
+                failures.append(f"hyperparameter_stability_nonfinite:{control}:{key}:{row.get(key)}")
+        test_rank = _as_int(row.get("test_rank_of_valid_best"), default=-1)
+        if test_rank <= 0:
+            failures.append(f"hyperparameter_stability_bad_test_rank:{control}:{row.get('test_rank_of_valid_best')}")
+        drop = _as_float(row.get("relative_drop_from_test_best"))
+        tolerance = _as_float(row.get("relative_drop_tolerance"), default=MAX_HYPERPARAMETER_RELATIVE_DROP)
+        if not math.isfinite(tolerance) or tolerance < 0.0 or tolerance > MAX_HYPERPARAMETER_RELATIVE_DROP:
+            failures.append(f"hyperparameter_stability_bad_tolerance:{control}:{row.get('relative_drop_tolerance')}")
+            tolerance = MAX_HYPERPARAMETER_RELATIVE_DROP
+        if not _as_bool(row.get("has_valid_and_test")):
+            failures.append(f"hyperparameter_stability_missing_valid_or_test:{control}")
+        if not _as_bool(row.get("stable_within_tolerance")):
+            failures.append(f"hyperparameter_stability_report_not_stable:{control}:{row.get('relative_drop_from_test_best')}")
+        if math.isfinite(drop) and drop > tolerance + 1e-12:
+            failures.append(f"hyperparameter_stability_drop_exceeds_tolerance:{control}:{drop}>{tolerance}")
+
+
+def _expected_hyperparameter_stability(rows: list[dict[str, str]], *, control: str) -> dict[str, Any]:
+    valid = [row for row in rows if str(row.get("split", "")).strip() == "valid" and str(row.get("control", "")).strip() == control]
+    test = [row for row in rows if str(row.get("split", "")).strip() == "test" and str(row.get("control", "")).strip() == control]
+    if not valid or not test:
+        return {}
+
+    def best(rows_for_split: list[dict[str, str]]) -> dict[str, str]:
+        return max(rows_for_split, key=lambda row: _as_float(row.get("metric_value")))
+
+    valid_best = best(valid)
+    test_best = best(test)
+    valid_best_value = str(valid_best.get("control_value", "")).strip()
+    test_best_value = str(test_best.get("control_value", "")).strip()
+    test_at_valid = [row for row in test if str(row.get("control_value", "")).strip() == valid_best_value]
+    if not test_at_valid:
+        return {
+            "valid_best_value": valid_best_value,
+            "test_best_value": test_best_value,
+            "valid_metric_at_best": _as_float(valid_best.get("metric_value")),
+            "test_best_metric": _as_float(test_best.get("metric_value")),
+            "test_metric_at_valid_best": float("nan"),
+            "relative_drop_from_test_best": float("nan"),
+            "test_rank_of_valid_best": -1,
+        }
+    valid_metric_at_best = _as_float(valid_best.get("metric_value"))
+    test_best_metric = _as_float(test_best.get("metric_value"))
+    test_metric_at_valid_best = _as_float(test_at_valid[0].get("metric_value"))
+    denominator = abs(test_best_metric)
+    if denominator <= 1e-12:
+        relative_drop = 0.0 if abs(test_best_metric - test_metric_at_valid_best) <= 1e-12 else float("inf")
+    else:
+        relative_drop = max(0.0, (test_best_metric - test_metric_at_valid_best) / denominator)
+    ranked_test = sorted(test, key=lambda row: _as_float(row.get("metric_value")), reverse=True)
+    rank_map = {str(row.get("control_value", "")).strip(): idx + 1 for idx, row in enumerate(ranked_test)}
+    return {
+        "valid_best_value": valid_best_value,
+        "test_best_value": test_best_value,
+        "valid_metric_at_best": valid_metric_at_best,
+        "test_best_metric": test_best_metric,
+        "test_metric_at_valid_best": test_metric_at_valid_best,
+        "relative_drop_from_test_best": relative_drop,
+        "test_rank_of_valid_best": rank_map.get(valid_best_value, -1),
+    }
+
+
 def _path_inside(path: Path, root: Path) -> bool:
     try:
         path.resolve().relative_to(root.resolve())
@@ -781,6 +901,13 @@ def _audit_hyperparameter(
         expected_controls=expected_controls,
         expected_metric=expected_metric,
         min_values=max(min_values, 3),
+        failures=failures,
+    )
+    _check_hyperparameter_stability_report(
+        provenance,
+        expected_controls=expected_controls,
+        expected_metric=expected_metric,
+        summary_rows=summary_rows,
         failures=failures,
     )
     for control in expected_controls:
