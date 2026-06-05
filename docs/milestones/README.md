@@ -634,6 +634,16 @@ The repository is now in M5 (multi-domain SOTA validation):
   `outputs/summary/paper_critical/local_server_evidence_consistency_tools_20260606.{json,md,sha256}`
   reports `8/8` Tools official packages ok with `failure_count=0`, without
   SSH, copying, deletion, or experiment launch.
+  The same local-only audit run over Sports/Toys/Home/Tools at 2026-06-06
+  00:50 CST produced
+  `outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_20260606.{json,md,sha256}`
+  with `row_count=32`, `ok_count=11`, and `failure_count=51`. The gap is
+  evidence packaging, not failed baselines: older Sports/Toys/Home packages
+  are missing copied `server_large_artifact_manifest.json` and/or `.sha256`,
+  while representative inspected rows still have passing server-final audits,
+  full metrics, exact score coverage, and row counts. Next evidence action:
+  backfill or regenerate those small server-large manifests and rerun the
+  consistency audit before treating all four local packages as artifact-ready.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

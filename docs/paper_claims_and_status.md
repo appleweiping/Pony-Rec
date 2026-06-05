@@ -198,6 +198,18 @@ also include:
     and no server-only bulk artifacts copied locally. This strengthens evidence
     packaging integrity but does not unblock Phase 2.5 signal generation while
     disk remains below the launch floor.
+    Four-new-domain consistency checkpoint on 2026-06-06 00:50 CST:
+    `outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_20260606.{json,md,sha256}`
+    audits Sports/Toys/Home/Tools together. It reports `ok=false`,
+    `row_count=32`, `ok_count=11`, and `failure_count=51`. This does not
+    invalidate completed official rows: the failures are local evidence-package
+    gaps where older Sports/Toys/Home rows lack copied
+    `server_large_artifact_manifest.json` and/or `.sha256`. Representative
+    rows still have `server_final_evidence_audit.json` with `ok=true`,
+    complete full metrics, exact score coverage, and row counts. The next
+    evidence-integrity action is to backfill or regenerate the small
+    server-large manifests for those older rows and rerun this audit. Tools
+    remains `8/8` consistent.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

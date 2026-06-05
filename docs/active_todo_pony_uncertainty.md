@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 00:40 CST
+Last updated: 2026-06-06 00:50 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -316,6 +316,24 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    tests\test_audit_phase2_5_storage_retention.py
    tests\test_plan_phase2_5_retention_cleanup.py
    tests\test_cleanup_phase2_5_safe_now_remnants.py` (`22 passed`).
+   Four-new-domain consistency checkpoint 2026-06-06 00:50 CST: heartbeat
+   preflight found no matching project Python process, GPU idle, and `/` at
+   `12,407,324,672` free bytes / `94%` used, so no server experiment was
+   launched. Codex ran the local-only consistency helper across
+   Sports/Toys/Home/Tools:
+   `outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_20260606.{json,md,sha256}`.
+   Result: `ok=false`, `row_count=32`, `ok_count=11`, `failure_count=51`.
+   Tools remains fully consistent (`8/8` ok); Home has RLMRec, LLM2Rec, and
+   LLM-ESR consistent; the remaining Sports/Toys/Home rows are blocked only on
+   missing copied `server_large_artifact_manifest.json` and/or `.sha256` in the
+   local lightweight packages. Representative inspection confirms those older
+   rows still have local-light manifests and `server_final_evidence_audit.json`
+   with `ok=true`, complete metrics, exact score coverage, and row counts, so
+   this is an evidence-packaging backfill gap rather than a baseline failure.
+   Next safe action is to backfill or regenerate small server-large manifests
+   for the missing rows where server scores/predictions/model files or accepted
+   deletion certificates exist, then rerun the same consistency audit. Do not
+   launch Phase 2.5 signal generation until disk is above the launch floor.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

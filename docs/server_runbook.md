@@ -128,11 +128,29 @@ python scripts\audit\main_audit_local_server_evidence_consistency.py `
   --output_md outputs\summary\paper_critical\local_server_evidence_consistency_tools_20260606.md
 ```
 
+For the four new domains together:
+
+```powershell
+python scripts\audit\main_audit_local_server_evidence_consistency.py `
+  --root . `
+  --domain sports `
+  --domain toys `
+  --domain home `
+  --domain tools `
+  --output_json outputs\summary\paper_critical\local_server_evidence_consistency_new_domains_20260606.json `
+  --output_md outputs\summary\paper_critical\local_server_evidence_consistency_new_domains_20260606.md
+```
+
 The audit should report all expected official rows ok. It fails if a required
 local-light file is missing or hash-mismatched, if the copied server large
 artifact manifest lacks `scores.csv`, `predictions/rank_predictions.jsonl`, or
 a model/checkpoint record, or if server-only bulk files were accidentally copied
 into the local package.
+As of 2026-06-06 00:50 CST, Tools passes `8/8`, while the four-domain audit
+finds older Sports/Toys/Home local packages missing copied server-large
+manifest JSON/SHA files. Treat that as a packaging backfill task, not as a
+baseline failure, if the row's `server_final_evidence_audit.json` and
+provenance still pass.
 
 For active official-baseline rows, prefer the local robust SSH-stdin monitor
 when the current local checkout has newer audit helpers than the server:
