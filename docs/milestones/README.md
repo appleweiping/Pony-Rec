@@ -199,6 +199,12 @@ bulk score/prediction dumps, and finite in-range metric values. Regression
 coverage now rejects missing seeds, fatal log markers, nested prediction JSONL,
 nonfinite full metrics, and out-of-range hyperparameter metric values.
 
+The 2026-06-06 05:36 CST component-ablation package table-count hardening added
+checks for exact `ranking_eval_records.csv` event rows, same-candidate coverage
+totals, matched-candidate totals, and allowed same-candidate summary status
+labels. This prevents a future component-ablation package from passing with
+present but incomplete imported tables.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter

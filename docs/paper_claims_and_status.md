@@ -557,6 +557,16 @@ values as finite values in `[0,1]`. Focused tests passed (`18 passed`). This is
 local audit hardening only; paper readiness remains blocked by missing
 full-scale signal rows and the Phase 2.5 storage gate.
 
+Component-ablation package table-count hardening on 2026-06-06 05:36 CST: the
+Phase 2.5 module-package audit now checks imported component-ablation tables
+for expected same-candidate row counts and coverage totals. It requires
+`ranking_eval_records.csv` to match the expected event count, coverage
+`ranking_events` to match expected events, and `total_candidates` /
+`matched_candidates` to match `expected_events * expected_candidates_per_event`;
+it also rejects unexpected status labels in the same-candidate summary. Focused
+tests passed (`20 passed`). This prepares the package gate for real full-scale
+ablation evidence after signal rows and storage are unblocked.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

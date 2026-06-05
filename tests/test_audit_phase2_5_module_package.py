@@ -152,39 +152,39 @@ def test_observation_package_audit_rejects_nonfinite_metrics(tmp_path):
     assert any(failure.startswith("observation_summary:nonfinite_metric:") for failure in audit["failures"])
 
 
-def test_component_ablation_package_audit_requires_every_ablation(tmp_path):
-    _general_files(tmp_path)
+def _complete_component_ablation_package(root: Path, *, ablations: tuple[str, ...] = ABLATIONS) -> None:
+    _general_files(root)
     header = _metric_header(
         ["domain", "ablation", "n_events", "status_label", "selected_on_test", "audit_ok", "degeneracy_audit_ok", "score_coverage_rate"]
     )
     rows = [
         _metric_values(["sports", ablation, 2, "same_schema_internal_ablation", "false", "true", "true", 1.0])
-        for ablation in ABLATIONS[:-1]
+        for ablation in ablations
     ]
-    _write(tmp_path / "component_ablation_summary.csv", _csv_line(header) + "".join(_csv_line(row) for row in rows))
+    _write(root / "component_ablation_summary.csv", _csv_line(header) + "".join(_csv_line(row) for row in rows))
     _write(
-        tmp_path / "selected_test_metrics.csv",
+        root / "selected_test_metrics.csv",
         _csv_line(_metric_header(["domain", "split", "audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count"]))
         + _csv_line(_metric_values(["sports", "test", "true", "true", 1.0, 202])),
     )
     _write(
-        tmp_path / "valid_ccrp_sweep.csv",
+        root / "valid_ccrp_sweep.csv",
         "ablation,audit_ok,degeneracy_audit_ok,NDCG@10\n"
         + "".join(f"{ablation},true,true,0.1\n" for ablation in ABLATIONS),
     )
-    _json(tmp_path / "selected_valid_config.json", {"score_mode": "full", "eta": 1.0})
+    _json(root / "selected_valid_config.json", {"score_mode": "full", "eta": 1.0})
     _json(
-        tmp_path / "ccrp_internal_provenance.json",
+        root / "ccrp_internal_provenance.json",
         {"status_label": "same_schema_internal_ablation", "audit_ok": True, "score_coverage_rate": 1.0},
     )
-    _write(tmp_path / "tables" / "ranking_metrics.csv", "baseline_name,MRR,HR@5,HR@10,HR@20,NDCG@5,NDCG@10,NDCG@20\nccrp,0.2,0.3,0.4,0.5,0.21,0.31,0.41\n")
-    _write(tmp_path / "tables" / "external_score_coverage.csv", "baseline_name,ranking_events,total_candidates,matched_candidates,score_coverage_rate\nccrp,2,202,202,1.0\n")
-    _write(tmp_path / "tables" / "same_candidate_external_baseline_summary.csv", "baseline_name,status_label\nccrp,same_schema_internal_ablation\n")
-    _write(tmp_path / "tables" / "ranking_eval_records.csv", "source_event_id,positive_rank\n1,1\n2,2\n")
-    _write(tmp_path / "fig_component_ablation.png", "png")
-    _write(tmp_path / "fig_component_ablation.pdf", "%PDF")
+    _write(root / "tables" / "ranking_metrics.csv", "baseline_name,MRR,HR@5,HR@10,HR@20,NDCG@5,NDCG@10,NDCG@20\nccrp,0.2,0.3,0.4,0.5,0.21,0.31,0.41\n")
+    _write(root / "tables" / "external_score_coverage.csv", "baseline_name,ranking_events,total_candidates,matched_candidates,score_coverage_rate\nccrp,2,202,202,1.0\n")
+    _write(root / "tables" / "same_candidate_external_baseline_summary.csv", "baseline_name,status_label\nccrp,same_schema_internal_ablation\n")
+    _write(root / "tables" / "ranking_eval_records.csv", "source_event_id,positive_rank\n1,1\n2,2\n")
+    _write(root / "fig_component_ablation.png", "png")
+    _write(root / "fig_component_ablation.pdf", "%PDF")
     _json(
-        tmp_path / "component_ablation_provenance.json",
+        root / "component_ablation_provenance.json",
         {
             "artifact_class": "paper_critical_component_ablation",
             "status_label": "paper_critical_component_ablation_ready",
@@ -194,6 +194,10 @@ def test_component_ablation_package_audit_requires_every_ablation(tmp_path):
             "figure_paths": ["fig_component_ablation.png", "fig_component_ablation.pdf"],
         },
     )
+
+
+def test_component_ablation_package_audit_requires_every_ablation(tmp_path):
+    _complete_component_ablation_package(tmp_path, ablations=ABLATIONS[:-1])
 
     audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
 
@@ -202,52 +206,37 @@ def test_component_ablation_package_audit_requires_every_ablation(tmp_path):
 
 
 def test_component_ablation_package_audit_accepts_complete_package(tmp_path):
-    _general_files(tmp_path)
-    header = _metric_header(
-        ["domain", "ablation", "n_events", "status_label", "selected_on_test", "audit_ok", "degeneracy_audit_ok", "score_coverage_rate"]
-    )
-    rows = [
-        _metric_values(["sports", ablation, 2, "same_schema_internal_ablation", "false", "true", "true", 1.0])
-        for ablation in ABLATIONS
-    ]
-    _write(tmp_path / "component_ablation_summary.csv", _csv_line(header) + "".join(_csv_line(row) for row in rows))
-    _write(
-        tmp_path / "selected_test_metrics.csv",
-        _csv_line(_metric_header(["domain", "split", "audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count"]))
-        + _csv_line(_metric_values(["sports", "test", "true", "true", 1.0, 202])),
-    )
-    _write(
-        tmp_path / "valid_ccrp_sweep.csv",
-        "ablation,audit_ok,degeneracy_audit_ok,NDCG@10\n"
-        + "".join(f"{ablation},true,true,0.1\n" for ablation in ABLATIONS),
-    )
-    _json(tmp_path / "selected_valid_config.json", {"score_mode": "full", "eta": 1.0})
-    _json(
-        tmp_path / "ccrp_internal_provenance.json",
-        {"status_label": "same_schema_internal_ablation", "audit_ok": True, "score_coverage_rate": 1.0},
-    )
-    _write(tmp_path / "tables" / "ranking_metrics.csv", "baseline_name,MRR,HR@5,HR@10,HR@20,NDCG@5,NDCG@10,NDCG@20\nccrp,0.2,0.3,0.4,0.5,0.21,0.31,0.41\n")
-    _write(tmp_path / "tables" / "external_score_coverage.csv", "baseline_name,ranking_events,total_candidates,matched_candidates,score_coverage_rate\nccrp,2,202,202,1.0\n")
-    _write(tmp_path / "tables" / "same_candidate_external_baseline_summary.csv", "baseline_name,status_label\nccrp,same_schema_internal_ablation\n")
-    _write(tmp_path / "tables" / "ranking_eval_records.csv", "source_event_id,positive_rank\n1,1\n2,2\n")
-    _write(tmp_path / "fig_component_ablation.png", "png")
-    _write(tmp_path / "fig_component_ablation.pdf", "%PDF")
-    _json(
-        tmp_path / "component_ablation_provenance.json",
-        {
-            "artifact_class": "paper_critical_component_ablation",
-            "status_label": "paper_critical_component_ablation_ready",
-            "git_commit": "abc123",
-            "command": "python ablation.py",
-            "input_sha256": {"valid_signal": "a", "test_signal": "b"},
-            "figure_paths": ["fig_component_ablation.png", "fig_component_ablation.pdf"],
-        },
-    )
+    _complete_component_ablation_package(tmp_path)
 
     audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
 
     assert audit["ok"] is True
     assert audit["paper_claim_ready"] is True
+
+
+def test_component_ablation_package_audit_rejects_bad_ranking_eval_count(tmp_path):
+    _complete_component_ablation_package(tmp_path)
+    _write(tmp_path / "tables" / "ranking_eval_records.csv", "source_event_id,positive_rank\n1,1\n")
+
+    audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "ranking_eval_records_row_count:1!=2" in audit["failures"]
+
+
+def test_component_ablation_package_audit_rejects_bad_coverage_totals(tmp_path):
+    _complete_component_ablation_package(tmp_path)
+    _write(
+        tmp_path / "tables" / "external_score_coverage.csv",
+        "baseline_name,ranking_events,total_candidates,matched_candidates,score_coverage_rate\nccrp,1,101,101,1.0\n",
+    )
+
+    audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "external_score_coverage_ranking_events:ccrp:1!=2" in audit["failures"]
+    assert "external_score_coverage_total_candidates:ccrp:101!=202" in audit["failures"]
+    assert "external_score_coverage_matched_candidates:ccrp:101!=202" in audit["failures"]
 
 
 def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):

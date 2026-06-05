@@ -478,8 +478,10 @@ def _audit_component_ablation(
     _check_metrics(ranking_header, failures, context="ranking_metrics_table")
     _check_metric_values(ranking_rows, failures, context="ranking_metrics_table")
     coverage_header, coverage_rows = _load_required_csv(base, "tables/external_score_coverage.csv", failures)
-    _load_required_csv(base, "tables/same_candidate_external_baseline_summary.csv", failures)
-    _load_required_csv(base, "tables/ranking_eval_records.csv", failures)
+    baseline_summary_header, baseline_summary_rows = _load_required_csv(
+        base, "tables/same_candidate_external_baseline_summary.csv", failures
+    )
+    ranking_eval_header, ranking_eval_rows = _load_required_csv(base, "tables/ranking_eval_records.csv", failures)
     if provenance.get("artifact_class") != "paper_critical_component_ablation":
         failures.append("component_ablation:unexpected_artifact_class")
     if provenance.get("status_label") != "paper_critical_component_ablation_ready":
@@ -524,9 +526,33 @@ def _audit_component_ablation(
             failures.append(f"selected_test_metrics_candidate_key_count:{row.get('candidate_key_count')}!={expected_score_keys}")
     if "score_coverage_rate" not in coverage_header:
         failures.append("external_score_coverage_missing_score_coverage_rate")
+    for column in ("ranking_events", "total_candidates", "matched_candidates"):
+        if column not in coverage_header:
+            failures.append(f"external_score_coverage_missing_column:{column}")
+    expected_score_keys = expected_events * expected_candidates_per_event if expected_events > 0 else 0
     for row in coverage_rows:
         if _as_float(row.get("score_coverage_rate"), 0.0) != 1.0:
             failures.append(f"external_score_coverage_not_one:{row.get('baseline_name')}:{row.get('score_coverage_rate')}")
+        if expected_events > 0 and _as_int(row.get("ranking_events")) != expected_events:
+            failures.append(f"external_score_coverage_ranking_events:{row.get('baseline_name')}:{row.get('ranking_events')}!={expected_events}")
+        if expected_score_keys and _as_int(row.get("total_candidates")) != expected_score_keys:
+            failures.append(
+                f"external_score_coverage_total_candidates:{row.get('baseline_name')}:{row.get('total_candidates')}!={expected_score_keys}"
+            )
+        if expected_score_keys and _as_int(row.get("matched_candidates")) != expected_score_keys:
+            failures.append(
+                f"external_score_coverage_matched_candidates:{row.get('baseline_name')}:{row.get('matched_candidates')}!={expected_score_keys}"
+            )
+    if expected_events > 0 and len(ranking_eval_rows) != expected_events:
+        failures.append(f"ranking_eval_records_row_count:{len(ranking_eval_rows)}!={expected_events}")
+    if "status_label" not in baseline_summary_header:
+        failures.append("same_candidate_summary_missing_status_label")
+    if not baseline_summary_rows:
+        failures.append("same_candidate_summary_empty")
+    for row in baseline_summary_rows:
+        status = str(row.get("status_label", "")).strip()
+        if status not in {"paper_critical_component_ablation_row", "same_schema_internal_ablation"}:
+            failures.append(f"same_candidate_summary_bad_status:{row.get('baseline_name')}:{status}")
     figures = _check_figures(base, provenance, failures, min_plot_files=min_plot_files)
 
     return {
