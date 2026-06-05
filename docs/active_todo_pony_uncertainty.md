@@ -2346,6 +2346,22 @@ the legacy Electronics ELMRec prediction without a passing server-final
 deletion gate. No cleanup was performed. Continue monitoring; do not start
 another Tools row while LLM-ESR is active.
 
+Tools LLM-ESR bounded monitor and gate-plan checkpoint: at 2026-06-05
+20:23 CST, the active Tools `llmesr_sasrec` row was still training normally:
+runner PID `3440278` and adapter PID `3440287` were alive, duplicate counts were
+exactly one LLM-ESR adapter, zero `ToolsSameCandidate100Neg` training child, and
+one relevant Python process, GPU was active at `100%` / `21785 MiB`, and disk
+was `11,804,286,976` bytes free / `95%` used. The latest log progress was
+`[llmesr] epoch=60 train_loss=0.013176`; no completion marker, traceback, OOM,
+no-space, killed marker, or final evidence files were present, so the row is
+still not table-eligible. A guarded, non-executing completion gate plan was
+created at
+`outputs/summary/official_completion_gate_plan/tools_llmesr_sasrec_completion_gates_20260605.{json,ps1}`.
+It records the required order: server-final audit, server large-artifact
+manifest, local-light sync, and local-light audit; the generated PowerShell
+script throws before any gate command and must not be used until the active run
+exits normally and final evidence exists.
+
 ## Required Next Actions
 
 1. Monitor the active Tools `llmesr_sasrec` row: runner PID `3440278`, adapter
