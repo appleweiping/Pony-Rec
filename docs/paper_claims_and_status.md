@@ -172,6 +172,21 @@ also include:
    `python -m pytest tests\test_framework_overview_figure.py
    tests\test_audit_paper_critical_modules.py` passed (`4 passed`) and the PNG
    was visually checked as nonblank/readable.
+   Review-ready checkpoint 2026-06-05 23:20 CST: the framework package was
+   regenerated and the module audit now treats it as a figure-only
+   review-ready artifact when the SVG/PDF/PNG/caption/provenance files match
+   the sha256 manifest, the SVG contains the required pipeline labels, the PNG
+   is valid and at least `1800x900`, provenance records
+   `status_label=paper_critical_framework_overview_review_ready`,
+   `paper_claim_ready=true`, the controlled same-candidate claim boundary, and
+   the multiplicative risk formula
+   `risk_score = base_score * (1 - uncertainty)^eta`. Evidence:
+   `outputs/summary/paper_critical/framework_overview/` and
+   `outputs/summary/paper_critical/paper_critical_module_audit_post_framework_review_20260605.{json,md,sha256}`.
+   The audit reports framework overview `status=review_ready` and
+   `paper_claim_ready=true`, but keeps overall `paper_ready=false` because
+   observation, component-ablation, and hyperparameter claims still lack
+   full-scale valid/test uncertainty signal rows.
 
 Each module needs status labels, row counts, commands, configs, seeds when
 applicable, provenance notes, plots/tables, and a lightweight local evidence

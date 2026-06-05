@@ -648,8 +648,19 @@ The repository is now in M5 (multi-domain SOTA validation):
   the code-matched multiplicative risk formula; focused figure/audit tests
   passed (`4 passed`) and the PNG was visually checked as nonblank/readable. It
   must keep the claim boundary as controlled same-candidate ranking rather than
-  full-catalog or generative-title recommendation and still needs final
-  paper-layout/reviewer polish.
+  full-catalog or generative-title recommendation. On 2026-06-05 23:20 CST the
+  package was upgraded from draft scaffold to figure-module review-ready:
+  provenance records
+  `status_label=paper_critical_framework_overview_review_ready`,
+  `paper_claim_ready=true`, and
+  `module_scope=framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence`;
+  the consolidated audit checks required SVG labels, PNG dimensions
+  (`2559x1378` in the regenerated artifact), claim boundary, formula
+  alignment, and manifest hashes. Evidence:
+  `outputs/summary/paper_critical/paper_critical_module_audit_post_framework_review_20260605.{json,md,sha256}`.
+  Overall paper readiness remains false because observation, ablation, and
+  hyperparameter modules still need full-scale valid/test uncertainty signal
+  rows.
 - Consolidated paper-critical module audit now exists:
   `scripts/audit/main_audit_paper_critical_modules.py`. Current artifact
   `outputs/summary/paper_critical/paper_critical_module_audit_20260604.{json,md}`

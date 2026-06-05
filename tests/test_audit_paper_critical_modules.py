@@ -15,22 +15,40 @@ def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _valid_png_header(width: int = 2000, height: int = 1000) -> bytes:
+    return b"\x89PNG\r\n\x1a\n" + b"\x00" * 8 + width.to_bytes(4, "big") + height.to_bytes(4, "big")
+
+
+def _framework_svg() -> str:
+    return (
+        "<svg><text>Same-candidate task</text><text>LLM signal extraction</text>"
+        "<text>Calibration layer</text><text>C-CRP uncertainty</text>"
+        "<text>Risk-adjusted ranking</text><text>Official baseline block</text>"
+        "<text>Paper-critical method evidence</text><text>Shared evidence gates</text>"
+        "<text>risk_score = base_score</text><text>* (1 - uncertainty)^eta</text></svg>\n"
+    )
+
+
 def _seed_framework_package(root: Path) -> None:
     base = root / "outputs/summary/paper_critical/framework_overview"
     files = {
-        "framework_overview.svg": "<svg><text>C-CRP uncertainty</text></svg>\n",
+        "framework_overview.svg": _framework_svg(),
         "framework_overview.pdf": "%PDF-1.4\n",
-        "framework_overview.png": "PNG bytes\n",
         "framework_overview_caption.md": "caption\n",
     }
     for name, text in files.items():
         _write(base / name, text)
+    (base / "framework_overview.png").write_bytes(_valid_png_header())
     _write(
         base / "framework_overview_provenance.json",
         json.dumps(
             {
-                "status_label": "paper_critical_framework_overview_draft",
+                "status_label": "paper_critical_framework_overview_review_ready",
+                "paper_claim_ready": True,
+                "review_status": "review_ready_not_camera_final_template",
+                "module_scope": "framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence",
                 "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog",
+                "formula_alignment": {"matches_src_shadow_ccrp_multiplicative_form": True},
                 "git_commit": "abc123",
                 "generated_at_utc": "2026-06-04T00:00:00+00:00",
             }
@@ -141,6 +159,8 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     assert audit["paper_ready"] is False
     assert audit["summary"]["component_inventory_ready"] is True
     assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is True
+    assert audit["modules"]["framework_overview"]["paper_claim_ready"] is True
+    assert audit["modules"]["framework_overview"]["status"] == "review_ready"
     assert audit["modules"]["observation_motivation"]["status"] == "blocked_missing_signal_rows"
     assert audit["modules"]["component_ablation"]["status"] == "blocked_missing_signal_rows"
     assert audit["modules"]["hyperparameter_analysis"]["status"] == "blocked_missing_signal_rows"

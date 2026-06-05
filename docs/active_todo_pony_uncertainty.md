@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 22:15 CST
+Last updated: 2026-06-05 23:25 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -272,8 +272,7 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    now labels the risk score formula as
    `risk_score = base_score * (1 - uncertainty)^eta`, matching
    `src/shadow/ccrp.py`, and includes counterevidence in the C-CRP uncertainty
-   box; it
-   still needs final paper-layout/reviewer polish before camera-ready use. On
+   box; it still needs final paper-layout/reviewer polish before camera-ready use. On
    2026-06-04 17:31 CST, the package was regenerated from
    `scripts/analysis/main_build_framework_overview_figure.py` against git
    commit `9badd19` with the code-matched multiplicative risk formula;
@@ -282,6 +281,29 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    PNG was visually checked as nonblank/readable. This completes the current
    draft scaffold for the framework-overview paper-critical module, but not
    final camera-ready reviewer polish.
+   Framework review-ready checkpoint 2026-06-05 23:20 CST: the figure builder
+   and consolidated module audit now require
+   `status_label=paper_critical_framework_overview_review_ready`,
+   `paper_claim_ready=true`, the controlled same-candidate claim boundary,
+   the code-matched multiplicative risk formula, required SVG labels, valid
+   PNG dimensions, and a matching sha256 manifest. The regenerated package
+   under `outputs/summary/paper_critical/framework_overview/` passes those
+   gates with PNG dimensions `2559x1378` and keeps
+   `module_scope=framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence`.
+   Fresh audit snapshot:
+   `outputs/summary/paper_critical/paper_critical_module_audit_post_framework_review_20260605.{json,md,sha256}`.
+   It reports framework overview `status=review_ready` and
+   `paper_claim_ready=true`, while overall `paper_ready=false` and
+   `signal_rows_available=false`; observation, ablation, and hyperparameter
+   modules remain blocked by missing full-scale valid/test uncertainty signal
+   rows. Verification:
+   `python -m pytest tests\test_framework_overview_figure.py
+   tests\test_audit_paper_critical_modules.py
+   tests\test_uncertainty_observation_study.py
+   tests\test_ccrp_hyperparameter_sweep_plot.py
+   tests\test_build_ccrp_component_inventory.py` (`19 passed`). Visual PNG
+   inspection was nonblank/readable. The framework-figure module is now
+   review-ready except for final venue-template sizing/polish.
 
 Evidence packaging for these modules follows the same lightweight-but-complete
 standard as official rows: keep selected metrics CSV/JSON, final tables, plots,

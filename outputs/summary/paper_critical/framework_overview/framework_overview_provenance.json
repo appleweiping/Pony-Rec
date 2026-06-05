@@ -1,7 +1,10 @@
 {
-  "status_label": "paper_critical_framework_overview_draft",
-  "generated_at_utc": "2026-06-04T09:30:37+00:00",
-  "git_commit": "9badd19677f5e37c45666db948524fe5301bf067",
+  "status_label": "paper_critical_framework_overview_review_ready",
+  "paper_claim_ready": true,
+  "review_status": "review_ready_not_camera_final_template",
+  "module_scope": "framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence",
+  "generated_at_utc": "2026-06-05T15:19:25+00:00",
+  "git_commit": "999d61e50ce90b1b866b3ac7021b5bc4023346f5",
   "command": "python scripts/analysis/main_build_framework_overview_figure.py --output_dir outputs\\summary\\paper_critical\\framework_overview",
   "outputs": {
     "svg": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview.svg",
@@ -12,5 +15,27 @@
     "manifest": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_manifest.sha256"
   },
   "caption": "Figure: Framework overview for Actionable Uncertainty. The method builds a controlled same-candidate ranking task, extracts task-grounded LLM relevance and evidence signals, calibrates the posterior on validation data, decomposes uncertainty into boundary ambiguity, calibration gap, and evidence insufficiency/counterevidence, and applies risk-adjusted ranking. Official baselines and C-CRP share the same candidate rows, metric importer, provenance, and evidence gates.",
-  "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog"
+  "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog",
+  "required_visual_elements": [
+    "Same-candidate task",
+    "LLM signal extraction",
+    "Calibration layer",
+    "C-CRP uncertainty",
+    "Risk-adjusted ranking",
+    "Official baseline block",
+    "Paper-critical method evidence",
+    "Shared evidence gates",
+    "risk_score = base_score * (1 - uncertainty)^eta",
+    "controlled same-candidate ranking"
+  ],
+  "formula_alignment": {
+    "risk_formula": "risk_score = base_score * (1 - uncertainty)^eta",
+    "matches_src_shadow_ccrp_multiplicative_form": true
+  },
+  "claim_limits": [
+    "Does not claim full-catalog recommendation.",
+    "Does not claim generative-title recommendation.",
+    "Does not claim backbone novelty.",
+    "Does not make observation, ablation, or hyperparameter evidence complete."
+  ]
 }

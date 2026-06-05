@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import struct
 import hashlib
 import json
 from datetime import datetime, timezone
@@ -13,6 +14,19 @@ FRAMEWORK_DIR = PAPER_CRITICAL_DIR / "framework_overview"
 PLAN_DIR = PAPER_CRITICAL_DIR / "ccrp_signal_generation_plan"
 COMPONENT_INVENTORY_DIR = PAPER_CRITICAL_DIR / "ccrp_component_inventory"
 DOMAINS = ("sports", "toys", "home", "tools")
+FRAMEWORK_REVIEW_READY_LABEL = "paper_critical_framework_overview_review_ready"
+FRAMEWORK_REQUIRED_LABELS = (
+    "Same-candidate task",
+    "LLM signal extraction",
+    "Calibration layer",
+    "C-CRP uncertainty",
+    "Risk-adjusted ranking",
+    "Official baseline block",
+    "Paper-critical method evidence",
+    "Shared evidence gates",
+    "risk_score = base_score",
+    "* (1 - uncertainty)^eta",
+)
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -36,6 +50,16 @@ def _load_manifest(path: Path) -> dict[str, str]:
         if len(parts) >= 2:
             entries[parts[-1]] = parts[0]
     return entries
+
+
+def _png_dimensions(path: Path) -> tuple[int | None, int | None]:
+    if not path.exists() or path.stat().st_size < 24:
+        return None, None
+    with path.open("rb") as fh:
+        header = fh.read(24)
+    if not header.startswith(b"\x89PNG\r\n\x1a\n"):
+        return None, None
+    return struct.unpack(">II", header[16:24])
 
 
 def audit_framework_overview(root: Path) -> dict[str, Any]:
@@ -69,21 +93,46 @@ def audit_framework_overview(root: Path) -> dict[str, Any]:
     provenance: dict[str, Any] = {}
     if files["framework_overview_provenance.json"].exists():
         provenance = _read_json(files["framework_overview_provenance.json"])
-        if provenance.get("status_label") != "paper_critical_framework_overview_draft":
-            failures.append("framework_status_label_not_draft")
+        if provenance.get("status_label") != FRAMEWORK_REVIEW_READY_LABEL:
+            failures.append("framework_status_label_not_review_ready")
         if provenance.get("claim_boundary") != "controlled_same_candidate_ranking_not_full_catalog":
             failures.append("framework_claim_boundary_mismatch")
+        if provenance.get("paper_claim_ready") is not True:
+            failures.append("framework_paper_claim_ready_not_true")
+        if "not_substitute_for_observation_ablation_or_hyperparameter" not in provenance.get("module_scope", ""):
+            failures.append("framework_scope_not_limited_to_figure")
+        if provenance.get("formula_alignment", {}).get("matches_src_shadow_ccrp_multiplicative_form") is not True:
+            failures.append("framework_formula_alignment_missing")
+
+    svg_text = files["framework_overview.svg"].read_text(encoding="utf-8", errors="replace") if files["framework_overview.svg"].exists() else ""
+    missing_labels = [label for label in FRAMEWORK_REQUIRED_LABELS if label not in svg_text]
+    if missing_labels:
+        failures.append("framework_missing_required_labels:" + ",".join(missing_labels))
+    png_width, png_height = _png_dimensions(files["framework_overview.png"])
+    if not png_width or not png_height:
+        failures.append("framework_png_not_valid")
+    elif png_width < 1800 or png_height < 900:
+        failures.append(f"framework_png_too_small:{png_width}x{png_height}")
 
     return {
         "module": "framework_overview",
-        "status": "draft_scaffold_ready" if not failures else "incomplete",
+        "status": "review_ready" if not failures else "incomplete",
         "artifact_scaffold_ready": not failures,
-        "paper_claim_ready": False,
-        "remaining_blockers": ["final_paper_layout_and_reviewer_polish"] if not failures else failures,
+        "paper_claim_ready": not failures,
+        "remaining_blockers": [] if not failures else failures,
         "files": {name: str(path) for name, path in files.items()},
         "manifest_checks": manifest_checks,
+        "required_label_checks": {
+            "required_labels": list(FRAMEWORK_REQUIRED_LABELS),
+            "missing_labels": missing_labels,
+            "ok": not missing_labels,
+        },
+        "png_dimensions": {"width": png_width, "height": png_height},
         "provenance": {
             "status_label": provenance.get("status_label", ""),
+            "paper_claim_ready": provenance.get("paper_claim_ready"),
+            "review_status": provenance.get("review_status", ""),
+            "module_scope": provenance.get("module_scope", ""),
             "git_commit": provenance.get("git_commit", ""),
             "generated_at_utc": provenance.get("generated_at_utc", ""),
         },

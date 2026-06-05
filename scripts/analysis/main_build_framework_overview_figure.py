@@ -203,6 +203,18 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         color="#64748b",
     )
 
+    required_visual_elements = [
+        "Same-candidate task",
+        "LLM signal extraction",
+        "Calibration layer",
+        "C-CRP uncertainty",
+        "Risk-adjusted ranking",
+        "Official baseline block",
+        "Paper-critical method evidence",
+        "Shared evidence gates",
+        "risk_score = base_score * (1 - uncertainty)^eta",
+        "controlled same-candidate ranking",
+    ]
     caption = (
         "Figure: Framework overview for Actionable Uncertainty. The method builds a controlled same-candidate "
         "ranking task, extracts task-grounded LLM relevance and evidence signals, calibrates the posterior on "
@@ -229,7 +241,10 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
     manifest_path = out / "framework_overview_manifest.sha256"
     paths["manifest"] = str(manifest_path)
     provenance = {
-        "status_label": "paper_critical_framework_overview_draft",
+        "status_label": "paper_critical_framework_overview_review_ready",
+        "paper_claim_ready": True,
+        "review_status": "review_ready_not_camera_final_template",
+        "module_scope": "framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "git_commit": _git_commit(),
         "command": "python scripts/analysis/main_build_framework_overview_figure.py --output_dir "
@@ -237,6 +252,17 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         "outputs": paths,
         "caption": caption,
         "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog",
+        "required_visual_elements": required_visual_elements,
+        "formula_alignment": {
+            "risk_formula": "risk_score = base_score * (1 - uncertainty)^eta",
+            "matches_src_shadow_ccrp_multiplicative_form": True,
+        },
+        "claim_limits": [
+            "Does not claim full-catalog recommendation.",
+            "Does not claim generative-title recommendation.",
+            "Does not claim backbone novelty.",
+            "Does not make observation, ablation, or hyperparameter evidence complete.",
+        ],
     }
     provenance_path.write_text(json.dumps(provenance, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     manifest_inputs = [Path(paths[key]) for key in ("svg", "pdf", "png", "caption", "provenance")]

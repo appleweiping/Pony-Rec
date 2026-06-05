@@ -31,5 +31,9 @@ def test_build_framework_overview_figure_outputs_editable_and_export_files(tmp_p
     assert "framework_overview.svg" in manifest
     assert "framework_overview_provenance.json" in manifest
     saved = json.loads((tmp_path / "framework_overview_provenance.json").read_text(encoding="utf-8"))
+    assert saved["status_label"] == "paper_critical_framework_overview_review_ready"
+    assert saved["paper_claim_ready"] is True
     assert saved["claim_boundary"] == "controlled_same_candidate_ranking_not_full_catalog"
+    assert "not_substitute_for_observation_ablation_or_hyperparameter" in saved["module_scope"]
+    assert saved["formula_alignment"]["matches_src_shadow_ccrp_multiplicative_form"] is True
     assert saved["command"].startswith("python scripts/analysis/main_build_framework_overview_figure.py")
