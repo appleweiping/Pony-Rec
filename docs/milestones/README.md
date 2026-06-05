@@ -313,6 +313,16 @@ The repository is now in M5 (multi-domain SOTA validation):
   killed, traceback, or error marker. Disk remained warning-level at about
   `9.3G` free / `96%` used and no new safe cleanup candidate was identified.
   This remains active monitor-only evidence, not a completed RLMRec row.
+  A 2026-06-05 09:45 CST follow-up found the same runner/adapter PIDs alive
+  and unique, with official RLMRec training past the halfway monitor checkpoint
+  on the default `3000`-epoch path: latest observed epoch `1510/3000` had train
+  loss `1.506936`, after epoch `1500` loss `1.507642`. Final RLMRec evidence
+  still remained placeholder-only (`4.0K`) with no final scores, provenance,
+  score audit, imported tables, predictions, completion marker, OOM/no-space,
+  killed, traceback, or error marker. Disk remained warning-level at about
+  `9.3G` free / `96%` used; a repeat large-file/cache/temp/archive and
+  prediction cleanup audit found no safe meaningful deletion candidate. This
+  remains active monitor-only evidence, not a completed RLMRec row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

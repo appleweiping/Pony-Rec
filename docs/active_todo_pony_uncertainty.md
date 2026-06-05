@@ -1779,6 +1779,22 @@ killed, traceback, or error marker. Disk remained warning-level at about
 `9.3G` free / `96%` used, and no new safe cleanup candidate was identified.
 Continue monitoring; do not start another Tools row while RLMRec is active.
 
+Monitor update 2026-06-05 09:45 CST: runner PID `3347729` and adapter PID
+`3347738` remained alive and unique, with exactly one matching RLMRec adapter
+process. Official RLMRec training passed the halfway checkpoint on the default
+`3000`-epoch path: latest observed line was `[rlmrec-official] epoch=1510
+train_loss=1.506936`, after epoch `1500` loss `1.507642`. This is still active
+monitor-only evidence, not a completed or table-eligible row: final RLMRec
+evidence remained placeholder-only (`4.0K`) with no final scores, provenance,
+score audit, imported tables, predictions, completion marker, OOM/no-space,
+killed, traceback, or error marker. Disk remained warning-level at about
+`9.3G` free / `96%` used. A repeat large-file/cache/temp/archive and prediction
+cleanup audit found no safe meaningful deletion candidate: visible large files
+were active RLMRec intermediates, protected same-candidate task packages,
+retained completed checkpoints/evidence, or older predictions lacking the
+required server-final/local-light proof. Continue monitoring; do not start
+another Tools row while RLMRec is active.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,

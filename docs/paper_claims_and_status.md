@@ -503,6 +503,17 @@ same-candidate tests before any paper-wide SOTA claim.
    killed, traceback, or error marker. Disk remained warning-level at about
    `9.3G` free / `96%` used and no new safe cleanup candidate was identified.
    This remains active monitor-only evidence, not a completed RLMRec row.
+   A 2026-06-05 09:45 CST follow-up found the same runner/adapter PIDs alive
+   and unique, with official RLMRec training past the halfway monitor
+   checkpoint on the default `3000`-epoch path: latest observed epoch
+   `1510/3000` had train loss `1.506936`, after epoch `1500` loss
+   `1.507642`. Final RLMRec evidence still remained placeholder-only (`4.0K`)
+   with no final scores, provenance, score audit, imported tables,
+   predictions, completion marker, OOM/no-space, killed, traceback, or error
+   marker. Disk remained warning-level at about `9.3G` free / `96%` used; a
+   repeat large-file/cache/temp/archive and prediction cleanup audit found no
+   safe meaningful deletion candidate. This remains active monitor-only
+   evidence, not a completed RLMRec row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
