@@ -3130,6 +3130,30 @@ reports `ok=true`, `four_domain_evidence_consistent=true`,
 `python -m pytest tests\test_ccrp_v3_signal_rows_runner.py tests\test_plan_ccrp_signal_generation.py tests\test_audit_paper_critical_modules.py`
 (`15 passed`). No server experiment or baseline was launched.
 
+Phase 2.5 signal-row launch hardening and Sports valid launch: on 2026-06-06,
+Codex added a strict generation-count guard to
+`experiments/rsc/run_ccrp_v3_signal_rows.py` so full-scale outputs abort if
+expected rows, prompt count, metadata rows, and backend result count diverge.
+Focused tests passed (`16 passed`), and the code was committed/pushed as
+`70f2f0d`. A separate continuity-rule documentation update was committed as
+`096f716`. The first Sports valid signal-row launch attempt used base
+`/home/ajifang/miniconda3/bin/python` and failed before writing rows because
+vLLM could not import `libcudart.so.13`. The corrected bounded launch uses
+`/home/ajifang/miniconda3/envs/qwen_vllm/bin/python` with PID `3543564`, log
+`ccrp_signal_rows_sports_valid_20260606_071906.log`, pidfile
+`outputs/summary/paper_critical/ccrp_signal_rows_sports_valid_20260606_071906.pid`,
+and output dir
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports`.
+Launch manifest:
+`outputs/summary/paper_critical/ccrp_signal_rows_sports_valid_launch_20260606_071906.{json,md}`.
+At launch audit the process was unique, GPU was active, disk remained `87%`
+used with about `25.98GB` free, fatal log scan was clean, and no progress line
+had appeared yet because the first chunk had not completed. This is not a
+paper-ready artifact: after completion, audit `valid_ccrp_signal_rows.csv`
+against the Sports valid `candidate_items.csv` before selector use; do not use
+test, observation, ablation, or hyperparameter modules until their own gates
+pass.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory

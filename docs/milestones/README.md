@@ -159,6 +159,25 @@ reports `ok=true`, `four_domain_evidence_consistent=true`,
 keeping `paper_ready=false` because no completed full-scale signal rows have
 passed audit. No Phase 2.5 experiment was launched.
 
+The 2026-06-06 07:19 CST Sports-valid signal-row launch is the first bounded
+Phase 2.5 execution after the signal-runner checkpoint. Before launch, Codex
+hardened `experiments/rsc/run_ccrp_v3_signal_rows.py` with a strict
+generation-count guard and pushed commit `70f2f0d`. A first attempt with base
+`/home/ajifang/miniconda3/bin/python` failed before writing rows because vLLM
+could not import `libcudart.so.13`. The corrected run uses
+`/home/ajifang/miniconda3/envs/qwen_vllm/bin/python`, PID `3543564`, log
+`ccrp_signal_rows_sports_valid_20260606_071906.log`, pidfile
+`outputs/summary/paper_critical/ccrp_signal_rows_sports_valid_20260606_071906.pid`,
+and output dir
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports`.
+Local launch manifest:
+`outputs/summary/paper_critical/ccrp_signal_rows_sports_valid_launch_20260606_071906.{json,md}`.
+At launch audit the process was unique, GPU was active, disk remained safe,
+and the fatal log scan was clean. This is not yet paper evidence: after
+completion, the valid signal rows must pass candidate-key coverage/provenance
+audit against Sports valid `candidate_items.csv` before any selector,
+observation, ablation, hyperparameter, or test use.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test

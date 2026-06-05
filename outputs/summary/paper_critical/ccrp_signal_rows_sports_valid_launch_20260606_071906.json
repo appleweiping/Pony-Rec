@@ -1,0 +1,43 @@
+{
+  "artifact_class": "phase2_5_signal_row_launch_snapshot",
+  "generated_local_time": "2026-06-06T01:23:19+02:00",
+  "server": "pony-rec-gpu",
+  "server_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "domain": "sports",
+  "split": "valid",
+  "status": "active_at_launch_audit",
+  "pid": 3543564,
+  "log_path": "ccrp_signal_rows_sports_valid_20260606_071906.log",
+  "pidfile": "outputs/summary/paper_critical/ccrp_signal_rows_sports_valid_20260606_071906.pid",
+  "output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "expected_signal_rows": 1010000,
+  "runner_path": "experiments/rsc/run_ccrp_v3_signal_rows.py",
+  "runner_sha256": "b3667dfbae798b29371dd0c4b0637ec2318d4b27dc0ea42a240171ec819f8ad7",
+  "local_runner_commit": "70f2f0d",
+  "documentation_commit": "096f716",
+  "python_executable": "/home/ajifang/miniconda3/envs/qwen_vllm/bin/python",
+  "data_path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+  "candidate_items_path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv",
+  "preflight": {
+    "active_project_processes_before_launch": 0,
+    "gpu_before_launch": "0 %, 15 MiB, 49140 MiB",
+    "disk_before_launch": "/dev/vda5 209709965312 172843282432 26139488256 87% /",
+    "target_output_existed_before_launch": false
+  },
+  "launch_audit": {
+    "process_unique": true,
+    "gpu_after_launch": "100 %, 42863 MiB, 49140 MiB",
+    "disk_after_launch": "/dev/vda5 209709965312 172999270400 25983500288 87% /",
+    "fatal_log_scan_clean": true,
+    "progress_lines_seen": false
+  },
+  "failed_attempt": {
+    "log_path": "ccrp_signal_rows_sports_valid_20260606_071701.log",
+    "python_executable": "/home/ajifang/miniconda3/bin/python",
+    "failure": "ImportError: libcudart.so.13: cannot open shared object file",
+    "rows_written": false
+  },
+  "next_gate": "monitor_to_completion_then_audit_valid_signal_rows_against_valid_candidate_items_before_selector_use"
+}

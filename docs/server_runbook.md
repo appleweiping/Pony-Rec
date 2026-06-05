@@ -52,6 +52,9 @@ PIDs, audit summaries, and missing-file errors.
 5. If no saved signal rows pass audit, use the guarded signal-row runner
    `experiments/rsc/run_ccrp_v3_signal_rows.py` to generate valid/test
    recomputable signal rows on the server, then audit them before selector use.
+   Use `/home/ajifang/miniconda3/envs/qwen_vllm/bin/python`; the base
+   `/home/ajifang/miniconda3/bin/python` vLLM import failed on 2026-06-06 with
+   `libcudart.so.13` missing.
 6. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
    failures; do not include it in the main official block unless a future
    memory-stable run passes all gates.

@@ -131,6 +131,22 @@ also include:
     `phase2_5_storage_launch_allowed=true`, and `guarded_plan_ready=true`, but
     keeps `paper_ready=false` because no completed full-scale signal rows have
     passed audit yet. No server experiment was launched.
+    Phase 2.5 Sports-valid launch on 2026-06-06: before server use, Codex
+    hardened `experiments/rsc/run_ccrp_v3_signal_rows.py` with a strict
+    generation-count guard and pushed commit `70f2f0d`. The first launch attempt
+    used base `/home/ajifang/miniconda3/bin/python` and failed before writing
+    rows because vLLM could not import `libcudart.so.13`. The corrected bounded
+    launch uses `/home/ajifang/miniconda3/envs/qwen_vllm/bin/python`, PID
+    `3543564`, log `ccrp_signal_rows_sports_valid_20260606_071906.log`, and
+    output dir
+    `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports`.
+    Local launch manifest:
+    `outputs/summary/paper_critical/ccrp_signal_rows_sports_valid_launch_20260606_071906.{json,md}`.
+    This running valid-split job is not paper-ready evidence yet. After
+    completion, its `valid_ccrp_signal_rows.csv` must pass the C-CRP uncertainty
+    source audit against the Sports valid `candidate_items.csv` before selector
+    use; test/observation/ablation/hyperparameter use remains blocked until the
+    relevant gates pass.
     Paper-facing comparison ledger checkpoint on 2026-06-06 02:35-02:40 CST:
     a GPT-5.5 xhigh read-only sidecar reviewer confirmed the compact
     four-domain comparison certificate was supported but lacked a strict
