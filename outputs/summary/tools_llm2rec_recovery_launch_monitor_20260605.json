@@ -1,0 +1,38 @@
+{
+  "artifact_class": "active_recovery_launch_monitor_snapshot",
+  "domain": "tools",
+  "method": "llm2rec_sasrec",
+  "status": "active_monitor_only_not_table_eligible",
+  "server": "pony-rec-gpu",
+  "server_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "launch_time_cst": "2026-06-05 15:59:04",
+  "snapshot_time_cst": "2026-06-05 16:05",
+  "runner_pid": 3423029,
+  "adapter_pid": 3423037,
+  "official_training_pid": 3423221,
+  "log_path": "baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log",
+  "training_log_path": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_training.log",
+  "heartbeat_id": "monitor-tools-llm2rec-recovery",
+  "embedding_reuse": {
+    "override_env": "LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE",
+    "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "adapter_command_includes_llm2rec_item_embedding_path": true,
+    "force_embeddings": false
+  },
+  "storage_recovery": {
+    "sports_checkpoint_manifest": "outputs/summary/sports_llm2rec_checkpoint_deletion_manifest_20260605.json",
+    "toys_checkpoint_manifest": "outputs/summary/toys_llm2rec_checkpoint_deletion_manifest_20260605.json",
+    "post_cleanup_free_bytes": 10692530176,
+    "post_cleanup_disk_used_percent": 95
+  },
+  "active_snapshot": {
+    "adapter_dir_size": "1.1G",
+    "output_dir_size": "5.3G",
+    "upstream_embedding_dir_size": "5.3G",
+    "latest_observed_training": "epoch 30+ active; checkpoint saved at epoch 30",
+    "gpu_observation": "0 %, 11299 MiB during an I/O/eval-adjacent sample",
+    "failure_markers_seen": false,
+    "completion_markers_seen": false
+  },
+  "next_gate": "Continue heartbeat monitoring; on completion run server-final audit, server large-artifact manifest, local-light sync/audit, collect full metrics/row counts, then only approved post-gate cleanup."
+}

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 15:23 CST
+Last updated: 2026-06-05 16:05 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -280,6 +280,52 @@ LLM2Rec recovery should first free additional audited space, then relaunch a
 single Tools `llm2rec_sasrec` row with the preserved embedding passed as
 `--llm2rec_item_embedding_path /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
 so Qwen3 embedding is not regenerated.
+
+Tools LLM2Rec recovery relaunch checkpoint: after a sidecar GPT-5.5 xhigh
+ARIS storage audit judged completed-checkpoint cleanup conditionally acceptable,
+the completed Sports LLM2Rec full checkpoint was removed with sha256/size
+manifests
+`outputs/summary/sports_llm2rec_checkpoint_deletion_manifest_20260605.json`
+and row-local
+`outputs/sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/checkpoint_deletion_manifest_20260605_sports_llm2rec.json`.
+The deleted checkpoint was `4,652,329,391` bytes with sha256
+`acddfcb8680ec7b98f96bbeac67a23d97e63c5cc862cabcea1aa29b5dd7b713c`.
+Sports LLM2Rec `scores.csv`, provenance, score audits, run summary, imported
+tables, server-final audit, and local-light package were preserved; live
+post-delete checks still found `scores.csv` at `1,010,001` lines and
+`tables/ranking_eval_records.csv` at `10,001` lines. When the active Tools
+run then saved its own full checkpoint and disk again reached warning level,
+the completed Toys LLM2Rec full checkpoint was removed under the same
+manifest discipline:
+`outputs/summary/toys_llm2rec_checkpoint_deletion_manifest_20260605.json` and
+row-local
+`outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/checkpoint_deletion_manifest_20260605_toys_llm2rec.json`.
+The deleted Toys checkpoint was `4,178,091,523` bytes with sha256
+`4f9d087f50116aee1a4dace21b514920f565921659a7c18d9f4e9ee222d9b7d9`; Toys
+scores/provenance/audits/run summary/tables/local-light evidence were preserved
+and live checks still found `scores.csv` at `1,010,001` lines and
+`tables/ranking_eval_records.csv` at `10,001` lines. These deletions are
+storage-emergency archive decisions only; they do not downgrade the completed
+Sports/Toys LLM2Rec table rows, but future reproduction of their full SASRec
+checkpoints would require rerunning from the recorded provenance and scores.
+
+The local and server `scripts/run_baselines_new_domains.sh` now support
+`LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE` for the LLM2Rec case only, forwarding it
+as `--llm2rec_item_embedding_path` so recovery can reuse a precomputed
+embedding without `--force_embeddings`. Server `bash -n` passed after copying
+the patched wrapper. A single Tools `llm2rec_sasrec` recovery run launched at
+2026-06-05 15:59 CST from
+`baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log` with runner
+PID `3423029`, adapter PID `3423037`, official training PID `3423221`, and
+heartbeat `monitor-tools-llm2rec-recovery`. The adapter command includes
+`--llm2rec_item_embedding_path /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`,
+and the training command uses that same embedding path. At 2026-06-05 16:05
+CST it was active around epoch `30+`, had saved a Tools checkpoint, and had no
+completion or fatal markers; disk was `10,692,530,176` bytes free (`10G` /
+`95%`), adapter dir `1.1G`, output dir `5.3G`, and preserved upstream embedding
+dir `5.3G`. The row remains active monitor-only evidence, not table-eligible,
+until provenance, score audit, import, server-final, server manifest,
+local-light sync, local-light audit, full metrics, and row-count gates pass.
 
 Execution specification: `docs/paper_critical_experiment_plan_2026-06-03.md`.
 Do not start Tools official baselines until the Home domain gate artifacts are

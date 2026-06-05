@@ -141,6 +141,10 @@ run_baseline_on_domain() {
           --embedding_max_length 128 --hf_device_map auto
         ;;
       llm2rec_sasrec)
+        llm2rec_extra_args=()
+        if [ -n "${LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE:-}" ]; then
+          llm2rec_extra_args+=(--llm2rec_item_embedding_path "$LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE")
+        fi
         "$PYTHON" scripts/adapters/main_run_llm2rec_official_same_candidate_adapter.py \
           --stage run --domain "$domain" \
           --task_dir "$task_dir" --valid_task_dir "$valid_dir" \
@@ -151,7 +155,8 @@ run_baseline_on_domain() {
           --backbone_path "$BACKBONE" \
           --llm_adaptation_mode frozen_base_embedding \
           --embedding_backend hf_mean_pool \
-          --embedding_max_length 128 --hf_device_map auto
+          --embedding_max_length 128 --hf_device_map auto \
+          "${llm2rec_extra_args[@]}"
         ;;
       llmesr_sasrec)
         "$PYTHON" scripts/adapters/main_run_llmesr_official_same_candidate_adapter.py \

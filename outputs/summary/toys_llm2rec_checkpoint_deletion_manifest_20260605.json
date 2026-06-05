@@ -1,0 +1,26 @@
+{
+  "absolute_deleted_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/seqrec_ckpt/LLM2Rec_official_qwen3base_toys_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=T-Jun-02-2026_16-06-16-897b80.pth",
+  "artifact_class": "completed_checkpoint_deletion_manifest",
+  "created_unix_time": 1780646677.8373017,
+  "deleted_path": "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/seqrec_ckpt/LLM2Rec_official_qwen3base_toys_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=T-Jun-02-2026_16-06-16-897b80.pth",
+  "domain": "toys",
+  "local_light_audit_expected": "outputs/baselines/official_adapters/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/local_light_evidence_audit.json",
+  "local_light_package": "outputs/baselines/official_adapters/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/",
+  "method": "llm2rec_sasrec",
+  "preserved_artifacts": [
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_score_audit.json",
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_sasrec_same_candidate_score_audit.txt",
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_run_summary.json",
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+    "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_metrics.csv"
+  ],
+  "provenance_checkpoint_sha256": "4f9d087f50116aee1a4dace21b514920f565921659a7c18d9f4e9ee222d9b7d9",
+  "reason": "disk_emergency_active_tools_llm2rec_recovery_after_tools_checkpoint_saved; completed Toys LLM2Rec row has server_final audit, local-light evidence package, live scores/provenance/audits/imported tables, and checkpoint sha in provenance; full checkpoint is not needed for current comparison tables",
+  "server_final_audit_ok": true,
+  "server_final_evidence_audit": "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+  "sha256": "4f9d087f50116aee1a4dace21b514920f565921659a7c18d9f4e9ee222d9b7d9",
+  "size_bytes": 4178091523,
+  "status": "deleted_after_manifest"
+}

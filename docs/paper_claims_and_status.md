@@ -614,6 +614,25 @@ claim.
    monitor threshold. Do not import this row and do not start the next baseline
    until additional audited space is freed; the recovery relaunch should pass
    the preserved path through `--llm2rec_item_embedding_path`.
+   A 2026-06-05 16:05 CST recovery/storage checkpoint removed the completed
+   Sports and Toys LLM2Rec full checkpoints with sha256/size manifests after a
+   GPT-5.5 xhigh sidecar ARIS storage audit and live evidence checks. The
+   manifests are
+   `outputs/summary/sports_llm2rec_checkpoint_deletion_manifest_20260605.json`
+   and `outputs/summary/toys_llm2rec_checkpoint_deletion_manifest_20260605.json`.
+   Sports/Toys LLM2Rec scores, provenance, score audits, run summaries,
+   imported tables, server-final audits, and local-light packages were
+   preserved; only the full `.pth` checkpoints were deleted. The wrapper now
+   supports `LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE` and the server copy passed
+   `bash -n`. Exactly one Tools LLM2Rec recovery launched at 2026-06-05
+   15:59 CST with runner PID `3423029`, adapter PID `3423037`, official
+   training PID `3423221`, log
+   `baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log`, and
+   heartbeat `monitor-tools-llm2rec-recovery`. Its adapter command includes
+   `--llm2rec_item_embedding_path /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`,
+   so Qwen3 embedding is reused. At the 16:05 CST snapshot it was active around
+   epoch `30+`, had saved a Tools checkpoint, and disk was about `10G` free /
+   `95%` used. This is active monitor-only evidence, not a completed row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

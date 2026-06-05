@@ -302,6 +302,32 @@ records the operation in provenance; scoring injects the same external Qwen3
 `.npy` table before loading the model. Pass `--llm2rec_keep_full_checkpoint`
 only when you intentionally want the much larger original checkpoint.
 
+For recovery after a failed LLM2Rec run that already produced a valid upstream
+item embedding, the production wrapper accepts
+`LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE`. Set it to the preserved
+`.../item_info/<DatasetAlias>/pony_qwen3_8b_title_item_embs.npy` path before
+launching the single-domain loop; the wrapper forwards it as
+`--llm2rec_item_embedding_path` and must not be combined with
+`--force_embeddings`.
+
+Example Tools recovery launch:
+
+```bash
+nohup env \
+  DOMAINS_OVERRIDE=tools \
+  FAST_METHODS_OVERRIDE= \
+  TRAIN_METHODS_OVERRIDE=llm2rec_sasrec \
+  LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE=/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy \
+  bash scripts/run_baselines_new_domains.sh \
+  > baselines_new_domains_tools_llm2rec_recovery_<STAMP>.log 2>&1 &
+```
+
+Before using this override, verify no active project experiment process,
+GPU/disk health, the existence and size of the embedding file, and absence of
+final `scores.csv`/completed provenance for the target row. The row is still
+not complete until score audit, import, server-final audit, large-artifact
+manifest, local-light sync/audit, full metrics, and row-count gates pass.
+
 Large domains are storage-heavy. The default production policy is one domain at
 a time:
 

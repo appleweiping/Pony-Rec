@@ -419,6 +419,24 @@ The repository is now in M5 (multi-domain SOTA validation):
   monitor threshold. Tools remains 6/8 official rows gated; next action is an
   additional audited storage decision, then exactly one LLM2Rec recovery run
   using `--llm2rec_item_embedding_path` to reuse the preserved embedding.
+  A 2026-06-05 16:05 CST recovery/storage checkpoint then removed the completed
+  Sports and Toys LLM2Rec full checkpoints under manifest-backed emergency
+  archive decisions after confirming each row's completed provenance,
+  server-final audit, local-light package, live scores, score audits, run
+  summary, and imported tables. Manifests are
+  `outputs/summary/sports_llm2rec_checkpoint_deletion_manifest_20260605.json`
+  and `outputs/summary/toys_llm2rec_checkpoint_deletion_manifest_20260605.json`;
+  final scores/provenance/audits/tables/local packages were preserved. The
+  wrapper gained `LLM2REC_ITEM_EMBEDDING_PATH_OVERRIDE`, was syntax-checked on
+  the server, and a single Tools `llm2rec_sasrec` recovery launched at
+  2026-06-05 15:59 CST with runner PID `3423029`, adapter PID `3423037`,
+  training PID `3423221`, log
+  `baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log`, and
+  heartbeat `monitor-tools-llm2rec-recovery`. The command reuses the preserved
+  Tools embedding path and does not force regeneration. At the 16:05 CST
+  snapshot it was active around epoch `30+`, had saved its Tools checkpoint,
+  and disk was about `10G` free / `95%` used. The row is still monitor-only
+  evidence until all completion gates pass.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final
