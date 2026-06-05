@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shlex
 import subprocess
@@ -138,6 +139,14 @@ def _read_json(path: str | Path) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise ValueError(f"expected JSON object: {path}")
     return payload
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _apply_retention_audit(item: dict[str, Any], retention_audit_json: str | Path | None) -> dict[str, Any]:
@@ -487,6 +496,18 @@ def write_decision_markdown(plan: dict[str, Any], *, output_md: str | Path) -> s
     return str(md_path)
 
 
+def write_packet_sha256(paths: list[str | Path], *, output_sha256: str | Path) -> str:
+    sha_path = Path(output_sha256)
+    sha_path.parent.mkdir(parents=True, exist_ok=True)
+    lines = []
+    for path_value in paths:
+        path = Path(path_value)
+        if path.exists() and path.is_file():
+            lines.append(f"{_sha256(path)}  {path.name}")
+    sha_path.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
+    return str(sha_path)
+
+
 def main() -> None:
     args = parse_args()
     output_dir = args.output_dir.rstrip("/\\")
@@ -503,8 +524,11 @@ def main() -> None:
         retention_audit_json=args.retention_audit_json or None,
     )
     outputs = write_plan_files(plan, output_json=output_json, output_sh=output_sh)
+    packet_paths: list[str | Path] = [output_json, output_sh]
     if args.output_md:
         outputs["markdown"] = write_decision_markdown(plan, output_md=args.output_md)
+        packet_paths.append(args.output_md)
+    outputs["sha256"] = write_packet_sha256(packet_paths, output_sha256=Path(output_json).with_suffix(".sha256"))
     print(
         json.dumps(
             {

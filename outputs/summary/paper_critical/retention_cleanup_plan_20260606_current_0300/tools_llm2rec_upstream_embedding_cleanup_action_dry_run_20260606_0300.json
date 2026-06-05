@@ -1,0 +1,118 @@
+{
+  "schema_version": "2026-06-06.retention_cleanup_action.v1",
+  "created_at_utc": "2026-06-05T19:04:13+00:00",
+  "mode": "dry_run",
+  "remote": "pony-rec-gpu",
+  "read_only": true,
+  "will_delete": false,
+  "will_start_experiment": false,
+  "plan_json": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current_0300\\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0300.json",
+  "packet_audit_json": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current_0300\\tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0300.json",
+  "preapproval_audit_json": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current_0300\\tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0300.json",
+  "target_path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+  "expected_sha256": "306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e",
+  "expected_size_bytes": 5662687360,
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "approval_token_required": "APPROVE_DELETE_COMPLETED_TOOLS_LLM2REC_UPSTREAM_EMBEDDING_20260605",
+  "approval_token_valid": false,
+  "validation": {
+    "ok": true,
+    "failures": [],
+    "warnings": [],
+    "approval_token_valid": false,
+    "allowed_preapproval_failures": [
+      "disk_below_min_free_before_cleanup"
+    ]
+  },
+  "ordered_steps": [
+    {
+      "index": 1,
+      "name": "server_preflight_read_only",
+      "read_only": true,
+      "destructive": false,
+      "command": "date '+%F %T %Z'; ps aux | grep python | grep -v grep | grep -i 'pony-rec\\|ccrp\\|baseline\\|uncertainty' || true; nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader; df -h /home/ajifang; df -B1 /home/ajifang"
+    },
+    {
+      "index": 2,
+      "name": "evidence_precondition_check",
+      "read_only": true,
+      "destructive": false,
+      "command": "test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json && test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json && test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv && test -f /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv"
+    },
+    {
+      "index": 3,
+      "name": "target_realpath_check",
+      "read_only": true,
+      "destructive": false,
+      "command": "test \"$(realpath /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy)\" = /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy"
+    },
+    {
+      "index": 4,
+      "name": "target_stat_read_only",
+      "read_only": true,
+      "destructive": false,
+      "command": "stat -c '%s  %n' /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy"
+    },
+    {
+      "index": 5,
+      "name": "target_sha256_read_only",
+      "read_only": true,
+      "destructive": false,
+      "command": "sha256sum /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy"
+    },
+    {
+      "index": 6,
+      "name": "domain_gate_check",
+      "read_only": true,
+      "destructive": false,
+      "command": "/home/ajifang/miniconda3/bin/python scripts/audit/main_audit_domain_official_gate.py --root . --domain tools --output_json outputs/summary/phase2_5_retention_cleanup_domain_gate_recheck.json --output_csv outputs/summary/phase2_5_retention_cleanup_domain_gate_recheck.csv --quiet"
+    },
+    {
+      "index": 7,
+      "name": "approval_guard",
+      "read_only": true,
+      "destructive": false,
+      "command": "APPROVAL_TOKEN='<approval-token-not-used-in-dry-run>'; test \"${APPROVAL_TOKEN:-}\" = APPROVE_DELETE_COMPLETED_TOOLS_LLM2REC_UPSTREAM_EMBEDDING_20260605"
+    },
+    {
+      "index": 8,
+      "name": "manifest_before_delete",
+      "read_only": false,
+      "destructive": false,
+      "command": "mkdir -p outputs/summary && sha256sum /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy > outputs/summary/tools_llm2rec_upstream_embedding_retention_cleanup_APPROVAL_REQUIRED_20260605.sha256 && stat -c '%s  %n' /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy > outputs/summary/tools_llm2rec_upstream_embedding_retention_cleanup_APPROVAL_REQUIRED_20260605.size.txt"
+    },
+    {
+      "index": 9,
+      "name": "delete_target_after_approval",
+      "read_only": false,
+      "destructive": true,
+      "command": "rm -- /home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy"
+    },
+    {
+      "index": 10,
+      "name": "post_delete_disk_check",
+      "read_only": true,
+      "destructive": false,
+      "command": "df -h /home/ajifang; df -B1 /home/ajifang"
+    },
+    {
+      "index": 11,
+      "name": "post_delete_domain_gate_check",
+      "read_only": false,
+      "destructive": false,
+      "command": "/home/ajifang/miniconda3/bin/python scripts/audit/main_audit_domain_official_gate.py --root . --domain tools --output_json outputs/summary/phase2_5_retention_cleanup_post_delete_domain_gate.json --output_csv outputs/summary/phase2_5_retention_cleanup_post_delete_domain_gate.csv --quiet"
+    },
+    {
+      "index": 12,
+      "name": "post_delete_comparison_gate_check",
+      "read_only": false,
+      "destructive": false,
+      "command": "/home/ajifang/miniconda3/bin/python scripts/experiments/main_build_domain_official_comparison.py --root . --domain tools --gate_json outputs/summary/phase2_5_retention_cleanup_post_delete_domain_gate.json --output_dir outputs/summary/phase2_5_retention_cleanup_comparison_recheck --stamp tools_retention_cleanup_post_delete --n_bootstrap 0 --quiet"
+    }
+  ],
+  "execution": {
+    "status": "dry_run_no_remote_commands",
+    "commands_executed": [],
+    "outputs": {}
+  }
+}

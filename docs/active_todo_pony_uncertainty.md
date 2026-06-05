@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 02:25 CST
+Last updated: 2026-06-06 03:00 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2780,6 +2780,28 @@ and
 Both regenerated audits report `ok=true`, zero failures, and zero warnings,
 while `paper_ready=false` remains because Phase 2.5 uncertainty signal rows are
 still missing.
+
+Current retention-decision checkpoint: at 2026-06-06 03:00 CST, Codex reran a
+read-only server storage audit and consolidated paper-critical module audit,
+then regenerated the Tools LLM2Rec upstream-embedding retention decision
+packet under
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0300/`.
+Server state: no matching project Python process, GPU idle, and `/` at
+`12,406,411,264` free bytes / `94%` used, below the `15GiB` Phase 2.5 launch
+floor. The storage audit recommends the same lowest-risk approval-required
+candidate,
+`/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`,
+with expected post-delete free bytes `18,069,098,624`. Codex fixed
+`scripts/audit/main_plan_phase2_5_retention_cleanup.py` so generated
+decision packets now emit their own `.sha256` packet manifest. The refreshed
+packet audit reports `ok=true` and `failures=[]`; the live preapproval audit
+reports `preapproval_checks_ready_except_disk=true` with only
+`disk_below_min_free_before_cleanup`; and the action renderer reports
+`ok=true`, `will_delete=false`, and
+`execution_status=dry_run_no_remote_commands`. No cleanup, deletion,
+manifesting on the server, post-delete gate, experiment launch, or baseline
+launch occurred. Checkpoint manifest:
+`outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
 
 ## Required Next Actions
 

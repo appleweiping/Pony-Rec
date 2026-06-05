@@ -325,6 +325,31 @@ also include:
     `will_delete=false`, and
     `execution_status=dry_run_no_remote_commands`. No cleanup command was
     executed, no artifact was deleted, and no experiment was launched.
+    Current retention-decision checkpoint on 2026-06-06 03:00 CST:
+    a fresh read-only storage audit found no active project Python process,
+    GPU idle, and `/` at `12,406,411,264` free bytes / `94%` used, still below
+    the `15GiB` Phase 2.5 launch floor. The consolidated module audit
+    `outputs/summary/paper_critical/paper_critical_module_audit_current_20260606_0300.{json,md}`
+    reports `ok=true`, `paper_ready=false`,
+    `four_domain_evidence_consistent=true`,
+    `framework_overview_scaffold_ready=true`, `component_inventory_ready=true`,
+    `guarded_plan_ready=true`, `signal_rows_available=false`, and
+    `phase2_5_storage_launch_allowed=false`. Codex fixed
+    `scripts/audit/main_plan_phase2_5_retention_cleanup.py` so generated
+    retention decision packets emit the `.sha256` packet manifest required by
+    the packet auditor. The refreshed non-destructive packet under
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0300/`
+    records the completed Tools LLM2Rec upstream embedding as the same
+    approval-required candidate, expected to raise free space to
+    `18,069,098,624` bytes if explicitly approved and deleted. Packet audit
+    now reports `ok=true` and `failures=[]`; live preapproval reports
+    `preapproval_checks_ready_except_disk=true` with only
+    `disk_below_min_free_before_cleanup`; dry-run action rendering reports
+    `ok=true`, `will_delete=false`, and
+    `execution_status=dry_run_no_remote_commands`. No server cleanup,
+    deletion, post-delete gate, experiment launch, or baseline launch occurred.
+    Checkpoint manifest:
+    `outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

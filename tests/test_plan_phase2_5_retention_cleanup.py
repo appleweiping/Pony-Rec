@@ -4,7 +4,11 @@ from scripts.audit.main_plan_phase2_5_retention_cleanup import (
     build_plan,
     decision_markdown,
     guarded_shell_script,
+    write_decision_markdown,
+    write_packet_sha256,
+    write_plan_files,
 )
+from scripts.audit.main_audit_phase2_5_retention_decision_packet import build_audit as build_packet_audit
 
 
 def _write_retention_audit(path, *, target_path=None):
@@ -183,3 +187,35 @@ def test_guarded_shell_exits_before_any_delete_or_manifest_command():
     assert "rsync --delete" not in script
     assert "nohup" not in script
     assert "run_baselines_new_domains.sh" not in script
+
+
+def test_retention_plan_writer_emits_auditable_packet_manifest(tmp_path):
+    audit_path = _write_retention_audit(tmp_path / "storage.json")
+    plan = build_plan(
+        candidate="tools_llm2rec_upstream_embedding",
+        min_free_gib=15,
+        output_dir=str(tmp_path),
+        plan_id="test_plan",
+        retention_audit_json=audit_path,
+    )
+    output_json = tmp_path / "test_plan.json"
+    output_sh = tmp_path / "test_plan.sh"
+    output_md = tmp_path / "test_plan.md"
+    output_sha = tmp_path / "test_plan.sha256"
+
+    write_plan_files(plan, output_json=output_json, output_sh=output_sh)
+    write_decision_markdown(plan, output_md=output_md)
+    write_packet_sha256([output_json, output_sh, output_md], output_sha256=output_sha)
+
+    packet_audit = build_packet_audit(
+        plan_json=output_json,
+        plan_sh=output_sh,
+        plan_md=output_md,
+        packet_sha256=output_sha,
+        retention_audit_json=audit_path,
+    )
+
+    assert packet_audit["ok"] is True
+    assert packet_audit["manifest_checks"]["test_plan.json"]["ok"] is True
+    assert packet_audit["manifest_checks"]["test_plan.sh"]["ok"] is True
+    assert packet_audit["manifest_checks"]["test_plan.md"]["ok"] is True

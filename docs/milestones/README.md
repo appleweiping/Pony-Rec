@@ -130,6 +130,21 @@ now locally self-contained for the four-domain C-CRP event/ranking records, but
 paper readiness remains blocked by missing full-scale uncertainty signal rows
 and the Phase 2.5 storage gate.
 
+The 2026-06-06 03:00 CST retention-decision checkpoint refreshed the live
+server storage audit and module audit without launching work. Server state was
+idle with `/` at `12,406,411,264` free bytes / `94%` used, so signal-row
+generation remains blocked by the `15GiB` floor. Codex fixed the retention
+planner to emit the packet `.sha256` manifest expected by the packet auditor
+and regenerated
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0300/`.
+The refreshed packet audit passes with `ok=true`; live preapproval is ready
+except for `disk_below_min_free_before_cleanup`; and the action renderer is
+dry-run only with `will_delete=false` and
+`execution_status=dry_run_no_remote_commands`. No cleanup, deletion,
+post-delete gate, baseline launch, or Phase 2.5 experiment launch occurred.
+Checkpoint manifest:
+`outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:

@@ -64,7 +64,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/run_ccrp_v3_new_domains.sh` | C-CRP v3 on home/tools only |
 | `scripts/audit/main_audit_domain_official_gate.py` | Read-only domain gate for the eight official baselines plus C-CRP full metrics, row counts, coverage, provenance, and stray official-like directories |
 | `scripts/experiments/main_build_domain_official_comparison.py` | Read-only full comparison table and paired tests for C-CRP vs eight official baselines |
-| `scripts/audit/main_plan_phase2_5_retention_cleanup.py` | Guarded, non-executing Phase 2.5 storage-retention plan; generated shell exits before manifest or delete commands and requires explicit approval |
+| `scripts/audit/main_plan_phase2_5_retention_cleanup.py` | Guarded, non-executing Phase 2.5 storage-retention plan; generated shell exits before manifest or delete commands, emits a packet `.sha256`, and requires explicit approval |
 | `scripts/audit/main_audit_phase2_5_storage_retention.py` | Read-only SSH storage audit for Phase 2.5 disk gates; classifies safe-now, protected, and approval-required high-yield artifacts and emits a ranked approval recommendation without deleting |
 | `scripts/audit/main_cleanup_phase2_5_safe_now_remnants.py` | Exact-target cleanup helper for audited low-yield Phase 2.5 staging/temp remnants; manifests every file before deletion and never targets final evidence |
 | `scripts/audit/main_audit_local_server_evidence_consistency.py` | Local-only consistency audit comparing lightweight evidence packages against copied server large-artifact manifests; catches missing local files and accidental local bulk artifacts |
@@ -136,7 +136,9 @@ python scripts\audit\main_plan_phase2_5_retention_cleanup.py `
 
 The generated shell is still intentionally non-runnable as generated: `exit 2`
 precedes sha256 manifesting and `rm --`. The Markdown packet is the user-facing
-retention-decision surface, not an approval by itself.
+retention-decision surface, not an approval by itself. As of the 2026-06-06
+03:00 CST refresh, the planner also writes the packet `.sha256` manifest
+expected by the packet auditor.
 
 Before any future approval or action, audit the packet locally:
 
@@ -190,6 +192,19 @@ target, with `--execute --approval_token <exact token>`, and still performs the
 ordered pre-delete manifest, exact-target delete, disk check, domain gate, and
 comparison gate sequence. Do not use execute mode merely because the dry-run
 passes.
+
+Current refreshed decision surface: the 2026-06-06 03:00 CST checkpoint is
+under
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current_0300/`
+with checkpoint manifest
+`outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
+It reports packet audit `ok=true`, live preapproval
+`preapproval_checks_ready_except_disk=true` with only
+`disk_below_min_free_before_cleanup`, and dry-run action rendering `ok=true`,
+`will_delete=false`, `execution_status=dry_run_no_remote_commands`. Server disk
+remains below the `15GiB` Phase 2.5 launch floor, so do not start signal-row
+generation until disk is expanded or the exact approval-required cleanup is
+explicitly approved and then passes post-delete gates.
 
 After local-light packages are copied, run a local/server evidence consistency
 audit over the completed domain before relying on the package for later paper
