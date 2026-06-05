@@ -67,6 +67,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_plan_phase2_5_retention_cleanup.py` | Guarded, non-executing Phase 2.5 storage-retention plan; generated shell exits before manifest or delete commands and requires explicit approval |
 | `scripts/audit/main_audit_phase2_5_storage_retention.py` | Read-only SSH storage audit for Phase 2.5 disk gates; classifies safe-now, protected, and approval-required high-yield artifacts and emits a ranked approval recommendation without deleting |
 | `scripts/audit/main_cleanup_phase2_5_safe_now_remnants.py` | Exact-target cleanup helper for audited low-yield Phase 2.5 staging/temp remnants; manifests every file before deletion and never targets final evidence |
+| `scripts/audit/main_audit_local_server_evidence_consistency.py` | Local-only consistency audit comparing lightweight evidence packages against copied server large-artifact manifests; catches missing local files and accidental local bulk artifacts |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring
@@ -114,6 +115,24 @@ upstream embedding as `recommended_by_ranked_audit=true` with risk tier
 `approval_required_external_embedding_cache`, but deletion still requires an
 explicit archive/retention approval, exact sha256/size manifesting, and
 post-delete domain/comparison gates.
+
+After local-light packages are copied, run a local/server evidence consistency
+audit over the completed domain before relying on the package for later paper
+work. This reads local files and copied server manifests only:
+
+```powershell
+python scripts\audit\main_audit_local_server_evidence_consistency.py `
+  --root . `
+  --domain tools `
+  --output_json outputs\summary\paper_critical\local_server_evidence_consistency_tools_20260606.json `
+  --output_md outputs\summary\paper_critical\local_server_evidence_consistency_tools_20260606.md
+```
+
+The audit should report all expected official rows ok. It fails if a required
+local-light file is missing or hash-mismatched, if the copied server large
+artifact manifest lacks `scores.csv`, `predictions/rank_predictions.jsonl`, or
+a model/checkpoint record, or if server-only bulk files were accidentally copied
+into the local package.
 
 For active official-baseline rows, prefer the local robust SSH-stdin monitor
 when the current local checkout has newer audit helpers than the server:

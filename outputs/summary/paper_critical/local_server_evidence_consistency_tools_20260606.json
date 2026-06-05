@@ -1,0 +1,801 @@
+{
+  "schema_version": "2026-06-06.v1",
+  "mode": "local_server_evidence_consistency_audit",
+  "read_only": true,
+  "will_ssh": false,
+  "will_copy": false,
+  "will_delete": false,
+  "will_start_experiment": false,
+  "root": ".",
+  "local_root": "outputs\\baselines\\official_adapters",
+  "domains": [
+    "tools"
+  ],
+  "methods": [
+    "proex_profile",
+    "promax_profile",
+    "elmrec_graph",
+    "llmemb",
+    "irllrec_intent",
+    "rlmrec_graphcl",
+    "llm2rec_sasrec",
+    "llmesr_sasrec"
+  ],
+  "expected_users": 10000,
+  "expected_candidates_per_user": 101,
+  "row_count": 8,
+  "ok_count": 8,
+  "failure_count": 0,
+  "ok": true,
+  "failures": [],
+  "rows": [
+    {
+      "domain": "tools",
+      "method": "proex_profile",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 8658
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4496
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1547
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 268
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5651
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 583,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1837,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 210,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 62,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42274647,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.0602",
+          "HR@10": "0.1177",
+          "HR@20": "0.2329",
+          "NDCG@5": "0.037281705859706714",
+          "NDCG@10": "0.055676376797898205",
+          "NDCG@20": "0.08437492971571317",
+          "MRR": "0.06071849976691817",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 12,
+        "excluded_file_count": 3,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+        "checked_file_count": 12
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "predictions/rank_predictions.jsonl",
+          "proex_official_model.pt",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "promax_profile",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 8838
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4510
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1552
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 269
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5970
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 582,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1840,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 211,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 63,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42293577,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.056",
+          "HR@10": "0.1046",
+          "HR@20": "0.2018",
+          "NDCG@5": "0.03468275603534166",
+          "NDCG@10": "0.05029722685396016",
+          "NDCG@20": "0.07458228366305956",
+          "MRR": "0.056527355267188224",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 13,
+        "excluded_file_count": 2,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate",
+        "checked_file_count": 13
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "predictions/rank_predictions.jsonl",
+          "promax_official_model.pt",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "elmrec_graph",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 8055
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4482
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1546
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 269
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5937
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 579,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1829,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 209,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 64,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42251820,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.0501",
+          "HR@10": "0.101",
+          "HR@20": "0.2101",
+          "NDCG@5": "0.029656030656687697",
+          "NDCG@10": "0.045870649973376774",
+          "NDCG@20": "0.07316592297455926",
+          "MRR": "0.05237582779698271",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 13,
+        "excluded_file_count": 2,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate",
+        "checked_file_count": 13
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "elmrec_official_model.pt",
+          "predictions/rank_predictions.jsonl",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "llmemb",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llmemb_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 7611
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4389
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1523
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 269
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5421
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 576,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1802,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 203,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 64,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42194649,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.1365",
+          "HR@10": "0.2257",
+          "HR@20": "0.3637",
+          "NDCG@5": "0.087457824217457",
+          "NDCG@10": "0.11594350972806679",
+          "NDCG@20": "0.15050644138929892",
+          "MRR": "0.10649354669900822",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 12,
+        "excluded_file_count": 3,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate",
+        "checked_file_count": 12
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "llmemb_official_model.pt",
+          "predictions/rank_predictions.jsonl",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "irllrec_intent",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 8155
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4512
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1555
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 270
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5676
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 580,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1838,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 211,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 63,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42291063,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.102",
+          "HR@10": "0.1651",
+          "HR@20": "0.3095",
+          "NDCG@5": "0.06504709833452535",
+          "NDCG@10": "0.08525707170530923",
+          "NDCG@20": "0.12100829406900945",
+          "MRR": "0.08670154590435823",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 12,
+        "excluded_file_count": 3,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
+        "checked_file_count": 12
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "irllrec_official_model.pt",
+          "predictions/rank_predictions.jsonl",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "rlmrec_graphcl",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 7711
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4511
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1553
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 269
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5842
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 582,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1840,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 211,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 63,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42295918,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.0784",
+          "HR@10": "0.1354",
+          "HR@20": "0.2465",
+          "NDCG@5": "0.05017501611537314",
+          "NDCG@10": "0.06838865570840932",
+          "NDCG@20": "0.09599330874161652",
+          "MRR": "0.07220064580885768",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 13,
+        "excluded_file_count": 2,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate",
+        "checked_file_count": 13
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "predictions/rank_predictions.jsonl",
+          "rlmrec_official_model.pt",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "llm2rec_sasrec",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 8512
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4514
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1775
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 379
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 6180
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 580,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1838,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 211,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 62,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42271231,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.0957",
+          "HR@10": "0.1625",
+          "HR@20": "0.2954",
+          "NDCG@5": "0.060227320850546905",
+          "NDCG@10": "0.08147852827156639",
+          "NDCG@20": "0.11481218118869342",
+          "MRR": "0.08101396652891538",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 13,
+        "excluded_file_count": 3,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+        "checked_file_count": 13
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "predictions/rank_predictions.jsonl",
+          "scores.csv",
+          "seqrec_ckpt/LLM2Rec_official_qwen3base_tools_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=T-Jun-05-2026_16-00-30-be7754.pth"
+        ],
+        "local_large_present": []
+      }
+    },
+    {
+      "domain": "tools",
+      "method": "llmesr_sasrec",
+      "local_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "files": {
+        "fairness_provenance.json": {
+          "present": true,
+          "size": 7562
+        },
+        "server_final_evidence_audit.json": {
+          "present": true,
+          "size": 4497
+        },
+        "server_large_artifact_manifest.json": {
+          "present": true,
+          "size": 1551
+        },
+        "server_large_artifact_manifest.sha256": {
+          "present": true,
+          "size": 269
+        },
+        "light_evidence_sync_manifest.json": {
+          "present": true,
+          "size": 5657
+        },
+        "tables/ranking_metrics.csv": {
+          "present": true,
+          "size": 586,
+          "lines": 2
+        },
+        "tables/same_candidate_external_baseline_summary.csv": {
+          "present": true,
+          "size": 1840,
+          "lines": 2
+        },
+        "tables/external_score_coverage.csv": {
+          "present": true,
+          "size": 210,
+          "lines": 2
+        },
+        "tables/ranking_exposure_distribution.csv": {
+          "present": true,
+          "size": 62,
+          "lines": 4
+        },
+        "tables/ranking_eval_records.csv": {
+          "present": true,
+          "size": 42289232,
+          "lines": 10001
+        },
+        "metrics_summary": {
+          "HR@5": "0.0711",
+          "HR@10": "0.127",
+          "HR@20": "0.2219",
+          "NDCG@5": "0.042728964614829223",
+          "NDCG@10": "0.060602849768892623",
+          "NDCG@20": "0.08433244535733923",
+          "MRR": "0.06334161303438132",
+          "sample_count": "10000",
+          "avg_candidates": "101.0"
+        }
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blocker_count": 0,
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+        "score_schema": [
+          "source_event_id",
+          "user_id",
+          "item_id",
+          "score"
+        ]
+      },
+      "light_sync_manifest": {
+        "ok": true,
+        "allowed_file_count": 12,
+        "excluded_file_count": 3,
+        "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate",
+        "checked_file_count": 12
+      },
+      "server_large_artifact_manifest": {
+        "ok": true,
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "server_large_rel_paths": [
+          "llmesr_official_model.pt",
+          "predictions/rank_predictions.jsonl",
+          "scores.csv"
+        ],
+        "local_large_present": []
+      }
+    }
+  ]
+}

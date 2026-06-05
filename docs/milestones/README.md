@@ -626,6 +626,14 @@ The repository is now in M5 (multi-domain SOTA validation):
   read-only preflight before refresh found no matching project Python process,
   GPU idle, and `/` at `12,407,390,208` free bytes / `94%` used. No deletion
   was performed and no Phase 2.5 experiment was launched.
+  A local/server evidence consistency audit was added at 2026-06-06 00:40 CST:
+  `scripts/audit/main_audit_local_server_evidence_consistency.py` checks
+  local lightweight packages against copied server large-artifact manifests,
+  hashes every sync-manifest checked file, and fails if server-only bulk
+  artifacts appear locally. Current Tools artifact
+  `outputs/summary/paper_critical/local_server_evidence_consistency_tools_20260606.{json,md,sha256}`
+  reports `8/8` Tools official packages ok with `failure_count=0`, without
+  SSH, copying, deletion, or experiment launch.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

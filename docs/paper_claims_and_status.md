@@ -185,6 +185,19 @@ also include:
     `94%` used. No deletion was performed and no Phase 2.5 experiment was
     launched. Guard verification passed with the broader paper-critical suite
     (`29 passed`).
+    Local/server evidence consistency audit on 2026-06-06 00:40 CST:
+    `scripts/audit/main_audit_local_server_evidence_consistency.py` now audits
+    local lightweight official-baseline packages against their copied server
+    large-artifact manifests without SSH, copying, deletion, or experiment
+    launch. Tools evidence:
+    `outputs/summary/paper_critical/local_server_evidence_consistency_tools_20260606.{json,md,sha256}`.
+    It reports `ok=true`, `row_count=8`, `ok_count=8`, and
+    `failure_count=0`, confirming all eight Tools official local packages have
+    required local-light files, matching sync-manifest hashes, copied
+    server-only large artifact manifests for scores/predictions/model files,
+    and no server-only bulk artifacts copied locally. This strengthens evidence
+    packaging integrity but does not unblock Phase 2.5 signal generation while
+    disk remains below the launch floor.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

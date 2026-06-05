@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 00:30 CST
+Last updated: 2026-06-06 00:40 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -295,6 +295,27 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    tests\test_plan_phase2_5_retention_cleanup.py
    tests\test_audit_phase2_5_storage_retention.py
    tests\test_cleanup_phase2_5_safe_now_remnants.py` (`29 passed`).
+   Local/server evidence consistency checkpoint 2026-06-06 00:40 CST: Codex
+   added `scripts/audit/main_audit_local_server_evidence_consistency.py` to
+   compare local lightweight official-baseline packages against their copied
+   server large-artifact manifests without SSH, copying, deletion, or
+   experiment launch. The helper verifies required local-light files, hashes
+   every `light_evidence_sync_manifest.json` checked file, checks
+   `server_large_artifact_manifest.json` for `scores.csv`,
+   `predictions/rank_predictions.jsonl`, and model/checkpoint records, and
+   fails if server-only bulk artifacts are present locally by default. Current
+   Tools audit artifact:
+   `outputs/summary/paper_critical/local_server_evidence_consistency_tools_20260606.{json,md,sha256}`.
+   Result: `ok=true`, `row_count=8`, `ok_count=8`, `failure_count=0`;
+   all eight Tools official local packages are consistent with their copied
+   server manifests. Verification:
+   `python -m pytest tests\test_local_server_evidence_consistency.py
+   tests\test_server_large_artifact_manifest.py
+   tests\test_remote_official_evidence_audit.py
+   tests\test_remote_server_large_artifact_manifest.py
+   tests\test_audit_phase2_5_storage_retention.py
+   tests\test_plan_phase2_5_retention_cleanup.py
+   tests\test_cleanup_phase2_5_safe_now_remnants.py` (`22 passed`).
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and
