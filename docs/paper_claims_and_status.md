@@ -111,6 +111,14 @@ also include:
     floor but not enough for the recommended Phase 2.5 regeneration target, so
     signal-row generation remains gated on additional disk or another
     archive-backed cleanup decision.
+    A follow-up read-only storage-retention audit is recorded in
+    `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_20260605.{json,md,sha256}`.
+    It found no sufficient routine safe-now cleanup: small completed staging
+    remnants are only about `57M`, while high-yield candidates are protected
+    completed artifacts such as the Tools LLM2Rec upstream embedding
+    (`5,662,687,360` bytes) or final LLMEmb/LLM-ESR checkpoints (`3.8G`-`6.8G`).
+    Those require an explicit archive/retention decision before deletion. No
+    deletion was performed and no Phase 2.5 experiment was launched.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

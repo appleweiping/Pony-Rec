@@ -178,6 +178,24 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    the 10GiB danger floor but remains below the recommended 15GiB hard stop
    for signal-row regeneration; do not launch Phase 2.5 regeneration until
    disk is expanded or another archive-backed cleanup raises free space.
+   Retention audit checkpoint 2026-06-05 22:49 CST: Codex ran an ARIS
+   read-only storage-retention audit plus a GPT-5.5 xhigh sidecar request for
+   the remaining Phase 2.5 disk gate. Server preflight again found no relevant
+   Python experiment process, idle GPU, and `/` at `12,342,841,344` bytes free
+   / `94%` used, leaving a `3,763,286,016` byte deficit to a strict `15GiB`
+   launch floor. Routine safe-now cleanup is not enough: the only clear
+   low-risk candidates were small completed staging/temp remnants such as the
+   Tools LLM2Rec paper-adapter directory (~`57M`) and `tmp_llm2rec_sync`
+   (~`40K`). The only high-yield candidates are protected artifacts requiring
+   an explicit archive/retention decision before deletion, especially
+   `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
+   (`5,662,687,360` bytes) or completed final LLMEmb/LLM-ESR model checkpoints
+   (`3.8G`-`6.8G` each). No deletion was performed, and no Phase 2.5 experiment
+   was launched. Evidence:
+   `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_20260605.{json,md,sha256}`.
+   Minimum next action remains: expand disk or approve/archive exactly one
+   high-yield completed artifact with sha256/size manifesting and post-delete
+   gate checks before signal-row regeneration.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

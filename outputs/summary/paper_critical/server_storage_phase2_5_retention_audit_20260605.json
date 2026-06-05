@@ -1,0 +1,129 @@
+{
+  "schema_version": "2026-06-05.v1",
+  "created_at_utc": "2026-06-05T14:49:38Z",
+  "mode": "read_only_phase2_5_storage_retention_audit",
+  "aris_skill": "aris-experiment-audit",
+  "sidecar_thread_id": "019e983e-c679-71e0-a575-4170e23af4c1",
+  "server": {
+    "host": "pony-rec-gpu",
+    "project_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+    "preflight_time_cst": "2026-06-05 22:42:14-16 CST",
+    "relevant_python_processes": [],
+    "gpu": {
+      "utilization": "0 %",
+      "memory_used": "15 MiB",
+      "memory_total": "49140 MiB"
+    },
+    "disk": {
+      "path": "/home/ajifang",
+      "free_bytes": 12342841344,
+      "used_pct": 94,
+      "df_h": "/dev/vda5 196G 174G 12G 94% /"
+    },
+    "server_git_note": "Server checkout is behind local main and dirty; no pull or experiment launch was attempted."
+  },
+  "phase2_5_disk_gate": {
+    "required_free_bytes_min_15_gib": 16106127360,
+    "preferred_free_bytes_25_gib": 26843545600,
+    "current_free_bytes": 12342841344,
+    "deficit_to_15_gib_bytes": 3763286016,
+    "verdict": "below_phase2_5_launch_threshold",
+    "experiment_launch_allowed": false
+  },
+  "safe_now_candidates": [
+    {
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter",
+      "size_bytes_approx": 59768832,
+      "classification": "SAFE_NOW_LOW_YIELD",
+      "reason": "Completed adapter staging only, but total size is about 57M and insufficient to change the Phase 2.5 gate."
+    },
+    {
+      "path": "tmp_llm2rec_sync",
+      "size_bytes_approx": 40960,
+      "classification": "SAFE_NOW_LOW_YIELD",
+      "reason": "Temporary sync directory, but negligible size."
+    }
+  ],
+  "safe_now_total_recoverable_bytes_approx": 59809792,
+  "safe_now_sufficient_for_15_gib": false,
+  "needs_approval_or_archive_decision": [
+    {
+      "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+      "size_bytes": 5662687360,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed Tools LLM2Rec upstream Qwen3 item embedding. It is outside the final evidence directory and would recover enough space, but it is an external embedding artifact referenced by the run summary and is protected unless a retention/archive decision is made. If approved, record sha256/size before deletion and recheck final LLM2Rec/domain gates."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 4798848507,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Server-large manifest and local-light evidence exist, but project rules protect method checkpoints unless a separate archive/retention decision permits deletion."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 4522405462,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Server-large manifest and local-light evidence exist, but project rules protect method checkpoints unless a separate archive/retention decision permits deletion."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 6812135931,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Server-large manifest and local-light evidence exist, but project rules protect method checkpoints unless a separate archive/retention decision permits deletion."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 6446871382,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Local-light evidence exists; local manifest coverage is partial for this older row, so deletion would need an explicit retention decision and fresh server-side sha256 verification."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 4167963387,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Local-light evidence exists; local manifest coverage is partial for this older row, so deletion would need an explicit retention decision and fresh server-side sha256 verification."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 3919354786,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Local-light evidence exists; local manifest coverage is partial for this older row, so deletion would need an explicit retention decision and fresh server-side sha256 verification."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 3847029499,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "reason": "Completed final model checkpoint. Local-light evidence exists; local manifest coverage is partial for this older row, so deletion would need an explicit retention decision and fresh server-side sha256 verification."
+    }
+  ],
+  "protected_examples": [
+    {
+      "pattern": "outputs/baselines/external_tasks/*/{candidate_items.csv,ranking_valid.jsonl,ranking_test.jsonl,item_metadata.csv}",
+      "reason": "Canonical train/valid/test task splits and candidate rows."
+    },
+    {
+      "pattern": "outputs/*_same_candidate/{scores.csv,fairness_provenance.json,*score_audit*,*run_summary*,tables/}",
+      "reason": "Final evidence required for domain gates, comparison builders, row counts, and paired tests."
+    },
+    {
+      "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions/rank_predictions.jsonl",
+      "reason": "Large legacy prediction, but previous audit says server_final ok=false; not eligible for prediction-deletion exception."
+    },
+    {
+      "pattern": "/home/ajifang/projects/uncertainty-llm4rec, /home/ajifang/projects/TGL-Rec, /home/ajifang/projects/TRUCE-Rec, /home/ajifang/.local/lib",
+      "reason": "Other projects or installed runtime packages; out of scope for this project cleanup."
+    }
+  ],
+  "commands_executed_read_only": [
+    "ssh pony-rec-gpu \"date; ps aux | grep python | grep -v grep | grep -i 'pony-rec\\|ccrp\\|baseline\\|uncertainty'\"",
+    "ssh pony-rec-gpu \"nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader\"",
+    "ssh pony-rec-gpu \"df -h /home/ajifang; df -B1 /home/ajifang\"",
+    "ssh pony-rec-gpu \"find/du scans over project files, temp/cache/log/archive patterns, paper_adapters, outputs/summary, and LLM2Rec item_info\""
+  ],
+  "audit_verdict": {
+    "safe_cleanup_enough_to_start_phase2_5": false,
+    "delete_performed": false,
+    "minimum_next_action": "Do not launch Phase 2.5 signal-row regeneration. Either expand disk or make an explicit archive/retention decision for one high-yield completed artifact, then record sha256/size manifest and rerun gates before deletion.",
+    "preferred_next_action": "Expand disk to reach at least 25GiB free; if expansion is unavailable, approve one completed LLM2Rec embedding or final model/checkpoint retention decision after confirming no rerun/resume need."
+  }
+}

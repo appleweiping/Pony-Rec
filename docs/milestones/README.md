@@ -584,6 +584,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   Holm-significant paired tests. This closes the Phase 2 new-domain
   official+C-CRP gate summary, but it is not a paper-readiness verdict and not
   a full raw local reproduction package.
+  A 2026-06-05 Phase 2.5 storage-retention audit then found the server at
+  `12,342,841,344` bytes free / `94%` used, below the strict `15GiB` launch
+  floor. Routine safe-now cleanup is insufficient; high-yield cleanup now
+  requires explicit archive/retention approval for a completed upstream
+  embedding or model checkpoint. No Phase 2.5 experiment was launched.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final
