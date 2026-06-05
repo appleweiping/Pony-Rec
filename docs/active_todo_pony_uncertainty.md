@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 23:25 CST
+Last updated: 2026-06-06 00:18 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -230,6 +230,30 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    `python -m pytest tests\test_audit_phase2_5_storage_retention.py
    tests\test_plan_phase2_5_retention_cleanup.py` (`5 passed`), and broader
    paper-critical tooling verification passed (`24 passed`).
+   Safe-now cleanup checkpoint 2026-06-06 00:10-00:15 CST: Codex added
+   `scripts/audit/main_cleanup_phase2_5_safe_now_remnants.py`, verified it
+   locally, then streamed it to the server to remove only the exact fixed
+   low-yield targets already classified as disposable:
+   `outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter`,
+   `outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter`,
+   and `tmp_llm2rec_sync`. The helper wrote a file-level sha256/size manifest
+   before deletion and removed `64,574,853` bytes; post-delete presence is
+   false for all three targets. Local evidence:
+   `outputs/summary/paper_critical/phase2_5_safe_now_cleanup_manifest_20260605.json`,
+   `phase2_5_safe_now_cleanup_post_domain_gate_20260605.{json,csv}`,
+   `phase2_5_safe_now_cleanup_post_comparison_20260605/`,
+   `server_storage_phase2_5_safe_now_postcleanup_20260605.{json,md}`, and
+   `phase2_5_safe_now_cleanup_evidence_20260605.sha256`. Post-cleanup disk is
+   `12,407,840,768` free bytes / `94%` used, still below the strict `15GiB`
+   floor by `3,698,286,592` bytes; `experiment_launch_allowed=false`.
+   Post-cleanup Tools gate remains `official_ok_count=8`,
+   `official_all_ok=true`, `ccrp_ok=true`, and `gate_ok=true`; post-cleanup
+   comparison keeps C-CRP observed-best on all seven metrics and all 56
+   C-CRP-vs-official paired tests positive and Holm-significant. No protected
+   final scores, provenance, audits, imported tables, checkpoints, task splits,
+   upstream embeddings, or other projects were deleted. Remaining action is
+   unchanged: disk expansion or explicit archive/retention approval for one
+   high-yield completed artifact before Phase 2.5 signal-row regeneration.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

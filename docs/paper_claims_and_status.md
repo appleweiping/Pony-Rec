@@ -138,6 +138,23 @@ also include:
     `experiment_launch_allowed=false`; routine cleanup still cannot clear the
     `15GiB` Phase 2.5 floor, and high-yield cleanup remains approval-required.
     No deletion was performed and no Phase 2.5 experiment was launched.
+    Safe-now cleanup on 2026-06-06 00:10-00:15 CST then removed only the
+    audited disposable staging/temp targets with a fixed-target helper:
+    `outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter`,
+    `outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter`,
+    and `tmp_llm2rec_sync`. The pre-delete manifest records file-level sha256
+    and size, total deleted bytes `64,574,853`, and post-delete absence for all
+    three paths. Evidence:
+    `outputs/summary/paper_critical/phase2_5_safe_now_cleanup_manifest_20260605.json`,
+    `outputs/summary/paper_critical/phase2_5_safe_now_cleanup_post_domain_gate_20260605.{json,csv}`,
+    `outputs/summary/paper_critical/phase2_5_safe_now_cleanup_post_comparison_20260605/`,
+    `outputs/summary/paper_critical/server_storage_phase2_5_safe_now_postcleanup_20260605.{json,md}`,
+    and `outputs/summary/paper_critical/phase2_5_safe_now_cleanup_evidence_20260605.sha256`.
+    Post-cleanup Tools gate still passes with eight official rows plus C-CRP,
+    and the post-cleanup comparison still reports C-CRP observed-best on all
+    seven metrics with all 56 paired tests positive and Holm-significant.
+    Disk remains below the Phase 2.5 floor at `12,407,840,768` free bytes, so
+    no signal-row regeneration was launched.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

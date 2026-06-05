@@ -1,0 +1,173 @@
+{
+  "schema_version": "2026-06-05.safe_now_cleanup.v1",
+  "created_at_utc": "2026-06-05T16:10:20+00:00",
+  "classification": "SAFE_NOW_LOW_YIELD_DISPOSABLE_STAGING",
+  "target_policy": "fixed_exact_target_list_only",
+  "execute_requested": true,
+  "delete_performed": true,
+  "active_processes": [],
+  "targets": [
+    {
+      "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter",
+      "resolved_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter",
+      "present_before": true,
+      "size_bytes": 59165755,
+      "file_count": 14,
+      "files": [
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/README.md",
+          "size_bytes": 612,
+          "sha256": "2c29c702d81d68353f395c0ee971db82ebf00ea3d934d68a54332e24d83c4135"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/adapter_metadata.json",
+          "size_bytes": 5849,
+          "sha256": "9bbe6cf575e2483204a2d413925fe0dbcbda3067fc2dae3466cdc389152ef1b6"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/item_id_map.csv",
+          "size_bytes": 6455739,
+          "sha256": "c3849eb037f747c91172ddb71de7aee5d8243f7e582cb3070e1ba92a8683f4b5"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data/ToolsSameCandidate100Neg/downstream/data.txt",
+          "size_bytes": 3340582,
+          "sha256": "c3449d817a34afb26d45614d0bd5665aa040fe8dc4945465a14da100925ee7c3"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data/ToolsSameCandidate100Neg/downstream/item_titles.json",
+          "size_bytes": 46208959,
+          "sha256": "c5d3c52fe76f064314b9924002b4cbee13458396ec11a6d6e3cf7e70a18b9db6"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data/ToolsSameCandidate100Neg/downstream/test_data.txt",
+          "size_bytes": 389739,
+          "sha256": "04bee07cd2c33cab1291124f5ef2788f93e77c4eb523877f4d2f4b4eec9182b4"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data/ToolsSameCandidate100Neg/downstream/train_data.txt",
+          "size_bytes": 321297,
+          "sha256": "340d5b555f3001fa73d20224acbc5a0b35eefb208cdc6d587d232f192ed7ce0b"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data/ToolsSameCandidate100Neg/downstream/val_data.txt",
+          "size_bytes": 321297,
+          "sha256": "340d5b555f3001fa73d20224acbc5a0b35eefb208cdc6d587d232f192ed7ce0b"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_embedding_metadata.json",
+          "size_bytes": 1063,
+          "sha256": "0eaa7274f55e32d9e115bda63a1846e920a84e77c9b4ee8409318fa70872eff3"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_same_candidate_score_metadata.json",
+          "size_bytes": 1817,
+          "sha256": "1b7c1b566e0b39a5dc1206cd926628d6180a2a85d82877bdf1504013266ba9b0"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_same_candidate_score_summary.csv",
+          "size_bytes": 1626,
+          "sha256": "891abc94f8a10aeb9616be62e1524ade29d57a26917175abe94bd311d9aadb3a"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_upstream_prepare_summary.json",
+          "size_bytes": 824,
+          "sha256": "659d4803c16b55ac0b5e2233918cbb7f6378535d98fbc207bc7bceea37474266"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/same_candidate_events.csv",
+          "size_bytes": 1767429,
+          "sha256": "0c91aae360a6ce5b132b6f80ce169a87fc49fc2852dec0bab3fdc037ca721cc0"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/user_id_map.csv",
+          "size_bytes": 348922,
+          "sha256": "40d480f9dd87f6590298a0dfb0870ecbb7687b93ff8c0d7a505607d051737e0a"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter",
+      "resolved_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter",
+      "present_before": true,
+      "size_bytes": 5376755,
+      "file_count": 8,
+      "files": [
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/README.md",
+          "size_bytes": 1122,
+          "sha256": "e62816509d7c17a42a93b79434a15f8b75990aae38dcf2db3c9da9982db7d496"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/adapter_metadata.json",
+          "size_bytes": 4496,
+          "sha256": "6071f969ad6ef53bcb57f7e2fb89024b0800dd43f2532675debc08938ea1d5fe"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/item_id_map.csv",
+          "size_bytes": 5013429,
+          "sha256": "3e3c0ed0fe0175f81896367a2f8c38e719e02c58810b9d37ec821a889c43f423"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llmesr_embedding_metadata.json",
+          "size_bytes": 895,
+          "sha256": "9836c8c4db5adba5d9eb9bce32cced226459b32346792022dbc4a5820b6258fa"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llmesr_upstream_epoch_log.csv",
+          "size_bytes": 5015,
+          "sha256": "4452c52534dd6207087d33ced54fbcf1c1683e1111feb8aeaac01f2adee688e3"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llmesr_upstream_score_metadata.json",
+          "size_bytes": 1546,
+          "sha256": "0ea8114802780cca0541d1ca5d00a21d500f23a757902c7125d1f2c90aab912f"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llmesr_upstream_score_summary.csv",
+          "size_bytes": 1331,
+          "sha256": "c6d9ade2f401168e4e7116f99c9b50e3e41d105b5b4dc901d9721c491c1cb2f4"
+        },
+        {
+          "rel_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/user_id_map.csv",
+          "size_bytes": 348921,
+          "sha256": "d59d27fd0dca6468f96c999d6313a4b5daab0ca1e7b552b4721d34609c03a9fa"
+        }
+      ],
+      "failures": []
+    },
+    {
+      "rel_path": "tmp_llm2rec_sync",
+      "resolved_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/tmp_llm2rec_sync",
+      "present_before": true,
+      "size_bytes": 32343,
+      "file_count": 2,
+      "files": [
+        {
+          "rel_path": "tmp_llm2rec_sync/main_export_llm2rec_same_candidate_task.py",
+          "size_bytes": 22561,
+          "sha256": "04af263ca9971f6da23db15eea14b2a83f59129b1ca81a8226b2a7924afcc50f"
+        },
+        {
+          "rel_path": "tmp_llm2rec_sync/test_llm2rec_same_candidate_export.py",
+          "size_bytes": 9782,
+          "sha256": "0b4f0f27f3e304b2e02dc5ca319a239540a21b01663529e0455ac5f29dbf0692"
+        }
+      ],
+      "failures": []
+    }
+  ],
+  "total_size_bytes": 64574853,
+  "deleted_targets": [
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter",
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter",
+    "tmp_llm2rec_sync"
+  ],
+  "post_delete_presence": {
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter": false,
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter": false,
+    "tmp_llm2rec_sync": false
+  },
+  "failures": []
+}

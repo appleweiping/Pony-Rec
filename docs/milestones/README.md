@@ -599,7 +599,16 @@ The repository is now in M5 (multi-domain SOTA validation):
   confirms no active project Python process, GPU idle, `12,342,640,640` free
   bytes, `64,611,717` safe-now recoverable bytes, and
   `experiment_launch_allowed=false`; eight high-yield candidates still require
-  explicit retention/archive approval before deletion.
+  explicit retention/archive approval before deletion. The audited safe-now
+  cleanup was then executed at 2026-06-06 00:10-00:15 CST using
+  `scripts/audit/main_cleanup_phase2_5_safe_now_remnants.py`; it deleted only
+  the two completed Tools paper-adapter staging directories and
+  `tmp_llm2rec_sync`, recovering `64,574,853` bytes with a file-level sha256
+  manifest. Post-cleanup disk is `12,407,840,768` free bytes / `94%` used,
+  still below the `15GiB` floor. Post-cleanup Tools domain gate and comparison
+  gates still pass, with C-CRP observed-best on all seven metrics and all 56
+  paired tests positive and Holm-significant. No Phase 2.5 experiment was
+  launched.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final
