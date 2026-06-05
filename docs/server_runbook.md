@@ -69,6 +69,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_cleanup_phase2_5_safe_now_remnants.py` | Exact-target cleanup helper for audited low-yield Phase 2.5 staging/temp remnants; manifests every file before deletion and never targets final evidence |
 | `scripts/audit/main_audit_local_server_evidence_consistency.py` | Local-only consistency audit comparing lightweight evidence packages against copied server large-artifact manifests; catches missing local files and accidental local bulk artifacts |
 | `scripts/audit/main_audit_paper_critical_modules.py` | Local paper-critical go/no-go audit; integrates signal-row readiness, guarded plan, framework figure, component inventory, four-domain evidence consistency, and the current Phase 2.5 storage gate when artifact paths are supplied |
+| `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` | Local-only audit for a Phase 2.5 retention decision packet; verifies the plan, shell guard, markdown memo, sha256 manifest, and storage-audit target agreement without SSH or deletion |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring
@@ -133,6 +134,23 @@ python scripts\audit\main_plan_phase2_5_retention_cleanup.py `
 The generated shell is still intentionally non-runnable as generated: `exit 2`
 precedes sha256 manifesting and `rm --`. The Markdown packet is the user-facing
 retention-decision surface, not an approval by itself.
+
+Before any future approval or action, audit the packet locally:
+
+```powershell
+python scripts\audit\main_audit_phase2_5_retention_decision_packet.py `
+  --plan_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.json `
+  --plan_sh outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.sh `
+  --plan_md outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.md `
+  --packet_sha256 outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.sha256 `
+  --retention_audit_json outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260606_0200.json `
+  --output_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.json `
+  --output_md outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.md
+```
+
+The 2026-06-06 02:05 CST packet audit reports `ok=true`, `read_only=true`,
+`will_delete=false`, `will_start_experiment=false`, and no failures. This still
+does not authorize deletion.
 
 After local-light packages are copied, run a local/server evidence consistency
 audit over the completed domain before relying on the package for later paper

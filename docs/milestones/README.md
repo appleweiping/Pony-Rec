@@ -96,6 +96,9 @@ The 2026-06-06 02:00 CST retention decision packet
 is the current non-destructive approval surface for clearing the storage gate:
 it cites the fresh storage audit, exits before `sha256sum` or `rm --`, and
 requires explicit archive/retention approval before any cleanup can occur.
+The follow-up packet audit
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.{json,md,sha256}`
+passes with `ok=true` and no failures, but it is still not deletion approval.
 
 ## Stable Agent Roles
 

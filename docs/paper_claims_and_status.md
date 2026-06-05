@@ -255,6 +255,15 @@ also include:
     `expected_to_clear_min_free_gate=true`. The generated shell still exits
     before `sha256sum` and `rm --`, so no manifesting, deletion, or experiment
     launch occurred.
+    Retention packet audit on 2026-06-06 02:05 CST:
+    `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` audits the
+    packet locally without SSH, deletion, manifesting, or experiment launch.
+    Artifact:
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.{json,md,sha256}`.
+    It reports `ok=true`, `read_only=true`, `will_delete=false`,
+    `will_start_experiment=false`, and `failures=[]`, confirming the current
+    packet is internally consistent and still non-authorizing. The storage gate
+    remains closed until explicit archive/retention approval or disk expansion.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

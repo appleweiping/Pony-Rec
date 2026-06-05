@@ -1,0 +1,48 @@
+{
+  "schema_version": "2026-06-06.retention_packet_audit.v1",
+  "created_at_utc": "2026-06-05T18:07:04+00:00",
+  "mode": "local_phase2_5_retention_decision_packet_audit",
+  "read_only": true,
+  "will_ssh": false,
+  "will_delete": false,
+  "will_start_experiment": false,
+  "ok": true,
+  "plan_json": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current\\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.json",
+  "plan_sh": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current\\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.sh",
+  "plan_md": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current\\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.md",
+  "packet_sha256": "outputs\\summary\\paper_critical\\retention_cleanup_plan_20260606_current\\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.sha256",
+  "plan_summary": {
+    "plan_id": "tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200",
+    "candidate": "tools_llm2rec_upstream_embedding",
+    "target_path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "current_free_bytes": 12406620160,
+    "expected_free_bytes_after_delete": 18069307520,
+    "requires_explicit_approval": true,
+    "approval_token_required": "APPROVE_DELETE_COMPLETED_TOOLS_LLM2REC_UPSTREAM_EMBEDDING_20260605"
+  },
+  "retention_audit_summary": {
+    "path": "outputs\\summary\\paper_critical\\server_storage_phase2_5_retention_audit_current_20260606_0200.json",
+    "experiment_launch_allowed": false,
+    "recommended_path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "recommended_expected_free_bytes_after_delete": 18069307520
+  },
+  "manifest_checks": {
+    "tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.json": {
+      "expected": "3c975e50a7356a73f546a1b8912245031224bfb051dc6678e829c4e31fdf685b",
+      "actual": "3c975e50a7356a73f546a1b8912245031224bfb051dc6678e829c4e31fdf685b",
+      "ok": true
+    },
+    "tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.sh": {
+      "expected": "42889d39c3b40c595e964f05607b783b1b3c21e15015faea6d06afc047d1ade4",
+      "actual": "42889d39c3b40c595e964f05607b783b1b3c21e15015faea6d06afc047d1ade4",
+      "ok": true
+    },
+    "tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.md": {
+      "expected": "24a6ec92a8cb80a7228850a46e2634f4c5591fb5a918640abfe202482ca8b366",
+      "actual": "24a6ec92a8cb80a7228850a46e2634f4c5591fb5a918640abfe202482ca8b366",
+      "ok": true
+    }
+  },
+  "failures": [],
+  "warnings": []
+}

@@ -2700,6 +2700,17 @@ shell keeps `exit 2` before `sha256sum` and `rm --`; the Markdown memo is only
 a decision surface, not approval. No deletion, manifesting, or experiment
 launch occurred.
 
+Retention packet audit checkpoint: at 2026-06-06 02:05 CST, Codex added
+`scripts/audit/main_audit_phase2_5_retention_decision_packet.py`, a local-only
+auditor for Phase 2.5 retention packets. It verifies plan JSON safety fields,
+the shell `exit 2` guard ordering before `sha256sum` and `rm --`, Markdown
+safety text, packet sha256 manifest consistency, and agreement with the
+referenced storage-audit recommendation. Current audit artifact:
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.{json,md,sha256}`.
+It reports `ok=true`, `read_only=true`, `will_delete=false`,
+`will_start_experiment=false`, and no failures. This strengthens the approval
+surface but does not authorize deletion or launch.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
