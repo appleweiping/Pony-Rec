@@ -1,0 +1,76 @@
+{
+  "roots": [
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6"
+  ],
+  "domains": [
+    "sports"
+  ],
+  "name_tokens": [
+    "ccrp",
+    "shadow",
+    "signal",
+    "calibrated",
+    "scored",
+    "rows"
+  ],
+  "max_file_mb": 600.0,
+  "full_audit": true,
+  "candidate_items_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv",
+  "candidate_count": 1,
+  "skipped": {
+    "missing_root": 0,
+    "too_large": 0,
+    "unsupported_suffix": 2998,
+    "filtered": 1139,
+    "empty_header": 0
+  },
+  "sources": [
+    {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_ccrp_v3/scores.csv",
+      "size": 89891286,
+      "header_status": "header_score_only_candidate",
+      "has_identity": true,
+      "has_uncertainty": false,
+      "has_recomputable_signal": false,
+      "has_score_only": true,
+      "columns": [
+        "item_id",
+        "score",
+        "source_event_id",
+        "user_id"
+      ],
+      "audit_label": "scores",
+      "audit_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_ccrp_v3/scores.csv",
+      "audit_exists": true,
+      "audit_status": "score_only_not_uncertainty",
+      "audit_paper_ready_uncertainty_rows": false,
+      "audit_recomputable_signal_rows": false,
+      "audit_row_count": 1010000,
+      "audit_event_count": 10000,
+      "audit_expected_events": 10000,
+      "audit_expected_score_rows": 1010000,
+      "audit_key_count": 1010000,
+      "audit_duplicate_keys": 0,
+      "audit_candidate_key_count": 1010000,
+      "audit_matched_candidate_keys": 1010000,
+      "audit_missing_candidate_keys": 0,
+      "audit_extra_source_keys": 0,
+      "audit_candidate_key_coverage_rate": 1.0,
+      "audit_uncertainty_col": "",
+      "audit_finite_uncertainty_rows": 0,
+      "audit_uncertainty_rows": 0,
+      "audit_has_event_key": true,
+      "audit_has_user_id": true,
+      "audit_has_item_key": true,
+      "audit_has_raw_probability": false,
+      "audit_has_calibrated_probability": false,
+      "audit_has_evidence": false,
+      "audit_has_counterevidence": false,
+      "audit_has_ccrp_components": false,
+      "audit_failures": [
+        "missing_uncertainty_column"
+      ],
+      "audit_warnings": []
+    }
+  ]
+}

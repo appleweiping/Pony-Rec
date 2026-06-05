@@ -559,6 +559,23 @@ support ready, but paper readiness remains false because full-scale valid/test
 uncertainty signal rows remain missing and the storage launch gate is still
 closed.
 
+Post-cleanup launch audit update (2026-06-06 06:38 CST): the storage/process
+gate has been cleared but the signal-row gate has not. After the completed-row
+checkpoint cleanup, fresh read-only storage audit
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_after_cleanup_final_20260606_0650.{json,md}`
+reports zero active project Python processes, idle GPU, `/` at
+`25,656,160,256` free bytes / `88%` used, and
+`experiment_launch_allowed=true`. Fresh signal-source discovery
+`outputs/summary/paper_critical/ccrp_signal_source_discovery_after_cleanup_20260606_0640.{json,csv}`
+and per-domain full audits
+`outputs/summary/paper_critical/ccrp_signal_source_audit_{sports,toys,home,tools}_after_cleanup_20260606_0645.{json,csv}`
+still find only score-only formal C-CRP `scores.csv` files with exact
+candidate-key coverage `1.0`; all four are classified
+`score_only_not_uncertainty` with `missing_uncertainty_column`. Do not launch
+observation, component ablation, or hyperparameter server runs until real
+full-scale valid/test uncertainty rows or recomputable signal rows are located
+or regenerated and pass the same-candidate audit.
+
 Feasibility: 7/10. Most work reuses existing C-CRP signal/score infrastructure,
 but the signal-row paths must be audited before launch.
 
@@ -566,6 +583,8 @@ Paper potential: 8/10. These modules directly address likely top-conference
 objections about motivation, non-stitching novelty, ablation completeness, and
 overfitting.
 
-Blocking issue: do not start these server runs until the active Tools ProEx row
-is complete/gated or cleanly failed, and do not proceed if the required C-CRP
-signal rows cannot be located or regenerated without LLM re-query leakage.
+Blocking issue: do not start these server runs on score-only formal C-CRP
+outputs. A fresh process/GPU/disk preflight is still required immediately
+before any launch, but the current hard scientific blocker is locating or
+regenerating the required full-scale C-CRP uncertainty/signal rows without LLM
+re-query leakage.

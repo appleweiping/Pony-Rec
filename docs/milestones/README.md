@@ -129,6 +129,20 @@ provenance, audits, imported tables, source code, configs, active outputs, or
 other-project files were deleted. Future server work still requires a fresh
 process/GPU/disk preflight.
 
+The 2026-06-06 06:36-06:38 CST post-cleanup launch audit separates the two
+remaining gates. Storage/process is now open:
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_after_cleanup_final_20260606_0650.{json,md}`
+reports zero active project Python processes, idle GPU, `/` at
+`25,656,160,256` free bytes / `88%` used, and
+`experiment_launch_allowed=true`. The scientific signal-row gate remains
+closed: fresh discovery
+`outputs/summary/paper_critical/ccrp_signal_source_discovery_after_cleanup_20260606_0640.{json,csv}`
+and per-domain audits
+`outputs/summary/paper_critical/ccrp_signal_source_audit_{sports,toys,home,tools}_after_cleanup_20260606_0645.{json,csv}`
+still find only the four formal C-CRP `scores.csv` files, all classified as
+`score_only_not_uncertainty` with candidate-key coverage `1.0` and
+`missing_uncertainty_column`. No Phase 2.5 experiment was launched.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test

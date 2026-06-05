@@ -99,6 +99,20 @@ also include:
     hyperparameter claims remain blocked until full-scale valid/test
     uncertainty signal rows are located or regenerated and audited under the
     same-candidate protocol.
+    Post-cleanup ARIS checkpoint on 2026-06-06 06:36-06:38 CST: after the
+    completed-row checkpoint cleanup cleared the storage floor, Codex reran
+    read-only server/storage and C-CRP signal-source audits. Storage/process is
+    no longer the immediate blocker:
+    `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_after_cleanup_final_20260606_0650.{json,md}`
+    reports zero active project Python processes, idle GPU, `/` at
+    `25,656,160,256` free bytes / `88%` used, and
+    `experiment_launch_allowed=true`. The signal-row gate remains closed:
+    `outputs/summary/paper_critical/ccrp_signal_source_discovery_after_cleanup_20260606_0640.{json,csv}`
+    found only the four formal C-CRP `scores.csv` files, and per-domain audits
+    `outputs/summary/paper_critical/ccrp_signal_source_audit_{sports,toys,home,tools}_after_cleanup_20260606_0645.{json,csv}`
+    classify each as `score_only_not_uncertainty` with candidate-key coverage
+    `1.0` and failure `missing_uncertainty_column`. No Phase 2.5 experiment or
+    baseline was launched.
     Paper-facing comparison ledger checkpoint on 2026-06-06 02:35-02:40 CST:
     a GPT-5.5 xhigh read-only sidecar reviewer confirmed the compact
     four-domain comparison certificate was supported but lacked a strict

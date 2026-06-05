@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 06:25 CST
+Last updated: 2026-06-06 06:38 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -3090,6 +3090,25 @@ audit, large-artifact manifest, and ranking tables) still present. No data
 splits, source code, canonical configs, final scores, provenance, audits,
 tables, active outputs, or other-project files were deleted.
 
+Post-cleanup Phase 2.5 launch audit: at 2026-06-06 06:36-06:38 CST, Codex
+reran ARIS read-only server checks and C-CRP signal-source discovery after the
+completed-row checkpoint cleanup. Final storage audit
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_after_cleanup_final_20260606_0650.{json,md}`
+reports no active project Python process, GPU `0 %, 15 MiB, 49140 MiB`, `/`
+at `25,656,160,256` free bytes / `88%` used, and
+`experiment_launch_allowed=true`. Fresh discovery artifact
+`outputs/summary/paper_critical/ccrp_signal_source_discovery_after_cleanup_20260606_0640.{json,csv}`
+still found only the four full-scale C-CRP formal score files:
+`outputs/{sports,toys,home,tools}_large10000_100neg_ccrp_v3/scores.csv`.
+Per-domain full audits
+`outputs/summary/paper_critical/ccrp_signal_source_audit_{sports,toys,home,tools}_after_cleanup_20260606_0645.{json,csv}`
+classify every file as `score_only_not_uncertainty` with exact candidate-key
+coverage `1.0` and failure `missing_uncertainty_column`. Therefore the
+storage/process gate is now open, but the observation, component-ablation, and
+hyperparameter modules remain blocked until real full-scale valid/test
+uncertainty or recomputable signal rows are located or regenerated under the
+same-candidate protocol. No Phase 2.5 experiment or baseline was launched.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -3106,7 +3125,9 @@ tables, active outputs, or other-project files were deleted.
    leave-one-component-out ablation, real hyperparameter curves, and the clean
    framework overview figure. After each module package is generated, run
    `scripts/audit/main_audit_phase2_5_module_package.py` for the relevant
-   module and do not cite that package until the audit passes.
+   module and do not cite that package until the audit passes. The current
+   blocker is not disk: the 2026-06-06 06:38 CST post-cleanup audit still
+   found no full-scale C-CRP uncertainty or recomputable signal rows.
 4. Before any new server work, run a fresh process/GPU/disk preflight. After
    the 2026-06-06 06:23 CST cleanup, `/` had `25,656,266,752` bytes free /
    `88%` used, clearing the prior 15 GiB Phase 2.5 launch-floor violation.
