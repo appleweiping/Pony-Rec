@@ -1,0 +1,143 @@
+{
+  "schema_version": "2026-06-06.cross_domain_official_ccrp_certificate_audit.v1",
+  "created_at_utc": "2026-06-05T18:34:56+00:00",
+  "mode": "local_cross_domain_official_ccrp_certificate_audit",
+  "read_only": true,
+  "will_ssh": false,
+  "will_copy": false,
+  "will_delete": false,
+  "will_start_experiment": false,
+  "ok": true,
+  "comparison_certificate_ready": true,
+  "paper_ready": false,
+  "summary_json": "outputs/summary/new_domains_official_ccrp_cross_domain_20260605_summary.json",
+  "domain_summary_csv": "outputs/summary/new_domains_official_ccrp_cross_domain_20260605_domain_summary.csv",
+  "method_rows_csv": "outputs/summary/new_domains_official_ccrp_cross_domain_20260605_method_rows.csv",
+  "evidence_consistency_json": "outputs/summary/paper_critical/local_server_evidence_consistency_new_domains_post_backfill_20260606.json",
+  "paper_critical_json": "outputs/summary/paper_critical/paper_critical_module_audit_post_evidence_backfill_20260606_0155.json",
+  "domain_order": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "required_metrics": [
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20",
+    "MRR"
+  ],
+  "expected": {
+    "domains": 4,
+    "official_methods_per_domain": 8,
+    "total_official_rows": 32,
+    "methods_per_domain_including_ccrp": 9,
+    "total_method_rows": 36,
+    "paired_tests_per_domain": 56,
+    "users": 10000,
+    "candidates_per_user": 101
+  },
+  "claim_supported": "On Sports, Toys, Home, and Tools 10k-user/101-candidate same-candidate domains, C-CRP v3 ranks first against eight official-code-level baselines, with all 56 per-domain C-CRP-vs-official metric tests positive and Holm-significant.",
+  "claim_not_supported": [
+    "full-catalog recommender SOTA",
+    "large practical effect size",
+    "paper-ready SOTA",
+    "uncertainty mechanism proven without Phase 2.5 motivation, ablation, and hyperparameter evidence",
+    "universal cross-domain winner beyond tested same-candidate domains"
+  ],
+  "claim_scope": "compact four-new-domain same-candidate official comparison certificate; not a paper-readiness verdict and not full-catalog SOTA",
+  "summary_audit": {
+    "ok": true,
+    "failures": [],
+    "warnings": [],
+    "aris_verdict": "CONDITIONAL_PASS_FOR_COMPACT_FOUR_NEW_DOMAIN_GATE_SUMMARY",
+    "claim_supported": "On Sports, Toys, Home, and Tools 10k-user/101-candidate same-candidate domains, C-CRP v3 ranks first against eight official-code-level baselines, with all 56 per-domain C-CRP-vs-official metric tests positive and Holm-significant.",
+    "claim_not_supported": [
+      "full-catalog recommender SOTA",
+      "large practical effect size",
+      "paper-ready SOTA",
+      "uncertainty mechanism proven without Phase 2.5 motivation, ablation, and hyperparameter evidence",
+      "universal cross-domain winner beyond tested same-candidate domains"
+    ]
+  },
+  "domain_audits": [
+    {
+      "domain": "sports",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "official_ok_count": 8,
+      "paired_positive_holm_significant_count": 56,
+      "ccrp_rank1_all_metrics": true,
+      "min_delta": 0.0272,
+      "max_holm_p_value": 1.219129314796352e-06
+    },
+    {
+      "domain": "toys",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "official_ok_count": 8,
+      "paired_positive_holm_significant_count": 56,
+      "ccrp_rank1_all_metrics": true,
+      "min_delta": 0.0193,
+      "max_holm_p_value": 0.0004061119980698498
+    },
+    {
+      "domain": "home",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "official_ok_count": 8,
+      "paired_positive_holm_significant_count": 56,
+      "ccrp_rank1_all_metrics": true,
+      "min_delta": 0.0336,
+      "max_holm_p_value": 1.0216927255359559e-08
+    },
+    {
+      "domain": "tools",
+      "ok": true,
+      "failures": [],
+      "warnings": [],
+      "official_ok_count": 8,
+      "paired_positive_holm_significant_count": 56,
+      "ccrp_rank1_all_metrics": true,
+      "min_delta": 0.0294,
+      "max_holm_p_value": 9.7172307634557e-07
+    }
+  ],
+  "method_rows_audit": {
+    "ok": true,
+    "row_count": 36,
+    "official_row_count": 32,
+    "ccrp_row_count": 4,
+    "failures": [],
+    "warnings": [
+      "sports/ccrp_v3_qwen3base_pointwise:local_event_restat_not_self_contained",
+      "toys/ccrp_v3_qwen3base_pointwise:local_event_restat_not_self_contained"
+    ]
+  },
+  "evidence_consistency_audit": {
+    "ok": true,
+    "failures": [],
+    "row_count": 32,
+    "ok_count": 32,
+    "failure_count": 0
+  },
+  "paper_critical_summary": {
+    "present": true,
+    "paper_ready": false,
+    "four_domain_evidence_consistent": true,
+    "signal_rows_available": false,
+    "phase2_5_storage_launch_allowed": false,
+    "warnings": []
+  },
+  "failures": [],
+  "warnings": [
+    "sports/ccrp_v3_qwen3base_pointwise:local_event_restat_not_self_contained",
+    "toys/ccrp_v3_qwen3base_pointwise:local_event_restat_not_self_contained"
+  ]
+}

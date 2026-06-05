@@ -71,6 +71,8 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_paper_critical_modules.py` | Local paper-critical go/no-go audit; integrates signal-row readiness, guarded plan, framework figure, component inventory, four-domain evidence consistency, and the current Phase 2.5 storage gate when artifact paths are supplied |
 | `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` | Local-only audit for a Phase 2.5 retention decision packet; verifies the plan, shell guard, markdown memo, sha256 manifest, and storage-audit target agreement without SSH or deletion |
 | `scripts/audit/main_execute_phase2_5_retention_cleanup.py` | Fail-closed retention cleanup action renderer/executor; defaults to dry-run, validates the plan, packet audit, and live preapproval audit, and requires `--execute` plus the exact approval token before any remote command runs |
+| `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` | Local-only audit for the compact Sports/Toys/Home/Tools official+C-CRP comparison certificate; verifies domain gates, method rows, paired-test counts, evidence consistency, and paper-scope disclaimers |
+| `scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py` | Local-only builder for the 36-row paper-facing full-metric evidence ledger; joins metrics, row counts, provenance/status, gate paths, paired-test paths, score audits, server-final audits, and local-light evidence paths |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring

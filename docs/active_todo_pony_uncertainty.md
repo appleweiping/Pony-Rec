@@ -2741,6 +2741,27 @@ The dry-run reports `ok=true`, `will_delete=false`, and
 `execution_status=dry_run_no_remote_commands`; no deletion, manifesting,
 post-delete gate run, or experiment launch occurred.
 
+Paper-facing comparison ledger checkpoint: at 2026-06-06 02:35-02:40 CST,
+Codex used a GPT-5.5 xhigh read-only sidecar reviewer to audit the compact
+Sports/Toys/Home/Tools official+C-CRP evidence. The sidecar confirmed the
+compact certificate is supported but identified a missing strict paper-facing
+ledger with provenance columns. Codex added
+`scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` and
+`scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py`.
+Artifacts:
+`outputs/summary/paper_critical/cross_domain_official_ccrp_certificate_audit_20260606_0235.{json,md,sha256}`,
+`outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md}`,
+and
+`outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.sha256`.
+The certificate audit reports `ok=true`, `comparison_certificate_ready=true`,
+and `paper_ready=false`. The ledger reports `ok=true`,
+`comparison_ledger_ready=true`, `row_count=36`, `official_row_count=32`,
+`ccrp_row_count=4`, no failures, and the expected warnings that Sports/Toys
+C-CRP compact rows are not self-contained for event-level restatement because
+local `user_ranks.jsonl` is missing. This closes the strict full-metric
+provenance-ledger gap for the four-domain comparison table; it does not unblock
+Phase 2.5 signal-row modules.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -2748,8 +2769,10 @@ post-delete gate run, or experiment launch occurred.
    official baseline rows unless a later audit finds a concrete failed or
    invalid row.
 2. Use `outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*` as
-   the compact four-new-domain comparison-gate certificate. Do not use stale
-   partial drafts that still say Home/Tools are incomplete.
+   the compact four-new-domain comparison-gate certificate, and use
+   `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.*`
+   as the full-metric provenance ledger for paper-table drafting. Do not use
+   stale partial drafts that still say Home/Tools are incomplete.
 3. Prioritize Phase 2.5 paper-critical modules before any paper-readiness
    claim: uncertainty observation/motivation figure or table, full C-CRP
    leave-one-component-out ablation, real hyperparameter curves, and the clean

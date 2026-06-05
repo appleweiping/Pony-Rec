@@ -99,6 +99,26 @@ also include:
     hyperparameter claims remain blocked until full-scale valid/test
     uncertainty signal rows are located or regenerated and audited under the
     same-candidate protocol.
+    Paper-facing comparison ledger checkpoint on 2026-06-06 02:35-02:40 CST:
+    a GPT-5.5 xhigh read-only sidecar reviewer confirmed the compact
+    four-domain comparison certificate was supported but lacked a strict
+    paper-facing provenance ledger. Codex added
+    `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` and
+    `scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py`.
+    Artifacts:
+    `outputs/summary/paper_critical/cross_domain_official_ccrp_certificate_audit_20260606_0235.{json,md,sha256}`,
+    `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md}`,
+    and
+    `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.sha256`.
+    The certificate audit reports `ok=true` and
+    `comparison_certificate_ready=true`; the ledger reports `ok=true`,
+    `comparison_ledger_ready=true`, `row_count=36`, `official_row_count=32`,
+    `ccrp_row_count=4`, complete HR@5/@10/@20, NDCG@5/@10/@20, MRR,
+    row-count, status, provenance, gate, paired-test, score-audit,
+    server-final, and local-light evidence columns. This supports drafting the
+    four-domain official comparison table, but `paper_ready=false` remains
+    because the uncertainty observation, component ablation, and hyperparameter
+    modules still need full-scale uncertainty signal rows.
     Storage preflight/cleanup for this next gate is recorded in
     `outputs/summary/paper_critical/server_storage_preflight_20260605.*`,
     `outputs/summary/tools_llmesr_completed_adapter_embedding_cleanup_20260605.{json,sha256}`,

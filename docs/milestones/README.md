@@ -110,6 +110,16 @@ reports `will_delete=false` and
 `execution_status=dry_run_no_remote_commands`. No cleanup or experiment launch
 occurred.
 
+The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
+`outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
+joins the compact comparison method rows, domain gate summaries, paired-test
+artifacts, local/server evidence consistency audit, and official provenance
+paths into a 36-row ledger. It reports `ok=true`,
+`comparison_ledger_ready=true`, `official_row_count=32`, and `ccrp_row_count=4`.
+This closes the paper-table evidence-ledger gap for the four-domain official
+comparison, while paper readiness remains blocked by missing full-scale
+uncertainty signal rows and the Phase 2.5 storage gate.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:
