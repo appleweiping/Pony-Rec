@@ -258,7 +258,7 @@ preferences before scoring each candidate. All domains use 10k users,
 | sports | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | domain gate PASS |
 | toys | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | domain gate PASS |
 | home | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | domain gate PASS |
-| tools | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
+| tools | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | domain gate PASS |
 
 Status: `completed_result` for beauty/books/electronics/movies/sports/toys/home/tools.
 The C-CRP v3 batch completed without FAILED/OOM/Traceback markers in
@@ -301,23 +301,24 @@ paper submission; do not rerun or relabel them without a provenance decision.
 ### Strategy for SOTA
 
 C-CRP v3 achieves SOTA on books and electronics under the current comparison
-table, and sports/toys/home now pass domain-level official-baseline and
-paired-test gates. Do not generalize to paper-wide SOTA until the declared
-domain set is complete; Tools now has 6/8 official rows gated after
-`proex_profile`, `promax_profile`, `elmrec_graph`, `llmemb`, `irllrec_intent`,
-and `rlmrec_graphcl`, so Tools still needs `llm2rec_sasrec` and
-`llmesr_sasrec` plus paired same-candidate tests before any paper-wide SOTA
-claim.
+table, and sports/toys/home/tools now pass domain-level official-baseline and
+paired-test gates. Paper-wide SOTA wording is still not submission-ready until
+the four-domain comparison is consolidated into the paper table, ARIS
+claim/citation audits pass, the paper-critical observation/ablation/
+hyperparameter/figure modules are complete, and GPT-5.5/Codex xhigh review
+reaches at least 8/10.
 
 ### Remaining for paper submission
 
-1. Complete the canonical 8 official baselines on tools after a
-   fresh disk/GPU/process check. `scripts/run_baselines_new_domains.sh` is
-   aligned to exclude SETRec while it remains blocked/supplementary, supports
-   single-domain production via `DOMAINS_OVERRIDE`, and now audits/imports
-   complete `@5/@10/@20 + MRR` same-candidate metrics after each completed
-   score file. Sports, toys, and home are now 8/8 complete and have passed
-   their domain/comparison/paired-test gates. Tools `proex_profile` launched at
+1. Consolidate the completed canonical 8-official-baseline gates for
+   sports/toys/home/tools into the final paper comparison evidence. Do not
+   launch more official baseline rows unless a later audit finds a concrete
+   invalid row. `scripts/run_baselines_new_domains.sh` remains aligned to
+   exclude SETRec while it is blocked/supplementary, supports single-domain
+   production via `DOMAINS_OVERRIDE`, and audits/imports complete
+   `@5/@10/@20 + MRR` same-candidate metrics after each completed score file.
+   Sports, toys, home, and tools are now 8/8 complete and have passed their
+   domain/comparison/paired-test gates. Tools `proex_profile` launched at
    2026-06-04 14:25 CST as the first Tools row and completed at
    2026-06-04 16:08 CST with `implementation_status=official_completed`,
    `blockers=[]`, exact `score_coverage_rate=1.0`, score audit/imported
@@ -762,6 +763,46 @@ claim.
    (`4.12G`), which is not safe to delete while training is active. Other large
    visible files are protected completed models/checkpoints/task splits or
    non-deletable legacy prediction evidence. No cleanup was performed.
+   At 2026-06-05 21:19 CST, Tools `llmesr_sasrec` completed as the eighth
+   Tools official row with wrapper markers `implementation_status=official_completed`,
+   `blockers=0`, `DONE llmesr_sasrec on tools`, and
+   `All baseline runs complete`. Server-final audit, server large-artifact
+   manifest, local-light sync, and local-light audit all passed. Full metrics
+   over 10,000 users and 101 candidates are HR@5/10/20
+   `0.0711 / 0.1270 / 0.2219`, NDCG@5/10/20
+   `0.042728964614829223 / 0.060602849768892623 / 0.08433244535733923`, and
+   MRR `0.06334161303438132`; row counts are `scores.csv` `1,010,001`,
+   prediction JSONL `10,000` before cleanup, and
+   `tables/ranking_eval_records.csv` `10,001`. The local lightweight package is
+   `outputs/baselines/official_adapters/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`.
+   Post-gate cleanup removed only the completed server prediction JSONL and
+   two adapter staging CSVs with manifest
+   `outputs/summary/tools_llmesr_post_gate_cleanup_20260605.sha256`, preserving
+   final scores, provenance, audits, imported tables, server-final certificate,
+   `llmesr_official_model.pt`, and upstream embedding artifacts. The valid
+   pre-cleanup Tools IRLLRec server-final certificate was restored from the
+   local-light package after a post-cleanup failed audit had overwritten the
+   server copy; the failed audit was preserved as
+   `server_final_evidence_audit_post_cleanup_failed_20260605.json`.
+   Tools C-CRP raw scores were imported into
+   `outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+   with exact `score_coverage_rate=1.0`. The post-cleanup Tools domain gate
+   `outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}`
+   records `official_ok_count=8`, `official_all_ok=true`, `ccrp_ok=true`, and
+   `gate_ok=true`. Tools C-CRP metrics are HR@5/10/20
+   `0.1937 / 0.2696 / 0.3931`, NDCG@5/10/20
+   `0.14186375906171483 / 0.16611553052793934 / 0.19703986741872317`, and MRR
+   `0.15585924577949772`. The comparison/statistical package
+   `outputs/summary/tools_official_ccrp_20260605_*` records
+   `claim_gate=tools_domain_pass`: C-CRP is observed-best on all seven metrics,
+   all 56 C-CRP-vs-8-official paired tests have positive deltas and are
+   Holm-significant, `min_delta=0.0294`, `min_ci_low=0.0173`, and
+   `max_holm_p_value=9.7172307634557e-07`. After local table sync and the
+   passed domain/comparison gates, the server-only imported C-CRP prediction
+   JSONL was removed with
+   `outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/prediction_deletion_manifest.json`;
+   the post-cleanup gate still passes by certificate. This is a Tools-domain
+   pass, not final paper readiness.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

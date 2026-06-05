@@ -1,0 +1,556 @@
+{
+  "domain": "tools",
+  "root": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "expected_users": 10000,
+  "expected_candidates_per_user": 101,
+  "official_expected_count": 8,
+  "official_ok_count": 8,
+  "official_all_ok": true,
+  "ccrp_ok": true,
+  "gate_ok": true,
+  "official_rows": [
+    {
+      "method": "llmemb",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.1365",
+        "HR@10": "0.2257",
+        "HR@20": "0.3637",
+        "NDCG@5": "0.087457824217457",
+        "NDCG@10": "0.11594350972806679",
+        "NDCG@20": "0.15050644138929892",
+        "MRR": "0.10649354669900822",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "llmemb",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "llmemb",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_run_summary.json"
+      }
+    },
+    {
+      "method": "proex_profile",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.0602",
+        "HR@10": "0.1177",
+        "HR@20": "0.2329",
+        "NDCG@5": "0.037281705859706714",
+        "NDCG@10": "0.055676376797898205",
+        "NDCG@20": "0.08437492971571317",
+        "MRR": "0.06071849976691817",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "proex_profile",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "proex_profile",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/proex_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/proex_profile_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/proex_official_run_summary.json"
+      }
+    },
+    {
+      "method": "promax_profile",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.056",
+        "HR@10": "0.1046",
+        "HR@20": "0.2018",
+        "NDCG@5": "0.03468275603534166",
+        "NDCG@10": "0.05029722685396016",
+        "NDCG@20": "0.07458228366305956",
+        "MRR": "0.056527355267188224",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "promax_profile",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "promax_profile",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate/promax_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate/promax_profile_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate/promax_official_run_summary.json"
+      }
+    },
+    {
+      "method": "elmrec_graph",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.0501",
+        "HR@10": "0.101",
+        "HR@20": "0.2101",
+        "NDCG@5": "0.029656030656687697",
+        "NDCG@10": "0.045870649973376774",
+        "NDCG@20": "0.07316592297455926",
+        "MRR": "0.05237582779698271",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "elmrec_graph",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "elmrec_graph",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_graph_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_official_run_summary.json"
+      }
+    },
+    {
+      "method": "irllrec_intent",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.102",
+        "HR@10": "0.1651",
+        "HR@20": "0.3095",
+        "NDCG@5": "0.06504709833452535",
+        "NDCG@10": "0.08525707170530923",
+        "NDCG@20": "0.12100829406900945",
+        "MRR": "0.08670154590435823",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "irllrec_intent",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "irllrec_intent",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/irllrec_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/irllrec_intent_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/irllrec_official_run_summary.json"
+      }
+    },
+    {
+      "method": "rlmrec_graphcl",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.0784",
+        "HR@10": "0.1354",
+        "HR@20": "0.2465",
+        "NDCG@5": "0.05017501611537314",
+        "NDCG@10": "0.06838865570840932",
+        "NDCG@20": "0.09599330874161652",
+        "MRR": "0.07220064580885768",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "rlmrec_graphcl",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "rlmrec_graphcl",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/rlmrec_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/rlmrec_graphcl_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/rlmrec_official_run_summary.json"
+      }
+    },
+    {
+      "method": "llm2rec_sasrec",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.0957",
+        "HR@10": "0.1625",
+        "HR@20": "0.2954",
+        "NDCG@5": "0.060227320850546905",
+        "NDCG@10": "0.08147852827156639",
+        "NDCG@20": "0.11481218118869342",
+        "MRR": "0.08101396652891538",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "llm2rec_sasrec",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "llm2rec_sasrec",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_sasrec_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_run_summary.json"
+      }
+    },
+    {
+      "method": "llmesr_sasrec",
+      "kind": "official_baseline",
+      "dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate",
+      "ok": true,
+      "failures": [],
+      "warnings": [
+        "missing_file_certified_by_server_final_audit:predictions/rank_predictions.jsonl"
+      ],
+      "metrics": {
+        "HR@5": "0.0711",
+        "HR@10": "0.127",
+        "HR@20": "0.2219",
+        "NDCG@5": "0.042728964614829223",
+        "NDCG@10": "0.060602849768892623",
+        "NDCG@20": "0.08433244535733923",
+        "MRR": "0.06334161303438132",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "provenance": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation"
+      },
+      "coverage": {
+        "baseline_name": "llmesr_sasrec",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "fully_scored_event_rate": "1.0",
+        "missing_score": "-1000000000000.0",
+        "score_rows_loaded": "1010000"
+      },
+      "summary": {
+        "baseline_name": "llmesr_sasrec",
+        "domain": "tools",
+        "status_label": "same_schema_external_baseline",
+        "artifact_class": "completed_result",
+        "ranking_events": "10000",
+        "total_candidates": "1010000",
+        "matched_candidates": "1010000",
+        "score_coverage_rate": "1.0",
+        "sample_count": "10000",
+        "avg_candidates": "101.0"
+      },
+      "row_counts": {
+        "scores_csv_lines": 1010001,
+        "predictions_jsonl_lines": 10000,
+        "ranking_eval_records_csv_lines": 10001,
+        "summary_csv_lines": 2
+      },
+      "dynamic_files": {
+        "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_score_audit.json",
+        "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_sasrec_same_candidate_score_audit.txt",
+        "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_run_summary.json"
+      }
+    }
+  ],
+  "ccrp": {
+    "method": "ccrp_v3_qwen3base_pointwise",
+    "kind": "internal_method",
+    "raw_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_ccrp_v3",
+    "imported_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate",
+    "ok": true,
+    "failures": [],
+    "warnings": [],
+    "metrics": {
+      "HR@5": "0.1937",
+      "HR@10": "0.2696",
+      "HR@20": "0.3931",
+      "NDCG@5": "0.14186375906171483",
+      "NDCG@10": "0.16611553052793934",
+      "NDCG@20": "0.19703986741872317",
+      "MRR": "0.15585924577949772",
+      "sample_count": "10000",
+      "avg_candidates": "101.0"
+    },
+    "coverage": {
+      "baseline_name": "ccrp_v3_qwen3base_pointwise",
+      "ranking_events": "10000",
+      "total_candidates": "1010000",
+      "matched_candidates": "1010000",
+      "score_coverage_rate": "1.0",
+      "fully_scored_event_rate": "1.0",
+      "missing_score": "-1000000000000.0",
+      "score_rows_loaded": "1010000"
+    },
+    "summary": {
+      "baseline_name": "ccrp_v3_qwen3base_pointwise",
+      "domain": "tools",
+      "status_label": "same_schema_internal_method",
+      "artifact_class": "completed_result",
+      "ranking_events": "10000",
+      "total_candidates": "1010000",
+      "matched_candidates": "1010000",
+      "score_coverage_rate": "1.0",
+      "sample_count": "10000",
+      "avg_candidates": "101.0"
+    },
+    "row_counts": {
+      "raw_scores_csv_lines": 1010001,
+      "raw_user_ranks_jsonl_lines": 10000,
+      "predictions_jsonl_lines": 10000,
+      "ranking_eval_records_csv_lines": 10001,
+      "summary_csv_lines": 2
+    },
+    "raw_report_keys": [
+      "HR@10",
+      "HR@20",
+      "HR@5",
+      "MRR",
+      "NDCG@10",
+      "NDCG@20",
+      "NDCG@5",
+      "data_path",
+      "inference_time_s",
+      "n_prompts",
+      "n_users"
+    ]
+  },
+  "stray_official_like_dirs": []
+}

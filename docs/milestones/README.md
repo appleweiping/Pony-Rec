@@ -551,6 +551,32 @@ The repository is now in M5 (multi-domain SOTA validation):
   (`4.12G`) as the main new pressure, with other large visible candidates
   protected completed models/checkpoints/task splits or non-deletable legacy
   prediction evidence. No cleanup was performed.
+  At 2026-06-05 21:19 CST, Tools `llmesr_sasrec` completed normally as the
+  eighth Tools official row. Server-final audit, server large-artifact
+  manifest, local-light sync, and local-light audit passed. Full metrics over
+  10,000 users and 101 candidates are HR@5/10/20
+  `0.0711 / 0.1270 / 0.2219`, NDCG@5/10/20
+  `0.042728964614829223 / 0.060602849768892623 / 0.08433244535733923`, and
+  MRR `0.06334161303438132`; row counts are `scores.csv` `1,010,001`,
+  prediction JSONL `10,000` before cleanup, and
+  `tables/ranking_eval_records.csv` `10,001`. Post-gate cleanup removed only
+  the server prediction JSONL and two adapter staging CSVs under
+  `outputs/summary/tools_llmesr_post_gate_cleanup_20260605.sha256`, preserving
+  final scores, provenance, audits, imported tables, server-final certificate,
+  `llmesr_official_model.pt`, and upstream embedding artifacts.
+  Tools C-CRP raw scores were then imported into
+  `outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+  with `score_coverage_rate=1.0`. The post-cleanup Tools domain gate
+  `outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}`
+  records `official_ok_count=8`, `official_all_ok=true`, `ccrp_ok=true`, and
+  `gate_ok=true`; the missing imported C-CRP prediction is certified by
+  `prediction_deletion_manifest.json` after domain-gate cleanup. The comparison
+  package `outputs/summary/tools_official_ccrp_20260605_*` records
+  `claim_gate=tools_domain_pass`: C-CRP is observed-best on all seven metrics,
+  all 56 C-CRP-vs-8-official paired tests are positive and Holm-significant,
+  with `min_delta=0.0294`, `min_ci_low=0.0173`, and
+  `max_holm_p_value=9.7172307634557e-07`. Disk remains tight at about `7.4G`
+  free / `97%` used, so future server work needs a fresh storage preflight.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final
@@ -634,7 +660,7 @@ The repository is now in M5 (multi-domain SOTA validation):
 | sports | 10000 | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | domain gate PASS |
 | toys | 10000 | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | domain gate PASS |
 | home | 10000 | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 | domain gate PASS |
-| tools | 10000 | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | baselines pending |
+| tools | 10000 | 0.194 | 0.270 | 0.393 | 0.142 | 0.166 | 0.197 | 0.156 | domain gate PASS |
 
 Original-domain C-CRP v3 formal reports are under
 `outputs/ccrp_v3_formal/<domain>/report.json`; the four-domain comparison with
@@ -644,9 +670,9 @@ completeness: each of sports/toys/home/tools has `report.json`, `scores.csv`
 with 1,010,000 candidate-score rows plus header, and `user_ranks.jsonl` with
 10,000 user-rank rows.
 
-New-domain imported-table note (updated 2026-06-04): sports, toys, and home
-C-CRP v3 imported same-candidate evidence now passes domain gates against all
-eight official baselines. For toys, raw scores under
+New-domain imported-table note (updated 2026-06-05): sports, toys, home, and
+tools C-CRP v3 imported same-candidate evidence now passes domain gates against
+all eight official baselines. For toys, raw scores under
 `outputs/toys_large10000_100neg_ccrp_v3`
 were imported into
 `outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
@@ -661,7 +687,13 @@ imported into
 with exact coverage, and
 `outputs/summary/home_official_ccrp_gate_20260604.{json,csv}` plus
 `outputs/summary/home_official_ccrp_20260604_*` record the passed Home domain
-gate and 56/56 positive Holm-significant paired tests.
+gate and 56/56 positive Holm-significant paired tests. For tools, raw scores
+under `outputs/tools_large10000_100neg_ccrp_v3` were imported into
+`outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+with exact coverage, and
+`outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}`
+plus `outputs/summary/tools_official_ccrp_20260605_*` record the passed Tools
+domain gate and 56/56 positive Holm-significant paired tests.
 
 Artifact audit note (2026-05-31): the old four-domain C-CRP reports are present
 under `outputs/ccrp_v3_formal/<domain>/report.json`; they were only missed by
@@ -675,13 +707,9 @@ not as a reason to silently rerun completed metric rows.
 ### Experiment Execution Plan
 
 1. C-CRP v3 on all 8 domains (Phase 1) — complete
-2. 8 official baselines on 4 new domains (Phase 2) — sports, toys, and home
-   each have all eight audited official rows plus C-CRP import,
-   domain/comparison, and paired-test gates complete; Tools has six audited
-   official rows complete (`proex_profile`, `promax_profile`, `elmrec_graph`,
-   `llmemb`, `irllrec_intent`, `rlmrec_graphcl`) and still needs
-   `llm2rec_sasrec`, `llmesr_sasrec`, and its domain/comparison/paired-test
-   gates.
+2. 8 official baselines on 4 new domains (Phase 2) — complete for sports,
+   toys, home, and tools: each has all eight audited official rows plus C-CRP
+   import, domain/comparison, and paired-test gates complete.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.

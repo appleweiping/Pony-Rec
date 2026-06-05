@@ -1,0 +1,2 @@
+4945986577	outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate
+4499167880	outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter

@@ -9,7 +9,7 @@ This is the Uncertainty project: Actionable Uncertainty for LLM-based Recommenda
 - **Current collaboration routing**: Claude reviewer tooling is unavailable in
   this thread; when multi-agent review is required, use GPT-5.5 xhigh
   sub-agents instead.
-- **Stage**: M5 (C-CRP v3 complete; sports/toys/home official gates passed; Tools ProEx active)
+- **Stage**: M5 (C-CRP v3 complete; sports/toys/home/tools official gates passed; paper-critical modules next)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
@@ -20,7 +20,7 @@ This is the Uncertainty project: Actionable Uncertainty for LLM-based Recommenda
   - SSH config: `125.71.97.70:15302`, user `ajifang`
   - GPU: RTX 4090 (49GB VRAM)
 
-## Experiment Roadmap (2026-05-31)
+## Experiment Roadmap (2026-06-05)
 
 ### Phase 1: C-CRP v3 Scoring (COMPLETE)
 Run C-CRP v3 on all 8 domains with Qwen3-8B via vLLM.
@@ -56,19 +56,15 @@ Use the documented single-domain loop under current storage pressure, e.g.
 `DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh`. The runner
 audits exact score coverage and imports complete `@5/@10/@20 + MRR` metrics
 after each completed score file.
-Current status (2026-06-04): sports, toys, and home are each 8/8 official
-baselines complete and have passed their domain/comparison/paired-test gates
-against C-CRP. The Home gate artifacts are
-`outputs/summary/home_official_ccrp_gate_20260604.{json,csv}` and
-`outputs/summary/home_official_ccrp_20260604_*`; the paired summary records
-`claim_gate=home_domain_pass`, C-CRP observed-best on all seven metrics, and
-56/56 C-CRP-vs-official paired tests positive and Holm-significant. Tools is
-the only new-domain official-baseline block still incomplete. Tools
-`proex_profile` launched at 2026-06-04 14:25 CST as a single-domain,
-single-method run; monitor adapter PID `3269572`, PID file
-`baselines_new_domains_tools_proex_20260604_142548.adapter.pid`, and log
-`baselines_new_domains_tools_proex_20260604_142548.log`. Do not start another
-baseline while this row is active.
+Current status (2026-06-05): sports, toys, home, and tools are each 8/8
+official baselines complete and have passed their domain/comparison/paired-test
+gates against C-CRP. The Tools artifacts are
+`outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}` and
+`outputs/summary/tools_official_ccrp_20260605_*`; the paired summary records
+`claim_gate=tools_domain_pass`, C-CRP observed-best on all seven metrics, and
+56/56 C-CRP-vs-official paired tests positive and Holm-significant. Do not
+start more official baseline rows unless a later audit finds a concrete invalid
+row.
 
 Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
 upstream staging directories were removed only after final server audits and

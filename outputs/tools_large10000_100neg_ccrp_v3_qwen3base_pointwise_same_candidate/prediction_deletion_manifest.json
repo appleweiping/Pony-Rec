@@ -1,0 +1,17 @@
+{
+  "comparison_summary": "outputs/summary/tools_official_ccrp_20260605_paired_summary.json",
+  "domain": "tools",
+  "failures": [],
+  "files": {
+    "predictions/rank_predictions.jsonl": {
+      "deleted": true,
+      "lines": 10000,
+      "path": "outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/predictions/rank_predictions.jsonl",
+      "sha256": "56ef7ce0c0ec9521fec37300c92ba24a7dfb95a3dea7e340f09e035647b76996",
+      "size": 789980879
+    }
+  },
+  "gate_json": "outputs/summary/tools_official_ccrp_gate_20260605.json",
+  "mode": "post_domain_gate_prediction_cleanup",
+  "ok": true
+}

@@ -2362,31 +2362,79 @@ manifest, local-light sync, and local-light audit; the generated PowerShell
 script throws before any gate command and must not be used until the active run
 exits normally and final evidence exists.
 
+Tools LLM-ESR completion/domain-gate checkpoint: at 2026-06-05 21:19 CST,
+the final Tools official row, `llmesr_sasrec`, completed normally. The wrapper
+log recorded `implementation_status=official_completed`, `blockers=0`,
+`DONE llmesr_sasrec on tools`, and `All baseline runs complete`. Server-final
+audit, server large-artifact manifest, local-light sync, and local-light audit
+all passed. Full metrics over 10,000 users and 101 candidates are HR@5/10/20
+`0.0711 / 0.1270 / 0.2219`, NDCG@5/10/20
+`0.042728964614829223 / 0.060602849768892623 / 0.08433244535733923`, and MRR
+`0.06334161303438132`; row counts are `scores.csv` `1,010,001` lines,
+`predictions/rank_predictions.jsonl` `10,000` lines before cleanup, and
+`tables/ranking_eval_records.csv` `10,001` lines. The local lightweight
+package is
+`outputs/baselines/official_adapters/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/`.
+Post-gate cleanup removed only the completed server prediction JSONL and two
+adapter staging CSVs with manifest
+`outputs/summary/tools_llmesr_post_gate_cleanup_20260605.sha256`; final
+`scores.csv`, provenance, audits, imported tables, server-final certificate,
+large-artifact manifest, `llmesr_official_model.pt`, and upstream embedding
+artifact were preserved.
+
+Tools domain gate/comparison checkpoint: after restoring the valid pre-cleanup
+Tools IRLLRec `server_final_evidence_audit.json` from the local-light package
+(the overwritten post-cleanup failed audit was preserved as
+`server_final_evidence_audit_post_cleanup_failed_20260605.json`), the read-only
+Tools official+C-CRP gate passed. C-CRP raw scores were imported into
+`outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate`
+with `score_coverage_rate=1.0`; the post-cleanup domain gate
+`outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}`
+records `official_ok_count=8`, `official_all_ok=true`, `ccrp_ok=true`, and
+`gate_ok=true`. Tools C-CRP metrics are HR@5/10/20
+`0.1937 / 0.2696 / 0.3931`, NDCG@5/10/20
+`0.14186375906171483 / 0.16611553052793934 / 0.19703986741872317`, and MRR
+`0.15585924577949772`, with raw `scores.csv` `1,010,001` lines,
+`user_ranks.jsonl` `10,000` lines, imported prediction `10,000` lines before
+cleanup, and imported `tables/ranking_eval_records.csv` `10,001` lines.
+The comparison/statistical package
+`outputs/summary/tools_official_ccrp_20260605_*` records
+`claim_gate=tools_domain_pass`: C-CRP is observed-best on all seven metrics,
+all 56 C-CRP-vs-8-official paired tests have positive deltas and are
+Holm-significant, `min_delta=0.0294`, `min_ci_low=0.0173`, and
+`max_holm_p_value=9.7172307634557e-07`. The closest official baseline is
+`llmemb` on every metric. After the passed domain/comparison gates and local
+table sync, the server-only imported C-CRP prediction JSONL was removed under
+the internal-method cleanup exception with
+`outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/prediction_deletion_manifest.json`
+and summary manifest
+`outputs/summary/tools_ccrp_imported_prediction_cleanup_20260605.sha256`;
+the post-cleanup domain gate still passes by certificate. Disk remains tight
+at about `7.4G` free / `97%` used, so do not start new server jobs without a
+fresh storage preflight.
+
 ## Required Next Actions
 
-1. Monitor the active Tools `llmesr_sasrec` row: runner PID `3440278`, adapter
-   PID `3440287`, log `baselines_new_domains_tools_llmesr_20260605_185250.log`,
-   pidfile `outputs/summary/tools_llmesr_launch_20260605_185250.pid`, launch
-   snapshot `outputs/summary/tools_llmesr_launch_monitor_20260605_185250.json`,
-   heartbeat `monitor-tools-llm-esr`. Notify on completion, failure, duplicate
-   process, dead tracked PID, disk below `10G` free, or disk at/above `97%`
-   used. Do not start another baseline while this row is active.
-2. After the remaining Tools row completes, run the established row gates
-   before marking it official: score audit/import, server-final audit, server
-   large-artifact sha256 manifest, local-light sync, local-light audit,
-   docs/memory, related-only commit/push, and then clean only eligible
-   completed intermediate artifacts if disk remains tight.
-3. After the remaining completed Tools row, verify full HR@5/@10/@20,
-   NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
-   score/candidate row counts, exact same-candidate coverage, provenance,
-   score audit, imported tables, server-final audit, lightweight sync, and
-   local-light audit before recording it as official evidence.
-4. Build domain comparison + paired-test gates only after all eight official
-   rows for that domain and C-CRP imported evidence pass the domain gate.
-5. Only after the declared experiments, comparisons, ablations, provenance,
-    statistical tests, and figure checks are complete, move to ARIS paper
-    writing and GPT-5.5/Codex xhigh review. The review loop must reach at
-    least 8/10 before submission-level readiness is claimed.
+1. Treat Phase 2 official new-domain baselines as complete for
+   Sports/Toys/Home/Tools under the same-candidate gate. Do not launch more
+   official baseline rows unless a later audit finds a concrete failed or
+   invalid row.
+2. Consolidate the four-domain comparison evidence and paper claim boundary:
+   the project now has Sports, Toys, Home, and Tools domain gates plus
+   paired-test packages, but paper-wide wording still needs a cross-domain
+   table/summary and ARIS claim audit.
+3. Prioritize Phase 2.5 paper-critical modules before any paper-readiness
+   claim: uncertainty observation/motivation figure or table, full C-CRP
+   leave-one-component-out ablation, real hyperparameter curves, and the clean
+   framework overview figure.
+4. Before any new server work, run a fresh process/GPU/disk preflight. Current
+   disk remains around `7.4G` free / `97%` used; preserve scores, provenance,
+   audits, imported tables, C-CRP raw reports/ranks, checkpoints/models, and
+   embeddings unless a separate archive decision explicitly allows deletion.
+5. Only after comparisons, paper-critical modules, provenance, statistical
+   tests, and figure checks are complete, move to ARIS paper writing and
+   GPT-5.5/Codex xhigh review. The review loop must reach at least 8/10 before
+   submission-level readiness is claimed.
 
 ## Evidence Gate Commands
 
