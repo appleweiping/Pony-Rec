@@ -580,6 +580,17 @@ claim.
    No Tools LLM2Rec row is active or table-eligible; disk is about `14G` free /
    `93%` used, so relaunch is pending a fresh preflight and storage-margin
    decision.
+   A 2026-06-05 13:46 CST relaunch checkpoint then started exactly one Tools
+   `llm2rec_sasrec` row after sidecar ARIS review of storage and duplicate-run
+   risk. Runner PID `3413921`, adapter PID `3413930`, log
+   `baselines_new_domains_tools_llm2rec_20260605_134355.log`, heartbeat
+   `monitor-tools-llm2rec`, and launch snapshot
+   `outputs/summary/tools_llm2rec_launch_monitor_20260605.json`. The snapshot
+   found one adapter process, no failure markers, active Qwen3 embedding
+   progress around `[hf_mean_pool] encoded 3888/345622`, GPU about `95%` /
+   `16089 MiB`, adapter directory `1.1G`, final output placeholder-only, and
+   disk about `12G` free / `94%` used. This is active monitor-only evidence,
+   not a completed or table-eligible row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

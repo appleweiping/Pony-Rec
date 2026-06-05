@@ -388,6 +388,16 @@ The repository is now in M5 (multi-domain SOTA validation):
   No Tools LLM2Rec row is active or table-eligible; disk is about `14G` free /
   `93%` used, so relaunch is pending a fresh preflight and storage-margin
   decision.
+  A 2026-06-05 13:46 CST relaunch checkpoint then started exactly one Tools
+  `llm2rec_sasrec` row after a GPT-5.5 xhigh sidecar ARIS auditor judged the
+  relaunch conditionally acceptable. Runner PID `3413921`, adapter PID
+  `3413930`, log `baselines_new_domains_tools_llm2rec_20260605_134355.log`,
+  heartbeat `monitor-tools-llm2rec`, and launch snapshot
+  `outputs/summary/tools_llm2rec_launch_monitor_20260605.json`. The snapshot
+  showed one adapter process, no failure markers, active Qwen3 embedding at
+  `[hf_mean_pool] encoded 3888/345622`, GPU about `95%` / `16089 MiB`, adapter
+  dir `1.1G`, final output placeholder-only, and disk about `12G` free / `94%`
+  used. This is active monitor-only evidence, not a completed row.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

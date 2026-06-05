@@ -1888,6 +1888,33 @@ or table-eligible. Disk is about `14G` free / `93%` used after the repair, so
 do not relaunch until a fresh process/GPU/disk preflight and storage-margin
 decision pass.
 
+Tools LLM2Rec relaunch checkpoint 2026-06-05 13:46 CST: after the repaired
+validation CSV passed, a GPT-5.5 xhigh sidecar ARIS auditor reviewed the
+storage/relaunch risk and found a conditional relaunch acceptable: no matching
+baseline process, stale failed PID dead, GPU idle, repaired validation manifest
+PASS, failed final output placeholder-only, and disk above the hard alert floor
+at roughly `13G` free / `94%` used. No large automatic cleanup was performed:
+the only clearly safe file was the corrupt validation CSV backup
+`candidate_items.csv.corrupt_20260605T051943Z` (`467M`), but deleting it would
+not materially change the LLM2Rec storage risk; completed scores, tables,
+models/checkpoints, and task splits remained protected. Launched exactly one
+row:
+
+```bash
+nohup env DOMAINS_OVERRIDE=tools FAST_METHODS_OVERRIDE= TRAIN_METHODS_OVERRIDE=llm2rec_sasrec bash scripts/run_baselines_new_domains.sh > baselines_new_domains_tools_llm2rec_20260605_134355.log 2>&1 &
+```
+
+Runner PID `3413921`, adapter PID `3413930`, heartbeat
+`monitor-tools-llm2rec`, and launch snapshot
+`outputs/summary/tools_llm2rec_launch_monitor_20260605.json`. The first stable
+snapshot found exactly one adapter process, no failure markers, GPU active at
+about `95%` / `16089 MiB`, adapter directory `1.1G`, final output
+placeholder-only, disk about `12G` free / `94%` used, and embedding progress
+around `[hf_mean_pool] encoded 3888/345622`. This is active monitor-only
+evidence, not a completed or table-eligible row. Do not start another baseline
+while this row is active; alert if disk falls below `10G` free or reaches
+`97%` used.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -2058,12 +2085,12 @@ evidence is under
 
 ## Required Next Actions
 
-1. No Tools baseline is currently active. Before relaunching Tools
-   `llm2rec_sasrec`, run a fresh process/GPU/disk/duplicate-output preflight
-   and confirm a storage margin above the 10G alert floor; disk is currently
-   about `14G` free / `93%` used after the validation candidate repair.
-   Relaunch only one row, then create a new monitor heartbeat for the new
-   runner/adapter PIDs.
+1. Monitor the active Tools `llm2rec_sasrec` row: runner PID `3413921`,
+   adapter PID `3413930`, log
+   `baselines_new_domains_tools_llm2rec_20260605_134355.log`, heartbeat
+   `monitor-tools-llm2rec`. Notify on completion, failure, duplicate process,
+   dead tracked PID, disk below `10G` free, or disk at/above `97%` used. Do
+   not start another baseline while this row is active.
 2. After each remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,

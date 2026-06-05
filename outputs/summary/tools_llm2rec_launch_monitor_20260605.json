@@ -1,0 +1,49 @@
+{
+  "status": "active",
+  "created_at_epoch": 1780638381,
+  "created_at_local": "2026-06-05 13:46:21 CST",
+  "runner_pid": 3413921,
+  "adapter_pid": 3413930,
+  "log": "baselines_new_domains_tools_llm2rec_20260605_134355.log",
+  "heartbeat_id": "monitor-tools-llm2rec",
+  "processes": "PID    PPID STAT     ELAPSED CMD\n3413921       1 S          02:26 bash scripts/run_baselines_new_domains.sh\n3413930 3413921 Rl         02:26 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_llm2rec_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto",
+  "matching_processes": "3413930 /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_llm2rec_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto\n3414353 /bin/sh -c pgrep -af 'main_run_llm2rec_official_same_candidate_adapter.py|evaluate_with_seqrec.py' || true",
+  "disk": "文件系统        大小  已用  可用 已用% 挂载点\n/dev/vda5       196G  174G   12G   94% /",
+  "gpu": "95 %, 16089 MiB",
+  "adapter_du": "1.1G\t/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter",
+  "final_du": "4.0K\t/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "log_tail": "[hf_mean_pool] encoded 3416/345622\n[hf_mean_pool] encoded 3424/345622\n[hf_mean_pool] encoded 3432/345622\n[hf_mean_pool] encoded 3440/345622\n[hf_mean_pool] encoded 3448/345622\n[hf_mean_pool] encoded 3456/345622\n[hf_mean_pool] encoded 3464/345622\n[hf_mean_pool] encoded 3472/345622\n[hf_mean_pool] encoded 3480/345622\n[hf_mean_pool] encoded 3488/345622\n[hf_mean_pool] encoded 3496/345622\n[hf_mean_pool] encoded 3504/345622\n[hf_mean_pool] encoded 3512/345622\n[hf_mean_pool] encoded 3520/345622\n[hf_mean_pool] encoded 3528/345622\n[hf_mean_pool] encoded 3536/345622\n[hf_mean_pool] encoded 3544/345622\n[hf_mean_pool] encoded 3552/345622\n[hf_mean_pool] encoded 3560/345622\n[hf_mean_pool] encoded 3568/345622\n[hf_mean_pool] encoded 3576/345622\n[hf_mean_pool] encoded 3584/345622\n[hf_mean_pool] encoded 3592/345622\n[hf_mean_pool] encoded 3600/345622\n[hf_mean_pool] encoded 3608/345622\n[hf_mean_pool] encoded 3616/345622\n[hf_mean_pool] encoded 3624/345622\n[hf_mean_pool] encoded 3632/345622\n[hf_mean_pool] encoded 3640/345622\n[hf_mean_pool] encoded 3648/345622\n[hf_mean_pool] encoded 3656/345622\n[hf_mean_pool] encoded 3664/345622\n[hf_mean_pool] encoded 3672/345622\n[hf_mean_pool] encoded 3680/345622\n[hf_mean_pool] encoded 3688/345622\n[hf_mean_pool] encoded 3696/345622\n[hf_mean_pool] encoded 3704/345622\n[hf_mean_pool] encoded 3712/345622\n[hf_mean_pool] encoded 3720/345622\n[hf_mean_pool] encoded 3728/345622\n[hf_mean_pool] encoded 3736/345622\n[hf_mean_pool] encoded 3744/345622\n[hf_mean_pool] encoded 3752/345622\n[hf_mean_pool] encoded 3760/345622\n[hf_mean_pool] encoded 3768/345622\n[hf_mean_pool] encoded 3776/345622\n[hf_mean_pool] encoded 3784/345622\n[hf_mean_pool] encoded 3792/345622\n[hf_mean_pool] encoded 3800/345622\n[hf_mean_pool] encoded 3808/345622\n[hf_mean_pool] encoded 3816/345622\n[hf_mean_pool] encoded 3824/345622\n[hf_mean_pool] encoded 3832/345622\n[hf_mean_pool] encoded 3840/345622\n[hf_mean_pool] encoded 3848/345622\n[hf_mean_pool] encoded 3856/345622\n[hf_mean_pool] encoded 3864/345622\n[hf_mean_pool] encoded 3872/345622\n[hf_mean_pool] encoded 3880/345622\n[hf_mean_pool] encoded 3888/345622",
+  "repair_validation_manifest_exists": true,
+  "repair_validation_manifest": {
+    "status": "pass",
+    "created_at_utc": "20260605T052213Z",
+    "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv",
+    "header": [
+      "source_event_id",
+      "user_id",
+      "timestamp",
+      "split_name",
+      "candidate_index",
+      "item_id",
+      "label",
+      "is_positive",
+      "popularity_group",
+      "candidate_title",
+      "candidate_text"
+    ],
+    "rows": 1010000,
+    "events": 10000,
+    "count_hist": {
+      "101": 10000
+    },
+    "positive_hist": {
+      "1": 10000
+    },
+    "label_hist": {
+      "1": 10000
+    },
+    "bad_rows": [],
+    "repair_manifest": "outputs/summary/tools_valid_candidate_items_repair_20260605T051943Z.json"
+  },
+  "failure_scan": ""
+}
