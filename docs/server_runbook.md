@@ -26,32 +26,28 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order (2026-05-31)
+## Current Priority Order (2026-06-06)
 
 ```text
 1. Pull latest repo state.
-2. C-CRP v3 batch run on new domains is complete
-   - sports ✓, toys ✓, home ✓, tools ✓
-3. Run baselines on new domains with a single-domain production loop
-   - Script: scripts/run_baselines_new_domains.sh
-   - Example launch: nohup env DOMAINS_OVERRIDE=sports bash scripts/run_baselines_new_domains.sh > baselines_new_domains_sports.log 2>&1 &
-   - Canonical 8-method block only: LLMEmb, ProEx, ProMax, ELMRec,
-     IRLLRec, RLMRec, LLM2Rec, LLM-ESR. SETRec is excluded while blocked.
-   - The script uses `${PYTHON:-/home/ajifang/miniconda3/bin/python}`; set
-     `PYTHON` explicitly only if the conda path changes.
-   - The script exports project/script import paths, audits exact score
-     coverage, and imports complete `@5/@10/@20 + MRR` same-candidate metrics
-     immediately after each score file is produced.
-4. After each baseline row finishes: run the server-final evidence audit, then
-   sync the lightweight package to local with
-   `scripts/audit/main_sync_official_evidence_package.py`
-5. Build comparison table, run stat tests
+2. Treat performance/table evidence as complete for the current same-candidate
+   claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
+   all eight official-code-level baseline rows complete; the four-new-domain
+   paper-facing ledger has `official_row_count=32`, `ccrp_row_count=4`, and
+   per-domain 56/56 positive Holm-significant paired tests.
+3. Do not launch more official baseline rows unless a later audit finds a
+   concrete failed or invalid row.
+4. Run Phase 2.5 paper-critical modules next: observation/motivation,
+   leave-one-component-out C-CRP component ablation, and hyperparameter curves.
+   Current blocker is missing full-scale C-CRP uncertainty/signal rows, not
+   performance, GPU, or disk.
+5. If no saved signal rows pass audit, use the guarded signal-row runner
+   `experiments/rsc/run_ccrp_v3_signal_rows.py` to generate valid/test
+   recomputable signal rows on the server, then audit them before selector use.
 6. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
    failures; do not include it in the main official block unless a future
    memory-stable run passes all gates.
-7. Run Shadow large-scale diagnostics only after the 100neg task packages are
-   confirmed healthy.
-8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
+7. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
    validation gates exist.
 ```
 
@@ -77,6 +73,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` | Local-only audit for the compact Sports/Toys/Home/Tools official+C-CRP comparison certificate; verifies domain gates, method rows, paired-test counts, evidence consistency, and paper-scope disclaimers |
 | `scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py` | Local-only builder for the 36-row paper-facing full-metric evidence ledger; joins metrics, row counts, provenance/status, gate paths, paired-test paths, score audits, server-final audits, and local-light evidence paths |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
+| `experiments/rsc/run_ccrp_v3_signal_rows.py` | Phase 2.5 server-side C-CRP signal-row runner; emits recomputable rows with identity, raw/calibrated relevance probability, evidence support, counterevidence strength, provenance, and parse-failure audit; do not use outputs until `main_audit_ccrp_uncertainty_sources.py` passes |
 
 ## Monitoring
 

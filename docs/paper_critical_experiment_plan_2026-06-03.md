@@ -576,6 +576,28 @@ observation, component ablation, or hyperparameter server runs until real
 full-scale valid/test uncertainty rows or recomputable signal rows are located
 or regenerated and pass the same-candidate audit.
 
+Signal-row runner update (2026-06-06 07:20 CST): performance/table evidence is
+closed for the current same-candidate claim, but Phase 2.5 explanation modules
+still require signal rows. Fresh server and ledger checks confirm all eight
+C-CRP v3 domain reports exist and Sports/Toys/Home/Tools each have `8/8`
+official-code-level baselines with `implementation_status=official_completed`
+and `blockers=[]`; the paper-facing ledger has `official_row_count=32` and
+`ccrp_row_count=4`. Codex added
+`experiments/rsc/run_ccrp_v3_signal_rows.py` as the guarded server-side path
+for generating recomputable valid/test signal rows when no saved signal rows
+exist. The runner writes identity, raw/calibrated relevance probability,
+evidence support, counterevidence strength, provenance, row counts, and parse
+failure audit fields. `scripts/audit/main_plan_ccrp_signal_generation.py` now
+places valid/test signal-row generation templates before the selector and
+module steps while preserving the non-executing `exit 2` shell guard.
+Consolidated audit checkpoint:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_signal_runner_plan_20260606_0720.{json,md}`.
+It reports `four_domain_evidence_consistent=true`,
+`phase2_5_storage_launch_allowed=true`, and `guarded_plan_ready=true`, but
+`signal_rows_available=false` and `paper_ready=false` until the generated or
+located full-scale signal rows pass `main_audit_ccrp_uncertainty_sources.py`.
+No server experiment was launched.
+
 Feasibility: 7/10. Most work reuses existing C-CRP signal/score infrastructure,
 but the signal-row paths must be audited before launch.
 

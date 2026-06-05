@@ -68,6 +68,8 @@ DEFAULT_STORAGE_AUDIT_GLOBS = (
     "server_storage_phase2_5_retention_audit_*.json",
 )
 REQUIRED_GUARDED_PLAN_COMMAND_KEYS = (
+    "generate_valid_signal_rows_template",
+    "generate_test_signal_rows_template",
     "select_ccrp_ablation_and_scores_template",
     "build_component_ablation_summary_template",
     "audit_component_ablation_package_template",

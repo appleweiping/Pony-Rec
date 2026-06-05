@@ -113,6 +113,24 @@ also include:
     classify each as `score_only_not_uncertainty` with candidate-key coverage
     `1.0` and failure `missing_uncertainty_column`. No Phase 2.5 experiment or
     baseline was launched.
+    Signal-row runner wiring checkpoint on 2026-06-06 07:20 CST: performance
+    evidence is not the current blocker. A fresh server audit confirmed C-CRP
+    v3 reports exist for all eight domains, and Sports/Toys/Home/Tools each
+    have `8/8` official completed baselines with `implementation_status=
+    official_completed` and `blockers=[]`. The paper-facing ledger already
+    reports `official_row_count=32`, `ccrp_row_count=4`, and per-domain
+    `8 official + 1 C-CRP` rows. Codex added
+    `experiments/rsc/run_ccrp_v3_signal_rows.py`, a server-side runner that can
+    generate recomputable C-CRP valid/test signal rows with identity,
+    raw/calibrated relevance probability, evidence support, counterevidence
+    strength, provenance, row counts, and parse-failure audit fields. The
+    guarded plan generator now emits valid/test signal-row generation templates
+    but remains non-executing by default. Current consolidated audit:
+    `outputs/summary/paper_critical/paper_critical_module_audit_post_signal_runner_plan_20260606_0720.{json,md}`.
+    It reports `four_domain_evidence_consistent=true`,
+    `phase2_5_storage_launch_allowed=true`, and `guarded_plan_ready=true`, but
+    keeps `paper_ready=false` because no completed full-scale signal rows have
+    passed audit yet. No server experiment was launched.
     Paper-facing comparison ledger checkpoint on 2026-06-06 02:35-02:40 CST:
     a GPT-5.5 xhigh read-only sidecar reviewer confirmed the compact
     four-domain comparison certificate was supported but lacked a strict

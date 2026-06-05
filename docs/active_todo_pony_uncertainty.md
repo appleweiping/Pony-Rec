@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 06:38 CST
+Last updated: 2026-06-06 07:20 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -3109,6 +3109,27 @@ hyperparameter modules remain blocked until real full-scale valid/test
 uncertainty or recomputable signal rows are located or regenerated under the
 same-candidate protocol. No Phase 2.5 experiment or baseline was launched.
 
+Phase 2.5 signal-row runner wiring: at 2026-06-06 07:20 CST, after rechecking
+that the performance/table gate is complete (`C-CRP v3` reports exist for all
+eight domains; Sports/Toys/Home/Tools each have `8/8` official completed
+baselines; the paper-facing ledger has `official_row_count=32` and
+`ccrp_row_count=4`), Codex added a guarded server-side signal-row generation
+entry point:
+`experiments/rsc/run_ccrp_v3_signal_rows.py`. It emits recomputable C-CRP
+signal rows with `source_event_id,user_id,candidate_item_id,item_id`,
+`relevance_probability`, `calibrated_relevance_probability`,
+`evidence_support`, `counterevidence_strength`, provenance, row counts, and
+parse-failure audit fields. `scripts/audit/main_plan_ccrp_signal_generation.py`
+now includes non-executing valid/test signal-generation command templates
+before selector, observation, ablation, and hyperparameter steps, while the
+generated shell still exits with `exit 2`. Consolidated audit artifact
+`outputs/summary/paper_critical/paper_critical_module_audit_post_signal_runner_plan_20260606_0720.{json,md}`
+reports `ok=true`, `four_domain_evidence_consistent=true`,
+`phase2_5_storage_launch_allowed=true`, `guarded_plan_ready=true`, but
+`paper_ready=false` and `signal_rows_available=false`. Focused tests passed:
+`python -m pytest tests\test_ccrp_v3_signal_rows_runner.py tests\test_plan_ccrp_signal_generation.py tests\test_audit_paper_critical_modules.py`
+(`15 passed`). No server experiment or baseline was launched.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -3126,8 +3147,11 @@ same-candidate protocol. No Phase 2.5 experiment or baseline was launched.
    framework overview figure. After each module package is generated, run
    `scripts/audit/main_audit_phase2_5_module_package.py` for the relevant
    module and do not cite that package until the audit passes. The current
-   blocker is not disk: the 2026-06-06 06:38 CST post-cleanup audit still
-   found no full-scale C-CRP uncertainty or recomputable signal rows.
+   blocker is not performance or disk: the 2026-06-06 post-cleanup and
+   signal-runner-plan audits still found no completed full-scale C-CRP
+   uncertainty or recomputable signal rows. If no saved signal rows are found,
+   use `experiments/rsc/run_ccrp_v3_signal_rows.py` on the server to generate
+   valid/test rows, then audit them before selector or paper use.
 4. Before any new server work, run a fresh process/GPU/disk preflight. After
    the 2026-06-06 06:23 CST cleanup, `/` had `25,656,266,752` bytes free /
    `88%` used, clearing the prior 15 GiB Phase 2.5 launch-floor violation.

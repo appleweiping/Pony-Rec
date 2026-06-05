@@ -143,6 +143,22 @@ still find only the four formal C-CRP `scores.csv` files, all classified as
 `score_only_not_uncertainty` with candidate-key coverage `1.0` and
 `missing_uncertainty_column`. No Phase 2.5 experiment was launched.
 
+The 2026-06-06 07:20 CST signal-runner wiring checkpoint confirms the
+performance/table gate is already closed for the current same-candidate claim:
+server reports show C-CRP v3 `report.json` present for all eight domains, and
+Sports/Toys/Home/Tools each have `8/8` official completed baselines with empty
+blockers. The local paper-facing ledger has `official_row_count=32`,
+`ccrp_row_count=4`, and per-domain `8 official + 1 C-CRP` rows. Codex added
+`experiments/rsc/run_ccrp_v3_signal_rows.py` and refreshed the guarded signal
+plan so a future server run can generate auditable valid/test C-CRP signal
+rows before selector, observation, component-ablation, and hyperparameter
+steps. Consolidated audit
+`outputs/summary/paper_critical/paper_critical_module_audit_post_signal_runner_plan_20260606_0720.{json,md}`
+reports `ok=true`, `four_domain_evidence_consistent=true`,
+`phase2_5_storage_launch_allowed=true`, and `guarded_plan_ready=true`, while
+keeping `paper_ready=false` because no completed full-scale signal rows have
+passed audit. No Phase 2.5 experiment was launched.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test

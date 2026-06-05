@@ -198,6 +198,7 @@ def build_domain_plan(
     expected_rows = expected_events * expected_candidates_per_event
     audit_out = _full_audit_outputs(output_dir, domain)
     selector_out = _plan_output_dir(output_dir, domain, "ccrp_ablation")
+    signal_out = _plan_output_dir(output_dir, domain, "ccrp_signal_rows")
     observation_out = _plan_output_dir(output_dir, domain, "observation")
     hyper_out = _plan_output_dir(output_dir, domain, "ccrp_hyperparameter")
     prefix = _task_prefix(domain)
@@ -227,6 +228,7 @@ def build_domain_plan(
             "valid_signal_placeholder": valid_signal,
             "test_signal_placeholder": test_signal,
             "selector_output_dir": selector_out,
+            "signal_output_dir": signal_out,
             "component_ablation_output_dir": selector_out,
             "observation_output_dir": observation_out,
             "hyperparameter_output_dir": hyper_out,
@@ -234,6 +236,38 @@ def build_domain_plan(
             "representative_method_eval_candidates": representative_method_eval_candidates,
         },
         "commands": {
+            "generate_valid_signal_rows_template": _line_command(
+                [
+                    "python",
+                    "experiments/rsc/run_ccrp_v3_signal_rows.py",
+                    "--domain",
+                    domain,
+                    "--split",
+                    "valid",
+                    "--data",
+                    _ranking_path(domain, "valid"),
+                    "--output_dir",
+                    signal_out,
+                    "--expected_candidates_per_event",
+                    str(expected_candidates_per_event),
+                ]
+            ),
+            "generate_test_signal_rows_template": _line_command(
+                [
+                    "python",
+                    "experiments/rsc/run_ccrp_v3_signal_rows.py",
+                    "--domain",
+                    domain,
+                    "--split",
+                    "test",
+                    "--data",
+                    _ranking_path(domain, "test"),
+                    "--output_dir",
+                    signal_out,
+                    "--expected_candidates_per_event",
+                    str(expected_candidates_per_event),
+                ]
+            ),
             "full_audit_candidate_signal_template": _line_command(
                 [
                     "python",
@@ -373,6 +407,8 @@ def build_domain_plan(
         "execution_gates": [
             "Do not run while any official baseline row or matching baseline Python process is active.",
             "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
+            "If no saved signal artifact exists, generate valid and test signal rows with experiments/rsc/run_ccrp_v3_signal_rows.py before selector use.",
+            "The signal-generation prompt must not include labels, positive_item_index, ranks, official-baseline outputs, or test-selected hyperparameters.",
             "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
             "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
             "Require exact same-candidate score coverage before importing or reporting table metrics.",
@@ -451,8 +487,9 @@ def build_plan(
         "output_dir": output_dir,
         "current_blocker": (
             "Full-scale C-CRP Sports/Toys/Home/Tools artifacts visible so far are score-only; "
-            "valid/test signal rows with evidence and counterevidence must be located or regenerated "
-            "from saved non-test-selected inputs before observation, ablation, or hyperparameter claims."
+            "performance comparison gates are complete, but valid/test signal rows with evidence and "
+            "counterevidence must be located or generated with the guarded signal-row runner before "
+            "observation, ablation, or hyperparameter claims."
         ),
         "global_commands": {
             "remote_header_discovery": _line_command(discovery_parts),
@@ -491,6 +528,12 @@ def guarded_shell_script(plan: dict[str, Any]) -> str:
         domain = domain_plan["domain"]
         lines.extend(
             [
+                f"# {domain}: if no audited saved signal artifact exists, generate valid signal rows.",
+                domain_plan["commands"]["generate_valid_signal_rows_template"],
+                "",
+                f"# {domain}: if no audited saved signal artifact exists, generate test signal rows.",
+                domain_plan["commands"]["generate_test_signal_rows_template"],
+                "",
                 f"# {domain}: audit the chosen signal artifact after replacing TODO paths.",
                 domain_plan["commands"]["full_audit_candidate_signal_template"],
                 "",

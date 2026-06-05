@@ -17,6 +17,7 @@ def test_plan_defaults_to_non_executing_sports_toys_flow():
     assert plan["status_label"] == "planning_only_not_executed"
     assert plan["domains"] == ["sports", "toys"]
     assert "score-only" in plan["current_blocker"]
+    assert "performance comparison gates are complete" in plan["current_blocker"]
     assert "main_remote_discover_ccrp_uncertainty_sources.py" in plan["global_commands"]["remote_header_discovery"]
     assert "--domain sports" in plan["global_commands"]["remote_header_discovery"]
     assert "official baseline row" in plan["required_status_before_execution"][0]
@@ -39,7 +40,18 @@ def test_domain_plan_uses_placeholders_and_full_scale_counts():
     assert domain_plan["expected_score_rows"] == 1010000
     assert domain_plan["paths"]["valid_signal_placeholder"] == "TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV"
     assert domain_plan["paths"]["test_signal_placeholder"] == "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV"
+    assert domain_plan["paths"]["signal_output_dir"] == (
+        "outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_rows_sports"
+    )
     assert domain_plan["paths"]["component_ablation_output_dir"] == domain_plan["paths"]["selector_output_dir"]
+    generate_valid = domain_plan["commands"]["generate_valid_signal_rows_template"]
+    assert "experiments/rsc/run_ccrp_v3_signal_rows.py" in generate_valid
+    assert "--split valid" in generate_valid
+    assert "valid_same_candidate/ranking_task.jsonl" in generate_valid
+    generate_test = domain_plan["commands"]["generate_test_signal_rows_template"]
+    assert "experiments/rsc/run_ccrp_v3_signal_rows.py" in generate_test
+    assert "--split test" in generate_test
+    assert "test_same_candidate/ranking_task.jsonl" in generate_test
     selector = domain_plan["commands"]["select_ccrp_ablation_and_scores_template"]
     assert "main_select_ccrp_variant_on_valid.py" in selector
     assert "--valid_signal_path TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in selector
@@ -61,6 +73,7 @@ def test_domain_plan_uses_placeholders_and_full_scale_counts():
     assert "--module hyperparameter_analysis" in domain_plan["commands"]["audit_hyperparameter_package_template"]
     assert "--expected_control eta" in domain_plan["commands"]["audit_hyperparameter_package_template"]
     assert "matching baseline Python process" in domain_plan["execution_gates"][0]
+    assert "positive_item_index" in " ".join(domain_plan["execution_gates"])
     assert "Home rlmrec_graphcl" not in " ".join(domain_plan["execution_gates"])
 
 
@@ -82,5 +95,7 @@ def test_guarded_shell_exits_before_any_command():
     assert shell.index("exit 2") < shell.index("cd /repo")
     assert "nohup" not in shell
     assert "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in shell
+    assert "run_ccrp_v3_signal_rows.py" in shell
+    assert shell.index("run_ccrp_v3_signal_rows.py") < shell.index("main_select_ccrp_variant_on_valid.py")
     assert "main_build_ccrp_component_ablation_summary.py" in shell
     assert "main_audit_phase2_5_module_package.py" in shell

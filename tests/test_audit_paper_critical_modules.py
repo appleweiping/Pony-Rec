@@ -114,6 +114,8 @@ def _seed_signal_audits(root: Path) -> None:
 def _seed_guarded_plan(root: Path) -> None:
     base = root / "outputs/summary/paper_critical/ccrp_signal_generation_plan"
     commands = {
+        "generate_valid_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py --split valid",
+        "generate_test_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py --split test",
         "select_ccrp_ablation_and_scores_template": "python scripts/misc/main_select_ccrp_variant_on_valid.py",
         "build_component_ablation_summary_template": "python scripts/analysis/main_build_ccrp_component_ablation_summary.py",
         "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module component_ablation",
@@ -145,6 +147,7 @@ def _seed_guarded_plan(root: Path) -> None:
         "cd /repo\n"
         "TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n"
         "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n"
+        "python experiments/rsc/run_ccrp_v3_signal_rows.py\n"
         "python scripts/analysis/main_build_uncertainty_observation_study.py\n"
         "python scripts/analysis/main_build_ccrp_component_ablation_summary.py\n"
         "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py\n"

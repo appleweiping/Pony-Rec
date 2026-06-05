@@ -1,0 +1,235 @@
+{
+  "artifact_class": "paper_critical_guarded_execution_plan",
+  "current_blocker": "Full-scale C-CRP Sports/Toys/Home/Tools artifacts visible so far are score-only; performance comparison gates are complete, but valid/test signal rows with evidence and counterevidence must be located or generated with the guarded signal-row runner before observation, ablation, or hyperparameter claims.",
+  "domain_plans": [
+    {
+      "commands": {
+        "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module component_ablation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_ablation full \\\n  --expected_ablation without_boundary_uncertainty \\\n  --expected_ablation without_calibration_gap \\\n  --expected_ablation without_evidence_support \\\n  --expected_ablation without_counterevidence \\\n  --expected_ablation without_risk_penalty \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/phase2_5_component_ablation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/phase2_5_component_ablation_package_audit.md",
+        "audit_hyperparameter_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module hyperparameter_analysis \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_control eta \\\n  --expected_control confidence_weight \\\n  --expected_control weight_grid_label \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/phase2_5_hyperparameter_analysis_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/phase2_5_hyperparameter_analysis_package_audit.md",
+        "audit_observation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module observation_motivation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/phase2_5_observation_motivation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/phase2_5_observation_motivation_package_audit.md",
+        "build_component_ablation_summary_template": "python scripts/analysis/main_build_ccrp_component_ablation_summary.py \\\n  --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports \\\n  --domain sports \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --metric NDCG@10 \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty",
+        "build_observation_study_template": "python scripts/analysis/main_build_uncertainty_observation_study.py \\\n  --domain sports \\\n  --uncertainty_scores_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_selected_test_scored_rows.csv \\\n  --ccrp_eval_path outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval llmemb=outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval proex=outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval rlmrec=outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports \\\n  --expected_events 10000 \\\n  --min_join_rate 0.999",
+        "full_audit_candidate_signal_template": "python scripts/audit/main_audit_ccrp_uncertainty_sources.py \\\n  --candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --source candidate_signal=TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_sports.json \\\n  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_sports.csv",
+        "generate_test_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain sports \\\n  --split test \\\n  --data outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports \\\n  --expected_candidates_per_event 101",
+        "generate_valid_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain sports \\\n  --split valid \\\n  --data outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports \\\n  --expected_candidates_per_event 101",
+        "plot_hyperparameter_curves_template": "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \\\n  --sweep_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/valid_ccrp_sweep.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports \\\n  --domain sports \\\n  --metric NDCG@10 \\\n  --score_mode full \\\n  --ablation full",
+        "select_ccrp_ablation_and_scores_template": "python scripts/misc/main_select_ccrp_variant_on_valid.py \\\n  --domain sports \\\n  --valid_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --test_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --valid_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv \\\n  --test_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --valid_signal_path TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --test_signal_path TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports \\\n  --score_modes confidence_only,evidence_only,confidence_plus_evidence,full \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty \\\n  --etas 0.5,1.0,2.0 \\\n  --confidence_weights 0.5,0.7,0.9 \\\n  --weight_grid '0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4' \\\n  --selection_metric NDCG@10 \\\n  --import_scores"
+      },
+      "domain": "sports",
+      "execution_gates": [
+        "Do not run while any official baseline row or matching baseline Python process is active.",
+        "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
+        "If no saved signal artifact exists, generate valid and test signal rows with experiments/rsc/run_ccrp_v3_signal_rows.py before selector use.",
+        "The signal-generation prompt must not include labels, positive_item_index, ranks, official-baseline outputs, or test-selected hyperparameters.",
+        "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
+        "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
+        "Require exact same-candidate score coverage before importing or reporting table metrics."
+      ],
+      "expected_candidates_per_event": 101,
+      "expected_events": 10000,
+      "expected_score_rows": 1010000,
+      "paths": {
+        "ccrp_eval_candidates": [
+          "outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/sports_large10000_100neg_ccrp_v3_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/sports_large10000_100neg_ccrp_v3/tables/ranking_eval_records.csv"
+        ],
+        "component_ablation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports",
+        "hyperparameter_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports",
+        "observation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports",
+        "representative_method_eval_candidates": {
+          "llmemb": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "proex": "outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "rlmrec": "outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv"
+        },
+        "selector_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports",
+        "signal_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports",
+        "test_candidate_items": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv",
+        "test_ranking": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_task.jsonl",
+        "test_signal_placeholder": "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV",
+        "valid_candidate_items": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv",
+        "valid_ranking": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_task.jsonl",
+        "valid_signal_placeholder": "TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV"
+      }
+    },
+    {
+      "commands": {
+        "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module component_ablation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_ablation full \\\n  --expected_ablation without_boundary_uncertainty \\\n  --expected_ablation without_calibration_gap \\\n  --expected_ablation without_evidence_support \\\n  --expected_ablation without_counterevidence \\\n  --expected_ablation without_risk_penalty \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/phase2_5_component_ablation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/phase2_5_component_ablation_package_audit.md",
+        "audit_hyperparameter_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module hyperparameter_analysis \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_control eta \\\n  --expected_control confidence_weight \\\n  --expected_control weight_grid_label \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys/phase2_5_hyperparameter_analysis_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys/phase2_5_hyperparameter_analysis_package_audit.md",
+        "audit_observation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module observation_motivation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/phase2_5_observation_motivation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/phase2_5_observation_motivation_package_audit.md",
+        "build_component_ablation_summary_template": "python scripts/analysis/main_build_ccrp_component_ablation_summary.py \\\n  --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys \\\n  --domain toys \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --metric NDCG@10 \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty",
+        "build_observation_study_template": "python scripts/analysis/main_build_uncertainty_observation_study.py \\\n  --domain toys \\\n  --uncertainty_scores_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/ccrp_selected_test_scored_rows.csv \\\n  --ccrp_eval_path outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval llmemb=outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval proex=outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval rlmrec=outputs/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys \\\n  --expected_events 10000 \\\n  --min_join_rate 0.999",
+        "full_audit_candidate_signal_template": "python scripts/audit/main_audit_ccrp_uncertainty_sources.py \\\n  --candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --source candidate_signal=TODO_TEST_TOYS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_toys.json \\\n  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_toys.csv",
+        "generate_test_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain toys \\\n  --split test \\\n  --data outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys \\\n  --expected_candidates_per_event 101",
+        "generate_valid_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain toys \\\n  --split valid \\\n  --data outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys \\\n  --expected_candidates_per_event 101",
+        "plot_hyperparameter_curves_template": "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \\\n  --sweep_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/valid_ccrp_sweep.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys \\\n  --domain toys \\\n  --metric NDCG@10 \\\n  --score_mode full \\\n  --ablation full",
+        "select_ccrp_ablation_and_scores_template": "python scripts/misc/main_select_ccrp_variant_on_valid.py \\\n  --domain toys \\\n  --valid_ranking_path outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --test_ranking_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --valid_candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/candidate_items.csv \\\n  --test_candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --valid_signal_path TODO_VALID_TOYS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --test_signal_path TODO_TEST_TOYS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys \\\n  --score_modes confidence_only,evidence_only,confidence_plus_evidence,full \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty \\\n  --etas 0.5,1.0,2.0 \\\n  --confidence_weights 0.5,0.7,0.9 \\\n  --weight_grid '0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4' \\\n  --selection_metric NDCG@10 \\\n  --import_scores"
+      },
+      "domain": "toys",
+      "execution_gates": [
+        "Do not run while any official baseline row or matching baseline Python process is active.",
+        "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
+        "If no saved signal artifact exists, generate valid and test signal rows with experiments/rsc/run_ccrp_v3_signal_rows.py before selector use.",
+        "The signal-generation prompt must not include labels, positive_item_index, ranks, official-baseline outputs, or test-selected hyperparameters.",
+        "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
+        "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
+        "Require exact same-candidate score coverage before importing or reporting table metrics."
+      ],
+      "expected_candidates_per_event": 101,
+      "expected_events": 10000,
+      "expected_score_rows": 1010000,
+      "paths": {
+        "ccrp_eval_candidates": [
+          "outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/toys_large10000_100neg_ccrp_v3_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/toys_large10000_100neg_ccrp_v3/tables/ranking_eval_records.csv"
+        ],
+        "component_ablation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys",
+        "hyperparameter_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys",
+        "observation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys",
+        "representative_method_eval_candidates": {
+          "llmemb": "outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "proex": "outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "rlmrec": "outputs/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv"
+        },
+        "selector_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys",
+        "signal_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys",
+        "test_candidate_items": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv",
+        "test_ranking": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_task.jsonl",
+        "test_signal_placeholder": "TODO_TEST_TOYS_CCRP_SIGNAL_JSONL_OR_CSV",
+        "valid_candidate_items": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/candidate_items.csv",
+        "valid_ranking": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_task.jsonl",
+        "valid_signal_placeholder": "TODO_VALID_TOYS_CCRP_SIGNAL_JSONL_OR_CSV"
+      }
+    },
+    {
+      "commands": {
+        "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module component_ablation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_ablation full \\\n  --expected_ablation without_boundary_uncertainty \\\n  --expected_ablation without_calibration_gap \\\n  --expected_ablation without_evidence_support \\\n  --expected_ablation without_counterevidence \\\n  --expected_ablation without_risk_penalty \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/phase2_5_component_ablation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/phase2_5_component_ablation_package_audit.md",
+        "audit_hyperparameter_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module hyperparameter_analysis \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_control eta \\\n  --expected_control confidence_weight \\\n  --expected_control weight_grid_label \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home/phase2_5_hyperparameter_analysis_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home/phase2_5_hyperparameter_analysis_package_audit.md",
+        "audit_observation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module observation_motivation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_home \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_home/phase2_5_observation_motivation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_home/phase2_5_observation_motivation_package_audit.md",
+        "build_component_ablation_summary_template": "python scripts/analysis/main_build_ccrp_component_ablation_summary.py \\\n  --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home \\\n  --domain home \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --metric NDCG@10 \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty",
+        "build_observation_study_template": "python scripts/analysis/main_build_uncertainty_observation_study.py \\\n  --domain home \\\n  --uncertainty_scores_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/ccrp_selected_test_scored_rows.csv \\\n  --ccrp_eval_path outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval llmemb=outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval proex=outputs/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval rlmrec=outputs/home_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_home \\\n  --expected_events 10000 \\\n  --min_join_rate 0.999",
+        "full_audit_candidate_signal_template": "python scripts/audit/main_audit_ccrp_uncertainty_sources.py \\\n  --candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --source candidate_signal=TODO_TEST_HOME_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_home.json \\\n  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_home.csv",
+        "generate_test_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain home \\\n  --split test \\\n  --data outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home \\\n  --expected_candidates_per_event 101",
+        "generate_valid_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain home \\\n  --split valid \\\n  --data outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home \\\n  --expected_candidates_per_event 101",
+        "plot_hyperparameter_curves_template": "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \\\n  --sweep_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/valid_ccrp_sweep.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home \\\n  --domain home \\\n  --metric NDCG@10 \\\n  --score_mode full \\\n  --ablation full",
+        "select_ccrp_ablation_and_scores_template": "python scripts/misc/main_select_ccrp_variant_on_valid.py \\\n  --domain home \\\n  --valid_ranking_path outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --test_ranking_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --valid_candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv \\\n  --test_candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --valid_signal_path TODO_VALID_HOME_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --test_signal_path TODO_TEST_HOME_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home \\\n  --score_modes confidence_only,evidence_only,confidence_plus_evidence,full \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty \\\n  --etas 0.5,1.0,2.0 \\\n  --confidence_weights 0.5,0.7,0.9 \\\n  --weight_grid '0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4' \\\n  --selection_metric NDCG@10 \\\n  --import_scores"
+      },
+      "domain": "home",
+      "execution_gates": [
+        "Do not run while any official baseline row or matching baseline Python process is active.",
+        "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
+        "If no saved signal artifact exists, generate valid and test signal rows with experiments/rsc/run_ccrp_v3_signal_rows.py before selector use.",
+        "The signal-generation prompt must not include labels, positive_item_index, ranks, official-baseline outputs, or test-selected hyperparameters.",
+        "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
+        "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
+        "Require exact same-candidate score coverage before importing or reporting table metrics."
+      ],
+      "expected_candidates_per_event": 101,
+      "expected_events": 10000,
+      "expected_score_rows": 1010000,
+      "paths": {
+        "ccrp_eval_candidates": [
+          "outputs/home_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/home_large10000_100neg_ccrp_v3_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/home_large10000_100neg_ccrp_v3/tables/ranking_eval_records.csv"
+        ],
+        "component_ablation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home",
+        "hyperparameter_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home",
+        "observation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_home",
+        "representative_method_eval_candidates": {
+          "llmemb": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "proex": "outputs/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "rlmrec": "outputs/home_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv"
+        },
+        "selector_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home",
+        "signal_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home",
+        "test_candidate_items": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv",
+        "test_ranking": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_task.jsonl",
+        "test_signal_placeholder": "TODO_TEST_HOME_CCRP_SIGNAL_JSONL_OR_CSV",
+        "valid_candidate_items": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv",
+        "valid_ranking": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_task.jsonl",
+        "valid_signal_placeholder": "TODO_VALID_HOME_CCRP_SIGNAL_JSONL_OR_CSV"
+      }
+    },
+    {
+      "commands": {
+        "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module component_ablation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_ablation full \\\n  --expected_ablation without_boundary_uncertainty \\\n  --expected_ablation without_calibration_gap \\\n  --expected_ablation without_evidence_support \\\n  --expected_ablation without_counterevidence \\\n  --expected_ablation without_risk_penalty \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/phase2_5_component_ablation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/phase2_5_component_ablation_package_audit.md",
+        "audit_hyperparameter_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module hyperparameter_analysis \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --expected_control eta \\\n  --expected_control confidence_weight \\\n  --expected_control weight_grid_label \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/phase2_5_hyperparameter_analysis_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/phase2_5_hyperparameter_analysis_package_audit.md",
+        "audit_observation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py \\\n  --module observation_motivation \\\n  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_tools \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --min_join_rate 0.999 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_tools/phase2_5_observation_motivation_package_audit.json \\\n  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_tools/phase2_5_observation_motivation_package_audit.md",
+        "build_component_ablation_summary_template": "python scripts/analysis/main_build_ccrp_component_ablation_summary.py \\\n  --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools \\\n  --domain tools \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --metric NDCG@10 \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty",
+        "build_observation_study_template": "python scripts/analysis/main_build_uncertainty_observation_study.py \\\n  --domain tools \\\n  --uncertainty_scores_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/ccrp_selected_test_scored_rows.csv \\\n  --ccrp_eval_path outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval llmemb=outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval proex=outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --method_eval rlmrec=outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_tools \\\n  --expected_events 10000 \\\n  --min_join_rate 0.999",
+        "full_audit_candidate_signal_template": "python scripts/audit/main_audit_ccrp_uncertainty_sources.py \\\n  --candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --source candidate_signal=TODO_TEST_TOOLS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_tools.json \\\n  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_audit_tools.csv",
+        "generate_test_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain tools \\\n  --split test \\\n  --data outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools \\\n  --expected_candidates_per_event 101",
+        "generate_valid_signal_rows_template": "python experiments/rsc/run_ccrp_v3_signal_rows.py \\\n  --domain tools \\\n  --split valid \\\n  --data outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools \\\n  --expected_candidates_per_event 101",
+        "plot_hyperparameter_curves_template": "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \\\n  --sweep_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/valid_ccrp_sweep.csv \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools \\\n  --domain tools \\\n  --metric NDCG@10 \\\n  --score_mode full \\\n  --ablation full",
+        "select_ccrp_ablation_and_scores_template": "python scripts/misc/main_select_ccrp_variant_on_valid.py \\\n  --domain tools \\\n  --valid_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_task.jsonl \\\n  --test_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_task.jsonl \\\n  --valid_candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv \\\n  --test_candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv \\\n  --valid_signal_path TODO_VALID_TOOLS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --test_signal_path TODO_TEST_TOOLS_CCRP_SIGNAL_JSONL_OR_CSV \\\n  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools \\\n  --score_modes confidence_only,evidence_only,confidence_plus_evidence,full \\\n  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty \\\n  --etas 0.5,1.0,2.0 \\\n  --confidence_weights 0.5,0.7,0.9 \\\n  --weight_grid '0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4' \\\n  --selection_metric NDCG@10 \\\n  --import_scores"
+      },
+      "domain": "tools",
+      "execution_gates": [
+        "Do not run while any official baseline row or matching baseline Python process is active.",
+        "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
+        "If no saved signal artifact exists, generate valid and test signal rows with experiments/rsc/run_ccrp_v3_signal_rows.py before selector use.",
+        "The signal-generation prompt must not include labels, positive_item_index, ranks, official-baseline outputs, or test-selected hyperparameters.",
+        "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
+        "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
+        "Require exact same-candidate score coverage before importing or reporting table metrics."
+      ],
+      "expected_candidates_per_event": 101,
+      "expected_events": 10000,
+      "expected_score_rows": 1010000,
+      "paths": {
+        "ccrp_eval_candidates": [
+          "outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/tools_large10000_100neg_ccrp_v3_same_candidate/tables/ranking_eval_records.csv",
+          "outputs/tools_large10000_100neg_ccrp_v3/tables/ranking_eval_records.csv"
+        ],
+        "component_ablation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools",
+        "hyperparameter_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools",
+        "observation_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_tools",
+        "representative_method_eval_candidates": {
+          "llmemb": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "proex": "outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+          "rlmrec": "outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv"
+        },
+        "selector_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools",
+        "signal_output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools",
+        "test_candidate_items": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv",
+        "test_ranking": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_task.jsonl",
+        "test_signal_placeholder": "TODO_TEST_TOOLS_CCRP_SIGNAL_JSONL_OR_CSV",
+        "valid_candidate_items": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv",
+        "valid_ranking": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_task.jsonl",
+        "valid_signal_placeholder": "TODO_VALID_TOOLS_CCRP_SIGNAL_JSONL_OR_CSV"
+      }
+    }
+  ],
+  "domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "git_commit": "3b6a2a42a96e07e0e3bf053b27583f9ddb51554d",
+  "git_status_short_relevant_at_generation": "M scripts/audit/main_plan_ccrp_signal_generation.py\n M tests/test_plan_ccrp_signal_generation.py",
+  "git_worktree_dirty_at_generation": true,
+  "global_commands": {
+    "remote_header_discovery": "python scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py \\\n  --root . \\\n  --domain sports \\\n  --domain toys \\\n  --domain home \\\n  --domain tools \\\n  --name_token ccrp \\\n  --name_token shadow \\\n  --name_token signal \\\n  --name_token calibrated \\\n  --name_token scored \\\n  --name_token rows \\\n  --expected_events 10000 \\\n  --expected_candidates_per_event 101 \\\n  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_discovery.json \\\n  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_source_discovery.csv \\\n  --quiet"
+  },
+  "output_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606",
+  "paper_readiness_links": [
+    "observation_motivation_study",
+    "ccrp_component_ablation",
+    "ccrp_hyperparameter_analysis"
+  ],
+  "plan_id": "ccrp_signal_generation_plan_post_performance_gate_20260606",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "remote_root": ".",
+  "required_status_before_execution": [
+    "Every active official baseline row completed or failed with an audited recovery decision.",
+    "Official-row server_final and local_light gates complete before any next baseline or C-CRP evidence run.",
+    "No matching Python process that would create duplicate-run or GPU-memory risk.",
+    "Server disk is above the project danger threshold after any necessary audited cleanup."
+  ],
+  "status_label": "planning_only_not_executed",
+  "will_start_experiment": false
+}
