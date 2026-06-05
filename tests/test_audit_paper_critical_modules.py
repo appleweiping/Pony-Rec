@@ -24,7 +24,7 @@ def _framework_svg() -> str:
         "<svg><text>Same-candidate task</text><text>LLM signal extraction</text>"
         "<text>Calibration layer</text><text>C-CRP uncertainty</text>"
         "<text>Risk-adjusted ranking</text><text>Official baseline block</text>"
-        "<text>Paper-critical method evidence</text><text>Shared evidence gates</text>"
+        "<text>Required method-evidence gates</text><text>Shared evidence gates</text>"
         "<text>risk_score = base_score</text><text>* (1 - uncertainty)^eta</text></svg>\n"
     )
 

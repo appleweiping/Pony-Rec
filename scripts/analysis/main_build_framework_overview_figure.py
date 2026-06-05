@@ -164,8 +164,8 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         ax,
         xy=(0.375, 0.265),
         wh=(0.25, 0.205),
-        title="Paper-critical method evidence",
-        body="Motivation bins over uncertainty\nLeave-one-component-out ablations\nHyperparameter curves and stability checks",
+        title="Required method-evidence gates",
+        body="Motivation bins over uncertainty\nLeave-one-component-out ablations\nHyperparameter curves\nbefore paper-ready claim",
         face="#f8fafc",
         edge=edge,
     )
@@ -210,7 +210,7 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         "C-CRP uncertainty",
         "Risk-adjusted ranking",
         "Official baseline block",
-        "Paper-critical method evidence",
+        "Required method-evidence gates",
         "Shared evidence gates",
         "risk_score = base_score * (1 - uncertainty)^eta",
         "controlled same-candidate ranking",
@@ -220,7 +220,8 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         "ranking task, extracts task-grounded LLM relevance and evidence signals, calibrates the posterior on "
         "validation data, decomposes uncertainty into boundary ambiguity, calibration gap, and evidence "
         "insufficiency/counterevidence, and applies risk-adjusted ranking. Official baselines and C-CRP share "
-        "the same candidate rows, metric importer, provenance, and evidence gates."
+        "the same candidate rows, metric importer, provenance, and evidence gates; the motivation, ablation, "
+        "and hyperparameter modules are required gates before a paper-ready claim."
     )
 
     paths: dict[str, str] = {}
@@ -256,6 +257,11 @@ def build_framework_figure(output_dir: str | Path, *, title: str, subtitle: str)
         "formula_alignment": {
             "risk_formula": "risk_score = base_score * (1 - uncertainty)^eta",
             "matches_src_shadow_ccrp_multiplicative_form": True,
+        },
+        "evidence_gate_status": {
+            "observation_motivation": "required_not_claimed_by_figure",
+            "component_ablation": "required_not_claimed_by_figure",
+            "hyperparameter_analysis": "required_not_claimed_by_figure",
         },
         "claim_limits": [
             "Does not claim full-catalog recommendation.",

@@ -27,7 +27,7 @@ FRAMEWORK_REQUIRED_LABELS = (
     "C-CRP uncertainty",
     "Risk-adjusted ranking",
     "Official baseline block",
-    "Paper-critical method evidence",
+    "Required method-evidence gates",
     "Shared evidence gates",
     "risk_score = base_score",
     "* (1 - uncertainty)^eta",
