@@ -1,0 +1,24 @@
+{
+  "schema_version": "2026-06-05.v1",
+  "created_at_utc": "2026-06-05T14:35:15.080265+00:00",
+  "mode": "post_cleanup_storage_verification",
+  "cleanup_manifest": "outputs/summary/tools_llmesr_completed_adapter_embedding_cleanup_20260605.json",
+  "cleanup_sha256_manifest": "outputs/summary/tools_llmesr_completed_adapter_embedding_cleanup_20260605.sha256",
+  "deleted_file_count": 5,
+  "total_deleted_bytes": 4493778837,
+  "post_cleanup_disk": {
+    "free_bytes": 12342898688,
+    "used_pct": 94,
+    "raw": "2026-06-05 22:35:15 CST\n文件系统        大小  已用  可用 已用% 挂载点\n/dev/vda5       196G  174G   12G   94% /\n文件系统             1B的块         已用        可用 已用% 挂载点\n/dev/vda5      209709965312 186639872000 12342898688   94% /\n0 %, 15 MiB"
+  },
+  "deleted_files_missing_verification_raw": "[\n  {\n    \"path\": \"outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl\",\n    \"missing\": true\n  },\n  {\n    \"path\": \"outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/pca64_itm_emb_np.pkl\",\n    \"missing\": true\n  },\n  {\n    \"path\": \"outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/sim_user_100.csv\",\n    \"missing\": true\n  },\n  {\n    \"path\": \"outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/sim_user_100.pkl\",\n    \"missing\": true\n  },\n  {\n    \"path\": \"outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/inter.txt\",\n    \"missing\": true\n  }\n]",
+  "protected_final_evidence_rechecked": [
+    "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv",
+    "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+    "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+    "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/tables/",
+    "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt"
+  ],
+  "verdict": "DISK_RECOVERED_ABOVE_10GIB_FLOOR_BUT_BELOW_15GIB_HARD_STOP_FOR_PHASE2_5_REGENERATION",
+  "next_action": "Do not start signal-row regeneration until either disk is expanded or another archive-backed cleanup raises free space to at least 15GiB, preferably 25GiB."
+}

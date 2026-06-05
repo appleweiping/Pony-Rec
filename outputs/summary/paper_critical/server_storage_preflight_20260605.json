@@ -1,0 +1,697 @@
+{
+  "schema_version": "2026-06-05.v1",
+  "created_at_utc": "2026-06-05T14:31:22.882122+00:00",
+  "remote": "pony-rec-gpu",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "disk": {
+    "free_bytes": 7849136128,
+    "used_pct": 97,
+    "danger": true,
+    "bytes_needed_for_10gib_floor": 2888282112,
+    "target_free_bytes_before_signal_regeneration": 12884901888,
+    "bytes_needed_for_12gib_working_target": 5035765760
+  },
+  "process_gpu_disk_raw": "2026-06-05 22:31:02 CST\n0 %, 15 MiB\n文件系统             1B的块         已用       可用 已用% 挂载点\n/dev/vda5      209709965312 191133634560 7849136128   97% /",
+  "top_output_dirs": [
+    {
+      "size": 75863326720,
+      "path": "outputs"
+    },
+    {
+      "size": 28186677248,
+      "path": "outputs/baselines"
+    },
+    {
+      "size": 21849374720,
+      "path": "outputs/baselines/external_tasks"
+    },
+    {
+      "size": 6959218688,
+      "path": "outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 6594478080,
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 4946034688,
+      "path": "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 4669943808,
+      "path": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 4558434304,
+      "path": "outputs/baselines/paper_adapters"
+    },
+    {
+      "size": 4315193344,
+      "path": "outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 4066750464,
+      "path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 3994017792,
+      "path": "outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 3760050176,
+      "path": "outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 1778798592,
+      "path": "outputs/baselines/official_adapters"
+    },
+    {
+      "size": 826339328,
+      "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate"
+    },
+    {
+      "size": 783667200,
+      "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions"
+    },
+    {
+      "size": 475664384,
+      "path": "outputs/summary"
+    },
+    {
+      "size": 349732864,
+      "path": "outputs/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 290488320,
+      "path": "outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 277504000,
+      "path": "outputs/summary/week8_large10000_100neg_ccrp_formal"
+    },
+    {
+      "size": 271908864,
+      "path": "outputs/sports_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 262451200,
+      "path": "outputs/toys_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 234131456,
+      "path": "outputs/home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 234094592,
+      "path": "outputs/home_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 219222016,
+      "path": "outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 219172864,
+      "path": "outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 214540288,
+      "path": "outputs/sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 214499328,
+      "path": "outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 212127744,
+      "path": "outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 212099072,
+      "path": "outputs/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 199016448,
+      "path": "outputs/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 188260352,
+      "path": "outputs/home_large10000_100neg_promax_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 184188928,
+      "path": "outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 179466240,
+      "path": "outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 177127424,
+      "path": "outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 176271360,
+      "path": "outputs/summary/week8_ours_external_rank_fusion"
+    },
+    {
+      "size": 174260224,
+      "path": "outputs/tools_large10000_100neg_promax_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 169754624,
+      "path": "outputs/sports_large10000_100neg_promax_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 167706624,
+      "path": "outputs/toys_large10000_100neg_promax_profile_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 148873216,
+      "path": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate"
+    },
+    {
+      "size": 147501056,
+      "path": "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate"
+    }
+  ],
+  "large_output_files": [
+    {
+      "size": 6812135931,
+      "path": "outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt"
+    },
+    {
+      "size": 6446871382,
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt"
+    },
+    {
+      "size": 4798848507,
+      "path": "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt"
+    },
+    {
+      "size": 4522405462,
+      "path": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt"
+    },
+    {
+      "size": 4418945194,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl"
+    },
+    {
+      "size": 4167963387,
+      "path": "outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt"
+    },
+    {
+      "size": 3919354786,
+      "path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt"
+    },
+    {
+      "size": 3847029499,
+      "path": "outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt"
+    },
+    {
+      "size": 3612579746,
+      "path": "outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt"
+    },
+    {
+      "size": 984582922,
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 983489726,
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 901278834,
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+    },
+    {
+      "size": 900858961,
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/ranking_valid.jsonl"
+    },
+    {
+      "size": 852656435,
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 851495965,
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 841453688,
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 840075550,
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 831176047,
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_valid_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 830412764,
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 795439842,
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 794239664,
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 783656344,
+      "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions/rank_predictions.jsonl"
+    },
+    {
+      "size": 780603378,
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+    },
+    {
+      "size": 779090828,
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_valid.jsonl"
+    },
+    {
+      "size": 768647850,
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+    },
+    {
+      "size": 767950269,
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl"
+    },
+    {
+      "size": 748305611,
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+    },
+    {
+      "size": 746719927,
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_valid_same_candidate/ranking_valid.jsonl"
+    },
+    {
+      "size": 735705748,
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 734595499,
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv"
+    },
+    {
+      "size": 724053538,
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+    },
+    {
+      "size": 722139732,
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_valid.jsonl"
+    },
+    {
+      "size": 662254587,
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+    },
+    {
+      "size": 660981498,
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl"
+    },
+    {
+      "size": 358855391,
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/item_metadata.csv"
+    },
+    {
+      "size": 356966767,
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/item_metadata.csv"
+    },
+    {
+      "size": 267072085,
+      "path": "outputs/summary/week8_large10000_100neg_ccrp_formal/beauty/ccrp_selected_test_scored_rows.csv"
+    },
+    {
+      "size": 252389925,
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/item_metadata.csv"
+    },
+    {
+      "size": 250753581,
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/item_metadata.csv"
+    }
+  ],
+  "paper_adapter_dirs": [
+    {
+      "size": 4558434304,
+      "path": "outputs/baselines/paper_adapters"
+    },
+    {
+      "size": 4499206144,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter"
+    },
+    {
+      "size": 4493803520,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr"
+    },
+    {
+      "size": 4493799424,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled"
+    },
+    {
+      "size": 59224064,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter"
+    },
+    {
+      "size": 50610176,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec"
+    },
+    {
+      "size": 50606080,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data"
+    },
+    {
+      "size": 50601984,
+      "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec/data/ToolsSameCandidate100Neg"
+    }
+  ],
+  "cache_dirs": [
+    {
+      "size": 84705280,
+      "path": "/home/ajifang/.config/google-chrome"
+    },
+    {
+      "size": 26464256,
+      "path": "/tmp"
+    },
+    {
+      "size": 25333760,
+      "path": "/home/ajifang/.vscode-server/data"
+    },
+    {
+      "size": 23957504,
+      "path": "/home/ajifang/.vscode-server/data/User"
+    },
+    {
+      "size": 23724032,
+      "path": "/home/ajifang/.vscode-server/data/User/globalStorage"
+    },
+    {
+      "size": 23023616,
+      "path": "/home/ajifang/.config/google-chrome/WasmTtsEngine"
+    },
+    {
+      "size": 23019520,
+      "path": "/home/ajifang/.config/google-chrome/WasmTtsEngine/20260105.1"
+    },
+    {
+      "size": 22241280,
+      "path": "/home/ajifang/.config/google-chrome/Safe Browsing"
+    },
+    {
+      "size": 21561344,
+      "path": "/home/ajifang/.cursor-server/data"
+    },
+    {
+      "size": 17424384,
+      "path": "/home/ajifang/.config/google-chrome/Default"
+    },
+    {
+      "size": 15216640,
+      "path": "/home/ajifang/.cursor-server/data/snapshots"
+    },
+    {
+      "size": 14970880,
+      "path": "/home/ajifang/.cursor-server/data/snapshots/roots"
+    },
+    {
+      "size": 13287424,
+      "path": "/tmp/_MEI45naYb"
+    },
+    {
+      "size": 8392704,
+      "path": "/home/ajifang/.config/google-chrome/BrowserMetrics"
+    },
+    {
+      "size": 8105984,
+      "path": "/home/ajifang/.config/google-chrome/Default/Extensions"
+    },
+    {
+      "size": 3686400,
+      "path": "/home/ajifang/.config/google-chrome/optimization_guide_model_store"
+    },
+    {
+      "size": 3620864,
+      "path": "/home/ajifang/.cursor-server/data/User"
+    },
+    {
+      "size": 3231744,
+      "path": "/home/ajifang/.config/google-chrome/optimization_guide_model_store/15"
+    },
+    {
+      "size": 3133440,
+      "path": "/tmp/pytest-of-ajifang"
+    },
+    {
+      "size": 2637824,
+      "path": "/home/ajifang/.cursor-server/data/User/globalStorage"
+    },
+    {
+      "size": 1945600,
+      "path": "/home/ajifang/.cursor-server/data/logs"
+    },
+    {
+      "size": 1896448,
+      "path": "/home/ajifang/.config/google-chrome/hyphen-data"
+    },
+    {
+      "size": 1892352,
+      "path": "/home/ajifang/.config/google-chrome/hyphen-data/120.0.6050.0"
+    },
+    {
+      "size": 1777664,
+      "path": "/home/ajifang/.cursor-server/data/logs/20260503T082505"
+    },
+    {
+      "size": 1769472,
+      "path": "/tmp/_MEI45naYb/lib-dynload"
+    },
+    {
+      "size": 1716224,
+      "path": "/home/ajifang/.config/google-chrome/ZxcvbnData"
+    },
+    {
+      "size": 1712128,
+      "path": "/home/ajifang/.config/google-chrome/ZxcvbnData/3"
+    },
+    {
+      "size": 1703936,
+      "path": "/home/ajifang/.config/google-chrome/Default/Service Worker"
+    },
+    {
+      "size": 1478656,
+      "path": "/tmp/pytest-of-ajifang/pytest-51"
+    },
+    {
+      "size": 1478656,
+      "path": "/tmp/pytest-of-ajifang/pytest-50"
+    },
+    {
+      "size": 1359872,
+      "path": "/home/ajifang/.vscode-server/data/CachedProfilesData"
+    },
+    {
+      "size": 1355776,
+      "path": "/home/ajifang/.vscode-server/data/CachedProfilesData/__default__profile__"
+    },
+    {
+      "size": 1347584,
+      "path": "/home/ajifang/.config/google-chrome/Default/IndexedDB"
+    },
+    {
+      "size": 1130496,
+      "path": "/home/ajifang/.config/google-chrome/OpenCookieDatabase"
+    },
+    {
+      "size": 1126400,
+      "path": "/home/ajifang/.config/google-chrome/OpenCookieDatabase/2024.10.17.0"
+    },
+    {
+      "size": 1093632,
+      "path": "/home/ajifang/.config/google-chrome/Default/Storage"
+    },
+    {
+      "size": 1040384,
+      "path": "/home/ajifang/.config/google-chrome/Default/Session Storage"
+    },
+    {
+      "size": 995328,
+      "path": "/home/ajifang/.config/google-chrome/AutofillStates"
+    },
+    {
+      "size": 991232,
+      "path": "/home/ajifang/.config/google-chrome/AutofillStates/2025.6.13.84507"
+    },
+    {
+      "size": 974848,
+      "path": "/tmp/_MEI45naYb/cryptography"
+    }
+  ],
+  "evidence_checks": {
+    "tools_llmesr_final": {
+      "server_final": {
+        "ok": true,
+        "mode": "server_final",
+        "failures": [],
+        "warnings": []
+      },
+      "fairness": {
+        "implementation_status": "official_completed",
+        "blockers": [],
+        "score_coverage_rate": 1.0,
+        "adapter_dir": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter",
+        "qwen3_item_embedding_path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl",
+        "qwen3_item_embedding_sha256": "31d66e0a93500e681d582bcf64272ca40a3a8b3d8bde78da96ca1eadc4802af5",
+        "adapter_or_checkpoint_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+        "adapter_or_checkpoint_sha256": "006148b605b686a4e427329510a64404fed45b64b0ab5e2d516b5510e12f5aa5"
+      },
+      "manifest": {
+        "ok": true,
+        "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate",
+        "files": [
+          {
+            "rel_path": "llmesr_official_model.pt",
+            "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+            "size": 4798848507,
+            "sha256": "006148b605b686a4e427329510a64404fed45b64b0ab5e2d516b5510e12f5aa5"
+          },
+          {
+            "rel_path": "predictions/rank_predictions.jsonl",
+            "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+            "size": 804747669,
+            "sha256": "1312fff4e9c94f4e33b4754f71c4843d3d7ee9cef225ef49150e2c5586280230"
+          },
+          {
+            "rel_path": "scores.csv",
+            "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv",
+            "size": 104798078,
+            "sha256": "2fbc1c657fae36ae762fafdf480d3b59d85a2532d9c11400583e24808aff3a83"
+          }
+        ],
+        "file_count": 3,
+        "model_artifact_count": 1,
+        "failures": [],
+        "warnings": [],
+        "required_relative_files": [
+          "scores.csv",
+          "predictions/rank_predictions.jsonl"
+        ],
+        "require_model_artifact": true,
+        "include_suffixes": [
+          ".bin",
+          ".ckpt",
+          ".npy",
+          ".npz",
+          ".pickle",
+          ".pkl",
+          ".pt",
+          ".pth",
+          ".safetensors"
+        ]
+      },
+      "adapter_embedding": {
+        "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl",
+        "exists": true,
+        "size": 4418945194
+      },
+      "adapter_dir": {
+        "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter",
+        "exists": true,
+        "size": 4096
+      }
+    },
+    "legacy_electronics_elmrec": {
+      "server_final": {
+        "ok": false,
+        "mode": "server_final",
+        "failures": [
+          "missing_required_file:fairness_provenance.json",
+          "missing_required_file:scores.csv",
+          "missing_score_audit_json",
+          "missing_same_candidate_score_audit_txt",
+          "missing_run_summary_json"
+        ],
+        "warnings": []
+      },
+      "manifest": {
+        "ok": false,
+        "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate",
+        "files": [
+          {
+            "rel_path": "predictions/rank_predictions.jsonl",
+            "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions/rank_predictions.jsonl",
+            "size": 783656344,
+            "sha256": "3c6fcf706df3177c15ce2dc9a384c44bd152af10b142f8eac9ea4f87fdd831f1"
+          }
+        ],
+        "file_count": 1,
+        "model_artifact_count": 0,
+        "failures": [
+          "missing_required_large_artifact:scores.csv",
+          "missing_model_artifact"
+        ],
+        "warnings": [],
+        "required_relative_files": [
+          "scores.csv",
+          "predictions/rank_predictions.jsonl"
+        ],
+        "require_model_artifact": true,
+        "include_suffixes": [
+          ".bin",
+          ".ckpt",
+          ".npy",
+          ".npz",
+          ".pickle",
+          ".pkl",
+          ".pt",
+          ".pth",
+          ".safetensors"
+        ]
+      },
+      "prediction": {
+        "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions/rank_predictions.jsonl",
+        "exists": true,
+        "size": 783656344
+      }
+    }
+  },
+  "classification": {
+    "immediate_safe_cleanup": [
+      {
+        "class": "user_cache_or_tmp_only",
+        "estimated_bytes_upper_bound": 241299456,
+        "decision": "not_sufficient_for_phase2_5_threshold",
+        "reason": "read-only cache scan is small compared with the bytes needed to clear the 10GiB floor or 12GiB working target"
+      }
+    ],
+    "conditional_cleanup_candidates": [
+      {
+        "path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl",
+        "size": 4418945194,
+        "would_raise_free_bytes_to": 12268081322,
+        "condition": "Only delete after explicit archive/resume decision because project rules treat external embedding artifacts as protected unless archival status is accepted.",
+        "supporting_evidence": "Tools LLM-ESR server_final/local_light passed; final score/provenance/audits/tables/model remain in final evidence dir and local lightweight package; provenance records qwen3_item_embedding_sha256.",
+        "risk": "Deleting removes the cached full item embedding needed for a cheap exact LLM-ESR rerun/rescore; it can likely be regenerated but is not part of the local-light package."
+      },
+      {
+        "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions/rank_predictions.jsonl",
+        "size": 783656344,
+        "condition": "Do not delete as completed evidence; only consider after a separate legacy-orphan archive decision because server_final audit is not ok.",
+        "supporting_evidence": "File is a legacy incomplete/orphan prediction; server_final audit reports missing provenance/scores/audits/run summary.",
+        "risk": "It may be historical diagnostic evidence and does not free enough space alone."
+      }
+    ],
+    "protected_large_artifacts": [
+      "outputs/baselines/external_tasks/* candidate/ranking/item_metadata task splits",
+      "outputs/*_official_qwen3base_same_candidate/*_official_model.pt final method checkpoints",
+      "outputs/*_official_qwen3base_same_candidate/scores.csv final scores",
+      "outputs/*_official_qwen3base_same_candidate/tables/ imported tables",
+      "/home/ajifang/models/Qwen/Qwen3-8B model weights",
+      "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy unless separately archived/accepted",
+      "other projects under /home/ajifang/projects/*"
+    ]
+  },
+  "verdict": "NO_IMMEDIATE_HIGH_IMPACT_SAFE_DELETION_WITHOUT_ARCHIVE_DECISION",
+  "next_action": "Make an explicit archive/resume decision on deleting the completed Tools LLM-ESR intermediate adapter embedding, or provision additional disk, before starting signal-row regeneration."
+}

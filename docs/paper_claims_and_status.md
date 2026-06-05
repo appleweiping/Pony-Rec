@@ -99,6 +99,18 @@ also include:
     hyperparameter claims remain blocked until full-scale valid/test
     uncertainty signal rows are located or regenerated and audited under the
     same-candidate protocol.
+    Storage preflight/cleanup for this next gate is recorded in
+    `outputs/summary/paper_critical/server_storage_preflight_20260605.*`,
+    `outputs/summary/tools_llmesr_completed_adapter_embedding_cleanup_20260605.{json,sha256}`,
+    and `outputs/summary/paper_critical/server_storage_postcleanup_20260605.*`.
+    The cleanup removed only completed Tools LLM-ESR paper-adapter staging
+    files after final evidence/local-light/domain gates passed, recovering
+    `/` to `12,342,898,688` bytes free / `94%` used. Final scores,
+    provenance, audits, imported tables, final model checkpoints, task splits,
+    and other projects were preserved. This is enough to clear the 10GiB danger
+    floor but not enough for the recommended Phase 2.5 regeneration target, so
+    signal-row generation remains gated on additional disk or another
+    archive-backed cleanup decision.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

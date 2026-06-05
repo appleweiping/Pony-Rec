@@ -156,6 +156,28 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    recover disk above the danger threshold with an audited safe-deletion list,
    then locate or regenerate full-scale valid/test uncertainty signal rows under
    the same-candidate protocol.
+   Storage cleanup checkpoint 2026-06-05 22:34 CST: ARIS read-only storage
+   audit plus a GPT-5.5 xhigh sidecar found no active experiment process, idle
+   GPU, and `/` at `7.85GB` free / `97%` used. The only high-impact safe
+   cleanup was completed Tools LLM-ESR paper-adapter staging under
+   `outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/`.
+   After verifying Tools LLM-ESR `server_final_evidence_audit.ok=true`,
+   `implementation_status=official_completed`, `blockers=[]`,
+   `score_coverage_rate=1.0`, local-light package pass, and Tools domain
+   gate pass, Codex recorded sha256/size manifests and deleted exactly five
+   staging files: `itm_emb_np.pkl`, `pca64_itm_emb_np.pkl`,
+   `sim_user_100.csv`, `sim_user_100.pkl`, and `inter.txt`. Cleanup manifest:
+   `outputs/summary/tools_llmesr_completed_adapter_embedding_cleanup_20260605.{json,sha256}`.
+   Local audit artifacts:
+   `outputs/summary/paper_critical/server_storage_preflight_20260605.*` and
+   `outputs/summary/paper_critical/server_storage_postcleanup_20260605.*`.
+   Total deleted size was `4,493,778,837` bytes; final scores, provenance,
+   score audits, run summary, imported tables, final `llmesr_official_model.pt`,
+   C-CRP artifacts, task splits, and other projects were not touched.
+   Post-cleanup disk is `12,342,898,688` bytes free / `94%` used. This clears
+   the 10GiB danger floor but remains below the recommended 15GiB hard stop
+   for signal-row regeneration; do not launch Phase 2.5 regeneration until
+   disk is expanded or another archive-backed cleanup raises free space.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and
