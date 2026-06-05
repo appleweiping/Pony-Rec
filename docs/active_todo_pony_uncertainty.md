@@ -2327,6 +2327,25 @@ run summary, server-final audit, large-artifact manifest, and local-light
 package. Post-cleanup disk was `16,293,425,152` bytes free / `92%` used, and
 the active LLM-ESR row remained alive.
 
+Tools LLM-ESR embedding/training transition checkpoint: at 2026-06-05
+19:55-20:01 CST, the active Tools `llmesr_sasrec` row remained alive with
+runner PID `3440278` and adapter PID `3440287`; duplicate counts stayed exactly
+one LLM-ESR adapter, zero `ToolsSameCandidate100Neg` training child, and one
+relevant Python process. The Qwen3 `hf_mean_pool` embedding pass completed
+(`269711/269711`), the row entered LLM-ESR training with log marker
+`[llmesr] epoch=1 train_loss=1.398057`, and final evidence was still absent:
+no `scores.csv`, `fairness_provenance.json`, score audit, run summary,
+`tables/ranking_eval_records.csv`, or prediction JSONL. Disk tightened to
+`11,804,352,512` bytes free / `95%` used after the active adapter grew to
+about `5.2G`; GPU was active again at `99%` / `21783 MiB`. A read-only storage
+audit showed the new pressure is mainly the active adapter embedding
+`outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl`
+(`4.12G`), which must not be deleted while training is active. Other largest
+visible candidates were protected completed models/checkpoints/task splits or
+the legacy Electronics ELMRec prediction without a passing server-final
+deletion gate. No cleanup was performed. Continue monitoring; do not start
+another Tools row while LLM-ESR is active.
+
 ## Required Next Actions
 
 1. Monitor the active Tools `llmesr_sasrec` row: runner PID `3440278`, adapter

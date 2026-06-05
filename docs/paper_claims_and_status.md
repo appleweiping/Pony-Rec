@@ -749,6 +749,19 @@ claim.
    Final LLM2Rec scores, provenance, score audit, run summary, imported
    tables, server-final audit, large-artifact manifest, and local-light package
    were preserved; disk recovered to `16,293,425,152` bytes free / `92%` used.
+   A 2026-06-05 19:55-20:01 CST monitor then found the active Tools
+   `llmesr_sasrec` row still alive and unique with runner PID `3440278` and
+   adapter PID `3440287`. The Qwen3 embedding pass completed
+   (`269711/269711`) and the row entered official LLM-ESR training at
+   `[llmesr] epoch=1 train_loss=1.398057`. There was still no final
+   `scores.csv`, provenance, score audit, run summary, imported ranking table,
+   or prediction JSONL, so this remains active monitor-only evidence. Disk was
+   tight at `11,804,352,512` bytes free / `95%` used; a read-only storage audit
+   found the main new pressure is the active adapter embedding
+   `outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl`
+   (`4.12G`), which is not safe to delete while training is active. Other large
+   visible files are protected completed models/checkpoints/task splits or
+   non-deletable legacy prediction evidence. No cleanup was performed.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

@@ -540,6 +540,17 @@ The repository is now in M5 (multi-domain SOTA validation):
   LLM2Rec scores, provenance, score audit, run summary, imported tables,
   server-final audit, large-artifact manifest, and local-light package were
   preserved; disk recovered to `16,293,425,152` bytes free / `92%` used.
+  A 2026-06-05 19:55-20:01 CST follow-up found the active Tools
+  `llmesr_sasrec` row still alive and unique with runner PID `3440278` and
+  adapter PID `3440287`. Qwen3 embedding completed (`269711/269711`) and the
+  row entered LLM-ESR training at `[llmesr] epoch=1 train_loss=1.398057`.
+  Final evidence was still absent, so the row remained non-table-eligible.
+  Disk tightened to `11,804,352,512` bytes free / `95%` used; a read-only
+  storage audit identified the active adapter embedding
+  `outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter/llm_esr/handled/itm_emb_np.pkl`
+  (`4.12G`) as the main new pressure, with other large visible candidates
+  protected completed models/checkpoints/task splits or non-deletable legacy
+  prediction evidence. No cleanup was performed.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final
