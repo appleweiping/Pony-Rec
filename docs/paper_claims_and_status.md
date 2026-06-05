@@ -264,6 +264,19 @@ also include:
     `will_start_experiment=false`, and `failures=[]`, confirming the current
     packet is internally consistent and still non-authorizing. The storage gate
     remains closed until explicit archive/retention approval or disk expansion.
+    Live remote pre-approval audit on 2026-06-06 02:12 CST:
+    `scripts/audit/main_remote_phase2_5_retention_preapproval_audit.py` checks
+    the live server target and evidence without deletion, manifesting, or
+    experiment launch. Artifact:
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0212.{json,md,sha256}`.
+    It reports `preapproval_checks_ready_except_disk=true`; the only failure is
+    `disk_below_min_free_before_cleanup`. The live target size is
+    `5,662,687,360`, sha256 matches
+    `306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`,
+    active process count is `0`, provenance is `official_completed` with
+    `blockers=[]` and `score_coverage_rate=1.0`, and server-final evidence is
+    `ok=true` with scores, prediction, and ranking eval records present. This
+    strengthens the approval surface but still does not authorize deletion.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

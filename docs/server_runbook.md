@@ -152,6 +152,22 @@ The 2026-06-06 02:05 CST packet audit reports `ok=true`, `read_only=true`,
 `will_delete=false`, `will_start_experiment=false`, and no failures. This still
 does not authorize deletion.
 
+For the final read-only pre-approval check against live server state, run:
+
+```powershell
+python scripts\audit\main_remote_phase2_5_retention_preapproval_audit.py `
+  --plan_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_current_retention_decision_plan_20260606_0200.json `
+  --output_json outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0212.json `
+  --output_md outputs\summary\paper_critical\retention_cleanup_plan_20260606_current\tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0212.md
+```
+
+The 2026-06-06 02:12 CST pre-approval audit reports
+`preapproval_checks_ready_except_disk=true`: no active process, target size and
+sha256 match, row provenance is `official_completed` with `blockers=[]` and
+`score_coverage_rate=1.0`, and server-final evidence remains `ok=true`. Its
+only failure is `disk_below_min_free_before_cleanup`, which is the condition the
+approved cleanup would address.
+
 After local-light packages are copied, run a local/server evidence consistency
 audit over the completed domain before relying on the package for later paper
 work. This reads local files and copied server manifests only:

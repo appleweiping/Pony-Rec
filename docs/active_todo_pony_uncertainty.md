@@ -2711,6 +2711,21 @@ It reports `ok=true`, `read_only=true`, `will_delete=false`,
 `will_start_experiment=false`, and no failures. This strengthens the approval
 surface but does not authorize deletion or launch.
 
+Live retention pre-approval audit: at 2026-06-06 02:12 CST, Codex added and ran
+`scripts/audit/main_remote_phase2_5_retention_preapproval_audit.py`, a
+read-only SSH audit against the current server state and the 02:00 retention
+packet. Artifact:
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0212.{json,md,sha256}`.
+It reports `ok=false` only because `disk_below_min_free_before_cleanup`, and
+`preapproval_checks_ready_except_disk=true`. Verified live state: active process
+count `0`, target size `5,662,687,360`, target sha256 matches
+`306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`,
+provenance has `implementation_status=official_completed`, `blockers=[]`,
+`score_coverage_rate=1.0`, and server-final audit is `ok=true` with scores,
+prediction, and ranking eval records present. This is still not approval to
+delete; it proves the approval packet is live-state consistent except for the
+disk condition it is meant to resolve.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

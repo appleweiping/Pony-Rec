@@ -99,6 +99,10 @@ requires explicit archive/retention approval before any cleanup can occur.
 The follow-up packet audit
 `outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_current_retention_decision_packet_audit_20260606_0205.{json,md,sha256}`
 passes with `ok=true` and no failures, but it is still not deletion approval.
+The live read-only pre-approval audit
+`outputs/summary/paper_critical/retention_cleanup_plan_20260606_current/tools_llm2rec_upstream_embedding_preapproval_audit_20260606_0212.{json,md,sha256}`
+then verifies the current server target size/hash and completed-row evidence;
+its only failure is the expected `disk_below_min_free_before_cleanup`.
 
 ## Stable Agent Roles
 
