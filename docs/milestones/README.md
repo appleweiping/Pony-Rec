@@ -437,6 +437,22 @@ The repository is now in M5 (multi-domain SOTA validation):
   snapshot it was active around epoch `30+`, had saved its Tools checkpoint,
   and disk was about `10G` free / `95%` used. The row is still monitor-only
   evidence until all completion gates pass.
+  A 2026-06-05 17:04 CST follow-up found the same recovery row still active
+  with runner PID `3423029`, adapter PID `3423037`, and training PID
+  `3423221`; duplicate counts remained exactly one LLM2Rec adapter and one
+  `ToolsSameCandidate100Neg` training child. No final provenance, `scores.csv`,
+  or imported ranking table existed yet. Training-log validation metrics were
+  still improving at epoch `330`, with latest observed validation HR@5/10/20
+  `0.26969999074935913 / 0.3407999873161316 / 0.414900004863739` and
+  NDCG@5/10/20
+  `0.20475752651691437 / 0.22773440182209015 / 0.2465011030435562`; these are
+  validation-only progress numbers, not final same-candidate table metrics.
+  Disk briefly crossed the monitor threshold at about `9.9G` free / `95%`
+  used. A large-file/cache/temp/archive audit found no safe project-output
+  deletion, and only approved conda package cache cleanup was run. No project
+  outputs, evidence, checkpoints, embeddings, task splits, or other projects
+  were deleted; post-cleanup `/` was about `11G` free (`10,773,983,232` bytes)
+  / `95%` used.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

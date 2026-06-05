@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 16:05 CST
+Last updated: 2026-06-05 17:04 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2174,14 +2174,39 @@ lightweight sync, and local-light evidence audit all passed. Local lightweight
 evidence is under
 `outputs/baselines/official_adapters/sports_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
 
+### Tools LLM2Rec Recovery Monitor Checkpoint
+
+At 2026-06-05 17:04 CST, the active Tools `llm2rec_sasrec` recovery row was
+still running under runner PID `3423029`, adapter PID `3423037`, and official
+training PID `3423221`, with log
+`baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log` and
+heartbeat `monitor-tools-llm2rec-recovery`. Duplicate audit found exactly one
+Tools LLM2Rec adapter and one `ToolsSameCandidate100Neg` training child. The
+row is not complete or table-eligible yet: no `fairness_provenance.json`, no
+`scores.csv`, and no imported ranking table exist. Validation metrics were
+still improving at epoch `330`, latest observed validation HR@5/10/20
+`0.26969999074935913 / 0.3407999873161316 / 0.414900004863739` and
+NDCG@5/10/20
+`0.20475752651691437 / 0.22773440182209015 / 0.2465011030435562`; these are
+training-log validation metrics only, not final same-candidate table metrics.
+Disk briefly crossed the monitor threshold at about `9.9G` free / `95%` used.
+A read-only large-file/cache audit found no safe project-output deletion:
+visible large artifacts were either active, final evidence/model artifacts,
+same-candidate task data, or an older Electronics ELMRec prediction whose
+server-final audit is `ok=false`. After approval, only conda package cache
+cleanup was run; no project outputs, evidence, checkpoints, embeddings, task
+splits, or other projects were deleted. Post-cleanup `/` was about `11G` free
+(`10,773,983,232` bytes) / `95%` used.
+
 ## Required Next Actions
 
-1. Monitor the active Tools `llm2rec_sasrec` row: runner PID `3413921`,
-   adapter PID `3413930`, log
-   `baselines_new_domains_tools_llm2rec_20260605_134355.log`, heartbeat
-   `monitor-tools-llm2rec`. Notify on completion, failure, duplicate process,
-   dead tracked PID, disk below `10G` free, or disk at/above `97%` used. Do
-   not start another baseline while this row is active.
+1. Monitor the active Tools `llm2rec_sasrec` recovery row: runner PID
+   `3423029`, adapter PID `3423037`, official training PID `3423221`, log
+   `baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log`,
+   heartbeat `monitor-tools-llm2rec-recovery`. Notify on completion, failure,
+   duplicate process, dead tracked PID, disk below `10G` free, or disk
+   at/above `97%` used. Do not start another baseline while this row is
+   active.
 2. After each remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,

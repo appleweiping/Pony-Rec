@@ -633,6 +633,25 @@ claim.
    so Qwen3 embedding is reused. At the 16:05 CST snapshot it was active around
    epoch `30+`, had saved a Tools checkpoint, and disk was about `10G` free /
    `95%` used. This is active monitor-only evidence, not a completed row.
+   A 2026-06-05 17:04 CST monitor/storage checkpoint confirmed the recovery
+   row was still active with runner PID `3423029`, adapter PID `3423037`, and
+   training PID `3423221`; duplicate counts were exactly one LLM2Rec adapter
+   and one `ToolsSameCandidate100Neg` training child. No final provenance,
+   `scores.csv`, or imported ranking table existed yet. Training-log
+   validation metrics were still improving at epoch `330`, latest observed
+   HR@5/10/20
+   `0.26969999074935913 / 0.3407999873161316 / 0.414900004863739` and
+   NDCG@5/10/20
+   `0.20475752651691437 / 0.22773440182209015 / 0.2465011030435562`; these
+   are validation-only progress numbers, not final table metrics. Disk briefly
+   crossed the monitor threshold at about `9.9G` free / `95%` used. A
+   large-file/cache/temp/archive audit found no safe project-output deletion:
+   large visible artifacts were active, final evidence/model artifacts,
+   same-candidate task data, or an older Electronics ELMRec prediction whose
+   server-final audit is `ok=false`. After approval, only conda package cache
+   cleanup was run; no project outputs, evidence, checkpoints, embeddings, task
+   splits, or other projects were deleted. Post-cleanup `/` was about `11G`
+   free (`10,773,983,232` bytes) / `95%` used.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
