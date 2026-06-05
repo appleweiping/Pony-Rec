@@ -62,9 +62,12 @@ gates against C-CRP. The Tools artifacts are
 `outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}` and
 `outputs/summary/tools_official_ccrp_20260605_*`; the paired summary records
 `claim_gate=tools_domain_pass`, C-CRP observed-best on all seven metrics, and
-56/56 C-CRP-vs-official paired tests positive and Holm-significant. Do not
-start more official baseline rows unless a later audit finds a concrete invalid
-row.
+56/56 C-CRP-vs-official paired tests positive and Holm-significant. The compact
+four-new-domain gate certificate is
+`outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*`; it supports
+the narrow same-candidate Sports/Toys/Home/Tools claim only, not paper-ready or
+full-catalog SOTA wording. Do not start more official baseline rows unless a
+later audit finds a concrete invalid row.
 
 Storage note: before the home launch, completed sports/toys LLMEmb and LLM-ESR
 upstream staging directories were removed only after final server audits and
@@ -74,7 +77,10 @@ final official evidence directories and local lightweight packages were
 preserved. Disk recovered from about `5.9G` to `17G` free.
 
 ### Phase 3: Full Comparison Table + Statistical Tests
-Build @5/@10/@20 table across all domains. Paired t-test / bootstrap.
+The four-new-domain official+C-CRP compact gate summary exists at
+`outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*`. Remaining
+Phase 3 work is paper-facing table integration and any all-domain/reconciled
+artifact packaging required by the final claim boundary.
 
 ### Phase 2.5 / Paper-Critical Method Evidence
 Before claiming paper readiness, complete four method-story gates:

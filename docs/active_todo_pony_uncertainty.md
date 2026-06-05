@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 19:13 CST
+Last updated: 2026-06-05 22:15 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2413,16 +2413,32 @@ the post-cleanup domain gate still passes by certificate. Disk remains tight
 at about `7.4G` free / `97%` used, so do not start new server jobs without a
 fresh storage preflight.
 
+Four-new-domain compact evidence checkpoint: at 2026-06-05 22:15 CST, Codex
+used ARIS experiment-audit discipline and a read-only GPT-5.5 xhigh sidecar
+audit to consolidate the Sports/Toys/Home/Tools official+C-CRP gates into
+`outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*`. The
+bundle includes a JSON summary, domain-summary CSV, method-row CSV, audit MD,
+and sha256 manifest. Blocking checks pass: all four domains have `gate_ok`,
+8/8 completed official rows, one completed C-CRP internal-method row,
+C-CRP rank 1 on all seven metrics, and 56/56 C-CRP-vs-official paired tests
+with positive Holm-significant deltas. This supports the narrow wording that
+C-CRP ranks first against eight official-code-level baselines on the four new
+10k-user/101-candidate same-candidate domains. It does not support
+paper-ready SOTA, full-catalog SOTA, a large practical-effect claim, universal
+winner wording, or a proven uncertainty mechanism. Non-blocking gaps remain:
+local raw C-CRP event-level restat is thin for Sports/Toys, so the compact
+bundle relies on copied gate/comparison/paired-test certificates rather than a
+self-contained local raw reproduction package.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
    Sports/Toys/Home/Tools under the same-candidate gate. Do not launch more
    official baseline rows unless a later audit finds a concrete failed or
    invalid row.
-2. Consolidate the four-domain comparison evidence and paper claim boundary:
-   the project now has Sports, Toys, Home, and Tools domain gates plus
-   paired-test packages, but paper-wide wording still needs a cross-domain
-   table/summary and ARIS claim audit.
+2. Use `outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*` as
+   the compact four-new-domain comparison-gate certificate. Do not use stale
+   partial drafts that still say Home/Tools are incomplete.
 3. Prioritize Phase 2.5 paper-critical modules before any paper-readiness
    claim: uncertainty observation/motivation figure or table, full C-CRP
    leave-one-component-out ablation, real hyperparameter curves, and the clean

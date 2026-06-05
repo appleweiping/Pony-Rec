@@ -577,6 +577,13 @@ The repository is now in M5 (multi-domain SOTA validation):
   with `min_delta=0.0294`, `min_ci_low=0.0173`, and
   `max_holm_p_value=9.7172307634557e-07`. Disk remains tight at about `7.4G`
   free / `97%` used, so future server work needs a fresh storage preflight.
+  A compact four-new-domain comparison-gate certificate was built locally at
+  `outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*`. It
+  records that Sports/Toys/Home/Tools each have 8/8 completed official rows,
+  passed domain gates, C-CRP rank 1 on all seven metrics, and 56/56 positive
+  Holm-significant paired tests. This closes the Phase 2 new-domain
+  official+C-CRP gate summary, but it is not a paper-readiness verdict and not
+  a full raw local reproduction package.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

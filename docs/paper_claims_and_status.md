@@ -803,6 +803,19 @@ reaches at least 8/10.
    `outputs/tools_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/prediction_deletion_manifest.json`;
    the post-cleanup gate still passes by certificate. This is a Tools-domain
    pass, not final paper readiness.
+   A compact four-new-domain ARIS gate certificate was then built locally as
+   `outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*`. It
+   covers Sports, Toys, Home, and Tools and records passing blocking checks:
+   8/8 official-code-level baseline rows per domain, exact same-candidate gate
+   status, C-CRP rank 1 on all seven metrics, and 56/56 positive
+   Holm-significant C-CRP-vs-official paired tests per domain. The safe claim
+   is limited to the four new 10k-user/101-candidate same-candidate domains.
+   The certificate explicitly does not support paper-ready SOTA,
+   full-catalog recommender SOTA, large-effect wording, universal winner
+   wording, or a proven uncertainty-mechanism claim. It also records
+   non-blocking local artifact gaps for Sports/Toys C-CRP raw event restat, so
+   it is a comparison-gate summary rather than a self-contained local raw
+   reproduction package.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
