@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 17:04 CST
+Last updated: 2026-06-05 18:11 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2197,6 +2197,25 @@ server-final audit is `ok=false`. After approval, only conda package cache
 cleanup was run; no project outputs, evidence, checkpoints, embeddings, task
 splits, or other projects were deleted. Post-cleanup `/` was about `11G` free
 (`10,773,983,232` bytes) / `95%` used.
+
+At 2026-06-05 18:07-18:11 CST, the same Tools `llm2rec_sasrec` recovery row
+remained active with runner PID `3423029`, adapter PID `3423037`, and training
+PID `3423221`; duplicate counts stayed exactly one adapter and one
+`ToolsSameCandidate100Neg` training child. No final provenance, `scores.csv`,
+score audit, or imported ranking table existed yet. Training-log validation
+progress had reached epoch `715`, latest observed validation HR@5/10/20
+`0.8866999745368958 / 0.9272000193595886 / 0.9584000110626221` and
+NDCG@5/10/20
+`0.8021516799926758 / 0.8153268098831177 / 0.8232611417770386`; these remain
+validation-only progress numbers, not final table metrics. Disk was only about
+34 MiB above the 10 GiB guard (`10,773,143,552` bytes free), so non-project
+cache cleanup was run: conda reported no unused tarballs/packages/tempfiles,
+pip cache purge removed `17.0 MB`, and npm cache clean was attempted. No
+project outputs, evidence, checkpoints, embeddings, task splits, or other
+projects were deleted. A post-cleanup safety check at 18:11 CST confirmed the
+same PIDs alive, duplicate counts `1/1`, no final evidence, and disk
+`10,820,177,920` bytes free / `95%` used. Continue monitoring disk through the
+final export.
 
 ## Required Next Actions
 

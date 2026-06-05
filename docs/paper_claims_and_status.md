@@ -652,6 +652,24 @@ claim.
    cleanup was run; no project outputs, evidence, checkpoints, embeddings, task
    splits, or other projects were deleted. Post-cleanup `/` was about `11G`
    free (`10,773,983,232` bytes) / `95%` used.
+   A 2026-06-05 18:07-18:11 CST follow-up found the same recovery row still
+   active with runner PID `3423029`, adapter PID `3423037`, and training PID
+   `3423221`; duplicate counts remained exactly one LLM2Rec adapter and one
+   `ToolsSameCandidate100Neg` training child. No final provenance,
+   `scores.csv`, score audit, or imported ranking table existed yet.
+   Training-log validation progress reached epoch `715`, latest observed
+   validation HR@5/10/20
+   `0.8866999745368958 / 0.9272000193595886 / 0.9584000110626221` and
+   NDCG@5/10/20
+   `0.8021516799926758 / 0.8153268098831177 / 0.8232611417770386`; these are
+   validation-only progress numbers, not final table metrics. Disk was only
+   about 34 MiB above the 10 GiB guard (`10,773,143,552` bytes free), so only
+   non-project cache cleanup was run: conda reported no unused
+   tarballs/packages/tempfiles, pip cache purge removed `17.0 MB`, and npm
+   cache clean was attempted. No project outputs, evidence, checkpoints,
+   embeddings, task splits, or other projects were deleted. The post-cleanup
+   safety check confirmed the same PIDs alive, duplicate counts `1/1`, no final
+   evidence, and disk `10,820,177,920` bytes free / `95%` used.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
