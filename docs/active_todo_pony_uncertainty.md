@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 18:57 CST
+Last updated: 2026-06-05 19:06 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2287,6 +2287,21 @@ No project outputs, evidence, checkpoints, embeddings, task splits, source
 code, configs, or other project files were deleted. Cache-cleanup record:
 `outputs/summary/tools_llmesr_launch_cache_cleanup_20260605.txt`. Post-cleanup
 disk was `10,866,053,120` bytes free / `95%` used at the 18:57 follow-up.
+
+Tools LLM-ESR monitor/cache checkpoint: at 2026-06-05 19:04-19:06 CST, the
+active Tools `llmesr_sasrec` row remained alive with runner PID `3440278` and
+adapter PID `3440287`; duplicate counts stayed exactly one LLM-ESR adapter and
+zero `ToolsSameCandidate100Neg` training child. GPU was active around
+`91-96%` / `16189 MiB`, embedding progress advanced to about `47824/269711`,
+and no final provenance, scores, score audit, imported ranking table,
+completion marker, failure marker, OOM, no-space, or killed marker was present.
+Disk dipped just below the strict 10 GiB guard (`10,726,035,456` bytes free).
+A read-only cache audit found only small non-project cache/log candidates, so
+only Chrome cache/GPU cache and VSCode-server logs were cleared; no project
+outputs, evidence, checkpoints, embeddings, task splits, source code, configs,
+or other project files were deleted. Cleanup record:
+`outputs/summary/tools_llmesr_monitor_cache_cleanup_20260605_1904.txt`.
+Post-cleanup disk was `10,757,963,776` bytes free / `95%` used.
 
 ## Required Next Actions
 

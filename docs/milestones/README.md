@@ -512,6 +512,17 @@ The repository is now in M5 (multi-domain SOTA validation):
   deleted. Cache-cleanup record:
   `outputs/summary/tools_llmesr_launch_cache_cleanup_20260605.txt`.
   Post-cleanup disk was `10,866,053,120` bytes free / `95%` used.
+  A 2026-06-05 19:04-19:06 CST monitor/cache checkpoint found the same row
+  still active with runner PID `3440278` and adapter PID `3440287`, duplicate
+  counts exactly one adapter and zero training child, GPU about `91-96%` /
+  `16189 MiB`, embedding progress about `47824/269711`, no final evidence, and
+  no failure/OOM/no-space markers. Disk dipped just below the strict 10 GiB
+  guard (`10,726,035,456` bytes free), so only non-project Chrome cache/GPU
+  cache and VSCode-server logs were cleared. No project outputs, evidence,
+  checkpoints, embeddings, task splits, configs, source code, or other project
+  files were deleted. Cleanup record:
+  `outputs/summary/tools_llmesr_monitor_cache_cleanup_20260605_1904.txt`.
+  Post-cleanup disk was `10,757,963,776` bytes free / `95%` used.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

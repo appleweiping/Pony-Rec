@@ -1,0 +1,14 @@
+=== before ===
+/dev/vda5      209709965312 188256735232 10726035456   95% /
+81M	/home/ajifang/.config/google-chrome
+31M	/home/ajifang/.vscode-server/data/logs
+26M	/tmp
+=== after ===
+/dev/vda5      209709965312 188224794624 10757976064   95% /
+81M	/home/ajifang/.config/google-chrome
+4.0K	/home/ajifang/.vscode-server/data/logs
+26M	/tmp
+=== active process ===
+    PID    PPID STAT     ELAPSED CMD
+3440278       1 S          12:56 bash scripts/run_baselines_new_domains.sh
+3440287 3440278 Rl         12:56  \_ /home/ajifang/miniconda3/bin/python scripts/adapters/main_run_llmesr_official_same_candidate_adapter.py --stage run --domain tools --task_dir outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate --valid_task_dir outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate --output_scores_path outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv --provenance_output_path outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/fairness_provenance.json --fairness_policy_id official_code_qwen3base_default_hparams_declared_adaptation_v1 --comparison_variant official_code_qwen3base_default_hparams_declared_adaptation --backbone_path /home/ajifang/models/Qwen/Qwen3-8B --llm_adaptation_mode frozen_base_embedding --embedding_backend hf_mean_pool --embedding_max_length 128 --hf_device_map auto
