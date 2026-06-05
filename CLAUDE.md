@@ -4,6 +4,16 @@ Read `AGENTS.md` first. It is the authoritative operating contract for this repo
 
 This is the Uncertainty project: Actionable Uncertainty for LLM-based Recommendation.
 
+## Continuity Rule
+
+Use `agentmemory` for shared recall, but do not depend on it as the only durable
+state. If memory is stale, empty, or unavailable after a restart, recover from
+GitHub `main`, `AGENTS.md`, canonical docs, local evidence packages/manifests,
+and fresh pony-rec-gpu audits. Important checkpoints must be mirrored outside
+agentmemory by committing/pushing related local changes, updating canonical
+docs when status or next actions change, and copying or manifesting important
+server evidence locally before cleanup.
+
 ## Quick Orientation
 
 - **Current collaboration routing**: Claude reviewer tooling is unavailable in

@@ -14,6 +14,26 @@ Before changing code, documents, experiments, or claims, read:
 5. `docs/top_conference_review_gate.md`
 6. `docs/server_runbook.md`
 
+## Continuity And Memory Durability
+
+`agentmemory` is the live collaboration index, but it is not sufficient as the
+only durable project state. Agents must use it at session start and after
+important work, then verify current truth from canonical repo docs, committed
+artifacts, and the server itself. If `agentmemory` is missing, stale, or
+unavailable after a restart, do not guess from chat history: recover from the
+latest GitHub `main`, this `AGENTS.md`, the canonical docs listed above, and
+server audits.
+
+Every important checkpoint must have a durable mirror outside agentmemory:
+
+- code/config/doc changes committed and pushed from the local repository;
+- project status reflected in canonical docs when the route, evidence state, or
+  next action changed;
+- important server evidence copied into a lightweight local package or recorded
+  with a local/server manifest before cleanup;
+- agentmemory updated as an index to the committed docs/artifacts, not as the
+  sole source of truth.
+
 For baseline or experiment implementation, also read:
 
 1. `docs/baseline_protocol.md`

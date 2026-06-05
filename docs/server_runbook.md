@@ -3,6 +3,14 @@
 This file is the stable entry point for server-side work. It avoids relying on
 chat memory.
 
+## Durability Rule
+
+Use `agentmemory` for shared recall, but never treat it as the only source of
+truth. After restarts or context loss, recover state from GitHub `main`, the
+canonical docs, local evidence packages/manifests, and fresh server audits. For
+each important experiment/code/doc checkpoint, push the related local change to
+GitHub and mirror key server evidence locally before any cleanup.
+
 ## Always Start Here
 
 ```bash

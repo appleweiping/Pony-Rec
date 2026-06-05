@@ -3132,6 +3132,16 @@ reports `ok=true`, `four_domain_evidence_consistent=true`,
 
 ## Required Next Actions
 
+Continuity correction on 2026-06-06: agentmemory remains the live shared-memory
+index, but it is not treated as the only durable state because restart/local
+service failures can hide prior memories. Future agents must still query
+agentmemory first, then verify against GitHub `main`, `AGENTS.md`, canonical
+docs, local evidence packages/manifests, and fresh pony-rec-gpu audits. Every
+important checkpoint must be mirrored outside agentmemory by committing and
+pushing related local changes, updating canonical docs when status or next
+actions change, and copying or manifesting important server evidence locally
+before cleanup.
+
 1. Treat Phase 2 official new-domain baselines as complete for
    Sports/Toys/Home/Tools under the same-candidate gate. Do not launch more
    official baseline rows unless a later audit finds a concrete failed or
