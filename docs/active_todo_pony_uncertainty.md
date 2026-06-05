@@ -1862,6 +1862,32 @@ local evidence were preserved; `/` recovered to about `15G` free / `93%` used.
 Tools is now 6/8 official rows gated; remaining rows are `llm2rec_sasrec` and
 `llmesr_sasrec`, followed by the Tools domain/comparison/paired-test gates.
 
+Tools LLM2Rec launch/validation-task repair checkpoint 2026-06-05 13:22 CST:
+after the RLMRec completion gates and cleanup, a single-row Tools
+`llm2rec_sasrec` launch was attempted with runner PID `3405735` and log
+`baselines_new_domains_tools_llm2rec_20260605_130248.log`. It failed before a
+stable adapter process or score file existed. The traceback was in
+`scripts/build/main_export_llm2rec_same_candidate_task.py` validation export:
+`source_event_id='AGEY75LYLXUAHG3KW5KF5ICMKA4A' has 0 positive rows; expected
+exactly 1`. Audit found that
+`outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv`
+was truncated: the original file had `587252` logical rows, ended in a partial
+event plus a malformed user-id-only row, and had sha256
+`4302712bb7dbe0a8cfde99b0a2727c8de0818d250b65e7cc3bc0b8ad01fa6f2b`. The file
+was rebuilt from the canonical `ranking_valid.jsonl`, preserving the
+`source_event_id,user_id,timestamp,split_name,candidate_index,item_id,label,is_positive,popularity_group,candidate_title,candidate_text`
+schema. Repair manifest:
+`outputs/summary/tools_valid_candidate_items_repair_20260605T051943Z.json`.
+Independent validation manifest:
+`outputs/summary/tools_valid_candidate_items_repair_validation_20260605T0520Z.json`
+with PASS, `1,010,000` rows, `10,000` events, exactly `101` candidates/event,
+and exactly one positive/label per event. The corrupt original remains
+server-side as
+`candidate_items.csv.corrupt_20260605T051943Z`. No Tools LLM2Rec row is active
+or table-eligible. Disk is about `14G` free / `93%` used after the repair, so
+do not relaunch until a fresh process/GPU/disk preflight and storage-margin
+decision pass.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
@@ -2032,14 +2058,12 @@ evidence is under
 
 ## Required Next Actions
 
-1. Monitor the active Tools `rlmrec_graphcl` row: runner PID `3347729`, adapter
-   PID `3347738`, log `baselines_new_domains_tools_rlmrec_20260605_054158.log`,
-   and heartbeat `monitor-tools-rlmrec`. Notify on completion, failure,
-   duplicate process, dead PID, disk below 10G free, or disk at/above 97% used.
-   Disk is currently below the 10G warning threshold after the one eligible
-   IRLLRec prediction cleanup, so watch for further growth but do not delete
-   active RLMRec adapter files. Do not start another baseline while this row is
-   active.
+1. No Tools baseline is currently active. Before relaunching Tools
+   `llm2rec_sasrec`, run a fresh process/GPU/disk/duplicate-output preflight
+   and confirm a storage margin above the 10G alert floor; disk is currently
+   about `14G` free / `93%` used after the validation candidate repair.
+   Relaunch only one row, then create a new monitor heartbeat for the new
+   runner/adapter PIDs.
 2. After each remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,

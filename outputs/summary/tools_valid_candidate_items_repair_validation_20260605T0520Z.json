@@ -1,0 +1,31 @@
+{
+  "status": "pass",
+  "created_at_utc": "20260605T052213Z",
+  "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv",
+  "header": [
+    "source_event_id",
+    "user_id",
+    "timestamp",
+    "split_name",
+    "candidate_index",
+    "item_id",
+    "label",
+    "is_positive",
+    "popularity_group",
+    "candidate_title",
+    "candidate_text"
+  ],
+  "rows": 1010000,
+  "events": 10000,
+  "count_hist": {
+    "101": 10000
+  },
+  "positive_hist": {
+    "1": 10000
+  },
+  "label_hist": {
+    "1": 10000
+  },
+  "bad_rows": [],
+  "repair_manifest": "outputs/summary/tools_valid_candidate_items_repair_20260605T051943Z.json"
+}

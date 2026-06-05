@@ -564,6 +564,22 @@ claim.
    manifests, and local evidence. Disk recovered to about `15G` free / `93%`
    used. Tools is now 6/8 official rows gated and still needs `llm2rec_sasrec`,
    `llmesr_sasrec`, and the Tools domain/comparison/paired-test gates.
+   A first Tools `llm2rec_sasrec` launch at 2026-06-05 13:02 CST then failed
+   before a stable adapter process or score file existed. The traceback was a
+   validation-export exact-one-positive failure for
+   `source_event_id='AGEY75LYLXUAHG3KW5KF5ICMKA4A'`. Audit found the Tools
+   valid `candidate_items.csv` was truncated: original sha256
+   `4302712bb7dbe0a8cfde99b0a2727c8de0818d250b65e7cc3bc0b8ad01fa6f2b`,
+   `587252` logical rows, partial final event, and a malformed user-id-only
+   row. The CSV was rebuilt from `ranking_valid.jsonl` and independently
+   validated as PASS with `1,010,000` rows, `10,000` events, `101`
+   candidates/event, and exactly one positive/label per event. Manifests are
+   `outputs/summary/tools_valid_candidate_items_repair_20260605T051943Z.json`
+   and
+   `outputs/summary/tools_valid_candidate_items_repair_validation_20260605T0520Z.json`.
+   No Tools LLM2Rec row is active or table-eligible; disk is about `14G` free /
+   `93%` used, so relaunch is pending a fresh preflight and storage-margin
+   decision.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

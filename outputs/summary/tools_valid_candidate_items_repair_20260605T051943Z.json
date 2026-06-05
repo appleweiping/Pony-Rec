@@ -1,0 +1,45 @@
+{
+  "status": "repaired",
+  "created_at_utc": "20260605T051943Z",
+  "reason": "Tools valid candidate_items.csv was truncated and ended with a malformed user-id-only row, causing LLM2Rec validation export to fail exact-one-positive invariant.",
+  "ranking_source": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+  "candidate_items_path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv",
+  "corrupt_backup_path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv.corrupt_20260605T051943Z",
+  "original_size_bytes": 489410560,
+  "original_sha256": "4302712bb7dbe0a8cfde99b0a2727c8de0818d250b65e7cc3bc0b8ad01fa6f2b",
+  "original_logical_rows_seen": 587252,
+  "original_bad_source_examples": [
+    {
+      "csv_record_index": 587253,
+      "source_event_id": "AGEY75LYLXUAHG3KW5KF5ICMKA4A",
+      "user_id": null
+    }
+  ],
+  "repaired_size_bytes": 841453688,
+  "repaired_sha256": "2561887f855026b32a553e703142213ac7e86bf27131bbc55bcb85f4aedfec1d",
+  "ranking_events": 10000,
+  "candidate_rows": 1010000,
+  "candidate_count_hist": {
+    "101": 10000
+  },
+  "positive_count_hist": {
+    "1": 10000
+  },
+  "label_count_hist": {
+    "1": 10000
+  },
+  "fieldnames": [
+    "source_event_id",
+    "user_id",
+    "timestamp",
+    "split_name",
+    "candidate_index",
+    "item_id",
+    "label",
+    "is_positive",
+    "popularity_group",
+    "candidate_title",
+    "candidate_text"
+  ],
+  "validation_required": "Run a CSV invariant scan before relaunching LLM2Rec."
+}

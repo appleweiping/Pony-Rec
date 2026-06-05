@@ -373,6 +373,21 @@ The repository is now in M5 (multi-domain SOTA validation):
   manifests, and local evidence. Disk recovered to about `15G` free / `93%`
   used. Tools is now 6/8 official rows gated and still needs `llm2rec_sasrec`,
   `llmesr_sasrec`, and the Tools domain/comparison/paired-test gates.
+  A first Tools `llm2rec_sasrec` launch at 2026-06-05 13:02 CST failed before
+  a stable adapter process or score file because validation export found a
+  malformed/truncated Tools valid candidate CSV. The corrupt file had
+  `587252` logical rows and ended with a user-id-only row for
+  `AGEY75LYLXUAHG3KW5KF5ICMKA4A`; sha256
+  `4302712bb7dbe0a8cfde99b0a2727c8de0818d250b65e7cc3bc0b8ad01fa6f2b`. It was
+  rebuilt from `ranking_valid.jsonl` and independently validated with
+  `1,010,000` rows, `10,000` events, `101` candidates/event, and exactly one
+  positive/label per event. Manifests:
+  `outputs/summary/tools_valid_candidate_items_repair_20260605T051943Z.json`
+  and
+  `outputs/summary/tools_valid_candidate_items_repair_validation_20260605T0520Z.json`.
+  No Tools LLM2Rec row is active or table-eligible; disk is about `14G` free /
+  `93%` used, so relaunch is pending a fresh preflight and storage-margin
+  decision.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

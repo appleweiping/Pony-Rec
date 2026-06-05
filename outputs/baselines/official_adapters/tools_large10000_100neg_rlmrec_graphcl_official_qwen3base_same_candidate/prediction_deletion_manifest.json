@@ -1,0 +1,10 @@
+{
+  "deleted_rel_path": "predictions/rank_predictions.jsonl",
+  "deleted_path": "outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+  "size": 806839232,
+  "line_count": 10000,
+  "sha256": "73ba3bf4adffe3efd49bb59967ea5a692e44a5f796e743afc50d2dd830b4f6b7",
+  "reason": "post_server_final_and_local_light_disk_cleanup",
+  "server_final_audit": "outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+  "local_light_audit_path": "outputs/baselines/official_adapters/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/local_light_evidence_audit.json"
+}

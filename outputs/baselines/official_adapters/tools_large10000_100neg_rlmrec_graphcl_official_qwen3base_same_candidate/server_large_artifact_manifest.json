@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "size": 806839232,
+      "sha256": "73ba3bf4adffe3efd49bb59967ea5a692e44a5f796e743afc50d2dd830b4f6b7"
+    },
+    {
+      "rel_path": "rlmrec_official_model.pt",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/rlmrec_official_model.pt",
+      "size": 69897213,
+      "sha256": "4eb3c57e88089439f867ec44090c8ca873fe05050f10af4ce7287c6229b3c8e8"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv",
+      "size": 106879641,
+      "sha256": "6062a43623d9907b6b13ed052acd53f7cf7bee0a936e30eda5441b97182bec71"
+    }
+  ],
+  "file_count": 3,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ]
+}
