@@ -192,6 +192,18 @@ hash evidence before selector/observation/ablation/hyperparameter consumption.
 Focused verification passed with `40 passed`; no experiment was stopped or
 launched, and the running valid-split row is still not paper-ready evidence.
 
+At the 2026-06-06 07:52 CST monitor, PID `3543564` was still active and unique,
+GPU was `93%`, root disk remained safe at `25,982,087,168` bytes free / `87%`
+used, fatal scan was clean, and the first chunk had reached `41214/505000`
+processed prompts. Codex then hardened the guarded signal-generation plan
+surface: `scripts/audit/main_plan_ccrp_signal_generation.py` now records
+generated valid/test signal paths, split-specific source-audit commands, and
+local post-completion `main_sync_ccrp_signal_evidence_package.py` sync/package
+audit templates. The regenerated tracked plan JSON/shell artifacts remain
+non-executing (`exit 2` before any command) and the shell does not include local
+sync commands. Focused verification passed with `51 passed`; no new experiment
+was launched.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test

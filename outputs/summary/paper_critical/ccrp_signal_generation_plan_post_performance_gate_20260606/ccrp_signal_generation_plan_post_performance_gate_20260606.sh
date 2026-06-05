@@ -34,6 +34,15 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports \
   --expected_candidates_per_event 101
 
+# sports: audit generated valid signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/valid_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/valid_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/valid_ccrp_signal_source_audit.csv
+
 # sports: if no audited saved signal artifact exists, generate test signal rows.
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain sports \
@@ -41,6 +50,17 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --data outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports \
   --expected_candidates_per_event 101
+
+# sports: audit generated test signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test_ccrp_signal_source_audit.csv
+
+# sports: run local_post_completion_commands from the local checkout to sync signal evidence.
 
 # sports: audit the chosen signal artifact after replacing TODO paths.
 python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
@@ -147,6 +167,15 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys \
   --expected_candidates_per_event 101
 
+# toys: audit generated valid signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/valid_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/valid_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/valid_ccrp_signal_source_audit.csv
+
 # toys: if no audited saved signal artifact exists, generate test signal rows.
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain toys \
@@ -154,6 +183,17 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --data outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys \
   --expected_candidates_per_event 101
+
+# toys: audit generated test signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/test_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/test_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/test_ccrp_signal_source_audit.csv
+
+# toys: run local_post_completion_commands from the local checkout to sync signal evidence.
 
 # toys: audit the chosen signal artifact after replacing TODO paths.
 python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
@@ -260,6 +300,15 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home \
   --expected_candidates_per_event 101
 
+# home: audit generated valid signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/valid_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/valid_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/valid_ccrp_signal_source_audit.csv
+
 # home: if no audited saved signal artifact exists, generate test signal rows.
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain home \
@@ -267,6 +316,17 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --data outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home \
   --expected_candidates_per_event 101
+
+# home: audit generated test signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/test_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/test_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/test_ccrp_signal_source_audit.csv
+
+# home: run local_post_completion_commands from the local checkout to sync signal evidence.
 
 # home: audit the chosen signal artifact after replacing TODO paths.
 python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
@@ -373,6 +433,15 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools \
   --expected_candidates_per_event 101
 
+# tools: audit generated valid signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/valid_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/valid_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/valid_ccrp_signal_source_audit.csv
+
 # tools: if no audited saved signal artifact exists, generate test signal rows.
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain tools \
@@ -380,6 +449,17 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --data outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools \
   --expected_candidates_per_event 101
+
+# tools: audit generated test signal rows before selector use.
+python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
+  --candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --source candidate_signal=outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test_ccrp_signal_rows.csv \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test_ccrp_signal_source_audit.json \
+  --output_csv outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test_ccrp_signal_source_audit.csv
+
+# tools: run local_post_completion_commands from the local checkout to sync signal evidence.
 
 # tools: audit the chosen signal artifact after replacing TODO paths.
 python scripts/audit/main_audit_ccrp_uncertainty_sources.py \

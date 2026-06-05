@@ -3175,6 +3175,27 @@ Focused verification passed:
 No server process was stopped, no new experiment was launched, and the running
 valid-split job remains not paper-ready until completion and audits pass.
 
+Phase 2.5 guarded-plan post-completion gate hardening: at the 2026-06-06 07:52
+CST monitor, Sports valid signal-row PID `3543564` was still unique and active,
+GPU was `93%` with `42863 MiB / 49140 MiB`, `/` had `25,982,087,168` bytes
+free / `87%` used, fatal log scan was clean, and the first chunk had reached
+`41214/505000` processed prompts. While waiting, Codex updated
+`scripts/audit/main_plan_ccrp_signal_generation.py` so guarded plans now record
+generated valid/test signal paths, split-specific source-audit commands inside
+each signal output directory, and local `main_sync_ccrp_signal_evidence_package.py`
+sync/package-audit templates under `local_post_completion_commands`. The
+generated shell remains non-executing (`exit 2` before `cd`) and deliberately
+does not include local sync commands. Regenerated tracked plan artifacts:
+`outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.{json,sh}`
+and
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_generation_plan_post_performance_gate_20260606.{json,sh}`.
+Focused verification passed:
+`python -m pytest tests\test_plan_ccrp_signal_generation.py tests\test_audit_paper_critical_modules.py tests\test_sync_ccrp_signal_evidence_package.py tests\test_ccrp_v3_signal_rows_runner.py tests\test_ccrp_uncertainty_source_audit.py tests\test_audit_phase2_5_module_package.py -q`
+(`51 passed`) and
+`python -m py_compile scripts\audit\main_plan_ccrp_signal_generation.py scripts\audit\main_sync_ccrp_signal_evidence_package.py scripts\audit\main_audit_ccrp_uncertainty_sources.py experiments\rsc\run_ccrp_v3_signal_rows.py`.
+This is planning/package hardening only; no new server job was launched and the
+active valid-split row remains not paper-ready evidence.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory

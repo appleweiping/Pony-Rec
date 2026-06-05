@@ -162,6 +162,21 @@ also include:
     package auditor tests (`40 passed`). This changes packaging discipline
     only; it does not mark the running signal row complete and does not create
     paper-ready evidence.
+    Guarded-plan hardening while the row is active: at the 2026-06-06 07:52 CST
+    monitor, PID `3543564` was still active/unique, GPU was `93%`, root disk
+    had `25,982,087,168` bytes free / `87%` used, fatal scan was clean, and the
+    first chunk had reached `41214/505000` processed prompts. Codex updated
+    `scripts/audit/main_plan_ccrp_signal_generation.py` and regenerated the
+    tracked guarded plan artifacts so generated valid/test signal rows have
+    split-specific source-audit commands and local post-completion sync/package
+    audit templates before selector use. The generated shell still exits before
+    execution and does not include local sync commands. Verification passed with
+    `tests\test_plan_ccrp_signal_generation.py`,
+    `tests\test_audit_paper_critical_modules.py`, and
+    `tests\test_sync_ccrp_signal_evidence_package.py`, plus related signal
+    runner/source/package-audit tests (`51 passed`). This is
+    planning hardening only; it does not complete the signal row or any
+    paper-critical module.
     Paper-facing comparison ledger checkpoint on 2026-06-06 02:35-02:40 CST:
     a GPT-5.5 xhigh read-only sidecar reviewer confirmed the compact
     four-domain comparison certificate was supported but lacked a strict

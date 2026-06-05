@@ -154,6 +154,79 @@ def _full_audit_outputs(output_dir: str, domain: str) -> dict[str, str]:
     }
 
 
+def _generated_signal_path(signal_out: str, split: str) -> str:
+    return f"{signal_out.rstrip('/')}/{split}_ccrp_signal_rows.csv"
+
+
+def _signal_source_audit_outputs(signal_out: str, split: str) -> dict[str, str]:
+    base = signal_out.rstrip("/")
+    return {
+        "json": f"{base}/{split}_ccrp_signal_source_audit.json",
+        "csv": f"{base}/{split}_ccrp_signal_source_audit.csv",
+    }
+
+
+def _signal_source_audit_command(
+    *,
+    domain: str,
+    split: str,
+    signal_path: str,
+    output_dir: str,
+    expected_events: int,
+    expected_candidates_per_event: int,
+) -> str:
+    audit_out = _signal_source_audit_outputs(output_dir, split)
+    return _line_command(
+        [
+            "python",
+            "scripts/audit/main_audit_ccrp_uncertainty_sources.py",
+            "--candidate_items_path",
+            _candidate_path(domain, split),
+            "--source",
+            f"candidate_signal={signal_path}",
+            "--expected_events",
+            str(expected_events),
+            "--expected_candidates_per_event",
+            str(expected_candidates_per_event),
+            "--output_json",
+            audit_out["json"],
+            "--output_csv",
+            audit_out["csv"],
+        ]
+    )
+
+
+def _local_signal_sync_command(
+    *,
+    domain: str,
+    split: str,
+    signal_out: str,
+    expected_events: int,
+    expected_candidates_per_event: int,
+) -> str:
+    source_audit = _signal_source_audit_outputs(signal_out, split)["json"]
+    return _line_command(
+        [
+            "python",
+            "scripts/audit/main_sync_ccrp_signal_evidence_package.py",
+            "--remote_signal_dir",
+            signal_out,
+            "--remote_extra_file",
+            f"ccrp_signal_rows_{domain}_{split}_TODO_TIMESTAMP.log",
+            "--local_package_dir",
+            signal_out,
+            "--expected_events",
+            str(expected_events),
+            "--expected_candidates_per_event",
+            str(expected_candidates_per_event),
+            "--source_audit_json",
+            source_audit,
+            "--copy",
+            "--quiet",
+        ]
+    )
+
+
 def _module_package_audit_command(
     *,
     module: str,
@@ -211,6 +284,10 @@ def build_domain_plan(
     valid_signal = _valid_signal_placeholder(domain)
     test_signal = _test_signal_placeholder(domain)
     audit_source_placeholder = f"candidate_signal={test_signal}"
+    generated_valid_signal = _generated_signal_path(signal_out, "valid")
+    generated_test_signal = _generated_signal_path(signal_out, "test")
+    valid_signal_audit = _signal_source_audit_outputs(signal_out, "valid")
+    test_signal_audit = _signal_source_audit_outputs(signal_out, "test")
     ccrp_eval_candidates = [
         f"outputs/{prefix}_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
         f"outputs/{prefix}_ccrp_v3_same_candidate/tables/ranking_eval_records.csv",
@@ -233,6 +310,12 @@ def build_domain_plan(
             "test_ranking": _ranking_path(domain, "test"),
             "valid_signal_placeholder": valid_signal,
             "test_signal_placeholder": test_signal,
+            "generated_valid_signal": generated_valid_signal,
+            "generated_test_signal": generated_test_signal,
+            "valid_signal_source_audit_json": valid_signal_audit["json"],
+            "valid_signal_source_audit_csv": valid_signal_audit["csv"],
+            "test_signal_source_audit_json": test_signal_audit["json"],
+            "test_signal_source_audit_csv": test_signal_audit["csv"],
             "selector_output_dir": selector_out,
             "signal_output_dir": signal_out,
             "component_ablation_output_dir": selector_out,
@@ -273,6 +356,22 @@ def build_domain_plan(
                     "--expected_candidates_per_event",
                     str(expected_candidates_per_event),
                 ]
+            ),
+            "audit_generated_valid_signal_rows_template": _signal_source_audit_command(
+                domain=domain,
+                split="valid",
+                signal_path=generated_valid_signal,
+                output_dir=signal_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
+            ),
+            "audit_generated_test_signal_rows_template": _signal_source_audit_command(
+                domain=domain,
+                split="test",
+                signal_path=generated_test_signal,
+                output_dir=signal_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
             ),
             "full_audit_candidate_signal_template": _line_command(
                 [
@@ -410,6 +509,22 @@ def build_domain_plan(
                 expected_controls=DEFAULT_HYPERPARAMETER_CONTROLS,
             ),
         },
+        "local_post_completion_commands": {
+            "sync_valid_signal_package_template": _local_signal_sync_command(
+                domain=domain,
+                split="valid",
+                signal_out=signal_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
+            ),
+            "sync_test_signal_package_template": _local_signal_sync_command(
+                domain=domain,
+                split="test",
+                signal_out=signal_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
+            ),
+        },
         "execution_gates": [
             "Do not run while any official baseline row or matching baseline Python process is active.",
             "Replace signal placeholders only with artifacts classified as recomputable_signal_rows or paper_ready_uncertainty_rows.",
@@ -417,6 +532,7 @@ def build_domain_plan(
             "The signal-generation prompt must not include labels, positive_item_index, ranks, official-baseline outputs, or test-selected hyperparameters.",
             "Do not use formal C-CRP scores.csv as the uncertainty source when it lacks uncertainty columns.",
             "Use validation-only selection; test rows must be transformed/evaluated only after selection is fixed.",
+            "After each generated split completes, run source audit and local signal package sync/audit before selector use.",
             "Require exact same-candidate score coverage before importing or reporting table metrics.",
         ],
     }
@@ -537,8 +653,16 @@ def guarded_shell_script(plan: dict[str, Any]) -> str:
                 f"# {domain}: if no audited saved signal artifact exists, generate valid signal rows.",
                 domain_plan["commands"]["generate_valid_signal_rows_template"],
                 "",
+                f"# {domain}: audit generated valid signal rows before selector use.",
+                domain_plan["commands"]["audit_generated_valid_signal_rows_template"],
+                "",
                 f"# {domain}: if no audited saved signal artifact exists, generate test signal rows.",
                 domain_plan["commands"]["generate_test_signal_rows_template"],
+                "",
+                f"# {domain}: audit generated test signal rows before selector use.",
+                domain_plan["commands"]["audit_generated_test_signal_rows_template"],
+                "",
+                f"# {domain}: run local_post_completion_commands from the local checkout to sync signal evidence.",
                 "",
                 f"# {domain}: audit the chosen signal artifact after replacing TODO paths.",
                 domain_plan["commands"]["full_audit_candidate_signal_template"],
