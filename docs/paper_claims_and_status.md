@@ -514,6 +514,19 @@ same-candidate tests before any paper-wide SOTA claim.
    repeat large-file/cache/temp/archive and prediction cleanup audit found no
    safe meaningful deletion candidate. This remains active monitor-only
    evidence, not a completed RLMRec row.
+   A 2026-06-05 10:36 CST follow-up found the same runner/adapter PIDs alive
+   and unique, with exactly one matching RLMRec adapter and zero matching
+   IRLLRec adapters. Official RLMRec training crossed the two-thirds monitor
+   checkpoint on the default `3000`-epoch path at epoch `2000/3000` with train
+   loss `1.506144`. Final RLMRec evidence still remained placeholder-only
+   (`4.0K`) with no final scores, provenance, score audit, imported tables,
+   predictions, completion marker, OOM/no-space, killed, traceback, or error
+   marker. Disk remained warning-level at about `9.3G` free / `96%` used; a
+   fresh cleanup audit found no safe deletion target because caches/tmp were
+   small, no temp/archive/part/core files existed, and the largest files were
+   active RLMRec intermediates, protected task splits, retained completed
+   checkpoints/evidence, or historical C-CRP/fusion summaries. This remains
+   active monitor-only evidence, not a completed RLMRec row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

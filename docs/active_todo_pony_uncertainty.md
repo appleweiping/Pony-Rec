@@ -1795,6 +1795,23 @@ retained completed checkpoints/evidence, or older predictions lacking the
 required server-final/local-light proof. Continue monitoring; do not start
 another Tools row while RLMRec is active.
 
+Monitor update 2026-06-05 10:36 CST: runner PID `3347729` and adapter PID
+`3347738` remained alive and unique, with exactly one matching RLMRec adapter
+process and zero matching IRLLRec adapter processes. Official RLMRec training
+crossed the two-thirds monitor checkpoint on the default `3000`-epoch path:
+latest observed line was `[rlmrec-official] epoch=2000 train_loss=1.506144`.
+This remains active monitor-only evidence, not a completed or table-eligible
+row: final RLMRec evidence stayed placeholder-only (`4.0K`) with no final
+scores, provenance, score audit, imported tables, predictions, completion
+marker, OOM/no-space, killed, traceback, or error marker. Disk remained
+warning-level at about `9.3G` free / `96%` used. A fresh cleanup audit found no
+safe deletion target: caches/tmp were small, no temp/archive/part/core files
+were present, and the largest files were active RLMRec intermediates,
+protected task splits, retained completed checkpoints/evidence, or historical
+C-CRP/fusion summaries that are not disposable without a separate archive
+decision. Continue monitoring; do not start another Tools row while RLMRec is
+active.
+
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
 `irllrec_intent` each passed the compact gate with `sample_count=10000`,
