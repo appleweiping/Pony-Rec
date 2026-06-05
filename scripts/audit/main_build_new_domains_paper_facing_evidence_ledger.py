@@ -136,11 +136,31 @@ def _official_paths(local_dir: str) -> dict[str, str]:
     }
 
 
+def _line_count(path: Path) -> int | None:
+    if not path.exists() or not path.is_file():
+        return None
+    with path.open("rb") as handle:
+        return sum(1 for _ in handle)
+
+
 def _ccrp_paths(domain: str) -> dict[str, str]:
     base = Path("outputs") / f"{domain}_large10000_100neg_ccrp_v3"
+    imported = Path("outputs") / f"{domain}_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate"
     return {
         "ccrp_report_path": str(base / "report.json") if (base / "report.json").exists() else "",
         "ccrp_user_ranks_path": str(base / "user_ranks.jsonl") if (base / "user_ranks.jsonl").exists() else "",
+        "local_ccrp_summary_path": str(imported / "tables" / "same_candidate_external_baseline_summary.csv")
+        if (imported / "tables" / "same_candidate_external_baseline_summary.csv").exists()
+        else "",
+        "local_ccrp_eval_path": str(imported / "tables" / "ranking_eval_records.csv")
+        if (imported / "tables" / "ranking_eval_records.csv").exists()
+        else "",
+        "local_ccrp_metrics_path": str(imported / "tables" / "ranking_metrics.csv")
+        if (imported / "tables" / "ranking_metrics.csv").exists()
+        else "",
+        "local_ccrp_coverage_path": str(imported / "tables" / "external_score_coverage.csv")
+        if (imported / "tables" / "external_score_coverage.csv").exists()
+        else "",
     }
 
 
@@ -212,6 +232,10 @@ def _build_row(
         "local_server_evidence_consistency_ok": "",
         "ccrp_report_path": "",
         "ccrp_user_ranks_path": "",
+        "local_ccrp_summary_path": "",
+        "local_ccrp_eval_path": "",
+        "local_ccrp_metrics_path": "",
+        "local_ccrp_coverage_path": "",
         "ccrp_local_event_restat_ready": method_row.get("ccrp_local_event_restat_ready", ""),
         "table_eligibility": "",
         "row_warnings": "",
@@ -222,6 +246,19 @@ def _build_row(
     if method == CCRP_METHOD:
         paths = _ccrp_paths(domain)
         output.update(paths)
+        user_rank_lines = _line_count(Path(paths["ccrp_user_ranks_path"])) if paths["ccrp_user_ranks_path"] else None
+        eval_lines = _line_count(Path(paths["local_ccrp_eval_path"])) if paths["local_ccrp_eval_path"] else None
+        local_event_ready = (
+            bool(paths["ccrp_report_path"])
+            and bool(paths["ccrp_user_ranks_path"])
+            and bool(paths["local_ccrp_summary_path"])
+            and bool(paths["local_ccrp_eval_path"])
+            and bool(paths["local_ccrp_metrics_path"])
+            and bool(paths["local_ccrp_coverage_path"])
+            and user_rank_lines == 10_000
+            and eval_lines == 10_001
+        )
+        output["ccrp_local_event_restat_ready"] = str(local_event_ready)
         output["implementation_status"] = "internal_completed"
         output["blocker_count"] = "0" if _as_bool(domain_summary.get("gate_ok")) is True else "1"
         output["blockers_json"] = "[]"
@@ -231,7 +268,14 @@ def _build_row(
             warnings.append("missing_local_ccrp_report")
         if not paths["ccrp_user_ranks_path"]:
             warnings.append("missing_local_ccrp_user_ranks")
-        if _as_bool(method_row.get("ccrp_local_event_restat_ready")) is not True:
+        if paths["ccrp_user_ranks_path"] and user_rank_lines != 10_000:
+            warnings.append("ccrp_user_ranks_lines_not_10000")
+        if paths["local_ccrp_eval_path"] and eval_lines != 10_001:
+            warnings.append("ccrp_ranking_eval_records_lines_not_10001")
+        for key in ("local_ccrp_summary_path", "local_ccrp_eval_path", "local_ccrp_metrics_path", "local_ccrp_coverage_path"):
+            if not paths[key]:
+                warnings.append(f"missing_{key}")
+        if not local_event_ready:
             warnings.append("compact_certificate_not_self_contained_for_event_restat")
     else:
         evidence_dir = str(method_row.get("evidence_path") or (evidence_row or {}).get("local_dir") or "")
@@ -427,6 +471,10 @@ LEDGER_FIELDS = [
     "local_server_evidence_consistency_ok",
     "ccrp_report_path",
     "ccrp_user_ranks_path",
+    "local_ccrp_summary_path",
+    "local_ccrp_eval_path",
+    "local_ccrp_metrics_path",
+    "local_ccrp_coverage_path",
     "ccrp_local_event_restat_ready",
     "table_eligibility",
     "row_warnings",

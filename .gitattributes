@@ -1,5 +1,7 @@
 # Preserve generated evidence bytes so sha256 manifests stay meaningful.
 outputs/baselines/official_adapters/** -text
+outputs/*_large10000_100neg_ccrp_v3/user_ranks.jsonl -text
+outputs/*_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/*.csv -text
 outputs/summary/*.csv -text
 outputs/summary/*.json -text
 outputs/summary/*.md -text

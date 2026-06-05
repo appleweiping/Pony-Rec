@@ -85,8 +85,25 @@ def _method_rows(tmp_path: Path) -> list[dict]:
     rows = []
     for domain in DOMAINS:
         ccrp_base = Path("outputs") / f"{domain}_large10000_100neg_ccrp_v3"
+        ccrp_tables = (
+            Path("outputs")
+            / f"{domain}_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate"
+            / "tables"
+        )
         ccrp_base.mkdir(parents=True, exist_ok=True)
+        ccrp_tables.mkdir(parents=True, exist_ok=True)
         (ccrp_base / "report.json").write_text("{}\n", encoding="utf-8")
+        (ccrp_base / "user_ranks.jsonl").write_text("".join("{}\n" for _ in range(10_000)), encoding="utf-8")
+        (ccrp_tables / "same_candidate_external_baseline_summary.csv").write_text(
+            "status_label,artifact_class\nsame_schema_internal_method,completed_result\n",
+            encoding="utf-8",
+        )
+        (ccrp_tables / "ranking_eval_records.csv").write_text(
+            "source_event_id,positive_rank\n" + "".join(f"e{i},1\n" for i in range(10_000)),
+            encoding="utf-8",
+        )
+        (ccrp_tables / "ranking_metrics.csv").write_text("sample_count,avg_candidates\n10000,101\n", encoding="utf-8")
+        (ccrp_tables / "external_score_coverage.csv").write_text("score_coverage_rate\n1.0\n", encoding="utf-8")
         for method in (CCRP_METHOD, *OFFICIAL_METHODS):
             is_ccrp = method == CCRP_METHOD
             evidence_path = ""
@@ -166,7 +183,8 @@ def test_build_ledger_emits_paper_facing_rows(tmp_path, monkeypatch):
     assert official["table_eligibility"] == "main_official_comparison_eligible"
     ccrp = next(row for row in ledger["rows"] if row["method"] == CCRP_METHOD)
     assert ccrp["table_eligibility"] == "main_internal_comparison_compact_certificate"
-    assert "compact_certificate_not_self_contained_for_event_restat" in ccrp["row_warnings"]
+    assert ccrp["ccrp_local_event_restat_ready"] == "True"
+    assert ccrp["row_warnings"] == ""
 
 
 def test_build_ledger_fails_when_official_has_blocker(tmp_path, monkeypatch):

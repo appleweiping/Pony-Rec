@@ -120,6 +120,16 @@ This closes the paper-table evidence-ledger gap for the four-domain official
 comparison, while paper readiness remains blocked by missing full-scale
 uncertainty signal rows and the Phase 2.5 storage gate.
 
+The 2026-06-06 02:55 CST C-CRP local evidence backfill copied the missing
+Sports/Toys `user_ranks.jsonl` files and missing Sports imported C-CRP tables
+from `pony-rec-gpu` without running experiments or modifying server files. The
+post-backfill certificate audit and ledger
+`outputs/summary/paper_critical/*post_ccrp_backfill_20260606_0255*` both report
+`ok=true`, zero failures, and zero warnings. The comparison evidence ledger is
+now locally self-contained for the four-domain C-CRP event/ranking records, but
+paper readiness remains blocked by missing full-scale uncertainty signal rows
+and the Phase 2.5 storage gate.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:

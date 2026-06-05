@@ -28,6 +28,44 @@ EXPECTED_SCORE_CSV_LINES = EXPECTED_USERS * EXPECTED_CANDIDATES_PER_USER + 1
 EXPECTED_EVAL_CSV_LINES = EXPECTED_USERS + 1
 
 
+def _line_count(path: Path) -> int | None:
+    if not path.exists() or not path.is_file():
+        return None
+    with path.open("rb") as handle:
+        return sum(1 for _ in handle)
+
+
+def _ccrp_local_evidence_status(domain: str) -> dict[str, Any]:
+    raw_dir = Path("outputs") / f"{domain}_large10000_100neg_ccrp_v3"
+    imported_dir = Path("outputs") / f"{domain}_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate"
+    paths = {
+        "report_json": raw_dir / "report.json",
+        "user_ranks_jsonl": raw_dir / "user_ranks.jsonl",
+        "ranking_eval_records_csv": imported_dir / "tables" / "ranking_eval_records.csv",
+        "ranking_metrics_csv": imported_dir / "tables" / "ranking_metrics.csv",
+        "summary_csv": imported_dir / "tables" / "same_candidate_external_baseline_summary.csv",
+        "coverage_csv": imported_dir / "tables" / "external_score_coverage.csv",
+    }
+    failures: list[str] = []
+    line_counts = {
+        "user_ranks_jsonl": _line_count(paths["user_ranks_jsonl"]),
+        "ranking_eval_records_csv": _line_count(paths["ranking_eval_records_csv"]),
+    }
+    for label, path in paths.items():
+        if not path.exists() or not path.is_file():
+            failures.append(f"missing_local_ccrp_{label}")
+    if line_counts["user_ranks_jsonl"] != EXPECTED_USERS:
+        failures.append("ccrp_user_ranks_lines_not_10000")
+    if line_counts["ranking_eval_records_csv"] != EXPECTED_EVAL_CSV_LINES:
+        failures.append("ccrp_ranking_eval_records_lines_not_10001")
+    return {
+        "ready": not failures,
+        "failures": failures,
+        "line_counts": line_counts,
+        "paths": {label: str(path) for label, path in paths.items()},
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -215,8 +253,12 @@ def _audit_method_rows(rows: list[dict[str, str]]) -> dict[str, Any]:
                     failures.append(f"{domain}/{method}:kind_not_internal_method")
                 if status_label != "same_schema_internal_method":
                     failures.append(f"{domain}/{method}:status_not_same_schema_internal_method")
-                if _as_bool(row.get("ccrp_local_event_restat_ready")) is not True:
-                    warnings.append(f"{domain}/{method}:local_event_restat_not_self_contained")
+                ccrp_status = _ccrp_local_evidence_status(domain)
+                if not ccrp_status["ready"]:
+                    warnings.append(
+                        f"{domain}/{method}:local_event_restat_not_self_contained:"
+                        + ",".join(ccrp_status["failures"])
+                    )
             else:
                 official_count += 1
                 if method not in OFFICIAL_METHODS:

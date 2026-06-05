@@ -2762,6 +2762,25 @@ local `user_ranks.jsonl` is missing. This closes the strict full-metric
 provenance-ledger gap for the four-domain comparison table; it does not unblock
 Phase 2.5 signal-row modules.
 
+Post-CCRP local evidence backfill checkpoint: at 2026-06-06 02:55 CST, Codex
+copied missing C-CRP local evidence from the project server only: Sports/Toys
+`outputs/{sports,toys}_large10000_100neg_ccrp_v3/user_ranks.jsonl` and the
+missing Sports imported same-candidate C-CRP tables under
+`outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/`.
+No experiment was run and no server file was modified. The copied
+`user_ranks.jsonl` files each have `10,000` lines, and the Sports
+`ranking_eval_records.csv` has `10,001` lines including header. The C-CRP
+certificate audit and paper-facing ledger scripts now check actual local C-CRP
+evidence instead of the stale `ccrp_local_event_restat_ready` field in the
+older compact CSV. Current artifacts:
+`outputs/summary/paper_critical/cross_domain_official_ccrp_certificate_audit_post_ccrp_backfill_20260606_0255.{json,md}`,
+`outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.{csv,json,md}`,
+and
+`outputs/summary/paper_critical/new_domains_ccrp_local_evidence_backfill_20260606_0255.sha256`.
+Both regenerated audits report `ok=true`, zero failures, and zero warnings,
+while `paper_ready=false` remains because Phase 2.5 uncertainty signal rows are
+still missing.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -2770,7 +2789,7 @@ Phase 2.5 signal-row modules.
    invalid row.
 2. Use `outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*` as
    the compact four-new-domain comparison-gate certificate, and use
-   `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.*`
+   `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.*`
    as the full-metric provenance ledger for paper-table drafting. Do not use
    stale partial drafts that still say Home/Tools are incomplete.
 3. Prioritize Phase 2.5 paper-critical modules before any paper-readiness

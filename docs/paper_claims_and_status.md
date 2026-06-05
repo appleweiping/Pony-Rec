@@ -119,6 +119,22 @@ also include:
     four-domain official comparison table, but `paper_ready=false` remains
     because the uncertainty observation, component ablation, and hyperparameter
     modules still need full-scale uncertainty signal rows.
+    Post-CCRP local evidence backfill on 2026-06-06 02:55 CST copied missing
+    C-CRP evidence from the project server only: Sports/Toys
+    `user_ranks.jsonl` and the missing Sports imported C-CRP same-candidate
+    tables. The copied rank files each have `10,000` lines, and Sports
+    `ranking_eval_records.csv` has `10,001` lines including header. Updated
+    scripts now compute C-CRP local event-restatement readiness from actual
+    local files rather than the stale compact-CSV flag. Current artifacts:
+    `outputs/summary/paper_critical/cross_domain_official_ccrp_certificate_audit_post_ccrp_backfill_20260606_0255.{json,md}`,
+    `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.{csv,json,md}`,
+    and
+    `outputs/summary/paper_critical/new_domains_ccrp_local_evidence_backfill_20260606_0255.sha256`.
+    Both regenerated artifacts report `ok=true`, zero failures, and zero
+    warnings. This closes the local C-CRP event-evidence packaging warning for
+    the four-domain comparison table; it still does not provide the missing
+    uncertainty signal rows required for the observation, ablation, and
+    hyperparameter modules.
     Storage preflight/cleanup for this next gate is recorded in
     `outputs/summary/paper_critical/server_storage_preflight_20260605.*`,
     `outputs/summary/tools_llmesr_completed_adapter_embedding_cleanup_20260605.{json,sha256}`,

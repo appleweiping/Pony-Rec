@@ -33,6 +33,31 @@ def _touch(path: Path) -> str:
     return str(path)
 
 
+def _write_ccrp_local_evidence(root: Path) -> None:
+    for domain in REQUIRED_DOMAINS:
+        raw = root / "outputs" / f"{domain}_large10000_100neg_ccrp_v3"
+        tables = (
+            root
+            / "outputs"
+            / f"{domain}_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate"
+            / "tables"
+        )
+        raw.mkdir(parents=True, exist_ok=True)
+        tables.mkdir(parents=True, exist_ok=True)
+        (raw / "report.json").write_text("{}\n", encoding="utf-8")
+        (raw / "user_ranks.jsonl").write_text("".join("{}\n" for _ in range(10_000)), encoding="utf-8")
+        (tables / "ranking_eval_records.csv").write_text(
+            "source_event_id,positive_rank\n" + "".join(f"e{i},1\n" for i in range(10_000)),
+            encoding="utf-8",
+        )
+        (tables / "ranking_metrics.csv").write_text("sample_count,avg_candidates\n10000,101\n", encoding="utf-8")
+        (tables / "same_candidate_external_baseline_summary.csv").write_text(
+            "status_label,artifact_class\nsame_schema_internal_method,completed_result\n",
+            encoding="utf-8",
+        )
+        (tables / "external_score_coverage.csv").write_text("score_coverage_rate\n1.0\n", encoding="utf-8")
+
+
 def _domain_rows(tmp_path: Path) -> list[dict]:
     rows = []
     for domain in REQUIRED_DOMAINS:
@@ -114,6 +139,7 @@ def _method_rows(tmp_path: Path) -> list[dict]:
 
 
 def _write_valid_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
+    _write_ccrp_local_evidence(tmp_path)
     summary = {
         "all_blocking_checks_ok": True,
         "aris_verdict": "CONDITIONAL_PASS_FOR_COMPACT_FOUR_NEW_DOMAIN_GATE_SUMMARY",
@@ -146,7 +172,8 @@ def _write_valid_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
     )
 
 
-def test_cross_domain_certificate_audit_accepts_valid_compact_certificate(tmp_path):
+def test_cross_domain_certificate_audit_accepts_valid_compact_certificate(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     summary_json, domain_csv, method_csv, evidence_json, paper_json = _write_valid_inputs(tmp_path)
 
     audit = build_audit(
@@ -162,10 +189,11 @@ def test_cross_domain_certificate_audit_accepts_valid_compact_certificate(tmp_pa
     assert audit["paper_ready"] is False
     assert audit["method_rows_audit"]["row_count"] == 36
     assert audit["evidence_consistency_audit"]["ok_count"] == 32
-    assert audit["warnings"]
+    assert audit["warnings"] == []
 
 
-def test_cross_domain_certificate_audit_rejects_missing_official_row(tmp_path):
+def test_cross_domain_certificate_audit_rejects_missing_official_row(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     summary_json, domain_csv, method_csv, evidence_json, paper_json = _write_valid_inputs(tmp_path)
     rows = _method_rows(tmp_path)
     rows = [row for row in rows if not (row["domain"] == "sports" and row["method"] == "llmemb")]
@@ -184,7 +212,8 @@ def test_cross_domain_certificate_audit_rejects_missing_official_row(tmp_path):
     assert "method_rows_total_not_36" in audit["failures"]
 
 
-def test_cross_domain_certificate_audit_rejects_non_significant_domain(tmp_path):
+def test_cross_domain_certificate_audit_rejects_non_significant_domain(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     summary_json, domain_csv, method_csv, evidence_json, paper_json = _write_valid_inputs(tmp_path)
     rows = _domain_rows(tmp_path)
     rows[0]["paired_positive_holm_significant_count"] = "55"
