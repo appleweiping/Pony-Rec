@@ -3,8 +3,8 @@
   "paper_claim_ready": true,
   "review_status": "review_ready_not_camera_final_template",
   "module_scope": "framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence",
-  "generated_at_utc": "2026-06-05T15:19:25+00:00",
-  "git_commit": "999d61e50ce90b1b866b3ac7021b5bc4023346f5",
+  "generated_at_utc": "2026-06-05T21:07:28+00:00",
+  "git_commit": "e81d1a8404b2a90467e1912c53e082e1e3c46dae",
   "command": "python scripts/analysis/main_build_framework_overview_figure.py --output_dir outputs\\summary\\paper_critical\\framework_overview",
   "outputs": {
     "svg": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview.svg",
@@ -14,7 +14,7 @@
     "provenance": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_provenance.json",
     "manifest": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_manifest.sha256"
   },
-  "caption": "Figure: Framework overview for Actionable Uncertainty. The method builds a controlled same-candidate ranking task, extracts task-grounded LLM relevance and evidence signals, calibrates the posterior on validation data, decomposes uncertainty into boundary ambiguity, calibration gap, and evidence insufficiency/counterevidence, and applies risk-adjusted ranking. Official baselines and C-CRP share the same candidate rows, metric importer, provenance, and evidence gates.",
+  "caption": "Figure: Framework overview for Actionable Uncertainty. The method builds a controlled same-candidate ranking task, extracts task-grounded LLM relevance and evidence signals, calibrates the posterior on validation data, decomposes uncertainty into boundary ambiguity, calibration gap, and evidence insufficiency/counterevidence, and applies risk-adjusted ranking. Official baselines and C-CRP share the same candidate rows, metric importer, provenance, and evidence gates; the motivation, ablation, and hyperparameter modules are required gates before a paper-ready claim.",
   "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog",
   "required_visual_elements": [
     "Same-candidate task",
@@ -23,7 +23,7 @@
     "C-CRP uncertainty",
     "Risk-adjusted ranking",
     "Official baseline block",
-    "Paper-critical method evidence",
+    "Required method-evidence gates",
     "Shared evidence gates",
     "risk_score = base_score * (1 - uncertainty)^eta",
     "controlled same-candidate ranking"
@@ -31,6 +31,11 @@
   "formula_alignment": {
     "risk_formula": "risk_score = base_score * (1 - uncertainty)^eta",
     "matches_src_shadow_ccrp_multiplicative_form": true
+  },
+  "evidence_gate_status": {
+    "observation_motivation": "required_not_claimed_by_figure",
+    "component_ablation": "required_not_claimed_by_figure",
+    "hyperparameter_analysis": "required_not_claimed_by_figure"
   },
   "claim_limits": [
     "Does not claim full-catalog recommendation.",

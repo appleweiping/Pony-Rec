@@ -160,6 +160,22 @@ bytes / `94%` used. The action audit is dry-run only
 cleanup, deletion, post-delete gate, baseline launch, or Phase 2.5 experiment
 launch occurred.
 
+The 2026-06-06 05:05 CST framework overview refresh tightened the figure after
+GPT-5.5 xhigh sidecar review by replacing the potentially overclaiming
+`Paper-critical method evidence` label with `Required method-evidence gates`.
+It regenerated the figure package at generator commit
+`e81d1a8404b2a90467e1912c53e082e1e3c46dae`:
+`outputs/summary/paper_critical/framework_overview/framework_overview.{svg,pdf,png}`,
+caption, provenance, and manifest. Visual inspection found the exported PNG
+nonblank and correctly carrying the same-candidate task, LLM signal extraction,
+calibration layer, C-CRP uncertainty decomposition, multiplicative risk formula,
+official baseline block, required method-evidence gates, shared evidence gates,
+and claim boundary. The post-refresh consolidated audit
+`outputs/summary/paper_critical/paper_critical_module_audit_post_framework_gate_wording_20260606_0505.{json,md,sha256}`
+passes with framework status `review_ready` but keeps `paper_ready=false`
+because signal rows and storage remain blocked. No experiment or cleanup was
+run.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter

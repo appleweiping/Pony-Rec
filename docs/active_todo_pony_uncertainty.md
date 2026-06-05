@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 04:47 CST
+Last updated: 2026-06-06 05:05 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2929,6 +2929,27 @@ used, and `preapproval_checks_ready_except_disk=true` with only
 `will_delete=false`, `execution_status=dry_run_no_remote_commands`, and
 `failures=[]`. No cleanup, deletion, post-delete gate, experiment launch, or
 baseline launch occurred.
+
+Framework overview refresh: at 2026-06-06 05:05 CST, Codex tightened the
+framework figure wording after GPT-5.5 xhigh sidecar review so the lower
+method-evidence box says `Required method-evidence gates` rather than implying
+the blocked modules are already complete. Codex regenerated the paper-critical
+framework overview package at generator commit
+`e81d1a8404b2a90467e1912c53e082e1e3c46dae` without running any experiment.
+Refreshed artifacts:
+`outputs/summary/paper_critical/framework_overview/framework_overview.{svg,pdf,png}`,
+`framework_overview_caption.md`, `framework_overview_provenance.json`, and
+`framework_overview_manifest.sha256`. Visual inspection confirmed a nonblank
+`2559x1378` PNG with the same-candidate task, LLM signal extraction,
+calibration layer, C-CRP uncertainty decomposition, multiplicative
+`risk_score = base_score * (1 - uncertainty)^eta` formula, risk-adjusted
+ranking, official baseline block, required method-evidence gates, shared
+evidence gates, and explicit claim boundary. Consolidated audit artifact
+`outputs/summary/paper_critical/paper_critical_module_audit_post_framework_gate_wording_20260606_0505.{json,md,sha256}`
+reports `ok=true`, `framework_overview_scaffold_ready=true`, framework status
+`review_ready`, and `paper_ready=false` because full-scale signal rows remain
+missing and the Phase 2.5 storage gate is still closed. No cleanup, deletion,
+experiment launch, or baseline launch occurred.
 
 ## Required Next Actions
 

@@ -508,6 +508,23 @@ project Python process, completed Tools LLM2Rec evidence still present, and
 does not unblock paper-critical signal generation until the disk expansion or
 explicit archive/retention decision is made.
 
+Framework overview refresh on 2026-06-06 05:05 CST: after GPT-5.5 xhigh
+sidecar review, Codex changed the figure wording from a potentially
+overclaiming `Paper-critical method evidence` label to
+`Required method-evidence gates`. Codex regenerated the framework overview
+figure package at generator commit
+`e81d1a8404b2a90467e1912c53e082e1e3c46dae`, updating the editable SVG, PDF/PNG
+exports, caption, provenance, and manifest under
+`outputs/summary/paper_critical/framework_overview/`. The refreshed figure
+keeps the claim boundary visible and uses the multiplicative C-CRP risk formula
+`risk_score = base_score * (1 - uncertainty)^eta`. The post-refresh audit
+`outputs/summary/paper_critical/paper_critical_module_audit_post_framework_gate_wording_20260606_0505.{json,md,sha256}`
+reports `ok=true`, `framework_overview_scaffold_ready=true`, and framework
+status `review_ready`, while preserving `paper_ready=false` because the
+observation, component-ablation, and hyperparameter modules still require
+full-scale uncertainty signal rows and the storage gate remains closed. No
+experiment or cleanup was run.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 
