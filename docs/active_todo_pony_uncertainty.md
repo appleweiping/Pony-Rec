@@ -2842,6 +2842,29 @@ and module-package audit commands while the generated shell remains stopped by
 no server experiment was launched, and component-ablation claims remain blocked
 until the full-scale package and audit pass.
 
+Consolidated paper-critical audit hardening: Codex updated
+`scripts/audit/main_audit_paper_critical_modules.py` so the go/no-go audit now
+checks component-ablation execution support explicitly. The audit requires the
+selector full-metric path, the dedicated component-ablation builder, the
+Phase 2.5 module package audit, and guarded-plan command templates for
+selection, component summary, observation, hyperparameter curves, and package
+audits. Fresh artifacts:
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0348.{json,md,sha256}`
+and
+`outputs/summary/paper_critical/paper_critical_module_audit_post_component_execution_support_20260606_0348.{json,md,sha256}`.
+The module audit reports `ok=true`, `paper_ready=false`,
+`component_ablation_execution_support_ready=true`,
+`four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
+`phase2_5_storage_launch_allowed=false`. The fresh storage audit found no
+active project Python process, GPU idle, `12,406,190,080` free bytes,
+`3,699,937,280` bytes deficit to the 15GiB floor, `94%` disk use, and no
+safe-now recoverable bytes. The lowest-risk high-yield candidate remains the
+Tools LLM2Rec upstream embedding cache, but it still requires explicit
+archive/retention approval before deletion. Focused verification:
+`python -m pytest tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py tests\test_export_ccrp_scored_rows_from_signal.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py`
+(`29 passed`). No cleanup, deletion, experiment launch, or baseline launch
+occurred.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

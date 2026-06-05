@@ -536,6 +536,16 @@ full @5/@10/@20 + MRR reporting are preserved.
 Gates: 8/10. Numeric gates are defined for coverage, joins, plotted values, and
 readiness.
 
+Consolidated audit update (2026-06-06 03:48 CST): the paper-critical module
+audit now checks component-ablation execution support before returning
+`ok=true`. This includes the selector full-metric path, dedicated
+`main_build_ccrp_component_ablation_summary.py` builder, module-package audit
+requirements, and guarded-plan command templates. Current checkpoint:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_component_execution_support_20260606_0348.{json,md,sha256}`.
+It reports execution support ready but paper readiness false because full-scale
+valid/test uncertainty signal rows remain missing and the storage launch gate
+is still closed.
+
 Feasibility: 7/10. Most work reuses existing C-CRP signal/score infrastructure,
 but the signal-row paths must be audited before launch.
 

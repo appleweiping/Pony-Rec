@@ -98,6 +98,15 @@ def _seed_signal_audits(root: Path) -> None:
 
 def _seed_guarded_plan(root: Path) -> None:
     base = root / "outputs/summary/paper_critical/ccrp_signal_generation_plan"
+    commands = {
+        "select_ccrp_ablation_and_scores_template": "python scripts/misc/main_select_ccrp_variant_on_valid.py",
+        "build_component_ablation_summary_template": "python scripts/analysis/main_build_ccrp_component_ablation_summary.py",
+        "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module component_ablation",
+        "build_observation_study_template": "python scripts/analysis/main_build_uncertainty_observation_study.py",
+        "audit_observation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module observation_motivation",
+        "plot_hyperparameter_curves_template": "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py",
+        "audit_hyperparameter_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module hyperparameter_analysis",
+    }
     _write(
         base / "ccrp_signal_generation_plan_20260604.json",
         json.dumps(
@@ -106,13 +115,44 @@ def _seed_guarded_plan(root: Path) -> None:
                 "status_label": "planning_only_not_executed",
                 "domains": ["sports", "toys"],
                 "current_blocker": "Full-scale artifacts are score-only.",
+                "domain_plans": [
+                    {"domain": "sports", "commands": commands},
+                    {"domain": "toys", "commands": commands},
+                ],
             }
         )
         + "\n",
     )
     _write(
         base / "ccrp_signal_generation_plan_20260604.sh",
-        "#!/usr/bin/env bash\nexit 2\ncd /repo\nTODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\nTODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n",
+        "#!/usr/bin/env bash\n"
+        "exit 2\n"
+        "cd /repo\n"
+        "TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n"
+        "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n"
+        "python scripts/analysis/main_build_ccrp_component_ablation_summary.py\n"
+        "python scripts/audit/main_audit_phase2_5_module_package.py --module component_ablation\n",
+    )
+
+
+def _seed_component_ablation_support_scripts(root: Path) -> None:
+    _write(
+        root / "scripts/misc/main_select_ccrp_variant_on_valid.py",
+        "FULL_REPORTING_KS = (5, 10, 20)\nmetrics = compute(..., ks=FULL_REPORTING_KS)\n",
+    )
+    _write(
+        root / "scripts/analysis/main_build_ccrp_component_ablation_summary.py",
+        "FULL_KS = (5, 10, 20)\n"
+        "component_ablation_summary.csv\n"
+        "component_ablation_provenance.json\n"
+        "selector_provenance_selected_on_not_valid\n"
+        "selected_score_mode_not_full_for_component_ablation\n"
+        "valid_sweep_missing_ablation\n"
+        "_evaluate_candidate_scores(\n",
+    )
+    _write(
+        root / "scripts/audit/main_audit_phase2_5_module_package.py",
+        "component_ablation_summary.csv\nvalid_ccrp_sweep.csv\nselected_test_metrics.csv\n",
     )
 
 
@@ -196,6 +236,7 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_ablation_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
 
     audit = build_module_audit(tmp_path)
@@ -203,6 +244,7 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     assert audit["ok"] is True
     assert audit["paper_ready"] is False
     assert audit["summary"]["component_inventory_ready"] is True
+    assert audit["summary"]["component_ablation_execution_support_ready"] is True
     assert audit["summary"]["four_domain_evidence_consistent"] is False
     assert audit["summary"]["phase2_5_storage_launch_allowed"] is False
     assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is True
@@ -220,6 +262,7 @@ def test_audit_integrates_evidence_consistency_and_storage_gate(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_ablation_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
     evidence_path = _seed_evidence_consistency(tmp_path, ok=True)
     storage_path = _seed_storage_audit(tmp_path, launch_allowed=False)
@@ -241,6 +284,7 @@ def test_audit_detects_framework_manifest_mismatch(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_ablation_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
     _write(tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview.svg", "<svg>changed</svg>\n")
 
@@ -255,6 +299,7 @@ def test_write_markdown_summary(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
+    _seed_component_ablation_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
     audit = build_module_audit(tmp_path)
     output = tmp_path / "audit.md"
@@ -266,3 +311,4 @@ def test_write_markdown_summary(tmp_path):
     assert "`observation_motivation`" in text
     assert "blocked_missing_signal_rows" in text
     assert "Component inventory ready" in text
+    assert "Component-ablation execution support ready" in text

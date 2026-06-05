@@ -445,6 +445,21 @@ component necessity; paper claims remain blocked until full-scale valid/test
 signal rows exist, the module package is synced/audited, and the storage gate
 clears.
 
+Consolidated audit hardening on 2026-06-06: `scripts/audit/main_audit_paper_critical_modules.py`
+now verifies the component-ablation execution-support layer explicitly:
+selector full-reporting metrics, dedicated component summary builder,
+component package audit requirements, and guarded-plan command templates. The
+refreshed checkpoint
+`outputs/summary/paper_critical/paper_critical_module_audit_post_component_execution_support_20260606_0348.{json,md,sha256}`
+reports `ok=true`, `paper_ready=false`,
+`component_ablation_execution_support_ready=true`,
+`four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
+`phase2_5_storage_launch_allowed=false`. The paired storage audit
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0348.{json,md,sha256}`
+reports no active experiment, GPU idle, `12,406,190,080` free bytes, and a
+`3,699,937,280` byte deficit to the 15GiB launch floor. No cleanup or
+experiment was run.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

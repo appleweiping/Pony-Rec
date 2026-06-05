@@ -821,6 +821,15 @@ The repository is now in M5 (multi-domain SOTA validation):
   `signal_rows_available=false`; observation, ablation, and hyperparameter
   modules remain blocked until full-scale
   uncertainty or recomputable signal rows are located or regenerated.
+  The 2026-06-06 03:48 CST refresh adds an explicit
+  `component_ablation_execution_support_ready` check covering the selector
+  full-metric path, component summary builder, module package audit, and
+  guarded-plan command templates. Artifact:
+  `outputs/summary/paper_critical/paper_critical_module_audit_post_component_execution_support_20260606_0348.{json,md,sha256}`.
+  It reports `ok=true`, `paper_ready=false`,
+  `component_ablation_execution_support_ready=true`,
+  `four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
+  `phase2_5_storage_launch_allowed=false`.
 - The guarded C-CRP signal-generation plan now uses generic active-row
   preconditions: no active official baseline row or matching baseline Python
   process may be running before the placeholder signal paths are filled and the

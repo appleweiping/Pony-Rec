@@ -13,6 +13,9 @@ PAPER_CRITICAL_DIR = Path("outputs/summary/paper_critical")
 FRAMEWORK_DIR = PAPER_CRITICAL_DIR / "framework_overview"
 PLAN_DIR = PAPER_CRITICAL_DIR / "ccrp_signal_generation_plan"
 COMPONENT_INVENTORY_DIR = PAPER_CRITICAL_DIR / "ccrp_component_inventory"
+SELECTOR_SCRIPT = Path("scripts/misc/main_select_ccrp_variant_on_valid.py")
+COMPONENT_BUILDER_SCRIPT = Path("scripts/analysis/main_build_ccrp_component_ablation_summary.py")
+MODULE_PACKAGE_AUDIT_SCRIPT = Path("scripts/audit/main_audit_phase2_5_module_package.py")
 DOMAINS = ("sports", "toys", "home", "tools")
 FRAMEWORK_REVIEW_READY_LABEL = "paper_critical_framework_overview_review_ready"
 FRAMEWORK_REQUIRED_LABELS = (
@@ -35,6 +38,15 @@ DEFAULT_STORAGE_AUDIT_GLOBS = (
     "server_storage_phase2_5_retention_audit_current_*.json",
     "server_storage_phase2_5_retention_audit_ranked_*.json",
     "server_storage_phase2_5_retention_audit_*.json",
+)
+REQUIRED_GUARDED_PLAN_COMMAND_KEYS = (
+    "select_ccrp_ablation_and_scores_template",
+    "build_component_ablation_summary_template",
+    "audit_component_ablation_package_template",
+    "build_observation_study_template",
+    "audit_observation_package_template",
+    "plot_hyperparameter_curves_template",
+    "audit_hyperparameter_package_template",
 )
 
 
@@ -238,6 +250,18 @@ def audit_guarded_signal_plan(root: Path) -> dict[str, Any]:
             failures.append("plan_may_start_experiment")
         if payload.get("status_label") != "planning_only_not_executed":
             failures.append("plan_status_not_planning_only")
+        for domain_plan in payload.get("domain_plans", []) or []:
+            domain = str(domain_plan.get("domain", "unknown"))
+            commands = domain_plan.get("commands") or {}
+            for key in REQUIRED_GUARDED_PLAN_COMMAND_KEYS:
+                if not str(commands.get(key, "")).strip():
+                    failures.append(f"guarded_plan_missing_command:{domain}:{key}")
+            component_cmd = str(commands.get("build_component_ablation_summary_template", ""))
+            if component_cmd and "main_build_ccrp_component_ablation_summary.py" not in component_cmd:
+                failures.append(f"guarded_plan_component_builder_command_mismatch:{domain}")
+            package_cmd = str(commands.get("audit_component_ablation_package_template", ""))
+            if package_cmd and "main_audit_phase2_5_module_package.py" not in package_cmd:
+                failures.append(f"guarded_plan_component_package_audit_command_mismatch:{domain}")
     if not plan_sh.exists():
         failures.append("missing_guarded_plan_shell")
     else:
@@ -250,12 +274,64 @@ def audit_guarded_signal_plan(root: Path) -> dict[str, Any]:
             failures.append("guarded_shell_missing_signal_placeholders")
         if "nohup" in shell:
             failures.append("guarded_shell_contains_nohup")
+        if "main_build_ccrp_component_ablation_summary.py" not in shell:
+            failures.append("guarded_shell_missing_component_builder")
+        if "main_audit_phase2_5_module_package.py" not in shell:
+            failures.append("guarded_shell_missing_module_package_audit")
     return {
         "status": "guarded_plan_ready_not_executable" if not failures else "incomplete",
         "paper_claim_ready": False,
         "files": {"json": str(plan_json), "shell": str(plan_sh)},
         "domains": payload.get("domains", []),
         "current_blocker": payload.get("current_blocker", ""),
+        "required_command_keys": list(REQUIRED_GUARDED_PLAN_COMMAND_KEYS),
+        "failures": failures,
+    }
+
+
+def audit_component_ablation_execution_support(root: Path) -> dict[str, Any]:
+    files = {
+        "selector": root / SELECTOR_SCRIPT,
+        "builder": root / COMPONENT_BUILDER_SCRIPT,
+        "package_audit": root / MODULE_PACKAGE_AUDIT_SCRIPT,
+    }
+    failures: list[str] = []
+    for label, path in files.items():
+        if not path.exists():
+            failures.append(f"missing_{label}_script:{path}")
+        elif path.stat().st_size <= 0:
+            failures.append(f"empty_{label}_script:{path}")
+
+    selector_text = files["selector"].read_text(encoding="utf-8", errors="replace") if files["selector"].exists() else ""
+    if "FULL_REPORTING_KS = (5, 10, 20)" not in selector_text:
+        failures.append("selector_missing_full_reporting_ks")
+    if "ks=FULL_REPORTING_KS" not in selector_text:
+        failures.append("selector_not_passing_full_reporting_ks")
+
+    builder_text = files["builder"].read_text(encoding="utf-8", errors="replace") if files["builder"].exists() else ""
+    required_builder_snippets = {
+        "full_metrics": "FULL_KS = (5, 10, 20)",
+        "summary_csv": "component_ablation_summary.csv",
+        "provenance_json": "component_ablation_provenance.json",
+        "valid_selection_guard": "selector_provenance_selected_on_not_valid",
+        "full_score_mode_guard": "selected_score_mode_not_full_for_component_ablation",
+        "valid_sweep_ablation_guard": "valid_sweep_missing_ablation",
+        "score_evaluator_reuse": "_evaluate_candidate_scores(",
+    }
+    for name, snippet in required_builder_snippets.items():
+        if snippet not in builder_text:
+            failures.append(f"component_builder_missing_guard:{name}")
+
+    package_text = files["package_audit"].read_text(encoding="utf-8", errors="replace") if files["package_audit"].exists() else ""
+    for snippet in ("component_ablation_summary.csv", "valid_ccrp_sweep.csv", "selected_test_metrics.csv"):
+        if snippet not in package_text:
+            failures.append(f"package_audit_missing_component_requirement:{snippet}")
+
+    return {
+        "status": "component_ablation_execution_support_ready" if not failures else "incomplete",
+        "paper_claim_ready": False,
+        "files": {label: str(path) for label, path in files.items()},
+        "required_builder_checks": sorted(required_builder_snippets),
         "failures": failures,
     }
 
@@ -405,6 +481,7 @@ def build_module_audit(
     guarded_plan = audit_guarded_signal_plan(repo)
     framework = audit_framework_overview(repo)
     component_inventory = audit_component_inventory(repo)
+    component_execution_support = audit_component_ablation_execution_support(repo)
     evidence_consistency = audit_evidence_consistency(repo, evidence_consistency_json)
     storage_gate = audit_storage_gate(repo, storage_audit_json)
 
@@ -426,9 +503,11 @@ def build_module_audit(
             else "ready_for_validation_selection_run",
             "paper_claim_ready": False,
             "required_next_gate": "run_leave_one_component_out_after_signal_rows_exist",
-            "blockers": launch_blockers + component_inventory["failures"],
-            "script": "scripts/misc/main_select_ccrp_variant_on_valid.py",
+            "blockers": launch_blockers + component_inventory["failures"] + component_execution_support["failures"],
+            "script": "scripts/analysis/main_build_ccrp_component_ablation_summary.py",
+            "selector_script": "scripts/misc/main_select_ccrp_variant_on_valid.py",
             "inventory": component_inventory,
+            "execution_support": component_execution_support,
         },
         "hyperparameter_analysis": {
             "status": "blocked_missing_signal_rows"
@@ -447,6 +526,7 @@ def build_module_audit(
             framework["artifact_scaffold_ready"]
             and guarded_plan["status"] == "guarded_plan_ready_not_executable"
             and component_inventory["status"] == "inventory_ready_not_executed"
+            and component_execution_support["status"] == "component_ablation_execution_support_ready"
         ),
         "paper_ready": paper_ready,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -454,6 +534,9 @@ def build_module_audit(
         "summary": {
             "framework_overview_scaffold_ready": framework["artifact_scaffold_ready"],
             "component_inventory_ready": component_inventory["status"] == "inventory_ready_not_executed",
+            "component_ablation_execution_support_ready": (
+                component_execution_support["status"] == "component_ablation_execution_support_ready"
+            ),
             "signal_rows_available": signal_state["status"] != "blocked_missing_signal_rows",
             "guarded_plan_ready": guarded_plan["status"] == "guarded_plan_ready_not_executable",
             "four_domain_evidence_consistent": evidence_consistency["status"] == "four_domain_evidence_consistent",
@@ -463,6 +546,7 @@ def build_module_audit(
         "signal_source_state": signal_state,
         "guarded_signal_plan": guarded_plan,
         "component_inventory": component_inventory,
+        "component_ablation_execution_support": component_execution_support,
         "evidence_consistency": evidence_consistency,
         "storage_gate": storage_gate,
         "modules": modules,
@@ -484,6 +568,7 @@ def write_markdown(path: str | Path, audit: dict[str, Any]) -> None:
         f"- Signal rows available: `{audit['summary']['signal_rows_available']}`",
         f"- Framework overview scaffold ready: `{audit['summary']['framework_overview_scaffold_ready']}`",
         f"- Component inventory ready: `{audit['summary']['component_inventory_ready']}`",
+        f"- Component-ablation execution support ready: `{audit['summary']['component_ablation_execution_support_ready']}`",
         f"- Guarded plan ready: `{audit['summary']['guarded_plan_ready']}`",
         f"- Four-domain evidence consistent: `{audit['summary']['four_domain_evidence_consistent']}`",
         f"- Phase 2.5 storage launch allowed: `{audit['summary']['phase2_5_storage_launch_allowed']}`",
