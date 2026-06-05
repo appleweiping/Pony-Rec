@@ -65,6 +65,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_domain_official_gate.py` | Read-only domain gate for the eight official baselines plus C-CRP full metrics, row counts, coverage, provenance, and stray official-like directories |
 | `scripts/experiments/main_build_domain_official_comparison.py` | Read-only full comparison table and paired tests for C-CRP vs eight official baselines |
 | `scripts/audit/main_plan_phase2_5_retention_cleanup.py` | Guarded, non-executing Phase 2.5 storage-retention plan; generated shell exits before manifest or delete commands and requires explicit approval |
+| `scripts/audit/main_audit_phase2_5_storage_retention.py` | Read-only SSH storage audit for Phase 2.5 disk gates; classifies safe-now, protected, and approval-required high-yield artifacts without deleting |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring
@@ -82,6 +83,17 @@ df -h /home/ajifang
 
 # Running processes
 ps aux | grep python | grep -v grep
+```
+
+For Phase 2.5 disk gates, run the read-only storage retention audit from the
+local checkout:
+
+```powershell
+python scripts\audit\main_audit_phase2_5_storage_retention.py `
+  --remote pony-rec-gpu `
+  --project ~/projects/pony-rec-rescue-shadow-v6 `
+  --output_json outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260605.json `
+  --output_md outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260605.md
 ```
 
 For active official-baseline rows, prefer the local robust SSH-stdin monitor

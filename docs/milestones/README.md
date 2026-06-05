@@ -592,7 +592,14 @@ The repository is now in M5 (multi-domain SOTA validation):
   the completed Tools LLM2Rec upstream embedding under
   `outputs/summary/paper_critical/retention_cleanup_plan_20260605/`; it exits
   before any delete command and records `will_delete=false`. No Phase 2.5
-  experiment was launched.
+  experiment was launched. A reusable read-only helper,
+  `scripts/audit/main_audit_phase2_5_storage_retention.py`, was added at the
+  2026-06-05 23:42 CST checkpoint. Current artifact
+  `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260605.{json,md,sha256}`
+  confirms no active project Python process, GPU idle, `12,342,640,640` free
+  bytes, `64,611,717` safe-now recoverable bytes, and
+  `experiment_launch_allowed=false`; eight high-yield candidates still require
+  explicit retention/archive approval before deletion.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

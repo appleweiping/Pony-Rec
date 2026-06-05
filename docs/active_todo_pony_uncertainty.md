@@ -213,6 +213,23 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    manifesting, and post-delete disk checks. Focused test:
    `python -m pytest tests\test_plan_phase2_5_retention_cleanup.py`
    (`3 passed`). No deletion was performed.
+   Read-only retention helper checkpoint 2026-06-05 23:42 CST: Codex added
+   `scripts/audit/main_audit_phase2_5_storage_retention.py`, a reusable
+   SSH-based audit helper that runs only `ps`, `nvidia-smi`, `df`, `find`,
+   `du`, and log/stat reads, then classifies large artifacts as protected,
+   safe-now low-yield, approval-required, or requiring another audit before
+   deletion. Current evidence:
+   `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260605.{json,md,sha256}`.
+   It confirms no active project Python process, GPU idle, `12,342,640,640`
+   free bytes, a `3,763,486,720` byte deficit to the strict `15GiB` floor,
+   safe-now recoverable bytes only `64,611,717`, and
+   `experiment_launch_allowed=false`. Eight high-yield candidates would each
+   require explicit archive/retention approval, led by the completed Tools
+   LLM2Rec upstream embedding and completed LLMEmb/LLM-ESR checkpoints. No
+   deletion or experiment launch was performed. Focused verification:
+   `python -m pytest tests\test_audit_phase2_5_storage_retention.py
+   tests\test_plan_phase2_5_retention_cleanup.py` (`5 passed`), and broader
+   paper-critical tooling verification passed (`24 passed`).
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

@@ -129,6 +129,15 @@ also include:
     exits with `exit 2` before `sha256sum` or `rm --`. The planned expected
     embedding sha256 is
     `306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`.
+    Current read-only retention helper:
+    `scripts/audit/main_audit_phase2_5_storage_retention.py`. The 2026-06-05
+    23:42 CST artifact
+    `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260605.{json,md,sha256}`
+    confirms no active project Python process, GPU idle, `12,342,640,640`
+    free bytes, `64,611,717` safe-now recoverable bytes, and
+    `experiment_launch_allowed=false`; routine cleanup still cannot clear the
+    `15GiB` Phase 2.5 floor, and high-yield cleanup remains approval-required.
+    No deletion was performed and no Phase 2.5 experiment was launched.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches
