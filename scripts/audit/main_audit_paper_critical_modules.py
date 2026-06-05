@@ -32,6 +32,32 @@ FRAMEWORK_REQUIRED_LABELS = (
     "risk_score = base_score",
     "* (1 - uncertainty)^eta",
 )
+REQUIRED_FRAMEWORK_EVIDENCE_GATE_STATUS = {
+    "observation_motivation": "required_not_claimed_by_figure",
+    "component_ablation": "required_not_claimed_by_figure",
+    "hyperparameter_analysis": "required_not_claimed_by_figure",
+}
+FRAMEWORK_REQUIRED_CAPTION_PHRASES = (
+    "required gates before a paper-ready claim",
+)
+FRAMEWORK_REQUIRED_SVG_PHRASES = (
+    "before paper-ready claim",
+)
+FRAMEWORK_REQUIRED_CLAIM_LIMITS = (
+    "Does not make observation, ablation, or hyperparameter evidence complete.",
+)
+FRAMEWORK_FORBIDDEN_OVERCLAIM_PHRASES = (
+    "observation complete",
+    "motivation complete",
+    "ablation complete",
+    "ablations complete",
+    "component ablation complete",
+    "component ablations complete",
+    "hyperparameter complete",
+    "hyperparameter analysis complete",
+    "modules complete",
+    "completed modules",
+)
 DEFAULT_EVIDENCE_CONSISTENCY_GLOBS = (
     "local_server_evidence_consistency_new_domains_post_backfill_*.json",
     "local_server_evidence_consistency_new_domains_*.json",
@@ -124,6 +150,19 @@ def audit_framework_overview(root: Path) -> dict[str, Any]:
         if not manifest_checks[name]["ok"]:
             failures.append(f"manifest_mismatch:{name}")
 
+    caption_text = (
+        files["framework_overview_caption.md"].read_text(encoding="utf-8", errors="replace")
+        if files["framework_overview_caption.md"].exists()
+        else ""
+    )
+    caption_lower = caption_text.lower()
+    for phrase in FRAMEWORK_REQUIRED_CAPTION_PHRASES:
+        if phrase not in caption_lower:
+            failures.append(f"framework_caption_missing_required_phrase:{phrase}")
+    for phrase in FRAMEWORK_FORBIDDEN_OVERCLAIM_PHRASES:
+        if phrase in caption_lower:
+            failures.append(f"framework_caption_overclaim_phrase:{phrase}")
+
     provenance: dict[str, Any] = {}
     if files["framework_overview_provenance.json"].exists():
         provenance = _read_json(files["framework_overview_provenance.json"])
@@ -137,11 +176,28 @@ def audit_framework_overview(root: Path) -> dict[str, Any]:
             failures.append("framework_scope_not_limited_to_figure")
         if provenance.get("formula_alignment", {}).get("matches_src_shadow_ccrp_multiplicative_form") is not True:
             failures.append("framework_formula_alignment_missing")
+        evidence_gate_status = provenance.get("evidence_gate_status") or {}
+        for module, expected_status in REQUIRED_FRAMEWORK_EVIDENCE_GATE_STATUS.items():
+            if evidence_gate_status.get(module) != expected_status:
+                failures.append(f"framework_evidence_gate_status_mismatch:{module}")
+        if provenance.get("caption", "").strip() != caption_text.strip():
+            failures.append("framework_caption_file_provenance_mismatch")
+        claim_limits = set(provenance.get("claim_limits") or [])
+        for required_limit in FRAMEWORK_REQUIRED_CLAIM_LIMITS:
+            if required_limit not in claim_limits:
+                failures.append("framework_claim_limit_missing:no_module_completion_claim")
 
     svg_text = files["framework_overview.svg"].read_text(encoding="utf-8", errors="replace") if files["framework_overview.svg"].exists() else ""
+    svg_lower = svg_text.lower()
     missing_labels = [label for label in FRAMEWORK_REQUIRED_LABELS if label not in svg_text]
     if missing_labels:
         failures.append("framework_missing_required_labels:" + ",".join(missing_labels))
+    for phrase in FRAMEWORK_REQUIRED_SVG_PHRASES:
+        if phrase not in svg_lower:
+            failures.append(f"framework_svg_missing_required_phrase:{phrase}")
+    for phrase in FRAMEWORK_FORBIDDEN_OVERCLAIM_PHRASES:
+        if phrase in svg_lower:
+            failures.append(f"framework_svg_overclaim_phrase:{phrase}")
     png_width, png_height = _png_dimensions(files["framework_overview.png"])
     if not png_width or not png_height:
         failures.append("framework_png_not_valid")
@@ -167,6 +223,8 @@ def audit_framework_overview(root: Path) -> dict[str, Any]:
             "paper_claim_ready": provenance.get("paper_claim_ready"),
             "review_status": provenance.get("review_status", ""),
             "module_scope": provenance.get("module_scope", ""),
+            "evidence_gate_status": provenance.get("evidence_gate_status", {}),
+            "claim_limits": provenance.get("claim_limits", []),
             "git_commit": provenance.get("git_commit", ""),
             "generated_at_utc": provenance.get("generated_at_utc", ""),
         },

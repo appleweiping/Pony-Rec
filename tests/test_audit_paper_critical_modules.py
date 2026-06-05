@@ -25,16 +25,21 @@ def _framework_svg() -> str:
         "<text>Calibration layer</text><text>C-CRP uncertainty</text>"
         "<text>Risk-adjusted ranking</text><text>Official baseline block</text>"
         "<text>Required method-evidence gates</text><text>Shared evidence gates</text>"
-        "<text>risk_score = base_score</text><text>* (1 - uncertainty)^eta</text></svg>\n"
+        "<text>before paper-ready claim</text><text>risk_score = base_score</text>"
+        "<text>* (1 - uncertainty)^eta</text></svg>\n"
     )
 
 
 def _seed_framework_package(root: Path) -> None:
     base = root / "outputs/summary/paper_critical/framework_overview"
+    caption = (
+        "Figure: framework overview. The motivation, ablation, and hyperparameter modules are required gates "
+        "before a paper-ready claim.\n"
+    )
     files = {
         "framework_overview.svg": _framework_svg(),
         "framework_overview.pdf": "%PDF-1.4\n",
-        "framework_overview_caption.md": "caption\n",
+        "framework_overview_caption.md": caption,
     }
     for name, text in files.items():
         _write(base / name, text)
@@ -49,6 +54,16 @@ def _seed_framework_package(root: Path) -> None:
                 "module_scope": "framework_figure_only_not_substitute_for_observation_ablation_or_hyperparameter_evidence",
                 "claim_boundary": "controlled_same_candidate_ranking_not_full_catalog",
                 "formula_alignment": {"matches_src_shadow_ccrp_multiplicative_form": True},
+                "caption": caption.strip(),
+                "evidence_gate_status": {
+                    "observation_motivation": "required_not_claimed_by_figure",
+                    "component_ablation": "required_not_claimed_by_figure",
+                    "hyperparameter_analysis": "required_not_claimed_by_figure",
+                },
+                "claim_limits": [
+                    "Does not claim full-catalog recommendation.",
+                    "Does not make observation, ablation, or hyperparameter evidence complete.",
+                ],
                 "git_commit": "abc123",
                 "generated_at_utc": "2026-06-04T00:00:00+00:00",
             }
@@ -346,6 +361,101 @@ def test_audit_detects_framework_manifest_mismatch(tmp_path):
     assert audit["ok"] is False
     assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is False
     assert "manifest_mismatch:framework_overview.svg" in audit["modules"]["framework_overview"]["remaining_blockers"]
+
+
+def _refresh_framework_manifest(root: Path) -> None:
+    base = root / "outputs/summary/paper_critical/framework_overview"
+    manifest_names = [
+        "framework_overview.svg",
+        "framework_overview.pdf",
+        "framework_overview.png",
+        "framework_overview_caption.md",
+        "framework_overview_provenance.json",
+    ]
+    _write(base / "framework_overview_manifest.sha256", "".join(f"{_sha(base / name)}  {name}\n" for name in manifest_names))
+
+
+def test_audit_detects_framework_overclaiming_gate_status(tmp_path):
+    _seed_framework_package(tmp_path)
+    _seed_signal_audits(tmp_path)
+    _seed_guarded_plan(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
+    _seed_component_inventory(tmp_path)
+    provenance_path = tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview_provenance.json"
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    provenance["evidence_gate_status"]["observation_motivation"] = "completed_by_figure"
+    provenance_path.write_text(json.dumps(provenance, sort_keys=True) + "\n", encoding="utf-8")
+    _refresh_framework_manifest(tmp_path)
+
+    audit = build_module_audit(tmp_path)
+
+    assert audit["ok"] is False
+    assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is False
+    assert (
+        "framework_evidence_gate_status_mismatch:observation_motivation"
+        in audit["modules"]["framework_overview"]["remaining_blockers"]
+    )
+
+
+def test_audit_detects_framework_caption_overclaim(tmp_path):
+    _seed_framework_package(tmp_path)
+    _seed_signal_audits(tmp_path)
+    _seed_guarded_plan(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
+    _seed_component_inventory(tmp_path)
+    caption_path = tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview_caption.md"
+    caption_path.write_text("Figure: observation complete and ablations complete.\n", encoding="utf-8")
+    provenance_path = tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview_provenance.json"
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    provenance["caption"] = caption_path.read_text(encoding="utf-8").strip()
+    provenance_path.write_text(json.dumps(provenance, sort_keys=True) + "\n", encoding="utf-8")
+    _refresh_framework_manifest(tmp_path)
+
+    audit = build_module_audit(tmp_path)
+
+    blockers = audit["modules"]["framework_overview"]["remaining_blockers"]
+    assert audit["ok"] is False
+    assert "framework_caption_overclaim_phrase:observation complete" in blockers
+    assert "framework_caption_missing_required_phrase:required gates before a paper-ready claim" in blockers
+
+
+def test_audit_detects_framework_svg_overclaim(tmp_path):
+    _seed_framework_package(tmp_path)
+    _seed_signal_audits(tmp_path)
+    _seed_guarded_plan(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
+    _seed_component_inventory(tmp_path)
+    svg_path = tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview.svg"
+    svg_path.write_text(_framework_svg().replace("before paper-ready claim", "hyperparameter analysis complete"), encoding="utf-8")
+    _refresh_framework_manifest(tmp_path)
+
+    audit = build_module_audit(tmp_path)
+
+    blockers = audit["modules"]["framework_overview"]["remaining_blockers"]
+    assert audit["ok"] is False
+    assert "framework_svg_overclaim_phrase:hyperparameter analysis complete" in blockers
+    assert "framework_svg_missing_required_phrase:before paper-ready claim" in blockers
+
+
+def test_audit_detects_framework_claim_limit_removal(tmp_path):
+    _seed_framework_package(tmp_path)
+    _seed_signal_audits(tmp_path)
+    _seed_guarded_plan(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
+    _seed_component_inventory(tmp_path)
+    provenance_path = tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview_provenance.json"
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    provenance["claim_limits"] = ["Does not claim full-catalog recommendation."]
+    provenance_path.write_text(json.dumps(provenance, sort_keys=True) + "\n", encoding="utf-8")
+    _refresh_framework_manifest(tmp_path)
+
+    audit = build_module_audit(tmp_path)
+
+    assert audit["ok"] is False
+    assert (
+        "framework_claim_limit_missing:no_module_completion_claim"
+        in audit["modules"]["framework_overview"]["remaining_blockers"]
+    )
 
 
 def test_write_markdown_summary(tmp_path):
