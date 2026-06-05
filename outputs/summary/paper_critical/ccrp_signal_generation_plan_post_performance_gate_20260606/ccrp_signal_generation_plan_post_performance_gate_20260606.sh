@@ -30,7 +30,7 @@ python scripts/audit/main_remote_discover_ccrp_uncertainty_sources.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain sports \
   --split valid \
-  --data outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports \
   --expected_candidates_per_event 101
 
@@ -38,7 +38,7 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain sports \
   --split test \
-  --data outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports \
   --expected_candidates_per_event 101
 
@@ -54,8 +54,8 @@ python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
 # sports: validation-select C-CRP components/hyperparameters and export test rows.
 python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --domain sports \
-  --valid_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
-  --test_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --valid_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
+  --test_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --valid_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv \
   --test_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \
   --valid_signal_path TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV \
@@ -143,7 +143,7 @@ python scripts/audit/main_audit_phase2_5_module_package.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain toys \
   --split valid \
-  --data outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys \
   --expected_candidates_per_event 101
 
@@ -151,7 +151,7 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain toys \
   --split test \
-  --data outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys \
   --expected_candidates_per_event 101
 
@@ -167,8 +167,8 @@ python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
 # toys: validation-select C-CRP components/hyperparameters and export test rows.
 python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --domain toys \
-  --valid_ranking_path outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
-  --test_ranking_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --valid_ranking_path outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
+  --test_ranking_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --valid_candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/candidate_items.csv \
   --test_candidate_items_path outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv \
   --valid_signal_path TODO_VALID_TOYS_CCRP_SIGNAL_JSONL_OR_CSV \
@@ -256,7 +256,7 @@ python scripts/audit/main_audit_phase2_5_module_package.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain home \
   --split valid \
-  --data outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home \
   --expected_candidates_per_event 101
 
@@ -264,7 +264,7 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain home \
   --split test \
-  --data outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home \
   --expected_candidates_per_event 101
 
@@ -280,8 +280,8 @@ python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
 # home: validation-select C-CRP components/hyperparameters and export test rows.
 python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --domain home \
-  --valid_ranking_path outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
-  --test_ranking_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --valid_ranking_path outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
+  --test_ranking_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --valid_candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv \
   --test_candidate_items_path outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv \
   --valid_signal_path TODO_VALID_HOME_CCRP_SIGNAL_JSONL_OR_CSV \
@@ -369,7 +369,7 @@ python scripts/audit/main_audit_phase2_5_module_package.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain tools \
   --split valid \
-  --data outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools \
   --expected_candidates_per_event 101
 
@@ -377,7 +377,7 @@ python experiments/rsc/run_ccrp_v3_signal_rows.py \
 python experiments/rsc/run_ccrp_v3_signal_rows.py \
   --domain tools \
   --split test \
-  --data outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --data outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools \
   --expected_candidates_per_event 101
 
@@ -393,8 +393,8 @@ python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
 # tools: validation-select C-CRP components/hyperparameters and export test rows.
 python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --domain tools \
-  --valid_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_task.jsonl \
-  --test_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_task.jsonl \
+  --valid_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
+  --test_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl \
   --valid_candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv \
   --test_candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv \
   --valid_signal_path TODO_VALID_TOOLS_CCRP_SIGNAL_JSONL_OR_CSV \

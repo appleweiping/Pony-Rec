@@ -47,11 +47,11 @@ def test_domain_plan_uses_placeholders_and_full_scale_counts():
     generate_valid = domain_plan["commands"]["generate_valid_signal_rows_template"]
     assert "experiments/rsc/run_ccrp_v3_signal_rows.py" in generate_valid
     assert "--split valid" in generate_valid
-    assert "valid_same_candidate/ranking_task.jsonl" in generate_valid
+    assert "valid_same_candidate/ranking_valid.jsonl" in generate_valid
     generate_test = domain_plan["commands"]["generate_test_signal_rows_template"]
     assert "experiments/rsc/run_ccrp_v3_signal_rows.py" in generate_test
     assert "--split test" in generate_test
-    assert "test_same_candidate/ranking_task.jsonl" in generate_test
+    assert "test_same_candidate/ranking_test.jsonl" in generate_test
     selector = domain_plan["commands"]["select_ccrp_ablation_and_scores_template"]
     assert "main_select_ccrp_variant_on_valid.py" in selector
     assert "--valid_signal_path TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in selector

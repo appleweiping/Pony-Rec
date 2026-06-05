@@ -1,6 +1,6 @@
 # Paper-Critical Module Audit
 
-- Generated UTC: `2026-06-05T22:51:57+00:00`
+- Generated UTC: `2026-06-05T23:00:59+00:00`
 - Paper ready: `False`
 - Signal rows available: `False`
 - Framework overview scaffold ready: `True`

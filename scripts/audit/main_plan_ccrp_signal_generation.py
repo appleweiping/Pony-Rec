@@ -117,7 +117,13 @@ def _candidate_path(domain: str, split: str) -> str:
 
 
 def _ranking_path(domain: str, split: str) -> str:
-    return f"outputs/baselines/external_tasks/{_task_prefix(domain)}_{split}_same_candidate/ranking_task.jsonl"
+    if split == "valid":
+        filename = "ranking_valid.jsonl"
+    elif split == "test":
+        filename = "ranking_test.jsonl"
+    else:
+        filename = f"ranking_{split}.jsonl"
+    return f"outputs/baselines/external_tasks/{_task_prefix(domain)}_{split}_same_candidate/{filename}"
 
 
 def _valid_signal_placeholder(domain: str) -> str:
