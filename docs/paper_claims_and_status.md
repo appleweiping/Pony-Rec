@@ -431,6 +431,20 @@ package-contained figures. This is a packaging gate, not a completed Phase 2.5
 result; the modules still need full-scale signal rows and server execution
 after the storage gate clears.
 
+Component-ablation execution support on 2026-06-06: Codex added
+`scripts/analysis/main_build_ccrp_component_ablation_summary.py`, tightened
+`scripts/misc/main_select_ccrp_variant_on_valid.py` so selected test metrics
+include `HR@5/@10/@20`, `NDCG@5/@10/@20`, and `MRR`, and refreshed the guarded
+C-CRP signal-generation plan artifact. The builder freezes the
+validation-selected config, evaluates expected leave-one-component-out rows on
+test without selecting on test, writes summary/provenance/figure files, and
+fails closed when validation metadata, full-score-mode eligibility, exact
+coverage, audit/degeneracy flags, or valid-sweep ablation coverage are missing.
+This improves the Phase 2.5 command surface but is not evidence of completed
+component necessity; paper claims remain blocked until full-scale valid/test
+signal rows exist, the module package is synced/audited, and the storage gate
+clears.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

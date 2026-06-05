@@ -12,6 +12,15 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DOMAINS = ("sports", "toys")
 DEFAULT_NAME_TOKENS = ("ccrp", "shadow", "signal", "calibrated", "scored", "rows")
 DEFAULT_OUTPUT_DIR = "outputs/summary/paper_critical/ccrp_signal_generation_plan"
+DEFAULT_CCRP_ABLATIONS = (
+    "full",
+    "without_boundary_uncertainty",
+    "without_calibration_gap",
+    "without_evidence_support",
+    "without_counterevidence",
+    "without_risk_penalty",
+)
+DEFAULT_HYPERPARAMETER_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
 
 
 def parse_args() -> argparse.Namespace:
@@ -139,6 +148,45 @@ def _full_audit_outputs(output_dir: str, domain: str) -> dict[str, str]:
     }
 
 
+def _module_package_audit_command(
+    *,
+    module: str,
+    package_dir: str,
+    expected_events: int,
+    expected_candidates_per_event: int,
+    expected_ablations: tuple[str, ...] = (),
+    expected_controls: tuple[str, ...] = (),
+    min_join_rate: str = "0.999",
+) -> str:
+    parts = [
+        "python",
+        "scripts/audit/main_audit_phase2_5_module_package.py",
+        "--module",
+        module,
+        "--package_dir",
+        package_dir,
+        "--expected_events",
+        str(expected_events),
+        "--expected_candidates_per_event",
+        str(expected_candidates_per_event),
+        "--min_join_rate",
+        min_join_rate,
+    ]
+    for ablation in expected_ablations:
+        parts.extend(["--expected_ablation", ablation])
+    for control in expected_controls:
+        parts.extend(["--expected_control", control])
+    parts.extend(
+        [
+            "--output_json",
+            f"{package_dir.rstrip('/')}/phase2_5_{module}_package_audit.json",
+            "--output_md",
+            f"{package_dir.rstrip('/')}/phase2_5_{module}_package_audit.md",
+        ]
+    )
+    return _line_command(parts)
+
+
 def build_domain_plan(
     domain: str,
     *,
@@ -179,6 +227,7 @@ def build_domain_plan(
             "valid_signal_placeholder": valid_signal,
             "test_signal_placeholder": test_signal,
             "selector_output_dir": selector_out,
+            "component_ablation_output_dir": selector_out,
             "observation_output_dir": observation_out,
             "hyperparameter_output_dir": hyper_out,
             "ccrp_eval_candidates": ccrp_eval_candidates,
@@ -226,7 +275,7 @@ def build_domain_plan(
                     "--score_modes",
                     "confidence_only,evidence_only,confidence_plus_evidence,full",
                     "--ablations",
-                    "full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty",
+                    ",".join(DEFAULT_CCRP_ABLATIONS),
                     "--etas",
                     "0.5,1.0,2.0",
                     "--confidence_weights",
@@ -236,6 +285,26 @@ def build_domain_plan(
                     "--selection_metric",
                     selection_metric,
                     "--import_scores",
+                ]
+            ),
+            "build_component_ablation_summary_template": _line_command(
+                [
+                    "python",
+                    "scripts/analysis/main_build_ccrp_component_ablation_summary.py",
+                    "--selector_dir",
+                    selector_out,
+                    "--output_dir",
+                    selector_out,
+                    "--domain",
+                    domain,
+                    "--expected_events",
+                    str(expected_events),
+                    "--expected_candidates_per_event",
+                    str(expected_candidates_per_event),
+                    "--metric",
+                    selection_metric,
+                    "--ablations",
+                    ",".join(DEFAULT_CCRP_ABLATIONS),
                 ]
             ),
             "build_observation_study_template": _line_command(
@@ -279,6 +348,26 @@ def build_domain_plan(
                     "--ablation",
                     "full",
                 ]
+            ),
+            "audit_component_ablation_package_template": _module_package_audit_command(
+                module="component_ablation",
+                package_dir=selector_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
+                expected_ablations=DEFAULT_CCRP_ABLATIONS,
+            ),
+            "audit_observation_package_template": _module_package_audit_command(
+                module="observation_motivation",
+                package_dir=observation_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
+            ),
+            "audit_hyperparameter_package_template": _module_package_audit_command(
+                module="hyperparameter_analysis",
+                package_dir=hyper_out,
+                expected_events=expected_events,
+                expected_candidates_per_event=expected_candidates_per_event,
+                expected_controls=DEFAULT_HYPERPARAMETER_CONTROLS,
             ),
         },
         "execution_gates": [
@@ -347,7 +436,9 @@ def build_plan(
         "git_status_short_relevant_at_generation": _git_status_short(
             [
                 "scripts/audit/main_plan_ccrp_signal_generation.py",
+                "scripts/analysis/main_build_ccrp_component_ablation_summary.py",
                 "tests/test_plan_ccrp_signal_generation.py",
+                "tests/test_build_ccrp_component_ablation_summary.py",
                 "docs/active_todo_pony_uncertainty.md",
                 "docs/paper_claims_and_status.md",
                 "docs/paper_critical_experiment_plan_2026-06-03.md",
@@ -406,11 +497,23 @@ def guarded_shell_script(plan: dict[str, Any]) -> str:
                 f"# {domain}: validation-select C-CRP components/hyperparameters and export test rows.",
                 domain_plan["commands"]["select_ccrp_ablation_and_scores_template"],
                 "",
+                f"# {domain}: build leave-one-component-out summary from the frozen validation-selected policy.",
+                domain_plan["commands"]["build_component_ablation_summary_template"],
+                "",
+                f"# {domain}: audit the component-ablation module package before paper use.",
+                domain_plan["commands"]["audit_component_ablation_package_template"],
+                "",
                 f"# {domain}: build observation/motivation table and figure.",
                 domain_plan["commands"]["build_observation_study_template"],
                 "",
+                f"# {domain}: audit the observation/motivation module package before paper use.",
+                domain_plan["commands"]["audit_observation_package_template"],
+                "",
                 f"# {domain}: plot validation hyperparameter curves.",
                 domain_plan["commands"]["plot_hyperparameter_curves_template"],
+                "",
+                f"# {domain}: audit the hyperparameter module package before paper use.",
+                domain_plan["commands"]["audit_hyperparameter_package_template"],
                 "",
             ]
         )

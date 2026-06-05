@@ -780,6 +780,17 @@ The repository is now in M5 (multi-domain SOTA validation):
   `base_score * ((1 - uncertainty) ** eta)`. This is an audit scaffold, not an
   executed ablation result; paper-facing component claims remain blocked until
   full-scale valid/test signal rows exist.
+- C-CRP component-ablation summary builder now exists:
+  `scripts/analysis/main_build_ccrp_component_ablation_summary.py`. It freezes
+  `selected_valid_config.json`, evaluates expected leave-one-component-out
+  ablations on test without test selection, writes
+  `component_ablation_summary.{csv,json}`, `component_ablation_provenance.json`,
+  and PNG/PDF figures, and fails closed on missing validation-selection
+  metadata, non-`full` score mode by default, missing valid-sweep ablations,
+  coverage failures, or audit/degeneracy failures. The guarded signal plan was
+  refreshed to include the builder and module package audits, but this is
+  tooling only; no full-scale component result exists until signal rows and
+  package audits pass.
 - Framework overview figure builder now exists:
   `scripts/analysis/main_build_framework_overview_figure.py`. It exports SVG
   editable source plus PDF/PNG/caption/provenance. As of 2026-06-04 04:43 CST,

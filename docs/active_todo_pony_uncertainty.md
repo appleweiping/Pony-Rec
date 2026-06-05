@@ -2823,6 +2823,25 @@ verification:
 (`27 passed`). This does not unblock Phase 2.5 execution while disk is below
 the launch floor.
 
+Phase 2.5 component-ablation builder wiring: Codex added
+`scripts/analysis/main_build_ccrp_component_ablation_summary.py` and refreshed
+the guarded plan artifact
+`outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`.
+The selector now writes full reporting metrics (`HR@5/@10/@20`,
+`NDCG@5/@10/@20`, `MRR`) into `selected_test_metrics.csv`; the new builder
+freezes `selected_valid_config.json`, evaluates every expected
+leave-one-component-out ablation on test without test selection, writes
+`component_ablation_summary.{csv,json}`, `component_ablation_provenance.json`,
+and PNG/PDF figures, and fails closed unless validation-selection metadata,
+`score_mode=full`, exact coverage, audit/degeneracy flags, and valid-sweep
+ablation coverage are present. The guarded plan now includes component-summary
+and module-package audit commands while the generated shell remains stopped by
+`exit 2`. Focused verification:
+`python -m pytest tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py tests\test_export_ccrp_scored_rows_from_signal.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py`
+(`25 passed`). This is tooling only: no full-scale signal rows were generated,
+no server experiment was launched, and component-ablation claims remain blocked
+until the full-scale package and audit pass.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

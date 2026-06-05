@@ -23,6 +23,9 @@ from src.shadow.ccrp import apply_ccrp_scores, parse_weights
 from src.utils.io import load_jsonl, save_jsonl
 
 
+FULL_REPORTING_KS = (5, 10, 20)
+
+
 def _parse_csv_list(value: str) -> list[str]:
     return [item.strip() for item in str(value).split(",") if item.strip()]
 
@@ -138,6 +141,7 @@ def _evaluate_candidate_scores(
     confidence_weight: float,
     weights: tuple[float, float, float],
     k: int,
+    ks: tuple[int, ...] | list[int] | None = None,
     fail_on_degeneracy: bool = True,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], pd.DataFrame]:
     ranking_rows = load_jsonl(ranking_path)
@@ -164,7 +168,7 @@ def _evaluate_candidate_scores(
         method_name=f"ccrp:{score_mode}:{ablation}:eta={eta}:cw={confidence_weight}:w={_weight_label(weights)}",
         k=k,
     )
-    metrics = compute_ranking_task_metrics(build_ranking_eval_frame(pd.DataFrame(predictions)), k=k)
+    metrics = compute_ranking_task_metrics(build_ranking_eval_frame(pd.DataFrame(predictions)), k=k, ks=ks)
     return {**audit, **degeneracy_audit, **metrics}, score_rows, scored_df
 
 
@@ -208,6 +212,7 @@ def main() -> None:
     etas = _parse_float_list(args.etas)
     confidence_weights = _parse_float_list(args.confidence_weights)
     weight_grid = _parse_weight_grid(args.weight_grid)
+    ranking_k = max(int(args.k), max(FULL_REPORTING_KS))
 
     valid_rows: list[dict[str, Any]] = []
     best: dict[str, Any] | None = None
@@ -227,7 +232,8 @@ def main() -> None:
                             eta=eta,
                             confidence_weight=confidence_weight,
                             weights=weights,
-                            k=args.k,
+                            k=ranking_k,
+                            ks=FULL_REPORTING_KS,
                             fail_on_degeneracy=False,
                         )
                         row = {
@@ -272,7 +278,8 @@ def main() -> None:
             float(best["weight_calibration_gap"]),
             float(best["weight_evidence"]),
         ),
-        k=args.k,
+        k=ranking_k,
+        ks=FULL_REPORTING_KS,
     )
     score_summary = write_score_rows(test_score_rows, output_dir / "ccrp_selected_test_scores.csv")
     test_scored_df.to_csv(output_dir / "ccrp_selected_test_scored_rows.csv", index=False)

@@ -51,6 +51,32 @@ python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --selection_metric NDCG@10 \
   --import_scores
 
+# sports: build leave-one-component-out summary from the frozen validation-selected policy.
+python scripts/analysis/main_build_ccrp_component_ablation_summary.py \
+  --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_sports \
+  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_sports \
+  --domain sports \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --metric NDCG@10 \
+  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty
+
+# sports: audit the component-ablation module package before paper use.
+python scripts/audit/main_audit_phase2_5_module_package.py \
+  --module component_ablation \
+  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_sports \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --min_join_rate 0.999 \
+  --expected_ablation full \
+  --expected_ablation without_boundary_uncertainty \
+  --expected_ablation without_calibration_gap \
+  --expected_ablation without_evidence_support \
+  --expected_ablation without_counterevidence \
+  --expected_ablation without_risk_penalty \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_sports/phase2_5_component_ablation_package_audit.json \
+  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_sports/phase2_5_component_ablation_package_audit.md
+
 # sports: build observation/motivation table and figure.
 python scripts/analysis/main_build_uncertainty_observation_study.py \
   --domain sports \
@@ -63,6 +89,16 @@ python scripts/analysis/main_build_uncertainty_observation_study.py \
   --expected_events 10000 \
   --min_join_rate 0.999
 
+# sports: audit the observation/motivation module package before paper use.
+python scripts/audit/main_audit_phase2_5_module_package.py \
+  --module observation_motivation \
+  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/observation_sports \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --min_join_rate 0.999 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/observation_sports/phase2_5_observation_motivation_package_audit.json \
+  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan/observation_sports/phase2_5_observation_motivation_package_audit.md
+
 # sports: plot validation hyperparameter curves.
 python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \
   --sweep_csv outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_sports/valid_ccrp_sweep.csv \
@@ -71,6 +107,19 @@ python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \
   --metric NDCG@10 \
   --score_mode full \
   --ablation full
+
+# sports: audit the hyperparameter module package before paper use.
+python scripts/audit/main_audit_phase2_5_module_package.py \
+  --module hyperparameter_analysis \
+  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_hyperparameter_sports \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --min_join_rate 0.999 \
+  --expected_control eta \
+  --expected_control confidence_weight \
+  --expected_control weight_grid_label \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_hyperparameter_sports/phase2_5_hyperparameter_analysis_package_audit.json \
+  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_hyperparameter_sports/phase2_5_hyperparameter_analysis_package_audit.md
 
 # toys: audit the chosen signal artifact after replacing TODO paths.
 python scripts/audit/main_audit_ccrp_uncertainty_sources.py \
@@ -99,6 +148,32 @@ python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --selection_metric NDCG@10 \
   --import_scores
 
+# toys: build leave-one-component-out summary from the frozen validation-selected policy.
+python scripts/analysis/main_build_ccrp_component_ablation_summary.py \
+  --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_toys \
+  --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_toys \
+  --domain toys \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --metric NDCG@10 \
+  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty
+
+# toys: audit the component-ablation module package before paper use.
+python scripts/audit/main_audit_phase2_5_module_package.py \
+  --module component_ablation \
+  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_toys \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --min_join_rate 0.999 \
+  --expected_ablation full \
+  --expected_ablation without_boundary_uncertainty \
+  --expected_ablation without_calibration_gap \
+  --expected_ablation without_evidence_support \
+  --expected_ablation without_counterevidence \
+  --expected_ablation without_risk_penalty \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_toys/phase2_5_component_ablation_package_audit.json \
+  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_toys/phase2_5_component_ablation_package_audit.md
+
 # toys: build observation/motivation table and figure.
 python scripts/analysis/main_build_uncertainty_observation_study.py \
   --domain toys \
@@ -111,6 +186,16 @@ python scripts/analysis/main_build_uncertainty_observation_study.py \
   --expected_events 10000 \
   --min_join_rate 0.999
 
+# toys: audit the observation/motivation module package before paper use.
+python scripts/audit/main_audit_phase2_5_module_package.py \
+  --module observation_motivation \
+  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/observation_toys \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --min_join_rate 0.999 \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/observation_toys/phase2_5_observation_motivation_package_audit.json \
+  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan/observation_toys/phase2_5_observation_motivation_package_audit.md
+
 # toys: plot validation hyperparameter curves.
 python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \
   --sweep_csv outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_ablation_toys/valid_ccrp_sweep.csv \
@@ -119,3 +204,16 @@ python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \
   --metric NDCG@10 \
   --score_mode full \
   --ablation full
+
+# toys: audit the hyperparameter module package before paper use.
+python scripts/audit/main_audit_phase2_5_module_package.py \
+  --module hyperparameter_analysis \
+  --package_dir outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_hyperparameter_toys \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --min_join_rate 0.999 \
+  --expected_control eta \
+  --expected_control confidence_weight \
+  --expected_control weight_grid_label \
+  --output_json outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_hyperparameter_toys/phase2_5_hyperparameter_analysis_package_audit.json \
+  --output_md outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_hyperparameter_toys/phase2_5_hyperparameter_analysis_package_audit.md

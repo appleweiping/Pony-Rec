@@ -214,11 +214,11 @@ paper-ready uncertainty rows from formal `scores.csv` alone. Evidence:
 Guarded next-step plan (2026-06-04): local plan artifact
 `outputs/summary/paper_critical/ccrp_signal_generation_plan/ccrp_signal_generation_plan_20260604.*`
 records the Sports/Toys discovery, per-domain source audit, C-CRP validation
-selection/ablation, observation-study, and hyperparameter-plot command
-templates. It is intentionally not executable as generated; the shell exits
-before any command and requires replacing `TODO_VALID_*`/`TODO_TEST_*` signal
-paths with artifacts classified as `recomputable_signal_rows` or
-`paper_ready_uncertainty_rows`.
+selection, component-ablation summary, observation-study, hyperparameter-plot,
+and module-package-audit command templates. It is intentionally not executable
+as generated; the shell exits before any command and requires replacing
+`TODO_VALID_*`/`TODO_TEST_*` signal paths with artifacts classified as
+`recomputable_signal_rows` or `paper_ready_uncertainty_rows`.
 
 ## Module B: C-CRP Component Ablation
 
@@ -228,6 +228,7 @@ Implementation anchors:
 
 - `src/shadow/ccrp.py`
 - `scripts/misc/main_select_ccrp_variant_on_valid.py`
+- `scripts/analysis/main_build_ccrp_component_ablation_summary.py`
 - `configs/week8_large_scale_future_framework.yaml`
 
 Components to ablate or compare:
@@ -284,6 +285,15 @@ python scripts/misc/main_select_ccrp_variant_on_valid.py \
   --weight_grid "0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4" \
   --selection_metric NDCG@10 \
   --import_scores
+
+python scripts/analysis/main_build_ccrp_component_ablation_summary.py \
+  --selector_dir outputs/summary/paper_critical/ccrp_ablation_sports \
+  --output_dir outputs/summary/paper_critical/ccrp_ablation_sports \
+  --domain sports \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101 \
+  --metric NDCG@10 \
+  --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty
 ```
 
 The `<VALID_CCRP_SIGNAL_JSONL_OR_CSV>` and `<TEST_CCRP_SIGNAL_JSONL_OR_CSV>`
@@ -301,7 +311,10 @@ Required outputs:
 - `selected_test_metrics.csv`
 - `ccrp_internal_provenance.json`
 - imported same-candidate `tables/`
-- ablation summary table and a compact plot if useful
+- `component_ablation_summary.csv`
+- `component_ablation_summary.json`
+- `component_ablation_provenance.json`
+- compact component-ablation PNG/PDF plots
 
 Numeric gates:
 
@@ -309,6 +322,9 @@ Numeric gates:
 - No finite-score or degeneracy audit failure.
 - Test reporting must use configs selected on validation or pre-fixed before
   test.
+- The dedicated component builder must see `selected_on=valid`, a valid-split
+  `selected_valid_config.json`, `score_mode=full` by default, and every
+  expected ablation in `valid_ccrp_sweep.csv`.
 - At least Sports and Toys must pass before the ablation story is paper-ready;
   broader-domain ablations can follow after Home/Tools finish.
 

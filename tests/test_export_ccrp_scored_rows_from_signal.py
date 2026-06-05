@@ -2,7 +2,7 @@ import csv
 import json
 import math
 
-from scripts.misc.main_select_ccrp_variant_on_valid import _evaluate_candidate_scores
+from scripts.misc.main_select_ccrp_variant_on_valid import _evaluate_candidate_scores, main as select_ccrp_main
 from scripts.analysis.main_export_ccrp_scored_rows_from_signal import export_ccrp_scored_rows
 
 
@@ -135,3 +135,65 @@ def test_ccrp_selector_accepts_item_id_signal_alias(tmp_path):
     assert metrics["HR@10"] == 1.0
     assert {row["item_id"] for row in score_rows} == {"i1", "i2"}
     assert "ccrp_uncertainty" in scored_df.columns
+
+
+def test_ccrp_selector_writes_full_reporting_metrics(tmp_path, monkeypatch):
+    signal = _write(
+        tmp_path / "test_signal.csv",
+        "source_event_id,user_id,item_id,relevance_probability,calibrated_confidence,evidence_support,counterevidence_strength\n"
+        "e1,u1,i1,0.9,0.8,0.9,0.1\n"
+        "e1,u1,i2,0.2,0.3,0.2,0.5\n",
+    )
+    candidates = _write(
+        tmp_path / "candidate_items.csv",
+        "source_event_id,user_id,item_id\n"
+        "e1,u1,i1\n"
+        "e1,u1,i2\n",
+    )
+    ranking = _write(
+        tmp_path / "ranking_task.jsonl",
+        '{"source_event_id":"e1","user_id":"u1","candidate_item_ids":["i1","i2"],"positive_item_id":"i1"}\n',
+    )
+    output_dir = tmp_path / "selector_out"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "main_select_ccrp_variant_on_valid.py",
+            "--domain",
+            "toy",
+            "--valid_ranking_path",
+            str(ranking),
+            "--test_ranking_path",
+            str(ranking),
+            "--valid_candidate_items_path",
+            str(candidates),
+            "--test_candidate_items_path",
+            str(candidates),
+            "--valid_signal_path",
+            str(signal),
+            "--test_signal_path",
+            str(signal),
+            "--output_dir",
+            str(output_dir),
+            "--score_modes",
+            "full",
+            "--ablations",
+            "full",
+            "--etas",
+            "1.0",
+            "--confidence_weights",
+            "0.7",
+            "--weight_grid",
+            "0.5,0.3,0.2",
+            "--selection_metric",
+            "NDCG@10",
+        ],
+    )
+
+    select_ccrp_main()
+
+    rows = list(csv.DictReader((output_dir / "selected_test_metrics.csv").open(encoding="utf-8")))
+    assert len(rows) == 1
+    for metric in ("HR@5", "HR@10", "HR@20", "NDCG@5", "NDCG@10", "NDCG@20", "MRR"):
+        assert metric in rows[0]
+    assert rows[0]["selected_on"] == "valid"
