@@ -20,6 +20,13 @@ DEFAULT_ABLATIONS = (
 )
 COMMAND_FILES = ("commands.md", "commands.txt", "run_commands.md", "run_command.txt")
 LOG_FILES = ("log_snippets.md", "log_snippets.txt", "key_logs.md", "run_log_excerpt.txt")
+LOG_FAILURE_MARKERS = (
+    "Traceback",
+    "CUDA out of memory",
+    "No space left on device",
+    "OOM",
+    "FAILED",
+)
 SERVER_COMPARISON_FILES = (
     "local_server_manifest_comparison.json",
     "local_server_evidence_consistency.json",
@@ -27,6 +34,7 @@ SERVER_COMPARISON_FILES = (
 )
 CONFIG_FILES = ("config.json", "run_config.json", "selected_valid_config.json", "selected_hyperparameters.json")
 DEFAULT_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
+SEED_KEYS = ("seed", "seeds", "random_seed", "random_seeds", "seed_list")
 
 
 def parse_args() -> argparse.Namespace:
@@ -164,6 +172,38 @@ def _has_config_or_selected_hparams(provenance: dict[str, Any], base: Path) -> b
     return False
 
 
+def _has_seed_record(provenance: dict[str, Any], base: Path) -> bool:
+    for key in SEED_KEYS:
+        value = provenance.get(key)
+        if isinstance(value, list) and value:
+            return True
+        if str(value or "").strip():
+            return True
+    for name in CONFIG_FILES:
+        path = base / name
+        if not path.exists() or path.stat().st_size <= 0:
+            continue
+        try:
+            payload = _read_json(path)
+        except Exception:
+            continue
+        for key in SEED_KEYS:
+            value = payload.get(key)
+            if isinstance(value, list) and value:
+                return True
+            if str(value or "").strip():
+                return True
+    return False
+
+
+def _scan_log_snippets(base: Path, failures: list[str]) -> None:
+    for name in _present(base, LOG_FILES):
+        text = (base / name).read_text(encoding="utf-8", errors="replace")
+        for marker in LOG_FAILURE_MARKERS:
+            if marker in text:
+                failures.append(f"log_snippet_contains_failure_marker:{name}:{marker}")
+
+
 def _comparison_has_substance(comparison: dict[str, Any]) -> bool:
     checked_files = comparison.get("checked_files")
     if isinstance(checked_files, list) and any(row.get("sha256") or row.get("sha256_ok") for row in checked_files if isinstance(row, dict)):
@@ -191,8 +231,12 @@ def _check_general_package(base: Path, provenance: dict[str, Any], failures: lis
         failures.append("missing_command_record")
     if not _present(base, LOG_FILES):
         failures.append("missing_log_snippets")
+    else:
+        _scan_log_snippets(base, failures)
     if not str(provenance.get("git_commit", "")).strip():
         failures.append("missing_git_commit")
+    if not _has_seed_record(provenance, base):
+        failures.append("missing_seed_record")
     if not _has_config_or_selected_hparams(provenance, base):
         failures.append("missing_config_or_selected_hyperparameters")
     if not _has_input_manifest(provenance, base):
@@ -212,21 +256,45 @@ def _check_general_package(base: Path, provenance: dict[str, Any], failures: lis
             if not _comparison_has_substance(comparison):
                 failures.append(f"local_server_manifest_comparison_lacks_evidence:{name}")
 
-    for path in base.iterdir():
+    for path in base.rglob("*"):
         if not path.is_file():
             continue
+        rel_path = path.relative_to(base).as_posix()
         if path.name == "scores.csv":
-            failures.append("disallowed_bulk_scores_csv")
+            failures.append(f"disallowed_bulk_scores_csv:{rel_path}")
         if path.name == "rank_predictions.jsonl":
-            failures.append("disallowed_bulk_prediction_jsonl")
-        if path.suffix.lower() in {".pt", ".pth", ".npy", ".pkl"}:
-            warnings.append(f"large_or_binary_artifact_in_package:{path.name}")
+            failures.append(f"disallowed_bulk_prediction_jsonl:{rel_path}")
+        if path.suffix.lower() in {".pt", ".pth", ".npy", ".pkl", ".npz", ".ckpt", ".safetensors", ".bin"}:
+            warnings.append(f"large_or_binary_artifact_in_package:{rel_path}")
 
 
 def _check_metrics(header: list[str], failures: list[str], *, context: str) -> None:
     missing = [metric for metric in FULL_METRICS if metric not in header]
     if missing:
         failures.append(f"{context}:missing_full_metrics:{','.join(missing)}")
+
+
+def _check_metric_values(rows: list[dict[str, str]], failures: list[str], *, context: str) -> None:
+    for idx, row in enumerate(rows):
+        for metric in FULL_METRICS:
+            if metric not in row:
+                continue
+            raw = row.get(metric, "")
+            value = _as_float(raw)
+            if not math.isfinite(value):
+                failures.append(f"{context}:nonfinite_metric:{idx}:{metric}:{raw}")
+            elif value < 0.0 or value > 1.0:
+                failures.append(f"{context}:metric_out_of_range:{idx}:{metric}:{raw}")
+
+
+def _check_scalar_metric_values(rows: list[dict[str, str]], failures: list[str], *, context: str, column: str) -> None:
+    for idx, row in enumerate(rows):
+        raw = row.get(column, "")
+        value = _as_float(raw)
+        if not math.isfinite(value):
+            failures.append(f"{context}:nonfinite_metric:{idx}:{column}:{raw}")
+        elif value < 0.0 or value > 1.0:
+            failures.append(f"{context}:metric_out_of_range:{idx}:{column}:{raw}")
 
 
 def _path_inside(path: Path, root: Path) -> bool:
@@ -323,6 +391,7 @@ def _audit_observation(
 
     _check_general_package(base, provenance, failures, warnings)
     _check_metrics(summary_header, failures, context="observation_summary")
+    _check_metric_values(summary_rows, failures, context="observation_summary")
     if provenance.get("artifact_class") != "paper_critical_observation_motivation":
         failures.append("observation:unexpected_artifact_class")
     if provenance.get("status_label") != "paper_critical_observation_ready":
@@ -393,17 +462,21 @@ def _audit_component_ablation(
 
     _check_general_package(base, provenance, failures, warnings)
     _check_metrics(summary_header, failures, context="component_ablation_summary")
+    _check_metric_values(summary_rows, failures, context="component_ablation_summary")
     for column in ("audit_ok", "degeneracy_audit_ok", "score_coverage_rate"):
         if column not in summary_header:
             failures.append(f"component_ablation_summary_missing_column:{column}")
     selected_header, selected_rows = _load_required_csv(base, "selected_test_metrics.csv", failures)
     _check_metrics(selected_header, failures, context="selected_test_metrics")
+    _check_metric_values(selected_rows, failures, context="selected_test_metrics")
     for column in ("audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count"):
         if column not in selected_header:
             failures.append(f"selected_test_metrics_missing_column:{column}")
     _load_required_json(base, "selected_valid_config.json", failures)
     internal_provenance = _load_required_json(base, "ccrp_internal_provenance.json", failures)
-    _load_required_csv(base, "tables/ranking_metrics.csv", failures)
+    ranking_header, ranking_rows = _load_required_csv(base, "tables/ranking_metrics.csv", failures)
+    _check_metrics(ranking_header, failures, context="ranking_metrics_table")
+    _check_metric_values(ranking_rows, failures, context="ranking_metrics_table")
     coverage_header, coverage_rows = _load_required_csv(base, "tables/external_score_coverage.csv", failures)
     _load_required_csv(base, "tables/same_candidate_external_baseline_summary.csv", failures)
     _load_required_csv(base, "tables/ranking_eval_records.csv", failures)
@@ -482,6 +555,7 @@ def _audit_hyperparameter(base: Path, *, expected_controls: tuple[str, ...], min
     for column in ("split", "control", "control_value", "metric_name", "metric_value"):
         if column not in summary_header:
             failures.append(f"hyperparameter_summary_missing_column:{column}")
+    _check_scalar_metric_values(summary_rows, failures, context="hyperparameter_summary", column="metric_value")
     if provenance.get("artifact_class") != "paper_critical_hyperparameter_analysis":
         failures.append("hyperparameter:unexpected_artifact_class")
     if provenance.get("status_label") != "paper_critical_hyperparameter_curve_ready":

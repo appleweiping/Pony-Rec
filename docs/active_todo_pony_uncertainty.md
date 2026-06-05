@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 05:23 CST
+Last updated: 2026-06-06 05:29 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2975,6 +2975,22 @@ hyperparameter evidence. Focused verification:
 `python -m pytest tests\test_framework_overview_figure.py tests\test_audit_paper_critical_modules.py`
 (`9 passed`). This was a local test guardrail only; no cleanup, deletion,
 experiment launch, or baseline launch occurred.
+
+Phase 2.5 package-audit hardening: at 2026-06-06 05:29 CST, Codex used a
+GPT-5.5 xhigh sidecar audit and tightened
+`scripts/audit/main_audit_phase2_5_module_package.py` for future completed
+observation, component-ablation, and hyperparameter packages. The audit now
+requires a seed record in provenance or config, scans packaged log snippets for
+fatal markers (`Traceback`, `CUDA out of memory`, `No space left on device`,
+`OOM`, `FAILED`), recursively rejects nested bulk `scores.csv` and
+`rank_predictions.jsonl`, warns on nested large/binary model artifacts, and
+validates full ranking metrics plus hyperparameter `metric_value` fields as
+finite values in `[0,1]`. Regression tests cover missing seed records, fatal
+log snippets, nested bulk predictions, nonfinite full metrics, and out-of-range
+hyperparameter metric values. Focused verification:
+`python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py`
+(`18 passed`). No cleanup, deletion, experiment launch, or baseline launch
+occurred.
 
 ## Required Next Actions
 

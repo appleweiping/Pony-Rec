@@ -546,6 +546,17 @@ complete observation, ablation, or hyperparameter evidence. Focused tests
 passed (`9 passed`). This protects the figure generator side of the same
 claim-boundary guard; it does not alter paper readiness.
 
+Phase 2.5 package-audit hardening on 2026-06-06 05:29 CST: after GPT-5.5 xhigh
+sidecar review, the completed-module package audit now enforces additional
+lightweight-complete evidence requirements before observation, ablation, or
+hyperparameter packages can support paper claims. It requires seed provenance,
+scans log snippets for fatal markers, recursively rejects bulk scores and
+prediction JSONL files inside the package, warns on nested large/binary model
+artifacts, and validates full ranking metrics plus hyperparameter curve metric
+values as finite values in `[0,1]`. Focused tests passed (`18 passed`). This is
+local audit hardening only; paper readiness remains blocked by missing
+full-scale signal rows and the Phase 2.5 storage gate.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

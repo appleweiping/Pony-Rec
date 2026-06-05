@@ -192,6 +192,13 @@ phrase, caption/provenance equality, and the claim limit that the framework
 figure does not complete observation, component-ablation, or hyperparameter
 evidence. This keeps the figure generator aligned with the stricter audit.
 
+The 2026-06-06 05:29 CST Phase 2.5 package-audit hardening tightened
+`scripts/audit/main_audit_phase2_5_module_package.py` so future completed
+module packages must include seed provenance, clean log snippets, no nested
+bulk score/prediction dumps, and finite in-range metric values. Regression
+coverage now rejects missing seeds, fatal log markers, nested prediction JSONL,
+nonfinite full metrics, and out-of-range hyperparameter metric values.
+
 Phase 2.5 package-audit hardening on 2026-06-06 added
 `scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
 for future observation/motivation, component-ablation, and hyperparameter
