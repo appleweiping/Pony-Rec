@@ -145,6 +145,22 @@ post-delete gate, baseline launch, or Phase 2.5 experiment launch occurred.
 Checkpoint manifest:
 `outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
 
+Phase 2.5 package-audit hardening on 2026-06-06 added
+`scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only gate
+for future observation/motivation, component-ablation, and hyperparameter
+packages. A module cannot support paper claims until this audit passes. The
+gate checks command/log/config/hash records, git commit, row counts, join
+counts where applicable, full metrics/tables where required, generated plots,
+provenance/status labels, and local/server manifest comparison. For component
+ablation it requires a dedicated `component_ablation_summary.csv` with all
+expected leave-one-component-out rows; the existing validation sweep alone is
+not sufficient evidence for the component study. It also checks selected
+valid/test artifacts, imported same-candidate tables, exact score coverage, and
+audit/degeneracy flags. For hyperparameter analysis, it requires expected
+controls (`eta`, `confidence_weight`, `weight_grid_label` by default), valid
+and test curves, producer audit-summary fields, and figures contained in the
+package.
+
 ## Stable Agent Roles
 
 Use these roles in future multi-agent work:

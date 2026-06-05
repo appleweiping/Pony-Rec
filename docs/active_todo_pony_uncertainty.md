@@ -2803,6 +2803,26 @@ manifesting on the server, post-delete gate, experiment launch, or baseline
 launch occurred. Checkpoint manifest:
 `outputs/summary/paper_critical/phase2_5_retention_decision_checkpoint_20260606_0300.sha256`.
 
+Phase 2.5 package-audit hardening: Codex added
+`scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only audit
+for finished observation/motivation, component-ablation, and hyperparameter
+packages. It must pass before those modules support paper claims. The checker
+enforces commands/log snippets, configs or selected hyperparameters, git
+commit, input hashes, row-count/join-count evidence, required metrics/tables,
+generated plots, provenance/status labels, and local/server manifest
+comparison. For component ablation, it requires an explicit
+`component_ablation_summary.csv` with every expected leave-one-component-out
+ablation and full metrics, so the validation sweep alone cannot be called a
+completed ablation study; it also checks selected-valid/test artifacts,
+imported same-candidate tables, exact coverage, and audit/degeneracy flags.
+For hyperparameter analysis, it requires the expected controls (`eta`,
+`confidence_weight`, and `weight_grid_label` by default), valid and test
+curves, producer audit-summary fields, and package-contained figures. Focused
+verification:
+`python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_build_ccrp_component_inventory.py`
+(`27 passed`). This does not unblock Phase 2.5 execution while disk is below
+the launch floor.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for
@@ -2817,7 +2837,9 @@ launch occurred. Checkpoint manifest:
 3. Prioritize Phase 2.5 paper-critical modules before any paper-readiness
    claim: uncertainty observation/motivation figure or table, full C-CRP
    leave-one-component-out ablation, real hyperparameter curves, and the clean
-   framework overview figure.
+   framework overview figure. After each module package is generated, run
+   `scripts/audit/main_audit_phase2_5_module_package.py` for the relevant
+   module and do not cite that package until the audit passes.
 4. Before any new server work, run a fresh process/GPU/disk preflight. Current
    disk remains around `12.41GB` free / `94%` used and below the Phase 2.5
    launch floor. Either expand disk or make an explicit archive/retention

@@ -457,6 +457,31 @@ Include:
 - provenance notes and status labels;
 - local/server manifest comparison.
 
+Before using a finished Phase 2.5 module in paper claims, run the local package
+audit:
+
+```powershell
+python scripts\audit\main_audit_phase2_5_module_package.py `
+  --module observation_motivation `
+  --package_dir outputs\summary\paper_critical\<module_name> `
+  --output_json outputs\summary\paper_critical\<module_name>\phase2_5_module_package_audit.json `
+  --output_md outputs\summary\paper_critical\<module_name>\phase2_5_module_package_audit.md
+```
+
+Use `--module component_ablation` for the leave-one-component-out package and
+`--module hyperparameter_analysis` for curve packages. The audit is read-only:
+it does not launch experiments, copy files, or delete files. It fails closed if
+the package lacks status labels, full metrics where required, row counts,
+figures, provenance, input hashes, log snippets, or local/server manifest
+comparison. It also requires the component-ablation package to include an
+explicit `component_ablation_summary.csv` covering every expected ablation, so
+a validation-only sweep cannot be relabeled as completed leave-one-component-out
+evidence. The component audit also checks selected-valid/test artifacts,
+imported same-candidate tables, exact score coverage, and audit/degeneracy
+fields. The hyperparameter audit requires the expected controls
+(`eta`, `confidence_weight`, and `weight_grid_label` by default) with valid and
+test curves, producer audit-summary fields, and package-contained figures.
+
 Exclude by default:
 
 - huge raw `scores.csv`;

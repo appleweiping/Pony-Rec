@@ -412,6 +412,24 @@ also include:
 Each module needs status labels, row counts, commands, configs, seeds when
 applicable, provenance notes, plots/tables, and a lightweight local evidence
 package before it can support paper claims.
+Package-audit hardening on 2026-06-06: Codex added
+`scripts/audit/main_audit_phase2_5_module_package.py`, a local read-only audit
+for finished observation/motivation, component-ablation, and hyperparameter
+packages. It enforces the Evidence Package Standard in
+`docs/paper_critical_experiment_plan_2026-06-03.md`: command/log/config/hash
+records, git commit, row-count and join-count evidence, metrics/tables,
+figures, provenance/status labels, and local/server manifest comparison. It
+also fails closed if a component-ablation package lacks an explicit
+`component_ablation_summary.csv` covering every expected leave-one-component-out
+ablation with full metrics and row counts, so a validation-only C-CRP sweep
+cannot be mislabeled as completed component evidence. The component gate also
+checks selected-valid/test artifacts, imported same-candidate tables, exact
+coverage, and audit/degeneracy flags. The hyperparameter gate requires the
+expected controls (`eta`, `confidence_weight`, and `weight_grid_label` by
+default), valid and test curves, producer audit-summary fields, and
+package-contained figures. This is a packaging gate, not a completed Phase 2.5
+result; the modules still need full-scale signal rows and server execution
+after the storage gate clears.
 
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
