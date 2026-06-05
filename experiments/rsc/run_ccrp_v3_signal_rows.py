@@ -167,6 +167,17 @@ def iter_task_prompts(records: list[dict[str, Any]]) -> tuple[list[str], list[di
     return prompts, meta_rows
 
 
+def validate_generation_count(*, expected_rows: int, prompt_count: int, meta_count: int, result_count: int) -> None:
+    counts = {
+        "expected_rows": int(expected_rows),
+        "prompt_count": int(prompt_count),
+        "meta_count": int(meta_count),
+        "result_count": int(result_count),
+    }
+    if len(set(counts.values())) != 1:
+        raise ValueError(f"signal-row generation count mismatch: {counts}")
+
+
 def write_signal_rows_csv(path: str | Path, rows: list[dict[str, Any]]) -> None:
     fieldnames = [
         "source_event_id",
@@ -251,6 +262,13 @@ def main() -> None:
         rate = done / elapsed if elapsed > 0 else 0.0
         print(f"[{done}/{len(prompts)}] {rate:.0f} prompts/s", flush=True)
 
+    validate_generation_count(
+        expected_rows=expected_rows,
+        prompt_count=len(prompts),
+        meta_count=len(meta_rows),
+        result_count=len(raw_results),
+    )
+
     rows: list[dict[str, Any]] = []
     failure_rows: list[dict[str, Any]] = []
     for meta, result in zip(meta_rows, raw_results):
@@ -287,6 +305,10 @@ def main() -> None:
         "batch_size": args.batch_size,
         "chunk_users": args.chunk_users,
         "expected_candidates_per_event": args.expected_candidates_per_event,
+        "expected_signal_rows": expected_rows,
+        "prompt_count": len(prompts),
+        "meta_row_count": len(meta_rows),
+        "raw_result_count": len(raw_results),
         "n_events": len(records),
         "n_signal_rows": len(rows),
         "signal_rows_path": str(signal_path),

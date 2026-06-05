@@ -1,9 +1,12 @@
 import csv
 
+import pytest
+
 from experiments.rsc.run_ccrp_v3_signal_rows import (
     SIGNAL_SCHEMA_VERSION,
     iter_task_prompts,
     parse_signal_response,
+    validate_generation_count,
     write_signal_rows_csv,
 )
 from scripts.audit.main_audit_ccrp_uncertainty_sources import audit_source
@@ -120,3 +123,10 @@ def test_written_signal_rows_are_recomputable_for_auditor(tmp_path):
     assert audit["recomputable_signal_rows"] is True
     assert audit["candidate_key_coverage_rate"] == 1.0
     assert audit["failures"] == ["missing_uncertainty_column"]
+
+
+def test_validate_generation_count_rejects_truncated_backend_results():
+    validate_generation_count(expected_rows=4, prompt_count=4, meta_count=4, result_count=4)
+
+    with pytest.raises(ValueError, match="signal-row generation count mismatch"):
+        validate_generation_count(expected_rows=4, prompt_count=4, meta_count=4, result_count=3)
