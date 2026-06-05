@@ -1,0 +1,25 @@
+{
+  "artifact_class": "post_gate_disk_cleanup_manifest",
+  "domain": "tools",
+  "baseline": "llm2rec_sasrec",
+  "cleanup_time_cst": "2026-06-05 18:45:03 CST",
+  "reason": "disk_below_10GiB_after_completed_row_server_final_and_local_light_pass",
+  "removed_file": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+  "removed_size_bytes": 804958794,
+  "removed_line_count": 10000,
+  "removed_sha256": "211a037a71020955e3488fdcd53f8d6710505bdad23e13c60e7a869d83e99148",
+  "server_final_evidence_audit": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+  "server_large_artifact_manifest": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_large_artifact_manifest.sha256",
+  "local_light_package": "D:/Research/Uncertainty/outputs/baselines/official_adapters/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "preserved": [
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_score_audit.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_run_summary.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_large_artifact_manifest.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_large_artifact_manifest.sha256",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/seqrec_ckpt/"
+  ]
+}

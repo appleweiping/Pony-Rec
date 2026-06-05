@@ -1,0 +1,132 @@
+{
+  "ok": true,
+  "copy": true,
+  "remote_host": "pony-rec-gpu",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "remote_evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "local_evidence_dir": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "allowed_file_count": 13,
+  "excluded_file_count": 3,
+  "excluded_files_preview": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "size": 804958794
+    },
+    {
+      "rel_path": "scores.csv",
+      "size": 104999203
+    },
+    {
+      "rel_path": "seqrec_ckpt/LLM2Rec_official_qwen3base_tools_100neg-evaluate_with_seqrec.py_--model=SASRec_--dataset=T-Jun-05-2026_16-00-30-be7754.pth",
+      "size": 5665876357
+    }
+  ],
+  "too_large": [],
+  "checked_files": [
+    {
+      "rel_path": "fairness_provenance.json",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\fairness_provenance.json",
+      "size": 8512,
+      "sha256": "6944b923608983ce9192f9a5fe2c1ee92841281e2d5f84bd3c7fd4f298b738b2",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_official_run_summary.json",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_official_run_summary.json",
+      "size": 13266,
+      "sha256": "059bece3ccd4a8b02de6fe8434db65c837061e98a907c7ee15d7983154ec0ac4",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_official_score_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_official_score_audit.json",
+      "size": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_official_training.log",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_official_training.log",
+      "size": 1494684,
+      "sha256": "ec565266a0f36c036db0da41f85a831ac39204f47265949222ac54973fdd0da3",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "llm2rec_sasrec_same_candidate_score_audit.txt",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\llm2rec_sasrec_same_candidate_score_audit.txt",
+      "size": 534,
+      "sha256": "c3c9e465ed07597a5ad1c672937d39df560eb6e77719e2a0f42acb0597e6bb01",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_final_evidence_audit.json",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_final_evidence_audit.json",
+      "size": 4514,
+      "sha256": "9f3cb7a513806c93e5628b02b78e6954f3c44f7bf92f63164ada510fcf647fa2",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.json",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_large_artifact_manifest.json",
+      "size": 1775,
+      "sha256": "7ea14c90703b63cdbee7d1e91c7432e0000cad22a4bf8abbfa5bc07c6f81bb42",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "server_large_artifact_manifest.sha256",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\server_large_artifact_manifest.sha256",
+      "size": 379,
+      "sha256": "ae67d0195247b2fa4a3254e0b237c0941c5e1775bc29548acbddc1f148eb04a3",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\external_score_coverage.csv",
+      "size": 211,
+      "sha256": "6e90dbf9374eb36199e8dddb78ab1d5aa26d01a3bcf6d21fa597d1d4c07bdf2d",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "size": 42271231,
+      "sha256": "190fa295c99e7d9f0333f62d29db486a9852346cbf77f15c59599675b7b8cd94",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\ranking_exposure_distribution.csv",
+      "size": 62,
+      "sha256": "108211c10bc21d804e494d0f7e8bba6e3f39d16088cee7197cfa3039c6c1cc67",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\ranking_metrics.csv",
+      "size": 580,
+      "sha256": "750caa559cf4387cc53d28b9c6d460ea5ccf0466036a40929254eb359b4846a7",
+      "size_ok": true,
+      "sha256_ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "local_path": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate\\tables\\same_candidate_external_baseline_summary.csv",
+      "size": 1838,
+      "sha256": "47b2543c7cc635a2297651f489801f534674c536d41d16ec505834098f66dcad",
+      "size_ok": true,
+      "sha256_ok": true
+    }
+  ],
+  "failures": []
+}

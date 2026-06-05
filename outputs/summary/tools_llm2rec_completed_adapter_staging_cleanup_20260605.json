@@ -1,0 +1,27 @@
+{
+  "artifact_class": "post_gate_adapter_staging_cleanup_manifest",
+  "domain": "tools",
+  "baseline": "llm2rec_sasrec",
+  "cleanup_time_cst": "2026-06-05 18:46:29 CST",
+  "reason": "disk_below_10GiB_after_completed_row_and_prediction_cleanup",
+  "removed_total_size_bytes": 1100523516,
+  "removed_files": [
+    {"path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/candidate_items_mapped.csv", "size_bytes": 856740425, "sha256": "8a041d3b4ad622505830819fc6fb82959fb3a956a0b75f14f39819c139a2f098"},
+    {"path": "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/item_text_seed.csv", "size_bytes": 243783091, "sha256": "4e8269dbf0b8be576f88ec86a96a94cec416442b6d981cff79bed6e153897d24"}
+  ],
+  "server_final_evidence_audit": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/server_final_evidence_audit.json",
+  "score_audit": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_score_audit.json",
+  "local_light_package": "D:/Research/Uncertainty/outputs/baselines/official_adapters/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "preserved": [
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/adapter_metadata.json",
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_embedding_metadata.json",
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_same_candidate_score_metadata.json",
+    "outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter/llm2rec_same_candidate_score_summary.csv",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_score_audit.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_run_summary.json",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/",
+    "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/seqrec_ckpt/"
+  ]
+}

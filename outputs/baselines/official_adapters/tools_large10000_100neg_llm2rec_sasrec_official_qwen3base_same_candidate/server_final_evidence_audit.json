@@ -1,0 +1,103 @@
+{
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate",
+  "mode": "server_final",
+  "expected_users": 10000,
+  "expected_candidates_per_user": 101,
+  "ok": true,
+  "failures": [],
+  "warnings": [],
+  "files": {
+    "fairness_provenance.json": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/fairness_provenance.json",
+      "present": true,
+      "size": 8512
+    },
+    "tables/ranking_metrics.csv": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_metrics.csv",
+      "present": true,
+      "size": 580,
+      "lines": 2
+    },
+    "tables/same_candidate_external_baseline_summary.csv": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/same_candidate_external_baseline_summary.csv",
+      "present": true,
+      "size": 1838,
+      "lines": 2
+    },
+    "tables/external_score_coverage.csv": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/external_score_coverage.csv",
+      "present": true,
+      "size": 211,
+      "lines": 2
+    },
+    "tables/ranking_exposure_distribution.csv": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_exposure_distribution.csv",
+      "present": true,
+      "size": 62,
+      "lines": 4
+    },
+    "tables/ranking_eval_records.csv": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "present": true,
+      "size": 42271231,
+      "lines": 10001
+    },
+    "scores.csv": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "present": true,
+      "size": 104999203,
+      "lines": 1010001
+    },
+    "predictions/rank_predictions.jsonl": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "present": true,
+      "size": 804958794,
+      "lines": 10000
+    },
+    "inspect_fairness_provenance.json": {
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/inspect_fairness_provenance.json",
+      "present": false,
+      "size": 0
+    }
+  },
+  "dynamic_files": {
+    "score_audit_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_score_audit.json",
+    "score_audit_txt": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_sasrec_same_candidate_score_audit.txt",
+    "run_summary_json": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/llm2rec_official_run_summary.json"
+  },
+  "provenance": {
+    "implementation_status": "official_completed",
+    "blocker_count": 0,
+    "score_coverage_rate": 1.0,
+    "comparison_variant": "official_code_qwen3base_default_hparams_declared_adaptation",
+    "score_schema": [
+      "source_event_id",
+      "user_id",
+      "item_id",
+      "score"
+    ],
+    "test_set_model_selection_allowed": false,
+    "baseline_extra_tuning_allowed": false
+  },
+  "metrics": {
+    "HR@5": "0.0957",
+    "HR@10": "0.1625",
+    "HR@20": "0.2954",
+    "NDCG@5": "0.060227320850546905",
+    "NDCG@10": "0.08147852827156639",
+    "NDCG@20": "0.11481218118869342",
+    "MRR": "0.08101396652891538",
+    "sample_count": "10000",
+    "avg_candidates": "101.0"
+  },
+  "coverage": {
+    "baseline_name": "llm2rec_sasrec",
+    "ranking_events": "10000",
+    "total_candidates": "1010000",
+    "matched_candidates": "1010000",
+    "score_coverage_rate": "1.0",
+    "fully_scored_event_rate": "1.0",
+    "missing_score": "-1000000000000.0",
+    "score_rows_loaded": "1010000"
+  }
+}

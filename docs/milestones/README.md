@@ -470,6 +470,31 @@ The repository is now in M5 (multi-domain SOTA validation):
   checkpoints, embeddings, task splits, or other projects were deleted. The
   post-cleanup safety check confirmed the same PIDs alive, duplicate counts
   `1/1`, no final evidence, and disk `10,820,177,920` bytes free / `95%` used.
+  At 2026-06-05 18:38 CST, Tools `llm2rec_sasrec` completed normally under
+  the recovery run: the wrapper reported `implementation_status=official_completed`,
+  `[2026-06-05 18:38:04] DONE llm2rec_sasrec on tools`, and `=== All baseline
+  runs complete ===`. Server-final audit passed with `ok=true`; server
+  large-artifact manifest passed; local-light sync and local-light audit both
+  passed. Local lightweight evidence is under
+  `outputs/baselines/official_adapters/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+  Full metrics over `10,000` users and `101` candidates are HR@5/10/20
+  `0.0957 / 0.1625 / 0.2954`, NDCG@5/10/20
+  `0.060227320850546905 / 0.08147852827156639 / 0.11481218118869342`, and MRR
+  `0.08101396652891538`. Score audit/import coverage passed with
+  `1,010,000` candidate/score rows, `1,010,000` matched keys, no missing,
+  extra, duplicate, or non-finite scores, and `score_coverage_rate=1.0`.
+  `scores.csv` has `1,010,001` lines, predictions had `10,000` lines before
+  post-gate cleanup, and `tables/ranking_eval_records.csv` has `10,001`
+  lines. Because disk remained tight, post-gate cleanup removed only the
+  server-side prediction JSONL after sha256/line-count manifesting
+  (`outputs/summary/tools_llm2rec_prediction_deleted_post_gate_20260605.{json,sha256}`)
+  and the completed-row adapter staging CSVs
+  (`outputs/summary/tools_llm2rec_completed_adapter_staging_cleanup_20260605.{json,sha256}`).
+  Final scores, provenance, audits, imported tables, server-final audit,
+  large-artifact manifest, SASRec checkpoint, upstream embedding, and compact
+  adapter metadata were preserved; disk recovered to `11,772,899,328` bytes
+  free / `95%` used. Tools is now 7/8 official rows gated; the remaining row
+  is `llmesr_sasrec`.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

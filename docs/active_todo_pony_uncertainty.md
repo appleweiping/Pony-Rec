@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 18:11 CST
+Last updated: 2026-06-05 18:46 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -2217,21 +2217,61 @@ same PIDs alive, duplicate counts `1/1`, no final evidence, and disk
 `10,820,177,920` bytes free / `95%` used. Continue monitoring disk through the
 final export.
 
+Tools LLM2Rec official completion/gate checkpoint: at 2026-06-05 18:38 CST,
+Tools `llm2rec_sasrec` completed normally under the recovery run. Wrapper log
+`baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log` contains
+`implementation_status=official_completed`, `[2026-06-05 18:38:04] DONE
+llm2rec_sasrec on tools`, and `=== All baseline runs complete ===`; the
+tracked runner, adapter, and training PIDs exited, with duplicate counts `0/0`.
+Server-final audit passed with `ok=true`, `failures=[]`, `warnings=[]`;
+server large-artifact manifest passed and records the hashes for
+`predictions/rank_predictions.jsonl`, `scores.csv`, and the SASRec checkpoint.
+Local-light evidence sync and local-light audit both passed. Local lightweight
+evidence is under
+`outputs/baselines/official_adapters/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+Full imported metrics over `10,000` users and `101` candidates are HR@5/10/20
+`0.0957 / 0.1625 / 0.2954`, NDCG@5/10/20
+`0.060227320850546905 / 0.08147852827156639 / 0.11481218118869342`, and MRR
+`0.08101396652891538`. Score audit is PASS with `candidate_rows=1010000`,
+`score_rows=1010000`, `matched_keys=1010000`, no missing/extra/duplicate keys,
+finite scores `1010000`, and `score_coverage_rate=1.0`. Row counts:
+`scores.csv` `1,010,001` lines, `predictions/rank_predictions.jsonl` `10,000`
+lines before post-gate cleanup, and `tables/ranking_eval_records.csv` `10,001`
+lines. Provenance has `implementation_status=official_completed`,
+`blockers=[]`, `score_coverage_rate=1.0`, comparison variant
+`official_code_qwen3base_default_hparams_declared_adaptation`, no test-set
+model selection, and no extra baseline tuning.
+
+Post-gate disk cleanup for the completed Tools LLM2Rec row preserved final
+scores, provenance, audits, imported tables, server-final audit, large-artifact
+manifest, SASRec checkpoint, upstream embedding, and compact adapter metadata.
+Because final export left disk below the 10 GiB guard, the server-side
+prediction JSONL was removed only after server-final and local-light gates
+passed and after sha256/line-count manifesting:
+`outputs/summary/tools_llm2rec_prediction_deleted_post_gate_20260605.{json,sha256}`.
+The removed file had `10,000` lines, size `804,958,794` bytes, and sha256
+`211a037a71020955e3488fdcd53f8d6710505bdad23e13c60e7a869d83e99148`.
+Disk was still slightly below the strict 10 GiB guard, so the completed-row
+adapter staging CSVs `candidate_items_mapped.csv` and `item_text_seed.csv`
+were removed with manifest
+`outputs/summary/tools_llm2rec_completed_adapter_staging_cleanup_20260605.{json,sha256}`;
+removed total size `1,100,523,516` bytes. Post-cleanup disk is
+`11,772,899,328` bytes free / `95%` used, and preserved row files were
+rechecked: `scores.csv` `1,010,001` lines, `ranking_eval_records.csv`
+`10,001` lines, provenance and score audit present.
+
 ## Required Next Actions
 
-1. Monitor the active Tools `llm2rec_sasrec` recovery row: runner PID
-   `3423029`, adapter PID `3423037`, official training PID `3423221`, log
-   `baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log`,
-   heartbeat `monitor-tools-llm2rec-recovery`. Notify on completion, failure,
-   duplicate process, dead tracked PID, disk below `10G` free, or disk
-   at/above `97%` used. Do not start another baseline while this row is
-   active.
-2. After each remaining Tools row completes, run the established row gates
+1. Tools `llm2rec_sasrec` is now official-completed and gated. Before launching
+   the last Tools row (`llmesr_sasrec`), run a fresh process/GPU/disk preflight,
+   verify no active baseline process and no duplicate output risk, and confirm
+   disk margin is acceptable for another storage-heavy SASRec-style row.
+2. After the remaining Tools row completes, run the established row gates
    before marking it official: score audit/import, server-final audit, server
    large-artifact sha256 manifest, local-light sync, local-light audit,
    docs/memory, related-only commit/push, and then clean only eligible
    completed intermediate artifacts if disk remains tight.
-3. After each completed Tools row, verify full HR@5/@10/@20,
+3. After the remaining completed Tools row, verify full HR@5/@10/@20,
    NDCG@5/@10/@20, MRR, `n_users=10000`, `avg_candidates=101`,
    score/candidate row counts, exact same-candidate coverage, provenance,
    score audit, imported tables, server-final audit, lightweight sync, and

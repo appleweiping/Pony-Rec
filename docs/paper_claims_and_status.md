@@ -670,6 +670,38 @@ claim.
    embeddings, task splits, or other projects were deleted. The post-cleanup
    safety check confirmed the same PIDs alive, duplicate counts `1/1`, no final
    evidence, and disk `10,820,177,920` bytes free / `95%` used.
+   At 2026-06-05 18:38 CST, Tools `llm2rec_sasrec` completed normally under
+   the recovery run. The wrapper reported `implementation_status=official_completed`,
+   `[2026-06-05 18:38:04] DONE llm2rec_sasrec on tools`, and `=== All baseline
+   runs complete ===`; tracked PIDs exited and duplicate counts were `0/0`.
+   Server-final audit passed with `ok=true`, `failures=[]`, `warnings=[]`;
+   server large-artifact manifest passed; local-light sync and local-light
+   audit both passed. Local lightweight evidence is under
+   `outputs/baselines/official_adapters/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/`.
+   Full metrics over `10,000` users and `101` candidates are HR@5/10/20
+   `0.0957 / 0.1625 / 0.2954`, NDCG@5/10/20
+   `0.060227320850546905 / 0.08147852827156639 / 0.11481218118869342`, and MRR
+   `0.08101396652891538`. Score audit/import coverage passed with
+   `candidate_rows=1010000`, `score_rows=1010000`, `matched_keys=1010000`,
+   no missing/extra/duplicate keys, finite scores `1010000`, and
+   `score_coverage_rate=1.0`. Row counts: `scores.csv` `1,010,001` lines,
+   `predictions/rank_predictions.jsonl` `10,000` lines before post-gate
+   cleanup, and `tables/ranking_eval_records.csv` `10,001` lines. Provenance
+   has `implementation_status=official_completed`, `blockers=[]`,
+   `score_coverage_rate=1.0`, no test-set model selection, and no extra
+   baseline tuning. Post-gate cleanup preserved final scores, provenance,
+   audits, imported tables, server-final audit, large-artifact manifest, SASRec
+   checkpoint, upstream embedding, and compact adapter metadata. Because disk
+   remained tight, only the server-side prediction JSONL was deleted with
+   manifest
+   `outputs/summary/tools_llm2rec_prediction_deleted_post_gate_20260605.{json,sha256}`
+   and then the completed-row adapter staging CSVs were deleted with manifest
+   `outputs/summary/tools_llm2rec_completed_adapter_staging_cleanup_20260605.{json,sha256}`.
+   The deleted prediction had `10,000` lines, size `804,958,794` bytes, and
+   sha256 `211a037a71020955e3488fdcd53f8d6710505bdad23e13c60e7a869d83e99148`;
+   adapter staging cleanup removed `1,100,523,516` bytes. Post-cleanup disk is
+   `11,772,899,328` bytes free / `95%` used. Tools is now 7/8 official rows
+   gated; the remaining Tools official row is `llmesr_sasrec`.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server
