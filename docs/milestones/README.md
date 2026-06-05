@@ -588,7 +588,11 @@ The repository is now in M5 (multi-domain SOTA validation):
   `12,342,841,344` bytes free / `94%` used, below the strict `15GiB` launch
   floor. Routine safe-now cleanup is insufficient; high-yield cleanup now
   requires explicit archive/retention approval for a completed upstream
-  embedding or model checkpoint. No Phase 2.5 experiment was launched.
+  embedding or model checkpoint. A guarded non-executing plan now exists for
+  the completed Tools LLM2Rec upstream embedding under
+  `outputs/summary/paper_critical/retention_cleanup_plan_20260605/`; it exits
+  before any delete command and records `will_delete=false`. No Phase 2.5
+  experiment was launched.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

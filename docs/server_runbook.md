@@ -64,6 +64,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/run_ccrp_v3_new_domains.sh` | C-CRP v3 on home/tools only |
 | `scripts/audit/main_audit_domain_official_gate.py` | Read-only domain gate for the eight official baselines plus C-CRP full metrics, row counts, coverage, provenance, and stray official-like directories |
 | `scripts/experiments/main_build_domain_official_comparison.py` | Read-only full comparison table and paired tests for C-CRP vs eight official baselines |
+| `scripts/audit/main_plan_phase2_5_retention_cleanup.py` | Guarded, non-executing Phase 2.5 storage-retention plan; generated shell exits before manifest or delete commands and requires explicit approval |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 
 ## Monitoring

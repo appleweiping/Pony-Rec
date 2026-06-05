@@ -196,6 +196,23 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    Minimum next action remains: expand disk or approve/archive exactly one
    high-yield completed artifact with sha256/size manifesting and post-delete
    gate checks before signal-row regeneration.
+   Guarded retention-decision plan 2026-06-05 22:58 CST: Codex added
+   `scripts/audit/main_plan_phase2_5_retention_cleanup.py` and generated a
+   non-executing plan for the highest-yield candidate, the completed Tools
+   LLM2Rec upstream embedding. Artifact:
+   `outputs/summary/paper_critical/retention_cleanup_plan_20260605/tools_llm2rec_upstream_embedding_retention_cleanup_plan_20260605.{json,sh,sha256}`.
+   The generated shell exits with `exit 2` before preflight, `sha256sum`, or
+   `rm --`, records `will_delete=false`, `will_delete_files=false`, and
+   `will_execute_cleanup=false`, and requires explicit token
+   `APPROVE_DELETE_COMPLETED_TOOLS_LLM2REC_UPSTREAM_EMBEDDING_20260605` after
+   a retention/archive decision. Expected embedding sha256 from local
+   `fairness_provenance.json` is
+   `306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`. The
+   plan includes exact-target `realpath` and size/hash guards, evidence
+   prechecks, pre/post Tools domain-gate and comparison checks, sha256/size
+   manifesting, and post-delete disk checks. Focused test:
+   `python -m pytest tests\test_plan_phase2_5_retention_cleanup.py`
+   (`3 passed`). No deletion was performed.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and
@@ -2503,7 +2520,7 @@ self-contained local raw reproduction package.
    leave-one-component-out ablation, real hyperparameter curves, and the clean
    framework overview figure.
 4. Before any new server work, run a fresh process/GPU/disk preflight. Current
-   disk remains around `7.4G` free / `97%` used; preserve scores, provenance,
+   disk remains around `12.34GB` free / `94%` used; preserve scores, provenance,
    audits, imported tables, C-CRP raw reports/ranks, checkpoints/models, and
    embeddings unless a separate archive decision explicitly allows deletion.
 5. Only after comparisons, paper-critical modules, provenance, statistical

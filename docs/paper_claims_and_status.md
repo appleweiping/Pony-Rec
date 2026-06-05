@@ -119,6 +119,16 @@ also include:
     (`5,662,687,360` bytes) or final LLMEmb/LLM-ESR checkpoints (`3.8G`-`6.8G`).
     Those require an explicit archive/retention decision before deletion. No
     deletion was performed and no Phase 2.5 experiment was launched.
+    Guarded planner:
+    `scripts/audit/main_plan_phase2_5_retention_cleanup.py` now creates a
+    planning-only retention cleanup package. Current artifact:
+    `outputs/summary/paper_critical/retention_cleanup_plan_20260605/tools_llm2rec_upstream_embedding_retention_cleanup_plan_20260605.{json,sh,sha256}`.
+    It targets the completed Tools LLM2Rec upstream embedding only as an
+    approval-required option, records `will_delete=false`,
+    `will_delete_files=false`, and `will_execute_cleanup=false`, and its shell
+    exits with `exit 2` before `sha256sum` or `rm --`. The planned expected
+    embedding sha256 is
+    `306618d974eb4133d9cda87bae3251e17d793aa6f5a8cb38d558b549ed31d56e`.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches
