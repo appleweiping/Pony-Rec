@@ -298,6 +298,13 @@ The repository is now in M5 (multi-domain SOTA validation):
   final scores/provenance/audits/tables/model were preserved. Disk recovered
   only to about `9.3G` free, so the active row still needs close disk
   monitoring and no next baseline should start.
+  A 2026-06-05 08:01 CST follow-up confirmed the active Tools RLMRec run uses
+  the default official `3000`-epoch setting (`--rlmrec_epochs=3000` / trainer
+  `--epochs=3000`) and had reached epoch `590/3000` with train loss
+  `1.509551`. The same runner/adapter PIDs were alive and unique, no
+  completion/failure/final-artifact markers existed, final evidence remained
+  placeholder-only, disk remained about `9.3G` free / `96%` used, and a repeat
+  large-file/cache/temp/archive audit found no safe cleanup candidate.
   Every completed row imports full `@5/@10/@20 + MRR` metrics after score audit.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates

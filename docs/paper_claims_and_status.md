@@ -486,6 +486,15 @@ same-candidate tests before any paper-wide SOTA claim.
    Scores, provenance, audits, imported tables, and model were preserved; disk
    recovered only to about `9.3G` free, still below the 10G warning threshold.
    This is active monitor-only evidence, not a completed RLMRec row.
+   A 2026-06-05 08:01 CST follow-up confirmed the active Tools RLMRec run is
+   on the expected official default `3000`-epoch path (`--rlmrec_epochs=3000`
+   / trainer `--epochs=3000`) and had reached epoch `590/3000` with train loss
+   `1.509551`. Runner PID `3347729` and adapter PID `3347738` were alive and
+   unique, no completion/failure/final-artifact markers existed, final evidence
+   remained placeholder-only, and disk remained warning-level at about `9.3G`
+   free / `96%` used. A repeat large-file/cache/temp/archive audit found no
+   safe deletion candidate. This remains active monitor-only evidence, not a
+   completed RLMRec row.
    Home
    LLM2Rec completed at 2026-06-04 09:49 CST after a disk-full partial-copy
    recovery and passed score audit/import, server-final audit, server

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-05 07:02 CST
+Last updated: 2026-06-05 08:01 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -1753,6 +1753,21 @@ recovering disk to about `9.3G` free / `96%` used. This remains below the
 10G warning threshold, so continue monitoring closely and do not start another
 baseline. An attempted Electronics ELMRec prediction cleanup was rejected
 because that older directory lacked server-final provenance/scores proof.
+Monitor update 2026-06-05 08:01 CST: runner PID `3347729` and adapter PID
+`3347738` remained alive and unique, with exactly one matching RLMRec adapter
+process. The trainer/default adapter path confirms the official RLMRec run uses
+the default `3000` epochs (`--rlmrec_epochs=3000` / trainer `--epochs=3000`);
+the active log reached `[rlmrec-official] epoch=590 train_loss=1.509551`, so
+this remains expected long training rather than a suspected stall. GPU memory
+remained resident at `24679 MiB / 49140 MiB`, final RLMRec evidence stayed
+placeholder-only (`4.0K`), and no final `scores.csv`, provenance, score audit,
+imported tables, predictions, completion marker, OOM, no-space, killed, or
+traceback marker existed yet. Disk remained about `9.3G` free / `96%` used,
+below the 10G warning threshold. A repeat large-file/cache/temp/archive audit
+found no safe cleanup candidate: the large files were active RLMRec
+intermediates, protected same-candidate task packages, completed evidence or
+checkpoints, or an older prediction file without deletion proof. Do not start
+another Tools row while this active RLMRec row is training.
 
 Read-only toys domain gate checkpoint 2026-06-02 07:18 CST: server-side
 official rows `llmemb`, `proex_profile`, `promax_profile`, `elmrec_graph`, and
