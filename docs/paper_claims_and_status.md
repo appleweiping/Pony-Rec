@@ -155,6 +155,19 @@ also include:
     seven metrics with all 56 paired tests positive and Holm-significant.
     Disk remains below the Phase 2.5 floor at `12,407,840,768` free bytes, so
     no signal-row regeneration was launched.
+    Ranked retention audit on 2026-06-06 00:20 CST:
+    `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_ranked_20260606.{json,md,sha256}`
+    adds deterministic risk tiers and a `recommended_approval_candidate`.
+    After safe-now cleanup, no safe-now bytes remain, disk is still below the
+    strict floor at `12,407,414,784` free bytes, and the lowest-risk
+    approval-required candidate is the completed Tools LLM2Rec upstream
+    embedding
+    `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`.
+    It is an external embedding cache rather than a final score/provenance/
+    audit/table/checkpoint artifact; deleting it would still require explicit
+    archive/retention approval and the guarded manifest/gate sequence, but it
+    would raise expected free space to `18,070,102,144` bytes and clear the
+    minimum Phase 2.5 gate.
    Observation-builder guard hardening on 2026-06-04: the motivation script now
    rejects duplicate ranking-eval events, eval events absent from the C-CRP
    uncertainty input, invalid positive ranks, and `num_candidates` mismatches

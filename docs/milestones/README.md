@@ -608,7 +608,13 @@ The repository is now in M5 (multi-domain SOTA validation):
   still below the `15GiB` floor. Post-cleanup Tools domain gate and comparison
   gates still pass, with C-CRP observed-best on all seven metrics and all 56
   paired tests positive and Holm-significant. No Phase 2.5 experiment was
-  launched.
+  launched. A ranked retention audit at 2026-06-06 00:20 CST now recommends
+  the completed Tools LLM2Rec upstream embedding as the lowest-risk
+  approval-required candidate because it is outside final evidence directories
+  and would raise expected free space to `18,070,102,144` bytes; it still
+  requires explicit archive/retention approval and the guarded manifest/gate
+  sequence before deletion. Evidence:
+  `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_ranked_20260606.{json,md,sha256}`.
 - Strategy: achieve SOTA only after the new-domain official baselines pass
   same-candidate score/provenance/import gates
 - Paper readiness now also requires three paper-critical modules before final

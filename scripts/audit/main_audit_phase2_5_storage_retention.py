@@ -76,12 +76,14 @@ def _parse_df_bytes(text: str) -> dict[str, Any]:
     return {"free_bytes": 0, "used_pct": None, "raw": text.strip()}
 
 
-def classify_large_file(path: str, size_bytes: int) -> dict[str, str]:
+def classify_large_file(path: str, size_bytes: int) -> dict[str, Any]:
     normalized = path.replace("\\", "/")
     lower = normalized.lower()
     if "/projects/llm2rec/item_info/" in lower and lower.endswith((".npy", ".pkl", ".npz")):
         return {
             "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+            "retention_risk_tier": "approval_required_external_embedding_cache",
+            "retention_risk_rank": 20,
             "reason": (
                 "Completed upstream embedding/cache outside the final evidence directory. "
                 "High-yield, but protected unless an explicit retention/archive decision is recorded."
@@ -90,16 +92,22 @@ def classify_large_file(path: str, size_bytes: int) -> dict[str, str]:
     if normalized.startswith("outputs/baselines/external_tasks/"):
         return {
             "classification": "PROTECTED_TASK_SPLIT",
+            "retention_risk_tier": "protected_task_split",
+            "retention_risk_rank": 90,
             "reason": "Canonical same-candidate train/valid/test task split or metadata.",
         }
     if "ccrp_selected_test_scored_rows" in lower or "ccrp_selected_valid_scored_rows" in lower:
         return {
             "classification": "PROTECTED_SIGNAL_EVIDENCE",
+            "retention_risk_tier": "protected_signal_evidence",
+            "retention_risk_rank": 95,
             "reason": "Event-level C-CRP/scored-row evidence needed for paper-critical signal analysis.",
         }
     if normalized.endswith("/predictions/rank_predictions.jsonl"):
         return {
             "classification": "NEEDS_SERVER_FINAL_LOCAL_LIGHT_AUDIT_BEFORE_DELETE",
+            "retention_risk_tier": "eligible_only_after_server_final_local_light",
+            "retention_risk_rank": 40,
             "reason": "Large prediction file can be deleted only under the documented post-gate exception.",
         }
     final_evidence_tokens = (
@@ -112,20 +120,28 @@ def classify_large_file(path: str, size_bytes: int) -> dict[str, str]:
     if any(lower.endswith(token) for token in final_evidence_tokens):
         return {
             "classification": "PROTECTED_FINAL_EVIDENCE",
+            "retention_risk_tier": "protected_final_evidence",
+            "retention_risk_rank": 100,
             "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons.",
         }
     if lower.endswith((".pt", ".pth", ".ckpt", ".safetensors", ".bin")):
         return {
             "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+            "retention_risk_tier": "approval_required_final_model_checkpoint",
+            "retention_risk_rank": 30,
             "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
         }
     if normalized.startswith("outputs/baselines/official_adapters/") and lower.endswith(".csv"):
         return {
             "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+            "retention_risk_tier": "protected_legacy_score_evidence",
+            "retention_risk_rank": 90,
             "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target.",
         }
     return {
         "classification": "REVIEW_BEFORE_DELETE",
+        "retention_risk_tier": "manual_review_required",
+        "retention_risk_rank": 70,
         "reason": "Large file does not match a safe-now rule; manual retention review required.",
     }
 
@@ -142,6 +158,24 @@ def classify_safe_candidate(path: str, size_bytes: int) -> dict[str, Any]:
         classification = "REVIEW_BEFORE_DELETE"
         reason = "No safe-now rule matched."
     return {"path": path, "size_bytes": size_bytes, "classification": classification, "reason": reason}
+
+
+def _approval_sort_key(row: dict[str, Any]) -> tuple[int, int, str]:
+    try:
+        risk_rank = int(row.get("retention_risk_rank", 70))
+    except (TypeError, ValueError):
+        risk_rank = 70
+    return risk_rank, -int(row["size_bytes"]), str(row["path"])
+
+
+def _with_retention_decision_fields(row: dict[str, Any], *, current_free_bytes: int, min_free_bytes: int) -> dict[str, Any]:
+    size = int(row["size_bytes"])
+    expected_free = current_free_bytes + size
+    value = dict(row)
+    value["expected_free_bytes_after_delete"] = expected_free
+    value["would_clear_min_free_gate"] = expected_free >= min_free_bytes
+    value["approval_decision_required"] = True
+    return value
 
 
 def _remote_commands(project: str) -> dict[str, str]:
@@ -207,11 +241,13 @@ def build_audit(
     safe_now = [row for row in safe_candidates if row["classification"] == "SAFE_NOW_LOW_YIELD"]
     safe_now_total = sum(int(row["size_bytes"]) for row in safe_now)
     high_yield = [
-        row
+        _with_retention_decision_fields(row, current_free_bytes=current_free_bytes, min_free_bytes=min_free_bytes)
         for row in large_files
         if row["classification"] == "NEEDS_APPROVAL_OR_ARCHIVE_DECISION"
         and int(row["size_bytes"]) + current_free_bytes >= min_free_bytes
     ]
+    high_yield = sorted(high_yield, key=_approval_sort_key)
+    recommended_candidate = high_yield[0] if high_yield else None
 
     active_processes = [line for line in raw["processes"].splitlines() if line.strip()]
     experiment_launch_allowed = (
@@ -241,6 +277,22 @@ def build_audit(
         "safe_now_total_recoverable_bytes": safe_now_total,
         "safe_now_sufficient_for_min_free": current_free_bytes + safe_now_total >= min_free_bytes,
         "high_yield_candidates_requiring_approval": high_yield,
+        "recommended_approval_candidate": recommended_candidate,
+        "retention_recommendation": {
+            "status": "approval_required" if recommended_candidate else "no_single_approval_candidate_found",
+            "candidate_path": recommended_candidate.get("path") if recommended_candidate else "",
+            "retention_risk_tier": recommended_candidate.get("retention_risk_tier") if recommended_candidate else "",
+            "expected_free_bytes_after_delete": recommended_candidate.get("expected_free_bytes_after_delete")
+            if recommended_candidate
+            else None,
+            "would_clear_min_free_gate": recommended_candidate.get("would_clear_min_free_gate") if recommended_candidate else False,
+            "reason": (
+                "This is the lowest-risk high-yield candidate under the audit's current policy. "
+                "It still must not be deleted without an explicit archive/retention approval and post-delete gate checks."
+            )
+            if recommended_candidate
+            else "No approval-required candidate individually clears the configured minimum free-space gate.",
+        },
         "large_file_classification": large_files,
         "log_pid_files": _read_size_path_lines(raw["logs_and_pids"]),
         "audit_verdict": {
@@ -272,11 +324,29 @@ def write_markdown(path: str | Path, audit: dict[str, Any]) -> None:
         f"- Safe-now recoverable bytes: `{audit['safe_now_total_recoverable_bytes']}`",
         f"- Safe-now sufficient: `{audit['safe_now_sufficient_for_min_free']}`",
         "",
-        "## High-Yield Approval-Required Candidates",
-        "",
     ]
+    recommendation = audit.get("retention_recommendation", {})
+    if recommendation.get("candidate_path"):
+        lines.extend(
+            [
+                "## Recommended Approval Candidate",
+                "",
+                f"- Path: `{recommendation['candidate_path']}`",
+                f"- Risk tier: `{recommendation['retention_risk_tier']}`",
+                f"- Expected free bytes after delete: `{recommendation['expected_free_bytes_after_delete']}`",
+                f"- Clears minimum gate: `{recommendation['would_clear_min_free_gate']}`",
+                f"- Note: {recommendation['reason']}",
+                "",
+                "## High-Yield Approval-Required Candidates",
+                "",
+            ]
+        )
     for row in audit["high_yield_candidates_requiring_approval"][:12]:
-        lines.append(f"- `{row['path']}`: `{row['size_bytes']}` bytes; {row['reason']}")
+        lines.append(
+            f"- `{row['path']}`: `{row['size_bytes']}` bytes; "
+            f"`{row.get('retention_risk_tier', '')}`; expected free "
+            f"`{row.get('expected_free_bytes_after_delete')}`; {row['reason']}"
+        )
     if not audit["high_yield_candidates_requiring_approval"]:
         lines.append("- None.")
     lines.extend(["", "## Safe-Now Low-Yield Candidates", ""])

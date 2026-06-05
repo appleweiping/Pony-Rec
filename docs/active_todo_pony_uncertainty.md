@@ -254,6 +254,23 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    upstream embeddings, or other projects were deleted. Remaining action is
    unchanged: disk expansion or explicit archive/retention approval for one
    high-yield completed artifact before Phase 2.5 signal-row regeneration.
+   Ranked retention recommendation checkpoint 2026-06-06 00:20 CST: Codex
+   upgraded `scripts/audit/main_audit_phase2_5_storage_retention.py` to assign
+   deterministic retention-risk tiers/ranks and emit a
+   `recommended_approval_candidate` without deleting anything. Current ranked
+   evidence:
+   `outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_ranked_20260606.{json,md,sha256}`.
+   It reports no active project Python process, GPU idle, `12,407,414,784`
+   free bytes, `3,698,712,576` byte deficit to the strict `15GiB` floor, and
+   no safe-now recoverable bytes remaining. The recommended approval-required
+   target is the completed Tools LLM2Rec upstream embedding
+   `/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`
+   (`5,662,687,360` bytes), classified as
+   `approval_required_external_embedding_cache`; deleting it after explicit
+   archive/retention approval would raise expected free space to
+   `18,070,102,144` bytes and clear the minimum gate. This is only a ranked
+   decision surface; deletion still requires the existing approval token path,
+   sha256/size manifesting, and post-delete domain/comparison gates.
    Verification checkpoint 2026-06-05 03:27 CST: while Tools IRLLRec remained
    active and untouched, Codex reran the local paper-critical tooling audit
    (`python scripts/audit/main_audit_paper_critical_modules.py --root .`) and

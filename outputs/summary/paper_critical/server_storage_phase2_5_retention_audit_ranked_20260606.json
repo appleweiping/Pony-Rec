@@ -1,0 +1,1118 @@
+{
+  "schema_version": "2026-06-05.v2",
+  "created_at_utc": "2026-06-05T16:20:25+00:00",
+  "mode": "read_only_phase2_5_storage_retention_audit",
+  "remote": "pony-rec-gpu",
+  "project": "~/projects/pony-rec-rescue-shadow-v6",
+  "commands_executed_read_only": {
+    "processes": "cd ~/projects/pony-rec-rescue-shadow-v6 && ps aux | grep python | grep -v grep | grep -i 'pony-rec\\|ccrp\\|baseline\\|uncertainty' || true",
+    "gpu": "nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader",
+    "disk": "df -B1 /home/ajifang",
+    "large_outputs": "cd ~/projects/pony-rec-rescue-shadow-v6 && find outputs -type f -size +50M -printf '%s %p\\n' 2>/dev/null | sort -nr | head -80",
+    "llm2rec_item_info": "find /home/ajifang/projects/LLM2Rec/item_info -type f -size +50M -printf '%s %p\\n' 2>/dev/null | sort -nr | head -40",
+    "safe_candidate_dirs": "cd ~/projects/pony-rec-rescue-shadow-v6 && du -sb outputs/baselines/paper_adapters/tools_large10000_100neg_llm2rec_official_adapter outputs/baselines/paper_adapters/tools_large10000_100neg_llmesr_official_adapter tmp_llm2rec_sync 2>/dev/null || true",
+    "logs_and_pids": "cd ~/projects/pony-rec-rescue-shadow-v6 && find . -maxdepth 1 -type f \\( -name '*.log' -o -name '*.pid' \\) -printf '%s %p\\n' 2>/dev/null | sort -nr | head -80"
+  },
+  "server": {
+    "relevant_python_processes": [],
+    "gpu": "0 %, 15 MiB, 49140 MiB",
+    "disk": {
+      "filesystem": "/dev/vda5",
+      "blocks_1b": 209709965312,
+      "used_bytes": 186575355904,
+      "free_bytes": 12407414784,
+      "used_pct": 94,
+      "mount": "/",
+      "raw": "/dev/vda5      209709965312 186575355904 12407414784   94% /"
+    }
+  },
+  "phase2_5_disk_gate": {
+    "required_free_bytes_min": 16106127360,
+    "preferred_free_bytes": 26843545600,
+    "current_free_bytes": 12407414784,
+    "deficit_to_min_free_bytes": 3698712576,
+    "used_pct_limit": 97,
+    "experiment_launch_allowed": false
+  },
+  "safe_now_candidates": [],
+  "safe_now_total_recoverable_bytes": 0,
+  "safe_now_sufficient_for_min_free": false,
+  "high_yield_candidates_requiring_approval": [
+    {
+      "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+      "size_bytes": 5662687360,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_external_embedding_cache",
+      "retention_risk_rank": 20,
+      "reason": "Completed upstream embedding/cache outside the final evidence directory. High-yield, but protected unless an explicit retention/archive decision is recorded.",
+      "expected_free_bytes_after_delete": 18070102144,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 6812135931,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 19219550715,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 6446871382,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 18854286166,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 4798848507,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 17206263291,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 4522405462,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 16929820246,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 4167963387,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 16575378171,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 3919354786,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 16326769570,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 3847029499,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal.",
+      "expected_free_bytes_after_delete": 16254444283,
+      "would_clear_min_free_gate": true,
+      "approval_decision_required": true
+    }
+  ],
+  "recommended_approval_candidate": {
+    "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "size_bytes": 5662687360,
+    "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+    "retention_risk_tier": "approval_required_external_embedding_cache",
+    "retention_risk_rank": 20,
+    "reason": "Completed upstream embedding/cache outside the final evidence directory. High-yield, but protected unless an explicit retention/archive decision is recorded.",
+    "expected_free_bytes_after_delete": 18070102144,
+    "would_clear_min_free_gate": true,
+    "approval_decision_required": true
+  },
+  "retention_recommendation": {
+    "status": "approval_required",
+    "candidate_path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+    "retention_risk_tier": "approval_required_external_embedding_cache",
+    "expected_free_bytes_after_delete": 18070102144,
+    "would_clear_min_free_gate": true,
+    "reason": "This is the lowest-risk high-yield candidate under the audit's current policy. It still must not be deleted without an explicit archive/retention approval and post-delete gate checks."
+  },
+  "large_file_classification": [
+    {
+      "path": "outputs/home_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 6812135931,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 6446871382,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 4798848507,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 4522405462,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 4167963387,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 3919354786,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size_bytes": 3847029499,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/llmemb_official_model.pt",
+      "size_bytes": 3612579746,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "size_bytes": 984582922,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "size_bytes": 983489726,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "size_bytes": 901278834,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "size_bytes": 900858961,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "size_bytes": 852656435,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "size_bytes": 851495965,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "size_bytes": 841453688,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "size_bytes": 840075550,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "size_bytes": 831176047,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "size_bytes": 830412764,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "size_bytes": 795439842,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "size_bytes": 794239664,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/electronics_large10000_100neg_elmrec_official_qwen3base_graph_same_candidate/predictions/rank_predictions.jsonl",
+      "size_bytes": 783656344,
+      "classification": "NEEDS_SERVER_FINAL_LOCAL_LIGHT_AUDIT_BEFORE_DELETE",
+      "retention_risk_tier": "eligible_only_after_server_final_local_light",
+      "retention_risk_rank": 40,
+      "reason": "Large prediction file can be deleted only under the documented post-gate exception."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "size_bytes": 780603378,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "size_bytes": 779090828,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "size_bytes": 768647850,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "size_bytes": 767950269,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "size_bytes": 748305611,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "size_bytes": 746719927,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "size_bytes": 735705748,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "size_bytes": 734595499,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "size_bytes": 724053538,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "size_bytes": 722139732,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "size_bytes": 662254587,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "size_bytes": 660981498,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_test_same_candidate/item_metadata.csv",
+      "size_bytes": 358855391,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/books_large10000_100neg_valid_same_candidate/item_metadata.csv",
+      "size_bytes": 356966767,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/summary/week8_large10000_100neg_ccrp_formal/beauty/ccrp_selected_test_scored_rows.csv",
+      "size_bytes": 267072085,
+      "classification": "PROTECTED_SIGNAL_EVIDENCE",
+      "retention_risk_tier": "protected_signal_evidence",
+      "retention_risk_rank": 95,
+      "reason": "Event-level C-CRP/scored-row evidence needed for paper-critical signal analysis."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/item_metadata.csv",
+      "size_bytes": 252389925,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/item_metadata.csv",
+      "size_bytes": 250753581,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_official_model.pt",
+      "size_bytes": 202495061,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/item_metadata.csv",
+      "size_bytes": 186345196,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_test_same_candidate/item_metadata.csv",
+      "size_bytes": 185920896,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/electronics_large10000_100neg_valid_same_candidate/item_metadata.csv",
+      "size_bytes": 184686164,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_test_same_candidate/item_metadata.csv",
+      "size_bytes": 143941217,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/toys_large10000_100neg_valid_same_candidate/item_metadata.csv",
+      "size_bytes": 143716991,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_official_model.pt",
+      "size_bytes": 143280725,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/item_metadata.csv",
+      "size_bytes": 143020766,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/item_metadata.csv",
+      "size_bytes": 142434129,
+      "classification": "PROTECTED_TASK_SPLIT",
+      "retention_risk_tier": "protected_task_split",
+      "retention_risk_rank": 90,
+      "reason": "Canonical same-candidate train/valid/test task split or metadata."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_official_model.pt",
+      "size_bytes": 124725333,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate/elmrec_official_model.pt",
+      "size_bytes": 115286101,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_final_model_checkpoint",
+      "retention_risk_rank": 30,
+      "reason": "Completed model/checkpoint artifact; protected unless a separate retention decision permits removal."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/books_large10000_100neg_irllrec_official/irllrec_official_scores.csv",
+      "size_bytes": 113173476,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/books_large10000_100neg_rlmrec_official/rlmrec_official_scores.csv",
+      "size_bytes": 113149709,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/electronics_large10000_100neg_rlmrec_official/rlmrec_official_scores.csv",
+      "size_bytes": 112784380,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/electronics_large10000_100neg_irllrec_official/irllrec_official_scores.csv",
+      "size_bytes": 112777407,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/movies_large10000_100neg_rlmrec_official/rlmrec_official_scores.csv",
+      "size_bytes": 112636239,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/movies_large10000_100neg_irllrec_official/irllrec_official_scores.csv",
+      "size_bytes": 112600126,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/movies_large10000_100neg_llmemb_official/llmemb_official_scores.csv",
+      "size_bytes": 111277876,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/books_large10000_100neg_llmemb_official/llmemb_official_scores.csv",
+      "size_bytes": 111272647,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/electronics_large10000_100neg_llmemb_official/llmemb_official_scores.csv",
+      "size_bytes": 111146257,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/movies_large10000_100neg_llm2rec_official/llm2rec_official_scores.csv",
+      "size_bytes": 111133500,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/electronics_large10000_100neg_llm2rec_official/llm2rec_official_scores.csv",
+      "size_bytes": 111010002,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/baselines/official_adapters/books_large10000_100neg_llm2rec_official/llm2rec_official_scores.csv",
+      "size_bytes": 110918083,
+      "classification": "PROTECTED_LEGACY_SCORE_EVIDENCE",
+      "retention_risk_tier": "protected_legacy_score_evidence",
+      "retention_risk_rank": 90,
+      "reason": "Legacy/local-light official score evidence; not a safe disk cleanup target."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106958272,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106938978,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106879641,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106864313,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106856106,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106846500,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106832394,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_irllrec_intent_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 106802404,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_proex_profile_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105989627,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_proex_profile_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105977216,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105958250,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105925644,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/home_large10000_100neg_llmemb_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105270418,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llmemb_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105245974,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105218680,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 105128988,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/tools_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 104999203,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/toys_large10000_100neg_llm2rec_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 104988987,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "size_bytes": 104857740,
+      "classification": "PROTECTED_FINAL_EVIDENCE",
+      "retention_risk_tier": "protected_final_evidence",
+      "retention_risk_rank": 100,
+      "reason": "Final scores/provenance/audit/imported records are required by gates and comparisons."
+    },
+    {
+      "path": "/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy",
+      "size_bytes": 5662687360,
+      "classification": "NEEDS_APPROVAL_OR_ARCHIVE_DECISION",
+      "retention_risk_tier": "approval_required_external_embedding_cache",
+      "retention_risk_rank": 20,
+      "reason": "Completed upstream embedding/cache outside the final evidence directory. High-yield, but protected unless an explicit retention/archive decision is recorded."
+    }
+  ],
+  "log_pid_files": [
+    {
+      "size_bytes": 107099852,
+      "path": "./ccrp_v3_all_domains.log"
+    },
+    {
+      "size_bytes": 6482787,
+      "path": "./baselines_new_domains_sports.log"
+    },
+    {
+      "size_bytes": 2621440,
+      "path": "./baselines_new_domains_home_llm2rec_20260604_071902.log"
+    },
+    {
+      "size_bytes": 1787489,
+      "path": "./baselines_new_domains_home_irllrec_20260603_1355.log"
+    },
+    {
+      "size_bytes": 1787186,
+      "path": "./baselines_new_domains_home_rlmrec_20260603_2028.log"
+    },
+    {
+      "size_bytes": 1787182,
+      "path": "./baselines_new_domains_home_promax_20260602_2215.log"
+    },
+    {
+      "size_bytes": 1787174,
+      "path": "./baselines_new_domains_home_proex_20260602_1950.log"
+    },
+    {
+      "size_bytes": 1776645,
+      "path": "./baselines_new_domains_home_llmemb_20260603_0608.log"
+    },
+    {
+      "size_bytes": 1773597,
+      "path": "./baselines_new_domains_home_llmesr_20260604_1015.log"
+    },
+    {
+      "size_bytes": 1773308,
+      "path": "./baselines_new_domains_home_elmrec_20260603_0302.log"
+    },
+    {
+      "size_bytes": 1588804,
+      "path": "./baselines_new_domains_tools_llm2rec_20260605_134355.log"
+    },
+    {
+      "size_bytes": 1303140,
+      "path": "./baselines_new_domains_sports_llm2rec_resume.log"
+    },
+    {
+      "size_bytes": 1252587,
+      "path": "./baselines_new_domains_tools_irllrec_20260605_0058.log"
+    },
+    {
+      "size_bytes": 1252283,
+      "path": "./baselines_new_domains_tools_rlmrec_20260605_054158.log"
+    },
+    {
+      "size_bytes": 1252278,
+      "path": "./baselines_new_domains_tools_promax_20260604_164630.log"
+    },
+    {
+      "size_bytes": 1252268,
+      "path": "./baselines_new_domains_tools_proex_20260604_142548.log"
+    },
+    {
+      "size_bytes": 1240211,
+      "path": "./baselines_new_domains_tools_llmemb_20260604_231030.log"
+    },
+    {
+      "size_bytes": 1238490,
+      "path": "./baselines_new_domains_tools_elmrec_20260604_204602.log"
+    },
+    {
+      "size_bytes": 1238411,
+      "path": "./baselines_new_domains_tools_llmesr_20260605_185250.log"
+    },
+    {
+      "size_bytes": 1167360,
+      "path": "./baselines_new_domains_toys_llm2rec_20260602_142615.log"
+    },
+    {
+      "size_bytes": 1070810,
+      "path": "./baselines_new_domains_sports_llmesr.log"
+    },
+    {
+      "size_bytes": 999719,
+      "path": "./baselines_new_domains_toys_irllrec_20260602_031623.log"
+    },
+    {
+      "size_bytes": 999482,
+      "path": "./baselines_new_domains_toys_proex_20260601_194414.log"
+    },
+    {
+      "size_bytes": 999420,
+      "path": "./baselines_new_domains_toys_rlmrec_20260602_064443.log"
+    },
+    {
+      "size_bytes": 999414,
+      "path": "./baselines_new_domains_toys_promax_20260601_212808.log"
+    },
+    {
+      "size_bytes": 988782,
+      "path": "./baselines_new_domains_toys_llmesr_20260602_1635.log"
+    },
+    {
+      "size_bytes": 987346,
+      "path": "./baselines_new_domains_toys_llmemb_20260602_014334.log"
+    },
+    {
+      "size_bytes": 985544,
+      "path": "./baselines_new_domains_toys_elmrec_20260602_000729.log"
+    },
+    {
+      "size_bytes": 4096,
+      "path": "./baselines_new_domains_home_llmemb_symlink_rerun_20260603_0920.log"
+    },
+    {
+      "size_bytes": 2154,
+      "path": "./baselines_new_domains_tools_llm2rec_20260605_130248.log"
+    },
+    {
+      "size_bytes": 1143,
+      "path": "./baselines_new_domains_tools_llm2rec_recovery_20260605_155904.log"
+    },
+    {
+      "size_bytes": 1112,
+      "path": "./baselines_new_domains_home_llmemb_symlink_rerun_20260603_0915.log"
+    },
+    {
+      "size_bytes": 1017,
+      "path": "./baselines_new_domains_toys_llm2rec_recovery_20260602_1603.log"
+    },
+    {
+      "size_bytes": 202,
+      "path": "./baselines_new_domains_sports_llm2rec_training_resume.log"
+    },
+    {
+      "size_bytes": 200,
+      "path": "./baselines_new_domains_home_llm2rec_recovery_20260604_094007.log"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_rlmrec_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_rlmrec_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_promax_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_promax_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_proex.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_llmesr_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_llmesr_nohup.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_llmemb_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_llmemb_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_llm2rec_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_llm2rec_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_irllrec_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_irllrec_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_elmrec_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_toys_elmrec_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_rlmrec_20260605_054158.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_rlmrec_20260605_054158.adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_promax.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_promax_20260604_164630.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_promax_20260604_164630.adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_proex_20260604_142548.adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_llmemb_20260604_231030.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_llmemb_20260604_231030.adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_llm2rec_20260605_134355.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_llm2rec_20260605_130248.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_irllrec_20260605_0058.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_irllrec_20260605_0058.adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_elmrec_20260604_204602.runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_tools_elmrec_20260604_204602.adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_sports.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_sports_llmesr.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_sports_llm2rec_resume.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_rlmrec_20260603_2028.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_promax_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_proex_runner.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_llmesr_20260604_1015.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_llmemb_symlink_rerun_20260603_0920.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_llmemb_symlink_rerun_20260603_0915.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_llmemb_adapter.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_llm2rec_recovery_20260604_094007.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_llm2rec_20260604_071902.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_irllrec_20260603_1355.pid"
+    },
+    {
+      "size_bytes": 8,
+      "path": "./baselines_new_domains_home_elmrec_runner.pid"
+    }
+  ],
+  "audit_verdict": {
+    "delete_performed": false,
+    "safe_cleanup_enough_to_start_phase2_5": false,
+    "minimum_next_action": "Do not launch Phase 2.5 signal-row regeneration until disk is expanded or one high-yield completed artifact receives an explicit archive/retention decision."
+  }
+}

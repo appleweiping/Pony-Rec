@@ -61,4 +61,7 @@ def test_build_audit_keeps_launch_blocked_when_safe_cleanup_is_too_small():
     assert audit["safe_now_total_recoverable_bytes"] == 64_575_278
     assert audit["safe_now_sufficient_for_min_free"] is False
     assert len(audit["high_yield_candidates_requiring_approval"]) == 2
+    assert audit["high_yield_candidates_requiring_approval"][0]["retention_risk_rank"] == 20
+    assert audit["recommended_approval_candidate"]["path"].endswith("pony_qwen3_8b_title_item_embs.npy")
+    assert audit["retention_recommendation"]["would_clear_min_free_gate"] is True
     assert audit["audit_verdict"]["delete_performed"] is False
