@@ -460,6 +460,24 @@ reports no active experiment, GPU idle, `12,406,190,080` free bytes, and a
 `3,699,937,280` byte deficit to the 15GiB launch floor. No cleanup or
 experiment was run.
 
+All-module execution-support audit hardening on 2026-06-06:
+`scripts/audit/main_audit_paper_critical_modules.py` now verifies execution
+support for all three paper-critical modules, not only component ablation. It
+checks observation builder guards, component-ablation selector/builder/package
+guards, hyperparameter test-sweep/audit/figure guards, and guarded-plan command
+templates. The refreshed checkpoint
+`outputs/summary/paper_critical/paper_critical_module_audit_post_all_module_execution_support_20260606_0432.{json,md,sha256}`
+reports `ok=true`, `paper_ready=false`,
+`observation_execution_support_ready=true`,
+`component_ablation_execution_support_ready=true`,
+`hyperparameter_execution_support_ready=true`,
+`four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
+`phase2_5_storage_launch_allowed=false`. The paired storage audit
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0432.{json,md,sha256}`
+reports no active experiment, GPU idle, `12,397,707,264` free bytes, no
+safe-now recoverable bytes, and a `3,708,420,096` byte deficit to the 15GiB
+launch floor. No cleanup or experiment was run.
+
 The current execution specification is
 `docs/paper_critical_experiment_plan_2026-06-03.md`.
 

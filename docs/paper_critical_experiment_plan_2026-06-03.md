@@ -546,6 +546,19 @@ It reports execution support ready but paper readiness false because full-scale
 valid/test uncertainty signal rows remain missing and the storage launch gate
 is still closed.
 
+Consolidated audit update (2026-06-06 04:32 CST): the same audit now checks
+execution support for all three paper-critical modules before returning
+`ok=true`. Observation support covers uncertainty-column, join-rate,
+candidate-count, full-metric, provenance/status, and figure-output guards.
+Hyperparameter support covers valid+test sweep reporting, audit-enforced rows,
+test-sweep hashes, expected controls, provenance/status, and curve figures.
+Current checkpoint:
+`outputs/summary/paper_critical/paper_critical_module_audit_post_all_module_execution_support_20260606_0432.{json,md,sha256}`.
+It reports observation, component-ablation, and hyperparameter execution
+support ready, but paper readiness remains false because full-scale valid/test
+uncertainty signal rows remain missing and the storage launch gate is still
+closed.
+
 Feasibility: 7/10. Most work reuses existing C-CRP signal/score infrastructure,
 but the signal-row paths must be audited before launch.
 

@@ -2865,6 +2865,34 @@ archive/retention approval before deletion. Focused verification:
 (`29 passed`). No cleanup, deletion, experiment launch, or baseline launch
 occurred.
 
+All-module execution-support audit hardening: Codex extended the consolidated
+paper-critical audit to verify observation/motivation and hyperparameter
+execution support in addition to component ablation. The audit now checks the
+observation builder's full-metric/default-`ks`, uncertainty-column, join-rate,
+candidate-count, provenance/status, and figure-output guards; the
+hyperparameter plotter's test-sweep, audit-enforcement, ready-status,
+test-hash, control, summary/provenance, and figure-output guards; and the
+guarded plan's observation/component/hyperparameter command templates. Fresh
+artifacts:
+`outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606_0432.{json,md,sha256}`
+and
+`outputs/summary/paper_critical/paper_critical_module_audit_post_all_module_execution_support_20260606_0432.{json,md,sha256}`.
+The module audit reports `ok=true`, `paper_ready=false`,
+`observation_execution_support_ready=true`,
+`component_ablation_execution_support_ready=true`,
+`hyperparameter_execution_support_ready=true`,
+`four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
+`phase2_5_storage_launch_allowed=false`. The storage audit found no active
+project Python process, GPU idle, `12,397,707,264` free bytes,
+`3,708,420,096` bytes deficit to the 15GiB floor, `94%` disk use, and no
+safe-now recoverable bytes. The recommended high-yield candidate remains
+`/home/ajifang/projects/LLM2Rec/item_info/ToolsSameCandidate100Neg/pony_qwen3_8b_title_item_embs.npy`,
+but deletion still requires explicit archive/retention approval. Focused
+verification stayed green:
+`python -m pytest tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py tests\test_export_ccrp_scored_rows_from_signal.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py`
+(`29 passed`). No cleanup, deletion, experiment launch, or baseline launch
+occurred.
+
 ## Required Next Actions
 
 1. Treat Phase 2 official new-domain baselines as complete for

@@ -830,6 +830,17 @@ The repository is now in M5 (multi-domain SOTA validation):
   `component_ablation_execution_support_ready=true`,
   `four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
   `phase2_5_storage_launch_allowed=false`.
+  The 2026-06-06 04:32 CST refresh generalizes this to all three
+  paper-critical modules. It checks observation/motivation execution support,
+  component-ablation execution support, hyperparameter execution support, and
+  guarded-plan command coverage. Artifact:
+  `outputs/summary/paper_critical/paper_critical_module_audit_post_all_module_execution_support_20260606_0432.{json,md,sha256}`.
+  It reports `ok=true`, `paper_ready=false`,
+  `observation_execution_support_ready=true`,
+  `component_ablation_execution_support_ready=true`,
+  `hyperparameter_execution_support_ready=true`,
+  `four_domain_evidence_consistent=true`, `signal_rows_available=false`, and
+  `phase2_5_storage_launch_allowed=false`.
 - The guarded C-CRP signal-generation plan now uses generic active-row
   preconditions: no active official baseline row or matching baseline Python
   process may be running before the placeholder signal paths are filled and the

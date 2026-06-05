@@ -130,12 +130,29 @@ def _seed_guarded_plan(root: Path) -> None:
         "cd /repo\n"
         "TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n"
         "TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV\n"
+        "python scripts/analysis/main_build_uncertainty_observation_study.py\n"
         "python scripts/analysis/main_build_ccrp_component_ablation_summary.py\n"
+        "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py\n"
         "python scripts/audit/main_audit_phase2_5_module_package.py --module component_ablation\n",
     )
 
 
-def _seed_component_ablation_support_scripts(root: Path) -> None:
+def _seed_paper_critical_support_scripts(root: Path) -> None:
+    _write(
+        root / "scripts/analysis/main_build_uncertainty_observation_study.py",
+        "DEFAULT_KS = (5, 10, 20)\n"
+        "paper_critical_observation_motivation\n"
+        "paper_critical_observation_ready\n"
+        "motivation_only_not_main_table_sota\n"
+        "join_report\n"
+        "expected_candidates_per_event\n"
+        "min_join_rate\n"
+        "No uncertainty column found\n"
+        "observation_summary.csv\n"
+        "observation_event_bins.csv\n"
+        "observation_provenance.json\n"
+        "fig_uncertainty_motivation\n",
+    )
     _write(
         root / "scripts/misc/main_select_ccrp_variant_on_valid.py",
         "FULL_REPORTING_KS = (5, 10, 20)\nmetrics = compute(..., ks=FULL_REPORTING_KS)\n",
@@ -152,7 +169,28 @@ def _seed_component_ablation_support_scripts(root: Path) -> None:
     )
     _write(
         root / "scripts/audit/main_audit_phase2_5_module_package.py",
-        "component_ablation_summary.csv\nvalid_ccrp_sweep.csv\nselected_test_metrics.csv\n",
+        "observation_summary.csv\n"
+        "observation_event_bins.csv\n"
+        "observation_provenance.json\n"
+        "component_ablation_summary.csv\n"
+        "valid_ccrp_sweep.csv\n"
+        "selected_test_metrics.csv\n"
+        "ccrp_hyperparameter_curve_summary.csv\n"
+        "ccrp_hyperparameter_curve_provenance.json\n"
+        "test_sweep_sha256\n",
+    )
+    _write(
+        root / "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py",
+        "--test_sweep_csv\n"
+        "--require_audit_ok\n"
+        "paper_critical_hyperparameter_curve_ready\n"
+        "valid_and_test_stability_curve_candidate\n"
+        "test_sweep_sha256\n"
+        "audit_summary\n"
+        "ccrp_hyperparameter_curve_summary.csv\n"
+        "ccrp_hyperparameter_curve_provenance.json\n"
+        "fig_hyper_eta_curve\n"
+        "eta,confidence_weight,weight_grid_label\n",
     )
 
 
@@ -236,7 +274,7 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
-    _seed_component_ablation_support_scripts(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
 
     audit = build_module_audit(tmp_path)
@@ -244,7 +282,9 @@ def test_audit_marks_framework_scaffold_ready_but_signal_modules_blocked(tmp_pat
     assert audit["ok"] is True
     assert audit["paper_ready"] is False
     assert audit["summary"]["component_inventory_ready"] is True
+    assert audit["summary"]["observation_execution_support_ready"] is True
     assert audit["summary"]["component_ablation_execution_support_ready"] is True
+    assert audit["summary"]["hyperparameter_execution_support_ready"] is True
     assert audit["summary"]["four_domain_evidence_consistent"] is False
     assert audit["summary"]["phase2_5_storage_launch_allowed"] is False
     assert audit["modules"]["framework_overview"]["artifact_scaffold_ready"] is True
@@ -262,7 +302,7 @@ def test_audit_integrates_evidence_consistency_and_storage_gate(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
-    _seed_component_ablation_support_scripts(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
     evidence_path = _seed_evidence_consistency(tmp_path, ok=True)
     storage_path = _seed_storage_audit(tmp_path, launch_allowed=False)
@@ -284,7 +324,7 @@ def test_audit_detects_framework_manifest_mismatch(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
-    _seed_component_ablation_support_scripts(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
     _write(tmp_path / "outputs/summary/paper_critical/framework_overview/framework_overview.svg", "<svg>changed</svg>\n")
 
@@ -299,7 +339,7 @@ def test_write_markdown_summary(tmp_path):
     _seed_framework_package(tmp_path)
     _seed_signal_audits(tmp_path)
     _seed_guarded_plan(tmp_path)
-    _seed_component_ablation_support_scripts(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
     _seed_component_inventory(tmp_path)
     audit = build_module_audit(tmp_path)
     output = tmp_path / "audit.md"
@@ -311,4 +351,6 @@ def test_write_markdown_summary(tmp_path):
     assert "`observation_motivation`" in text
     assert "blocked_missing_signal_rows" in text
     assert "Component inventory ready" in text
+    assert "Observation execution support ready" in text
     assert "Component-ablation execution support ready" in text
+    assert "Hyperparameter execution support ready" in text

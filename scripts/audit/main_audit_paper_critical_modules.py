@@ -13,8 +13,10 @@ PAPER_CRITICAL_DIR = Path("outputs/summary/paper_critical")
 FRAMEWORK_DIR = PAPER_CRITICAL_DIR / "framework_overview"
 PLAN_DIR = PAPER_CRITICAL_DIR / "ccrp_signal_generation_plan"
 COMPONENT_INVENTORY_DIR = PAPER_CRITICAL_DIR / "ccrp_component_inventory"
+OBSERVATION_BUILDER_SCRIPT = Path("scripts/analysis/main_build_uncertainty_observation_study.py")
 SELECTOR_SCRIPT = Path("scripts/misc/main_select_ccrp_variant_on_valid.py")
 COMPONENT_BUILDER_SCRIPT = Path("scripts/analysis/main_build_ccrp_component_ablation_summary.py")
+HYPERPARAMETER_PLOTTER_SCRIPT = Path("scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py")
 MODULE_PACKAGE_AUDIT_SCRIPT = Path("scripts/audit/main_audit_phase2_5_module_package.py")
 DOMAINS = ("sports", "toys", "home", "tools")
 FRAMEWORK_REVIEW_READY_LABEL = "paper_critical_framework_overview_review_ready"
@@ -262,6 +264,12 @@ def audit_guarded_signal_plan(root: Path) -> dict[str, Any]:
             package_cmd = str(commands.get("audit_component_ablation_package_template", ""))
             if package_cmd and "main_audit_phase2_5_module_package.py" not in package_cmd:
                 failures.append(f"guarded_plan_component_package_audit_command_mismatch:{domain}")
+            observation_cmd = str(commands.get("build_observation_study_template", ""))
+            if observation_cmd and "main_build_uncertainty_observation_study.py" not in observation_cmd:
+                failures.append(f"guarded_plan_observation_command_mismatch:{domain}")
+            hyperparameter_cmd = str(commands.get("plot_hyperparameter_curves_template", ""))
+            if hyperparameter_cmd and "main_plot_ccrp_hyperparameter_sweep.py" not in hyperparameter_cmd:
+                failures.append(f"guarded_plan_hyperparameter_command_mismatch:{domain}")
     if not plan_sh.exists():
         failures.append("missing_guarded_plan_shell")
     else:
@@ -274,8 +282,12 @@ def audit_guarded_signal_plan(root: Path) -> dict[str, Any]:
             failures.append("guarded_shell_missing_signal_placeholders")
         if "nohup" in shell:
             failures.append("guarded_shell_contains_nohup")
+        if "main_build_uncertainty_observation_study.py" not in shell:
+            failures.append("guarded_shell_missing_observation_builder")
         if "main_build_ccrp_component_ablation_summary.py" not in shell:
             failures.append("guarded_shell_missing_component_builder")
+        if "main_plot_ccrp_hyperparameter_sweep.py" not in shell:
+            failures.append("guarded_shell_missing_hyperparameter_plotter")
         if "main_audit_phase2_5_module_package.py" not in shell:
             failures.append("guarded_shell_missing_module_package_audit")
     return {
@@ -285,6 +297,50 @@ def audit_guarded_signal_plan(root: Path) -> dict[str, Any]:
         "domains": payload.get("domains", []),
         "current_blocker": payload.get("current_blocker", ""),
         "required_command_keys": list(REQUIRED_GUARDED_PLAN_COMMAND_KEYS),
+        "failures": failures,
+    }
+
+
+def audit_observation_execution_support(root: Path) -> dict[str, Any]:
+    files = {
+        "builder": root / OBSERVATION_BUILDER_SCRIPT,
+        "package_audit": root / MODULE_PACKAGE_AUDIT_SCRIPT,
+    }
+    failures: list[str] = []
+    for label, path in files.items():
+        if not path.exists():
+            failures.append(f"missing_{label}_script:{path}")
+        elif path.stat().st_size <= 0:
+            failures.append(f"empty_{label}_script:{path}")
+
+    builder_text = files["builder"].read_text(encoding="utf-8", errors="replace") if files["builder"].exists() else ""
+    required_builder_snippets = {
+        "full_metrics": "DEFAULT_KS = (5, 10, 20)",
+        "artifact_class": "paper_critical_observation_motivation",
+        "status_label": "paper_critical_observation_ready",
+        "claim_scope": "motivation_only_not_main_table_sota",
+        "join_report": "join_report",
+        "candidate_count_guard": "expected_candidates_per_event",
+        "join_rate_guard": "min_join_rate",
+        "uncertainty_column_guard": "No uncertainty column found",
+        "summary_csv": "observation_summary.csv",
+        "provenance_json": "observation_provenance.json",
+        "figure_outputs": "fig_uncertainty_motivation",
+    }
+    for name, snippet in required_builder_snippets.items():
+        if snippet not in builder_text:
+            failures.append(f"observation_builder_missing_guard:{name}")
+
+    package_text = files["package_audit"].read_text(encoding="utf-8", errors="replace") if files["package_audit"].exists() else ""
+    for snippet in ("observation_summary.csv", "observation_event_bins.csv", "observation_provenance.json"):
+        if snippet not in package_text:
+            failures.append(f"package_audit_missing_observation_requirement:{snippet}")
+
+    return {
+        "status": "observation_execution_support_ready" if not failures else "incomplete",
+        "paper_claim_ready": False,
+        "files": {label: str(path) for label, path in files.items()},
+        "required_builder_checks": sorted(required_builder_snippets),
         "failures": failures,
     }
 
@@ -332,6 +388,49 @@ def audit_component_ablation_execution_support(root: Path) -> dict[str, Any]:
         "paper_claim_ready": False,
         "files": {label: str(path) for label, path in files.items()},
         "required_builder_checks": sorted(required_builder_snippets),
+        "failures": failures,
+    }
+
+
+def audit_hyperparameter_execution_support(root: Path) -> dict[str, Any]:
+    files = {
+        "plotter": root / HYPERPARAMETER_PLOTTER_SCRIPT,
+        "package_audit": root / MODULE_PACKAGE_AUDIT_SCRIPT,
+    }
+    failures: list[str] = []
+    for label, path in files.items():
+        if not path.exists():
+            failures.append(f"missing_{label}_script:{path}")
+        elif path.stat().st_size <= 0:
+            failures.append(f"empty_{label}_script:{path}")
+
+    plotter_text = files["plotter"].read_text(encoding="utf-8", errors="replace") if files["plotter"].exists() else ""
+    required_plotter_snippets = {
+        "test_sweep_arg": "--test_sweep_csv",
+        "audit_requirement": "--require_audit_ok",
+        "ready_status": "paper_critical_hyperparameter_curve_ready",
+        "claim_scope": "valid_and_test_stability_curve_candidate",
+        "test_sweep_hash": "test_sweep_sha256",
+        "audit_summary": "audit_summary",
+        "summary_csv": "ccrp_hyperparameter_curve_summary.csv",
+        "provenance_json": "ccrp_hyperparameter_curve_provenance.json",
+        "figure_outputs": "fig_hyper_eta_curve",
+        "default_controls": "eta,confidence_weight,weight_grid_label",
+    }
+    for name, snippet in required_plotter_snippets.items():
+        if snippet not in plotter_text:
+            failures.append(f"hyperparameter_plotter_missing_guard:{name}")
+
+    package_text = files["package_audit"].read_text(encoding="utf-8", errors="replace") if files["package_audit"].exists() else ""
+    for snippet in ("ccrp_hyperparameter_curve_summary.csv", "ccrp_hyperparameter_curve_provenance.json", "test_sweep_sha256"):
+        if snippet not in package_text:
+            failures.append(f"package_audit_missing_hyperparameter_requirement:{snippet}")
+
+    return {
+        "status": "hyperparameter_execution_support_ready" if not failures else "incomplete",
+        "paper_claim_ready": False,
+        "files": {label: str(path) for label, path in files.items()},
+        "required_plotter_checks": sorted(required_plotter_snippets),
         "failures": failures,
     }
 
@@ -481,7 +580,9 @@ def build_module_audit(
     guarded_plan = audit_guarded_signal_plan(repo)
     framework = audit_framework_overview(repo)
     component_inventory = audit_component_inventory(repo)
+    observation_execution_support = audit_observation_execution_support(repo)
     component_execution_support = audit_component_ablation_execution_support(repo)
+    hyperparameter_execution_support = audit_hyperparameter_execution_support(repo)
     evidence_consistency = audit_evidence_consistency(repo, evidence_consistency_json)
     storage_gate = audit_storage_gate(repo, storage_audit_json)
 
@@ -494,8 +595,9 @@ def build_module_audit(
             else "ready_for_representative_run_planning",
             "paper_claim_ready": False,
             "required_next_gate": "locate_or_regenerate_valid_test_uncertainty_signal_rows",
-            "blockers": launch_blockers,
+            "blockers": launch_blockers + observation_execution_support["failures"],
             "script": "scripts/analysis/main_build_uncertainty_observation_study.py",
+            "execution_support": observation_execution_support,
         },
         "component_ablation": {
             "status": "blocked_missing_signal_rows"
@@ -515,8 +617,9 @@ def build_module_audit(
             else "ready_for_curve_generation",
             "paper_claim_ready": False,
             "required_next_gate": "build_validation_and_test_curves_after_signal_rows_exist",
-            "blockers": launch_blockers,
+            "blockers": launch_blockers + hyperparameter_execution_support["failures"],
             "script": "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py",
+            "execution_support": hyperparameter_execution_support,
         },
         "framework_overview": framework,
     }
@@ -526,7 +629,9 @@ def build_module_audit(
             framework["artifact_scaffold_ready"]
             and guarded_plan["status"] == "guarded_plan_ready_not_executable"
             and component_inventory["status"] == "inventory_ready_not_executed"
+            and observation_execution_support["status"] == "observation_execution_support_ready"
             and component_execution_support["status"] == "component_ablation_execution_support_ready"
+            and hyperparameter_execution_support["status"] == "hyperparameter_execution_support_ready"
         ),
         "paper_ready": paper_ready,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -534,8 +639,14 @@ def build_module_audit(
         "summary": {
             "framework_overview_scaffold_ready": framework["artifact_scaffold_ready"],
             "component_inventory_ready": component_inventory["status"] == "inventory_ready_not_executed",
+            "observation_execution_support_ready": (
+                observation_execution_support["status"] == "observation_execution_support_ready"
+            ),
             "component_ablation_execution_support_ready": (
                 component_execution_support["status"] == "component_ablation_execution_support_ready"
+            ),
+            "hyperparameter_execution_support_ready": (
+                hyperparameter_execution_support["status"] == "hyperparameter_execution_support_ready"
             ),
             "signal_rows_available": signal_state["status"] != "blocked_missing_signal_rows",
             "guarded_plan_ready": guarded_plan["status"] == "guarded_plan_ready_not_executable",
@@ -546,7 +657,9 @@ def build_module_audit(
         "signal_source_state": signal_state,
         "guarded_signal_plan": guarded_plan,
         "component_inventory": component_inventory,
+        "observation_execution_support": observation_execution_support,
         "component_ablation_execution_support": component_execution_support,
+        "hyperparameter_execution_support": hyperparameter_execution_support,
         "evidence_consistency": evidence_consistency,
         "storage_gate": storage_gate,
         "modules": modules,
@@ -568,7 +681,9 @@ def write_markdown(path: str | Path, audit: dict[str, Any]) -> None:
         f"- Signal rows available: `{audit['summary']['signal_rows_available']}`",
         f"- Framework overview scaffold ready: `{audit['summary']['framework_overview_scaffold_ready']}`",
         f"- Component inventory ready: `{audit['summary']['component_inventory_ready']}`",
+        f"- Observation execution support ready: `{audit['summary']['observation_execution_support_ready']}`",
         f"- Component-ablation execution support ready: `{audit['summary']['component_ablation_execution_support_ready']}`",
+        f"- Hyperparameter execution support ready: `{audit['summary']['hyperparameter_execution_support_ready']}`",
         f"- Guarded plan ready: `{audit['summary']['guarded_plan_ready']}`",
         f"- Four-domain evidence consistent: `{audit['summary']['four_domain_evidence_consistent']}`",
         f"- Phase 2.5 storage launch allowed: `{audit['summary']['phase2_5_storage_launch_allowed']}`",
