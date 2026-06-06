@@ -1014,8 +1014,11 @@ table, and sports/toys/home/tools now pass domain-level official-baseline and
 paired-test gates. Paper-wide SOTA wording is still not submission-ready until
 the four-domain comparison is consolidated into the paper table, ARIS
 claim/citation audits pass, the paper-critical observation/ablation/
-hyperparameter/figure modules are complete, and GPT-5.5/Codex xhigh review
-reaches at least 8/10.
+hyperparameter/figure modules are complete, and each completed module has passed
+the per-module tri-reviewer review-as-you-go pass (Codex GPT xhigh + GPT-5.5
+xhigh + a second Claude Opus 4.8) with no unresolved major objection. This
+per-module cadence replaces the prior single end-of-project GPT-5.5/Codex xhigh
+≥ 8/10 gate.
 
 ### Remaining for paper submission
 

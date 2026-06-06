@@ -3510,10 +3510,16 @@ before cleanup.
    Continue to preserve scores, provenance, audits, imported tables, C-CRP raw
    reports/ranks, active outputs, data splits, configs, and any checkpoint/model
    not covered by an explicit cleanup manifest and retention decision.
-5. Only after comparisons, paper-critical modules, provenance, statistical
-   tests, and figure checks are complete, move to ARIS paper writing and
-   GPT-5.5/Codex xhigh review. The review loop must reach at least 8/10 before
-   submission-level readiness is claimed.
+5. Run review-as-you-go: after each completed part/module (signal split + audit,
+   selector, component ablation, observation study, hyperparameter sweep, table
+   build), immediately run a concurrent tri-reviewer pass — Codex (GPT xhigh) +
+   GPT-5.5 xhigh + a second Claude Opus 4.8 — and apply the feedback before
+   continuing. This replaces the old single end-of-project GPT-5.5/Codex xhigh
+   ≥ 8/10 gate. A serious reviewer objection still vetoes the module/table.
+   HARD RULE (all agents, always): formal top-conference setting only; no toy /
+   reduced-scale / shortcut experiments without explicit user permission — any
+   unauthorized toy experiment is immediately reviewed, rejected, and redone at
+   full formal setting, and never used as paper evidence.
 
 ## Evidence Gate Commands
 

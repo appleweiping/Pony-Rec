@@ -103,8 +103,8 @@ ssh pony-rec-gpu "ps aux | grep python | grep -v grep | grep -i 'pony-rec\|ccrp\
 | Baselines 正在跑 | 等待，监控进度 |
 | Baselines 全部完成 | scp 轻量产物到本地 → 构建对比表 → 统计检验 |
 | 对比表和统计检验完成 | 开始论文写作（ARIS paper-write skill） |
-| 论文初稿完成 | 提交 GPT-5.5/Codex review（目标 8/10） |
-| Review 返回修改意见 | 修改 → 重跑必要实验 → 再提交 review |
+| 每完成一个 part/module | 立即并发三方 review（Codex GPT xhigh + GPT-5.5 xhigh + 第二个 Claude Opus 4.8），边做边反馈边改 |
+| Review 返回修改意见 | 立即修改 → 重跑必要实验 → 再提交该 module 的三方 review |
 
 ### Step 4: 同步本地仓库
 
@@ -179,6 +179,15 @@ and status label; if our method changes, the change must be motivated by our
 uncertainty claim and ablated under the same protocol.
 
 ## Non-Toy Experiment Standard
+
+**Hard rule, always in force, binds every Claude/agent at all times:** only
+formal top-conference-setting experiments are allowed. No toy, reduced-scale, or
+shortcut experiments may be run unless the user explicitly authorizes one. If a
+toy experiment is produced without explicit permission, it must be immediately
+reviewed, rejected, and redone at the full formal top-conference setting
+(full-scale users, 101-candidate same-candidate protocol, official baselines,
+valid/test discipline, full metric set, paired tests, provenance). A toy result
+must never be packaged or claimed as paper evidence.
 
 Do not replace hard baseline work with toy shortcuts. A result is not
 paper-facing unless it has:
@@ -256,6 +265,22 @@ coverage, leakage risk, table eligibility, and whether the claim is still too
 broad. Reviewer objections remain blockers until addressed, downgraded, or
 explicitly documented as accepted limitations.
 
+**Review-as-you-go cadence (2026-06-06):** do not defer review to a single
+end-of-project gate. After each part/module completes (signal split + audit,
+selector, component ablation, observation study, hyperparameter sweep, table
+build, etc.), run a concurrent three-perspective review and apply the feedback
+immediately before continuing:
+
+- Codex (GPT xhigh) — engineering/implementation correctness;
+- GPT-5.5 xhigh — literature/protocol + top-conference reviewer/auditor;
+- a second Claude Opus 4.8 instance — independent adversarial cross-check.
+
+This is cheaper on tokens and time than building everything then reviewing once,
+and replaces the old "iterate to GPT-5.5 xhigh ≥ 8/10 at the end" model. If a
+reviewer agent is unavailable in a given session, use the available reviewers
+and record which perspective was missing. A serious reviewer objection still
+vetoes the module/table; do not average it away.
+
 Each sub-agent handoff should report:
 
 - milestone touched;
@@ -268,9 +293,11 @@ Each sub-agent handoff should report:
 Reviewer/auditor findings can veto wording and table inclusion. Do not average
 away a serious reviewer objection.
 
-Current tool-routing note (2026-06-03): Claude reviewer tooling is unavailable
-in this thread. When multi-agent review/collaboration is required, use
-GPT-5.5 xhigh sub-agents instead of Claude reviewer sessions.
+Current tool-routing note (2026-06-06): the standard review panel is three
+concurrent agents — Codex (GPT xhigh), GPT-5.5 xhigh, and a second Claude Opus
+4.8 instance — run per module. If Claude reviewer tooling is unavailable in a
+given session, fall back to GPT-5.5 xhigh / Codex sub-agents and note the
+missing perspective.
 
 Every substantial final report must include both what changed or was learned
 and a concrete next-step plan. The plan must name the next server command,
@@ -397,10 +424,16 @@ When in doubt, downgrade the claim, not the evidence standard.
 
 1. **必须达到 SOTA** — C-CRP v3 在多个域上超越所有 8 个 official baselines
 2. **创新非缝合** — 方法必须是原创的、有理论动机的，不是拼凑已有方法
-3. **禁止 toy 化** — 所有实验必须是 full-scale（10k 用户、101 候选）
+3. **禁止 toy 化（硬性，所有 agent 任何时候都要记住）** — 所有实验必须是
+   full-scale 正规顶会 setting（10k 用户、101 候选、official baselines、
+   valid/test 纪律、完整指标、paired tests、provenance）。未经用户明确允许
+   不得做任何 toy / 缩规模 / 走捷径的实验；若擅自做了 toy 实验，必须立即
+   审核、驳回，并以完整正规顶会 setting 重做，绝不可当作论文证据
 4. **8 个 official baselines** — 每个域都必须有完整的 8 个 baseline 对比
 5. **公平比较** — setting 完全对齐（用户数、候选数、指标、统一 Qwen3-8B backbone）
-6. **GPT-5.5 review 达到 8/10** — 按 ARIS 审核标准，多维度评价
+6. **边做边三方 review** — 每完成一个 part/module 立即并发三方 review
+   （Codex GPT xhigh + GPT-5.5 xhigh + 第二个 Claude Opus 4.8），即时反馈即时
+   改，省 token 省时间；取代旧的"最后统一 GPT-5.5 review 达到 8/10"模式
 7. **实验做完再写** — 结果完整后再写作，不能半成品提交 review
 8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
 9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 2 小时激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
@@ -418,7 +451,7 @@ Phase 2: 8 official baselines on 4 new domains complete (sports✓ 8/8 + gate✓
 Phase 2.5: Paper-critical modules before readiness claim: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
-Phase 5: GPT-5.5/Codex review cycle (must reach 8/10)
+Phase 5: Per-module tri-reviewer review-as-you-go (Codex GPT xhigh + GPT-5.5 xhigh + 2nd Claude Opus 4.8), run after each module — not a single end-gate
 ```
 
 ## Artifact Management（产物管理规则）

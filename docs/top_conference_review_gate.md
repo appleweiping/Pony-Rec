@@ -4,6 +4,35 @@ This file turns the literature-scout and reviewer-agent passes into a standing
 pre-submission gate. It is not a literature review draft; it is a claim and
 evidence defense checklist.
 
+## Standing Hard Rules (always in force, all agents)
+
+1. **Formal top-conference setting only — no toy experiments.** Every experiment
+   must use the full, most rigorous top-conference setting (full-scale users,
+   101-candidate same-candidate protocol, official baselines, proper
+   valid/test discipline, complete metric set, paired tests, provenance). Toy,
+   reduced-scale, or shortcut experiments are forbidden unless the user
+   explicitly authorizes one. If a toy experiment is produced without explicit
+   permission, it must be immediately reviewed, rejected, and redone at the full
+   formal top-conference setting; it must never be packaged as paper evidence.
+   This rule binds every Claude/agent at all times.
+2. **Review-as-you-go (per-module tri-reviewer), not a single end-gate.** After
+   each part/module completes (e.g. a signal split + audit, the selector, the
+   component ablation, the observation study, the hyperparameter sweep, a table
+   build), run a concurrent three-perspective review and apply the feedback
+   immediately before moving on:
+   - Codex (GPT xhigh) — engineering/implementation correctness;
+   - GPT-5.5 xhigh — literature/protocol + top-conference reviewer/auditor;
+   - a second Claude Opus 4.8 instance — independent cross-check / adversarial
+     reading.
+   This replaces the old "iterate to a final GPT-5.5 xhigh score ≥ 8/10" model.
+   The goal is incremental, token- and time-efficient correction: build a
+   module, get three independent reviews, fix, then continue. A serious reviewer
+   objection (fairness, leakage, novelty, baseline eligibility, overclaim,
+   statistical validity) can still veto a module or table; do not average away a
+   blocking objection. Reviewer tooling availability varies per session — if an
+   agent is unavailable, use the available reviewers and note which perspective
+   was missing.
+
 ## Venue Fit
 
 The project is best framed as:
@@ -160,8 +189,11 @@ for the defended claim:
   claim, with Beauty smaller-N labeled if used;
 - leakage, candidate protocol, score coverage, provenance, and reproducibility
   audits pass;
-- a top-conference reviewer/auditor has no unresolved major objection about
-  fairness, novelty, technical depth, or overclaiming.
+- the per-module tri-reviewer review-as-you-go pass (Codex GPT xhigh + GPT-5.5
+  xhigh + a second Claude Opus 4.8) has been run on each completed module and
+  has no unresolved major objection about fairness, novelty, technical depth, or
+  overclaiming. (This per-module cadence replaces the prior single end-of-project
+  "GPT-5.5 xhigh ≥ 8/10" gate.)
 
 If these gates pass, tell the user the project is ready to enter paper writing
 and artifact packaging rather than continuing to add new experiments. If they
