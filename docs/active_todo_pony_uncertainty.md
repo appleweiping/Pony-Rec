@@ -3432,6 +3432,46 @@ summary + `main_audit_phase2_5_module_package.py` -> observation/motivation stud
 expectations: `expected_events=10000`, `expected_candidates_per_event=101`,
 `expected_score_rows=1,010,000`, candidate-key coverage `1.0`.
 
+Sports-valid signal rows COMPLETE + AUDITED 2026-06-06 ~19:38 CST (server time):
+PID `3543564` exited cleanly after `Processed prompts: 505000/505000` on the
+second chunk. Output `valid_ccrp_signal_rows.csv` has `1,010,001` lines
+(`1,010,000` rows + header), `valid_ccrp_signal_rows_provenance.json` records
+`n_events=10000`, `n_signal_rows=1010000`, `expected_signal_rows=1010000`,
+`prompt_count=meta_row_count=raw_result_count=1010000`, `parse_failure_count=0`,
+`parse_failure_rate=0.0`, `git_commit=9ded57b7`,
+`data_sha256=2538001458e48675...`,
+`signal_rows_sha256=9bee8e8453c37b...`, and the leakage guard
+"Prompt does not include positive_item_index or labels; selection must be done
+on validation outputs only before test rows are used." The CSV schema is
+`source_event_id,user_id,candidate_item_id,item_id,candidate_idx,relevance_probability,calibrated_relevance_probability,evidence_support,counterevidence_strength,reason,parse_success,signal_schema_version`.
+Source audit `scripts/audit/main_audit_ccrp_uncertainty_sources.py` against
+`outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv`
+returned `status=recomputable_signal_rows` (the required class),
+`row_count=1010000`, `event_count=10000`, `duplicate_keys=0`,
+`candidate_key_coverage_rate=1.0`, `recomputable_signal_count=1`,
+`paper_ready_count=0`. The single `failures=[missing_uncertainty_column]` is
+expected and correct for raw signal rows: uncertainty is computed by the
+validation selector from raw/calibrated probability + evidence +
+counterevidence, not pre-stored. Audit artifacts:
+`.../ccrp_signal_rows_sports/valid_ccrp_signal_source_audit.{json,csv}`. This
+clears the valid-split gate.
+
+Sports-test signal rows LAUNCHED 2026-06-06 ~19:49 CST after a clean preflight
+(no experiment process, GPU idle `0%`/`15 MiB`, `/` `24G` free / `88%` used,
+test ranking+candidate_items present, no pre-existing test signal). Command:
+`nohup /home/ajifang/miniconda3/envs/qwen_vllm/bin/python experiments/rsc/run_ccrp_v3_signal_rows.py --domain sports --split test --data outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports --expected_candidates_per_event 101`.
+PID `3586922`, pid file `ccrp_signal_rows_sports_test.pid`, log
+`ccrp_signal_rows_sports_test_20260606_194944.log`. Confirmed past vLLM engine
+init (model loaded, KV cache allocated, CUDA graphs captured, fatal scan `0`)
+and feeding chunk-1 prompts. Same size as valid (10,000 events, expect
+`1,010,000` rows), so expect a similar ~12h runtime. The CSV/provenance write
+only after both 5,000-user chunks finish; an empty output dir mid-run is normal.
+Next on completion: test source audit, then local signal-package sync for both
+splits, then the validation-only selector
+`scripts/misc/main_select_ccrp_variant_on_valid.py` (needs both valid+test
+signal paths, `--import_scores`), then component ablation, observation, and
+hyperparameter modules with their `main_audit_phase2_5_module_package.py` gates.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory
