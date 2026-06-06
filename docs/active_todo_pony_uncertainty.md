@@ -3372,6 +3372,17 @@ still contained zero files; `valid_ccrp_signal_rows.csv`,
 `valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
 audit, local-light sync, cleanup, or new experiment was run.
 
+Phase 2.5 Sports-valid signal-row monitor checkpoint: at the 2026-06-06 16:20
+CST monitor, PID `3543564` was still active and unique, elapsed `09:01:10`,
+with duplicate `run_ccrp_v3_signal_rows` process count `1`. GPU was active at
+`93%` with `42863 MiB / 49140 MiB`; `/` had `25,946,288,128` bytes free /
+`87%` used. Fatal log scan remained clean. The second chunk had reached
+`232950/505000` prompts after the first chunk completed, giving an estimated
+overall split progress of about `73.1%` of `1,010,000` expected signal rows.
+The signal output directory still contained zero files; no signal CSV,
+provenance, or source-audit artifact existed. No completion gate, source audit,
+local-light sync, cleanup, or new experiment was run.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory
