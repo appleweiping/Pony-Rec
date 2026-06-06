@@ -278,19 +278,27 @@ passes for Sports/Toys/Home/Tools: `row_count=32`, `ok_count=32`, and
 `failure_count=0`.
 
 For the consolidated paper-critical go/no-go checkpoint after evidence backfill
-and storage audit, pass both artifacts explicitly:
+and storage audit, pass the post-cleanup storage artifact explicitly when
+reproducing the current gate. Historical `current_*` or `ranked_*` storage
+audits from before cleanup are valid provenance, but they should not be passed
+as the current `--storage_audit_json` because they will intentionally report
+the old blocked disk gate. Since commit `346f9cc`, the audit's default storage
+selection prefers `after_cleanup_final_*` and `after_cleanup_*` before stale
+`current_*` artifacts.
 
 ```powershell
 python scripts\audit\main_audit_paper_critical_modules.py `
   --evidence_consistency_json outputs\summary\paper_critical\local_server_evidence_consistency_new_domains_post_backfill_20260606.json `
-  --storage_audit_json outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_current_20260606_0155.json `
-  --output_json outputs\summary\paper_critical\paper_critical_module_audit_post_evidence_backfill_20260606_0155.json `
-  --output_md outputs\summary\paper_critical\paper_critical_module_audit_post_evidence_backfill_20260606_0155.md
+  --storage_audit_json outputs\summary\paper_critical\server_storage_phase2_5_retention_audit_after_cleanup_final_20260606_0650.json `
+  --output_json outputs\summary\paper_critical\paper_critical_module_audit_current.json `
+  --output_md outputs\summary\paper_critical\paper_critical_module_audit_current.md
 ```
 
-The 2026-06-06 01:55 CST artifact reports the intended go/no-go state:
-four-domain evidence is consistent, but full-scale uncertainty signal rows are
-still absent and `phase2_5_storage_launch_allowed=false`.
+The current go/no-go state should report four-domain evidence consistent,
+`phase2_5_storage_launch_allowed=true`, full-scale uncertainty signal rows still
+absent, and therefore `paper_ready=false`. If the storage gate is reported as
+blocked while the post-cleanup audit is available, check whether an older
+`current_*` storage file was passed explicitly.
 
 For active official-baseline rows, prefer the local robust SSH-stdin monitor
 when the current local checkout has newer audit helpers than the server:
