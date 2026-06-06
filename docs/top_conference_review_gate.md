@@ -32,6 +32,19 @@ evidence defense checklist.
    blocking objection. Reviewer tooling availability varies per session — if an
    agent is unavailable, use the available reviewers and note which perspective
    was missing.
+3. **Design-review-before-execution gate (≥ 8/10 before running anything).**
+   Before launching any experiment — and before building any project
+   module/component — first submit the concrete setting and design (data/split,
+   candidate protocol, baselines, metrics, the component's mechanism, what it
+   ablates/controls, expected evidence) to GPT xhigh + a second Claude Opus 4.8
+   using the ARIS review skill/mechanism. Only once the design genuinely reaches
+   **8/10 (8 = top-conference-submission level)** do we start strict execution.
+   This catches design flaws before any GPU/token/time is spent, so we are not
+   reviewing a finished-but-wrong artifact after the fact. Sequence per module:
+   design → ARIS design review until ≥ 8/10 → execute strictly → per-module
+   tri-reviewer review of outputs (rule 2) → fix → continue. If reviewer tooling
+   is unavailable, use the available reviewers and record which perspective was
+   missing; do not skip the design gate.
 
 ## Venue Fit
 

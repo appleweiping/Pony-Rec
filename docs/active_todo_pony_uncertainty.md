@@ -3510,12 +3510,18 @@ before cleanup.
    Continue to preserve scores, provenance, audits, imported tables, C-CRP raw
    reports/ranks, active outputs, data splits, configs, and any checkpoint/model
    not covered by an explicit cleanup manifest and retention decision.
-5. Run review-as-you-go: after each completed part/module (signal split + audit,
-   selector, component ablation, observation study, hyperparameter sweep, table
-   build), immediately run a concurrent tri-reviewer pass — Codex (GPT xhigh) +
-   GPT-5.5 xhigh + a second Claude Opus 4.8 — and apply the feedback before
-   continuing. This replaces the old single end-of-project GPT-5.5/Codex xhigh
-   ≥ 8/10 gate. A serious reviewer objection still vetoes the module/table.
+5. Design-review-before-execution, then review-as-you-go. BEFORE running any
+   experiment or building any module/component, first submit the concrete
+   setting + design to GPT xhigh + a second Claude Opus 4.8 via the ARIS review
+   skill and iterate until it reaches ≥ 8/10 (8 = top-conference-submission
+   level); only then execute strictly. AFTER each completed part/module (signal
+   split + audit, selector, component ablation, observation study,
+   hyperparameter sweep, table build), immediately run a concurrent tri-reviewer
+   pass — Codex (GPT xhigh) + GPT-5.5 xhigh + a second Claude Opus 4.8 — and
+   apply the feedback before continuing. Per-module sequence: design → ARIS
+   design review ≥ 8/10 → execute → tri-reviewer output review → fix → continue.
+   This replaces the old single end-of-project GPT-5.5/Codex xhigh ≥ 8/10 gate.
+   A serious reviewer objection still vetoes the module/table.
    HARD RULE (all agents, always): formal top-conference setting only; no toy /
    reduced-scale / shortcut experiments without explicit user permission — any
    unauthorized toy experiment is immediately reviewed, rejected, and redone at

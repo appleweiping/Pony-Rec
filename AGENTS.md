@@ -281,6 +281,17 @@ reviewer agent is unavailable in a given session, use the available reviewers
 and record which perspective was missing. A serious reviewer objection still
 vetoes the module/table; do not average it away.
 
+**Design-review-before-execution gate (2026-06-06, ≥ 8/10 before running):**
+before launching ANY experiment, and before building any project
+module/component, first submit the concrete setting + design (data/split,
+candidate protocol, baselines, metrics, the component's mechanism and what it
+ablates/controls, expected evidence) to GPT xhigh + a second Claude Opus 4.8
+via the ARIS review skill/mechanism. Only after the design genuinely reaches
+8/10 (8 = top-conference-submission level) do we start strict execution. This
+catches design flaws before any GPU/token/time is spent. Per-module sequence:
+design → ARIS design review until ≥ 8/10 → execute strictly → per-module
+tri-reviewer review of outputs → fix → continue.
+
 Each sub-agent handoff should report:
 
 - milestone touched;
@@ -434,6 +445,13 @@ When in doubt, downgrade the claim, not the evidence standard.
 6. **边做边三方 review** — 每完成一个 part/module 立即并发三方 review
    （Codex GPT xhigh + GPT-5.5 xhigh + 第二个 Claude Opus 4.8），即时反馈即时
    改，省 token 省时间；取代旧的"最后统一 GPT-5.5 review 达到 8/10"模式
+6.5. **跑实验前先审设计（≥8 分才执行）** — 做任何实验前、建任何模块/组件前，
+   先把具体 setting 和设计（数据/split、候选协议、baselines、指标、组件机制与
+   它 ablate/control 什么、预期证据）交给 GPT xhigh + 第二个 Claude Opus 4.8，
+   用 ARIS 审核 skill/机制审。等设计真正达到 8 分（8 = 符合顶会投稿级别）再开始
+   严格执行。先审设计能在烧 GPU/token/时间前抓出设计缺陷，不浪费 token 不浪费
+   时间。每模块顺序：设计 → ARIS 设计审核到 ≥8 分 → 严格执行 → 产出的 per-module
+   三方 review → 改 → 继续
 7. **实验做完再写** — 结果完整后再写作，不能半成品提交 review
 8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
 9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 2 小时激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
