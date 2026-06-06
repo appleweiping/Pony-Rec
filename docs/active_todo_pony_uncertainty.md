@@ -3196,6 +3196,18 @@ Focused verification passed:
 This is planning/package hardening only; no new server job was launched and the
 active valid-split row remains not paper-ready evidence.
 
+Phase 2.5 Sports-valid signal-row monitor checkpoint: at the 2026-06-06 08:37
+CST monitor, PID `3543564` was still active and unique with command
+`experiments/rsc/run_ccrp_v3_signal_rows.py --domain sports --split valid`.
+GPU was active at `100%` with `42863 MiB / 49140 MiB`, `/` had
+`25,979,711,488` bytes free / `87%` used, fatal log scan was clean, and the
+first chunk had reached `103908/505000` processed prompts. The output
+directory existed but contained zero files; `valid_ccrp_signal_rows.csv`,
+`valid_ccrp_signal_rows_provenance.json`, and
+`valid_ccrp_signal_source_audit.json` were absent. No source audit, local sync,
+cleanup, or new experiment was run; continue monitoring until completion
+artifacts exist.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory

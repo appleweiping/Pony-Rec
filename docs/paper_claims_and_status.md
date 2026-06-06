@@ -197,6 +197,14 @@ also include:
     four-domain official comparison table, but `paper_ready=false` remains
     because the uncertainty observation, component ablation, and hyperparameter
     modules still need full-scale uncertainty signal rows.
+    Follow-up monitor at 2026-06-06 08:37 CST: the same Sports-valid
+    signal-row PID `3543564` remained active and unique, GPU was `100%` with
+    `42863 MiB / 49140 MiB`, root disk had `25,979,711,488` bytes free / `87%`
+    used, fatal scan was clean, and the first chunk had reached
+    `103908/505000` processed prompts. The signal output directory still had
+    zero files; `valid_ccrp_signal_rows.csv`, provenance, and source-audit
+    artifacts were absent. No source audit, local-light sync, cleanup, or new
+    experiment was run.
     Post-CCRP local evidence backfill on 2026-06-06 02:55 CST copied missing
     C-CRP evidence from the project server only: Sports/Toys
     `user_ranks.jsonl` and the missing Sports imported C-CRP same-candidate

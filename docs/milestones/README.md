@@ -204,6 +204,14 @@ non-executing (`exit 2` before any command) and the shell does not include local
 sync commands. Focused verification passed with `51 passed`; no new experiment
 was launched.
 
+At the 2026-06-06 08:37 CST monitor, PID `3543564` was still active and unique.
+GPU was `100%` with `42863 MiB / 49140 MiB`, root disk remained safe at
+`25,979,711,488` bytes free / `87%` used, fatal scan was clean, and the first
+chunk had reached `103908/505000` processed prompts. The signal output
+directory still had zero files and no `valid_ccrp_signal_rows.csv`,
+`valid_ccrp_signal_rows_provenance.json`, or source-audit artifact, so no
+completion gate or local package sync was run.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test
