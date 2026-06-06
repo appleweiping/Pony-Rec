@@ -44,6 +44,10 @@ def _dataset(domain: str) -> str:
         "books": "amazon_books",
         "electronics": "amazon_electronics",
         "movies": "amazon_movies",
+        "sports": "amazon_sports",
+        "toys": "amazon_toys",
+        "home": "amazon_home",
+        "tools": "amazon_tools",
     }[domain]
 
 

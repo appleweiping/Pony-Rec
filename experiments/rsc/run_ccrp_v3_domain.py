@@ -72,8 +72,9 @@ def main():
     n_candidates = len(records[0]['candidate_titles'])
     print(f"Total prompts: {len(all_prompts)} ({len(records)} users x {n_candidates} candidates)")
 
-    # Process in chunks to avoid overwhelming vLLM scheduler
-    CHUNK_USERS = 1000
+    # Process in chunks — vLLM handles scheduling internally via continuous batching.
+    # With clean GPU/CPU, large batches maximize prefix cache hits and throughput.
+    CHUNK_USERS = 5000
     chunk_size = CHUNK_USERS * n_candidates
     print(f"Running inference in chunks of {CHUNK_USERS} users ({chunk_size} prompts)...")
     start = time.time()
@@ -95,7 +96,25 @@ def main():
         score = parse_score(result["raw_text"])
         user_scores[meta["user_id"]].append((meta["candidate_idx"], score))
 
-    # Save raw scores for post-hoc evaluation at different k
+    out_dir = Path(args.output)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Save per-candidate scores CSV (aligned with official baseline import format)
+    import csv
+    scores_csv_path = out_dir / "scores.csv"
+    with open(scores_csv_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["source_event_id", "user_id", "item_id", "score"])
+        for rec in records:
+            uid = rec["user_id"]
+            source_event_id = rec.get("source_event_id", uid)
+            candidate_ids = rec["candidate_item_ids"]
+            scores = user_scores.get(uid, [])
+            for candidate_idx, score in scores:
+                writer.writerow([source_event_id, uid, candidate_ids[candidate_idx], score])
+    print(f"Saved scores CSV: {scores_csv_path} ({sum(len(v) for v in user_scores.values())} rows)")
+
+    # Compute metrics using 1-based rank (aligned with official ranking_task_metrics.py)
     scores_output = []
     for rec in records:
         uid = rec["user_id"]
@@ -105,27 +124,25 @@ def main():
             continue
         scores.sort(key=lambda x: -x[1])
         ranked_indices = [idx for idx, _ in scores]
-        rank = ranked_indices.index(pos_idx) if pos_idx in ranked_indices else len(ranked_indices)
-        scores_output.append({"user_id": uid, "pos_rank": rank, "n_candidates": len(scores)})
+        rank_0based = ranked_indices.index(pos_idx) if pos_idx in ranked_indices else len(ranked_indices)
+        positive_rank = rank_0based + 1  # 1-based, aligned with official eval
+        scores_output.append({"user_id": uid, "positive_rank": positive_rank, "n_candidates": len(scores)})
 
-    # Evaluate at multiple k
-    pos_ranks = np.array([s["pos_rank"] for s in scores_output])
+    pos_ranks = np.array([s["positive_rank"] for s in scores_output])
 
     report = {}
     for k in [5, 10, 20]:
-        hr = float(np.mean(pos_ranks < k))
-        ndcg = float(np.mean([1.0 / np.log2(r + 2) if r < k else 0.0 for r in pos_ranks]))
-        report[f"hr{k}"] = hr
-        report[f"ndcg{k}"] = ndcg
+        hr = float(np.mean(pos_ranks <= k))
+        ndcg = float(np.mean([1.0 / np.log2(r + 1) if r <= k else 0.0 for r in pos_ranks]))
+        report[f"HR@{k}"] = hr
+        report[f"NDCG@{k}"] = ndcg
 
-    report["mrr"] = float(np.mean([1.0 / (r + 1) for r in pos_ranks]))
+    report["MRR"] = float(np.mean([1.0 / r for r in pos_ranks]))
     report["n_users"] = len(pos_ranks)
     report["n_prompts"] = len(all_prompts)
     report["inference_time_s"] = elapsed
     report["data_path"] = args.data
 
-    out_dir = Path(args.output)
-    out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_dir / "report.json", "w") as f:
         json.dump(report, f, indent=2)
 
@@ -137,37 +154,13 @@ def main():
     print(f"\n{'='*50}")
     print(f"C-CRP v3 Results ({report['n_users']} users)")
     print(f"{'='*50}")
-    print(f"HR@5:    {report['hr5']:.3f}")
-    print(f"HR@10:   {report['hr10']:.3f}")
-    print(f"HR@20:   {report['hr20']:.3f}")
-    print(f"NDCG@5:  {report['ndcg5']:.4f}")
-    print(f"NDCG@10: {report['ndcg10']:.4f}")
-    print(f"NDCG@20: {report['ndcg20']:.4f}")
-    print(f"MRR:     {report['mrr']:.4f}")
-
-    # Auto-save markdown summary (agent-independent persistence)
-    domain = Path(args.data).parent.name.split("_")[0]
-    summary_dir = Path("experiment_results")
-    summary_dir.mkdir(parents=True, exist_ok=True)
-    summary_file = summary_dir / f"ccrp_v3_{domain}_{time.strftime('%Y-%m-%d_%H%M%S')}.md"
-    summary_file.write_text(
-        f"---\ntitle: C-CRP v3 {domain} result\ntype: fact\n"
-        f"created: {time.strftime('%Y-%m-%dT%H:%M:%S')}\nagent: script-auto\n"
-        f"tags: [experiment, ccrp-v3, {domain}]\n---\n\n"
-        f"## Result\n\n"
-        f"| Metric | Value |\n|--------|-------|\n"
-        f"| HR@5 | {report['hr5']:.4f} |\n"
-        f"| HR@10 | {report['hr10']:.4f} |\n"
-        f"| HR@20 | {report['hr20']:.4f} |\n"
-        f"| NDCG@5 | {report['ndcg5']:.4f} |\n"
-        f"| NDCG@10 | {report['ndcg10']:.4f} |\n"
-        f"| NDCG@20 | {report['ndcg20']:.4f} |\n"
-        f"| MRR | {report['mrr']:.4f} |\n"
-        f"| Users | {report['n_users']} |\n\n"
-        f"## Config\n\n- Data: {args.data}\n- Model: {args.model}\n"
-        f"- Inference time: {elapsed:.0f}s\n- Prompts: {report['n_prompts']}\n"
-    )
-    print(f"[AUTO-MEMORY] Saved to {summary_file}")
+    print(f"HR@5:    {report['HR@5']:.4f}")
+    print(f"HR@10:   {report['HR@10']:.4f}")
+    print(f"HR@20:   {report['HR@20']:.4f}")
+    print(f"NDCG@5:  {report['NDCG@5']:.4f}")
+    print(f"NDCG@10: {report['NDCG@10']:.4f}")
+    print(f"NDCG@20: {report['NDCG@20']:.4f}")
+    print(f"MRR:     {report['MRR']:.4f}")
 
 if __name__ == "__main__":
     main()
