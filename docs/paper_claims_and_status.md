@@ -246,6 +246,18 @@ also include:
     zero files; `valid_ccrp_signal_rows.csv`, provenance, and source-audit
     artifacts were absent. No completion gate, source audit, local-light sync,
     cleanup, or new experiment was run.
+    Follow-up monitor/correction at 2026-06-06 13:35 CST: PID `3543564`
+    remained active and unique, elapsed `06:16:29`, duplicate signal-runner
+    process count was `1`, GPU was `100%` with `42863 MiB / 49140 MiB`, and
+    root disk had `25,954,861,056` bytes free / `87%` used. Fatal scan
+    remained clean. The apparent `Processed prompts: 505000/505000` line is
+    only chunk-local because `chunk_users=5000` and
+    `expected_candidates_per_event=101`; Sports valid has `10000` events and
+    expects `1,010,000` final signal rows. The first chunk had completed, while
+    the second chunk was still adding requests at `337289/505000`. The signal
+    output directory still had zero files; `valid_ccrp_signal_rows.csv`,
+    provenance, and source-audit artifacts were absent. No completion gate,
+    source audit, local-light sync, cleanup, or new experiment was run.
     Post-CCRP local evidence backfill on 2026-06-06 02:55 CST copied missing
     C-CRP evidence from the project server only: Sports/Toys
     `user_ranks.jsonl` and the missing Sports imported C-CRP same-candidate

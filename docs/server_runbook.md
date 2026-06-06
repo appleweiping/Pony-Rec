@@ -55,6 +55,11 @@ PIDs, audit summaries, and missing-file errors.
    Use `/home/ajifang/miniconda3/envs/qwen_vllm/bin/python`; the base
    `/home/ajifang/miniconda3/bin/python` vLLM import failed on 2026-06-06 with
    `libcudart.so.13` missing.
+   Monitor progress as chunk-local: with the default `chunk_users=5000` and
+   `expected_candidates_per_event=101`, each full chunk logs
+   `505000/505000`, while a 10k-user valid/test split still expects
+   `1,010,000` final signal rows. Do not treat one `505000/505000` progress
+   line as completion; require process exit plus final CSV/provenance files.
 6. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
    failures; do not include it in the main official block unless a future
    memory-stable run passes all gates.
@@ -103,6 +108,13 @@ df -h /home/ajifang
 # Running processes
 ps aux | grep python | grep -v grep
 ```
+
+For `experiments/rsc/run_ccrp_v3_signal_rows.py`, parse both `Processed
+prompts:` and `Adding requests:` lines. Progress bars are chunk-local. A
+completed Sports valid/test package must have `1,010,000` signal rows plus the
+CSV header, matching provenance counts, and a passing
+`main_audit_ccrp_uncertainty_sources.py` source audit before local sync or
+selector use.
 
 For Phase 2.5 disk gates, run the read-only storage retention audit from the
 local checkout:
