@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 14:17 CST
+Last updated: 2026-06-06 15:13 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -3306,6 +3306,19 @@ with duplicate `run_ccrp_v3_signal_rows` process count `1`. GPU was active at
 The first 5,000-user chunk has completed; the second chunk was active at about
 `64,626/505,000` prompts, giving an estimated overall split progress of about
 `56.4%` of `1,010,000` expected candidate rows. The signal output directory
+still contained zero files; `valid_ccrp_signal_rows.csv`,
+`valid_ccrp_signal_rows_provenance.json`, and
+`valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
+audit, local-light sync, cleanup, or new experiment was run.
+
+Phase 2.5 Sports-valid signal-row monitor checkpoint: at the 2026-06-06 15:13
+CST monitor, PID `3543564` was still active and unique, elapsed `07:54:03`,
+with duplicate `run_ccrp_v3_signal_rows` process count `1`. GPU was active at
+`93%` with `42863 MiB / 49140 MiB`; `/` had `25,949,925,376` bytes free /
+`87%` used, still above the 10 GiB / 97% alert floor. Fatal log scan remained
+clean. The first 5,000-user chunk has completed; the second chunk was active at
+`140,671/505,000` prompts, giving an estimated overall split progress of about
+`63.9%` of `1,010,000` expected candidate rows. The signal output directory
 still contained zero files; `valid_ccrp_signal_rows.csv`,
 `valid_ccrp_signal_rows_provenance.json`, and
 `valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
