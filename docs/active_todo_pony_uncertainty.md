@@ -3324,6 +3324,22 @@ still contained zero files; `valid_ccrp_signal_rows.csv`,
 `valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
 audit, local-light sync, cleanup, or new experiment was run.
 
+Phase 2.5 certificate-audit storage-state fix: at 2026-06-06 15:55 CST, the
+Sports-valid signal-row PID `3543564` was still active and unique, root disk
+was safe at `25,947,631,616` bytes free / `87%` used, fatal scan was clean, and
+the second chunk had reached `198804/505000`, about `69.7%` overall. The
+signal output directory still had zero files. While waiting, Codex fixed
+`scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` so the
+compact four-domain certificate audit treats
+`phase2_5_storage_launch_allowed=true` as a valid current storage state instead
+of a warning; the audit still requires `paper_ready=false`,
+`four_domain_evidence_consistent=true`, and `signal_rows_available=false` for
+the current pre-signal-row certificate boundary. Verification passed with
+`python -m pytest tests\test_audit_cross_domain_official_ccrp_certificate.py`
+(`4 passed`) and a real-input temporary rerun reported `ok=true`,
+`comparison_certificate_ready=true`, `paper_ready=false`, `warnings=[]`. This
+does not complete signal rows or any paper-critical module.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory

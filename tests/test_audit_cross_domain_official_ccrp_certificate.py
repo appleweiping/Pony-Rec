@@ -192,6 +192,26 @@ def test_cross_domain_certificate_audit_accepts_valid_compact_certificate(tmp_pa
     assert audit["warnings"] == []
 
 
+def test_cross_domain_certificate_audit_accepts_storage_launch_allowed_state(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    summary_json, domain_csv, method_csv, evidence_json, paper_json = _write_valid_inputs(tmp_path)
+    paper_critical = json.loads(paper_json.read_text(encoding="utf-8"))
+    paper_critical["summary"]["phase2_5_storage_launch_allowed"] = True
+    paper_json.write_text(json.dumps(paper_critical), encoding="utf-8")
+
+    audit = build_audit(
+        summary_json=summary_json,
+        domain_summary_csv=domain_csv,
+        method_rows_csv=method_csv,
+        evidence_consistency_json=evidence_json,
+        paper_critical_json=paper_json,
+    )
+
+    assert audit["ok"] is True
+    assert audit["paper_critical_summary"]["phase2_5_storage_launch_allowed"] is True
+    assert audit["warnings"] == []
+
+
 def test_cross_domain_certificate_audit_rejects_missing_official_row(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     summary_json, domain_csv, method_csv, evidence_json, paper_json = _write_valid_inputs(tmp_path)

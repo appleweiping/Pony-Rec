@@ -336,8 +336,8 @@ def _paper_critical_summary(payload: dict[str, Any] | None) -> dict[str, Any]:
         warnings.append("paper_critical_four_domain_evidence_not_consistent")
     if summary.get("signal_rows_available") is not False:
         warnings.append("paper_critical_signal_row_status_unexpected")
-    if summary.get("phase2_5_storage_launch_allowed") is not False:
-        warnings.append("paper_critical_storage_gate_status_unexpected")
+    if not isinstance(summary.get("phase2_5_storage_launch_allowed"), bool):
+        warnings.append("paper_critical_storage_gate_status_missing_or_non_bool")
     return {
         "present": True,
         "paper_ready": payload.get("paper_ready"),

@@ -131,6 +131,18 @@ also include:
     `phase2_5_storage_launch_allowed=true`, and `guarded_plan_ready=true`, but
     keeps `paper_ready=false` because no completed full-scale signal rows have
     passed audit yet. No server experiment was launched.
+    A 2026-06-06 15:55 CST certificate-audit fix updated
+    `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` so
+    `phase2_5_storage_launch_allowed=true` is accepted as a valid current
+    storage state rather than reported as a compact-certificate warning. The
+    cross-domain certificate still requires `paper_ready=false`,
+    `four_domain_evidence_consistent=true`, and `signal_rows_available=false`
+    for this pre-signal-row boundary. Focused verification passed with
+    `python -m pytest tests\test_audit_cross_domain_official_ccrp_certificate.py`
+    (`4 passed`), and a real-input temporary rerun reported `ok=true`,
+    `comparison_certificate_ready=true`, `paper_ready=false`, and `warnings=[]`.
+    This changes audit interpretation only; it does not complete any Phase 2.5
+    signal-row, observation, ablation, or hyperparameter artifact.
     Phase 2.5 Sports-valid launch on 2026-06-06: before server use, Codex
     hardened `experiments/rsc/run_ccrp_v3_signal_rows.py` with a strict
     generation-count guard and pushed commit `70f2f0d`. The first launch attempt
