@@ -3526,6 +3526,19 @@ before cleanup.
    reduced-scale / shortcut experiments without explicit user permission — any
    unauthorized toy experiment is immediately reviewed, rejected, and redone at
    full formal setting, and never used as paper evidence.
+6. Multi-domain Phase 2.5 plan (user directive 2026-06-06): after Sports
+   completes its full Phase 2.5 chain, extend the same chain to three more
+   favorable domains. All four new domains are strongly favorable — C-CRP beats
+   the best official baseline in every domain by a wide margin (NDCG@10:
+   sports +29.7%, toys +32.2%, home +41.0%, tools +43.3%; NDCG@5: sports +42.9%,
+   toys +42.1%, home +59.1%, tools +62.2%). So the three to add are the
+   remaining toys / home / tools — none is weak enough to exclude, and doing all
+   four completes new-domain Phase 2.5 evidence under the eight-domain C-CRP v3
+   narrative. Note the relative margins are largest on the sparser home/tools
+   domains, which supports the motivation story that uncertainty helps more on
+   harder domains. Run domains serially (server disk forces single-domain), and
+   each domain's signal-row/selector/ablation/observation/hyperparameter design
+   still passes the ARIS ≥ 8/10 design gate before execution.
 
 ## Evidence Gate Commands
 
