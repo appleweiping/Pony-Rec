@@ -286,6 +286,16 @@ also include:
     coverage before any package can pass. Focused verification passed with
     `python -m pytest tests\test_sync_ccrp_signal_evidence_package.py
     tests\test_ccrp_uncertainty_source_audit.py -q` (`8 passed`).
+    Follow-up monitor at 2026-06-06 16:16 CST: PID `3543564` remained active
+    and unique, elapsed `08:57:33`, with duplicate signal-runner process count
+    `1`. GPU was `92%` with `42863 MiB / 49140 MiB`, root disk remained safe at
+    `25,946,492,928` bytes free / `87%` used, and fatal scan stayed clean. The
+    first chunk had completed; the second chunk had reached `227991/505000`
+    prompts, about `72.6%` overall for the expected `1,010,000` Sports-valid
+    signal rows. The output directory still had zero files and no
+    `valid_ccrp_signal_rows.csv`, provenance, or source-audit artifact, so no
+    completion gate, source audit, cleanup, local package sync, or new
+    experiment was run.
     Post-CCRP local evidence backfill on 2026-06-06 02:55 CST copied missing
     C-CRP evidence from the project server only: Sports/Toys
     `user_ranks.jsonl` and the missing Sports imported C-CRP same-candidate

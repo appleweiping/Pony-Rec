@@ -3359,6 +3359,19 @@ provenance, parse-failure, and candidate-key coverage checks. Verification
 passed with `python -m pytest tests\test_sync_ccrp_signal_evidence_package.py
 tests\test_ccrp_uncertainty_source_audit.py -q` (`8 passed`).
 
+Phase 2.5 Sports-valid signal-row monitor checkpoint: at the 2026-06-06 16:16
+CST monitor, PID `3543564` was still active and unique, elapsed `08:57:33`,
+with duplicate `run_ccrp_v3_signal_rows` process count `1`. GPU was active at
+`92%` with `42863 MiB / 49140 MiB`; `/` had `25,946,492,928` bytes free /
+`87%` used, above the 10 GiB / 97% alert floor. Fatal log scan remained clean.
+The first chunk has completed; the second chunk had reached `227991/505000`
+prompts, giving an estimated overall split progress of about `72.6%` of the
+expected `1,010,000` Sports-valid signal rows. The signal output directory
+still contained zero files; `valid_ccrp_signal_rows.csv`,
+`valid_ccrp_signal_rows_provenance.json`, and
+`valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
+audit, local-light sync, cleanup, or new experiment was run.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory

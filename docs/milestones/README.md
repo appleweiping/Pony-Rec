@@ -259,6 +259,17 @@ tests\test_ccrp_uncertainty_source_audit.py -q` (`8 passed`); the helper keeps
 the full signal CSV allowed by default while enforcing row-count, sha256,
 provenance, parse-failure, and candidate-key coverage checks after completion.
 
+At the 2026-06-06 16:16 CST monitor, PID `3543564` remained active and unique,
+elapsed `08:57:33`, with duplicate signal-runner process count `1`. GPU was
+`92%` with `42863 MiB / 49140 MiB`, root disk remained safe at
+`25,946,492,928` bytes free / `87%` used, fatal scan stayed clean, and the
+second chunk had reached `227991/505000` prompts after the first chunk had
+completed, about `72.6%` overall for the `1,010,000` expected Sports-valid
+signal rows. The output directory still had zero files and no
+`valid_ccrp_signal_rows.csv`, provenance, or source-audit artifact, so no
+completion gate, source audit, cleanup, local package sync, or new experiment
+was run.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test
