@@ -3405,6 +3405,33 @@ The signal output directory still contained zero files; no signal CSV,
 provenance, or source-audit artifact existed. No completion gate, source audit,
 local-light sync, cleanup, or new experiment was run.
 
+Opus takeover checkpoint 2026-06-06 ~18:50 CST (server time): Opus took over from
+Codex. Live preflight on `pony-rec-gpu` confirmed PID `3543564`
+(`run_ccrp_v3_signal_rows.py --domain sports --split valid`, output dir
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports`)
+still active and unique, GPU `94-100%` with `42863 MiB / 49140 MiB`, `/` at
+`25G` free / `87%` used (safe, above the 10G/97% alert floor), fatal log scan
+clean. Second 5,000-user chunk reached `455356/505000` (~90%), i.e. ~93% of the
+`1,010,000` expected Sports-valid signal rows. Confirmed by reading
+`experiments/rsc/run_ccrp_v3_signal_rows.py` that the final
+`valid_ccrp_signal_rows.csv` + `valid_ccrp_signal_rows_provenance.json` +
+`valid_parse_failures.jsonl` are written only after both chunks finish, so the
+empty output dir mid-run is expected, not a failure. Committed and pushed
+`8db93ab` (C-CRP v3 same-candidate `scores.csv` export + official metric naming
++ `chunk_users` 1000->5000; adapter-plan sports/toys/home/tools dataset keys)
+after verifying py_compile, metric numerical equivalence, and data-schema key
+safety (`candidate_item_ids`/`source_event_id` present). No server experiment was
+started, stopped, or disturbed. User approved auto-proceeding through the full
+Sports Phase 2.5 chain on completion (pause only on a blocker or audit failure):
+valid source audit -> local signal sync -> launch Sports `test` split signal
+rows -> test source audit -> local sync -> validation-only selector
+(`scripts/misc/main_select_ccrp_variant_on_valid.py`, needs both valid+test
+signal paths, `--import_scores`) -> component leave-one-component-out ablation
+summary + `main_audit_phase2_5_module_package.py` -> observation/motivation study
++ package audit -> hyperparameter sweep + package audit. Source-audit
+expectations: `expected_events=10000`, `expected_candidates_per_event=101`,
+`expected_score_rows=1,010,000`, candidate-key coverage `1.0`.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory
