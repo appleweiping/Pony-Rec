@@ -288,6 +288,15 @@ completed, about `73.5%` overall. The output directory still had zero files and
 no signal CSV, provenance, or source-audit artifact, so no completion gate,
 source audit, cleanup, local package sync, or new experiment was run.
 
+At the 2026-06-06 16:26 CST monitor, PID `3543564` remained active and unique,
+elapsed `09:07:10`, with duplicate signal-runner process count `1`. GPU was
+`92%` with `42863 MiB / 49140 MiB`, root disk remained safe at
+`25,945,972,736` bytes free / `87%` used, fatal scan stayed clean, and the
+second chunk had reached `241182/505000` prompts after the first chunk had
+completed, about `73.9%` overall. The output directory still had zero files and
+no signal CSV, provenance, or source-audit artifact, so no completion gate,
+source audit, cleanup, local package sync, or new experiment was run.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test
