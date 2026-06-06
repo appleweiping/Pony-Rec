@@ -228,6 +228,14 @@ had reached `250729/505000` prompts (`50%`). The output directory still had zero
 files and no `valid_ccrp_signal_rows.csv`, provenance, or source-audit artifact,
 so no completion gate, source audit, cleanup, or local package sync was run.
 
+At the 2026-06-06 10:57 CST monitor, PID `3543564` remained active and unique,
+elapsed `03:38:49`, with duplicate signal-runner process count `1`. GPU was
+`100%` with `42863 MiB / 49140 MiB`, root disk remained safe at
+`25,972,076,544` bytes free / `87%` used, fatal scan stayed clean, and progress
+had reached `296362/505000` prompts (`59%`). The output directory still had zero
+files and no `valid_ccrp_signal_rows.csv`, provenance, or source-audit artifact,
+so no completion gate, source audit, cleanup, or local package sync was run.
+
 The 2026-06-06 02:35-02:40 CST paper-facing comparison ledger
 `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_20260606_0240.{csv,json,md,sha256}`
 joins the compact comparison method rows, domain gate summaries, paired-test
