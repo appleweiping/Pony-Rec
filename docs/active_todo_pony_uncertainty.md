@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 07:20 CST
+Last updated: 2026-06-06 14:17 CST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -3297,6 +3297,19 @@ tests\test_audit_paper_critical_modules.py -q` (`9 passed`), and a fresh
 stdout-only module audit now reports `phase2_5_storage_launch_allowed=true`,
 `signal_rows_available=false`, and `paper_ready=false`. The remaining blocker
 is completed full-scale signal rows, not stale storage-gate selection.
+
+Phase 2.5 Sports-valid signal-row monitor checkpoint: at the 2026-06-06 14:17
+CST monitor, PID `3543564` was still active and unique, elapsed `06:58:03`,
+with duplicate `run_ccrp_v3_signal_rows` process count `1`. GPU was active at
+`92%` with `42863 MiB / 49140 MiB`; `/` had `25,952,808,960` bytes free /
+`87%` used, above the 10 GiB / 97% alert floor. Fatal log scan remained clean.
+The first 5,000-user chunk has completed; the second chunk was active at about
+`64,626/505,000` prompts, giving an estimated overall split progress of about
+`56.4%` of `1,010,000` expected candidate rows. The signal output directory
+still contained zero files; `valid_ccrp_signal_rows.csv`,
+`valid_ccrp_signal_rows_provenance.json`, and
+`valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
+audit, local-light sync, cleanup, or new experiment was run.
 
 ## Required Next Actions
 
