@@ -63,6 +63,8 @@ DEFAULT_EVIDENCE_CONSISTENCY_GLOBS = (
     "local_server_evidence_consistency_new_domains_*.json",
 )
 DEFAULT_STORAGE_AUDIT_GLOBS = (
+    "server_storage_phase2_5_retention_audit_after_cleanup_final_*.json",
+    "server_storage_phase2_5_retention_audit_after_cleanup_*.json",
     "server_storage_phase2_5_retention_audit_current_*.json",
     "server_storage_phase2_5_retention_audit_ranked_*.json",
     "server_storage_phase2_5_retention_audit_*.json",

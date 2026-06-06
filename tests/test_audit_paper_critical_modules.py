@@ -263,6 +263,11 @@ def _seed_evidence_consistency(root: Path, *, ok: bool = True) -> Path:
 
 def _seed_storage_audit(root: Path, *, launch_allowed: bool = False) -> Path:
     path = root / "outputs/summary/paper_critical/server_storage_phase2_5_retention_audit_current_20260606.json"
+    return _seed_storage_audit_at(root, path.name, launch_allowed=launch_allowed)
+
+
+def _seed_storage_audit_at(root: Path, filename: str, *, launch_allowed: bool = False) -> Path:
+    path = root / "outputs/summary/paper_critical" / filename
     current_free = 18_000_000_000 if launch_allowed else 12_000_000_000
     required_free = 16_106_127_360
     recommended = None
@@ -349,6 +354,30 @@ def test_audit_integrates_evidence_consistency_and_storage_gate(tmp_path):
     assert audit["storage_gate"]["deficit_to_min_free_bytes"] > 0
     assert "pony_qwen3_8b_title_item_embs.npy" in audit["next_action"]
     assert "server_disk_below_phase2_5_floor" in audit["modules"]["hyperparameter_analysis"]["blockers"]
+
+
+def test_audit_prefers_after_cleanup_storage_gate_by_default(tmp_path):
+    _seed_framework_package(tmp_path)
+    _seed_signal_audits(tmp_path)
+    _seed_guarded_plan(tmp_path)
+    _seed_paper_critical_support_scripts(tmp_path)
+    _seed_component_inventory(tmp_path)
+    _seed_storage_audit_at(
+        tmp_path,
+        "server_storage_phase2_5_retention_audit_current_20260606_0432.json",
+        launch_allowed=False,
+    )
+    after_cleanup_path = _seed_storage_audit_at(
+        tmp_path,
+        "server_storage_phase2_5_retention_audit_after_cleanup_final_20260606_0650.json",
+        launch_allowed=True,
+    )
+
+    audit = build_module_audit(tmp_path)
+
+    assert audit["summary"]["phase2_5_storage_launch_allowed"] is True
+    assert audit["storage_gate"]["path"].endswith(after_cleanup_path.name)
+    assert "phase2_5_experiment_launch_not_allowed" not in audit["modules"]["observation_motivation"]["blockers"]
 
 
 def test_audit_detects_framework_manifest_mismatch(tmp_path):

@@ -3284,6 +3284,20 @@ single `505000/505000` progress line as completion; wait for the process to
 exit and for the final CSV/provenance files to exist before running audit or
 sync.
 
+Phase 2.5 paper-critical audit storage-default fix: at the 2026-06-06 14:03
+CST checkpoint, `scripts/audit/main_audit_paper_critical_modules.py` was
+updated to prefer
+`server_storage_phase2_5_retention_audit_after_cleanup_final_*.json` and
+`server_storage_phase2_5_retention_audit_after_cleanup_*.json` before stale
+`current_*` or `ranked_*` storage audits. This prevents the consolidated
+paper-critical audit from reporting the pre-cleanup storage gate as blocked
+after a documented cleanup has already opened the launch gate. Focused
+verification passed with `python -m pytest
+tests\test_audit_paper_critical_modules.py -q` (`9 passed`), and a fresh
+stdout-only module audit now reports `phase2_5_storage_launch_allowed=true`,
+`signal_rows_available=false`, and `paper_ready=false`. The remaining blocker
+is completed full-scale signal rows, not stale storage-gate selection.
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory
