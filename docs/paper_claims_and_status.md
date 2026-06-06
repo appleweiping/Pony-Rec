@@ -237,6 +237,15 @@ also include:
     directory still had zero files; `valid_ccrp_signal_rows.csv`, provenance,
     and source-audit artifacts were absent. No completion gate, source audit,
     local-light sync, cleanup, or new experiment was run.
+    Follow-up monitor at 2026-06-06 12:53 CST: PID `3543564` was still active
+    and unique, elapsed `05:34:45`, duplicate signal-runner process count was
+    `1`, GPU was `93%` with `42863 MiB / 49140 MiB`, and root disk had
+    `25,957,179,392` bytes free / `87%` used, above the 10 GiB / 97% alert
+    floor. Fatal scan remained clean, and progress had reached
+    `455609/505000` prompts (`90%`). The signal output directory still had
+    zero files; `valid_ccrp_signal_rows.csv`, provenance, and source-audit
+    artifacts were absent. No completion gate, source audit, local-light sync,
+    cleanup, or new experiment was run.
     Post-CCRP local evidence backfill on 2026-06-06 02:55 CST copied missing
     C-CRP evidence from the project server only: Sports/Toys
     `user_ranks.jsonl` and the missing Sports imported C-CRP same-candidate
