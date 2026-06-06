@@ -270,6 +270,22 @@ also include:
     output directory still had zero files; `valid_ccrp_signal_rows.csv`,
     provenance, and source-audit artifacts were absent. No completion gate,
     source audit, local-light sync, cleanup, or new experiment was run.
+    Follow-up monitor at 2026-06-06 16:11 CST: PID `3543564` remained active
+    and unique, elapsed `08:52:39`, with duplicate signal-runner process count
+    `1`. GPU was `93%` with `42863 MiB / 49140 MiB`, root disk remained safe at
+    `25,946,750,976` bytes free / `87%` used, and fatal scan stayed clean. The
+    first chunk had completed; the second chunk had reached `221282/505000`
+    prompts, about `71.9%` of the expected `1,010,000` signal rows overall. The
+    output directory still had zero files and no `valid_ccrp_signal_rows.csv`,
+    provenance, or source-audit artifact, so no completion gate, source audit,
+    cleanup, or local package sync was run. While waiting, Codex rechecked the
+    signal evidence sync helper and verified it does not impose a too-small
+    full-CSV ceiling by default (`--max_signal_rows_mb=900`) while still
+    requiring sha256/size, `1,010,001` CSV lines for Sports valid,
+    provenance-count agreement, parse-failure bounds, and exact candidate-key
+    coverage before any package can pass. Focused verification passed with
+    `python -m pytest tests\test_sync_ccrp_signal_evidence_package.py
+    tests\test_ccrp_uncertainty_source_audit.py -q` (`8 passed`).
     Post-CCRP local evidence backfill on 2026-06-06 02:55 CST copied missing
     C-CRP evidence from the project server only: Sports/Toys
     `user_ranks.jsonl` and the missing Sports imported C-CRP same-candidate

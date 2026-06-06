@@ -3340,6 +3340,25 @@ the current pre-signal-row certificate boundary. Verification passed with
 `comparison_certificate_ready=true`, `paper_ready=false`, `warnings=[]`. This
 does not complete signal rows or any paper-critical module.
 
+Phase 2.5 Sports-valid signal-row monitor checkpoint: at the 2026-06-06 16:11
+CST monitor, PID `3543564` was still active and unique, elapsed `08:52:39`,
+with duplicate `run_ccrp_v3_signal_rows` process count `1`. GPU was active at
+`93%` with `42863 MiB / 49140 MiB`; `/` had `25,946,750,976` bytes free /
+`87%` used, above the 10 GiB / 97% alert floor. Fatal log scan remained clean.
+The first 5,000-user chunk has completed; the second chunk was active at
+`221282/505000` prompts, giving an estimated overall split progress of about
+`71.9%` of `1,010,000` expected signal rows. The signal output directory still
+contained zero files; `valid_ccrp_signal_rows.csv`,
+`valid_ccrp_signal_rows_provenance.json`, and
+`valid_ccrp_signal_source_audit.json` were absent. No completion gate, source
+audit, local-light sync, cleanup, or new experiment was run. While waiting,
+Codex rechecked `scripts/audit/main_sync_ccrp_signal_evidence_package.py` and
+confirmed the post-completion sync path allows the full signal CSV by default
+(`--max_signal_rows_mb=900`) and still enforces line count, sha256,
+provenance, parse-failure, and candidate-key coverage checks. Verification
+passed with `python -m pytest tests\test_sync_ccrp_signal_evidence_package.py
+tests\test_ccrp_uncertainty_source_audit.py -q` (`8 passed`).
+
 ## Required Next Actions
 
 Continuity correction on 2026-06-06: agentmemory remains the live shared-memory
