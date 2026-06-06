@@ -265,20 +265,32 @@ coverage, leakage risk, table eligibility, and whether the claim is still too
 broad. Reviewer objections remain blockers until addressed, downgraded, or
 explicitly documented as accepted limitations.
 
-**Self-managed rigor; AI review optional/on-demand (2026-06-06 update):** the
-executing agent holds every module to top-conference standard itself — formal
-setting, fair same-candidate alignment, validation-only selection, honest
-reporting (including neutral/negative ablation results), full metrics, paired
-tests, provenance, evidence packaging. Multi-AI review (GPT xhigh / GPT-5.5
-xhigh / a second Claude Opus 4.8 via ARIS) is available and should be used when
-it adds value — an uncertain or novel design decision, a possible overclaim, a
-fairness/leakage question, or before final paper submission — but it is NOT a
-mandatory gate before or after every experiment/module. Do not block routine,
-well-understood execution on an external review pass. A serious objection
-(reviewer agent or self-audit) still vetoes a module/table; do not average it
-away. (This supersedes the earlier mandatory per-module tri-reviewer cadence and
-the ARIS ≥ 8/10 design gate; keep standards high, just don't require an AI pass
-at every step.)
+**Review-as-you-go cadence (2026-06-06):** do not defer review to a single
+end-of-project gate. After each part/module completes (signal split + audit,
+selector, component ablation, observation study, hyperparameter sweep, table
+build, etc.), run a concurrent three-perspective review and apply the feedback
+immediately before continuing:
+
+- Codex (GPT xhigh) — engineering/implementation correctness;
+- GPT-5.5 xhigh — literature/protocol + top-conference reviewer/auditor;
+- a second Claude Opus 4.8 instance — independent adversarial cross-check.
+
+This is cheaper on tokens and time than building everything then reviewing once,
+and replaces the old "iterate to GPT-5.5 xhigh ≥ 8/10 at the end" model. If a
+reviewer agent is unavailable in a given session, use the available reviewers
+and record which perspective was missing. A serious reviewer objection still
+vetoes the module/table; do not average it away.
+
+**Design-review-before-execution gate (2026-06-06, ≥ 8/10 before running):**
+before launching ANY experiment, and before building any project
+module/component, first submit the concrete setting + design (data/split,
+candidate protocol, baselines, metrics, the component's mechanism and what it
+ablates/controls, expected evidence) to GPT xhigh + a second Claude Opus 4.8
+via the ARIS review skill/mechanism. Only after the design genuinely reaches
+8/10 (8 = top-conference-submission level) do we start strict execution. This
+catches design flaws before any GPU/token/time is spent. Per-module sequence:
+design → ARIS design review until ≥ 8/10 → execute strictly → per-module
+tri-reviewer review of outputs → fix → continue.
 
 Each sub-agent handoff should report:
 
@@ -292,11 +304,11 @@ Each sub-agent handoff should report:
 Reviewer/auditor findings can veto wording and table inclusion. Do not average
 away a serious reviewer objection.
 
-Current tool-routing note (2026-06-06): when an AI review is warranted (see
-above — used on-demand, not every step), the available panel is GPT xhigh,
-GPT-5.5 xhigh, and a second Claude Opus 4.8 instance via ARIS. Use whichever
-add value for the decision at hand; note any missing perspective. Routine,
-well-understood execution does not require an AI review pass.
+Current tool-routing note (2026-06-06): the standard review panel is three
+concurrent agents — Codex (GPT xhigh), GPT-5.5 xhigh, and a second Claude Opus
+4.8 instance — run per module. If Claude reviewer tooling is unavailable in a
+given session, fall back to GPT-5.5 xhigh / Codex sub-agents and note the
+missing perspective.
 
 Every substantial final report must include both what changed or was learned
 and a concrete next-step plan. The plan must name the next server command,
@@ -430,14 +442,16 @@ When in doubt, downgrade the claim, not the evidence standard.
    审核、驳回，并以完整正规顶会 setting 重做，绝不可当作论文证据
 4. **8 个 official baselines** — 每个域都必须有完整的 8 个 baseline 对比
 5. **公平比较** — setting 完全对齐（用户数、候选数、指标、统一 Qwen3-8B backbone）
-6. **自把关严格执行，AI 审核按需可选** — 执行 agent 自己把每个模块做到顶会
-   标准（正规 setting、公平对齐、valid-only 选择、诚实报告含不利 ablation、完整
-   指标、paired tests、provenance、证据打包）。需要时（设计拿不准、可能 overclaim、
-   fairness/leakage 存疑、或论文投稿前）可用 GPT xhigh / GPT-5.5 xhigh / 第二个
-   Claude Opus 4.8（ARIS）审核，但不是每步实验/模块前后的强制门，不要让常规、已
-   想清楚的执行卡在外部审核上。严重 objection（reviewer 或自审）仍可 veto 模块/
-   表。取代旧的"每模块三方 review + ARIS ≥8 分设计门"强制要求——标准照旧高，只是
-   不强制每步走 AI 审。
+6. **边做边三方 review** — 每完成一个 part/module 立即并发三方 review
+   （Codex GPT xhigh + GPT-5.5 xhigh + 第二个 Claude Opus 4.8），即时反馈即时
+   改，省 token 省时间；取代旧的"最后统一 GPT-5.5 review 达到 8/10"模式
+6.5. **跑实验前先审设计（≥8 分才执行）** — 做任何实验前、建任何模块/组件前，
+   先把具体 setting 和设计（数据/split、候选协议、baselines、指标、组件机制与
+   它 ablate/control 什么、预期证据）交给 GPT xhigh + 第二个 Claude Opus 4.8，
+   用 ARIS 审核 skill/机制审。等设计真正达到 8 分（8 = 符合顶会投稿级别）再开始
+   严格执行。先审设计能在烧 GPU/token/时间前抓出设计缺陷，不浪费 token 不浪费
+   时间。每模块顺序：设计 → ARIS 设计审核到 ≥8 分 → 严格执行 → 产出的 per-module
+   三方 review → 改 → 继续
 7. **实验做完再写** — 结果完整后再写作，不能半成品提交 review
 8. **每步 commit + memory** — 每个关键产物 commit 到 GitHub，更新文档
 9. **目标续跑监控** — 长期项目使用当前线程 heartbeat 每 2 小时激活一次；每次续跑只做一个有界监控周期，禁止刚结束就连续自触发或无脑重复检查
@@ -455,7 +469,7 @@ Phase 2: 8 official baselines on 4 new domains complete (sports✓ 8/8 + gate✓
 Phase 2.5: Paper-critical modules before readiness claim: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure
 Phase 3: Full comparison table + statistical significance tests
 Phase 4: Paper writing (ARIS paper-write skill)
-Phase 5: Self top-conference audit throughout; optional AI review (GPT xhigh / GPT-5.5 xhigh / 2nd Claude Opus 4.8) on-demand for uncertain designs, overclaim/fairness checks, or before submission — not a mandatory per-module gate
+Phase 5: Per-module tri-reviewer review-as-you-go (Codex GPT xhigh + GPT-5.5 xhigh + 2nd Claude Opus 4.8), run after each module — not a single end-gate
 ```
 
 ## Artifact Management（产物管理规则）

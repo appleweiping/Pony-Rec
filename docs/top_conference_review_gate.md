@@ -15,19 +15,36 @@ evidence defense checklist.
    permission, it must be immediately reviewed, rejected, and redone at the full
    formal top-conference setting; it must never be packaged as paper evidence.
    This rule binds every Claude/agent at all times.
-2. **Self-managed rigor; AI review is optional/on-demand, not a mandatory
-   per-step gate.** The executing agent is responsible for holding every module
-   to top-conference standard itself: formal setting, fair same-candidate
-   alignment, validation-only selection, honest reporting (including neutral or
-   negative ablation results), full metric set, paired tests, provenance, and
-   evidence packaging. Multi-AI review (GPT xhigh / GPT-5.5 xhigh / a second
-   Claude Opus 4.8 via ARIS) is available and should be used when it genuinely
-   adds value — e.g. an uncertain or novel design decision, a possible overclaim,
-   a fairness/leakage question, or before final paper submission — but it is NOT
-   a required gate before or after every experiment/module. Do not block routine,
-   well-understood execution on an external review pass. A serious objection
-   (whether from a reviewer agent or self-audit) still vetoes a module or table;
-   do not average away a blocking concern.
+2. **Review-as-you-go (per-module tri-reviewer), not a single end-gate.** After
+   each part/module completes (e.g. a signal split + audit, the selector, the
+   component ablation, the observation study, the hyperparameter sweep, a table
+   build), run a concurrent three-perspective review and apply the feedback
+   immediately before moving on:
+   - Codex (GPT xhigh) — engineering/implementation correctness;
+   - GPT-5.5 xhigh — literature/protocol + top-conference reviewer/auditor;
+   - a second Claude Opus 4.8 instance — independent cross-check / adversarial
+     reading.
+   This replaces the old "iterate to a final GPT-5.5 xhigh score ≥ 8/10" model.
+   The goal is incremental, token- and time-efficient correction: build a
+   module, get three independent reviews, fix, then continue. A serious reviewer
+   objection (fairness, leakage, novelty, baseline eligibility, overclaim,
+   statistical validity) can still veto a module or table; do not average away a
+   blocking objection. Reviewer tooling availability varies per session — if an
+   agent is unavailable, use the available reviewers and note which perspective
+   was missing.
+3. **Design-review-before-execution gate (≥ 8/10 before running anything).**
+   Before launching any experiment — and before building any project
+   module/component — first submit the concrete setting and design (data/split,
+   candidate protocol, baselines, metrics, the component's mechanism, what it
+   ablates/controls, expected evidence) to GPT xhigh + a second Claude Opus 4.8
+   using the ARIS review skill/mechanism. Only once the design genuinely reaches
+   **8/10 (8 = top-conference-submission level)** do we start strict execution.
+   This catches design flaws before any GPU/token/time is spent, so we are not
+   reviewing a finished-but-wrong artifact after the fact. Sequence per module:
+   design → ARIS design review until ≥ 8/10 → execute strictly → per-module
+   tri-reviewer review of outputs (rule 2) → fix → continue. If reviewer tooling
+   is unavailable, use the available reviewers and record which perspective was
+   missing; do not skip the design gate.
 
 ## Venue Fit
 
@@ -185,11 +202,11 @@ for the defended claim:
   claim, with Beauty smaller-N labeled if used;
 - leakage, candidate protocol, score coverage, provenance, and reproducibility
   audits pass;
-- there is no unresolved major objection about fairness, novelty, technical
-  depth, or overclaiming — judged by the executing agent's own top-conference
-  self-audit, optionally backed by an AI review pass (GPT xhigh / GPT-5.5 xhigh /
-  a second Claude Opus 4.8) when a decision is uncertain or before final
-  submission. AI review is on-demand, not a mandatory per-module gate.
+- the per-module tri-reviewer review-as-you-go pass (Codex GPT xhigh + GPT-5.5
+  xhigh + a second Claude Opus 4.8) has been run on each completed module and
+  has no unresolved major objection about fairness, novelty, technical depth, or
+  overclaiming. (This per-module cadence replaces the prior single end-of-project
+  "GPT-5.5 xhigh ≥ 8/10" gate.)
 
 If these gates pass, tell the user the project is ready to enter paper writing
 and artifact packaging rather than continuing to add new experiments. If they
