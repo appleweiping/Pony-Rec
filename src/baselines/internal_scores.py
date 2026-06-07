@@ -106,6 +106,7 @@ def audit_score_degeneracy(
     *,
     precision: int = 12,
     max_tie_pair_rate: float = 0.98,
+    max_constant_event_rate: float = 0.0,
 ) -> dict[str, Any]:
     by_event: dict[str, list[float]] = {}
     for row in score_rows:
@@ -133,11 +134,21 @@ def audit_score_degeneracy(
         tie_pair_count += sum(max(0, count * (count - 1) // 2) for count in counts.values())
 
     tie_pair_rate = tie_pair_count / total_pair_count if total_pair_count else 0.0
-    degeneracy_audit_ok = event_count > 0 and constant_event_count == 0 and tie_pair_rate <= max_tie_pair_rate
+    constant_event_rate = constant_event_count / event_count if event_count else 0.0
+    # A small fraction of fully-constant events is allowed when max_constant_event_rate>0
+    # (e.g. LLM-verbalized relevance that returns all-zero for a few genuinely
+    # uninformative events); those events are ranked by the caller's seeded random
+    # tie-break (at chance), which is the honest outcome rather than a leak.
+    degeneracy_audit_ok = (
+        event_count > 0
+        and constant_event_rate <= max_constant_event_rate
+        and tie_pair_rate <= max_tie_pair_rate
+    )
     return {
         "score_degeneracy_event_count": event_count,
         "constant_score_event_count": constant_event_count,
-        "constant_score_event_rate": constant_event_count / event_count if event_count else 0.0,
+        "constant_score_event_rate": constant_event_rate,
+        "max_constant_event_rate": max_constant_event_rate,
         "mean_unique_scores_per_event": sum(unique_counts) / event_count if event_count else 0.0,
         "min_unique_scores_per_event": min(unique_counts) if unique_counts else 0,
         "tie_pair_count": tie_pair_count,

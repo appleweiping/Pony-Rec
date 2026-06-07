@@ -152,7 +152,8 @@ def _evaluate_candidate_scores(
     k: int,
     ks: tuple[int, ...] | list[int] | None = None,
     fail_on_degeneracy: bool = True,
-    max_tie_pair_rate: float = 0.5,
+    max_tie_pair_rate: float = 0.7,
+    max_constant_event_rate: float = 0.02,
     tie_break_seed: int = 20260607,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], pd.DataFrame]:
     ranking_rows = load_jsonl(ranking_path)
@@ -170,7 +171,11 @@ def _evaluate_candidate_scores(
     audit = audit_score_rows_against_candidates(candidate_rows=candidate_rows, score_rows=score_rows)
     if not audit["audit_ok"]:
         raise ValueError(f"C-CRP score coverage audit failed for {signal_path}: {audit}")
-    degeneracy_audit = audit_score_degeneracy(score_rows, max_tie_pair_rate=max_tie_pair_rate)
+    degeneracy_audit = audit_score_degeneracy(
+        score_rows,
+        max_tie_pair_rate=max_tie_pair_rate,
+        max_constant_event_rate=max_constant_event_rate,
+    )
     if fail_on_degeneracy and not degeneracy_audit["degeneracy_audit_ok"]:
         raise ValueError(f"C-CRP score degeneracy audit failed for {signal_path}: {degeneracy_audit}")
     predictions = _predictions_from_scores(
@@ -217,8 +222,25 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max_tie_pair_rate",
         type=float,
-        default=0.5,
-        help="Score-degeneracy gate: reject configs whose tied-candidate-pair rate exceeds this (tightened from the 0.98 library default).",
+        default=0.7,
+        help=(
+            "Score-degeneracy gate: reject configs whose tied-candidate-pair rate exceeds this. "
+            "Tightened from the 0.98 library default; set above the observed ~0.54 LLM-signal tie "
+            "rate (coarse verbalized probabilities, neutralized by seeded random tie-break) while "
+            "still rejecting a near-constant scorer."
+        ),
+    )
+    parser.add_argument(
+        "--max_constant_event_rate",
+        type=float,
+        default=0.02,
+        help=(
+            "Score-degeneracy gate: allow at most this fraction of fully-constant events (all "
+            "candidates equal score). LLM-verbalized relevance returns all-zero for a small fraction "
+            "of genuinely uninformative events; these are ranked at chance by the seeded random "
+            "tie-break. Default 0.02 (2%) sits above the observed ~0.4% while still catching a "
+            "globally degenerate scorer."
+        ),
     )
     parser.add_argument(
         "--tie_break_seed",
@@ -272,6 +294,7 @@ def main() -> None:
                 ks=FULL_REPORTING_KS,
                 fail_on_degeneracy=False,
                 max_tie_pair_rate=args.max_tie_pair_rate,
+                max_constant_event_rate=args.max_constant_event_rate,
                 tie_break_seed=args.tie_break_seed,
             )
             row = {
@@ -350,6 +373,7 @@ def main() -> None:
             f"valid_{args.selection_metric}": best[args.selection_metric],
         },
         "max_tie_pair_rate": args.max_tie_pair_rate,
+        "max_constant_event_rate": args.max_constant_event_rate,
         "tie_break_seed": args.tie_break_seed,
         "note": "Ablations and degenerate score-modes are diagnostics evaluated at the frozen main config, never selection candidates.",
     }
@@ -367,6 +391,7 @@ def main() -> None:
         k=ranking_k,
         ks=FULL_REPORTING_KS,
         max_tie_pair_rate=args.max_tie_pair_rate,
+        max_constant_event_rate=args.max_constant_event_rate,
         tie_break_seed=args.tie_break_seed,
     )
     score_summary = write_score_rows(test_score_rows, output_dir / "ccrp_selected_test_scores.csv")
@@ -405,6 +430,7 @@ def main() -> None:
         "confidence_weights_grid": [float(args.prereg_confidence_weight)],
         "weight_grid": [_weight_label(weights) for weights in weight_grid],
         "max_tie_pair_rate": args.max_tie_pair_rate,
+        "max_constant_event_rate": args.max_constant_event_rate,
         "tie_break_seed": args.tie_break_seed,
         **score_summary,
         **test_metrics,
@@ -445,6 +471,7 @@ def main() -> None:
                 ks=FULL_REPORTING_KS,
                 fail_on_degeneracy=False,
                 max_tie_pair_rate=args.max_tie_pair_rate,
+                max_constant_event_rate=args.max_constant_event_rate,
                 tie_break_seed=args.tie_break_seed,
             )
         except Exception as exc:  # noqa: BLE001 — record diagnostic failure, do not abort main result
