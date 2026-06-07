@@ -3405,6 +3405,30 @@ The signal output directory still contained zero files; no signal CSV,
 provenance, or source-audit artifact existed. No completion gate, source audit,
 local-light sync, cleanup, or new experiment was run.
 
+Sports-TEST signal rows COMPLETE + AUDITED + SYNCED 2026-06-07 ~08:31 CST
+(server time): test PID `3586922` exited cleanly after both 5,000-user chunks.
+`test_ccrp_signal_rows.csv` has `1,010,001` lines, provenance records
+`n_events=10000`, `n_signal_rows=1010000`, `parse_failure_count=0`,
+`git_commit=9ded57b7`, `data_sha256=7654f9a9...`,
+`signal_rows_sha256=1b55a4b8...`, leakage guard present. Source audit returned
+`status=recomputable_signal_rows`, `row_count=1010000`, `event_count=10000`,
+`duplicate_keys=0`, `candidate_key_coverage_rate=1.0`, `missing=0`, `extra=0`,
+`recomputable_signal_count=1` (the `failures=[missing_uncertainty_column]` is
+the expected/correct flag for raw signal rows). Both Sports splits are now
+complete and audited. Local signal packages synced into per-split subdirs
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/{valid,test}/`
+— each package audit `ok=true`, `failures=[]`, `sync_manifest_ok=true`, full
+signal CSV copied locally (valid ~299MB, test ~304MB; CSVs are gitignored, only
+the JSON provenance/source-audit/sync-manifest/package-audit are committed).
+NOTE on layout: the auditor expects exactly one signal CSV per package dir, so
+valid and test were reorganized into separate `valid/` and `test/` subdirs on
+both server and local before the per-split sync/audit passed. The completion
+cron monitor was deleted. Next: validation-only selector
+`scripts/misc/main_select_ccrp_variant_on_valid.py` (both signal paths,
+`--import_scores`), then component ablation, observation, hyperparameter — each
+preceded by the mandatory ARIS ≥ 8/10 design review and followed by the
+per-module tri-reviewer output review.
+
 Opus takeover checkpoint 2026-06-06 ~18:50 CST (server time): Opus took over from
 Codex. Live preflight on `pony-rec-gpu` confirmed PID `3543564`
 (`run_ccrp_v3_signal_rows.py --domain sports --split valid`, output dir

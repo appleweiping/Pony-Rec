@@ -1,0 +1,64 @@
+{
+  "ok": true,
+  "copy": true,
+  "remote_host": "pony-rec-gpu",
+  "remote_project": "/home/ajifang/projects/pony-rec-rescue-shadow-v6",
+  "remote_signal_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test",
+  "local_package_dir": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_sports\\test",
+  "include_signal_rows": true,
+  "allowed_file_count": 4,
+  "excluded_file_count": 0,
+  "excluded_files_preview": [],
+  "too_large": [],
+  "checked_files": [
+    {
+      "rel_path": "test_ccrp_signal_rows.csv",
+      "role": "signal_rows",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_sports\\test\\test_ccrp_signal_rows.csv",
+      "size": 304743878,
+      "sha256": "1b55a4b83673b2699d8a6029b02f39ae10145db514de5101a7f6b11e1f9e8207",
+      "expected_sha256": "1b55a4b83673b2699d8a6029b02f39ae10145db514de5101a7f6b11e1f9e8207",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": 1010001
+    },
+    {
+      "rel_path": "test_ccrp_signal_rows_provenance.json",
+      "role": "signal_provenance",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows_provenance.json",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_sports\\test\\test_ccrp_signal_rows_provenance.json",
+      "size": 1432,
+      "sha256": "85f861609291d5aeb7acd12251849f51a6d64cc5af914ca194970bd919c7694a",
+      "expected_sha256": "85f861609291d5aeb7acd12251849f51a6d64cc5af914ca194970bd919c7694a",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": null
+    },
+    {
+      "rel_path": "test_ccrp_signal_source_audit.csv",
+      "role": "source_audit",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_source_audit.csv",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_sports\\test\\test_ccrp_signal_source_audit.csv",
+      "size": 470,
+      "sha256": "d921f20c372cde3ab817189b140e8ac17a0284e49939555194b1b899ce7e3a53",
+      "expected_sha256": "d921f20c372cde3ab817189b140e8ac17a0284e49939555194b1b899ce7e3a53",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": 2
+    },
+    {
+      "rel_path": "test_ccrp_signal_source_audit.json",
+      "role": "source_audit",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_source_audit.json",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_sports\\test\\test_ccrp_signal_source_audit.json",
+      "size": 1934,
+      "sha256": "5ad5d2c4b66e93a511abcbb534d6e362fb2ef6a96e1ade96d273b770b0521dcc",
+      "expected_sha256": "5ad5d2c4b66e93a511abcbb534d6e362fb2ef6a96e1ade96d273b770b0521dcc",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": null
+    }
+  ],
+  "failures": []
+}
