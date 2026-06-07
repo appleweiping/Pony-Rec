@@ -3429,6 +3429,41 @@ cron monitor was deleted. Next: validation-only selector
 preceded by the mandatory ARIS ≥ 8/10 design review and followed by the
 per-module tri-reviewer output review.
 
+Sports SELECTOR DONE 2026-06-07 (commit a0a4b62). Mandatory ARIS design review
+FAILED the original selector (two independent Opus 4.8 reviewers, 4/10) — it let
+ablations + degenerate score-modes compete to be the "main" C-CRP. Rewritten
+leakage-safe (select only within full/full; ablations+degenerate modes = separate
+ccrp_ablation_diagnostics.csv at the frozen config; preregistered principled
+config full/eta=1.0/0.5,0.3,0.2 as MAIN with the valid grid as a sensitivity
+study; seeded order-independent tie-break; degeneracy gate calibrated
+max_tie_pair_rate=0.70 + new max_constant_event_rate=0.02 for the coarse zero-heavy
+LLM signal). Re-review 8/10 PASS, then executed on real Sports. Main test
+(10k events, 101 cand, preregistered config): HR@5/10/20=0.2672/0.3793/0.5183,
+NDCG@5/10/20=0.1920/0.2281/0.2631, MRR=0.2025; degeneracy_audit_ok=True
+(tie_pair_rate 0.39, const_rate 0.0002). Evidence in ccrp_ablation_sports/
+(scored_rows 377MB + scores 96MB server-side; lightweight json/csv +
+SPORTS_SELECTOR_FINDINGS.md committed). NOTE: GPT-xhigh/Codex CLI is broken in this
+env (service_tier priority/flex/fast all rejected) — used 2 Opus 4.8 reviewers;
+ACTION ITEM to fix Codex for later modules.
+HONEST FINDING: on Sports the C-CRP uncertainty/risk components are NEAR-INERT —
+leave-one-out of boundary uncertainty / calibration gap / counterevidence / risk
+penalty is neutral-to-slightly-better; confidence_only ≈ full; only evidence_only
+collapses (0.181). Ranking driven by calibrated relevance probability alone, likely
+due to coarse LLM signal (median relevance_probability=0.0, 19 distinct values).
+User decision: proceed to toys/home/tools first to see if this generalizes, before
+any reframe; operate autonomously, surface only major findings/blockers.
+
+Toys-VALID signal rows LAUNCHED 2026-06-07 ~18:22 CST after a clean preflight
+(no experiment proc, GPU idle, disk 23G/88%). PID `3635383`, pid file
+`ccrp_signal_rows_toys_valid.pid`, log `ccrp_signal_rows_toys_valid_20260607_182219.log`,
+output dir `.../ccrp_signal_rows_toys/valid`. Confirmed past vLLM init, GPU 100%,
+inference running, fatal scan 0. Same ~12h/split profile as Sports. The signal-row
+runner and the fixed selector are unchanged from the Sports review, so applying
+them to a new domain is not a new design and does not need a fresh ARIS gate; the
+gate re-applies to any domain-specific design change. After toys valid+test:
+source audit → per-split sync → selector (preregistered) → record toys ablation
+diagnostics; then home, then tools.
+
 Opus takeover checkpoint 2026-06-06 ~18:50 CST (server time): Opus took over from
 Codex. Live preflight on `pony-rec-gpu` confirmed PID `3543564`
 (`run_ccrp_v3_signal_rows.py --domain sports --split valid`, output dir
