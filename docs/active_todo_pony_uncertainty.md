@@ -3464,6 +3464,19 @@ gate re-applies to any domain-specific design change. After toys valid+test:
 source audit → per-split sync → selector (preregistered) → record toys ablation
 diagnostics; then home, then tools.
 
+Toys-VALID signal rows COMPLETE + AUDITED + SYNCED 2026-06-08 ~14:30 CST: PID
+`3635383` exited cleanly, `valid_ccrp_signal_rows.csv` 1,010,001 lines, provenance
+n_events=10000 / n_rows=1010000 / parse_fail=0. Source audit
+`status=recomputable_signal_rows`, rows 1010000, events 10000, dup 0, coverage 1.0.
+Local per-split package synced (package audit ok). Toys-TEST signal rows LAUNCHED
+2026-06-08 ~14:34 CST after clean preflight (no experiment proc, GPU idle, disk
+24G): PID `3693120`, pid file `ccrp_signal_rows_toys_test.pid`, log
+`ccrp_signal_rows_toys_test_20260608_143436.log`, output dir
+`.../ccrp_signal_rows_toys/test`; confirmed past vLLM init, inference running,
+fatal 0. After toys-test completes: source audit → sync → selector (preregistered)
+→ record toys ablation diagnostics vs the Sports near-inert-components finding;
+then home, then tools.
+
 Opus takeover checkpoint 2026-06-06 ~18:50 CST (server time): Opus took over from
 Codex. Live preflight on `pony-rec-gpu` confirmed PID `3543564`
 (`run_ccrp_v3_signal_rows.py --domain sports --split valid`, output dir

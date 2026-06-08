@@ -1,0 +1,2 @@
+label,path,status,paper_ready_uncertainty_rows,recomputable_signal_rows,row_count,event_count,key_count,candidate_key_count,candidate_key_coverage_rate,uncertainty_col,finite_uncertainty_rows,failures,warnings
+candidate_signal,outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/valid/valid_ccrp_signal_rows.csv,recomputable_signal_rows,False,True,1010000,10000,1010000,1010000,1.0,,0,missing_uncertainty_column,
