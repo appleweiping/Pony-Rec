@@ -1,0 +1,63 @@
+{
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "min_candidate_key_coverage": 0.999,
+  "candidate_items": {
+    "path": "outputs/baselines/external_tasks/home_large10000_100neg_valid_same_candidate/candidate_items.csv",
+    "row_count": 1010000,
+    "event_count": 10000,
+    "key_count": 1010000
+  },
+  "sources": [
+    {
+      "label": "candidate_signal",
+      "path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/valid/valid_ccrp_signal_rows.csv",
+      "exists": true,
+      "status": "recomputable_signal_rows",
+      "paper_ready_uncertainty_rows": false,
+      "recomputable_signal_rows": true,
+      "row_count": 1010000,
+      "event_count": 10000,
+      "expected_events": 10000,
+      "expected_score_rows": 1010000,
+      "key_count": 1010000,
+      "duplicate_keys": 0,
+      "candidate_key_count": 1010000,
+      "matched_candidate_keys": 1010000,
+      "missing_candidate_keys": 0,
+      "extra_source_keys": 0,
+      "candidate_key_coverage_rate": 1.0,
+      "uncertainty_col": "",
+      "finite_uncertainty_rows": 0,
+      "uncertainty_rows": 0,
+      "has_event_key": true,
+      "has_user_id": true,
+      "has_item_key": true,
+      "has_raw_probability": true,
+      "has_calibrated_probability": true,
+      "has_evidence": true,
+      "has_counterevidence": true,
+      "has_ccrp_components": false,
+      "columns": [
+        "calibrated_relevance_probability",
+        "candidate_idx",
+        "candidate_item_id",
+        "counterevidence_strength",
+        "evidence_support",
+        "item_id",
+        "parse_success",
+        "reason",
+        "relevance_probability",
+        "signal_schema_version",
+        "source_event_id",
+        "user_id"
+      ],
+      "failures": [
+        "missing_uncertainty_column"
+      ],
+      "warnings": []
+    }
+  ],
+  "paper_ready_count": 0,
+  "recomputable_signal_count": 1
+}
