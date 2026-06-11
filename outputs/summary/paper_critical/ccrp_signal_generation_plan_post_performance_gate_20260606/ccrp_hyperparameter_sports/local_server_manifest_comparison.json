@@ -41,10 +41,10 @@
       "server_size": 12399
     },
     "ccrp_hyperparameter_curve_provenance.json": {
-      "server_sha256": "d8e6cc242915fd271124cc5884c19f7180d111df39105f57c4eb34d06d1f63c1",
-      "local_sha256": "d8e6cc242915fd271124cc5884c19f7180d111df39105f57c4eb34d06d1f63c1",
-      "expected": "d8e6cc242915fd271124cc5884c19f7180d111df39105f57c4eb34d06d1f63c1",
-      "actual": "d8e6cc242915fd271124cc5884c19f7180d111df39105f57c4eb34d06d1f63c1",
+      "server_sha256": "5065c75917497058168fee5c44c8369b6146f8906da596e172bfd0b2e1f2bbe1",
+      "local_sha256": "5065c75917497058168fee5c44c8369b6146f8906da596e172bfd0b2e1f2bbe1",
+      "expected": "5065c75917497058168fee5c44c8369b6146f8906da596e172bfd0b2e1f2bbe1",
+      "actual": "5065c75917497058168fee5c44c8369b6146f8906da596e172bfd0b2e1f2bbe1",
       "ok": true,
       "local_size": 11526,
       "server_size": 11526
@@ -59,10 +59,10 @@
       "server_size": 83721
     },
     "fig_hyper_eta_curve.pdf": {
-      "server_sha256": "b944c299dabc4db16bed31251eb4c4fe8e0e253a04aacce8aec3412c341baf0b",
-      "local_sha256": "b944c299dabc4db16bed31251eb4c4fe8e0e253a04aacce8aec3412c341baf0b",
-      "expected": "b944c299dabc4db16bed31251eb4c4fe8e0e253a04aacce8aec3412c341baf0b",
-      "actual": "b944c299dabc4db16bed31251eb4c4fe8e0e253a04aacce8aec3412c341baf0b",
+      "server_sha256": "f7faaa1eb8f79204d84cb291ba4d0bfa798b108d6560a5466a6e825c00da2447",
+      "local_sha256": "f7faaa1eb8f79204d84cb291ba4d0bfa798b108d6560a5466a6e825c00da2447",
+      "expected": "f7faaa1eb8f79204d84cb291ba4d0bfa798b108d6560a5466a6e825c00da2447",
+      "actual": "f7faaa1eb8f79204d84cb291ba4d0bfa798b108d6560a5466a6e825c00da2447",
       "ok": true,
       "local_size": 14927,
       "server_size": 14927
@@ -77,10 +77,10 @@
       "server_size": 81266
     },
     "fig_hyper_weight_simplex_or_lines.pdf": {
-      "server_sha256": "ee737aaff241e50737ff2974a4181f25d9bbd65c124560c23fb0bceabf18375d",
-      "local_sha256": "ee737aaff241e50737ff2974a4181f25d9bbd65c124560c23fb0bceabf18375d",
-      "expected": "ee737aaff241e50737ff2974a4181f25d9bbd65c124560c23fb0bceabf18375d",
-      "actual": "ee737aaff241e50737ff2974a4181f25d9bbd65c124560c23fb0bceabf18375d",
+      "server_sha256": "b8bfb3c298274e303822fda6e5fe4042e7c099924a95b7e918de349c9bb717b8",
+      "local_sha256": "b8bfb3c298274e303822fda6e5fe4042e7c099924a95b7e918de349c9bb717b8",
+      "expected": "b8bfb3c298274e303822fda6e5fe4042e7c099924a95b7e918de349c9bb717b8",
+      "actual": "b8bfb3c298274e303822fda6e5fe4042e7c099924a95b7e918de349c9bb717b8",
       "ok": true,
       "local_size": 16799,
       "server_size": 16799

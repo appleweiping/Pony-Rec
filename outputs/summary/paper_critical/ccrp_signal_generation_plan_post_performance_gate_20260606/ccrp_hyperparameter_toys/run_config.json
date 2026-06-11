@@ -1,7 +1,7 @@
 {
   "seed": 20260607,
   "tie_break_seed": 20260607,
-  "domain": "sports",
+  "domain": "toys",
   "git_commit": "0b9e2e441d61281fc792c4880d419b1e7c61faf7",
   "sweep_builder_git_commit": "4cf95b54f2bc8fff655ada3f923e585a003a96af",
   "code_worktree": "/home/ajifang/projects/pony-rec-rescue-shadow-v6-code-4cf95b5",
@@ -38,5 +38,5 @@
   "expected_events": 10000,
   "expected_candidates_per_event": 101,
   "test_not_used_for_selection": true,
-  "generated_at": "2026-06-11T23:11:52.996109+00:00"
+  "generated_at": "2026-06-11T23:11:52.997226+00:00"
 }

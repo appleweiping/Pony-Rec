@@ -5,7 +5,7 @@
   "read_only": true,
   "will_start_experiment": false,
   "will_delete": false,
-  "package_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports",
+  "package_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys",
   "module": "hyperparameter_analysis",
   "expected_events": 10000,
   "expected_candidates_per_event": 101,

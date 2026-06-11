@@ -10,7 +10,7 @@
     "Diagnostic or audit-not-enforced curves must not be used as main paper evidence."
   ],
   "domain": "sports",
-  "git_commit": "4cf95b54f2bc8fff655ada3f923e585a003a96af",
+  "git_commit": "0b9e2e441d61281fc792c4880d419b1e7c61faf7",
   "command": "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py --domain sports --sweep_csv /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/valid_ccrp_hyperparameter_sweep.csv --test_sweep_csv /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/test_ccrp_hyperparameter_sweep.csv --sweep_provenance_json /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/ccrp_hyperparameter_sweep_provenance.json --output_dir /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports --metric NDCG@10 --score_mode full --ablation full --eta 1.0 --confidence_weight 0.7 --weight_grid_label 0.5,0.3,0.2 --controls eta,weight_grid_label --min_values 3\r",
   "sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/valid_ccrp_hyperparameter_sweep.csv",
   "sweep_sha256": "129553ccb5dc903d3ce69a6cf4028640f51bce9e8e047181b2e4054d310a8c90",
@@ -102,7 +102,7 @@
       "test_best_metric": 0.2280957895657901,
       "test_metric_at_valid_best": 0.2280957895657901,
       "relative_drop_from_test_best": 0.0,
-      "test_rank_of_valid_best": 2,
+      "test_rank_of_valid_best": 1,
       "best_value_match": false,
       "stable_within_tolerance": true,
       "reason": "within_tolerance"

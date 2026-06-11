@@ -157,16 +157,34 @@ cycle.
   PNG/PDF eta and weight-grid figures. Server and local Phase 2.5 package
   audits both report `ok=true`, `paper_claim_ready=true`, `failures=[]`; the
   local/server manifest comparison checks 9 key files with matching sha256.
-  Key sports result: for `eta`, valid-best and test-best are both `0` with
-  `relative_drop_from_test_best=0`; for `weight_grid_label`, valid-best
-  `0.5,0.3,0.2` and test-best `0.4,0.4,0.2` differ but remain within the 5%
-  stability tolerance. Wording must stay sensitivity/stability-only; sports
-  does not support a claim that risk penalty strength is beneficial.
+  Key sports result after the 2026-06-12 tie-aware rank fix: for `eta`,
+  valid-best and test-best are both `0` with
+  `relative_drop_from_test_best=0` and `test_rank_of_valid_best=1`; for
+  `weight_grid_label`, valid-best `0.5,0.3,0.2` and test-best `0.4,0.4,0.2`
+  differ but tie in test metric, so `test_rank_of_valid_best=1` and
+  `relative_drop_from_test_best=0`. Wording must stay
+  sensitivity/stability-only; sports does not support a claim that risk penalty
+  strength is beneficial.
+- Toys hyperparameter package is complete and locally synced:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys/`.
+  Server sweep log `ccrp_hyperparameter_toys_20260612_061200.log` returned
+  `ok=true`, `valid_rows=16`, `test_rows=16`; plotting produced 22 summary
+  rows and eta/weight-grid PNG/PDF figures. Server and local Phase 2.5 package
+  audits both report `ok=true`, `paper_claim_ready=true`, `failures=[]`; the
+  local/server manifest comparison checks 9 key files with matching sha256.
+  Key Toys result after the tie-aware rank fix: for `eta`, valid-best `0.25`
+  and test-best `0` differ, but `test_rank_of_valid_best=2` with
+  `relative_drop_from_test_best=1.2462949826291314e-05`; for
+  `weight_grid_label`, valid-best `0.4,0.4,0.2` and test-best `0.7,0.2,0.1`
+  differ, but `test_rank_of_valid_best=2` with
+  `relative_drop_from_test_best=0.00019790098296872946`. Toys therefore
+  supports stability/sensitivity within the pre-registered tolerance, not a
+  test-selection or unique-best hyperparameter claim.
 - Next bounded action: continue hyperparameter curves one domain at a time on
-  the server, starting with Toys, then Home and Tools if each previous domain
-  passes sweep/provenance/package-audit gates. After all four domains pass,
-  aggregate and run post-module review. Do not rerun observation or component
-  ablation unless a concrete audit failure is found.
+  the server, starting with Home and then Tools if each previous domain passes
+  sweep/provenance/package-audit gates. After all four domains pass, aggregate
+  and run post-module review. Do not rerun observation or component ablation
+  unless a concrete audit failure is found.
   The selector import command now points to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py` and includes
   `--tie_break_seed`; if a future agent sees selector import failures, first
