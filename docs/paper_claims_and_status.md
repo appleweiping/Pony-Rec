@@ -69,6 +69,12 @@ claim. The selector command surface was corrected on 2026-06-11 so server-side
 `--import_scores` calls the real importer at
 `scripts/misc/main_import_same_candidate_baseline_scores.py` and preserves the
 seeded tie-break via `--tie_break_seed`.
+Post-module GPT-5.5 xhigh sidecar review rated the Tools component-ablation
+package **CONDITIONAL PASS, 7.5/10** and limited its table eligibility to
+supplementary/diagnostic ablation evidence. The remaining Phase 2.5 blockers
+are no longer missing Tools signal rows; they are the cross-domain ablation
+aggregation, observation/motivation package, hyperparameter-curve package, and
+final claim/overclaim audit.
 
 1. An observation/motivation study explaining why uncertainty should be used in
    this framework. It should use representative completed baselines and fair

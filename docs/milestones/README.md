@@ -91,6 +91,9 @@ component-necessity claim. Tools package evidence lives at
 `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/`
 and `phase2_5_component_ablation_package_audit.{json,md}` reports `ok=true`,
 `paper_claim_ready=true`, and `failures=[]`.
+Post-module GPT-5.5 xhigh sidecar review rated Tools component-ablation
+**CONDITIONAL PASS, 7.5/10**, with supplementary/diagnostic table eligibility
+only; Claude Opus reviewer tooling was unavailable in this session.
 On 2026-06-11 the selector/import command surface was also repaired and synced
 to the server: C-CRP selector imports now call
 `scripts/misc/main_import_same_candidate_baseline_scores.py` and pass

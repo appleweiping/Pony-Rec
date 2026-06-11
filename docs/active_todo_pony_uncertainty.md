@@ -31,6 +31,15 @@ cycle.
   used the preregistered main config (`eta=1.0`, weights `0.5,0.3,0.2`,
   `tie_break_seed=20260607`) with score coverage `1.0` and imported
   `NDCG@10=0.16949770813562767`.
+- Post-module GPT-5.5 xhigh sidecar review on 2026-06-11 returned
+  **CONDITIONAL PASS, 7.5/10** for the Tools component-ablation package.
+  Table eligibility is supplementary/diagnostic ablation evidence, not a main
+  component-necessity table. The reviewer found packaging structurally clean
+  but emphasized that Tools makes the negative component result stronger:
+  `without_counterevidence` and `without_risk_penalty` are higher than full, so
+  "counterevidence/risk may be redundant or harmful" is the honest wording for
+  Tools. Missing reviewer perspective: no Claude Opus reviewer tool was
+  available in this session.
 - Important correction: Home component summary was rebuilt with the
   preregistered main C-CRP config (`eta=1.0`, `tie_break_seed=20260607`) rather
   than the validation-sensitivity best row (`eta=0.5`). The importer now supports
@@ -51,9 +60,11 @@ cycle.
   `python scripts\audit\main_project_bootstrap.py` both report
   `project_readiness_ok=True`; the readiness audit now checks the current
   `scripts/` layout rather than retired root script paths.
-- Next bounded action: build the observation/motivation study and real
-  hyperparameter curves from the now-complete Sports/Toys/Home/Tools signal and
-  selector packages, then run their Phase 2.5 package audits. The selector
+- Next bounded action: first aggregate Sports/Toys/Home/Tools component
+  ablations into one honest cross-domain diagnostic table, then build the
+  observation/motivation study and real hyperparameter curves from the
+  now-complete Sports/Toys/Home/Tools signal and selector packages, then run
+  their Phase 2.5 package audits. The selector
   import command now points
   to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py`, includes
