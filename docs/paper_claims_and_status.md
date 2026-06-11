@@ -43,6 +43,31 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-11 observation/motivation closure.** The Phase 2.5
+observation/motivation module is now closed as descriptive motivation-only
+evidence. Sports/Toys/Home/Tools packages at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_{sports,toys,home,tools}/`
+each pass the hardened package audit with `ok=true`,
+`paper_claim_ready=true`, and `failures=[]`. The audit now independently
+requires `1,010,000` finite uncertainty rows, exactly `101` rows/event,
+`invalid_uncertainty_rows=0`, event-bin `candidate_rows=101`, exact event
+joins, `same_candidate_alignment.json`, same-candidate candidate key count
+`1,010,000`, score coverage `1.0`, zero missing/extra/duplicate/invalid score
+keys, and local/server hash evidence. The four-domain aggregate at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_four_domain/`
+reports `ok=true`, `paper_claim_ready=true`,
+`claim_status=uncertainty_stratifies_reliability`, and
+`table_eligibility=motivation_only_not_main_table_sota`. The claim gate passes
+because high-uncertainty C-CRP bins have lower `NDCG@10`, `MRR`, and `HR@10`
+than low-uncertainty bins in all four domains. Paper wording may say
+"C-CRP event-level uncertainty stratifies ranking reliability under the
+same-candidate protocol" and may use the five-bin trend and high-minus-low
+figures as motivation evidence. It must not claim causality, statistical
+significance, baseline calibration, exhaustive baseline behavior, or main-table
+SOTA evidence from this module. GPT-5.5 xhigh post-module review returned
+**PASS, 8.4/10**; an engineering review veto was lifted after gate hardening
+with **8.6/10**. Claude Opus reviewer tooling was unavailable in this session.
+
 **2026-06-11 status update.** Home now has a completed local Phase 2.5
 component-ablation evidence package at
 `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/`.
@@ -84,9 +109,9 @@ must be cautious: boundary uncertainty is inert across all four domains;
 counterevidence and risk-penalty removal are nonworse or better on NDCG@10;
 evidence support is directionally supportive but small; calibration gap is
 mixed. A GPT-5.5 xhigh post-module review rated the completed component module
-**CONDITIONAL PASS, 8.1/10**. The remaining Phase 2.5 blockers are the
-observation/motivation package, hyperparameter-curve package, and final
-claim/overclaim audit.
+**CONDITIONAL PASS, 8.1/10**. The remaining Phase 2.5 blocker before final
+paper-readiness review is the real hyperparameter-curve package, followed by
+final claim/overclaim audit.
 
 1. An observation/motivation study explaining why uncertainty should be used in
    this framework. It should use representative completed baselines and fair
@@ -95,7 +120,13 @@ claim/overclaim audit.
    phenomenon. Script entry:
    `scripts/analysis/main_build_uncertainty_observation_study.py`; it requires
    real event-level uncertainty fields and intentionally rejects score-only
-   C-CRP files. Current artifact audit status: the server has a complete
+   C-CRP files. Current status: closed on 2026-06-11 for
+   Sports/Toys/Home/Tools as `motivation_only_not_main_table_sota` evidence
+   after package audits, exact four-domain aggregation, GPT-5.5 xhigh review,
+   and engineering gate-hardening review. The older audit history below is
+   retained to explain why score-only formal outputs were insufficient before
+   the full-scale signal/selector packages existed. Historical artifact audit
+   status: the server had a complete
    `ccrp_selected_test_scored_rows.csv`/`ccrp_internal_provenance.json` pair
    only for the older Beauty supplementary smaller-N selector run; the
    Sports/Toys/Home/Tools formal C-CRP outputs currently visible are score-only

@@ -1,0 +1,111 @@
+{
+  "artifact_class": "paper_critical_observation_motivation",
+  "status_label": "paper_critical_observation_ready",
+  "paper_claim_scope": "motivation_only_not_main_table_sota",
+  "claim_limits": [
+    "Representative uncertainty-behavior evidence only.",
+    "Does not replace full official-baseline comparison, ablation, or paired statistical gates.",
+    "Requires real event-level uncertainty fields; score-only C-CRP outputs are rejected."
+  ],
+  "domain": "sports",
+  "git_commit": "9ded57b7ad500bbd73b8c6f57c067fa8d04a403e",
+  "command": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/scripts/analysis/main_build_uncertainty_observation_study.py --domain sports --uncertainty_scores_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_selected_test_scored_rows.csv --ccrp_eval_path outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv --method_eval llmemb=outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv --method_eval proex=outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv --method_eval rlmrec=outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports --uncertainty_col ccrp_uncertainty --event_agg mean --n_bins 5 --ks 5,10,20 --primary_metric NDCG@10 --expected_events 10000 --expected_candidates_per_event 101 --min_join_rate 0.999",
+  "input_paths": {
+    "uncertainty_scores": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_selected_test_scored_rows.csv",
+    "ccrp_eval": "outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+    "ccrp_v3_eval": "outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+    "llmemb_eval": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+    "proex_eval": "outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+    "rlmrec_eval": "outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv"
+  },
+  "input_sha256": {
+    "uncertainty_scores": "650e4b172e02835f6938b92a1f8f82c14e7bca83061e37ac4cf7b054781658cf",
+    "ccrp_eval": "ac45a55e2531d51c1e2c2e969a0117ea1ba9d95921b72a8d2e77f030e9673958",
+    "ccrp_v3_eval": "ac45a55e2531d51c1e2c2e969a0117ea1ba9d95921b72a8d2e77f030e9673958",
+    "llmemb_eval": "4180615e27202924babd220a4d04bc72f37ed6f0840ad8e2b64b592485bffa77",
+    "proex_eval": "ae87e6bdcea97aac6d02c8eb44a69f08e8bfc58dc05fcf5f6e344a6d8b698cad",
+    "rlmrec_eval": "8be0dace2440b5f026a88f472828adc147a9244468abe69d45d379a0a3764112"
+  },
+  "uncertainty_summary": {
+    "uncertainty_input_rows": 1010000,
+    "finite_uncertainty_rows": 1010000,
+    "invalid_uncertainty_rows": 0,
+    "event_count": 10000,
+    "expected_events": 10000,
+    "expected_uncertainty_rows_per_event": 101,
+    "expected_finite_uncertainty_rows": 1010000,
+    "candidate_rows_min": 101,
+    "candidate_rows_max": 101,
+    "candidate_rows_bad_event_count": 0,
+    "uncertainty_col": "ccrp_uncertainty",
+    "event_agg": "mean"
+  },
+  "join_report": [
+    {
+      "method": "ccrp_v3",
+      "eval_path": "outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+      "method_eval_rows": 10000,
+      "joined_events": 10000,
+      "ccrp_uncertainty_events": 10000,
+      "missing_eval_events": 0,
+      "extra_eval_events": 0,
+      "exact_event_match": true,
+      "join_rate": 1.0
+    },
+    {
+      "method": "llmemb",
+      "eval_path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "method_eval_rows": 10000,
+      "joined_events": 10000,
+      "ccrp_uncertainty_events": 10000,
+      "missing_eval_events": 0,
+      "extra_eval_events": 0,
+      "exact_event_match": true,
+      "join_rate": 1.0
+    },
+    {
+      "method": "proex",
+      "eval_path": "outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "method_eval_rows": 10000,
+      "joined_events": 10000,
+      "ccrp_uncertainty_events": 10000,
+      "missing_eval_events": 0,
+      "extra_eval_events": 0,
+      "exact_event_match": true,
+      "join_rate": 1.0
+    },
+    {
+      "method": "rlmrec",
+      "eval_path": "outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "method_eval_rows": 10000,
+      "joined_events": 10000,
+      "ccrp_uncertainty_events": 10000,
+      "missing_eval_events": 0,
+      "extra_eval_events": 0,
+      "exact_event_match": true,
+      "join_rate": 1.0
+    }
+  ],
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "expected_uncertainty_rows_per_event": 101,
+  "min_join_rate": 0.999,
+  "ks": [
+    5,
+    10,
+    20
+  ],
+  "required_metrics": [
+    "MRR",
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20"
+  ],
+  "figure_paths": [
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/fig_uncertainty_motivation.png",
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/fig_uncertainty_motivation.pdf"
+  ]
+}

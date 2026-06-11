@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-11 17:52 CEST
+Last updated: 2026-06-11 19:10 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -11,7 +11,7 @@ cycle.
 
 - Server live state: the server is idle for this project (`nvidia-smi` reported
   `0%`, `15 MiB / 49140 MiB`, and no matching Pony/C-CRP/baseline Python
-  process). Disk is about `20G` free / `90%` used. Do not start a new GPU
+  process). Disk is about `18G` free / `91%` used. Do not start a new GPU
   experiment without a fresh preflight, but there is no active run to wait on.
 - Tools test signal rows are complete, source-audited, and locally synced:
   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/`
@@ -86,25 +86,49 @@ cycle.
   leave-one-component-out rows are neutral or slightly better than full C-CRP.
   Treat this as weak/redundant component evidence; do not write a
   component-necessity claim.
+- The observation/motivation module is now closed as full-scale descriptive
+  motivation evidence, not main-table SOTA evidence. Per-domain packages live
+  at
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_{sports,toys,home,tools}/`.
+  Each package audit reports `ok=true`, `paper_claim_ready=true`, and
+  `failures=[]` under the hardened gate requiring `1,010,000` finite
+  uncertainty rows, exactly `101` rows/event, `invalid_uncertainty_rows=0`,
+  exact event joins, package-local `same_candidate_alignment.json`, candidate
+  key count `1,010,000`, score coverage `1.0`, zero missing/extra/duplicate
+  score keys, and local/server hash evidence. The four-domain aggregate at
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_four_domain/`
+  reports `ok=true`, `paper_claim_ready=true`,
+  `claim_status=uncertainty_stratifies_reliability`, and
+  `table_eligibility=motivation_only_not_main_table_sota`. C-CRP high-vs-low
+  uncertainty bins degrade in all four domains for `NDCG@10`, `MRR`, and
+  `HR@10`; the paper may say C-CRP event-level uncertainty stratifies ranking
+  reliability, but must not claim causality, statistical significance, baseline
+  calibration, exhaustive baseline behavior, or main-table SOTA evidence from
+  this module.
+- Post-module GPT-5.5 xhigh review returned **PASS, 8.4/10** for the
+  observation/motivation module. An independent engineering audit initially
+  vetoed commit readiness because reusable gates were too permissive; after
+  hardening package-audit uncertainty coverage, same-candidate semantic
+  alignment, and exact four-domain aggregate gating, the engineering re-review
+  lifted the veto with **8.6/10**. Missing reviewer perspective: no Claude Opus
+  reviewer tool was available in this session.
 - Focused regression and readiness checks passed after the component-module
-  closure:
-  `python -m pytest tests\test_aggregate_ccrp_component_ablation.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
-  -> `48 passed`.
+  and observation-module closure:
+  `python -m pytest tests\test_uncertainty_observation_study.py tests\test_aggregate_uncertainty_observation_study.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
+  -> `58 passed`.
   `python -m scripts.audit.main_project_readiness_check` and
   `python scripts\audit\main_project_bootstrap.py` both report
   `project_readiness_ok=True`; the readiness audit now checks the current
   `scripts/` layout rather than retired root script paths.
-- Next bounded action: build the observation/motivation study and real
-  hyperparameter curves from the now-complete Sports/Toys/Home/Tools signal and
-  selector packages, then run their Phase 2.5 package audits and post-module
-  review. The selector import command now points
-  to the real script path
-  `scripts/misc/main_import_same_candidate_baseline_scores.py`, includes
-  `--tie_break_seed`, and this selector-path fix plus the current component
-  ablation builder/package auditor were synced to `pony-rec-gpu` while the
-  Tools signal-row job continued. If a future agent sees selector import
-  failures, first verify the server file still contains that script path before
-  rerunning anything.
+- Next bounded action: build real hyperparameter curves from the now-complete
+  Sports/Toys/Home/Tools signal and selector packages, then run the Phase 2.5
+  hyperparameter package audits and post-module review. Do not rerun
+  observation or component ablation unless a concrete audit failure is found.
+  The selector import command now points to the real script path
+  `scripts/misc/main_import_same_candidate_baseline_scores.py` and includes
+  `--tie_break_seed`; if a future agent sees selector import failures, first
+  verify the server file still contains that script path before rerunning
+  anything.
 - Shared-memory note: `agentmemory` remains the required collaboration index by
   project contract, but this Codex session exposes no `agentmemory` MCP tool and
   `where.exe agentmemory` did not find a local CLI. Current truth is therefore
@@ -147,7 +171,13 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    data paths, metrics, commands, row counts, provenance notes, and the git
    commit. Script entry:
    `scripts/analysis/main_build_uncertainty_observation_study.py`. Current
-   blocker to resolve before running it for Sports/Toys: the already imported
+   2026-06-11 status: closed for Sports/Toys/Home/Tools as
+   `motivation_only_not_main_table_sota` evidence after hardened package
+   audits, exact four-domain aggregation, GPT-5.5 xhigh review, and engineering
+   gate-hardening review. The historical blocker below explains why older
+   score-only formal outputs were insufficient before the full-scale signal and
+   selector packages existed. Historical blocker before running it for
+   Sports/Toys: the already imported
    C-CRP final `scores.csv` files are score-only, so a signal/score row file
    with a real uncertainty column must be located or regenerated without LLM
    re-query leakage. Read-only server discovery on 2026-06-03 found that the

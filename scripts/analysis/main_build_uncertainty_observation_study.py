@@ -66,6 +66,15 @@ def parse_args() -> argparse.Namespace:
         default=101,
         help="If ranking eval records include num_candidates, require this exact candidate count. Use 0 to disable.",
     )
+    parser.add_argument(
+        "--expected_uncertainty_rows_per_event",
+        type=int,
+        default=-1,
+        help=(
+            "Expected finite uncertainty rows per event. Defaults to --expected_candidates_per_event. "
+            "Use 0 only for focused tests or diagnostics, not paper-facing runs."
+        ),
+    )
     parser.add_argument("--min_join_rate", type=float, default=0.999)
     parser.add_argument("--skip_plot", action="store_true")
     return parser.parse_args()
@@ -162,6 +171,8 @@ def load_event_uncertainty(
     *,
     uncertainty_col: str = "",
     event_agg: str = "mean",
+    expected_events: int = 0,
+    expected_uncertainty_rows_per_event: int = 0,
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     df = _read_table(path)
     if df.empty:
@@ -178,6 +189,30 @@ def load_event_uncertainty(
         raise ValueError(f"No finite event uncertainty rows in {path}")
 
     group = work.groupby("event_id", sort=False)["uncertainty_value"]
+    counts = group.size().rename("candidate_rows")
+    expected_rows = (
+        int(expected_events) * int(expected_uncertainty_rows_per_event)
+        if int(expected_events) > 0 and int(expected_uncertainty_rows_per_event) > 0
+        else 0
+    )
+    if expected_uncertainty_rows_per_event > 0:
+        if invalid != 0:
+            raise ValueError(
+                f"Expected zero invalid uncertainty rows for {path}, got {invalid}. "
+                "Resolve the uncertainty source before using this module in the paper."
+            )
+        bad_counts = counts[counts.astype(int) != int(expected_uncertainty_rows_per_event)]
+        if not bad_counts.empty:
+            preview = ", ".join(f"{idx}:{int(value)}" for idx, value in bad_counts.head(5).items())
+            raise ValueError(
+                f"Expected exactly {expected_uncertainty_rows_per_event} finite uncertainty rows per event for {path}; "
+                f"bad event counts: {preview}"
+            )
+        if expected_rows and len(work) != expected_rows:
+            raise ValueError(
+                f"Expected {expected_rows} finite uncertainty rows for {path}, got {len(work)}. "
+                "Resolve the full-scale signal/scored-row source before paper use."
+            )
     if event_agg == "mean":
         uncertainty = group.mean()
     elif event_agg == "max":
@@ -189,13 +224,22 @@ def load_event_uncertainty(
     else:
         raise ValueError(f"Unsupported event_agg={event_agg}")
 
-    counts = group.size().rename("candidate_rows")
     out = pd.concat([uncertainty.rename("event_uncertainty"), counts], axis=1).reset_index()
     summary = {
         "uncertainty_input_rows": int(len(df)),
         "finite_uncertainty_rows": int(len(work)),
         "invalid_uncertainty_rows": invalid,
         "event_count": int(len(out)),
+        "expected_events": int(expected_events),
+        "expected_uncertainty_rows_per_event": int(expected_uncertainty_rows_per_event),
+        "expected_finite_uncertainty_rows": int(expected_rows),
+        "candidate_rows_min": int(counts.min()),
+        "candidate_rows_max": int(counts.max()),
+        "candidate_rows_bad_event_count": int(
+            (counts.astype(int) != int(expected_uncertainty_rows_per_event)).sum()
+        )
+        if expected_uncertainty_rows_per_event > 0
+        else 0,
         "uncertainty_col": selected_col,
         "event_agg": event_agg,
     }
@@ -324,11 +368,19 @@ def build_observation_tables(
     expected_events: int,
     expected_candidates_per_event: int,
     min_join_rate: float,
+    expected_uncertainty_rows_per_event: int | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any]]:
+    expected_uncertainty_rows = (
+        expected_candidates_per_event
+        if expected_uncertainty_rows_per_event is None
+        else int(expected_uncertainty_rows_per_event)
+    )
     event_uncertainty, uncertainty_summary = load_event_uncertainty(
         uncertainty_scores_path,
         uncertainty_col=uncertainty_col,
         event_agg=event_agg,
+        expected_events=expected_events,
+        expected_uncertainty_rows_per_event=expected_uncertainty_rows,
     )
     if expected_events > 0 and len(event_uncertainty) != expected_events:
         raise ValueError(
@@ -433,6 +485,7 @@ def build_observation_tables(
         "join_report": join_report,
         "expected_events": expected_events,
         "expected_candidates_per_event": expected_candidates_per_event,
+        "expected_uncertainty_rows_per_event": expected_uncertainty_rows,
         "min_join_rate": min_join_rate,
         "ks": ks,
         "required_metrics": metrics,
@@ -507,6 +560,9 @@ def main() -> None:
         ks=ks,
         expected_events=args.expected_events,
         expected_candidates_per_event=args.expected_candidates_per_event,
+        expected_uncertainty_rows_per_event=(
+            None if args.expected_uncertainty_rows_per_event < 0 else args.expected_uncertainty_rows_per_event
+        ),
         min_join_rate=args.min_join_rate,
     )
     _write_csv(output_dir / "observation_event_bins.csv", event_bins)

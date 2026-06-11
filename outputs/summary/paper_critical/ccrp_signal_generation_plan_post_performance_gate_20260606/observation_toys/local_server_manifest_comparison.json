@@ -1,0 +1,141 @@
+{
+  "ok": true,
+  "created_at_utc": "2026-06-11T16:28:16.444095+00:00",
+  "domain": "toys",
+  "row_count": 11,
+  "remote_host": "pony-rec-gpu",
+  "server_package_dir": "~/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys",
+  "copy_policy": "light_observation_package_only; bulky scored rows and ranking records remain server-side with sha256 evidence",
+  "checked_files": [
+    {
+      "rel_path": "observation_event_bins.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/observation_event_bins.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 7892452,
+      "server_size": 7892452,
+      "local_sha256": "e8ac72c08396aeffaf056d04d40129c20ed195004a556175c1481b94107a957a",
+      "server_sha256": "e8ac72c08396aeffaf056d04d40129c20ed195004a556175c1481b94107a957a",
+      "ok": true
+    },
+    {
+      "rel_path": "observation_summary.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/observation_summary.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 5123,
+      "server_size": 5123,
+      "local_sha256": "1c3ca0bb9562c2f05cc81e26d84c713f87cc5812e118271bc7cce9f7b1fa543b",
+      "server_sha256": "1c3ca0bb9562c2f05cc81e26d84c713f87cc5812e118271bc7cce9f7b1fa543b",
+      "ok": true
+    },
+    {
+      "rel_path": "observation_summary.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/observation_summary.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 13743,
+      "server_size": 13743,
+      "local_sha256": "fc9095baeb50db3e2fa827a14bb7ddf4bf977d9d53cf7c098018f47e015fdfda",
+      "server_sha256": "fc9095baeb50db3e2fa827a14bb7ddf4bf977d9d53cf7c098018f47e015fdfda",
+      "ok": true
+    },
+    {
+      "rel_path": "observation_provenance.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/observation_provenance.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 5715,
+      "server_size": 5715,
+      "local_sha256": "6d5fa5f5bc322e742695d4124ed281045a332fec1d17e6cea6cbbe2132a66150",
+      "server_sha256": "6d5fa5f5bc322e742695d4124ed281045a332fec1d17e6cea6cbbe2132a66150",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_uncertainty_motivation.png",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/fig_uncertainty_motivation.png",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 99265,
+      "server_size": 99265,
+      "local_sha256": "fa038fd80caf25d569e29da93955548592fdbbc08f6c49d86dfc5c25c376d272",
+      "server_sha256": "fa038fd80caf25d569e29da93955548592fdbbc08f6c49d86dfc5c25c376d272",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_uncertainty_motivation.pdf",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_toys/fig_uncertainty_motivation.pdf",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 18425,
+      "server_size": 18425,
+      "local_sha256": "7d3a2bb3cab8d89869e09e56064bdcd0781e1db4154f7e4d88a15f79a5f571d6",
+      "server_sha256": "7d3a2bb3cab8d89869e09e56064bdcd0781e1db4154f7e4d88a15f79a5f571d6",
+      "ok": true
+    }
+  ],
+  "server_only_bulk_files": [
+    {
+      "label": "ccrp_scored_rows",
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/ccrp_selected_test_scored_rows.csv",
+      "server_present": true,
+      "server_size": 392807472,
+      "server_sha256": "b46a6813c82db4e4a4571a783ffba90f7aa987a19004a783c0ac7e4f82cc3b3f",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "ccrp_eval",
+      "rel_path": "outputs/toys_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42366529,
+      "server_sha256": "1832ba3a5dd91e2abc969002aedf544293fecae8c0569780f8ca681118bb21c1",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "llmemb_eval",
+      "rel_path": "outputs/toys_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42159775,
+      "server_sha256": "b510aef906909e91a0cff472fe31e7d9ef9666b88229434d11ca894e0653caa1",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "proex_eval",
+      "rel_path": "outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42245340,
+      "server_sha256": "71930e72b87f44a67b5886959ae3d40d2f08b6b317464b17dc40b3f07697ebc8",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "rlmrec_eval",
+      "rel_path": "outputs/toys_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42265695,
+      "server_sha256": "9262b2c0879d12fe47c999eed313205ed2e19f254ea5a2c5836124712a7a63a1",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    }
+  ],
+  "semantic_alignment": {
+    "status_label": "same_candidate_alignment_evidence",
+    "same_candidate_alignment_json": "same_candidate_alignment.json",
+    "candidate_key_count": 1010000,
+    "score_key_count": 1010000,
+    "score_coverage_rate": 1.0,
+    "test_candidate_items_sha256": "06432f71b04f419b1e39b8916720dfe8c938edacc2001ed956c042fb6c8fffa6",
+    "source_provenance_sha256": "a41e28ed9e243b5f2f87194cc619973d5e804585748a6d8bbc34e0d3dbc4170f",
+    "method_eval_rows": {
+      "ccrp_v3": 10000,
+      "llmemb": 10000,
+      "proex": 10000,
+      "rlmrec": 10000
+    },
+    "ok": true
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "ok": true,
+  "created_at_utc": "2026-06-11T16:28:11.362763+00:00",
+  "domain": "sports",
+  "row_count": 11,
+  "remote_host": "pony-rec-gpu",
+  "server_package_dir": "~/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports",
+  "copy_policy": "light_observation_package_only; bulky scored rows and ranking records remain server-side with sha256 evidence",
+  "checked_files": [
+    {
+      "rel_path": "observation_event_bins.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/observation_event_bins.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 7926842,
+      "server_size": 7926842,
+      "local_sha256": "b4966083125bdc25fc3dec12b8ac1dfbc8a6a0f489fd40430789712bd83dc062",
+      "server_sha256": "b4966083125bdc25fc3dec12b8ac1dfbc8a6a0f489fd40430789712bd83dc062",
+      "ok": true
+    },
+    {
+      "rel_path": "observation_summary.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/observation_summary.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 5149,
+      "server_size": 5149,
+      "local_sha256": "80ec15dc18802211d3f7e6a71ea0dd0c98c9fdc1e181aa5273265037ee95c2d2",
+      "server_sha256": "80ec15dc18802211d3f7e6a71ea0dd0c98c9fdc1e181aa5273265037ee95c2d2",
+      "ok": true
+    },
+    {
+      "rel_path": "observation_summary.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/observation_summary.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 13769,
+      "server_size": 13769,
+      "local_sha256": "43e00843be7ef560f78b9311697a55f72b607faa1682344ee4734d20ccea5885",
+      "server_sha256": "43e00843be7ef560f78b9311697a55f72b607faa1682344ee4734d20ccea5885",
+      "ok": true
+    },
+    {
+      "rel_path": "observation_provenance.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/observation_provenance.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 5755,
+      "server_size": 5755,
+      "local_sha256": "dc8357cb0e553c5bb0fe6b5812831a4671aa840bab8b28e8472dd310ff2263ac",
+      "server_sha256": "dc8357cb0e553c5bb0fe6b5812831a4671aa840bab8b28e8472dd310ff2263ac",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_uncertainty_motivation.png",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/fig_uncertainty_motivation.png",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 108116,
+      "server_size": 108116,
+      "local_sha256": "420b118c29fcb1cac254c5a2d61d821a3106d3c6fb7a548382253a2dd8cd5752",
+      "server_sha256": "420b118c29fcb1cac254c5a2d61d821a3106d3c6fb7a548382253a2dd8cd5752",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_uncertainty_motivation.pdf",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_sports/fig_uncertainty_motivation.pdf",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 18515,
+      "server_size": 18515,
+      "local_sha256": "5fe9414a70521ba63f998e5a9cc34216360026971c0c205615ba703974cf9656",
+      "server_sha256": "5fe9414a70521ba63f998e5a9cc34216360026971c0c205615ba703974cf9656",
+      "ok": true
+    }
+  ],
+  "server_only_bulk_files": [
+    {
+      "label": "ccrp_scored_rows",
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_selected_test_scored_rows.csv",
+      "server_present": true,
+      "server_size": 377088375,
+      "server_sha256": "650e4b172e02835f6938b92a1f8f82c14e7bca83061e37ac4cf7b054781658cf",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "ccrp_eval",
+      "rel_path": "outputs/sports_large10000_100neg_ccrp_v3_qwen3base_pointwise_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42383285,
+      "server_sha256": "ac45a55e2531d51c1e2c2e969a0117ea1ba9d95921b72a8d2e77f030e9673958",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "llmemb_eval",
+      "rel_path": "outputs/sports_large10000_100neg_llmemb_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42179104,
+      "server_sha256": "4180615e27202924babd220a4d04bc72f37ed6f0840ad8e2b64b592485bffa77",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "proex_eval",
+      "rel_path": "outputs/sports_large10000_100neg_proex_profile_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42260249,
+      "server_sha256": "ae87e6bdcea97aac6d02c8eb44a69f08e8bfc58dc05fcf5f6e344a6d8b698cad",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    },
+    {
+      "label": "rlmrec_eval",
+      "rel_path": "outputs/sports_large10000_100neg_rlmrec_graphcl_official_qwen3base_same_candidate/tables/ranking_eval_records.csv",
+      "server_present": true,
+      "server_size": 42283421,
+      "server_sha256": "8be0dace2440b5f026a88f472828adc147a9244468abe69d45d379a0a3764112",
+      "local_copy_policy": "server_only_bulk_not_in_light_observation_package",
+      "ok": true
+    }
+  ],
+  "semantic_alignment": {
+    "status_label": "same_candidate_alignment_evidence",
+    "same_candidate_alignment_json": "same_candidate_alignment.json",
+    "candidate_key_count": 1010000,
+    "score_key_count": 1010000,
+    "score_coverage_rate": 1.0,
+    "test_candidate_items_sha256": "6fd502c4ff2f622168eca009fe306e01a55b80134f532da80e073fdf7aad60c0",
+    "source_provenance_sha256": "11ab0077c610387cc49ca7c9c6cc9415d1949afdfe234a423551e45ecf5c43f3",
+    "method_eval_rows": {
+      "ccrp_v3": 10000,
+      "llmemb": 10000,
+      "proex": 10000,
+      "rlmrec": 10000
+    },
+    "ok": true
+  }
+}

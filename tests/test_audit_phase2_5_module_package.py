@@ -94,10 +94,10 @@ def _complete_observation_package(root: Path) -> None:
     _write(root / "observation_summary.csv", _csv_line(header) + "".join(_csv_line(row) for row in rows))
     _json(root / "observation_summary.json", {"rows": [dict(zip(header, row)) for row in rows]})
     event_header = _metric_header(
-        ["event_id", "method", "uncertainty_bin_index", "uncertainty_bin", "positive_rank", "num_candidates"]
+        ["event_id", "method", "uncertainty_bin_index", "uncertainty_bin", "candidate_rows", "positive_rank", "num_candidates"]
     )
     event_rows = [
-        _metric_values([f"e{idx}", method, idx % 2, "low" if idx % 2 == 0 else "high", idx + 1, 101])
+        _metric_values([f"e{idx}", method, idx % 2, "low" if idx % 2 == 0 else "high", 101, idx + 1, 101])
         for method in ("ccrp", "proex")
         for idx in range(2)
     ]
@@ -114,11 +114,46 @@ def _complete_observation_package(root: Path) -> None:
             "command": "python observation.py",
             "input_sha256": {"signals": "a"},
             "expected_candidates_per_event": 101,
+            "expected_uncertainty_rows_per_event": 101,
+            "uncertainty_summary": {
+                "uncertainty_input_rows": 202,
+                "finite_uncertainty_rows": 202,
+                "invalid_uncertainty_rows": 0,
+                "event_count": 2,
+                "expected_events": 2,
+                "expected_uncertainty_rows_per_event": 101,
+                "expected_finite_uncertainty_rows": 202,
+                "candidate_rows_min": 101,
+                "candidate_rows_max": 101,
+                "candidate_rows_bad_event_count": 0,
+            },
             "join_report": [
                 {"method": "ccrp", "join_rate": 1.0, "exact_event_match": True},
                 {"method": "proex", "join_rate": 1.0, "exact_event_match": True},
             ],
             "figure_paths": ["fig_uncertainty_motivation.png", "fig_uncertainty_motivation.pdf"],
+        },
+    )
+    _json(
+        root / "same_candidate_alignment.json",
+        {
+            "ok": True,
+            "status_label": "same_candidate_alignment_evidence",
+            "expected_events": 2,
+            "expected_candidates_per_event": 101,
+            "expected_candidate_key_count": 202,
+            "candidate_key_count": 202,
+            "score_key_count": 202,
+            "score_coverage_rate": 1.0,
+            "missing_score_keys": 0,
+            "extra_score_keys": 0,
+            "duplicate_score_keys": 0,
+            "invalid_scores": 0,
+            "blank_score_keys": 0,
+            "test_candidate_items_sha256": TEST_SHA256,
+            "source_provenance_sha256": TEST_SHA256,
+            "score_sha256": TEST_SHA256,
+            "method_eval_rows": {"ccrp": 2, "proex": 2},
         },
     )
 
@@ -142,6 +177,55 @@ def test_observation_package_audit_accepts_complete_package(tmp_path):
 
     assert audit["ok"] is True
     assert audit["paper_claim_ready"] is True
+
+
+def test_observation_package_audit_requires_uncertainty_row_coverage(tmp_path):
+    _complete_observation_package(tmp_path)
+    provenance = json.loads((tmp_path / "observation_provenance.json").read_text(encoding="utf-8"))
+    provenance["uncertainty_summary"]["candidate_rows_max"] = 100
+    provenance["uncertainty_summary"]["finite_uncertainty_rows"] = 201
+    _json(tmp_path / "observation_provenance.json", provenance)
+
+    audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "observation_uncertainty_summary_mismatch:candidate_rows_max:100!=101" in audit["failures"]
+    assert "observation_uncertainty_summary_mismatch:finite_uncertainty_rows:201!=202" in audit["failures"]
+
+
+def test_observation_package_audit_requires_event_bin_candidate_rows(tmp_path):
+    _complete_observation_package(tmp_path)
+    text = (tmp_path / "observation_event_bins.csv").read_text(encoding="utf-8")
+    (tmp_path / "observation_event_bins.csv").write_text(text.replace(",101,1,101,", ",100,1,101,", 1), encoding="utf-8")
+
+    audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert any(failure.startswith("observation_candidate_rows_mismatch:") for failure in audit["failures"])
+
+
+def test_observation_package_audit_requires_same_candidate_alignment(tmp_path):
+    _complete_observation_package(tmp_path)
+    (tmp_path / "same_candidate_alignment.json").unlink()
+
+    audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "missing_required_file:same_candidate_alignment.json" in audit["failures"]
+
+
+def test_observation_package_audit_rejects_bad_same_candidate_alignment(tmp_path):
+    _complete_observation_package(tmp_path)
+    alignment = json.loads((tmp_path / "same_candidate_alignment.json").read_text(encoding="utf-8"))
+    alignment["score_coverage_rate"] = 0.99
+    alignment["candidate_key_count"] = 201
+    _json(tmp_path / "same_candidate_alignment.json", alignment)
+
+    audit = build_audit(module="observation_motivation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "observation_same_candidate_alignment_mismatch:candidate_key_count:201!=202" in audit["failures"]
+    assert "observation_same_candidate_alignment_score_coverage:0.99!=1.0" in audit["failures"]
 
 
 def test_observation_package_audit_rejects_vague_manifest_comparison(tmp_path):

@@ -1,0 +1,109 @@
+{
+  "artifact_class": "paper_critical_observation_motivation_cross_domain",
+  "status_label": "paper_critical_observation_cross_domain_ready",
+  "ok": true,
+  "paper_claim_ready": true,
+  "failures": [],
+  "warnings": [],
+  "domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "required_domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "exact_four_domain_set": true,
+  "gate_method": "ccrp_v3",
+  "primary_metric": "NDCG@10",
+  "support_metrics": [
+    "MRR",
+    "HR@10"
+  ],
+  "min_domains_for_stratification": 3,
+  "primary_gate": {
+    "degraded_domain_count": 4,
+    "degraded_domains": [
+      "home",
+      "sports",
+      "tools",
+      "toys"
+    ],
+    "pass": true
+  },
+  "support_gate": {
+    "MRR": {
+      "degraded_domain_count": 4,
+      "degraded_domains": [
+        "home",
+        "sports",
+        "tools",
+        "toys"
+      ],
+      "pass": true
+    },
+    "HR@10": {
+      "degraded_domain_count": 4,
+      "degraded_domains": [
+        "home",
+        "sports",
+        "tools",
+        "toys"
+      ],
+      "pass": true
+    }
+  },
+  "claim_gate_pass": true,
+  "claim_status": "uncertainty_stratifies_reliability",
+  "table_eligibility": "motivation_only_not_main_table_sota",
+  "git_commit": "5527ff15458c400762cf1195738ede07ff19f272",
+  "input_paths": {
+    "sports:observation_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_sports\\observation_summary.csv",
+    "sports:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_sports\\phase2_5_observation_motivation_package_audit.json",
+    "sports:observation_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_sports\\observation_provenance.json",
+    "toys:observation_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_toys\\observation_summary.csv",
+    "toys:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_toys\\phase2_5_observation_motivation_package_audit.json",
+    "toys:observation_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_toys\\observation_provenance.json",
+    "home:observation_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_home\\observation_summary.csv",
+    "home:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_home\\phase2_5_observation_motivation_package_audit.json",
+    "home:observation_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_home\\observation_provenance.json",
+    "tools:observation_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_tools\\observation_summary.csv",
+    "tools:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_tools\\phase2_5_observation_motivation_package_audit.json",
+    "tools:observation_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_tools\\observation_provenance.json"
+  },
+  "input_sha256": {
+    "sports:observation_summary": "80ec15dc18802211d3f7e6a71ea0dd0c98c9fdc1e181aa5273265037ee95c2d2",
+    "sports:package_audit": "7407cb3eb1eb530830baad108cd72393f2f26ce9762800f5c4536ada66936a5c",
+    "sports:observation_provenance": "dc8357cb0e553c5bb0fe6b5812831a4671aa840bab8b28e8472dd310ff2263ac",
+    "toys:observation_summary": "1c3ca0bb9562c2f05cc81e26d84c713f87cc5812e118271bc7cce9f7b1fa543b",
+    "toys:package_audit": "e9ea5b9634f982a8f7992113ab7b921e13754e5f3d62777655d9cba9a6580233",
+    "toys:observation_provenance": "6d5fa5f5bc322e742695d4124ed281045a332fec1d17e6cea6cbbe2132a66150",
+    "home:observation_summary": "7cfe64b14678cdc4891514de0d4c91313e39fa97eb2fe9a7d2a5e7b71eb48c05",
+    "home:package_audit": "cd926929228e7168437128daf2ffed1325218295d45e07828501a75f39fe74c3",
+    "home:observation_provenance": "e988f29ebcd941a4ff9e640b4b0e6d95fef2eb8301558369dbef0b83bd24f200",
+    "tools:observation_summary": "e8ce9783628a84c1ba20b4fe666b224dd8780abfebb478f08675367d4bf1b10a",
+    "tools:package_audit": "c6baab80a26c1314fb758ff8d79de601a08680e6554145b4b310938979c4392d",
+    "tools:observation_provenance": "84aea45eb1f2dda0f2c2e30f24fddcda43c77f668be64a5c6f83b47e320b576d"
+  },
+  "outputs": {
+    "summary_rows_csv": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\observation_four_domain_summary_rows.csv",
+    "domain_deltas_csv": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\observation_four_domain_domain_deltas.csv",
+    "figure_paths": [
+      "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\fig_uncertainty_observation_four_domain.png",
+      "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\fig_uncertainty_observation_four_domain.pdf",
+      "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\fig_uncertainty_observation_four_domain_trend.png",
+      "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\fig_uncertainty_observation_four_domain_trend.pdf"
+    ]
+  },
+  "claim_limits": [
+    "Bins are defined by C-CRP event uncertainty.",
+    "This is descriptive motivation evidence, not a causal or statistically significant effect claim.",
+    "Representative baselines are not exhaustive baseline evidence.",
+    "No hyperparameter or method choice may be changed after inspecting this test-bin analysis.",
+    "If claim_gate_pass is false, paper wording must be downgraded to mixed diagnostic pattern."
+  ]
+}

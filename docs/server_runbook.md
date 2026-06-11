@@ -49,13 +49,20 @@ PIDs, audit summaries, and missing-file errors.
    evidence: Sports/Toys/Home/Tools component packages and the four-domain
    aggregation pass their audits, with table eligibility limited to
    `supplementary_diagnostic_only`. Do not claim every component is necessary.
-5. Run the remaining Phase 2.5 paper-critical modules next:
-   observation/motivation and real hyperparameter curves, then their package
-   audits and post-module review. Current blocker is no longer missing
-   full-scale signal rows for component ablation; use the completed signal and
-   selector packages rather than regenerating rows unless a concrete audit
-   failure proves a missing/invalid artifact.
-6. If a future audit finds no saved signal rows pass audit, use the guarded
+5. Phase 2.5 observation/motivation is now closed as descriptive
+   motivation-only evidence: Sports/Toys/Home/Tools observation packages and
+   the four-domain aggregate pass their hardened gates, with table eligibility
+   limited to `motivation_only_not_main_table_sota`. Use wording that C-CRP
+   event-level uncertainty stratifies ranking reliability; do not claim
+   causality, statistical significance, exhaustive baseline behavior, or
+   main-table SOTA evidence from this module.
+6. Run the remaining Phase 2.5 paper-critical module next: real
+   hyperparameter curves, then package audit and post-module review. Current
+   blocker is no longer missing full-scale signal rows for observation or
+   component ablation; use the completed signal and selector packages rather
+   than regenerating rows unless a concrete audit failure proves a
+   missing/invalid artifact.
+7. If a future audit finds no saved signal rows pass audit, use the guarded
    signal-row runner
    `experiments/rsc/run_ccrp_v3_signal_rows.py` to generate valid/test
    recomputable signal rows on the server, then audit them before selector use.
@@ -67,10 +74,10 @@ PIDs, audit summaries, and missing-file errors.
    `505000/505000`, while a 10k-user valid/test split still expects
    `1,010,000` final signal rows. Do not treat one `505000/505000` progress
    line as completion; require process exit plus final CSV/provenance files.
-7. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
+8. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
    failures; do not include it in the main official block unless a future
    memory-stable run passes all gates.
-8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
+9. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
    validation gates exist.
 ```
 
@@ -93,6 +100,8 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_plan_ccrp_signal_generation.py` | Guarded, non-executing Phase 2.5 C-CRP signal-row plan; records discovery, valid/test signal generation, valid/test source audits, local signal-package sync templates, validation selection, component-ablation summary, observation, hyperparameter, and module-package audit commands while generated shell exits before execution |
 | `scripts/analysis/main_build_ccrp_component_ablation_summary.py` | Builds the paper-critical C-CRP leave-one-component-out summary from a frozen validation-selected selector package; writes summary/provenance/figures and fails closed on missing validation metadata, non-full score mode by default, missing ablations, coverage, or audit failures |
 | `scripts/analysis/main_aggregate_ccrp_component_ablation.py` | Aggregates package-audited Sports/Toys/Home/Tools component-ablation summaries; fails closed on missing package audits, row counts, coverage, or ablations; emits `removal_minus_full` deltas, `tie_epsilon=1e-12`, figures, and supplementary/diagnostic-only provenance |
+| `scripts/analysis/main_build_uncertainty_observation_study.py` | Builds the paper-critical uncertainty observation/motivation package from real C-CRP uncertainty rows plus representative same-candidate ranking records; fails closed on missing uncertainty columns, duplicate/missing events, candidate-count mismatches, and incomplete 101-row/event uncertainty coverage |
+| `scripts/analysis/main_aggregate_uncertainty_observation_study.py` | Aggregates package-audited Sports/Toys/Home/Tools observation packages; requires the exact four-domain set for paper-claim readiness, downgrades subsets to diagnostic-only, emits high-minus-low and five-bin trend figures, and keeps table eligibility `motivation_only_not_main_table_sota` |
 | `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` | Local-only audit for a Phase 2.5 retention decision packet; verifies the plan, shell guard, markdown memo, sha256 manifest, and storage-audit target agreement without SSH or deletion |
 | `scripts/audit/main_execute_phase2_5_retention_cleanup.py` | Fail-closed retention cleanup action renderer/executor; defaults to dry-run, validates the plan, packet audit, and live preapproval audit, and requires `--execute` plus the exact approval token before any remote command runs |
 | `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` | Local-only audit for the compact Sports/Toys/Home/Tools official+C-CRP comparison certificate; verifies domain gates, method rows, paired-test counts, evidence consistency, and paper-scope disclaimers |

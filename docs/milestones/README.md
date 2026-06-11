@@ -108,6 +108,25 @@ supportive with a small mean delta. A GPT-5.5 xhigh post-module review rated
 the completed component module **CONDITIONAL PASS, 8.1/10**. This closes the
 Phase 2.5 component-ablation module as supplementary diagnostic evidence, not
 as a component-necessity claim and not as main-table SOTA evidence.
+The Phase 2.5 observation/motivation module is also closed as descriptive
+motivation evidence. Per-domain packages at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_{sports,toys,home,tools}/`
+pass the hardened package audit with `ok=true`, `paper_claim_ready=true`, and
+`failures=[]`. The audit independently verifies `1,010,000` finite uncertainty
+rows per domain, exactly `101` uncertainty rows/event, zero invalid uncertainty
+rows, exact event joins, package-local `same_candidate_alignment.json`, same
+candidate key count `1,010,000`, score coverage `1.0`, zero missing/extra/
+duplicate/invalid score keys, and local/server hash evidence. The four-domain
+aggregate at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_four_domain/`
+reports `ok=true`, `paper_claim_ready=true`,
+`claim_status=uncertainty_stratifies_reliability`, and
+`table_eligibility=motivation_only_not_main_table_sota`; high-uncertainty
+C-CRP bins degrade versus low-uncertainty bins in all four domains on
+`NDCG@10`, `MRR`, and `HR@10`. GPT-5.5 xhigh review rated this module
+**PASS, 8.4/10**; a separate engineering audit veto was lifted after gate
+hardening with **8.6/10**. This supports only motivation wording, not causal,
+statistically significant, exhaustive-baseline, or main-table SOTA claims.
 On 2026-06-11 the selector/import command surface was also repaired and synced
 to the server: C-CRP selector imports now call
 `scripts/misc/main_import_same_candidate_baseline_scores.py` and pass
@@ -115,8 +134,8 @@ to the server: C-CRP selector imports now call
 the selector stage.
 
 Regression evidence for this gate:
-`python -m pytest tests\test_aggregate_ccrp_component_ablation.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
-passed with `48 passed`; `python -m scripts.audit.main_project_readiness_check`
+`python -m pytest tests\test_uncertainty_observation_study.py tests\test_aggregate_uncertainty_observation_study.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
+passed with `58 passed`; `python -m scripts.audit.main_project_readiness_check`
 and `python scripts\audit\main_project_bootstrap.py` report
 `project_readiness_ok=True`.
 

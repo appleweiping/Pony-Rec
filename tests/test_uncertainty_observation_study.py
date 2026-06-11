@@ -12,18 +12,16 @@ from scripts.analysis.main_build_uncertainty_observation_study import (
 
 def test_build_observation_tables_bins_uncertainty_and_methods(tmp_path):
     uncertainty_path = tmp_path / "uncertainty_scores.csv"
-    uncertainty_path.write_text(
-        "source_event_id,user_id,item_id,ccrp_uncertainty\n"
-        "e1,u1,i1,0.1\n"
-        "e1,u1,i2,0.3\n"
-        "e2,u2,i1,0.2\n"
-        "e2,u2,i2,0.4\n"
-        "e3,u3,i1,0.7\n"
-        "e3,u3,i2,0.9\n"
-        "e4,u4,i1,0.6\n"
-        "e4,u4,i2,0.8\n",
-        encoding="utf-8",
-    )
+    uncertainty_rows = ["source_event_id,user_id,item_id,ccrp_uncertainty"]
+    for event_id, user_id, low, high in (
+        ("e1", "u1", 0.1, 0.3),
+        ("e2", "u2", 0.2, 0.4),
+        ("e3", "u3", 0.7, 0.9),
+        ("e4", "u4", 0.6, 0.8),
+    ):
+        for idx, value in enumerate(np.linspace(low, high, 21), start=1):
+            uncertainty_rows.append(f"{event_id},{user_id},i{idx},{value}")
+    uncertainty_path.write_text("\n".join(uncertainty_rows) + "\n", encoding="utf-8")
     ccrp_eval = tmp_path / "ccrp_eval.csv"
     ccrp_eval.write_text(
         "source_event_id,positive_rank,num_candidates\n"
@@ -69,8 +67,12 @@ def test_build_observation_tables_bins_uncertainty_and_methods(tmp_path):
     assert provenance["artifact_class"] == "paper_critical_observation_motivation"
     assert provenance["paper_claim_scope"] == "motivation_only_not_main_table_sota"
     assert provenance["expected_candidates_per_event"] == 21
+    assert provenance["expected_uncertainty_rows_per_event"] == 21
     assert provenance["required_metrics"] == ["MRR", "HR@5", "HR@10", "HR@20", "NDCG@5", "NDCG@10", "NDCG@20"]
     assert provenance["uncertainty_summary"]["uncertainty_col"] == "ccrp_uncertainty"
+    assert provenance["uncertainty_summary"]["finite_uncertainty_rows"] == 84
+    assert provenance["uncertainty_summary"]["candidate_rows_min"] == 21
+    assert provenance["uncertainty_summary"]["candidate_rows_max"] == 21
     assert all(row["join_rate"] == 1.0 for row in provenance["join_report"])
     assert all(row["exact_event_match"] for row in provenance["join_report"])
 
@@ -115,6 +117,7 @@ def test_observation_rejects_duplicate_method_eval_events(tmp_path):
             ks=[5, 10, 20],
             expected_events=2,
             expected_candidates_per_event=101,
+            expected_uncertainty_rows_per_event=0,
             min_join_rate=1.0,
         )
 
@@ -148,6 +151,7 @@ def test_observation_rejects_extra_method_eval_events(tmp_path):
             ks=[5, 10, 20],
             expected_events=2,
             expected_candidates_per_event=101,
+            expected_uncertainty_rows_per_event=0,
             min_join_rate=1.0,
         )
 
@@ -178,6 +182,40 @@ def test_observation_rejects_candidate_count_mismatch(tmp_path):
             ks=[5, 10, 20],
             expected_events=1,
             expected_candidates_per_event=101,
+            expected_uncertainty_rows_per_event=0,
+            min_join_rate=1.0,
+        )
+
+
+def test_observation_rejects_incomplete_uncertainty_candidate_rows(tmp_path):
+    uncertainty_path = tmp_path / "uncertainty_scores.csv"
+    uncertainty_path.write_text(
+        "source_event_id,ccrp_uncertainty\n"
+        "e1,0.1\n"
+        "e1,0.2\n"
+        "e2,0.3\n",
+        encoding="utf-8",
+    )
+    ccrp_eval = tmp_path / "ccrp_eval.csv"
+    ccrp_eval.write_text(
+        "source_event_id,positive_rank,num_candidates\n"
+        "e1,1,2\n"
+        "e2,2,2\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="Expected exactly 2 finite uncertainty rows per event"):
+        build_observation_tables(
+            domain="toy",
+            uncertainty_scores_path=str(uncertainty_path),
+            ccrp_eval_path=str(ccrp_eval),
+            method_eval_specs=[],
+            uncertainty_col="",
+            event_agg="mean",
+            n_bins=1,
+            ks=[5, 10, 20],
+            expected_events=2,
+            expected_candidates_per_event=2,
             min_join_rate=1.0,
         )
 

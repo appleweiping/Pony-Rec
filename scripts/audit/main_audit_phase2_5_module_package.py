@@ -628,6 +628,93 @@ def _check_observation_event_rows(
                 )
             if rank > 0 and num_candidates > 0 and rank > num_candidates:
                 failures.append(f"observation_positive_rank_beyond_candidates:{method}:{event_id}:{rank}>{num_candidates}")
+        if "candidate_rows" in row and str(row.get("candidate_rows", "")).strip():
+            candidate_rows = _as_int(row.get("candidate_rows"))
+            if expected_candidates_per_event > 0 and candidate_rows != expected_candidates_per_event:
+                failures.append(
+                    f"observation_candidate_rows_mismatch:{method}:{event_id}:{candidate_rows}!={expected_candidates_per_event}"
+                )
+
+
+def _check_observation_uncertainty_summary(
+    provenance: dict[str, Any],
+    failures: list[str],
+    *,
+    expected_events: int,
+    expected_candidates_per_event: int,
+) -> None:
+    summary = provenance.get("uncertainty_summary")
+    if not isinstance(summary, dict):
+        failures.append("observation:missing_uncertainty_summary")
+        return
+    expected_rows = expected_events * expected_candidates_per_event if expected_events > 0 else 0
+    checks = {
+        "event_count": expected_events,
+        "expected_events": expected_events,
+        "expected_uncertainty_rows_per_event": expected_candidates_per_event,
+        "candidate_rows_min": expected_candidates_per_event,
+        "candidate_rows_max": expected_candidates_per_event,
+        "candidate_rows_bad_event_count": 0,
+        "invalid_uncertainty_rows": 0,
+    }
+    if expected_rows > 0:
+        checks["finite_uncertainty_rows"] = expected_rows
+        checks["expected_finite_uncertainty_rows"] = expected_rows
+    for key, expected in checks.items():
+        actual = _as_int(summary.get(key), default=-1)
+        if actual != expected:
+            failures.append(f"observation_uncertainty_summary_mismatch:{key}:{actual}!={expected}")
+    input_rows = _as_int(summary.get("uncertainty_input_rows"), default=-1)
+    finite_rows = _as_int(summary.get("finite_uncertainty_rows"), default=-1)
+    if input_rows != finite_rows:
+        failures.append(f"observation_uncertainty_input_finite_mismatch:{input_rows}!={finite_rows}")
+
+
+def _check_observation_same_candidate_alignment(
+    alignment: dict[str, Any],
+    failures: list[str],
+    *,
+    expected_events: int,
+    expected_candidates_per_event: int,
+) -> None:
+    if not alignment:
+        return
+    expected_keys = expected_events * expected_candidates_per_event if expected_events > 0 else 0
+    if alignment.get("ok") is not True:
+        failures.append("observation_same_candidate_alignment_not_ok")
+    if alignment.get("status_label") != "same_candidate_alignment_evidence":
+        failures.append("observation_same_candidate_alignment_bad_status")
+    for key, expected in (
+        ("expected_events", expected_events),
+        ("expected_candidates_per_event", expected_candidates_per_event),
+        ("expected_candidate_key_count", expected_keys),
+        ("candidate_key_count", expected_keys),
+        ("score_key_count", expected_keys),
+        ("missing_score_keys", 0),
+        ("extra_score_keys", 0),
+        ("duplicate_score_keys", 0),
+        ("invalid_scores", 0),
+        ("blank_score_keys", 0),
+    ):
+        if expected <= 0 and key in {"expected_candidate_key_count", "candidate_key_count", "score_key_count"}:
+            continue
+        actual = _as_int(alignment.get(key), default=-1)
+        if actual != expected:
+            failures.append(f"observation_same_candidate_alignment_mismatch:{key}:{actual}!={expected}")
+    coverage = _as_float(alignment.get("score_coverage_rate"))
+    if not math.isfinite(coverage) or abs(coverage - 1.0) > 1e-12:
+        failures.append(f"observation_same_candidate_alignment_score_coverage:{alignment.get('score_coverage_rate')}!=1.0")
+    for key in ("test_candidate_items_sha256", "source_provenance_sha256", "score_sha256"):
+        if not _clean_sha256(alignment.get(key)):
+            failures.append(f"observation_same_candidate_alignment_missing_sha256:{key}")
+    method_eval_rows = alignment.get("method_eval_rows", {})
+    if not isinstance(method_eval_rows, dict) or not method_eval_rows:
+        failures.append("observation_same_candidate_alignment_missing_method_eval_rows")
+    else:
+        for method, count in method_eval_rows.items():
+            actual = _as_int(count, default=-1)
+            if expected_events > 0 and actual != expected_events:
+                failures.append(f"observation_same_candidate_alignment_eval_rows:{method}:{actual}!={expected_events}")
 
 
 def _check_component_config_matches_main(
@@ -670,6 +757,7 @@ def _audit_observation(
     summary_header, summary_rows = _load_required_csv(base, "observation_summary.csv", failures)
     summary_json = _load_required_json(base, "observation_summary.json", failures)
     provenance = _load_required_json(base, "observation_provenance.json", failures)
+    alignment = _load_required_json(base, "same_candidate_alignment.json", failures)
 
     _check_general_package(base, provenance, failures, warnings)
     _check_metrics(summary_header, failures, context="observation_summary")
@@ -685,6 +773,23 @@ def _audit_observation(
             "observation:expected_candidates_per_event_mismatch:"
             f"{provenance.get('expected_candidates_per_event')}!={expected_candidates_per_event}"
         )
+    if int(provenance.get("expected_uncertainty_rows_per_event") or 0) != expected_candidates_per_event:
+        failures.append(
+            "observation:expected_uncertainty_rows_per_event_mismatch:"
+            f"{provenance.get('expected_uncertainty_rows_per_event')}!={expected_candidates_per_event}"
+        )
+    _check_observation_uncertainty_summary(
+        provenance,
+        failures,
+        expected_events=expected_events,
+        expected_candidates_per_event=expected_candidates_per_event,
+    )
+    _check_observation_same_candidate_alignment(
+        alignment,
+        failures,
+        expected_events=expected_events,
+        expected_candidates_per_event=expected_candidates_per_event,
+    )
     _check_observation_event_rows(
         event_rows,
         failures,

@@ -1,0 +1,32 @@
+{
+  "module": "observation_motivation",
+  "domain": "tools",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "expected_uncertainty_rows_per_event": 101,
+  "uncertainty_col": "ccrp_uncertainty",
+  "event_agg": "mean",
+  "n_bins": 5,
+  "ks": [
+    5,
+    10,
+    20
+  ],
+  "primary_metric": "NDCG@10",
+  "seed": 20260607,
+  "methods": [
+    "ccrp_v3",
+    "llmemb",
+    "proex",
+    "rlmrec"
+  ],
+  "representative_baseline_policy": "motivation_only_embedding_profile_graph_representatives_not_exhaustive",
+  "design_review": {
+    "reviewer": "GPT-5.5 xhigh sidecar",
+    "verdict": "PROCEED",
+    "average_score": 8.3
+  },
+  "claim_gate_policy": "downgrade_to_mixed_diagnostic_if_high_uncertainty_degradation_not_seen_in_3_of_4_domains_on_NDCG@10_and_support_metric",
+  "server_project": "~/projects/pony-rec-rescue-shadow-v6",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_tools"
+}
