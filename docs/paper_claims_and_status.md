@@ -71,10 +71,22 @@ claim. The selector command surface was corrected on 2026-06-11 so server-side
 seeded tie-break via `--tie_break_seed`.
 Post-module GPT-5.5 xhigh sidecar review rated the Tools component-ablation
 package **CONDITIONAL PASS, 7.5/10** and limited its table eligibility to
-supplementary/diagnostic ablation evidence. The remaining Phase 2.5 blockers
-are no longer missing Tools signal rows; they are the cross-domain ablation
-aggregation, observation/motivation package, hyperparameter-curve package, and
-final claim/overclaim audit.
+supplementary/diagnostic ablation evidence. Later on 2026-06-11, Sports and
+Toys component packages were backfilled from existing full-scale server signal
+rows without LLM re-query, passed package audit with `ok=true`,
+`paper_claim_ready=true`, and `failures=[]`, and were aggregated with Home and
+Tools at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_component_ablation_four_domain/`.
+The aggregation provenance reports `ok=true`, `paper_claim_ready=true`,
+`delta_convention=removal_minus_full`, `tie_epsilon=1e-12`, and
+`table_eligibility=supplementary_diagnostic_only`. The paper-facing wording
+must be cautious: boundary uncertainty is inert across all four domains;
+counterevidence and risk-penalty removal are nonworse or better on NDCG@10;
+evidence support is directionally supportive but small; calibration gap is
+mixed. A GPT-5.5 xhigh post-module review rated the completed component module
+**CONDITIONAL PASS, 8.1/10**. The remaining Phase 2.5 blockers are the
+observation/motivation package, hyperparameter-curve package, and final
+claim/overclaim audit.
 
 1. An observation/motivation study explaining why uncertainty should be used in
    this framework. It should use representative completed baselines and fair

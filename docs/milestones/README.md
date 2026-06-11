@@ -94,6 +94,20 @@ and `phase2_5_component_ablation_package_audit.{json,md}` reports `ok=true`,
 Post-module GPT-5.5 xhigh sidecar review rated Tools component-ablation
 **CONDITIONAL PASS, 7.5/10**, with supplementary/diagnostic table eligibility
 only; Claude Opus reviewer tooling was unavailable in this session.
+Sports and Toys were then backfilled from existing full-scale server signal
+rows without LLM re-query. Their component package audits now report `ok=true`,
+`paper_claim_ready=true`, and `failures=[]`, and the four-domain component
+aggregation at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_component_ablation_four_domain/`
+reports `ok=true`, `paper_claim_ready=true`, `delta_convention=removal_minus_full`,
+`tie_epsilon=1e-12`, and `table_eligibility=supplementary_diagnostic_only`.
+On NDCG@10, removing boundary uncertainty is exactly inert across all four
+domains, removing counterevidence or risk penalty is nonworse/better in all
+four, calibration gap is mixed, and evidence support is only directionally
+supportive with a small mean delta. A GPT-5.5 xhigh post-module review rated
+the completed component module **CONDITIONAL PASS, 8.1/10**. This closes the
+Phase 2.5 component-ablation module as supplementary diagnostic evidence, not
+as a component-necessity claim and not as main-table SOTA evidence.
 On 2026-06-11 the selector/import command surface was also repaired and synced
 to the server: C-CRP selector imports now call
 `scripts/misc/main_import_same_candidate_baseline_scores.py` and pass
@@ -101,8 +115,8 @@ to the server: C-CRP selector imports now call
 the selector stage.
 
 Regression evidence for this gate:
-`python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
-passed with `49 passed`; `python -m scripts.audit.main_project_readiness_check`
+`python -m pytest tests\test_aggregate_ccrp_component_ablation.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
+passed with `48 passed`; `python -m scripts.audit.main_project_readiness_check`
 and `python scripts\audit\main_project_bootstrap.py` report
 `project_readiness_ok=True`.
 

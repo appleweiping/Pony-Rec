@@ -1,0 +1,86 @@
+{
+  "artifact_class": "paper_critical_component_ablation_cross_domain_diagnostic",
+  "status_label": "paper_critical_component_ablation_cross_domain_ready",
+  "ok": true,
+  "paper_claim_ready": true,
+  "failures": [],
+  "warnings": [],
+  "domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "expected_domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "expected_ablations": [
+    "full",
+    "without_boundary_uncertainty",
+    "without_calibration_gap",
+    "without_evidence_support",
+    "without_counterevidence",
+    "without_risk_penalty"
+  ],
+  "required_metrics": [
+    "MRR",
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20"
+  ],
+  "primary_metric": "NDCG@10",
+  "delta_convention": "removal_minus_full",
+  "tie_epsilon": 1e-12,
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "git_commit": "8e0f8291ffc710591bfb780518915ab6f5c1bccf",
+  "input_paths": {
+    "sports:component_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_sports\\component_ablation_summary.csv",
+    "sports:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_sports\\phase2_5_component_ablation_package_audit.json",
+    "sports:component_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_sports\\component_ablation_provenance.json",
+    "toys:component_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_toys\\component_ablation_summary.csv",
+    "toys:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_toys\\phase2_5_component_ablation_package_audit.json",
+    "toys:component_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_toys\\component_ablation_provenance.json",
+    "home:component_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_home\\component_ablation_summary.csv",
+    "home:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_home\\phase2_5_component_ablation_package_audit.json",
+    "home:component_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_home\\component_ablation_provenance.json",
+    "tools:component_summary": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_tools\\component_ablation_summary.csv",
+    "tools:package_audit": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_tools\\phase2_5_component_ablation_package_audit.json",
+    "tools:component_provenance": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_tools\\component_ablation_provenance.json"
+  },
+  "input_sha256": {
+    "sports:component_summary": "f41a5ba4517242949c107fc7fd4c0df57521238b68db167b817b88d46814c419",
+    "sports:package_audit": "27ceb13e73c31105ad8cf9e60f415617a1d7890a3a7732a9bc221a6726c7f5da",
+    "sports:component_provenance": "d5126878834e1e758c99a87446aa7402134939b0b7c7867251a7e29214c12d75",
+    "toys:component_summary": "49c4ec36a8c4f2ad7c1d5033c1a4253921a5eb06696736cb2b22676e1d7b7bef",
+    "toys:package_audit": "f63175cc139a442e8718c0d06b4824d22be5cb23bb2f35e88eee7e66c1d22117",
+    "toys:component_provenance": "c226f5b5beccb0cf3b8b0191b3b40df5e9eca51c7e5cc8cdcbf1d1297051ae96",
+    "home:component_summary": "70567cbb9e6e693a778a1b6ca2d66ca763ef99554e56433ced5bf039f1b4ac83",
+    "home:package_audit": "e64d0b199f5a7baf1c17a5e24b26ab04e4d518baac62aa9a18c11f300a240d60",
+    "home:component_provenance": "db790a31dfb753417fe99dfb3fad64a2be8c2ab94ee68307bb5320e3a48e913a",
+    "tools:component_summary": "049b5263f509735c1aef1b89fa7402bbc9c5f3881cf0052ff7fedb52b95b93c5",
+    "tools:package_audit": "f2f2ddf5d2287a62e381a87fa3635650bf8fbfb151966293e8b1a33fb9ae63cd",
+    "tools:component_provenance": "0fd63d9cc720059e8d040f6ff644a720e1a58a68599d12501a06e5f69ab5dffb"
+  },
+  "outputs": {
+    "delta_rows_csv": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\component_ablation_four_domain_delta_rows.csv",
+    "component_summary_csv": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\component_ablation_four_domain_component_summary.csv",
+    "figure_paths": [
+      "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\fig_component_ablation_four_domain.png",
+      "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\fig_component_ablation_four_domain.pdf"
+    ]
+  },
+  "table_eligibility": "supplementary_diagnostic_only",
+  "claim_limits": [
+    "This is not main-table SOTA evidence.",
+    "Delta is removal_minus_full; positive deltas mean removal is nonworse or better.",
+    "Neutral or positive removals must be reported as weak, redundant, or harmful component evidence.",
+    "No claim is made that every C-CRP component is necessary."
+  ]
+}

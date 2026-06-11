@@ -34,7 +34,7 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order (2026-06-06)
+## Current Priority Order (2026-06-11)
 
 ```text
 1. Pull latest repo state.
@@ -45,11 +45,18 @@ PIDs, audit summaries, and missing-file errors.
    per-domain 56/56 positive Holm-significant paired tests.
 3. Do not launch more official baseline rows unless a later audit finds a
    concrete failed or invalid row.
-4. Run Phase 2.5 paper-critical modules next: observation/motivation,
-   leave-one-component-out C-CRP component ablation, and hyperparameter curves.
-   Current blocker is missing full-scale C-CRP uncertainty/signal rows, not
-   performance, GPU, or disk.
-5. If no saved signal rows pass audit, use the guarded signal-row runner
+4. Phase 2.5 component ablation is now closed as supplementary diagnostic
+   evidence: Sports/Toys/Home/Tools component packages and the four-domain
+   aggregation pass their audits, with table eligibility limited to
+   `supplementary_diagnostic_only`. Do not claim every component is necessary.
+5. Run the remaining Phase 2.5 paper-critical modules next:
+   observation/motivation and real hyperparameter curves, then their package
+   audits and post-module review. Current blocker is no longer missing
+   full-scale signal rows for component ablation; use the completed signal and
+   selector packages rather than regenerating rows unless a concrete audit
+   failure proves a missing/invalid artifact.
+6. If a future audit finds no saved signal rows pass audit, use the guarded
+   signal-row runner
    `experiments/rsc/run_ccrp_v3_signal_rows.py` to generate valid/test
    recomputable signal rows on the server, then audit them before selector use.
    Use `/home/ajifang/miniconda3/envs/qwen_vllm/bin/python`; the base
@@ -60,10 +67,10 @@ PIDs, audit summaries, and missing-file errors.
    `505000/505000`, while a 10k-user valid/test split still expects
    `1,010,000` final signal rows. Do not treat one `505000/505000` progress
    line as completion; require process exit plus final CSV/provenance files.
-6. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
+7. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
    failures; do not include it in the main official block unless a future
    memory-stable run passes all gates.
-7. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
+8. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
    validation gates exist.
 ```
 
@@ -85,6 +92,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_sync_ccrp_signal_evidence_package.py` | Copies and audits completed Phase 2.5 C-CRP signal-row packages from pony-rec-gpu; verifies local/server size and sha256, row counts, provenance counts, parse-failure rate, and source-audit candidate-key coverage |
 | `scripts/audit/main_plan_ccrp_signal_generation.py` | Guarded, non-executing Phase 2.5 C-CRP signal-row plan; records discovery, valid/test signal generation, valid/test source audits, local signal-package sync templates, validation selection, component-ablation summary, observation, hyperparameter, and module-package audit commands while generated shell exits before execution |
 | `scripts/analysis/main_build_ccrp_component_ablation_summary.py` | Builds the paper-critical C-CRP leave-one-component-out summary from a frozen validation-selected selector package; writes summary/provenance/figures and fails closed on missing validation metadata, non-full score mode by default, missing ablations, coverage, or audit failures |
+| `scripts/analysis/main_aggregate_ccrp_component_ablation.py` | Aggregates package-audited Sports/Toys/Home/Tools component-ablation summaries; fails closed on missing package audits, row counts, coverage, or ablations; emits `removal_minus_full` deltas, `tie_epsilon=1e-12`, figures, and supplementary/diagnostic-only provenance |
 | `scripts/audit/main_audit_phase2_5_retention_decision_packet.py` | Local-only audit for a Phase 2.5 retention decision packet; verifies the plan, shell guard, markdown memo, sha256 manifest, and storage-audit target agreement without SSH or deletion |
 | `scripts/audit/main_execute_phase2_5_retention_cleanup.py` | Fail-closed retention cleanup action renderer/executor; defaults to dry-run, validates the plan, packet audit, and live preapproval audit, and requires `--execute` plus the exact approval token before any remote command runs |
 | `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` | Local-only audit for the compact Sports/Toys/Home/Tools official+C-CRP comparison certificate; verifies domain gates, method rows, paired-test counts, evidence consistency, and paper-scope disclaimers |

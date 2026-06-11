@@ -1,0 +1,2 @@
+sample_count,parse_success_rate,avg_latency,avg_confidence,avg_candidates,MRR,out_of_candidate_rate,HR@5,NDCG@5,coverage@5,head_exposure_ratio@5,longtail_coverage@5,HR@10,NDCG@10,coverage@10,head_exposure_ratio@10,longtail_coverage@10,HR@20,NDCG@20,coverage@20,head_exposure_ratio@20,longtail_coverage@20
+10000,1.0,0.0,-1.0,101.0,0.20253036448346562,0.0,0.2672,0.19201899038505812,0.12229378982273997,0.7433,0.05427542092493199,0.3793,0.22809578956579013,0.20774232191531103,0.74138,0.10621277847217116,0.5183,0.2630918465808869,0.3475364155627702,0.73614,0.20866112785824573

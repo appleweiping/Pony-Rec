@@ -1,0 +1,202 @@
+{
+  "ok": true,
+  "created_at_utc": "2026-06-11T15:38:04.620969+00:00",
+  "domain": "sports",
+  "row_count": 18,
+  "checked_light_file_count": 14,
+  "server_only_bulk_file_count": 4,
+  "remote_host": "pony-rec-gpu",
+  "server_package_dir": "~/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports",
+  "copy_policy": "light_component_package_only; bulky signal, selected-score, selected-scored-row, and prediction files remain server-side with sha256 evidence",
+  "checked_files": [
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/tables/ranking_metrics.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 576,
+      "server_size": 576,
+      "local_sha256": "064796092495651a5cefba001a205a62e7ce78f731b4142e20fad1b7b6a2d940",
+      "server_sha256": "064796092495651a5cefba001a205a62e7ce78f731b4142e20fad1b7b6a2d940",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/tables/external_score_coverage.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 274,
+      "server_size": 274,
+      "local_sha256": "e895ab94bb53395e5280da31e3a04639f1a999f682d3ab5c15419af136238727",
+      "server_sha256": "e895ab94bb53395e5280da31e3a04639f1a999f682d3ab5c15419af136238727",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/tables/same_candidate_external_baseline_summary.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 1492,
+      "server_size": 1492,
+      "local_sha256": "5cffc43842a193459da91aa5d02da0e6e703ef45a1b3e77e69408784c273132e",
+      "server_sha256": "5cffc43842a193459da91aa5d02da0e6e703ef45a1b3e77e69408784c273132e",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/tables/ranking_eval_records.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 42373092,
+      "server_size": 42373092,
+      "local_sha256": "5dc22f1c14cd75d8b4475acc2cddfda9c834ea2f01465548f359dd56eb5091a6",
+      "server_sha256": "5dc22f1c14cd75d8b4475acc2cddfda9c834ea2f01465548f359dd56eb5091a6",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/tables/ranking_exposure_distribution.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 64,
+      "server_size": 64,
+      "local_sha256": "31d0b4819c603083c90e9f97279ecd1462fed50d11bd959128bf97b4b14d85d8",
+      "server_sha256": "31d0b4819c603083c90e9f97279ecd1462fed50d11bd959128bf97b4b14d85d8",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_summary.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/component_ablation_summary.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 4144,
+      "server_size": 4144,
+      "local_sha256": "f41a5ba4517242949c107fc7fd4c0df57521238b68db167b817b88d46814c419",
+      "server_sha256": "f41a5ba4517242949c107fc7fd4c0df57521238b68db167b817b88d46814c419",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_summary.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/component_ablation_summary.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 12670,
+      "server_size": 12670,
+      "local_sha256": "f05c403cf38bacdfbc29d47920f0ce1a2acd13cffa119f1d2532938fe2d8b1a7",
+      "server_sha256": "f05c403cf38bacdfbc29d47920f0ce1a2acd13cffa119f1d2532938fe2d8b1a7",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_provenance.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/component_ablation_provenance.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 4357,
+      "server_size": 4357,
+      "local_sha256": "d5126878834e1e758c99a87446aa7402134939b0b7c7867251a7e29214c12d75",
+      "server_sha256": "d5126878834e1e758c99a87446aa7402134939b0b7c7867251a7e29214c12d75",
+      "ok": true
+    },
+    {
+      "rel_path": "selected_test_metrics.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/selected_test_metrics.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 3239,
+      "server_size": 3239,
+      "local_sha256": "55ac41aa687143d718cc23d5d4fac647fe8471c40037426b326cd1a9727d9a89",
+      "server_sha256": "55ac41aa687143d718cc23d5d4fac647fe8471c40037426b326cd1a9727d9a89",
+      "ok": true
+    },
+    {
+      "rel_path": "ccrp_internal_provenance.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_internal_provenance.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 3802,
+      "server_size": 3802,
+      "local_sha256": "11ab0077c610387cc49ca7c9c6cc9415d1949afdfe234a423551e45ecf5c43f3",
+      "server_sha256": "11ab0077c610387cc49ca7c9c6cc9415d1949afdfe234a423551e45ecf5c43f3",
+      "ok": true
+    },
+    {
+      "rel_path": "valid_ccrp_sweep.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/valid_ccrp_sweep.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 2208,
+      "server_size": 2208,
+      "local_sha256": "7b57d2e5f236ffde528cdbf74c5057cff7c3da585e51e5ac24ccfddb5b1f9759",
+      "server_sha256": "7b57d2e5f236ffde528cdbf74c5057cff7c3da585e51e5ac24ccfddb5b1f9759",
+      "ok": true
+    },
+    {
+      "rel_path": "selected_valid_config.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/selected_valid_config.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 1639,
+      "server_size": 1639,
+      "local_sha256": "eead149cf2528648f66e0ee4942a6c923b232a368927e7617167675c125ecda0",
+      "server_sha256": "eead149cf2528648f66e0ee4942a6c923b232a368927e7617167675c125ecda0",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_component_ablation.png",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/fig_component_ablation.png",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 113937,
+      "server_size": 113937,
+      "local_sha256": "a32a3e4880802285237ddff582bc3c1806cc5a196370a739c4b91ce22db80b47",
+      "server_sha256": "a32a3e4880802285237ddff582bc3c1806cc5a196370a739c4b91ce22db80b47",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_component_ablation.pdf",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/fig_component_ablation.pdf",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 14867,
+      "server_size": 14867,
+      "local_sha256": "39582712a94c7ba892640ecf1b48932fd8e74e588e421c0d3ad0301a2e7f1700",
+      "server_sha256": "39582712a94c7ba892640ecf1b48932fd8e74e588e421c0d3ad0301a2e7f1700",
+      "ok": true
+    }
+  ],
+  "server_only_bulk_files": [
+    {
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv",
+      "server_present": true,
+      "server_size": 304743878,
+      "server_sha256": "1b55a4b83673b2699d8a6029b02f39ae10145db514de5101a7f6b11e1f9e8207",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    },
+    {
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_selected_test_scores.csv",
+      "server_present": true,
+      "server_size": 96189417,
+      "server_sha256": "d607e942c59550aea7e7dd23276085d8f106c3c33d314c42d9e86d9ac8eab52f",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    },
+    {
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_selected_test_scored_rows.csv",
+      "server_present": true,
+      "server_size": 377088375,
+      "server_sha256": "650e4b172e02835f6938b92a1f8f82c14e7bca83061e37ac4cf7b054781658cf",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    },
+    {
+      "rel_path": "outputs/sports_ccrp_selected_same_candidate/predictions/rank_predictions.jsonl",
+      "server_present": true,
+      "server_size": 691462898,
+      "server_sha256": "0c6bfdfa2b0ea01c273222f70ffe309b880a7502bcc312333710d25c49fc3e42",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    }
+  ]
+}

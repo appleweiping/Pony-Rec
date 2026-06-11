@@ -1,0 +1,26 @@
+{
+  "module": "component_ablation",
+  "domain": "sports",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "main_config_mode": "preregistered",
+  "score_mode": "full",
+  "ablation": "full",
+  "eta": 1.0,
+  "confidence_weight": 0.7,
+  "weight_boundary": 0.5,
+  "weight_calibration_gap": 0.3,
+  "weight_evidence": 0.2,
+  "tie_break_seed": 20260607,
+  "seed": 20260607,
+  "import_tie_break_mode": "hash_seeded",
+  "server_project": "~/projects/pony-rec-rescue-shadow-v6",
+  "server_git_commit_observed": "9ded57b7ad500bbd73b8c6f57c067fa8d04a403e",
+  "server_git_state_note": "server worktree is dirty/behind origin; scripts used were pre-synced, no server git pull/reset performed",
+  "design_review": {
+    "reviewer": "GPT-5.5 xhigh sidecar",
+    "verdict": "PROCEED",
+    "average_score": 8.18
+  },
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports"
+}

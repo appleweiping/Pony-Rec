@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-11 14:39 CEST
+Last updated: 2026-06-11 17:52 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -9,12 +9,10 @@ cycle.
 
 ## Current Checkpoint (2026-06-11)
 
-- Server live state: Tools test signal-row PID `3841494` exited cleanly after
-  the second 5k-user chunk reached `505000/505000`; the server is now idle
-  for this project (`nvidia-smi` reported `0%`, `15 MiB / 49140 MiB`, and no
-  matching Pony/C-CRP/baseline Python process). Disk is about `21G` free / `89%`
-  used. Do not start a new GPU experiment without a fresh preflight, but there
-  is no active run to wait on.
+- Server live state: the server is idle for this project (`nvidia-smi` reported
+  `0%`, `15 MiB / 49140 MiB`, and no matching Pony/C-CRP/baseline Python
+  process). Disk is about `20G` free / `90%` used. Do not start a new GPU
+  experiment without a fresh preflight, but there is no active run to wait on.
 - Tools test signal rows are complete, source-audited, and locally synced:
   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/`
   has `test_ccrp_signal_rows.csv` with `1,010,000` rows, provenance
@@ -31,6 +29,44 @@ cycle.
   used the preregistered main config (`eta=1.0`, weights `0.5,0.3,0.2`,
   `tie_break_seed=20260607`) with score coverage `1.0` and imported
   `NDCG@10=0.16949770813562767`.
+- Sports and Toys component-ablation packages were backfilled on 2026-06-11
+  without LLM re-query, using the already completed full-scale server signal
+  rows. A GPT-5.5 xhigh design re-review returned **PROCEED, 8.18/10** after
+  the fail-closed gates were made explicit. `scripts/analysis/main_build_ccrp_component_ablation_summary.py`
+  returned `ok=true`, `failures=[]` for both domains; same-candidate imports
+  used `scripts/misc/main_import_same_candidate_baseline_scores.py` with
+  `--tie_break_seed 20260607`, `status_label=same_schema_internal_ablation`,
+  and score coverage `1.0`. Package audits now pass:
+  `ccrp_ablation_sports/phase2_5_component_ablation_package_audit.{json,md}`
+  and `ccrp_ablation_toys/phase2_5_component_ablation_package_audit.{json,md}`
+  both report `ok=true`, `paper_claim_ready=true`, `failures=[]`. The failed
+  local Toys test-signal sync left a partial CSV; it was treated as invalid,
+  the local copy process was stopped, and the partial local CSV was deleted.
+  The component package follows the Home/Tools light-local policy: bulky signal
+  rows, selected score CSVs, selected scored rows, and prediction JSONL stay
+  server-side with size+sha256 evidence in
+  `local_server_manifest_comparison.json`.
+- The four-domain component-ablation aggregation is complete at
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_component_ablation_four_domain/`.
+  `component_ablation_four_domain_provenance.json` reports `ok=true`,
+  `paper_claim_ready=true`, `failures=[]`,
+  `delta_convention=removal_minus_full`, `tie_epsilon=1e-12`, and
+  `table_eligibility=supplementary_diagnostic_only`. On NDCG@10:
+  `without_boundary_uncertainty` has mean delta `0` and is nonworse in `4/4`
+  domains; `without_counterevidence` mean delta is `+0.00168456132483` and
+  nonworse in `4/4`; `without_risk_penalty` mean delta is
+  `+0.000824890949846` and nonworse in `4/4`; `without_calibration_gap` is
+  mixed; `without_evidence_support` is directionally supportive but small.
+  This is a useful reviewer-warning result: C-CRP components are not uniformly
+  necessary under the preregistered full configuration.
+- Post-module GPT-5.5 xhigh sidecar review on 2026-06-11 returned
+  **CONDITIONAL PASS, 8.1/10** for the completed Sports/Toys backfill plus
+  four-domain aggregation. Table eligibility remains supplementary/diagnostic
+  only. Required wording: leave-one-component-out diagnostics show several
+  uncertainty/risk terms are neutral, weak, or redundant; do not claim
+  statistically significant component effects, main-table SOTA evidence, or
+  that every component is necessary. Missing reviewer perspective: no Claude
+  Opus reviewer tool was available in this session.
 - Post-module GPT-5.5 xhigh sidecar review on 2026-06-11 returned
   **CONDITIONAL PASS, 7.5/10** for the Tools component-ablation package.
   Table eligibility is supplementary/diagnostic ablation evidence, not a main
@@ -46,26 +82,22 @@ cycle.
   `--tie_break_seed`; Home same-candidate tables were re-imported with
   `--tie_break_seed 20260607`, making imported `NDCG@10=0.13635503352938705`
   match `selected_test_metrics.csv`.
-- Honest result note: Tools confirms the Sports/Toys/Home pattern that several
-  leave-one-component-out rows are neutral or slightly better than full C-CRP
-  (`without_counterevidence` and `without_risk_penalty` beat full on NDCG@10`;
-  Tools full `0.16949770813562767`, without counterevidence
-  `0.17239786620427713`, without risk penalty `0.17113102319895984`).
-  Treat this as weak/redundant component evidence unless later domains reverse
-  it; do not write a component-necessity claim.
-- Focused regression and readiness checks passed after the fix:
-  `python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py -q`
-  plus `tests\test_plan_ccrp_signal_generation.py` -> `49 passed`.
+- Honest result note: four-domain aggregation confirms that several
+  leave-one-component-out rows are neutral or slightly better than full C-CRP.
+  Treat this as weak/redundant component evidence; do not write a
+  component-necessity claim.
+- Focused regression and readiness checks passed after the component-module
+  closure:
+  `python -m pytest tests\test_aggregate_ccrp_component_ablation.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
+  -> `48 passed`.
   `python -m scripts.audit.main_project_readiness_check` and
   `python scripts\audit\main_project_bootstrap.py` both report
   `project_readiness_ok=True`; the readiness audit now checks the current
   `scripts/` layout rather than retired root script paths.
-- Next bounded action: first aggregate Sports/Toys/Home/Tools component
-  ablations into one honest cross-domain diagnostic table, then build the
-  observation/motivation study and real hyperparameter curves from the
-  now-complete Sports/Toys/Home/Tools signal and selector packages, then run
-  their Phase 2.5 package audits. The selector
-  import command now points
+- Next bounded action: build the observation/motivation study and real
+  hyperparameter curves from the now-complete Sports/Toys/Home/Tools signal and
+  selector packages, then run their Phase 2.5 package audits and post-module
+  review. The selector import command now points
   to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py`, includes
   `--tie_break_seed`, and this selector-path fix plus the current component

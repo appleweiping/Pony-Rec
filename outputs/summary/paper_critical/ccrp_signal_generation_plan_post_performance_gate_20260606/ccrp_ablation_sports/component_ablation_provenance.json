@@ -1,0 +1,75 @@
+{
+  "artifact_class": "paper_critical_component_ablation",
+  "status_label": "paper_critical_component_ablation_ready",
+  "paper_claim_scope": "leave_one_component_out_component_evidence_candidate",
+  "claim_limits": [
+    "Uses validation-selected score mode, eta, confidence weight, and weight triple.",
+    "Does not select ablation variants on test.",
+    "Requires the Phase 2.5 module package audit before paper claims."
+  ],
+  "ok": true,
+  "failures": [],
+  "domain": "sports",
+  "git_commit": "9ded57b7ad500bbd73b8c6f57c067fa8d04a403e",
+  "command": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/scripts/analysis/main_build_ccrp_component_ablation_summary.py --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports --domain sports --test_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl --test_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv --test_signal_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv --expected_events 10000 --expected_candidates_per_event 101",
+  "input_paths": {
+    "selected_config_json": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/selected_valid_config.json",
+    "selector_provenance_json": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/ccrp_internal_provenance.json",
+    "valid_sweep_csv": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/valid_ccrp_sweep.csv",
+    "test_ranking_path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+    "test_candidate_items_path": "outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv",
+    "test_signal_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv"
+  },
+  "input_sha256": {
+    "selected_config_json": "eead149cf2528648f66e0ee4942a6c923b232a368927e7617167675c125ecda0",
+    "selector_provenance_json": "11ab0077c610387cc49ca7c9c6cc9415d1949afdfe234a423551e45ecf5c43f3",
+    "valid_sweep_csv": "7b57d2e5f236ffde528cdbf74c5057cff7c3da585e51e5ac24ccfddb5b1f9759",
+    "test_ranking_path": "7654f9a9121cc31531924a88258b0d7dce91cc40afb731ebba2b14c0262b2381",
+    "test_candidate_items_path": "6fd502c4ff2f622168eca009fe306e01a55b80134f532da80e073fdf7aad60c0",
+    "test_signal_path": "1b55a4b83673b2699d8a6029b02f39ae10145db514de5101a7f6b11e1f9e8207"
+  },
+  "selected_config": {
+    "score_mode": "full",
+    "eta": 1.0,
+    "confidence_weight": 0.7,
+    "weight_boundary": 0.5,
+    "weight_calibration_gap": 0.3,
+    "weight_evidence": 0.2,
+    "weight_grid_label": "0.5,0.3,0.2"
+  },
+  "selection_source": {
+    "selected_on": "preregistered",
+    "main_config_mode": "preregistered",
+    "selected_config_split": "valid",
+    "selection_metric": "NDCG@10",
+    "selected_valid_metric": 0.22418612276807512
+  },
+  "require_full_score_mode": true,
+  "valid_sweep_ablations": [
+    "full"
+  ],
+  "ablations": [
+    "full",
+    "without_boundary_uncertainty",
+    "without_calibration_gap",
+    "without_evidence_support",
+    "without_counterevidence",
+    "without_risk_penalty"
+  ],
+  "required_metrics": [
+    "MRR",
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20"
+  ],
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "summary_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/component_ablation_summary.csv",
+  "figure_paths": [
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/fig_component_ablation.png",
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_sports/fig_component_ablation.pdf"
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "ok": true,
+  "created_at_utc": "2026-06-11T15:38:10.566800+00:00",
+  "domain": "toys",
+  "row_count": 18,
+  "checked_light_file_count": 14,
+  "server_only_bulk_file_count": 4,
+  "remote_host": "pony-rec-gpu",
+  "server_package_dir": "~/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys",
+  "copy_policy": "light_component_package_only; bulky signal, selected-score, selected-scored-row, and prediction files remain server-side with sha256 evidence",
+  "checked_files": [
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/tables/ranking_metrics.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 576,
+      "server_size": 576,
+      "local_sha256": "1bfa47b46c0656afc5842d04b8ad1cc09daa279720c49f5c4e7cdb26898ca70b",
+      "server_sha256": "1bfa47b46c0656afc5842d04b8ad1cc09daa279720c49f5c4e7cdb26898ca70b",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/tables/external_score_coverage.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 272,
+      "server_size": 272,
+      "local_sha256": "e4ab10d4ba3c8705bc1643f3b93b1fca5b78a5d50b433f701704ddf230f53716",
+      "server_sha256": "e4ab10d4ba3c8705bc1643f3b93b1fca5b78a5d50b433f701704ddf230f53716",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/tables/same_candidate_external_baseline_summary.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 1482,
+      "server_size": 1482,
+      "local_sha256": "0028b2a9366832df1bb4e5c2cb342be0db6801af02c9b300839ac0a5e53b9080",
+      "server_sha256": "0028b2a9366832df1bb4e5c2cb342be0db6801af02c9b300839ac0a5e53b9080",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/tables/ranking_eval_records.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 42335228,
+      "server_size": 42335228,
+      "local_sha256": "f344bb33ad83a0a6b43ea0f4427760cb1684c9b6b9a02f62eea67797de384f57",
+      "server_sha256": "f344bb33ad83a0a6b43ea0f4427760cb1684c9b6b9a02f62eea67797de384f57",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/tables/ranking_exposure_distribution.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 63,
+      "server_size": 63,
+      "local_sha256": "3763464eb074e7eff04688c434973c33ca956d34867c15d21da47e23d59ca35a",
+      "server_sha256": "3763464eb074e7eff04688c434973c33ca956d34867c15d21da47e23d59ca35a",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_summary.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/component_ablation_summary.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 4125,
+      "server_size": 4125,
+      "local_sha256": "49c4ec36a8c4f2ad7c1d5033c1a4253921a5eb06696736cb2b22676e1d7b7bef",
+      "server_sha256": "49c4ec36a8c4f2ad7c1d5033c1a4253921a5eb06696736cb2b22676e1d7b7bef",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_summary.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/component_ablation_summary.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 12651,
+      "server_size": 12651,
+      "local_sha256": "eb3f7ffbb22a0907c6513da4857045e4ce042af7055bdbe0477c244af308174b",
+      "server_sha256": "eb3f7ffbb22a0907c6513da4857045e4ce042af7055bdbe0477c244af308174b",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_provenance.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/component_ablation_provenance.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 4324,
+      "server_size": 4324,
+      "local_sha256": "c226f5b5beccb0cf3b8b0191b3b40df5e9eca51c7e5cc8cdcbf1d1297051ae96",
+      "server_sha256": "c226f5b5beccb0cf3b8b0191b3b40df5e9eca51c7e5cc8cdcbf1d1297051ae96",
+      "ok": true
+    },
+    {
+      "rel_path": "selected_test_metrics.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/selected_test_metrics.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 3222,
+      "server_size": 3222,
+      "local_sha256": "6805a4407e059a813a2780187b9f43fd5a5c2a206c682530b5029fdd7c6278e3",
+      "server_sha256": "6805a4407e059a813a2780187b9f43fd5a5c2a206c682530b5029fdd7c6278e3",
+      "ok": true
+    },
+    {
+      "rel_path": "ccrp_internal_provenance.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/ccrp_internal_provenance.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 3785,
+      "server_size": 3785,
+      "local_sha256": "a41e28ed9e243b5f2f87194cc619973d5e804585748a6d8bbc34e0d3dbc4170f",
+      "server_sha256": "a41e28ed9e243b5f2f87194cc619973d5e804585748a6d8bbc34e0d3dbc4170f",
+      "ok": true
+    },
+    {
+      "rel_path": "valid_ccrp_sweep.csv",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/valid_ccrp_sweep.csv",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 2198,
+      "server_size": 2198,
+      "local_sha256": "2b8c990ffa3426058b84bfd23776f70241c0f69bc4a035ff3f77547ebec8c64e",
+      "server_sha256": "2b8c990ffa3426058b84bfd23776f70241c0f69bc4a035ff3f77547ebec8c64e",
+      "ok": true
+    },
+    {
+      "rel_path": "selected_valid_config.json",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/selected_valid_config.json",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 1636,
+      "server_size": 1636,
+      "local_sha256": "3470dcdcaff501db276f0a1c1dc9c99c66c4b36221265cd65e1288aef219c456",
+      "server_sha256": "3470dcdcaff501db276f0a1c1dc9c99c66c4b36221265cd65e1288aef219c456",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_component_ablation.png",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/fig_component_ablation.png",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 115942,
+      "server_size": 115942,
+      "local_sha256": "354ed1852a00a2d9bbca8b9a23a9977610122e4674181751e59fa62141c48a9f",
+      "server_sha256": "354ed1852a00a2d9bbca8b9a23a9977610122e4674181751e59fa62141c48a9f",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_component_ablation.pdf",
+      "server_rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/fig_component_ablation.pdf",
+      "local_present": true,
+      "server_present": true,
+      "local_size": 14903,
+      "server_size": 14903,
+      "local_sha256": "1a425ccbf3bbde28ce2415f120a23fed05b48174b36f8cb7411b0079f073a184",
+      "server_sha256": "1a425ccbf3bbde28ce2415f120a23fed05b48174b36f8cb7411b0079f073a184",
+      "ok": true
+    }
+  ],
+  "server_only_bulk_files": [
+    {
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_toys/test/test_ccrp_signal_rows.csv",
+      "server_present": true,
+      "server_size": 314881619,
+      "server_sha256": "0605a6ec09dc0a45b31e87bfe47c11ef3df074f357e28798f77cc2f5a8e178ac",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    },
+    {
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/ccrp_selected_test_scores.csv",
+      "server_present": true,
+      "server_size": 96773188,
+      "server_sha256": "204be4b39112aa3f62897b71b13800450765c9eee254e637892c07384be6ad21",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    },
+    {
+      "rel_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_toys/ccrp_selected_test_scored_rows.csv",
+      "server_present": true,
+      "server_size": 392807472,
+      "server_sha256": "b46a6813c82db4e4a4571a783ffba90f7aa987a19004a783c0ac7e4f82cc3b3f",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    },
+    {
+      "rel_path": "outputs/toys_ccrp_selected_same_candidate/predictions/rank_predictions.jsonl",
+      "server_present": true,
+      "server_size": 808772768,
+      "server_sha256": "706ad6d20fb1fa3d7bde748db8d1686740033ac68c60776d055f6a1e0f4fd01f",
+      "local_copy_policy": "server_only_bulk_not_in_light_component_package",
+      "ok": true
+    }
+  ]
+}
