@@ -34,7 +34,8 @@ SERVER_COMPARISON_FILES = (
     "manifest_comparison.json",
 )
 CONFIG_FILES = ("config.json", "run_config.json", "selected_valid_config.json", "selected_hyperparameters.json")
-DEFAULT_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
+DEFAULT_CONTROLS = ("eta", "weight_grid_label")
+DIAGNOSTIC_CONTROLS = ("confidence_weight",)
 SEED_KEYS = ("seed", "seeds", "random_seed", "random_seeds", "seed_list")
 HYPERPARAMETER_SUMMARY_AUDIT_COLUMNS = ("audit_ok", "degeneracy_audit_ok", "score_coverage_rate", "candidate_key_count")
 MAX_HYPERPARAMETER_RELATIVE_DROP = 0.05
@@ -993,6 +994,45 @@ def _audit_hyperparameter(
         failures.append("hyperparameter:unexpected_paper_claim_scope")
     if provenance.get("reporting_mode") != "valid_and_test":
         failures.append("hyperparameter:not_valid_and_test")
+    if provenance.get("test_not_used_for_selection") is not True:
+        failures.append("hyperparameter:test_not_used_for_selection_not_true")
+    source_provenance = provenance.get("sweep_source_provenance")
+    if not isinstance(source_provenance, dict) or not source_provenance:
+        failures.append("hyperparameter:missing_sweep_source_provenance")
+        source_provenance = {}
+    else:
+        if source_provenance.get("status_label") != "valid_test_saved_signal_hyperparameter_sweep_ready":
+            failures.append(f"hyperparameter:bad_sweep_source_status:{source_provenance.get('status_label')}")
+        if source_provenance.get("test_not_used_for_selection") is not True:
+            failures.append("hyperparameter:sweep_source_test_not_used_for_selection_not_true")
+        cleanup = source_provenance.get("cleanup_status", {})
+        if not isinstance(cleanup, dict) or not cleanup:
+            failures.append("hyperparameter:missing_cleanup_status")
+        else:
+            for key in (
+                "retained_bulk_scores_csv",
+                "retained_prediction_jsonl",
+                "retained_scored_temp_rows",
+                "retained_checkpoints",
+            ):
+                if cleanup.get(key) is not False:
+                    failures.append(f"hyperparameter_cleanup_retained_bulk:{key}:{cleanup.get(key)}")
+        for key in ("main_controls", "eta_grid", "weight_grid", "expected_candidate_key_count", "tie_break_seed"):
+            if key not in source_provenance:
+                failures.append(f"hyperparameter:sweep_source_missing:{key}")
+        expected_key_count = expected_events * expected_candidates_per_event if expected_events > 0 else 0
+        row_counts = source_provenance.get("row_counts", {})
+        if expected_key_count > 0 and isinstance(row_counts, dict):
+            for key in ("valid_signal_rows", "test_signal_rows", "valid_candidate_rows", "test_candidate_rows"):
+                actual = _as_int(row_counts.get(key), default=-1)
+                if actual != expected_key_count:
+                    failures.append(f"hyperparameter_sweep_source_row_count:{key}:{actual}!={expected_key_count}")
+            for key in ("valid_ranking_events", "test_ranking_events"):
+                actual = _as_int(row_counts.get(key), default=-1)
+                if actual != expected_events:
+                    failures.append(f"hyperparameter_sweep_source_row_count:{key}:{actual}!={expected_events}")
+        elif expected_key_count > 0:
+            failures.append("hyperparameter:missing_sweep_source_row_counts")
     sweep_sha_raw = str(provenance.get("sweep_sha256", "")).strip()
     test_sweep_sha_raw = str(provenance.get("test_sweep_sha256", "")).strip()
     sweep_sha = _clean_sha256(sweep_sha_raw)
@@ -1030,6 +1070,17 @@ def _audit_hyperparameter(
     if 0 < int(audit_summary.get("audited_rows") or 0) < len(summary_rows):
         failures.append(f"hyperparameter:audited_rows_less_than_summary:{audit_summary.get('audited_rows')}<{len(summary_rows)}")
     controls = [str(control) for control in provenance.get("controls", [])]
+    for idx, row in enumerate(summary_rows):
+        control = str(row.get("control", "")).strip()
+        row_kind = str(row.get("row_kind", "")).strip()
+        score_mode = str(row.get("score_mode", "")).strip()
+        if control in set(expected_controls) and row_kind and row_kind != "main_control":
+            failures.append(f"hyperparameter_main_control_bad_row_kind:{idx}:{control}:{row_kind}")
+        if control in set(DIAGNOSTIC_CONTROLS):
+            if row_kind and row_kind != "diagnostic_control":
+                failures.append(f"hyperparameter_diagnostic_bad_row_kind:{idx}:{control}:{row_kind}")
+            if score_mode == "full":
+                failures.append(f"hyperparameter_confidence_weight_full_mode:{idx}")
     summary_value_counts = _hyperparameter_summary_value_counts(
         summary_rows,
         expected_controls=expected_controls,

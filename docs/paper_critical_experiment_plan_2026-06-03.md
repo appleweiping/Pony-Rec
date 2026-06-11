@@ -356,8 +356,10 @@ SRPD-only sweeps:
 Required plots:
 
 - `fig_hyper_eta_curve.pdf/png`
-- `fig_hyper_confidence_weight_curve.pdf/png`
 - `fig_hyper_weight_simplex_or_lines.pdf/png`
+- `fig_hyper_confidence_weight_curve.pdf/png` only as diagnostic
+  `confidence_plus_evidence` sensitivity, not as a main full-mode C-CRP
+  hyperparameter curve.
 - `fig_hyper_temperature_curve.pdf/png` if temperature is an active control
 - SRPD learning-rate/lambda curves only if SRPD is used in the paper story.
 - `ccrp_hyperparameter_curve_summary.csv` and
@@ -366,24 +368,42 @@ Required plots:
 
 Implementation anchor:
 
+- `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py`
 - `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`
 
-Command template after a validation sweep exists:
+Current command template after audited valid/test signal rows exist:
 
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6
+python scripts/analysis/main_build_ccrp_hyperparameter_sweep.py \
+  --domain sports \
+  --valid_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl \
+  --test_ranking_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl \
+  --valid_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv \
+  --test_candidate_items_path outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv \
+  --valid_signal_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/valid/valid_ccrp_signal_rows.csv \
+  --test_signal_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv \
+  --output_dir outputs/summary/paper_critical/hyperparameter_sports \
+  --metric NDCG@10 \
+  --eta_grid 0,0.25,0.5,1,2,4 \
+  --weight_grid "0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4;0.33,0.33,0.34" \
+  --diagnostic_confidence_weights 0.1,0.3,0.5,0.7,0.9 \
+  --expected_events 10000 \
+  --expected_candidates_per_event 101
+
 python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py \
   --domain sports \
-  --sweep_csv outputs/summary/paper_critical/ccrp_ablation_sports/valid_ccrp_sweep.csv \
-  --test_sweep_csv outputs/summary/paper_critical/ccrp_ablation_sports/test_ccrp_sweep.csv \
+  --sweep_csv outputs/summary/paper_critical/hyperparameter_sports/valid_ccrp_hyperparameter_sweep.csv \
+  --test_sweep_csv outputs/summary/paper_critical/hyperparameter_sports/test_ccrp_hyperparameter_sweep.csv \
+  --sweep_provenance_json outputs/summary/paper_critical/hyperparameter_sports/ccrp_hyperparameter_sweep_provenance.json \
   --output_dir outputs/summary/paper_critical/hyperparameter_sports \
   --metric NDCG@10 \
   --score_mode full \
   --ablation full \
   --eta 1.0 \
-  --confidence_weight 0.5 \
+  --confidence_weight 0.7 \
   --weight_grid_label "0.5,0.3,0.2" \
-  --controls eta,confidence_weight,weight_grid_label \
+  --controls eta,weight_grid_label \
   --min_values 3
 ```
 
@@ -494,9 +514,10 @@ explicit `component_ablation_summary.csv` covering every expected ablation, so
 a validation-only sweep cannot be relabeled as completed leave-one-component-out
 evidence. The component audit also checks selected-valid/test artifacts,
 imported same-candidate tables, exact score coverage, and audit/degeneracy
-fields. The hyperparameter audit requires the expected controls
-(`eta`, `confidence_weight`, and `weight_grid_label` by default) with valid and
-test curves, producer audit-summary fields, and package-contained figures.
+fields. The hyperparameter audit requires the main expected controls
+(`eta` and `weight_grid_label`) with valid and test curves, treats
+`confidence_weight` as diagnostic-only under `confidence_plus_evidence`, and
+requires producer audit-summary fields and package-contained figures.
 
 Exclude by default:
 

@@ -57,6 +57,38 @@ def test_build_hyperparameter_summary_requires_three_values(tmp_path):
     ].item() == pytest.approx(0.24)
 
 
+def test_build_hyperparameter_summary_uses_control_column_and_embeds_source_provenance(tmp_path):
+    sweep = tmp_path / "valid_ccrp_hyperparameter_sweep.csv"
+    sweep.write_text(
+        "domain,split,row_kind,control,control_value,score_mode,ablation,eta,confidence_weight,weight_grid_label,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,NDCG@10,HR@10,MRR\n"
+        "sports,valid,main_control,eta,0,full,full,0,0.7,\"0.5,0.3,0.2\",true,true,1.0,1010000,0.20,0.30,0.18\n"
+        "sports,valid,main_control,eta,1,full,full,1,0.7,\"0.5,0.3,0.2\",true,true,1.0,1010000,0.24,0.34,0.20\n"
+        "sports,valid,main_control,eta,2,full,full,2,0.7,\"0.5,0.3,0.2\",true,true,1.0,1010000,0.22,0.32,0.19\n"
+        "sports,valid,main_control,weight_grid_label,\"0.5,0.3,0.2\",full,full,1,0.7,\"0.5,0.3,0.2\",true,true,1.0,1010000,0.24,0.34,0.20\n"
+        "sports,valid,main_control,weight_grid_label,\"0.7,0.2,0.1\",full,full,1,0.7,\"0.7,0.2,0.1\",true,true,1.0,1010000,0.23,0.33,0.19\n"
+        "sports,valid,main_control,weight_grid_label,\"0.4,0.4,0.2\",full,full,1,0.7,\"0.4,0.4,0.2\",true,true,1.0,1010000,0.26,0.36,0.22\n",
+        encoding="utf-8",
+    )
+    source_provenance = tmp_path / "ccrp_hyperparameter_sweep_provenance.json"
+    source_provenance.write_text(
+        '{"status_label":"valid_test_saved_signal_hyperparameter_sweep_ready","test_not_used_for_selection":true}\n',
+        encoding="utf-8",
+    )
+
+    summary, provenance = build_hyperparameter_summary(
+        sweep,
+        sweep_provenance_json=source_provenance,
+        domain="sports",
+        controls=["eta", "weight_grid_label"],
+        min_values=3,
+    )
+
+    assert len(summary[summary["control"] == "eta"]) == 3
+    assert len(summary[summary["control"] == "weight_grid_label"]) == 3
+    assert provenance["test_not_used_for_selection"] is True
+    assert provenance["sweep_source_provenance"]["status_label"] == "valid_test_saved_signal_hyperparameter_sweep_ready"
+
+
 def test_build_hyperparameter_summary_reports_valid_and_test_separately(tmp_path):
     valid = tmp_path / "valid_ccrp_sweep.csv"
     test = tmp_path / "test_ccrp_sweep.csv"

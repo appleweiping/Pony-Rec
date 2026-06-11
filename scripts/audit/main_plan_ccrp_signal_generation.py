@@ -20,7 +20,7 @@ DEFAULT_CCRP_ABLATIONS = (
     "without_counterevidence",
     "without_risk_penalty",
 )
-DEFAULT_HYPERPARAMETER_CONTROLS = ("eta", "confidence_weight", "weight_grid_label")
+DEFAULT_HYPERPARAMETER_CONTROLS = ("eta", "weight_grid_label")
 
 
 def parse_args() -> argparse.Namespace:
@@ -411,10 +411,6 @@ def build_domain_plan(
                     test_signal,
                     "--output_dir",
                     selector_out,
-                    "--score_modes",
-                    "confidence_only,evidence_only,confidence_plus_evidence,full",
-                    "--ablations",
-                    ",".join(DEFAULT_CCRP_ABLATIONS),
                     "--etas",
                     "0.5,1.0,2.0",
                     "--confidence_weights",
@@ -424,6 +420,40 @@ def build_domain_plan(
                     "--selection_metric",
                     selection_metric,
                     "--import_scores",
+                ]
+            ),
+            "build_hyperparameter_sweep_template": _line_command(
+                [
+                    "python",
+                    "scripts/analysis/main_build_ccrp_hyperparameter_sweep.py",
+                    "--domain",
+                    domain,
+                    "--valid_ranking_path",
+                    _ranking_path(domain, "valid"),
+                    "--test_ranking_path",
+                    _ranking_path(domain, "test"),
+                    "--valid_candidate_items_path",
+                    _candidate_path(domain, "valid"),
+                    "--test_candidate_items_path",
+                    _candidate_path(domain, "test"),
+                    "--valid_signal_path",
+                    valid_signal,
+                    "--test_signal_path",
+                    test_signal,
+                    "--output_dir",
+                    hyper_out,
+                    "--metric",
+                    selection_metric,
+                    "--eta_grid",
+                    "0,0.25,0.5,1,2,4",
+                    "--weight_grid",
+                    "0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4;0.33,0.33,0.34",
+                    "--diagnostic_confidence_weights",
+                    "0.1,0.3,0.5,0.7,0.9",
+                    "--expected_events",
+                    str(expected_events),
+                    "--expected_candidates_per_event",
+                    str(expected_candidates_per_event),
                 ]
             ),
             "build_component_ablation_summary_template": _line_command(
@@ -475,7 +505,11 @@ def build_domain_plan(
                     "python",
                     "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py",
                     "--sweep_csv",
-                    f"{selector_out}/valid_ccrp_sweep.csv",
+                    f"{hyper_out}/valid_ccrp_hyperparameter_sweep.csv",
+                    "--test_sweep_csv",
+                    f"{hyper_out}/test_ccrp_hyperparameter_sweep.csv",
+                    "--sweep_provenance_json",
+                    f"{hyper_out}/ccrp_hyperparameter_sweep_provenance.json",
                     "--output_dir",
                     hyper_out,
                     "--domain",
@@ -486,6 +520,10 @@ def build_domain_plan(
                     "full",
                     "--ablation",
                     "full",
+                    "--confidence_weight",
+                    "0.7",
+                    "--controls",
+                    ",".join(DEFAULT_HYPERPARAMETER_CONTROLS),
                 ]
             ),
             "audit_component_ablation_package_template": _module_package_audit_command(
@@ -682,7 +720,10 @@ def guarded_shell_script(plan: dict[str, Any]) -> str:
                 f"# {domain}: audit the observation/motivation module package before paper use.",
                 domain_plan["commands"]["audit_observation_package_template"],
                 "",
-                f"# {domain}: plot validation hyperparameter curves.",
+                f"# {domain}: build valid/test hyperparameter sweep CSVs from audited saved signal rows.",
+                domain_plan["commands"]["build_hyperparameter_sweep_template"],
+                "",
+                f"# {domain}: plot valid/test hyperparameter curves.",
                 domain_plan["commands"]["plot_hyperparameter_curves_template"],
                 "",
                 f"# {domain}: audit the hyperparameter module package before paper use.",

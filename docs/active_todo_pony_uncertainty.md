@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-11 19:10 CEST
+Last updated: 2026-06-11 20:58 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -120,9 +120,28 @@ cycle.
   `python scripts\audit\main_project_bootstrap.py` both report
   `project_readiness_ok=True`; the readiness audit now checks the current
   `scripts/` layout rather than retired root script paths.
-- Next bounded action: build real hyperparameter curves from the now-complete
-  Sports/Toys/Home/Tools signal and selector packages, then run the Phase 2.5
-  hyperparameter package audits and post-module review. Do not rerun
+- Hyperparameter-module execution support was hardened on 2026-06-11 before
+  launching any server sweep. New entrypoint
+  `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py` builds valid/test
+  sweep CSVs from saved full-scale signal rows only; it does not query an LLM,
+  import scores, or retain per-grid score/prediction dumps. Main controls are
+  `eta` and `weight_grid_label`; `confidence_weight` is diagnostic-only under
+  `confidence_plus_evidence` and is rejected if presented as a full-mode main
+  curve. The guarded plan now calls this saved-signal sweep builder before
+  `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`, passes valid/test
+  sweep provenance, and no longer emits stale selector flags
+  `--score_modes`/`--ablations`. Package audit now requires
+  `test_not_used_for_selection=true`, sweep-source provenance, exact source
+  row counts, cleanup status proving no bulk sweep artifacts were retained,
+  exact coverage/audit/degeneracy flags, and fail-closed four-domain-compatible
+  controls. Focused tests passed:
+  `python -m pytest tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_hyperparameter_sweep.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py -q`
+  -> `58 passed`.
+- Next bounded action: run the required design/code re-review for the
+  hyperparameter module after this hardening, then build real hyperparameter
+  curves from the now-complete Sports/Toys/Home/Tools signal packages on the
+  server only if the review gate clears. After each domain, run the Phase 2.5
+  hyperparameter package audit and then post-module review. Do not rerun
   observation or component ablation unless a concrete audit failure is found.
   The selector import command now points to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py` and includes
@@ -2949,9 +2968,10 @@ comparison. For component ablation, it requires an explicit
 ablation and full metrics, so the validation sweep alone cannot be called a
 completed ablation study; it also checks selected-valid/test artifacts,
 imported same-candidate tables, exact coverage, and audit/degeneracy flags.
-For hyperparameter analysis, it requires the expected controls (`eta`,
-`confidence_weight`, and `weight_grid_label` by default), valid and test
-curves, producer audit-summary fields, and package-contained figures. Focused
+For hyperparameter analysis, it now requires the main expected controls (`eta`
+and `weight_grid_label`), treats `confidence_weight` as diagnostic-only under
+`confidence_plus_evidence`, and requires valid and test curves, producer
+audit-summary fields, and package-contained figures. Focused
 verification:
 `python -m pytest tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py tests\test_uncertainty_observation_study.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_build_ccrp_component_inventory.py`
 (`27 passed`). This does not unblock Phase 2.5 execution while disk is below

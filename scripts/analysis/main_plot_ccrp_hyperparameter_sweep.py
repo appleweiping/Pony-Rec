@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Build paper-critical C-CRP hyperparameter curve tables and figures "
-            "from valid_ccrp_sweep.csv produced by main_select_ccrp_variant_on_valid.py."
+            "from saved-signal valid/test sweep CSVs."
         )
     )
     parser.add_argument("--sweep_csv", required=True)
@@ -32,6 +32,11 @@ def parse_args() -> argparse.Namespace:
             "reported separately for valid and test rather than validation-only."
         ),
     )
+    parser.add_argument(
+        "--sweep_provenance_json",
+        default="",
+        help="Optional provenance emitted by main_build_ccrp_hyperparameter_sweep.py.",
+    )
     parser.add_argument("--output_dir", required=True)
     parser.add_argument("--metric", default="NDCG@10")
     parser.add_argument("--domain", default="")
@@ -42,8 +47,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--weight_grid_label", default="0.5,0.3,0.2")
     parser.add_argument(
         "--controls",
-        default="eta,confidence_weight,weight_grid_label",
-        help="Comma-separated controls to plot: eta, confidence_weight, weight_grid_label.",
+        default="eta,weight_grid_label",
+        help=(
+            "Comma-separated controls to plot. eta and weight_grid_label are main "
+            "C-CRP controls; confidence_weight is diagnostic for confidence_plus_evidence."
+        ),
     )
     parser.add_argument("--min_values", type=int, default=3)
     parser.add_argument("--allow_incomplete", action="store_true")
@@ -86,7 +94,7 @@ def _parse_controls(value: str) -> list[str]:
     unknown = sorted(set(controls) - allowed)
     if unknown:
         raise ValueError(f"Unsupported controls: {unknown}; expected subset of {sorted(allowed)}")
-    return controls or ["eta", "confidence_weight", "weight_grid_label"]
+    return controls or ["eta", "weight_grid_label"]
 
 
 def sha256_file(path: str | Path) -> str:
@@ -129,6 +137,18 @@ def _load_sweeps(valid_path: str | Path, test_path: str | Path | None = None) ->
         test["split"] = "test"
         frames.append(test)
     return pd.concat(frames, ignore_index=True)
+
+
+def _load_optional_json(path: str | Path | None) -> dict[str, Any]:
+    if not path:
+        return {}
+    source = Path(path)
+    if not source.exists():
+        raise FileNotFoundError(source)
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError(f"expected JSON object: {source}")
+    return payload
 
 
 def _filter_audited_rows(df: pd.DataFrame, *, require_audit_ok: bool) -> tuple[pd.DataFrame, dict[str, Any]]:
@@ -205,7 +225,10 @@ def _curve_source(
     confidence_weight: float,
     weight_grid_label: str,
 ) -> pd.DataFrame:
-    out = _filter_exact(df, "ablation", ablation)
+    out = df.copy()
+    if "control" in out.columns:
+        out = _filter_exact(out, "control", control)
+    out = _filter_exact(out, "ablation", ablation)
     if control == "confidence_weight":
         out = _filter_exact(out, "score_mode", "confidence_plus_evidence")
         out = _filter_exact(out, "eta", eta)
@@ -351,6 +374,7 @@ def build_hyperparameter_summary(
     sweep_csv: str | Path,
     *,
     test_sweep_csv: str | Path | None = None,
+    sweep_provenance_json: str | Path | None = None,
     domain: str = "",
     metric: str = "NDCG@10",
     score_mode: str = "full",
@@ -369,11 +393,12 @@ def build_hyperparameter_summary(
     test_path = Path(test_sweep_csv) if test_sweep_csv else None
     if test_path and not test_path.exists():
         raise FileNotFoundError(test_path)
+    sweep_provenance = _load_optional_json(sweep_provenance_json)
     df = _load_sweeps(path, test_path)
     if df.empty:
         raise ValueError(f"Empty sweep CSV: {path}")
     audited, audit_summary = _filter_audited_rows(df, require_audit_ok=require_audit_ok)
-    controls = controls or ["eta", "confidence_weight", "weight_grid_label"]
+    controls = controls or ["eta", "weight_grid_label"]
 
     summary_frames: list[pd.DataFrame] = []
     control_reports: list[dict[str, Any]] = []
@@ -451,6 +476,10 @@ def build_hyperparameter_summary(
         "audit_summary": audit_summary,
         "control_reports": control_reports,
         "stability_report": stability_report,
+        "test_not_used_for_selection": bool(sweep_provenance.get("test_not_used_for_selection"))
+        if sweep_provenance
+        else bool(test_path),
+        "sweep_source_provenance": sweep_provenance,
     }
     return summary, provenance
 
@@ -524,6 +553,7 @@ def main() -> None:
     summary, provenance = build_hyperparameter_summary(
         args.sweep_csv,
         test_sweep_csv=args.test_sweep_csv or None,
+        sweep_provenance_json=args.sweep_provenance_json or None,
         domain=args.domain,
         metric=args.metric,
         score_mode=args.score_mode,

@@ -497,10 +497,10 @@ ablation it requires a dedicated `component_ablation_summary.csv` with all
 expected leave-one-component-out rows; the existing validation sweep alone is
 not sufficient evidence for the component study. It also checks selected
 valid/test artifacts, imported same-candidate tables, exact score coverage, and
-audit/degeneracy flags. For hyperparameter analysis, it requires expected
-controls (`eta`, `confidence_weight`, `weight_grid_label` by default), valid
-and test curves, producer audit-summary fields, and figures contained in the
-package.
+audit/degeneracy flags. For hyperparameter analysis, it requires the main
+controls (`eta`, `weight_grid_label`), treats `confidence_weight` as
+diagnostic-only under `confidence_plus_evidence`, and requires valid/test
+curves, producer audit-summary fields, and figures contained in the package.
 
 ## Stable Agent Roles
 
@@ -1259,6 +1259,17 @@ not as a reason to silently rerun completed metric rows.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.
+   2026-06-11 update: observation/motivation and four-domain component-ablation
+   packages are closed as paper-critical supporting evidence under their
+   scoped labels. Hyperparameter-curve execution support is hardened but not
+   yet evidence-complete: use
+   `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py` to build
+   valid/test sweeps from audited saved signal rows, then
+   `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py` with the sweep
+   provenance. Main controls are `eta` and `weight_grid_label`;
+   `confidence_weight` is diagnostic-only for `confidence_plus_evidence`.
+   Re-run the required design/code review before launching the full-scale
+   server sweep.
 4. Full comparison table + statistical tests (Phase 3)
 5. Paper writing with ARIS skill (Phase 4)
 6. GPT-5.5/Codex review cycle until 8/10 (Phase 5)

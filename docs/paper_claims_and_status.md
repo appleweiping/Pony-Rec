@@ -701,9 +701,10 @@ also fails closed if a component-ablation package lacks an explicit
 ablation with full metrics and row counts, so a validation-only C-CRP sweep
 cannot be mislabeled as completed component evidence. The component gate also
 checks selected-valid/test artifacts, imported same-candidate tables, exact
-coverage, and audit/degeneracy flags. The hyperparameter gate requires the
-expected controls (`eta`, `confidence_weight`, and `weight_grid_label` by
-default), valid and test curves, producer audit-summary fields, and
+coverage, and audit/degeneracy flags. The hyperparameter gate now requires the
+main expected controls (`eta` and `weight_grid_label`), treats
+`confidence_weight` as diagnostic-only under `confidence_plus_evidence`, and
+requires valid and test curves, producer audit-summary fields, and
 package-contained figures. This is a packaging gate, not a completed Phase 2.5
 result; the modules still need full-scale signal rows and server execution
 after a fresh process/GPU/disk preflight passes.
@@ -1095,6 +1096,22 @@ the per-module tri-reviewer review-as-you-go pass (Codex GPT xhigh + GPT-5.5
 xhigh + a second Claude Opus 4.8) with no unresolved major objection. This
 per-module cadence replaces the prior single end-of-project GPT-5.5/Codex xhigh
 ≥ 8/10 gate.
+
+2026-06-11 hyperparameter-module status: execution support is hardened, but no
+paper-facing hyperparameter evidence has been run or accepted yet. The new
+saved-signal entrypoint
+`scripts/analysis/main_build_ccrp_hyperparameter_sweep.py` produces valid/test
+sweep CSVs and provenance from already audited full-scale C-CRP signal rows
+without LLM re-query, score import, or retained per-grid prediction/score
+dumps. The main controls are `eta` and `weight_grid_label`; `confidence_weight`
+is diagnostic-only for `confidence_plus_evidence` and must not be used as a
+full-mode main C-CRP curve. The package audit now requires
+`test_not_used_for_selection=true`, sweep-source provenance, exact valid/test
+row counts, cleanup status proving no bulk sweep artifacts remain, coverage
+`1.0`, and audit/degeneracy flags. Focused checks passed on 2026-06-11:
+`python -m pytest tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_hyperparameter_sweep.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py -q`
+-> `58 passed`. Before launching the full-scale server sweep, rerun the
+required design/code review to clear the earlier engineering reviewer block.
 
 ### Remaining for paper submission
 

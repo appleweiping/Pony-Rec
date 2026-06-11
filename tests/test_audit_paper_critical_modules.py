@@ -121,6 +121,7 @@ def _seed_guarded_plan(root: Path) -> None:
         "audit_component_ablation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module component_ablation",
         "build_observation_study_template": "python scripts/analysis/main_build_uncertainty_observation_study.py",
         "audit_observation_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module observation_motivation",
+        "build_hyperparameter_sweep_template": "python scripts/analysis/main_build_ccrp_hyperparameter_sweep.py",
         "plot_hyperparameter_curves_template": "python scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py",
         "audit_hyperparameter_package_template": "python scripts/audit/main_audit_phase2_5_module_package.py --module hyperparameter_analysis",
     }
@@ -199,20 +200,38 @@ def _seed_paper_critical_support_scripts(root: Path) -> None:
         "selected_test_metrics.csv\n"
         "ccrp_hyperparameter_curve_summary.csv\n"
         "ccrp_hyperparameter_curve_provenance.json\n"
-        "test_sweep_sha256\n",
+        "test_sweep_sha256\n"
+        "sweep_source_provenance\n"
+        "test_not_used_for_selection\n"
+        "retained_scored_temp_rows\n"
+        "DEFAULT_CONTROLS = (\"eta\", \"weight_grid_label\")\n",
+    )
+    _write(
+        root / "scripts/analysis/main_build_ccrp_hyperparameter_sweep.py",
+        "valid_ccrp_hyperparameter_sweep.csv\n"
+        "test_ccrp_hyperparameter_sweep.csv\n"
+        "ccrp_hyperparameter_sweep_provenance.json\n"
+        "test_not_used_for_selection\n"
+        "MAIN_CONTROLS = (\"eta\", \"weight_grid_label\")\n"
+        "DIAGNOSTIC_CONTROLS = (\"confidence_weight\",)\n"
+        "retained_scored_temp_rows\n"
+        "degeneracy_audit_ok\n"
+        "score_coverage_rate\n",
     )
     _write(
         root / "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py",
         "--test_sweep_csv\n"
+        "--sweep_provenance_json\n"
         "--require_audit_ok\n"
         "paper_critical_hyperparameter_curve_ready\n"
         "valid_and_test_stability_curve_candidate\n"
         "test_sweep_sha256\n"
+        "sweep_source_provenance\n"
         "audit_summary\n"
         "ccrp_hyperparameter_curve_summary.csv\n"
         "ccrp_hyperparameter_curve_provenance.json\n"
         "fig_hyper_eta_curve\n"
-        "eta,confidence_weight,weight_grid_label\n",
+        "eta,weight_grid_label\n",
     )
 
 

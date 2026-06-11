@@ -16,6 +16,7 @@ COMPONENT_INVENTORY_DIR = PAPER_CRITICAL_DIR / "ccrp_component_inventory"
 OBSERVATION_BUILDER_SCRIPT = Path("scripts/analysis/main_build_uncertainty_observation_study.py")
 SELECTOR_SCRIPT = Path("scripts/misc/main_select_ccrp_variant_on_valid.py")
 COMPONENT_BUILDER_SCRIPT = Path("scripts/analysis/main_build_ccrp_component_ablation_summary.py")
+HYPERPARAMETER_SWEEP_BUILDER_SCRIPT = Path("scripts/analysis/main_build_ccrp_hyperparameter_sweep.py")
 HYPERPARAMETER_PLOTTER_SCRIPT = Path("scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py")
 MODULE_PACKAGE_AUDIT_SCRIPT = Path("scripts/audit/main_audit_phase2_5_module_package.py")
 DOMAINS = ("sports", "toys", "home", "tools")
@@ -77,6 +78,7 @@ REQUIRED_GUARDED_PLAN_COMMAND_KEYS = (
     "audit_component_ablation_package_template",
     "build_observation_study_template",
     "audit_observation_package_template",
+    "build_hyperparameter_sweep_template",
     "plot_hyperparameter_curves_template",
     "audit_hyperparameter_package_template",
 )
@@ -461,6 +463,7 @@ def audit_component_ablation_execution_support(root: Path) -> dict[str, Any]:
 
 def audit_hyperparameter_execution_support(root: Path) -> dict[str, Any]:
     files = {
+        "sweep_builder": root / HYPERPARAMETER_SWEEP_BUILDER_SCRIPT,
         "plotter": root / HYPERPARAMETER_PLOTTER_SCRIPT,
         "package_audit": root / MODULE_PACKAGE_AUDIT_SCRIPT,
     }
@@ -471,25 +474,51 @@ def audit_hyperparameter_execution_support(root: Path) -> dict[str, Any]:
         elif path.stat().st_size <= 0:
             failures.append(f"empty_{label}_script:{path}")
 
+    builder_text = files["sweep_builder"].read_text(encoding="utf-8", errors="replace") if files["sweep_builder"].exists() else ""
+    required_builder_snippets = {
+        "valid_sweep_output": "valid_ccrp_hyperparameter_sweep.csv",
+        "test_sweep_output": "test_ccrp_hyperparameter_sweep.csv",
+        "source_provenance": "ccrp_hyperparameter_sweep_provenance.json",
+        "test_not_used": "test_not_used_for_selection",
+        "main_controls": 'MAIN_CONTROLS = ("eta", "weight_grid_label")',
+        "diagnostic_confidence": 'DIAGNOSTIC_CONTROLS = ("confidence_weight",)',
+        "cleanup_status": "retained_scored_temp_rows",
+        "degeneracy_gate": "degeneracy_audit_ok",
+        "coverage_gate": "score_coverage_rate",
+    }
+    for name, snippet in required_builder_snippets.items():
+        if snippet not in builder_text:
+            failures.append(f"hyperparameter_builder_missing_guard:{name}")
+
     plotter_text = files["plotter"].read_text(encoding="utf-8", errors="replace") if files["plotter"].exists() else ""
     required_plotter_snippets = {
         "test_sweep_arg": "--test_sweep_csv",
+        "sweep_provenance_arg": "--sweep_provenance_json",
         "audit_requirement": "--require_audit_ok",
         "ready_status": "paper_critical_hyperparameter_curve_ready",
         "claim_scope": "valid_and_test_stability_curve_candidate",
         "test_sweep_hash": "test_sweep_sha256",
+        "source_provenance": "sweep_source_provenance",
         "audit_summary": "audit_summary",
         "summary_csv": "ccrp_hyperparameter_curve_summary.csv",
         "provenance_json": "ccrp_hyperparameter_curve_provenance.json",
         "figure_outputs": "fig_hyper_eta_curve",
-        "default_controls": "eta,confidence_weight,weight_grid_label",
+        "default_controls": "eta,weight_grid_label",
     }
     for name, snippet in required_plotter_snippets.items():
         if snippet not in plotter_text:
             failures.append(f"hyperparameter_plotter_missing_guard:{name}")
 
     package_text = files["package_audit"].read_text(encoding="utf-8", errors="replace") if files["package_audit"].exists() else ""
-    for snippet in ("ccrp_hyperparameter_curve_summary.csv", "ccrp_hyperparameter_curve_provenance.json", "test_sweep_sha256"):
+    for snippet in (
+        "ccrp_hyperparameter_curve_summary.csv",
+        "ccrp_hyperparameter_curve_provenance.json",
+        "test_sweep_sha256",
+        "sweep_source_provenance",
+        "test_not_used_for_selection",
+        "retained_scored_temp_rows",
+        'DEFAULT_CONTROLS = ("eta", "weight_grid_label")',
+    ):
         if snippet not in package_text:
             failures.append(f"package_audit_missing_hyperparameter_requirement:{snippet}")
 
@@ -497,6 +526,7 @@ def audit_hyperparameter_execution_support(root: Path) -> dict[str, Any]:
         "status": "hyperparameter_execution_support_ready" if not failures else "incomplete",
         "paper_claim_ready": False,
         "files": {label: str(path) for label, path in files.items()},
+        "required_builder_checks": sorted(required_builder_snippets),
         "required_plotter_checks": sorted(required_plotter_snippets),
         "failures": failures,
     }

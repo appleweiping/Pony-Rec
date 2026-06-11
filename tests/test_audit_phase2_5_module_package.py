@@ -36,7 +36,7 @@ def _json(path: Path, payload: dict) -> Path:
     return _write(path, json.dumps(payload, indent=2) + "\n")
 
 
-def _stability_report(controls: tuple[str, ...] = ("eta", "confidence_weight", "weight_grid_label")) -> list[dict[str, object]]:
+def _stability_report(controls: tuple[str, ...] = ("eta", "weight_grid_label")) -> list[dict[str, object]]:
     return [
         {
             "control": control,
@@ -463,16 +463,18 @@ def _complete_hyperparameter_package(root: Path) -> None:
     _general_files(root)
     rows = []
     for split in ("valid", "test"):
-        for control in ("eta", "confidence_weight", "weight_grid_label"):
+        for control in ("eta", "weight_grid_label"):
             for value in ("0.5", "1.0", "2.0"):
-                rows.append(f"{split},{control},{value},NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n")
+                rows.append(
+                    f"{split},main_control,{control},{value},full,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+                )
     _write(
         root / "ccrp_hyperparameter_curve_summary.csv",
-        "split,control,control_value,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
+        "split,row_kind,control,control_value,score_mode,metric_name,metric_value,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,candidate_rows_for_value\n"
         + "".join(rows),
     )
     figures = []
-    for stem in ("fig_hyper_eta_curve", "fig_hyper_confidence_weight_curve", "fig_hyper_weight_simplex_or_lines"):
+    for stem in ("fig_hyper_eta_curve", "fig_hyper_weight_simplex_or_lines"):
         for suffix, body in (("png", "png"), ("pdf", "%PDF")):
             name = f"{stem}.{suffix}"
             figures.append(name)
@@ -488,22 +490,46 @@ def _complete_hyperparameter_package(root: Path) -> None:
             "command": "python hyper.py",
             "sweep_sha256": TEST_SHA256,
             "test_sweep_sha256": TEST_SHA256_B,
+            "test_not_used_for_selection": True,
             "metric": "NDCG@10",
             "min_values": 3,
-            "controls": ["eta", "confidence_weight", "weight_grid_label"],
+            "controls": ["eta", "weight_grid_label"],
             "filters": {"score_mode": "full", "ablation": "full"},
             "audit_summary": {
                 "require_audit_ok": True,
                 "missing_audit_columns": [],
-                "audited_rows": 18,
+                "audited_rows": 12,
                 "dropped_audit_rows": 0,
             },
             "control_reports": [
                 {"split": split, "control": control, "curve_values": 3, "meets_min_values": True}
                 for split in ("valid", "test")
-                for control in ("eta", "confidence_weight", "weight_grid_label")
+                for control in ("eta", "weight_grid_label")
             ],
             "stability_report": _stability_report(),
+            "sweep_source_provenance": {
+                "status_label": "valid_test_saved_signal_hyperparameter_sweep_ready",
+                "test_not_used_for_selection": True,
+                "main_controls": ["eta", "weight_grid_label"],
+                "eta_grid": [0.5, 1.0, 2.0],
+                "weight_grid": ["0.5,0.3,0.2", "0.7,0.2,0.1", "0.4,0.4,0.2"],
+                "expected_candidate_key_count": DEFAULT_KEY_COUNT,
+                "tie_break_seed": 20260607,
+                "row_counts": {
+                    "valid_signal_rows": DEFAULT_KEY_COUNT,
+                    "test_signal_rows": DEFAULT_KEY_COUNT,
+                    "valid_candidate_rows": DEFAULT_KEY_COUNT,
+                    "test_candidate_rows": DEFAULT_KEY_COUNT,
+                    "valid_ranking_events": 10000,
+                    "test_ranking_events": 10000,
+                },
+                "cleanup_status": {
+                    "retained_bulk_scores_csv": False,
+                    "retained_prediction_jsonl": False,
+                    "retained_scored_temp_rows": False,
+                    "retained_checkpoints": False,
+                },
+            },
             "figure_paths": figures,
         },
     )
@@ -518,11 +544,52 @@ def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
     assert audit["paper_claim_ready"] is True
 
 
+def test_hyperparameter_package_audit_requires_sweep_source_provenance(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance.pop("sweep_source_provenance")
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter:missing_sweep_source_provenance" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_retained_bulk_sweep_outputs(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_provenance.json"
+    provenance = json.loads(path.read_text(encoding="utf-8"))
+    provenance["sweep_source_provenance"]["cleanup_status"]["retained_scored_temp_rows"] = True
+    _json(path, provenance)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_cleanup_retained_bulk:retained_scored_temp_rows:True" in audit["failures"]
+
+
+def test_hyperparameter_package_audit_rejects_confidence_weight_as_full_mode(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "ccrp_hyperparameter_curve_summary.csv"
+    path.write_text(
+        path.read_text(encoding="utf-8")
+        + f"test,diagnostic_control,confidence_weight,0.7,full,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n",
+        encoding="utf-8",
+    )
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "hyperparameter_confidence_weight_full_mode:12" in audit["failures"]
+
+
 def test_hyperparameter_package_audit_rejects_missing_row_audit_columns(tmp_path):
     _complete_hyperparameter_package(tmp_path)
     rows = []
     for split in ("valid", "test"):
-        for control in ("eta", "confidence_weight", "weight_grid_label"):
+        for control in ("eta", "weight_grid_label"):
             for value in ("0.5", "1.0", "2.0"):
                 rows.append(f"{split},{control},{value},NDCG@10,0.2\n")
     _write(
@@ -642,20 +709,24 @@ def test_hyperparameter_package_audit_rejects_duplicate_and_extra_stability_cont
 def test_hyperparameter_package_audit_rejects_test_best_of_many_curve_points(tmp_path):
     _complete_hyperparameter_package(tmp_path)
     text = (tmp_path / "ccrp_hyperparameter_curve_summary.csv").read_text(encoding="utf-8")
-    text = text.replace(f"test,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1", f"test,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},2", 1)
+    text = text.replace(
+        f"test,main_control,eta,0.5,full,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1",
+        f"test,main_control,eta,0.5,full,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},2",
+        1,
+    )
     (tmp_path / "ccrp_hyperparameter_curve_summary.csv").write_text(text, encoding="utf-8")
 
     audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
 
     assert audit["ok"] is False
-    assert "hyperparameter_summary_candidate_rows_for_value:9:2!=1" in audit["failures"]
+    assert "hyperparameter_summary_candidate_rows_for_value:6:2!=1" in audit["failures"]
 
 
 def test_hyperparameter_package_audit_rejects_duplicate_curve_points(tmp_path):
     _complete_hyperparameter_package(tmp_path)
     path = tmp_path / "ccrp_hyperparameter_curve_summary.csv"
     text = path.read_text(encoding="utf-8")
-    duplicate = f"valid,eta,0.5,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
+    duplicate = f"valid,main_control,eta,0.5,full,NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n"
     path.write_text(text + duplicate, encoding="utf-8")
 
     audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
@@ -681,7 +752,7 @@ def test_hyperparameter_package_audit_rejects_unknown_metric_name(tmp_path):
 def test_hyperparameter_package_audit_rejects_summary_missing_test_rows(tmp_path):
     _complete_hyperparameter_package(tmp_path)
     rows = []
-    for control in ("eta", "confidence_weight", "weight_grid_label"):
+    for control in ("eta", "weight_grid_label"):
         for value in ("0.5", "1.0", "2.0"):
             rows.append(f"valid,{control},{value},NDCG@10,0.2,true,true,1.0,{DEFAULT_KEY_COUNT},1\n")
     _write(
@@ -793,7 +864,6 @@ def test_hyperparameter_package_audit_requires_expected_controls(tmp_path):
     audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
 
     assert audit["ok"] is False
-    assert "hyperparameter_missing_expected_control:confidence_weight" in audit["failures"]
     assert "hyperparameter_missing_expected_control:weight_grid_label" in audit["failures"]
 
 

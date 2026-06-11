@@ -89,9 +89,20 @@ def test_domain_plan_uses_placeholders_and_full_scale_counts():
     observation = domain_plan["commands"]["build_observation_study_template"]
     assert "ccrp_selected_test_scored_rows.csv" in observation
     assert "main_build_uncertainty_observation_study.py" in observation
+    hyper_builder = domain_plan["commands"]["build_hyperparameter_sweep_template"]
+    assert "main_build_ccrp_hyperparameter_sweep.py" in hyper_builder
+    assert "--valid_signal_path TODO_VALID_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in hyper_builder
+    assert "--test_signal_path TODO_TEST_SPORTS_CCRP_SIGNAL_JSONL_OR_CSV" in hyper_builder
+    assert "--diagnostic_confidence_weights" in hyper_builder
+    hyper_plotter = domain_plan["commands"]["plot_hyperparameter_curves_template"]
+    assert "valid_ccrp_hyperparameter_sweep.csv" in hyper_plotter
+    assert "test_ccrp_hyperparameter_sweep.csv" in hyper_plotter
+    assert "--sweep_provenance_json" in hyper_plotter
+    assert "--controls eta,weight_grid_label" in hyper_plotter
     assert "--module observation_motivation" in domain_plan["commands"]["audit_observation_package_template"]
     assert "--module hyperparameter_analysis" in domain_plan["commands"]["audit_hyperparameter_package_template"]
     assert "--expected_control eta" in domain_plan["commands"]["audit_hyperparameter_package_template"]
+    assert "--expected_control confidence_weight" not in domain_plan["commands"]["audit_hyperparameter_package_template"]
     assert "matching baseline Python process" in domain_plan["execution_gates"][0]
     assert "positive_item_index" in " ".join(domain_plan["execution_gates"])
     assert "local signal package sync/audit" in " ".join(domain_plan["execution_gates"])
@@ -122,4 +133,6 @@ def test_guarded_shell_exits_before_any_command():
     assert shell.index("valid_ccrp_signal_source_audit.json") < shell.index("main_select_ccrp_variant_on_valid.py")
     assert "main_sync_ccrp_signal_evidence_package.py" not in shell
     assert "main_build_ccrp_component_ablation_summary.py" in shell
+    assert "main_build_ccrp_hyperparameter_sweep.py" in shell
+    assert shell.index("main_build_ccrp_hyperparameter_sweep.py") < shell.index("main_plot_ccrp_hyperparameter_sweep.py")
     assert "main_audit_phase2_5_module_package.py" in shell
