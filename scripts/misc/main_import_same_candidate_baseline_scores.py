@@ -38,6 +38,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--missing_score", type=float, default=-1.0e12)
     parser.add_argument("--k", type=int, default=10)
     parser.add_argument(
+        "--tie_break_seed",
+        type=int,
+        default=None,
+        help=(
+            "Optional order-independent hash tie-break seed for methods with coarse/tied scores. "
+            "Default preserves original candidate-order tie-breaking for external baselines."
+        ),
+    )
+    parser.add_argument(
         "--ks",
         default="5,10,20",
         help="Optional comma-separated metric cutoffs to export alongside the primary --k summary.",
@@ -369,6 +378,7 @@ def main() -> None:
         source_event_col=args.source_event_col,
         missing_score=args.missing_score,
         k=export_topk_k,
+        tie_break_seed=args.tie_break_seed,
     )
     score_summary["score_rows_loaded"] = len(score_rows)
 

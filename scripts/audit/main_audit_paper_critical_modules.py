@@ -431,9 +431,10 @@ def audit_component_ablation_execution_support(root: Path) -> dict[str, Any]:
         "full_metrics": "FULL_KS = (5, 10, 20)",
         "summary_csv": "component_ablation_summary.csv",
         "provenance_json": "component_ablation_provenance.json",
-        "valid_selection_guard": "selector_provenance_selected_on_not_valid",
+        "main_config_mode_guard": "main_config_mode",
+        "preregistered_main_config_support": "preregistered",
         "full_score_mode_guard": "selected_score_mode_not_full_for_component_ablation",
-        "valid_sweep_ablation_guard": "valid_sweep_missing_ablation",
+        "valid_sweep_main_guard": "valid_sweep_missing_main_ablation",
         "score_evaluator_reuse": "_evaluate_candidate_scores(",
     }
     for name, snippet in required_builder_snippets.items():

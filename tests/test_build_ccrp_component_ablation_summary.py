@@ -57,9 +57,18 @@ def _seed_selector_package(root):
         root / "ccrp_internal_provenance.json",
         {
             "domain": "toy",
+            "main_config_mode": "valid_selected",
             "selected_on": "valid",
             "selection_metric": "NDCG@10",
             "selected_valid_NDCG@10": 0.8,
+            "score_mode": "full",
+            "ablation": "full",
+            "eta": 1.0,
+            "confidence_weight": 0.7,
+            "weight_boundary": 0.5,
+            "weight_calibration_gap": 0.3,
+            "weight_evidence": 0.2,
+            "weight_grid_label": "0.5,0.3,0.2",
             "test_ranking_path": str(ranking),
             "test_candidate_items_path": str(candidates),
             "test_signal_path": str(signal),
@@ -70,6 +79,44 @@ def _seed_selector_package(root):
         "domain,split,score_mode,ablation,eta,confidence_weight,weight_grid_label,audit_ok,degeneracy_audit_ok,NDCG@10\n"
         "toy,valid,full,full,1.0,0.7,0.5;0.3;0.2,true,true,0.8\n"
         "toy,valid,full,without_risk_penalty,1.0,0.7,0.5;0.3;0.2,true,true,0.7\n",
+    )
+    return root
+
+
+def _seed_preregistered_selector_package(root):
+    _seed_selector_package(root)
+    _write_json(
+        root / "selected_valid_config.json",
+        {
+            "domain": "toy",
+            "split": "valid",
+            "score_mode": "full",
+            "ablation": "full",
+            "eta": 0.5,
+            "confidence_weight": 0.7,
+            "weight_boundary": 0.5,
+            "weight_calibration_gap": 0.3,
+            "weight_evidence": 0.2,
+        },
+    )
+    provenance = json.loads((root / "ccrp_internal_provenance.json").read_text(encoding="utf-8"))
+    provenance.update(
+        {
+            "main_config_mode": "preregistered",
+            "selected_on": "preregistered",
+            "eta": 1.0,
+            "confidence_weight": 0.7,
+            "weight_boundary": 0.5,
+            "weight_calibration_gap": 0.3,
+            "weight_evidence": 0.2,
+            "weight_grid_label": "0.5,0.3,0.2",
+        }
+    )
+    _write_json(root / "ccrp_internal_provenance.json", provenance)
+    _write(
+        root / "valid_ccrp_sweep.csv",
+        "domain,split,score_mode,ablation,eta,confidence_weight,weight_grid_label,audit_ok,degeneracy_audit_ok,NDCG@10\n"
+        "toy,valid,full,full,0.5,0.7,0.5;0.3;0.2,true,true,0.8\n",
     )
     return root
 
@@ -128,6 +175,25 @@ def test_component_ablation_builder_uses_valid_selected_config_and_full_metrics(
     for metric in ("HR@5", "HR@10", "HR@20", "NDCG@5", "NDCG@10", "NDCG@20", "MRR"):
         assert metric in summary
     assert "without_risk_penalty" in summary
+
+
+def test_component_ablation_builder_uses_preregistered_main_config(tmp_path):
+    selector = _seed_preregistered_selector_package(tmp_path)
+
+    provenance = build_component_ablation_package(
+        selector_dir=selector,
+        ablations=["full", "without_risk_penalty"],
+        expected_events=2,
+        expected_candidates_per_event=2,
+    )
+
+    assert provenance["ok"] is True
+    assert provenance["selection_source"]["selected_on"] == "preregistered"
+    assert provenance["selection_source"]["main_config_mode"] == "preregistered"
+    assert provenance["selected_config"]["eta"] == 1.0
+    summary = (selector / "component_ablation_summary.csv").read_text(encoding="utf-8")
+    assert ",1.0,0.7," in summary
+    assert ",0.5,0.7," not in summary
 
 
 def test_component_ablation_builder_outputs_package_audit_compatible_files(tmp_path):

@@ -267,6 +267,7 @@ def _complete_component_ablation_package(root: Path, *, ablations: tuple[str, ..
         {
             "artifact_class": "paper_critical_component_ablation",
             "status_label": "paper_critical_component_ablation_ready",
+            "ok": True,
             "git_commit": "abc123",
             "command": "python ablation.py",
             "input_sha256": {"valid_signal": "a", "test_signal": "b"},
@@ -291,6 +292,62 @@ def test_component_ablation_package_audit_accepts_complete_package(tmp_path):
 
     assert audit["ok"] is True
     assert audit["paper_claim_ready"] is True
+
+
+def test_component_ablation_package_audit_rejects_failed_builder_provenance(tmp_path):
+    _complete_component_ablation_package(tmp_path)
+    provenance = json.loads((tmp_path / "component_ablation_provenance.json").read_text(encoding="utf-8"))
+    provenance["ok"] = False
+    provenance["failures"] = ["valid_sweep_missing_main_ablation:full"]
+    _json(tmp_path / "component_ablation_provenance.json", provenance)
+
+    audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert "component_ablation:provenance_not_ok" in audit["failures"]
+
+
+def test_component_ablation_package_audit_allows_preregistered_sweep_full_only(tmp_path):
+    _complete_component_ablation_package(tmp_path)
+    _write(
+        tmp_path / "valid_ccrp_sweep.csv",
+        "ablation,audit_ok,degeneracy_audit_ok,NDCG@10\n"
+        "full,true,true,0.1\n",
+    )
+
+    audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is True
+    assert audit["paper_claim_ready"] is True
+
+
+def test_component_ablation_package_audit_rejects_main_config_mismatch(tmp_path):
+    _complete_component_ablation_package(tmp_path)
+    text = (tmp_path / "component_ablation_summary.csv").read_text(encoding="utf-8")
+    lines = text.splitlines()
+    header = lines[0].split(",")
+    insert_at = header.index("score_coverage_rate") + 1
+    header.insert(insert_at, "eta")
+    rows = []
+    for line in lines[1:]:
+        values = line.split(",")
+        values.insert(insert_at, "0.5")
+        rows.append(",".join(values))
+    _write(tmp_path / "component_ablation_summary.csv", ",".join(header) + "\n" + "\n".join(rows) + "\n")
+    _json(
+        tmp_path / "ccrp_internal_provenance.json",
+        {
+            "status_label": "same_schema_internal_ablation",
+            "audit_ok": True,
+            "score_coverage_rate": 1.0,
+            "eta": 1.0,
+        },
+    )
+
+    audit = build_audit(module="component_ablation", package_dir=tmp_path, expected_events=2)
+
+    assert audit["ok"] is False
+    assert any(failure.startswith("component_ablation_config_mismatch:") for failure in audit["failures"])
 
 
 def test_component_ablation_package_audit_rejects_bad_ranking_eval_count(tmp_path):

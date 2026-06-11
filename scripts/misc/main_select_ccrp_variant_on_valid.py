@@ -514,6 +514,8 @@ def main() -> None:
             args.artifact_class,
             "--status_label",
             args.status_label,
+            "--tie_break_seed",
+            str(args.tie_break_seed),
         ]
         subprocess.run(cmd, check=True)
 

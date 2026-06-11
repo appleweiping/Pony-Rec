@@ -1,11 +1,42 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-06 15:13 CST
+Last updated: 2026-06-11 14:25 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
 official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
+
+## Current Checkpoint (2026-06-11)
+
+- Server live state: `pony-rec-gpu` is running exactly one Phase 2.5 signal-row
+  job, Tools test PID `3841494`, command
+  `experiments/rsc/run_ccrp_v3_signal_rows.py --domain tools --split test`.
+  GPU remains active around `93-100%` with about `42.7GB / 49.1GB` VRAM used;
+  disk is about `22G` free / `89%` used. Do not stop, restart, or duplicate it.
+- Home component-ablation package is now locally audited as package-ready:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/phase2_5_component_ablation_package_audit.{json,md}`
+  reports `ok=true`, `paper_claim_ready=true`, `failures=[]`. This is a
+  module-package gate only, not whole-paper readiness.
+- Important correction: Home component summary was rebuilt with the
+  preregistered main C-CRP config (`eta=1.0`, `tie_break_seed=20260607`) rather
+  than the validation-sensitivity best row (`eta=0.5`). The importer now supports
+  `--tie_break_seed`; Home same-candidate tables were re-imported with
+  `--tie_break_seed 20260607`, making imported `NDCG@10=0.13635503352938705`
+  match `selected_test_metrics.csv`.
+- Honest result note: Home repeats the Sports/Toys pattern that several
+  leave-one-component-out rows are neutral or slightly better than full C-CRP
+  (`without_counterevidence` and `without_risk_penalty` beat full on NDCG@10).
+  Treat this as weak/redundant component evidence unless later domains reverse
+  it; do not write a component-necessity claim.
+- Focused regression tests passed after the fix:
+  `python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py -q`
+  -> `46 passed`.
+- Next bounded action: monitor Tools test until it exits, then run Tools source
+  audit, local signal sync/package audit, and selector/ablation using the
+  patched tie-break-aware importer path. Before any selector `--import_scores`
+  on the server, ensure the patched selector/importer is synced or pass the
+  importer with `--tie_break_seed 20260607` explicitly.
 
 ## Hard Invariants
 

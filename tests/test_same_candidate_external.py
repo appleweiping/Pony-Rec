@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from main_import_same_candidate_baseline_scores import normalize_artifact_class
+import hashlib
+
+from scripts.misc.main_import_same_candidate_baseline_scores import normalize_artifact_class
 from src.baselines.same_candidate_external import build_predictions_from_external_scores
 
 
@@ -60,6 +62,44 @@ def test_external_scores_keep_candidate_order_for_missing_ties() -> None:
     assert predictions[0]["pred_ranked_item_ids"] == ["i2", "i1", "i3"]
     assert predictions[0]["external_missing_score_count"] == 2
     assert summary["matched_candidates"] == 1
+
+
+def test_external_scores_support_seeded_hash_tie_break() -> None:
+    candidate_ids = ["i1", "i2", "i3", "i4"]
+    ranking_samples = [
+        {
+            "source_event_id": "e1",
+            "user_id": "u1",
+            "positive_item_id": "i3",
+            "candidate_item_ids": candidate_ids,
+            "candidate_popularity_groups": ["head", "tail", "mid", "tail"],
+        }
+    ]
+    score_rows = [
+        {"source_event_id": "e1", "user_id": "u1", "item_id": item_id, "score": "0.0"}
+        for item_id in candidate_ids
+    ]
+
+    default_predictions, _ = build_predictions_from_external_scores(
+        ranking_samples,
+        score_rows,
+        baseline_name="external",
+    )
+    seeded_predictions, summary = build_predictions_from_external_scores(
+        ranking_samples,
+        score_rows,
+        baseline_name="external",
+        tie_break_seed=7,
+    )
+
+    expected = sorted(
+        candidate_ids,
+        key=lambda item_id: int(hashlib.sha256(f"7:e1:u1:{item_id}".encode("utf-8")).hexdigest(), 16),
+    )
+    assert default_predictions[0]["pred_ranked_item_ids"] == candidate_ids
+    assert seeded_predictions[0]["pred_ranked_item_ids"] == expected
+    assert summary["tie_break_mode"] == "hash_seeded"
+    assert summary["tie_break_seed"] == 7
 
 
 def test_scaffold_status_does_not_default_to_completed_result() -> None:

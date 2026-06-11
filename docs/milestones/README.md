@@ -71,6 +71,27 @@ The repository is currently between M4 and M5:
   baselines, Shadow large-scale diagnostics, and LoRA/generative modules are
   completed under the same protocol.
 
+## Current Evidence Integrity (updated 2026-06-11)
+
+Phase 2.5 is in active execution, not writing-ready closure. As of
+2026-06-11, Tools test signal-row generation is still running on
+`pony-rec-gpu` as PID `3841494`; no new experiment should be launched until it
+finishes and its source/package audits pass. Home component-ablation packaging
+has advanced from provisional to package-audited:
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/phase2_5_component_ablation_package_audit.{json,md}`
+reports `ok=true`, `paper_claim_ready=true`, and no failures. The accepted Home
+package uses the preregistered main C-CRP config (`eta=1.0`) and
+tie-break-aware same-candidate import (`--tie_break_seed 20260607`), avoiding
+the earlier mismatch where component summary rows froze the validation
+sensitivity row (`eta=0.5`). The scientific interpretation remains cautious:
+Home, Sports, and Toys all show near-inert or redundant uncertainty/risk
+components in leave-one-component-out diagnostics, so the component story must
+be framed honestly unless Tools or later audits change the pattern.
+
+Regression evidence for this gate:
+`python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py -q`
+passed with `46 passed`.
+
 ## Current Evidence Integrity (updated 2026-06-06)
 
 Sports, Toys, Home, and Tools now have all eight new-domain official-code-level

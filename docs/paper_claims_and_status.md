@@ -43,6 +43,25 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-11 status update.** Home now has a completed local Phase 2.5
+component-ablation evidence package at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/`.
+The package audit
+`phase2_5_component_ablation_package_audit.{json,md}` reports `ok=true`,
+`paper_claim_ready=true`, and `failures=[]`. The package was repaired before
+being accepted: the component summary now freezes the preregistered main C-CRP
+configuration (`eta=1.0`, `tie_break_seed=20260607`) rather than the
+validation-sensitivity best row (`eta=0.5`), and the same-candidate import was
+rerun with `--tie_break_seed 20260607` so imported ranking metrics match
+`selected_test_metrics.csv`. This does not make the whole paper ready. It also
+does not support a strong component-necessity claim: Home, like Sports/Toys,
+shows neutral-to-slightly-better leave-one-component-out rows for some
+uncertainty/risk components. The paper must report this as weak or redundant
+component evidence unless the remaining domains produce a different audited
+pattern. Tools test signal generation is still active on the server as PID
+`3841494`; wait for completion before Tools source audit, sync, selector, and
+component package construction.
+
 1. An observation/motivation study explaining why uncertainty should be used in
    this framework. It should use representative completed baselines and fair
    same-candidate settings, not paid/SOTA general-model exhaustiveness, and it

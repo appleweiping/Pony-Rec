@@ -1,0 +1,75 @@
+{
+  "artifact_class": "paper_critical_component_ablation",
+  "status_label": "paper_critical_component_ablation_ready",
+  "paper_claim_scope": "leave_one_component_out_component_evidence_candidate",
+  "claim_limits": [
+    "Uses validation-selected score mode, eta, confidence weight, and weight triple.",
+    "Does not select ablation variants on test.",
+    "Requires the Phase 2.5 module package audit before paper claims."
+  ],
+  "ok": true,
+  "failures": [],
+  "domain": "home",
+  "git_commit": "9ded57b7ad500bbd73b8c6f57c067fa8d04a403e",
+  "command": "- --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home --domain home --expected_events 10000 --expected_candidates_per_event 101 --metric NDCG@10 --ablations full,without_boundary_uncertainty,without_calibration_gap,without_evidence_support,without_counterevidence,without_risk_penalty",
+  "input_paths": {
+    "selected_config_json": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/selected_valid_config.json",
+    "selector_provenance_json": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/ccrp_internal_provenance.json",
+    "valid_sweep_csv": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/valid_ccrp_sweep.csv",
+    "test_ranking_path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+    "test_candidate_items_path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/candidate_items.csv",
+    "test_signal_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_home/test/test_ccrp_signal_rows.csv"
+  },
+  "input_sha256": {
+    "selected_config_json": "801c0b6bd2e0fbbfe7611c940b851f49f236a77b2b36a78019bdfbcb272ed3b7",
+    "selector_provenance_json": "562d539c0391e574c424d50268c4da3f0c4cef7457e51f8f58003e01e29ca61c",
+    "valid_sweep_csv": "dac8dc008749ae955ea79f859a7b2117e83e2fea4e2070b6d61d391bb9189e7b",
+    "test_ranking_path": "b4c84d37cf588ca833cd76ef452941c7535b2ef437f328fc42afc06349e42f3d",
+    "test_candidate_items_path": "e13de5e2517133ef917b27143656446e7f010e397e457f4bff2736f7958c88b2",
+    "test_signal_path": "ea7f2d7ecbb491ef542f300448a9db1fc59b52d58e6c4bd4ab8b57ae4e90c465"
+  },
+  "selected_config": {
+    "score_mode": "full",
+    "eta": 1.0,
+    "confidence_weight": 0.7,
+    "weight_boundary": 0.5,
+    "weight_calibration_gap": 0.3,
+    "weight_evidence": 0.2,
+    "weight_grid_label": "0.5,0.3,0.2"
+  },
+  "selection_source": {
+    "selected_on": "preregistered",
+    "main_config_mode": "preregistered",
+    "selected_config_split": "valid",
+    "selection_metric": "NDCG@10",
+    "selected_valid_metric": 0.1399469280089625
+  },
+  "require_full_score_mode": true,
+  "valid_sweep_ablations": [
+    "full"
+  ],
+  "ablations": [
+    "full",
+    "without_boundary_uncertainty",
+    "without_calibration_gap",
+    "without_evidence_support",
+    "without_counterevidence",
+    "without_risk_penalty"
+  ],
+  "required_metrics": [
+    "MRR",
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20"
+  ],
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "summary_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/component_ablation_summary.csv",
+  "figure_paths": [
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/fig_component_ablation.png",
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/fig_component_ablation.pdf"
+  ]
+}

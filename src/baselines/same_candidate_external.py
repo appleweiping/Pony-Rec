@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -70,6 +71,7 @@ def build_predictions_from_external_scores(
     source_event_col: str = "source_event_id",
     missing_score: float = -1.0e12,
     k: int = 10,
+    tie_break_seed: int | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     event_lookup, user_item_lookup = build_score_lookup(
         score_rows,
@@ -113,7 +115,16 @@ def build_predictions_from_external_scores(
         if candidate_ids and event_matched == len(candidate_ids):
             fully_scored_events += 1
 
-        ranked_ids = [item_id for item_id, _, _, _ in sorted(scored_items, key=lambda item: (-item[1], item[2]))]
+        def _tie_order(item: tuple[str, float, int, bool]) -> int:
+            item_id, _, idx, _ = item
+            if tie_break_seed is None:
+                return idx
+            return int(
+                hashlib.sha256(f"{tie_break_seed}:{source_event_id}:{user_id}:{item_id}".encode("utf-8")).hexdigest(),
+                16,
+            )
+
+        ranked_ids = [item_id for item_id, _, _, _ in sorted(scored_items, key=lambda item: (-item[1], _tie_order(item)))]
         candidate_scores = {item_id: score for item_id, score, _, matched in scored_items if matched}
 
         predictions.append(
@@ -148,6 +159,8 @@ def build_predictions_from_external_scores(
         "score_coverage_rate": float(matched_candidates / total_candidates) if total_candidates else 0.0,
         "fully_scored_event_rate": float(fully_scored_events / len(ranking_samples)) if ranking_samples else 0.0,
         "missing_score": missing_score,
+        "tie_break_mode": "hash_seeded" if tie_break_seed is not None else "candidate_order",
+        "tie_break_seed": tie_break_seed if tie_break_seed is not None else "",
     }
     return predictions, summary
 

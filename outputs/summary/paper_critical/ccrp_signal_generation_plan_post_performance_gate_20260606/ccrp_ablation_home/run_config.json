@@ -1,0 +1,19 @@
+{
+  "module": "component_ablation",
+  "domain": "home",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "main_config_mode": "preregistered",
+  "score_mode": "full",
+  "ablation": "full",
+  "eta": 1.0,
+  "confidence_weight": 0.7,
+  "weight_boundary": 0.5,
+  "weight_calibration_gap": 0.3,
+  "weight_evidence": 0.2,
+  "tie_break_seed": 20260607,
+  "seed": 20260607,
+  "import_tie_break_mode": "hash_seeded",
+  "server_project": "~/projects/pony-rec-rescue-shadow-v6",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home"
+}

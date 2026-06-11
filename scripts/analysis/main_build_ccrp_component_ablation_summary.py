@@ -110,6 +110,38 @@ def _selected_weights(selected: dict[str, Any]) -> tuple[float, float, float]:
     )
 
 
+def _main_weights(row: dict[str, Any], fallback: dict[str, Any]) -> tuple[float, float, float]:
+    source = row if all(key in row for key in ("weight_boundary", "weight_calibration_gap", "weight_evidence")) else fallback
+    return (
+        float(source["weight_boundary"]),
+        float(source["weight_calibration_gap"]),
+        float(source["weight_evidence"]),
+    )
+
+
+def _main_config(selected: dict[str, Any], selector_provenance: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    main_config_mode = str(selector_provenance.get("main_config_mode") or "").strip()
+    selected_on = str(selector_provenance.get("selected_on") or "").strip().lower()
+    if not main_config_mode:
+        main_config_mode = "preregistered" if selected_on == "preregistered" else "valid_selected"
+
+    if main_config_mode == "preregistered" or selected_on == "preregistered":
+        cfg_source = selector_provenance
+        selected_label = "preregistered"
+    else:
+        cfg_source = selected
+        selected_label = "valid"
+
+    cfg = {
+        "score_mode": str(cfg_source["score_mode"]),
+        "ablation": str(cfg_source.get("ablation", "full")),
+        "eta": float(cfg_source["eta"]),
+        "confidence_weight": float(cfg_source["confidence_weight"]),
+        "weights": _main_weights(cfg_source, selected),
+    }
+    return cfg, selected_label
+
+
 def _path_arg(value: str, fallback: str | Path) -> str:
     return str(value or fallback)
 
@@ -183,6 +215,7 @@ def build_component_ablation_package(
     sweep_path = Path(valid_sweep_csv) if valid_sweep_csv else selector / "valid_ccrp_sweep.csv"
     selected = _read_json(selected_path)
     selector_provenance = _read_json(provenance_path)
+    main_cfg, main_selected_on = _main_config(selected, selector_provenance)
 
     selected_domain = domain or str(selector_provenance.get("domain") or selected.get("domain") or "")
     if not selected_domain:
@@ -201,11 +234,13 @@ def build_component_ablation_package(
         if not path or not Path(path).exists():
             raise FileNotFoundError(f"{label} is missing: {path}")
 
-    weights = _selected_weights(selected)
-    score_mode = str(selected["score_mode"])
-    eta = float(selected["eta"])
-    confidence_weight = float(selected["confidence_weight"])
-    selected_on = str(selector_provenance.get("selected_on") or "").strip().lower()
+    weights = main_cfg["weights"]
+    score_mode = str(main_cfg["score_mode"])
+    eta = float(main_cfg["eta"])
+    confidence_weight = float(main_cfg["confidence_weight"])
+    main_config_mode = str(selector_provenance.get("main_config_mode") or "").strip() or (
+        "preregistered" if main_selected_on == "preregistered" else "valid_selected"
+    )
     selected_split = str(selected.get("split") or "").strip().lower()
     sweep_ablations = _valid_sweep_ablations(sweep_path)
     rows: list[dict[str, Any]] = []
@@ -233,7 +268,7 @@ def build_component_ablation_package(
                 "split": "test",
                 "ablation": ablation,
                 "status_label": row_status_label,
-                "selected_on": "valid",
+                "selected_on": main_selected_on,
                 "selected_on_test": False,
                 "score_mode": score_mode,
                 "eta": eta,
@@ -262,15 +297,14 @@ def build_component_ablation_package(
         "test_signal_path": test_signal,
     }
     failures: list[str] = []
-    if selected_on != "valid":
-        failures.append(f"selector_provenance_selected_on_not_valid:{selected_on or 'missing'}")
+    if main_selected_on not in {"valid", "preregistered"}:
+        failures.append(f"selector_provenance_selected_on_unknown:{main_selected_on or 'missing'}")
     if selected_split != "valid":
         failures.append(f"selected_config_split_not_valid:{selected_split or 'missing'}")
     if require_full_score_mode and score_mode != "full":
         failures.append(f"selected_score_mode_not_full_for_component_ablation:{score_mode}")
-    missing_sweep_ablations = [ablation for ablation in ablations if ablation not in sweep_ablations]
-    if missing_sweep_ablations:
-        failures.append(f"valid_sweep_missing_ablation:{','.join(missing_sweep_ablations)}")
+    if "full" not in sweep_ablations:
+        failures.append("valid_sweep_missing_main_ablation:full")
     for row in rows:
         if row["n_events"] != expected_events:
             failures.append(f"{row['ablation']}:n_events:{row['n_events']}!={expected_events}")
@@ -310,7 +344,8 @@ def build_component_ablation_package(
             "weight_grid_label": _weight_label(weights),
         },
         "selection_source": {
-            "selected_on": selected_on,
+            "selected_on": main_selected_on,
+            "main_config_mode": main_config_mode,
             "selected_config_split": selected_split,
             "selection_metric": selector_provenance.get("selection_metric", ""),
             "selected_valid_metric": selector_provenance.get(

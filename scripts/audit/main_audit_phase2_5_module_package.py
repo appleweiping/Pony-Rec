@@ -630,6 +630,32 @@ def _check_observation_event_rows(
                 failures.append(f"observation_positive_rank_beyond_candidates:{method}:{event_id}:{rank}>{num_candidates}")
 
 
+def _check_component_config_matches_main(
+    row: dict[str, str],
+    main_provenance: dict[str, Any],
+    failures: list[str],
+) -> None:
+    if not main_provenance:
+        return
+    ablation = str(row.get("ablation", "")).strip() or "unknown"
+    for key in ("score_mode", "weight_grid_label"):
+        expected = str(main_provenance.get(key, "")).strip()
+        if not expected or key not in row:
+            continue
+        actual = str(row.get(key, "")).strip()
+        if actual != expected:
+            failures.append(f"component_ablation_config_mismatch:{ablation}:{key}:{actual}!={expected}")
+    for key in ("eta", "confidence_weight"):
+        if key not in main_provenance or key not in row:
+            continue
+        expected = _as_float(main_provenance.get(key))
+        actual = _as_float(row.get(key))
+        if not math.isfinite(expected) or not math.isfinite(actual):
+            failures.append(f"component_ablation_config_nonfinite:{ablation}:{key}:{row.get(key)}!={main_provenance.get(key)}")
+        elif abs(actual - expected) > 1e-12:
+            failures.append(f"component_ablation_config_mismatch:{ablation}:{key}:{actual}!={expected}")
+
+
 def _audit_observation(
     base: Path,
     *,
@@ -742,6 +768,8 @@ def _audit_component_ablation(
         failures.append("component_ablation:unexpected_artifact_class")
     if provenance.get("status_label") != "paper_critical_component_ablation_ready":
         failures.append("component_ablation:unexpected_status_label")
+    if provenance.get("ok") is not True:
+        failures.append("component_ablation:provenance_not_ok")
     if not internal_provenance:
         failures.append("component_ablation:missing_internal_provenance")
 
@@ -750,8 +778,8 @@ def _audit_component_ablation(
     for ablation in expected_ablations:
         if ablation not in summary_abls:
             failures.append(f"component_ablation_summary_missing:{ablation}")
-        if ablation not in sweep_abls:
-            failures.append(f"valid_sweep_missing_ablation:{ablation}")
+    if "full" not in sweep_abls:
+        failures.append("valid_sweep_missing_main_ablation:full")
     if expected_events > 0:
         for row in summary_rows:
             count = _event_count(row)
@@ -767,6 +795,7 @@ def _audit_component_ablation(
         for column in ("audit_ok", "degeneracy_audit_ok"):
             if not _as_bool(row.get(column)):
                 failures.append(f"component_ablation_{column}_false:{row.get('ablation')}")
+        _check_component_config_matches_main(row, internal_provenance, failures)
     if len(selected_rows) != 1:
         failures.append(f"selected_test_metrics_row_count:{len(selected_rows)}!=1")
     for row in selected_rows:

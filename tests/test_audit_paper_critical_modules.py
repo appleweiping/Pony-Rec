@@ -180,9 +180,10 @@ def _seed_paper_critical_support_scripts(root: Path) -> None:
         "FULL_KS = (5, 10, 20)\n"
         "component_ablation_summary.csv\n"
         "component_ablation_provenance.json\n"
-        "selector_provenance_selected_on_not_valid\n"
+        "main_config_mode\n"
+        "preregistered\n"
         "selected_score_mode_not_full_for_component_ablation\n"
-        "valid_sweep_missing_ablation\n"
+        "valid_sweep_missing_main_ablation\n"
         "_evaluate_candidate_scores(\n",
     )
     _write(

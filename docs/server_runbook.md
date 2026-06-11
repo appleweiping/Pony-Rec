@@ -1096,6 +1096,13 @@ python main_import_same_candidate_baseline_scores.py \
   --artifact_class completed_result
 ```
 
+For internal C-CRP/SRPD rows whose selector/evaluator used seeded
+order-independent tie-breaking, pass the same seed to the importer, e.g.
+`--tie_break_seed 20260607`. External official-baseline imports keep the
+default candidate-order tie-break unless their own protocol declares a seeded
+tie policy. Do not compare selector-side metrics against a default importer run
+when tied scores are common.
+
 Generate SRPD formal commands:
 
 ```bash

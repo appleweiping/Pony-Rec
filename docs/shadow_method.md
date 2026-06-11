@@ -95,6 +95,11 @@ python main_select_ccrp_variant_on_valid.py \
   --import_scores
 ```
 
+When importing score-only C-CRP rows, preserve the selector's tie policy. The
+current formal selector uses `tie_break_seed=20260607`, and the importer must
+receive `--tie_break_seed 20260607` either through the patched
+`--import_scores` path or through an explicit import command.
+
 `main_shadow_ccrp_eval.py` remains useful for local diagnostics. Prompt-only
 shadow diagnostics are not ranking main-table evidence.
 
