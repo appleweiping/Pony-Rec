@@ -1,0 +1,87 @@
+{
+  "artifact_class": "paper_critical_hyperparameter_sweep_inputs",
+  "status_label": "valid_test_saved_signal_hyperparameter_sweep_ready",
+  "ok": true,
+  "domain": "sports",
+  "git_commit": "4cf95b54f2bc8fff655ada3f923e585a003a96af",
+  "command": "scripts/analysis/main_build_ccrp_hyperparameter_sweep.py --domain sports --valid_ranking_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl --test_ranking_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl --valid_candidate_items_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv --test_candidate_items_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv --valid_signal_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/valid/valid_ccrp_signal_rows.csv --test_signal_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv --output_dir /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports --metric NDCG@10 --eta_grid 0,0.25,0.5,1,2,4 --weight_grid 0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4;0.33,0.33,0.34 --diagnostic_confidence_weights 0.1,0.3,0.5,0.7,0.9 --expected_events 10000 --expected_candidates_per_event 101",
+  "metric": "NDCG@10",
+  "test_not_used_for_selection": true,
+  "main_controls": [
+    "eta",
+    "weight_grid_label"
+  ],
+  "diagnostic_controls": [
+    "confidence_weight"
+  ],
+  "eta_grid": [
+    0.0,
+    0.25,
+    0.5,
+    1.0,
+    2.0,
+    4.0
+  ],
+  "weight_grid": [
+    "0.5,0.3,0.2",
+    "0.7,0.2,0.1",
+    "0.4,0.4,0.2",
+    "0.4,0.2,0.4",
+    "0.33,0.33,0.34"
+  ],
+  "diagnostic_confidence_weights": [
+    0.1,
+    0.3,
+    0.5,
+    0.7,
+    0.9
+  ],
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "expected_candidate_key_count": 1010000,
+  "tie_break_seed": 20260607,
+  "max_tie_pair_rate": 0.7,
+  "max_constant_event_rate": 0.02,
+  "paths": {
+    "valid_ranking_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+    "test_ranking_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+    "valid_candidate_items_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_valid_same_candidate/candidate_items.csv",
+    "test_candidate_items_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/sports_large10000_100neg_test_same_candidate/candidate_items.csv",
+    "valid_signal_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/valid/valid_ccrp_signal_rows.csv",
+    "test_signal_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_sports/test/test_ccrp_signal_rows.csv",
+    "valid_sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/valid_ccrp_hyperparameter_sweep.csv",
+    "test_sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/test_ccrp_hyperparameter_sweep.csv"
+  },
+  "sha256": {
+    "valid_ranking": "2538001458e48675073bac5e1610f8ad136cde662f2453ce4c33fbddf419ed11",
+    "test_ranking": "7654f9a9121cc31531924a88258b0d7dce91cc40afb731ebba2b14c0262b2381",
+    "valid_candidate_items": "6931da4b218ea97f2bfcb0b1bcb979d0d8f1f16c6ff70f1771469817d6e8ca6b",
+    "test_candidate_items": "6fd502c4ff2f622168eca009fe306e01a55b80134f532da80e073fdf7aad60c0",
+    "valid_signal": "9bee8e8453c37b7d5b1fca6c9cf373675d6e2bf13b106d4b13d585fb6cb16afb",
+    "test_signal": "1b55a4b83673b2699d8a6029b02f39ae10145db514de5101a7f6b11e1f9e8207",
+    "valid_sweep_csv": "129553ccb5dc903d3ce69a6cf4028640f51bce9e8e047181b2e4054d310a8c90",
+    "test_sweep_csv": "59121bcbc6fd31b2d49db5be95b4042012f4de3d746050ce45758504c3721dd7"
+  },
+  "row_counts": {
+    "valid_rows": 16,
+    "test_rows": 16,
+    "valid_signal_rows": 1010000,
+    "test_signal_rows": 1010000,
+    "valid_candidate_rows": 1010000,
+    "test_candidate_rows": 1010000,
+    "valid_ranking_events": 10000,
+    "test_ranking_events": 10000
+  },
+  "cleanup_status": {
+    "retained_bulk_scores_csv": false,
+    "retained_prediction_jsonl": false,
+    "retained_scored_temp_rows": false,
+    "retained_checkpoints": false,
+    "policy": "metrics_only_no_per_grid_score_or_prediction_files"
+  },
+  "claim_limits": [
+    "Hyperparameter curves are sensitivity/stability evidence only.",
+    "Test sweep is reporting-only and cannot select or change the main method.",
+    "confidence_weight is diagnostic under confidence_plus_evidence and not a main full-mode hyperparameter."
+  ]
+}

@@ -137,12 +137,36 @@ cycle.
   controls. Focused tests passed:
   `python -m pytest tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_hyperparameter_sweep.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py -q`
   -> `58 passed`.
-- Next bounded action: run the required design/code re-review for the
-  hyperparameter module after this hardening, then build real hyperparameter
-  curves from the now-complete Sports/Toys/Home/Tools signal packages on the
-  server only if the review gate clears. After each domain, run the Phase 2.5
-  hyperparameter package audit and then post-module review. Do not rerun
-  observation or component ablation unless a concrete audit failure is found.
+- Hyperparameter design/code re-review on 2026-06-11 cleared the design/code
+  gate conditionally: engineering reviewer scored 8.2/10 and protocol reviewer
+  scored 8.4/10, both blocking immediate launch only because the server had not
+  yet been synced to the hardened commit. To avoid disturbing the dirty main
+  server checkout, Codex created a clean detached server worktree at
+  `~/projects/pony-rec-rescue-shadow-v6-code-4cf95b5` with HEAD
+  `4cf95b54f2bc8fff655ada3f923e585a003a96af`; experiments run from that code
+  while reading/writing the canonical server project data paths.
+- Sports hyperparameter package is complete and locally synced:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/`.
+  Server sweep log `ccrp_hyperparameter_sports_20260612_051743.log` returned
+  `ok=true`, `valid_rows=16`, `test_rows=16`; the sweep provenance records
+  `test_not_used_for_selection=true`, main controls `eta` and
+  `weight_grid_label`, diagnostic control `confidence_weight`, exact valid/test
+  signal and candidate row counts `1,010,000`, ranking events `10,000`, and
+  no retained bulk scores, predictions, temp scored rows, or checkpoints.
+  Plotting produced `ccrp_hyperparameter_curve_summary.csv` with 22 rows and
+  PNG/PDF eta and weight-grid figures. Server and local Phase 2.5 package
+  audits both report `ok=true`, `paper_claim_ready=true`, `failures=[]`; the
+  local/server manifest comparison checks 9 key files with matching sha256.
+  Key sports result: for `eta`, valid-best and test-best are both `0` with
+  `relative_drop_from_test_best=0`; for `weight_grid_label`, valid-best
+  `0.5,0.3,0.2` and test-best `0.4,0.4,0.2` differ but remain within the 5%
+  stability tolerance. Wording must stay sensitivity/stability-only; sports
+  does not support a claim that risk penalty strength is beneficial.
+- Next bounded action: continue hyperparameter curves one domain at a time on
+  the server, starting with Toys, then Home and Tools if each previous domain
+  passes sweep/provenance/package-audit gates. After all four domains pass,
+  aggregate and run post-module review. Do not rerun observation or component
+  ablation unless a concrete audit failure is found.
   The selector import command now points to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py` and includes
   `--tie_break_seed`; if a future agent sees selector import failures, first
