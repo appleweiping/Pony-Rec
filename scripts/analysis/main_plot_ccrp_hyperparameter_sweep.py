@@ -349,8 +349,7 @@ def _build_stability_report(
             relative_drop = 0.0 if abs(test_best_metric - test_metric_at_valid_best) <= 1e-12 else float("inf")
         else:
             relative_drop = max(0.0, (test_best_metric - test_metric_at_valid_best) / denominator)
-        ordered_test = test.assign(_metric_float=test["metric_value"].map(_as_float)).sort_values("_metric_float", ascending=False)
-        test_rank_map = {str(value): int(rank + 1) for rank, value in enumerate(ordered_test["control_value"].astype(str).tolist())}
+        test_rank = _tie_aware_rank(test["metric_value"], test_metric_at_valid_best)
         stable = bool(relative_drop <= relative_drop_tolerance)
         row.update(
             {
@@ -360,7 +359,7 @@ def _build_stability_report(
                 "test_best_metric": float(test_best_metric),
                 "test_metric_at_valid_best": float(test_metric_at_valid_best),
                 "relative_drop_from_test_best": float(relative_drop),
-                "test_rank_of_valid_best": test_rank_map.get(valid_best_value),
+                "test_rank_of_valid_best": test_rank,
                 "best_value_match": bool(valid_best_value == test_best_value),
                 "stable_within_tolerance": stable,
                 "reason": "within_tolerance" if stable else "test_drop_exceeds_tolerance",
@@ -368,6 +367,10 @@ def _build_stability_report(
         )
         report.append(row)
     return report
+
+
+def _tie_aware_rank(metric_values: pd.Series, target_metric: float, *, eps: float = 1e-12) -> int:
+    return int(sum(1 for value in metric_values.map(_as_float) if value > target_metric + eps) + 1)
 
 
 def build_hyperparameter_summary(

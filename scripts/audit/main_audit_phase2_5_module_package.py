@@ -541,8 +541,9 @@ def _expected_hyperparameter_stability(rows: list[dict[str, str]], *, control: s
         relative_drop = 0.0 if abs(test_best_metric - test_metric_at_valid_best) <= 1e-12 else float("inf")
     else:
         relative_drop = max(0.0, (test_best_metric - test_metric_at_valid_best) / denominator)
-    ranked_test = sorted(test, key=lambda row: _as_float(row.get("metric_value")), reverse=True)
-    rank_map = {str(row.get("control_value", "")).strip(): idx + 1 for idx, row in enumerate(ranked_test)}
+    test_rank_of_valid_best = 1 + sum(
+        1 for row in test if _as_float(row.get("metric_value")) > test_metric_at_valid_best + 1e-12
+    )
     return {
         "valid_best_value": valid_best_value,
         "test_best_value": test_best_value,
@@ -550,7 +551,7 @@ def _expected_hyperparameter_stability(rows: list[dict[str, str]], *, control: s
         "test_best_metric": test_best_metric,
         "test_metric_at_valid_best": test_metric_at_valid_best,
         "relative_drop_from_test_best": relative_drop,
-        "test_rank_of_valid_best": rank_map.get(valid_best_value, -1),
+        "test_rank_of_valid_best": test_rank_of_valid_best,
     }
 
 

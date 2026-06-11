@@ -116,6 +116,35 @@ def test_build_hyperparameter_summary_reports_valid_and_test_separately(tmp_path
     assert provenance["stability_report"][0]["stable_within_tolerance"] is True
 
 
+def test_build_hyperparameter_summary_uses_tie_aware_test_rank(tmp_path):
+    valid = tmp_path / "valid_ccrp_sweep.csv"
+    test = tmp_path / "test_ccrp_sweep.csv"
+    valid.write_text(
+        "domain,score_mode,ablation,eta,confidence_weight,weight_grid_label,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,NDCG@10\n"
+        "sports,full,full,1,0.7,\"0.5,0.3,0.2\",true,true,1.0,1010000,0.30\n"
+        "sports,full,full,1,0.7,\"0.7,0.2,0.1\",true,true,1.0,1010000,0.20\n"
+        "sports,full,full,1,0.7,\"0.4,0.4,0.2\",true,true,1.0,1010000,0.10\n",
+        encoding="utf-8",
+    )
+    test.write_text(
+        "domain,score_mode,ablation,eta,confidence_weight,weight_grid_label,audit_ok,degeneracy_audit_ok,score_coverage_rate,candidate_key_count,NDCG@10\n"
+        "sports,full,full,1,0.7,\"0.7,0.2,0.1\",true,true,1.0,1010000,0.40\n"
+        "sports,full,full,1,0.7,\"0.4,0.4,0.2\",true,true,1.0,1010000,0.35\n"
+        "sports,full,full,1,0.7,\"0.5,0.3,0.2\",true,true,1.0,1010000,0.35\n",
+        encoding="utf-8",
+    )
+
+    _, provenance = build_hyperparameter_summary(
+        valid,
+        test_sweep_csv=test,
+        domain="sports",
+        controls=["weight_grid_label"],
+        min_values=3,
+    )
+
+    assert provenance["stability_report"][0]["test_rank_of_valid_best"] == 2
+
+
 def test_build_hyperparameter_summary_downgrades_unstable_valid_test_curves(tmp_path):
     valid = tmp_path / "valid_ccrp_sweep.csv"
     test = tmp_path / "test_ccrp_sweep.csv"
