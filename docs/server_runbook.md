@@ -16,7 +16,7 @@ GitHub and mirror key server evidence locally before any cleanup.
 ```bash
 cd ~/projects/pony-rec-rescue-shadow-v6
 git pull --ff-only
-python main_project_readiness_check.py
+python -m scripts.audit.main_project_readiness_check
 ```
 
 Read these files before launching heavy work:
@@ -27,7 +27,7 @@ docs/milestones/README.md
 docs/top_conference_review_gate.md
 docs/archive/legacy_root_reports/CODEX_HANDOFF_WEEK8_2026-05-06.md
 docs/archive/legacy_root_reports/WEEK8_LARGE_SCALE_10K_100NEG_PLAN_2026-05-06.md
-OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
+docs/archive/legacy_root_reports/OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
 ```
 
 The agent normally cannot see this server. Do not assume server state from
@@ -367,22 +367,16 @@ kill $(cat outputs/summary/logs/week8_fourdomain_100neg_full_external.pid)
 ## Official Baseline Audit
 
 ```bash
-python main_audit_official_external_repos.py
-python main_audit_official_fairness_policy.py
-python main_make_official_external_adapter_plan.py
+python -m scripts.audit.main_audit_official_external_repos
+python -m scripts.audit.main_audit_official_fairness_policy
 ```
 
-The default adapter plan is `inspect` stage. It writes provenance and blocker
-reports for all 24 domain/method rows, but it does not import scores. This is
-intentional: rows must not become `official_completed` until a method adapter
-actually calls the pinned official implementation and emits exact candidate
-scores.
-
-Use run stage only after the target method adapter is implemented:
-
-```bash
-python main_make_official_external_adapter_plan.py --plan_stage run
-```
+The old all-row adapter-plan generator is not a current Phase 2.5 entry point.
+Sports/Toys/Home/Tools already have eight official baseline rows gated under
+the same-candidate protocol. If a later audit finds a concrete invalid row, use
+the corresponding method adapter under `scripts/adapters/` and re-run that row
+through final provenance, score coverage, import, server-final, local-light,
+domain-gate, and paired-test checks.
 
 Do not import official-baseline rows into main comparison tables until:
 
@@ -1085,7 +1079,7 @@ python main_export_srpd_scores_from_predictions.py \
   --provenance_output_path outputs/summary/week8_srpd_formal/books/srpd_internal_provenance.json \
   --method_variant SRPD-formal
 
-python main_import_same_candidate_baseline_scores.py \
+python scripts/misc/main_import_same_candidate_baseline_scores.py \
   --baseline_name books_srpd_formal \
   --exp_name books_srpd_formal_same_candidate \
   --domain books \
@@ -1156,8 +1150,8 @@ Use them only when you need historical detail for that specific stage.
 After code/config/doc changes that affect server commands or project status:
 
 ```bash
-python main_project_readiness_check.py
-python main_audit_official_fairness_policy.py
+python -m scripts.audit.main_project_readiness_check
+python -m scripts.audit.main_audit_official_fairness_policy
 git status --short
 git add <related files only>
 git commit -m "<milestone/status message>"

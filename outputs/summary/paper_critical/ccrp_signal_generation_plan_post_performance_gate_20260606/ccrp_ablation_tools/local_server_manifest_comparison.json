@@ -1,0 +1,130 @@
+{
+  "ok": true,
+  "row_count": 15,
+  "ok_count": 15,
+  "remote_host": "pony-rec-gpu",
+  "server_package_dir": "~/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools",
+  "local_package_dir": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools",
+  "checked_files": [
+    {
+      "rel_path": "tables/ranking_metrics.csv",
+      "local_size": 576,
+      "server_size": 576,
+      "local_sha256": "ea773c294306b28142e777da8741d3c3d911a708cd2dae6f0b6ec75dfba4d549",
+      "server_sha256": "ea773c294306b28142e777da8741d3c3d911a708cd2dae6f0b6ec75dfba4d549",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/external_score_coverage.csv",
+      "local_size": 273,
+      "server_size": 273,
+      "local_sha256": "d7a2e993c962636ff6b11797a4101325a124e5f7e34b1b30238c5138bf72be42",
+      "server_sha256": "d7a2e993c962636ff6b11797a4101325a124e5f7e34b1b30238c5138bf72be42",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/same_candidate_external_baseline_summary.csv",
+      "local_size": 1487,
+      "server_size": 1487,
+      "local_sha256": "c379796887563a3df3dd28ea24b8190fe2d7206bfa3c67c625c0b6c75a86c23a",
+      "server_sha256": "c379796887563a3df3dd28ea24b8190fe2d7206bfa3c67c625c0b6c75a86c23a",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/ranking_eval_records.csv",
+      "local_size": 42374680,
+      "server_size": 42374680,
+      "local_sha256": "78d1a8a8b373bad10a6c34a611e3608bb0ba8687d3535baf2be9da9b02a790aa",
+      "server_sha256": "78d1a8a8b373bad10a6c34a611e3608bb0ba8687d3535baf2be9da9b02a790aa",
+      "ok": true
+    },
+    {
+      "rel_path": "tables/ranking_exposure_distribution.csv",
+      "local_size": 64,
+      "server_size": 64,
+      "local_sha256": "9b79900605a19a4c3967eaf190b9151e7b73dd2b70d42019dc40c31cf0229525",
+      "server_sha256": "9b79900605a19a4c3967eaf190b9151e7b73dd2b70d42019dc40c31cf0229525",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_summary.csv",
+      "local_size": 4139,
+      "server_size": 4139,
+      "local_sha256": "049b5263f509735c1aef1b89fa7402bbc9c5f3881cf0052ff7fedb52b95b93c5",
+      "server_sha256": "049b5263f509735c1aef1b89fa7402bbc9c5f3881cf0052ff7fedb52b95b93c5",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_summary.json",
+      "local_size": 12665,
+      "server_size": 12665,
+      "local_sha256": "559adb893d43dacf82d08e2e684a1b3672687f67b7188fafb70aa912477e0aaa",
+      "server_sha256": "559adb893d43dacf82d08e2e684a1b3672687f67b7188fafb70aa912477e0aaa",
+      "ok": true
+    },
+    {
+      "rel_path": "component_ablation_provenance.json",
+      "local_size": 4341,
+      "server_size": 4341,
+      "local_sha256": "0fd63d9cc720059e8d040f6ff644a720e1a58a68599d12501a06e5f69ab5dffb",
+      "server_sha256": "0fd63d9cc720059e8d040f6ff644a720e1a58a68599d12501a06e5f69ab5dffb",
+      "ok": true
+    },
+    {
+      "rel_path": "selected_test_metrics.csv",
+      "local_size": 3232,
+      "server_size": 3232,
+      "local_sha256": "f878e7d801da41994d6fbc64e1501b431cba2fe5e1c94f6b9f24516491c4445c",
+      "server_sha256": "f878e7d801da41994d6fbc64e1501b431cba2fe5e1c94f6b9f24516491c4445c",
+      "ok": true
+    },
+    {
+      "rel_path": "ccrp_internal_provenance.json",
+      "local_size": 3795,
+      "server_size": 3795,
+      "local_sha256": "280a3a1a934615104bcdf91c6e2d7a5d5f6d6a46814ae6a6b5d0931de2bdb37f",
+      "server_sha256": "280a3a1a934615104bcdf91c6e2d7a5d5f6d6a46814ae6a6b5d0931de2bdb37f",
+      "ok": true
+    },
+    {
+      "rel_path": "valid_ccrp_sweep.csv",
+      "local_size": 2207,
+      "server_size": 2207,
+      "local_sha256": "1ff14253199ece50b60b90752c3bcc755bf88819f65e405e5e4c6d882606214f",
+      "server_sha256": "1ff14253199ece50b60b90752c3bcc755bf88819f65e405e5e4c6d882606214f",
+      "ok": true
+    },
+    {
+      "rel_path": "selected_valid_config.json",
+      "local_size": 1639,
+      "server_size": 1639,
+      "local_sha256": "29904c370a066a915f8971711e2c5b170baf6390f9dc5009643e3383ac48b4e8",
+      "server_sha256": "29904c370a066a915f8971711e2c5b170baf6390f9dc5009643e3383ac48b4e8",
+      "ok": true
+    },
+    {
+      "rel_path": "ccrp_selection_preregistration.json",
+      "local_size": 842,
+      "server_size": 842,
+      "local_sha256": "bb26db3d31efa0851fef5522291224819a146455fa79b2221ce121a6f90329d1",
+      "server_sha256": "bb26db3d31efa0851fef5522291224819a146455fa79b2221ce121a6f90329d1",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_component_ablation.png",
+      "local_size": 121310,
+      "server_size": 121310,
+      "local_sha256": "ae513f73938832ba88f6c1470ad14b3964c17f0b72792b7d3f2605949fdda57f",
+      "server_sha256": "ae513f73938832ba88f6c1470ad14b3964c17f0b72792b7d3f2605949fdda57f",
+      "ok": true
+    },
+    {
+      "rel_path": "fig_component_ablation.pdf",
+      "local_size": 15162,
+      "server_size": 15162,
+      "local_sha256": "678005108720431d01bfe5831c7a618c7f3eff1b685499c255260ea213d7365e",
+      "server_sha256": "678005108720431d01bfe5831c7a618c7f3eff1b685499c255260ea213d7365e",
+      "ok": true
+    }
+  ]
+}

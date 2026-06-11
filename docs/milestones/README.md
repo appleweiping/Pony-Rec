@@ -74,23 +74,34 @@ The repository is currently between M4 and M5:
 ## Current Evidence Integrity (updated 2026-06-11)
 
 Phase 2.5 is in active execution, not writing-ready closure. As of
-2026-06-11, Tools test signal-row generation is still running on
-`pony-rec-gpu` as PID `3841494`; no new experiment should be launched until it
-finishes and its source/package audits pass. Home component-ablation packaging
-has advanced from provisional to package-audited:
+2026-06-11, Tools test signal-row generation completed, passed source/package
+sync audits, and the server has no matching active Pony/C-CRP/baseline Python
+process. Home component-ablation packaging has advanced from provisional to
+package-audited:
 `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/phase2_5_component_ablation_package_audit.{json,md}`
 reports `ok=true`, `paper_claim_ready=true`, and no failures. The accepted Home
 package uses the preregistered main C-CRP config (`eta=1.0`) and
 tie-break-aware same-candidate import (`--tie_break_seed 20260607`), avoiding
 the earlier mismatch where component summary rows froze the validation
 sensitivity row (`eta=0.5`). The scientific interpretation remains cautious:
-Home, Sports, and Toys all show near-inert or redundant uncertainty/risk
+Home, Sports, Toys, and Tools all show near-inert or redundant uncertainty/risk
 components in leave-one-component-out diagnostics, so the component story must
-be framed honestly unless Tools or later audits change the pattern.
+be framed honestly as weak/redundant component evidence rather than a strong
+component-necessity claim. Tools package evidence lives at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/`
+and `phase2_5_component_ablation_package_audit.{json,md}` reports `ok=true`,
+`paper_claim_ready=true`, and `failures=[]`.
+On 2026-06-11 the selector/import command surface was also repaired and synced
+to the server: C-CRP selector imports now call
+`scripts/misc/main_import_same_candidate_baseline_scores.py` and pass
+`--tie_break_seed`, preventing a missing-root-script failure when Tools reaches
+the selector stage.
 
 Regression evidence for this gate:
-`python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py -q`
-passed with `46 passed`.
+`python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py tests\test_plan_ccrp_signal_generation.py -q`
+passed with `49 passed`; `python -m scripts.audit.main_project_readiness_check`
+and `python scripts\audit\main_project_bootstrap.py` report
+`project_readiness_ok=True`.
 
 ## Current Evidence Integrity (updated 2026-06-06)
 

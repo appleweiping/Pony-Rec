@@ -319,7 +319,7 @@ source_event_id,user_id,item_id,score
 Import and evaluate:
 
 ```bash
-python main_import_same_candidate_baseline_scores.py \
+python scripts/misc/main_import_same_candidate_baseline_scores.py \
   --baseline_name sasrec \
   --exp_name beauty_sasrec_same_candidate \
   --domain beauty \

@@ -1,0 +1,33 @@
+{
+  "main_config_mode": "preregistered",
+  "selection_metric": "NDCG@10",
+  "selection_space": "score_mode=full, ablation=full; sweep eta x confidence_weight x weight_grid",
+  "etas_grid": [
+    0.5,
+    1.0,
+    2.0
+  ],
+  "confidence_weights_grid": [
+    0.7
+  ],
+  "weight_grid": [
+    "0.5,0.3,0.2"
+  ],
+  "preregistered_config": {
+    "score_mode": "full",
+    "ablation": "full",
+    "eta": 1.0,
+    "confidence_weight": 0.7,
+    "weights": "0.5,0.3,0.2"
+  },
+  "valid_selected_config": {
+    "eta": 0.5,
+    "confidence_weight": 0.7,
+    "weights": "0.5,0.3,0.2",
+    "valid_NDCG@10": 0.17034366022692146
+  },
+  "max_tie_pair_rate": 0.7,
+  "max_constant_event_rate": 0.02,
+  "tie_break_seed": 20260607,
+  "note": "Ablations and degenerate score-modes are diagnostics evaluated at the frozen main config, never selection candidates."
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "2026-06-06.phase2_5_module_package_audit.v1",
+  "created_at_utc": "2026-06-11T14:00:18+00:00",
+  "mode": "local_read_only_phase2_5_module_package_audit",
+  "read_only": true,
+  "will_start_experiment": false,
+  "will_delete": false,
+  "package_dir": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_tools",
+  "module": "component_ablation",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "ok": true,
+  "paper_claim_ready": true,
+  "module_audit": {
+    "module": "component_ablation",
+    "ok": true,
+    "paper_claim_ready": true,
+    "status_label": "paper_critical_component_ablation_ready",
+    "summary_rows": 6,
+    "valid_sweep_rows": 3,
+    "selected_test_metric_rows": 1,
+    "summary_ablations": [
+      "full",
+      "without_boundary_uncertainty",
+      "without_calibration_gap",
+      "without_counterevidence",
+      "without_evidence_support",
+      "without_risk_penalty"
+    ],
+    "expected_ablations": [
+      "full",
+      "without_boundary_uncertainty",
+      "without_calibration_gap",
+      "without_evidence_support",
+      "without_counterevidence",
+      "without_risk_penalty"
+    ],
+    "figures": [
+      "fig_component_ablation.png",
+      "fig_component_ablation.pdf"
+    ],
+    "failures": [],
+    "warnings": []
+  },
+  "failures": [],
+  "warnings": []
+}

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-11 14:25 CEST
+Last updated: 2026-06-11 14:39 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -9,34 +9,64 @@ cycle.
 
 ## Current Checkpoint (2026-06-11)
 
-- Server live state: `pony-rec-gpu` is running exactly one Phase 2.5 signal-row
-  job, Tools test PID `3841494`, command
-  `experiments/rsc/run_ccrp_v3_signal_rows.py --domain tools --split test`.
-  GPU remains active around `93-100%` with about `42.7GB / 49.1GB` VRAM used;
-  disk is about `22G` free / `89%` used. Do not stop, restart, or duplicate it.
+- Server live state: Tools test signal-row PID `3841494` exited cleanly after
+  the second 5k-user chunk reached `505000/505000`; the server is now idle
+  for this project (`nvidia-smi` reported `0%`, `15 MiB / 49140 MiB`, and no
+  matching Pony/C-CRP/baseline Python process). Disk is about `21G` free / `89%`
+  used. Do not start a new GPU experiment without a fresh preflight, but there
+  is no active run to wait on.
+- Tools test signal rows are complete, source-audited, and locally synced:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/`
+  has `test_ccrp_signal_rows.csv` with `1,010,000` rows, provenance
+  `n_events=10000`, `parse_failure_count=0`, source-audit status
+  `recomputable_signal_rows`, duplicate keys `0`, candidate-key coverage
+  `1.0`, and local `signal_evidence_package_audit.json` reports `ok=true`.
 - Home component-ablation package is now locally audited as package-ready:
   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_home/phase2_5_component_ablation_package_audit.{json,md}`
   reports `ok=true`, `paper_claim_ready=true`, `failures=[]`. This is a
   module-package gate only, not whole-paper readiness.
+- Tools component-ablation package is also locally audited as package-ready:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/phase2_5_component_ablation_package_audit.{json,md}`
+  reports `ok=true`, `paper_claim_ready=true`, `failures=[]`. Selector/import
+  used the preregistered main config (`eta=1.0`, weights `0.5,0.3,0.2`,
+  `tie_break_seed=20260607`) with score coverage `1.0` and imported
+  `NDCG@10=0.16949770813562767`.
 - Important correction: Home component summary was rebuilt with the
   preregistered main C-CRP config (`eta=1.0`, `tie_break_seed=20260607`) rather
   than the validation-sensitivity best row (`eta=0.5`). The importer now supports
   `--tie_break_seed`; Home same-candidate tables were re-imported with
   `--tie_break_seed 20260607`, making imported `NDCG@10=0.13635503352938705`
   match `selected_test_metrics.csv`.
-- Honest result note: Home repeats the Sports/Toys pattern that several
+- Honest result note: Tools confirms the Sports/Toys/Home pattern that several
   leave-one-component-out rows are neutral or slightly better than full C-CRP
-  (`without_counterevidence` and `without_risk_penalty` beat full on NDCG@10).
+  (`without_counterevidence` and `without_risk_penalty` beat full on NDCG@10`;
+  Tools full `0.16949770813562767`, without counterevidence
+  `0.17239786620427713`, without risk penalty `0.17113102319895984`).
   Treat this as weak/redundant component evidence unless later domains reverse
   it; do not write a component-necessity claim.
-- Focused regression tests passed after the fix:
+- Focused regression and readiness checks passed after the fix:
   `python -m pytest tests\test_same_candidate_external.py tests\test_build_ccrp_component_ablation_summary.py tests\test_audit_phase2_5_module_package.py tests\test_audit_paper_critical_modules.py -q`
-  -> `46 passed`.
-- Next bounded action: monitor Tools test until it exits, then run Tools source
-  audit, local signal sync/package audit, and selector/ablation using the
-  patched tie-break-aware importer path. Before any selector `--import_scores`
-  on the server, ensure the patched selector/importer is synced or pass the
-  importer with `--tie_break_seed 20260607` explicitly.
+  plus `tests\test_plan_ccrp_signal_generation.py` -> `49 passed`.
+  `python -m scripts.audit.main_project_readiness_check` and
+  `python scripts\audit\main_project_bootstrap.py` both report
+  `project_readiness_ok=True`; the readiness audit now checks the current
+  `scripts/` layout rather than retired root script paths.
+- Next bounded action: build the observation/motivation study and real
+  hyperparameter curves from the now-complete Sports/Toys/Home/Tools signal and
+  selector packages, then run their Phase 2.5 package audits. The selector
+  import command now points
+  to the real script path
+  `scripts/misc/main_import_same_candidate_baseline_scores.py`, includes
+  `--tie_break_seed`, and this selector-path fix plus the current component
+  ablation builder/package auditor were synced to `pony-rec-gpu` while the
+  Tools signal-row job continued. If a future agent sees selector import
+  failures, first verify the server file still contains that script path before
+  rerunning anything.
+- Shared-memory note: `agentmemory` remains the required collaboration index by
+  project contract, but this Codex session exposes no `agentmemory` MCP tool and
+  `where.exe agentmemory` did not find a local CLI. Current truth is therefore
+  mirrored in Git/canonical docs/server audits until the memory tool is
+  available again; do not infer state from chat alone.
 
 ## Hard Invariants
 

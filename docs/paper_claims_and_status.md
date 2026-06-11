@@ -56,11 +56,19 @@ rerun with `--tie_break_seed 20260607` so imported ranking metrics match
 `selected_test_metrics.csv`. This does not make the whole paper ready. It also
 does not support a strong component-necessity claim: Home, like Sports/Toys,
 shows neutral-to-slightly-better leave-one-component-out rows for some
-uncertainty/risk components. The paper must report this as weak or redundant
-component evidence unless the remaining domains produce a different audited
-pattern. Tools test signal generation is still active on the server as PID
-`3841494`; wait for completion before Tools source audit, sync, selector, and
-component package construction.
+uncertainty/risk components. Tools now repeats that pattern and is complete
+through the same package gate:
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/phase2_5_component_ablation_package_audit.{json,md}`
+reports `ok=true`, `paper_claim_ready=true`, and `failures=[]`. Tools selector
+used the preregistered main config (`eta=1.0`, weights `0.5,0.3,0.2`,
+`tie_break_seed=20260607`) with score coverage `1.0` and imported
+`NDCG@10=0.16949770813562767`, but `without_counterevidence` and
+`without_risk_penalty` are higher on NDCG@10. The paper must report this as
+weak or redundant component evidence, not as a strong component-necessity
+claim. The selector command surface was corrected on 2026-06-11 so server-side
+`--import_scores` calls the real importer at
+`scripts/misc/main_import_same_candidate_baseline_scores.py` and preserves the
+seeded tie-break via `--tie_break_seed`.
 
 1. An observation/motivation study explaining why uncertainty should be used in
    this framework. It should use representative completed baselines and fair

@@ -1,0 +1,2 @@
+baseline_name,ranking_events,total_candidates,matched_candidates,score_coverage_rate,fully_scored_event_rate,missing_score,tie_break_mode,tie_break_seed,score_rows_loaded
+tools_ccrp_component_full,10000,1010000,1010000,1.0,1.0,-1000000000000.0,hash_seeded,20260607,1010000

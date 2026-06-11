@@ -238,7 +238,7 @@ def parse_args() -> argparse.Namespace:
             "Score-degeneracy gate: allow at most this fraction of fully-constant events (all "
             "candidates equal score). LLM-verbalized relevance returns all-zero for a small fraction "
             "of genuinely uninformative events; these are ranked at chance by the seeded random "
-            "tie-break. Default 0.02 (2%) sits above the observed ~0.4% while still catching a "
+            "tie-break. Default 0.02 (2%%) sits above the observed ~0.4%% while still catching a "
             "globally degenerate scorer."
         ),
     )
@@ -499,7 +499,7 @@ def main() -> None:
         exp_name = args.import_exp_name or f"{args.domain}_ccrp_selected_same_candidate"
         cmd = [
             sys.executable,
-            "main_import_same_candidate_baseline_scores.py",
+            "scripts/misc/main_import_same_candidate_baseline_scores.py",
             "--baseline_name",
             baseline_name,
             "--exp_name",

@@ -1,0 +1,64 @@
+{
+  "ok": true,
+  "copy": true,
+  "remote_host": "pony-rec-gpu",
+  "remote_project": "~/projects/pony-rec-rescue-shadow-v6",
+  "remote_signal_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test",
+  "local_package_dir": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_tools\\test",
+  "include_signal_rows": true,
+  "allowed_file_count": 4,
+  "excluded_file_count": 0,
+  "excluded_files_preview": [],
+  "too_large": [],
+  "checked_files": [
+    {
+      "rel_path": "test_ccrp_signal_rows.csv",
+      "role": "signal_rows",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_rows.csv",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_tools\\test\\test_ccrp_signal_rows.csv",
+      "size": 303537752,
+      "sha256": "873d36c645d6113f04fb2bb0fc3865dbdc93a16118b29d1a14859ec039bb0e60",
+      "expected_sha256": "873d36c645d6113f04fb2bb0fc3865dbdc93a16118b29d1a14859ec039bb0e60",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": 1010001
+    },
+    {
+      "rel_path": "test_ccrp_signal_rows_provenance.json",
+      "role": "signal_provenance",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_rows_provenance.json",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_tools\\test\\test_ccrp_signal_rows_provenance.json",
+      "size": 1434,
+      "sha256": "9160c5df4066b0b1f2c9e0dc4b7c15e829163a7172264fcb19d4f5e713da859d",
+      "expected_sha256": "9160c5df4066b0b1f2c9e0dc4b7c15e829163a7172264fcb19d4f5e713da859d",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": null
+    },
+    {
+      "rel_path": "test_ccrp_signal_source_audit.csv",
+      "role": "source_audit",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_source_audit.csv",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_tools\\test\\test_ccrp_signal_source_audit.csv",
+      "size": 475,
+      "sha256": "05bc38986a9ce345d1776613933e3ee47c2178355cf3ca634697fde9a977fb7b",
+      "expected_sha256": "05bc38986a9ce345d1776613933e3ee47c2178355cf3ca634697fde9a977fb7b",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": 2
+    },
+    {
+      "rel_path": "test_ccrp_signal_source_audit.json",
+      "role": "source_audit",
+      "remote_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_source_audit.json",
+      "local_path": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_tools\\test\\test_ccrp_signal_source_audit.json",
+      "size": 1938,
+      "sha256": "5c333c6819ac1cada7c79f51da7936e7e1c69dbabf339f3985cc220935047210",
+      "expected_sha256": "5c333c6819ac1cada7c79f51da7936e7e1c69dbabf339f3985cc220935047210",
+      "size_ok": true,
+      "sha256_ok": true,
+      "lines": null
+    }
+  ],
+  "failures": []
+}

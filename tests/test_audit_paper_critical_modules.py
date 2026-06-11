@@ -173,7 +173,10 @@ def _seed_paper_critical_support_scripts(root: Path) -> None:
     )
     _write(
         root / "scripts/misc/main_select_ccrp_variant_on_valid.py",
-        "FULL_REPORTING_KS = (5, 10, 20)\nmetrics = compute(..., ks=FULL_REPORTING_KS)\n",
+        "FULL_REPORTING_KS = (5, 10, 20)\n"
+        "metrics = compute(..., ks=FULL_REPORTING_KS)\n"
+        "scripts/misc/main_import_same_candidate_baseline_scores.py\n"
+        "\"--tie_break_seed\"\n",
     )
     _write(
         root / "scripts/analysis/main_build_ccrp_component_ablation_summary.py",

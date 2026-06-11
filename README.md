@@ -176,7 +176,7 @@ The repository includes:
 |-- requirements.txt
 |-- environment.yml
 |-- results_manifest.yaml
-|-- OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
+|-- docs/archive/legacy_root_reports/OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md
 |-- configs/
 |   |-- baseline/                     # literature baseline configs
 |   |-- baseline_reliability/         # reliability proxy manifest
@@ -268,18 +268,15 @@ monolithic training entry point.
   upstream repositories, pinned commits, shared Qwen3-8B base-model path,
   per-method adaptation policy, fairness provenance fields, and unchanged score
   schema.
-- `main_audit_official_external_repos.py` and
-  `main_audit_official_fairness_policy.py` check official checkout pins and the
+- `scripts/audit/main_audit_official_external_repos.py` and
+  `scripts/audit/main_audit_official_fairness_policy.py` check official checkout pins and the
   standardized comparison contract before heavy training starts.
-- `main_make_official_external_adapter_plan.py` generates the four-domain x
-  six-method official adapter command plan with fairness provenance arguments.
-  Its default `inspect` stage writes blocker/provenance reports; `--plan_stage
-  run` should be used only after a method adapter has a real official-code
-  implementation.
-- `main_run_official_same_candidate_adapter.py` is the unified official runner
-  entry point. The six `main_run_<method>_official_same_candidate_adapter.py`
-  files are thin wrappers for the plan generator.
-- `main_project_readiness_check.py` is the lightweight post-pull sanity check
+- `scripts/adapters/main_run_official_same_candidate_adapter.py` is the unified
+  official runner entry point. The method-specific
+  `scripts/adapters/main_run_<method>_official_same_candidate_adapter.py` files
+  are the current rerun entry points if a later audit finds a concrete invalid
+  official row.
+- `scripts/audit/main_project_readiness_check.py` is the lightweight post-pull sanity check
   for the canonical milestone/reviewer/server-runbook layer.
 - `main_export_*_same_candidate_task.py` scripts materialize unified
   same-candidate task packages in external-repository-friendly formats.
@@ -291,7 +288,7 @@ monolithic training entry point.
   `main_run_week8_external_only_phenomenon_diagnostics.py`, and
   `main_run_week8_external_paired_stat_tests.py` build paper-facing comparison,
   complementarity diagnostics, and paired tests from imported scores.
-- `PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md` is the human navigation map
+- `docs/archive/legacy_root_reports/PROJECT_LINEAGE_AND_FILE_INDEX_2026-05-06.md` is the human navigation map
   for active, future, and historical files. Prefer updating the index before
   moving root scripts or markdown notes.
 - `docs/milestones/README.md`, `docs/server_runbook.md`, and
@@ -438,7 +435,7 @@ scores imported through `main_import_same_candidate_baseline_scores.py`.
 The current `*_style_*` rows remain useful paper-style same-candidate
 adaptations, but they should not be called official reproductions until the
 pinned official baseline checklist is complete. See
-[OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md](OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md).
+[OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md](docs/archive/legacy_root_reports/OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md).
 
 Score-derived quantities are audited as reliability proxies, not automatically
 treated as confidence. ECE and Brier are valid only for relevance-calibratable

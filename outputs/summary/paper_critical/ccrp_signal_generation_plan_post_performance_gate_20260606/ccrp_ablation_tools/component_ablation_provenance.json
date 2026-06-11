@@ -1,0 +1,75 @@
+{
+  "artifact_class": "paper_critical_component_ablation",
+  "status_label": "paper_critical_component_ablation_ready",
+  "paper_claim_scope": "leave_one_component_out_component_evidence_candidate",
+  "claim_limits": [
+    "Uses validation-selected score mode, eta, confidence weight, and weight triple.",
+    "Does not select ablation variants on test.",
+    "Requires the Phase 2.5 module package audit before paper claims."
+  ],
+  "ok": true,
+  "failures": [],
+  "domain": "tools",
+  "git_commit": "9ded57b7ad500bbd73b8c6f57c067fa8d04a403e",
+  "command": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/scripts/analysis/main_build_ccrp_component_ablation_summary.py --selector_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools --output_dir outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools --domain tools --test_ranking_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl --test_candidate_items_path outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv --test_signal_path outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_rows.csv --expected_events 10000 --expected_candidates_per_event 101",
+  "input_paths": {
+    "selected_config_json": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/selected_valid_config.json",
+    "selector_provenance_json": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/ccrp_internal_provenance.json",
+    "valid_sweep_csv": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/valid_ccrp_sweep.csv",
+    "test_ranking_path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+    "test_candidate_items_path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv",
+    "test_signal_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_rows.csv"
+  },
+  "input_sha256": {
+    "selected_config_json": "29904c370a066a915f8971711e2c5b170baf6390f9dc5009643e3383ac48b4e8",
+    "selector_provenance_json": "280a3a1a934615104bcdf91c6e2d7a5d5f6d6a46814ae6a6b5d0931de2bdb37f",
+    "valid_sweep_csv": "1ff14253199ece50b60b90752c3bcc755bf88819f65e405e5e4c6d882606214f",
+    "test_ranking_path": "576303e1730a2062dceb13edcee45c010a71c067e08484e9498906b3ec88d61b",
+    "test_candidate_items_path": "e866e9ee8b96910061b5a4c7d67aa3a4867aaa7e6575d0c02108a945724bea7b",
+    "test_signal_path": "873d36c645d6113f04fb2bb0fc3865dbdc93a16118b29d1a14859ec039bb0e60"
+  },
+  "selected_config": {
+    "score_mode": "full",
+    "eta": 1.0,
+    "confidence_weight": 0.7,
+    "weight_boundary": 0.5,
+    "weight_calibration_gap": 0.3,
+    "weight_evidence": 0.2,
+    "weight_grid_label": "0.5,0.3,0.2"
+  },
+  "selection_source": {
+    "selected_on": "preregistered",
+    "main_config_mode": "preregistered",
+    "selected_config_split": "valid",
+    "selection_metric": "NDCG@10",
+    "selected_valid_metric": 0.17034366022692146
+  },
+  "require_full_score_mode": true,
+  "valid_sweep_ablations": [
+    "full"
+  ],
+  "ablations": [
+    "full",
+    "without_boundary_uncertainty",
+    "without_calibration_gap",
+    "without_evidence_support",
+    "without_counterevidence",
+    "without_risk_penalty"
+  ],
+  "required_metrics": [
+    "MRR",
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20"
+  ],
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "summary_path": "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/component_ablation_summary.csv",
+  "figure_paths": [
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/fig_component_ablation.png",
+    "outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_ablation_tools/fig_component_ablation.pdf"
+  ]
+}

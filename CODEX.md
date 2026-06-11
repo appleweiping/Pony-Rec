@@ -81,7 +81,7 @@ For complex tasks, run an `rg` discovery pass for the subsystem. Cover project r
 | Task Type | Extra Files to Read |
 |-----------|-------------------|
 | Claims, paper text, tables | `docs/paper_claims_and_status.md`, `docs/top_conference_review_gate.md`, relevant `docs/milestones/M*.md` |
-| Official external baselines | `docs/baseline_protocol.md`, `OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md`, `configs/official_external_baselines.yaml` |
+| Official external baselines | `docs/baseline_protocol.md`, `docs/archive/legacy_root_reports/OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md`, `configs/official_external_baselines.yaml` |
 | C-CRP / Shadow / uncertainty | `docs/shadow_method.md`, `configs/shadow/*.yaml`, candidate-score importer/exporter scripts |
 | SRPD / LoRA training | `configs/srpd/`, `configs/lora/`, `docs/server_runbook.md` (leakage, teacher, weighted-loss gates) |
 | Server / long-running experiments | `docs/server_runbook.md` — do not guess server state |
@@ -126,7 +126,7 @@ For storage-heavy baselines: one method-domain production loop. Run → verify �
 - Keep changes scoped to the requested subsystem
 - Do not push `outputs/`, raw logs, datasets, model weights, checkpoints, private keys
 - Update canonical docs when plan, status, command surface, or claim boundary changes
-- Run `python main_project_readiness_check.py` after meaningful changes
+- Run `python -m scripts.audit.main_project_readiness_check` after meaningful changes
 
 ## Final Handoff
 

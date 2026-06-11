@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def run(cmd: list[str]) -> int:
@@ -16,7 +16,7 @@ def run(cmd: list[str]) -> int:
 
 
 def main() -> int:
-    readiness = run([sys.executable, "main_project_readiness_check.py"])
+    readiness = run([sys.executable, "-m", "scripts.audit.main_project_readiness_check"])
     if readiness != 0:
         return readiness
     print("bootstrap_ok=true")
@@ -26,4 +26,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

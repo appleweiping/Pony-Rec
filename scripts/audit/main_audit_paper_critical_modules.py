@@ -425,6 +425,10 @@ def audit_component_ablation_execution_support(root: Path) -> dict[str, Any]:
         failures.append("selector_missing_full_reporting_ks")
     if "ks=FULL_REPORTING_KS" not in selector_text:
         failures.append("selector_not_passing_full_reporting_ks")
+    if "scripts/misc/main_import_same_candidate_baseline_scores.py" not in selector_text:
+        failures.append("selector_import_scores_uses_missing_root_importer")
+    if '"--tie_break_seed"' not in selector_text:
+        failures.append("selector_import_scores_missing_tie_break_seed")
 
     builder_text = files["builder"].read_text(encoding="utf-8", errors="replace") if files["builder"].exists() else ""
     required_builder_snippets = {
