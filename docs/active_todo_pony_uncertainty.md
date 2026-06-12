@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 18:16 CEST
+Last updated: 2026-06-12 19:35 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -12,8 +12,9 @@ cycle.
 - Pre-submission gate refresh added:
   `scripts/audit/main_refresh_pre_submission_gates.py` is now the preferred
   one-command refresh for final submission status. It runs, in order, external
-  proceedings metadata, submission package, submission metadata packet, manual
-  submission checklist, and final submission gate, then writes
+  proceedings metadata, submission package, anonymous source-package staging,
+  source-package rebuild audit, submission metadata packet, manual submission
+  checklist, and final submission gate, then writes
   `outputs/summary/paper_critical/pre_submission_gate_refresh_20260612.{json,md}`.
   The latest live refresh reports `ok=true`,
   `final_submission_ready=false`, and final verdict
@@ -35,7 +36,7 @@ cycle.
   submission-system fields. The current freshness artifact
   `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
   reports `ok=true`, `refresh_artifact_fresh=true`,
-  `final_submission_ready=false`, `19` input fingerprints checked, `10`
+  `final_submission_ready=false`, `21` input fingerprints checked, `14`
   generated gate files checked, and zero input/output hash mismatches. It
   now also reflects the strengthened ProMax source check below and preserves
   the same external/manual blockers instead of treating freshness as submission
@@ -67,11 +68,31 @@ cycle.
   artifact handoff but does not close final readiness while ProMax metadata and
   private submission-system gates remain open.
 
+- Anonymous source-package rebuild audit added:
+  `scripts/audit/main_audit_submission_source_package_rebuild.py` now copies
+  the staged anonymous source package into an independent ignored worktree
+  under `artifacts/submission_source_package_rebuild_20260612/work/`, deletes
+  stale LaTeX build outputs, and runs
+  `pdflatex -> bibtex -> pdflatex -> pdflatex`. The generated audit
+  `outputs/summary/paper_critical/submission_source_package_rebuild_20260612.{json,md}`
+  reports `ok=true`, `submission_source_package_rebuild_ready=true`,
+  `final_submission_ready=false`, `21` verified package files, all four build
+  commands returning `0`, rebuilt `Paper/main.pdf` at `9` pages / `546669`
+  bytes, actual PDF page count `9`, `bibtex_warning_count=0`, and
+  `overfull_hbox_count=0`. It fails closed on manifest hash drift, extra or
+  missing staged files, unsafe or missing `files_dir`, nonzero LaTeX/BibTeX
+  commands, stale-output ambiguity, log/PDF page or byte mismatch, BibTeX
+  warnings, undefined citations/references, rerun warnings, or overfull hbox.
+  Underfull layout warnings remain warnings only. This proves local
+  rebuildability of the staged anonymous source package, not final submission
+  readiness.
+
 - Final submission gate added:
-  `scripts/audit/main_build_final_submission_gate.py` aggregates the four
-  local pre-submission gates:
+  `scripts/audit/main_build_final_submission_gate.py` aggregates the local
+  pre-submission gates:
   `submission_package_audit_20260612.json`,
   `submission_metadata_packet_20260612.json`,
+  `submission_source_package_rebuild_20260612.json`,
   `external_proceedings_metadata_recheck_20260612.json`, and
   `manual_submission_checklist_20260612.json`. The generated summary
   `outputs/summary/paper_critical/final_submission_gate_20260612.{json,md}`

@@ -47,9 +47,9 @@ also include:
 **2026-06-12 pre-submission gate refresh.** Codex added
 `scripts/audit/main_refresh_pre_submission_gates.py` as the preferred
 single-command refresh for the final submission gate stack. It runs the external
-proceedings metadata audit, submission package audit, submission metadata
-packet, manual submission checklist, and final submission gate in dependency
-order, then writes
+proceedings metadata audit, submission package audit, anonymous source-package
+staging, source-package rebuild audit, submission metadata packet, manual
+submission checklist, and final submission gate in dependency order, then writes
 `outputs/summary/paper_critical/pre_submission_gate_refresh_20260612.{json,md}`.
 The latest live refresh reports `ok=true`, `final_submission_ready=false`, and
 final verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. This
@@ -69,8 +69,8 @@ recorded Git HEAD is interpreted as generation provenance, not as a strict
 current-HEAD equality condition after committing generated artifacts.
 The current freshness artifact
 `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
-reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints and
-`10` generated gate files checked, zero hash mismatches, and
+reports `ok=true`, `refresh_artifact_fresh=true`, `21` input fingerprints and
+`14` generated gate files checked, zero hash mismatches, and
 `final_submission_ready=false`. The refreshed external metadata audit now also
 passes a required SIGIR 2026 accepted-papers source check for the ProMax title
 and author line, strengthening the accepted-paper evidence while leaving final
@@ -95,10 +95,28 @@ explicit generated-paper allowlist. This is local artifact staging only; it does
 not close final submission readiness while ProMax metadata and manual
 submission-system gates remain open.
 
+**2026-06-12 anonymous source-package rebuild audit.** Codex added
+`scripts/audit/main_audit_submission_source_package_rebuild.py` as the local
+rebuildability gate for the staged anonymous source package. It verifies the
+staged package file tree exactly matches the manifest, rejects hash/size drift,
+copies the package into an independent ignored worktree, deletes stale LaTeX
+build outputs, and runs `pdflatex -> bibtex -> pdflatex -> pdflatex`. The
+generated
+`outputs/summary/paper_critical/submission_source_package_rebuild_20260612.{json,md}`
+reports `ok=true`, `submission_source_package_rebuild_ready=true`,
+`final_submission_ready=false`, `21` verified package files, four successful
+build commands, a rebuilt 9-page / 546669-byte `main.pdf`, actual PDF page
+count `9`, `bibtex_warning_count=0`, and `overfull_hbox_count=0`. The final
+submission gate now treats this rebuild audit as a required local artifact
+gate. Passing it means only that the staged anonymous package rebuilds cleanly
+in this local environment; it does not imply ProMax metadata readiness, manual
+submission-system completion, or final submission readiness.
+
 **2026-06-12 final submission gate.** Codex added
 `scripts/audit/main_build_final_submission_gate.py` as the final local
-pre-submission aggregator over the package audit, metadata packet, external
-proceedings metadata audit, and manual submission checklist. The generated
+pre-submission aggregator over the package audit, metadata packet,
+source-package rebuild audit, external proceedings metadata audit, and manual
+submission checklist. The generated
 `outputs/summary/paper_critical/final_submission_gate_20260612.{json,md}`
 reports `ok=true`, `all_local_artifact_gates_ok=true`,
 `external_proceedings_metadata_ready=false`,

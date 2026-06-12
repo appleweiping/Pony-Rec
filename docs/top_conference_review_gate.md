@@ -255,8 +255,23 @@ manifest is not clean, if source hashes changed, if paths escape the package,
 if private/manual/COI/reviewer/account files appear, or if stale output files
 would survive an overwrite.
 
-After running the package audit, metadata packet, external proceedings
-metadata audit, and manual submission checklist, build the final local gate:
+After staging, run the independent rebuild audit:
+
+```bash
+python -m scripts.audit.main_audit_submission_source_package_rebuild --overwrite
+```
+
+This copies the staged package into an ignored rebuild worktree and runs
+`pdflatex -> bibtex -> pdflatex -> pdflatex`. It must fail on hash drift, extra
+or missing staged files, unsafe package paths, stale PDF/log ambiguity, failed
+commands, log/PDF page or byte mismatch, BibTeX warnings, undefined references,
+rerun warnings, or overfull hbox. Passing this gate means only that the staged
+anonymous source package rebuilds in the local environment; it is not a TAPS,
+Overleaf, metadata, or final-submission approval.
+
+After running the package audit, source-package staging, source-package rebuild
+audit, metadata packet, external proceedings metadata audit, and manual
+submission checklist, build the final local gate:
 
 ```bash
 python -m scripts.audit.main_build_final_submission_gate \
@@ -265,9 +280,9 @@ python -m scripts.audit.main_build_final_submission_gate \
 ```
 
 This is the single local summary for pre-submission status. It must not mark
-`final_submission_ready=true` unless all local artifact gates pass, external
-proceedings metadata is ready, and manual submission-system items have actually
-been completed.
+`final_submission_ready=true` unless all local artifact gates pass, including
+the source-package rebuild audit, external proceedings metadata is ready, and
+manual submission-system items have actually been completed.
 
 To refresh the whole local pre-submission stack in dependency order, use:
 
@@ -279,8 +294,9 @@ python -m scripts.audit.main_refresh_pre_submission_gates \
 ```
 
 This is the preferred command immediately before any submission-status report
-because it regenerates external metadata, package, metadata packet, manual
-checklist, and final-gate artifacts in the correct order. The refresh artifact
+because it regenerates external metadata, package, source-package, rebuild,
+metadata packet, manual checklist, and final-gate artifacts in the correct
+order. The refresh artifact
 should then be checked with the local freshness audit:
 
 ```bash

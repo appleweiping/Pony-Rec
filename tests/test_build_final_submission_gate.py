@@ -37,6 +37,19 @@ def _seed_inputs(tmp_path: Path) -> dict[str, Path]:
             "remaining_blockers": ["promax:final_page_range_missing_in_bib"],
         },
     )
+    source_rebuild = _write_json(
+        tmp_path / "source_rebuild.json",
+        {
+            "schema_version": "source_rebuild.v1",
+            "created_at_utc": "2026-06-12T00:00:00Z",
+            "ok": True,
+            "submission_source_package_rebuild_ready": True,
+            "final_submission_ready": False,
+            "warnings": [],
+            "failures": [],
+            "remaining_blockers": ["promax:final_page_range_missing_in_bib"],
+        },
+    )
     external = _write_json(
         tmp_path / "external_metadata.json",
         {
@@ -64,7 +77,13 @@ def _seed_inputs(tmp_path: Path) -> dict[str, Path]:
             "remaining_blockers": ["manual_submission_system_items_not_confirmed"],
         },
     )
-    return {"package": package, "metadata": metadata, "external": external, "manual": manual}
+    return {
+        "package": package,
+        "metadata": metadata,
+        "source_rebuild": source_rebuild,
+        "external": external,
+        "manual": manual,
+    }
 
 
 def test_final_submission_gate_aggregates_external_and_manual_blockers(tmp_path: Path) -> None:
@@ -74,6 +93,7 @@ def test_final_submission_gate_aggregates_external_and_manual_blockers(tmp_path:
         root=tmp_path,
         submission_package_audit_json=paths["package"].relative_to(tmp_path),
         submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        submission_source_package_rebuild_json=paths["source_rebuild"].relative_to(tmp_path),
         external_metadata_audit_json=paths["external"].relative_to(tmp_path),
         manual_checklist_json=paths["manual"].relative_to(tmp_path),
     )
@@ -88,6 +108,7 @@ def test_final_submission_gate_aggregates_external_and_manual_blockers(tmp_path:
     assert "manual_submission_system_not_ready" in gate["remaining_blockers"]
     assert "promax:crossref_registry_not_visible:status=404" in gate["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in gate["remaining_blockers"]
+    assert gate["gates"][2]["gate_id"] == "submission_source_package_rebuild"
     assert gate["warnings"] == ["external_proceedings_metadata:proex:crossref_not_visible:status=404"]
 
 
@@ -101,6 +122,7 @@ def test_final_submission_gate_fails_closed_on_unexpected_subgate_final_ready(tm
         root=tmp_path,
         submission_package_audit_json=paths["package"].relative_to(tmp_path),
         submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        submission_source_package_rebuild_json=paths["source_rebuild"].relative_to(tmp_path),
         external_metadata_audit_json=paths["external"].relative_to(tmp_path),
         manual_checklist_json=paths["manual"].relative_to(tmp_path),
     )
@@ -109,6 +131,28 @@ def test_final_submission_gate_fails_closed_on_unexpected_subgate_final_ready(tm
     assert gate["final_submission_ready"] is False
     assert "submission_package:unexpected_local_final_submission_ready" in gate["failures"]
     assert gate["verdict"] == "FINAL_SUBMISSION_GATE_NEEDS_REPAIR"
+
+
+def test_final_submission_gate_fails_closed_when_source_rebuild_not_ready(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    source_rebuild = json.loads(paths["source_rebuild"].read_text(encoding="utf-8"))
+    source_rebuild["submission_source_package_rebuild_ready"] = False
+    source_rebuild["failures"] = ["rebuilt_pdf_missing_or_too_small"]
+    paths["source_rebuild"].write_text(json.dumps(source_rebuild), encoding="utf-8")
+
+    gate = build_final_submission_gate(
+        root=tmp_path,
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        submission_source_package_rebuild_json=paths["source_rebuild"].relative_to(tmp_path),
+        external_metadata_audit_json=paths["external"].relative_to(tmp_path),
+        manual_checklist_json=paths["manual"].relative_to(tmp_path),
+    )
+
+    assert gate["ok"] is False
+    assert gate["final_submission_ready"] is False
+    assert "submission_source_package_rebuild:not_ready" in gate["failures"]
+    assert "submission_source_package_rebuild:rebuilt_pdf_missing_or_too_small" in gate["failures"]
 
 
 def test_final_submission_gate_can_mark_ready_when_all_gates_ready(tmp_path: Path) -> None:
@@ -121,7 +165,7 @@ def test_final_submission_gate_can_mark_ready_when_all_gates_ready(tmp_path: Pat
         payload[ready_field] = True
         payload["remaining_blockers"] = []
         paths[key].write_text(json.dumps(payload), encoding="utf-8")
-    for key in ["package", "metadata"]:
+    for key in ["package", "metadata", "source_rebuild"]:
         payload = json.loads(paths[key].read_text(encoding="utf-8"))
         payload["remaining_blockers"] = []
         paths[key].write_text(json.dumps(payload), encoding="utf-8")
@@ -130,6 +174,7 @@ def test_final_submission_gate_can_mark_ready_when_all_gates_ready(tmp_path: Pat
         root=tmp_path,
         submission_package_audit_json=paths["package"].relative_to(tmp_path),
         submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        submission_source_package_rebuild_json=paths["source_rebuild"].relative_to(tmp_path),
         external_metadata_audit_json=paths["external"].relative_to(tmp_path),
         manual_checklist_json=paths["manual"].relative_to(tmp_path),
     )

@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 
 from scripts.audit.main_refresh_pre_submission_gates import refresh_pre_submission_gates
@@ -14,6 +15,19 @@ def _write_json(path: Path, payload: dict) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+def _fake_latex_runner(command, cwd, **kwargs):
+    cwd = Path(cwd)
+    if command[0] == "pdflatex":
+        (cwd / "main.log").write_text(
+            "Output written on main.pdf (9 pages, 120000 bytes).\n",
+            encoding="utf-8",
+        )
+        (cwd / "main.pdf").write_bytes((b"/Type /Page\n" * 9) + (b"p" * 119_892))
+    if command[0] == "bibtex":
+        (cwd / "main.blg").write_text("warning$ -- 0\n", encoding="utf-8")
+    return subprocess.CompletedProcess(command, 0, stdout="ok\n", stderr="")
 
 
 def _seed_package_inputs(tmp_path: Path) -> dict[str, Path]:
@@ -211,6 +225,9 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
         target_profile_id="test_profile",
         metadata_config=paths["metadata_config"].relative_to(tmp_path),
         manual_config=paths["manual_config"].relative_to(tmp_path),
+        source_package_output_dir="artifacts/source_package",
+        source_rebuild_build_dir="artifacts/source_rebuild",
+        source_rebuild_runner=_fake_latex_runner,
     )
 
     assert refresh["ok"] is True
@@ -221,6 +238,8 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     assert [step["step_id"] for step in refresh["steps"]] == [
         "external_proceedings_metadata",
         "submission_package",
+        "submission_source_package",
+        "submission_source_package_rebuild",
         "submission_metadata_packet",
         "manual_submission_checklist",
         "final_submission_gate",
@@ -228,6 +247,8 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     for name in [
         "external_proceedings_metadata_recheck_test.json",
         "submission_package_audit_test.json",
+        "submission_source_package_test.json",
+        "submission_source_package_rebuild_test.json",
         "submission_metadata_packet_test.json",
         "manual_submission_checklist_test.json",
         "final_submission_gate_test.json",
@@ -238,5 +259,7 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     assert "Paper/main.tex" in input_paths
     assert "Paper/references.bib" in input_paths
     assert "scripts/audit/main_audit_pre_submission_refresh_freshness.py" in input_paths
+    assert "scripts/audit/main_build_submission_source_package.py" in input_paths
+    assert "scripts/audit/main_audit_submission_source_package_rebuild.py" in input_paths
     assert "promax:final_page_range_missing_in_bib" in refresh["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in refresh["remaining_blockers"]

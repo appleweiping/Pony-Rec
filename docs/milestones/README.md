@@ -86,8 +86,8 @@ submission gate stack, and
 recorded input fingerprints and generated gate hashes. The current freshness
 artifact
 `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
-reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints,
-`10` generated gate files, zero mismatches, and
+reports `ok=true`, `refresh_artifact_fresh=true`, `21` input fingerprints,
+`14` generated gate files, zero mismatches, and
 `final_submission_ready=false`. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
 in addition to arXiv `2604.26231`, but ProMax final page range and DOI/Crossref
@@ -99,8 +99,12 @@ package can also be staged locally from the audited source manifest via
 `scripts/audit/main_build_submission_source_package.py`; the current staging
 manifest reports 21 copied files and a copied manifest sha256 matching the
 source audit manifest under ignored `artifacts/submission_source_package_20260612/`.
-This is an artifact handoff aid, not final submission readiness. The manual
-submission gate now has a
+`scripts/audit/main_audit_submission_source_package_rebuild.py` now verifies
+that staged package in an independent ignored worktree; the current rebuild
+audit reports four successful LaTeX/BibTeX commands, a 9-page PDF, zero BibTeX
+warnings, and zero overfull hbox warnings. This is an artifact handoff and
+local rebuildability aid, not final submission readiness. The manual submission
+gate now has a
 privacy-preserving closure path:
 `configs/paper_manual_submission_private_confirmation.template.json` plus the
 optional `--private-confirmation-json` argument to

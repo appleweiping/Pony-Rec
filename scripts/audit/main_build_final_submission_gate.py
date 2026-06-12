@@ -13,6 +13,9 @@ DEFAULT_SUBMISSION_PACKAGE_AUDIT = Path(
 DEFAULT_SUBMISSION_METADATA_PACKET = Path(
     "outputs/summary/paper_critical/submission_metadata_packet_20260612.json"
 )
+DEFAULT_SUBMISSION_SOURCE_PACKAGE_REBUILD = Path(
+    "outputs/summary/paper_critical/submission_source_package_rebuild_20260612.json"
+)
 DEFAULT_EXTERNAL_METADATA_AUDIT = Path(
     "outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.json"
 )
@@ -85,17 +88,20 @@ def build_final_submission_gate(
     root: str | Path = ".",
     submission_package_audit_json: str | Path = DEFAULT_SUBMISSION_PACKAGE_AUDIT,
     submission_metadata_packet_json: str | Path = DEFAULT_SUBMISSION_METADATA_PACKET,
+    submission_source_package_rebuild_json: str | Path = DEFAULT_SUBMISSION_SOURCE_PACKAGE_REBUILD,
     external_metadata_audit_json: str | Path = DEFAULT_EXTERNAL_METADATA_AUDIT,
     manual_checklist_json: str | Path = DEFAULT_MANUAL_CHECKLIST,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
     package_path = repo / submission_package_audit_json
     metadata_path = repo / submission_metadata_packet_json
+    source_rebuild_path = repo / submission_source_package_rebuild_json
     external_path = repo / external_metadata_audit_json
     manual_path = repo / manual_checklist_json
 
     package = _read_json(package_path)
     metadata = _read_json(metadata_path)
+    source_rebuild = _read_json(source_rebuild_path)
     external = _read_json(external_path)
     manual = _read_json(manual_path)
 
@@ -113,6 +119,13 @@ def build_final_submission_gate(
             root=repo,
             payload=metadata,
             ready_field="submission_metadata_packet_ready",
+        ),
+        _gate_record(
+            gate_id="submission_source_package_rebuild",
+            path=source_rebuild_path,
+            root=repo,
+            payload=source_rebuild,
+            ready_field="submission_source_package_rebuild_ready",
         ),
         _gate_record(
             gate_id="external_proceedings_metadata",
@@ -136,7 +149,11 @@ def build_final_submission_gate(
     for gate in gates:
         if not gate["ok"]:
             failures.append(f"{gate['gate_id']}:not_ok")
-        if gate["gate_id"] in {"submission_package", "submission_metadata_packet"} and not gate["ready"]:
+        if gate["gate_id"] in {
+            "submission_package",
+            "submission_metadata_packet",
+            "submission_source_package_rebuild",
+        } and not gate["ready"]:
             failures.append(f"{gate['gate_id']}:not_ready")
         if gate["gate_id"] == "external_proceedings_metadata" and not gate["ready"]:
             blockers.append("external_proceedings_metadata_not_ready")
@@ -153,6 +170,8 @@ def build_final_submission_gate(
         and package.get("submission_package_ready_for_target_formatting") is True
         and metadata.get("ok") is True
         and metadata.get("submission_metadata_packet_ready") is True
+        and source_rebuild.get("ok") is True
+        and source_rebuild.get("submission_source_package_rebuild_ready") is True
         and manual.get("ok") is True
         and manual.get("manual_submission_checklist_ready") is True
         and external.get("ok") is True
@@ -193,6 +212,7 @@ def build_final_submission_gate(
         "input_paths": {
             "submission_package_audit": str(Path(submission_package_audit_json)),
             "submission_metadata_packet": str(Path(submission_metadata_packet_json)),
+            "submission_source_package_rebuild": str(Path(submission_source_package_rebuild_json)),
             "external_metadata_audit": str(Path(external_metadata_audit_json)),
             "manual_checklist": str(Path(manual_checklist_json)),
         },
@@ -202,7 +222,7 @@ def build_final_submission_gate(
         "remaining_blockers": _dedupe(blockers),
         "next_actions": [
             "Rerun external proceedings metadata recheck immediately before final submission.",
-            "Rerun submission package, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.",
+            "Rerun submission package, source-package staging/rebuild, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.",
             "Complete private author/COI/reviewer/declaration fields only inside the submission system.",
             "Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are both ready.",
         ],
@@ -255,6 +275,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--root", default=".")
     parser.add_argument("--submission-package-audit-json", default=str(DEFAULT_SUBMISSION_PACKAGE_AUDIT))
     parser.add_argument("--submission-metadata-packet-json", default=str(DEFAULT_SUBMISSION_METADATA_PACKET))
+    parser.add_argument(
+        "--submission-source-package-rebuild-json",
+        default=str(DEFAULT_SUBMISSION_SOURCE_PACKAGE_REBUILD),
+    )
     parser.add_argument("--external-metadata-audit-json", default=str(DEFAULT_EXTERNAL_METADATA_AUDIT))
     parser.add_argument("--manual-checklist-json", default=str(DEFAULT_MANUAL_CHECKLIST))
     parser.add_argument("--output-json")
@@ -268,6 +292,7 @@ def main() -> int:
         root=args.root,
         submission_package_audit_json=args.submission_package_audit_json,
         submission_metadata_packet_json=args.submission_metadata_packet_json,
+        submission_source_package_rebuild_json=args.submission_source_package_rebuild_json,
         external_metadata_audit_json=args.external_metadata_audit_json,
         manual_checklist_json=args.manual_checklist_json,
     )

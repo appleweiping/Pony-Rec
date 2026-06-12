@@ -21,6 +21,10 @@ from scripts.audit.main_audit_submission_package import (
     build_submission_package_audit,
 )
 from scripts.audit.main_audit_submission_package import _write_md as write_package_md
+from scripts.audit.main_audit_submission_source_package_rebuild import (
+    audit_submission_source_package_rebuild,
+)
+from scripts.audit.main_audit_submission_source_package_rebuild import _write_md as write_source_rebuild_md
 from scripts.audit.main_build_final_submission_gate import build_final_submission_gate
 from scripts.audit.main_build_final_submission_gate import _write_md as write_final_gate_md
 from scripts.audit.main_build_manual_submission_checklist import (
@@ -33,6 +37,8 @@ from scripts.audit.main_build_submission_metadata_packet import (
     build_submission_metadata_packet,
 )
 from scripts.audit.main_build_submission_metadata_packet import _write_md as write_metadata_md
+from scripts.audit.main_build_submission_source_package import build_submission_source_package
+from scripts.audit.main_build_submission_source_package import _write_md as write_source_package_md
 
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
@@ -158,6 +164,9 @@ def refresh_pre_submission_gates(
     metadata_config: str | Path = DEFAULT_METADATA_CONFIG,
     manual_config: str | Path = DEFAULT_MANUAL_CONFIG,
     manual_private_confirmation_json: str | Path | None = None,
+    source_package_output_dir: str | Path | None = None,
+    source_rebuild_build_dir: str | Path | None = None,
+    source_rebuild_runner: Any = subprocess.run,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
     out_dir = repo / output_dir
@@ -168,6 +177,10 @@ def refresh_pre_submission_gates(
     external_md = out_dir / f"external_proceedings_metadata_recheck_{stamp}.md"
     package_json = out_dir / f"submission_package_audit_{stamp}.json"
     package_md = out_dir / f"submission_package_audit_{stamp}.md"
+    source_package_json = out_dir / f"submission_source_package_{stamp}.json"
+    source_package_md = out_dir / f"submission_source_package_{stamp}.md"
+    source_rebuild_json = out_dir / f"submission_source_package_rebuild_{stamp}.json"
+    source_rebuild_md = out_dir / f"submission_source_package_rebuild_{stamp}.md"
     metadata_json = out_dir / f"submission_metadata_packet_{stamp}.json"
     metadata_md = out_dir / f"submission_metadata_packet_{stamp}.md"
     manual_json = out_dir / f"manual_submission_checklist_{stamp}.json"
@@ -190,6 +203,8 @@ def refresh_pre_submission_gates(
         "scripts/audit/main_refresh_pre_submission_gates.py",
         "scripts/audit/main_audit_external_proceedings_metadata.py",
         "scripts/audit/main_audit_submission_package.py",
+        "scripts/audit/main_build_submission_source_package.py",
+        "scripts/audit/main_audit_submission_source_package_rebuild.py",
         "scripts/audit/main_build_submission_metadata_packet.py",
         "scripts/audit/main_build_manual_submission_checklist.py",
         "scripts/audit/main_build_final_submission_gate.py",
@@ -222,6 +237,25 @@ def refresh_pre_submission_gates(
     _write_json(package_json, package)
     write_package_md(package_md, package)
 
+    source_package = build_submission_source_package(
+        root=repo,
+        submission_package_audit_json=package_json.relative_to(repo),
+        output_dir=source_package_output_dir or Path("artifacts") / f"submission_source_package_{stamp}",
+        overwrite=True,
+    )
+    _write_json(source_package_json, source_package)
+    write_source_package_md(source_package_md, source_package)
+
+    source_rebuild = audit_submission_source_package_rebuild(
+        root=repo,
+        source_package_json=source_package_json.relative_to(repo),
+        build_dir=source_rebuild_build_dir or Path("artifacts") / f"submission_source_package_rebuild_{stamp}",
+        overwrite=True,
+        runner=source_rebuild_runner,
+    )
+    _write_json(source_rebuild_json, source_rebuild)
+    write_source_rebuild_md(source_rebuild_md, source_rebuild)
+
     metadata = build_submission_metadata_packet(
         root=repo,
         paper_dir=paper_dir,
@@ -246,6 +280,7 @@ def refresh_pre_submission_gates(
         root=repo,
         submission_package_audit_json=package_json.relative_to(repo),
         submission_metadata_packet_json=metadata_json.relative_to(repo),
+        submission_source_package_rebuild_json=source_rebuild_json.relative_to(repo),
         external_metadata_audit_json=external_json.relative_to(repo),
         manual_checklist_json=manual_json.relative_to(repo),
     )
@@ -268,6 +303,22 @@ def refresh_pre_submission_gates(
             root=repo,
             payload=package,
             ready_field="submission_package_ready_for_target_formatting",
+        ),
+        _step_record(
+            step_id="submission_source_package",
+            json_path=source_package_json,
+            md_path=source_package_md,
+            root=repo,
+            payload=source_package,
+            ready_field="submission_source_package_ready",
+        ),
+        _step_record(
+            step_id="submission_source_package_rebuild",
+            json_path=source_rebuild_json,
+            md_path=source_rebuild_md,
+            root=repo,
+            payload=source_rebuild,
+            ready_field="submission_source_package_rebuild_ready",
         ),
         _step_record(
             step_id="submission_metadata_packet",
@@ -306,11 +357,11 @@ def refresh_pre_submission_gates(
     return {
         "schema_version": "2026-06-12.pre_submission_gate_refresh.v1",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
-        "mode": "local_read_only_pre_submission_gate_refresh",
-        "read_only": True,
+        "mode": "local_artifact_pre_submission_gate_refresh",
+        "read_only": False,
         "will_ssh": False,
-        "will_copy": False,
-        "will_delete": False,
+        "will_copy": True,
+        "will_delete": True,
         "will_start_experiment": False,
         "stamp": stamp,
         "output_dir": str(Path(output_dir)),
@@ -399,6 +450,8 @@ def parse_args() -> argparse.Namespace:
         "--manual-private-confirmation-json",
         help="Optional untracked/private JSON confirming submission-system fields were completed without storing private values.",
     )
+    parser.add_argument("--source-package-output-dir")
+    parser.add_argument("--source-rebuild-build-dir")
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     return parser.parse_args()
@@ -423,6 +476,8 @@ def main() -> int:
         metadata_config=args.metadata_config,
         manual_config=args.manual_config,
         manual_private_confirmation_json=args.manual_private_confirmation_json,
+        source_package_output_dir=args.source_package_output_dir,
+        source_rebuild_build_dir=args.source_rebuild_build_dir,
     )
     if args.output_json:
         output = Path(args.output_json)
