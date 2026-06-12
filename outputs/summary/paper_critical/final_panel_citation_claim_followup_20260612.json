@@ -1,0 +1,48 @@
+{
+  "audit_name": "final_panel_citation_claim_followup",
+  "project": "uncertainty",
+  "generated_utc": "2026-06-12T05:25:00Z",
+  "panel_scope": "citation/proceedings metadata and final claim boundary after citation recheck",
+  "reviewers": [
+    {
+      "reviewer": "Faraday existing subagent",
+      "score": "8.0/10",
+      "verdict": "conditional_pass_for_citation_claim_gate",
+      "final_submission_ready_should_remain_false": true,
+      "blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry details need pre-submission confirmation.",
+        "ProEx ACM-visible metadata should be rechecked because local audit notes Crossref 404.",
+        "Final full manuscript claim/citation panel review is still required before final_submission_ready=true."
+      ]
+    },
+    {
+      "reviewer": "Meitner existing subagent",
+      "score": "8.5/10",
+      "verdict": "citation_metadata_conditional_pass_claim_boundary_pass_with_scope_guards",
+      "final_submission_ready_should_remain_false": true,
+      "blockers": [
+        "ProMax final ACM page range is not yet in local BibTeX; numpages=11 is acceptable as a temporary proceedings caution.",
+        "ACM/Crossref visibility for 2026 DOI records should be rechecked immediately before submission.",
+        "Final full-panel readiness remains open."
+      ]
+    }
+  ],
+  "reviewer_consensus": {
+    "citation_claim_gate": "conditional_pass",
+    "claim_boundary": "same_candidate_reranking_scope_guarded",
+    "final_submission_ready": false,
+    "new_experiment_required": false
+  },
+  "validated_artifacts": [
+    "Paper/references.bib",
+    "outputs/summary/paper_critical/final_citation_proceedings_recheck_20260612.json",
+    "outputs/summary/paper_critical/final_citation_proceedings_recheck_20260612.md",
+    "outputs/summary/paper_critical/final_paper_claim_audit_after_citation_recheck_20260612.json",
+    "outputs/summary/paper_critical/final_paper_claim_audit_after_citation_recheck_20260612.md"
+  ],
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "ProEx ACM-visible metadata should be rechecked immediately before submission because Crossref returned 404 in this environment.",
+    "Final full manuscript panel/signoff remains required before final_submission_ready can become true."
+  ]
+}

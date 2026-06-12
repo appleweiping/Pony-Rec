@@ -88,9 +88,25 @@ the re-review returned `28/35 = 8.0/10`, a bare conditional section-readiness
 pass. The regenerated claim audit
 `outputs/summary/paper_critical/final_paper_claim_audit_after_local_review_20260612.{json,md}`
 still reports `final_submission_ready=false`, so final submission readiness
-remains blocked on manual reference completeness, ProEx/ProMax proceedings
-metadata recheck, and a final full review panel including the specifically
-requested Claude Opus perspective if available.
+remains blocked on citation metadata cautions and a final full review panel
+including the specifically requested Claude Opus perspective if available. The
+manual citation/proceedings recheck is saved at
+`outputs/summary/paper_critical/final_citation_proceedings_recheck_20260612.{json,md}`:
+it reports `cited_key_count=21`, `bibliography_entry_count=21`,
+`missing_in_bib=[]`, `uncited_in_bib=[]`, and `placeholder_hits=[]`. It also
+updates ProEx to the KDD 2026 `V.1` booktitle detail and upgrades ProMax from
+arXiv-only `@misc` to SIGIR 2026 `@inproceedings` with ACM DOI
+`10.1145/3805712.3809600`, retaining arXiv `2604.26231` and `numpages=11` from
+arXiv metadata; remaining citation cautions are ProMax final ACM page range and
+ACM/Crossref registry visibility immediately before submission, plus a
+ProEx ACM-visible metadata spot-check because Crossref returned 404 in this
+environment. A two-reviewer final citation/claim follow-up is saved at
+`outputs/summary/paper_critical/final_panel_citation_claim_followup_20260612.{json,md}`:
+Faraday returned `8.0/10` conditional pass and Meitner returned `8.5/10`
+conditional pass/pass-with-scope-guards. Both reviewers agreed that the
+citation/claim gate is conditionally passed, no new experiment is required, and
+`final_submission_ready` must remain `false` until the remaining metadata
+cautions and final manuscript signoff are closed.
 A previous ARIS paper-claim-audit pass on the expanded manuscript is saved at
 `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`;
 it reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,

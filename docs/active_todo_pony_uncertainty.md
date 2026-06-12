@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 07:05 CEST
+Last updated: 2026-06-12 07:17 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -61,10 +61,33 @@ cycle.
   `warning$ -- 0`, `Paper/main.pdf` is 546561 bytes, the paper-critical pytest
   subset reports `66 passed`, and
   `python -m scripts.audit.main_project_readiness_check` reports
-  `project_readiness_ok=True`. Remaining blockers: manual reference
-  completeness/final citation sweep, final ProEx/ProMax proceedings metadata
-  recheck before any submission-ready claim, and a final full review panel
-  including the specifically requested Claude Opus perspective if available.
+  `project_readiness_ok=True`. The final citation/proceedings recheck is saved
+  at
+  `outputs/summary/paper_critical/final_citation_proceedings_recheck_20260612.{json,md}`:
+  automated citation checks report `cited_key_count=21`,
+  `bibliography_entry_count=21`, `missing_in_bib=[]`, `uncited_in_bib=[]`, and
+  `placeholder_hits=[]`; ProEx now records the KDD 2026 `V.1` booktitle detail,
+  and ProMax was upgraded from arXiv-only `@misc` to SIGIR 2026
+  `@inproceedings` with ACM DOI `10.1145/3805712.3809600` while retaining
+  arXiv `2604.26231` and `numpages=11` from arXiv metadata. Remaining
+  blockers: final submission readiness is still false, ProMax final ACM page
+  range and ACM/Crossref registry visibility must be checked immediately before
+  submission, ProEx ACM-visible metadata should be
+  spot-checked because Crossref returned 404 in this environment, and a final
+  full review panel including the specifically requested Claude Opus perspective
+  remains required if available. Verification after the citation recheck:
+  `pdflatex -> bibtex -> pdflatex -> pdflatex` passed, `Paper/main.blg`
+  reports `warning$ -- 0`, `Paper/main.pdf` is 546621 bytes, the
+  paper-critical pytest subset reports `66 passed`, and
+  `python -m scripts.audit.main_project_readiness_check` reports
+  `project_readiness_ok=True`. A two-reviewer final citation/claim follow-up is
+  saved at
+  `outputs/summary/paper_critical/final_panel_citation_claim_followup_20260612.{json,md}`:
+  Faraday returned `8.0/10` conditional pass and Meitner returned `8.5/10`
+  conditional pass/pass-with-scope-guards. Both reviewers agreed that the
+  citation/claim gate is conditionally passed, no new experiment is required,
+  and `final_submission_ready` must remain `false` until the remaining metadata
+  cautions and final manuscript signoff are closed.
 - Manuscript structural expansion checkpoint: first expansion/rebalancing pass
   is complete, but the paper is still not final submission-ready. The method
   section now gives the reranking-scope contract, C-CRP posterior notation,

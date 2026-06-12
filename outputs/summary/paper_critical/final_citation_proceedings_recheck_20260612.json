@@ -1,0 +1,61 @@
+{
+  "audit_name": "final_citation_proceedings_recheck",
+  "project": "uncertainty",
+  "agent": "codex",
+  "aris_skill": "aris-citation-audit",
+  "generated_utc": "2026-06-12T05:17:23Z",
+  "timestamp_cest": "2026-06-12 07:17:23 +02:00",
+  "overall_citation_health": "HEALTHY_WITH_PROCEEDINGS_PAGE_CAUTION",
+  "final_submission_ready": false,
+  "manuscript": "Paper/main.tex",
+  "bibliography": "Paper/references.bib",
+  "automated_checks": {
+    "cited_key_count": 21,
+    "bibliography_entry_count": 21,
+    "missing_in_bib": [],
+    "uncited_in_bib": [],
+    "placeholder_hits": []
+  },
+  "proceedings_metadata_recheck": {
+    "proex": {
+      "key": "proex",
+      "status": "proceedings_metadata_retained_with_booktitle_volume_detail",
+      "title": "ProEx: A Unified Framework Leveraging Large Language Model with Profile Extrapolation for Recommendation",
+      "venue": "Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.1",
+      "pages": "1940--1951",
+      "year": 2026,
+      "doi": "10.1145/3770854.3780284",
+      "url": "https://doi.org/10.1145/3770854.3780284",
+      "notes": "DOI/proceedings metadata kept from ACM DOI spot-check; Crossref API returned 404 during this local recheck, so final submission should still confirm ACM-visible metadata."
+    },
+    "promax": {
+      "key": "promax",
+      "status": "upgraded_from_arxiv_misc_to_sigir_2026_inproceedings_with_acm_doi",
+      "title": "ProMax: Exploring the Potential of LLM-derived Profiles with Distribution Shaping for Recommender Systems",
+      "venue": "Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval",
+      "year": 2026,
+      "numpages": 11,
+      "doi": "10.1145/3805712.3809600",
+      "url": "https://doi.org/10.1145/3805712.3809600",
+      "arxiv": "2604.26231",
+      "notes": "arXiv API reports accepted by SIGIR 2026, 11 pages, and arXiv HTML exposes DOI 10.1145/3805712.3809600. ACM DOI page is Cloudflare-gated and Crossref API returned 404, so final ACM page ranges remain a pre-submission metadata caution."
+    }
+  },
+  "bibtex_repairs": [
+    "Changed ProEx booktitle to include KDD 2026 V.1.",
+    "Changed ProMax from arXiv-only @misc to SIGIR 2026 @inproceedings with ACM DOI 10.1145/3805712.3809600, numpages=11 from arXiv metadata, and arXiv eprint retained."
+  ],
+  "verification": {
+    "latex_chain": "pdflatex -> bibtex -> pdflatex -> pdflatex passed",
+    "bibtex_warning_count": 0,
+    "bibtex_warning_line": "warning$ -- 0",
+    "pdf_path": "Paper/main.pdf",
+    "pdf_bytes": 546621
+  },
+  "remaining_cautions": [
+    "Final submission-ready wording is still false.",
+    "Confirm ProMax final ACM page range and ACM/Crossref registry details immediately before submission.",
+    "Confirm ProEx ACM-visible metadata immediately before submission because Crossref returned 404 in this environment.",
+    "This citation audit does not replace final full-panel manuscript review."
+  ]
+}
