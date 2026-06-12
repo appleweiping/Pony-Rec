@@ -67,6 +67,22 @@ still not final proceedings metadata: ProMax has no final page range in BibTeX,
 Crossref `/works/10.1145/3805712.3809600` remains 404, and the DOI resolver
 remains 404.
 
+**2026-06-12 final blocker closure packet.** Codex added
+`scripts/audit/main_build_final_submission_blocker_closure_packet.py` to turn
+the remaining final-readiness blockers into a single actionable handoff. The
+generated
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`
+reports `closure_packet_ready=true`, `local_release_candidate_ready=true`,
+`ready_for_human_handoff=true`, and `final_submission_ready=false`. It
+classifies the state as local artifact handoff ready, external proceedings
+metadata blocked, and manual submission system private-pending. The packet
+records the current ProMax DOI/ISBN/location/source-check evidence, exact
+public metadata closure conditions, source-manifest sha256
+`795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`, and the
+manual item IDs needed in a future untracked private confirmation file. It
+does not store private author/COI/reviewer/account data and does not close
+final submission readiness.
+
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local
 handoff index over the final gate, refresh freshness audit, anonymous source

@@ -74,6 +74,10 @@ PIDs, audit summaries, and missing-file errors.
    audit now records passing arXiv HTML ACM-metadata evidence for the expected
    DOI/ISBN/venue/location and exposes BibTeX `isbn`/`location`, but final ACM
    page range plus Crossref/DOI resolver visibility are still unresolved.
+   For a compact closure view, read
+   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`;
+   it groups local artifact, external metadata, and private manual submission
+   blockers and gives the exact next commands without storing private fields.
    The current priority is paper-critical tests/readiness checks and another
    section-level review on this latest draft before any final-readiness claim;
    Claude Opus reviewer coverage was still missing in this session.
@@ -160,6 +164,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_pre_submission_refresh_freshness.py` | Local read-only freshness audit for a pre-submission refresh artifact; verifies recorded input fingerprints and generated gate JSON/MD hashes against the current worktree, treating Git HEAD as generation provenance rather than a strict post-commit equality gate |
 | `scripts/audit/main_build_submission_release_candidate_packet.py` | Local read-only release-candidate handoff index over the final gate, freshness audit, source package, rebuild audit, metadata packet, manual checklist, and external metadata audit; distinguishes `local_release_candidate_ready` from `final_submission_ready` |
 | `scripts/audit/main_refresh_submission_release_candidate_stack.py` | Preferred sequential local handoff wrapper; runs pre-submission refresh, freshness audit, and release-candidate packet generation in order, then emits a compact stack artifact while preserving external/manual blockers and `final_submission_ready=false` |
+| `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, and release-candidate stack; groups final blockers into local artifact, public external metadata, and private manual-submission closure paths |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, external proceedings metadata, and manual checklist; keeps final readiness false while external DOI/page-range or private submission-system blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_audit_external_proceedings_metadata.py` | Local read-only ARIS citation/proceedings metadata recheck for ProEx/ProMax; records BibTeX, DOI/Crossref, arXiv, DBLP/SIGIR source visibility, and advisory Crossref title-discovery candidates while keeping final submission blocked until exact public page-range/registry evidence is present |

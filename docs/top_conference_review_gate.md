@@ -345,6 +345,20 @@ artifacts. It still has `readiness_scope=local_artifacts_only` and must keep
 `final_submission_ready=false` until the final submission gate closes all
 external/manual blockers.
 
+After the stack refresh, build the final blocker closure packet:
+
+```bash
+python -m scripts.audit.main_build_final_submission_blocker_closure_packet \
+  --stamp YYYYMMDD \
+  --output-json outputs/summary/paper_critical/final_submission_blocker_closure_packet_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/final_submission_blocker_closure_packet_YYYYMMDD.md
+```
+
+This packet does not change readiness. It groups the remaining blockers into
+local artifact, public external metadata, and private manual-submission closure
+paths, records the source-manifest sha256 needed for the private confirmation
+file, and gives the exact recheck commands.
+
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
 

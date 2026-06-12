@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 22:44 CEST
+Last updated: 2026-06-12 23:08 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Final submission blocker closure packet added:
+  `scripts/audit/main_build_final_submission_blocker_closure_packet.py` now
+  builds a single local handoff packet over the final submission gate, external
+  proceedings metadata audit, manual submission checklist, and release-candidate
+  stack. The generated
+  `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`
+  reports `ok=true`, `closure_packet_ready=true`,
+  `local_release_candidate_ready=true`, `ready_for_human_handoff=true`, and
+  `final_submission_ready=false`. It groups remaining blockers into
+  `local_artifact_handoff` (`ready`), `external_proceedings_metadata`
+  (`blocked`, public-safe), and `manual_submission_system`
+  (`manual_private_pending`, not public-safe). It records the current ProMax
+  DOI/ISBN/location/source-check evidence, the exact ProMax public metadata
+  closure conditions, and the source-manifest sha256 plus required item IDs for
+  an untracked private manual confirmation. This is the first-read artifact for
+  closing the final two blocker classes; it is not a readiness upgrade.
 
 - Submission release-candidate stack refresh added:
   `scripts/audit/main_refresh_submission_release_candidate_stack.py` is now the

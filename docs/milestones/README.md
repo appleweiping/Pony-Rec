@@ -101,7 +101,14 @@ writes
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`;
 the current stack artifact reports `ok=true`,
 `local_release_candidate_ready=true`, zero failures, and the same
-`final_submission_ready=false` external/manual blockers. The refreshed external metadata audit also
+`final_submission_ready=false` external/manual blockers. The new closure packet
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`
+is now the compact first-read artifact for the two remaining blocker classes:
+external ProMax proceedings metadata and private manual submission-system
+confirmation. It reports `closure_packet_ready=true`,
+`ready_for_human_handoff=true`, local artifact handoff `ready`, external
+metadata `blocked`, and manual submission `manual_private_pending`, while
+preserving `final_submission_ready=false`. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
 in addition to arXiv `2604.26231`, and now reports advisory Crossref
 title-discovery candidates. The ProMax metadata audit also requires and passes
