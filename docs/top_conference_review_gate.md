@@ -247,6 +247,21 @@ profile, PDF/source-manifest identifiers, and remaining blockers. It must not
 store author identities, conflicts of interest, reviewer suggestions/exclusions,
 or private submission-system declarations in the repository.
 
+For the remaining external proceedings metadata caution, run the ARIS
+citation-audit-backed recheck:
+
+```bash
+python -m scripts.audit.main_audit_external_proceedings_metadata \
+  --output-json outputs/summary/paper_critical/external_proceedings_metadata_recheck_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/external_proceedings_metadata_recheck_YYYYMMDD.md
+```
+
+This command is read-only and only records public DOI/Crossref/arXiv/DBLP
+visibility against `Paper/references.bib`. It may clear a citation-metadata
+caution only when the expected public evidence is actually visible; otherwise
+it must keep `external_proceedings_metadata_ready=false` and preserve concrete
+blockers such as a missing final page range or unresolved DOI registry entry.
+
 ## Likely Reviewer Objections
 
 | risk | defense |

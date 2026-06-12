@@ -1,0 +1,157 @@
+{
+  "aris_skill": "aris-citation-audit",
+  "checked_entries": {
+    "proex": {
+      "bibtex": {
+        "booktitle": "Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.1",
+        "doi": "10.1145/3770854.3780284",
+        "entry_type": "inproceedings",
+        "eprint": "",
+        "exists": true,
+        "numpages": "",
+        "pages": "1940--1951",
+        "title": "{ProEx}: A Unified Framework Leveraging Large Language Model with Profile Extrapolation for Recommendation",
+        "url": "https://doi.org/10.1145/3770854.3780284",
+        "year": "2026"
+      },
+      "blockers": [],
+      "display_name": "ProEx",
+      "external_metadata_ready": true,
+      "failures": [],
+      "key": "proex",
+      "network": {
+        "crossref": {
+          "content_length_sampled": 19,
+          "error": "HTTP Error 404: Not Found",
+          "final_url": "https://api.crossref.org/works/10.1145/3770854.3780284",
+          "ok": false,
+          "status_code": 404,
+          "url": "https://api.crossref.org/works/10.1145/3770854.3780284"
+        },
+        "crossref_summary": {},
+        "doi_resolver": {
+          "content_length_sampled": 10610,
+          "error": "HTTP Error 404: Not Found",
+          "final_url": "https://doi.org/10.1145/3770854.3780284",
+          "ok": false,
+          "status_code": 404,
+          "url": "https://doi.org/10.1145/3770854.3780284"
+        }
+      },
+      "notes": [
+        "ProEx currently has complete page-range metadata in the local BibTeX; DBLP visibility is enough for this local pre-submission recheck if ACM/Crossref remains gated."
+      ],
+      "ok": true,
+      "source_checks": [
+        {
+          "error": "",
+          "final_url": "https://dblp.org/search/publ/api?q=ProEx%20Profile%20Extrapolation%20Recommendation&format=json",
+          "missing_patterns": [],
+          "name": "dblp_search_proex_kdd_2026",
+          "ok": true,
+          "required_for_final": true,
+          "status_code": 200,
+          "url": "https://dblp.org/search/publ/api?q=ProEx%20Profile%20Extrapolation%20Recommendation&format=json"
+        }
+      ],
+      "warnings": [
+        "proex:crossref_not_visible:status=404",
+        "proex:doi_resolver_not_visible:status=404"
+      ]
+    },
+    "promax": {
+      "bibtex": {
+        "booktitle": "Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval",
+        "doi": "10.1145/3805712.3809600",
+        "entry_type": "inproceedings",
+        "eprint": "2604.26231",
+        "exists": true,
+        "numpages": "11",
+        "pages": "",
+        "title": "{ProMax}: Exploring the Potential of {LLM}-derived Profiles with Distribution Shaping for Recommender Systems",
+        "url": "https://doi.org/10.1145/3805712.3809600",
+        "year": "2026"
+      },
+      "blockers": [
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404"
+      ],
+      "display_name": "ProMax",
+      "external_metadata_ready": false,
+      "failures": [],
+      "key": "promax",
+      "network": {
+        "crossref": {
+          "content_length_sampled": 19,
+          "error": "HTTP Error 404: Not Found",
+          "final_url": "https://api.crossref.org/works/10.1145/3805712.3809600",
+          "ok": false,
+          "status_code": 404,
+          "url": "https://api.crossref.org/works/10.1145/3805712.3809600"
+        },
+        "crossref_summary": {},
+        "doi_resolver": {
+          "content_length_sampled": 10610,
+          "error": "HTTP Error 404: Not Found",
+          "final_url": "https://doi.org/10.1145/3805712.3809600",
+          "ok": false,
+          "status_code": 404,
+          "url": "https://doi.org/10.1145/3805712.3809600"
+        }
+      },
+      "notes": [
+        "ProMax remains final-blocking until final ACM page range and DOI registry visibility are public enough to verify immediately before submission."
+      ],
+      "ok": true,
+      "source_checks": [
+        {
+          "error": "",
+          "final_url": "https://arxiv.org/abs/2604.26231",
+          "missing_patterns": [],
+          "name": "arxiv_2604_26231",
+          "ok": true,
+          "required_for_final": true,
+          "status_code": 200,
+          "url": "https://arxiv.org/abs/2604.26231"
+        }
+      ],
+      "warnings": []
+    }
+  },
+  "checked_entry_count": 2,
+  "created_at_utc": "2026-06-12T08:22:52.960413+00:00",
+  "external_proceedings_metadata_ready": false,
+  "failures": [],
+  "final_submission_ready": false,
+  "input_paths": {
+    "bib_path": "Paper\\references.bib",
+    "config_path": "configs\\paper_external_proceedings_metadata_checks.json",
+    "fixture_json": ""
+  },
+  "mode": "local_read_only_external_proceedings_metadata_audit",
+  "network_mode": "live",
+  "next_actions": [
+    "If ProMax DOI/Crossref/page-range visibility becomes public, update Paper/references.bib and rerun this audit.",
+    "Rerun the submission package and metadata packet audits after this external metadata audit changes.",
+    "Keep final_submission_ready=false until this audit, target formatting, and manual submission-system checks are all closed."
+  ],
+  "ok": true,
+  "read_only": true,
+  "remaining_blockers": [
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed."
+  ],
+  "schema_version": "2026-06-12.external_proceedings_metadata_audit.v1",
+  "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "warnings": [
+    "proex:crossref_not_visible:status=404",
+    "proex:doi_resolver_not_visible:status=404"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

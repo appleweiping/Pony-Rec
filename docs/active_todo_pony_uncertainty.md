@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 09:48 CEST
+Last updated: 2026-06-12 10:25 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,28 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- External proceedings metadata recheck added:
+  `scripts/audit/main_audit_external_proceedings_metadata.py` with config
+  `configs/paper_external_proceedings_metadata_checks.json`. The generated
+  live audit
+  `outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.{json,md}`
+  reports `ok=true`, `external_proceedings_metadata_ready=false`, and
+  `final_submission_ready=false`. ProEx is no longer a blocking citation
+  metadata item: DBLP search API confirms the KDD 2026 record, pages
+  `1940-1951`, and DOI `10.1145/3770854.3780284`, although Crossref/DOI
+  resolver still returned `404` in this environment and is recorded as a
+  warning. ProMax arXiv `2604.26231` is reachable and confirms `11 pages` and
+  accepted-by-SIGIR-2026 metadata, but final ACM/Crossref evidence remains
+  unresolved: `Paper/references.bib` has no final page range for `promax`, and
+  both Crossref and the DOI resolver return `404` for
+  `10.1145/3805712.3809600`. The concrete remaining blockers are
+  `promax:final_page_range_missing_in_bib`,
+  `promax:crossref_registry_not_visible:status=404`,
+  `promax:doi_resolver_not_visible:status=404`, plus the manual
+  submission-system checklist. The submission-package and metadata-packet
+  audits were regenerated so these blockers are now visible in the local final
+  gate instead of only being prose reminders.
 
 - Submission metadata packet added:
   `scripts/audit/main_build_submission_metadata_packet.py` with config

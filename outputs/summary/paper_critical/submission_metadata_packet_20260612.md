@@ -1,6 +1,6 @@
 # Submission Metadata Packet
 
-Generated: 2026-06-12T08:00:13.111216+00:00
+Generated: 2026-06-12T08:25:06.557597+00:00
 
 - OK: `true`
 - Submission metadata packet ready: `true`
@@ -22,6 +22,9 @@ Large language models (LLMs) are increasingly used as scoring and representation
 ## Remaining Blockers
 
 - ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.
+- promax:final_page_range_missing_in_bib
+- promax:crossref_registry_not_visible:status=404
+- promax:doi_resolver_not_visible:status=404
 - Final manual submission-system metadata/format checklist is not closed.
 
 ## Manual Fields Not Stored

@@ -199,3 +199,34 @@ def test_submission_package_audit_rejects_existing_external_source_reference(tmp
     assert audit["ok"] is False
     normalized_failures = {failure.replace("\\", "/") for failure in audit["failures"]}
     assert "external_source_file_reference:external/framework_overview.pdf" in normalized_failures
+
+
+def test_submission_package_audit_merges_external_metadata_blockers(tmp_path: Path) -> None:
+    paths = _seed_package(tmp_path)
+    external = _write_json(
+        tmp_path / "external_metadata.json",
+        {
+            "ok": True,
+            "external_proceedings_metadata_ready": False,
+            "remaining_blockers": [
+                "promax:final_page_range_missing_in_bib",
+                "promax:crossref_registry_not_visible:status=404",
+            ],
+        },
+    )
+
+    audit = build_submission_package_audit(
+        root=tmp_path,
+        paper_dir=paths["paper"].relative_to(tmp_path),
+        claim_audit_json=paths["claim"].relative_to(tmp_path),
+        panel_review_json=paths["panel"].relative_to(tmp_path),
+        metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+        target_profile_json=paths["profile"].relative_to(tmp_path),
+        external_metadata_audit_json=external.relative_to(tmp_path),
+    )
+
+    assert audit["ok"] is True
+    assert audit["evidence_gates"]["external_metadata_audit_present"] is True
+    assert audit["evidence_gates"]["external_proceedings_metadata_ready"] is False
+    assert "promax:final_page_range_missing_in_bib" in audit["remaining_blockers"]
+    assert "promax:crossref_registry_not_visible:status=404" in audit["remaining_blockers"]

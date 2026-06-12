@@ -19,6 +19,9 @@ DEFAULT_METADATA_FOLLOWUP_JSON = Path(
     "outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.json"
 )
 DEFAULT_TARGET_PROFILE_JSON = Path("configs/paper_submission_profiles.json")
+DEFAULT_EXTERNAL_METADATA_AUDIT_JSON = Path(
+    "outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.json"
+)
 
 INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
 GRAPHICS_RE = re.compile(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}")
@@ -349,6 +352,7 @@ def build_submission_package_audit(
     claim_audit_json: str | Path = DEFAULT_CLAIM_AUDIT_JSON,
     panel_review_json: str | Path = DEFAULT_PANEL_REVIEW_JSON,
     metadata_followup_json: str | Path = DEFAULT_METADATA_FOLLOWUP_JSON,
+    external_metadata_audit_json: str | Path | None = DEFAULT_EXTERNAL_METADATA_AUDIT_JSON,
     target_profile_json: str | Path = DEFAULT_TARGET_PROFILE_JSON,
     target_profile_id: str | None = None,
     max_pages: int = 9,
@@ -360,6 +364,7 @@ def build_submission_package_audit(
     claim_path = repo / claim_audit_json
     panel_path = repo / panel_review_json
     metadata_path = repo / metadata_followup_json
+    external_metadata_path = repo / external_metadata_audit_json if external_metadata_audit_json else None
     target_profile_path = repo / target_profile_json
 
     source = _discover_source_closure(paper, repo)
@@ -378,6 +383,7 @@ def build_submission_package_audit(
     claim_audit = _read_json(claim_path)
     panel_review = _read_json(panel_path)
     metadata_followup = _read_json(metadata_path)
+    external_metadata_audit = _read_json(external_metadata_path) if external_metadata_path else {}
 
     failures: list[str] = []
     warnings: list[str] = []
@@ -453,6 +459,16 @@ def build_submission_package_audit(
         failures.append("final_panel_review_not_in_expected_conditional_pass_state")
 
     remaining_blockers = list(metadata_followup.get("remaining_blockers") or [])
+    external_metadata_ready = None
+    if external_metadata_path and external_metadata_path.exists():
+        external_metadata_ready = external_metadata_audit.get("external_proceedings_metadata_ready") is True
+        for blocker in external_metadata_audit.get("remaining_blockers") or []:
+            if blocker not in remaining_blockers:
+                remaining_blockers.append(blocker)
+        if external_metadata_audit.get("ok") is not True:
+            failures.append("external_metadata_audit_not_ok")
+    elif external_metadata_path:
+        warnings.append(f"external_metadata_audit_missing:{_rel(external_metadata_path, repo)}")
     if target_profile["ok"]:
         remaining_blockers = [
             blocker
@@ -497,6 +513,9 @@ def build_submission_package_audit(
             "claim_audit": _file_state(claim_path, repo),
             "panel_review": _file_state(panel_path, repo),
             "metadata_followup": _file_state(metadata_path, repo),
+            "external_metadata_audit": _file_state(external_metadata_path, repo)
+            if external_metadata_path
+            else {"path": "", "exists": False, "size_bytes": 0},
             "target_profile": _file_state(target_profile_path, repo),
         },
         "required_files": {label: _file_state(path, repo) for label, path in required_files.items()},
@@ -511,6 +530,10 @@ def build_submission_package_audit(
             "panel_review_ok": panel_ok,
             "panel_score_floor": floor,
             "metadata_followup_verdict": metadata_followup.get("verdict"),
+            "external_metadata_audit_present": bool(
+                external_metadata_path and external_metadata_path.exists()
+            ),
+            "external_proceedings_metadata_ready": external_metadata_ready,
             "target_formatting_profile_ok": target_profile["ok"],
         },
         "warnings": warnings,
@@ -544,6 +567,8 @@ def _write_md(path: Path, audit: dict[str, Any]) -> None:
         f"`{audit['build']['underfull_vbox_count']}`",
         f"- Cited keys: `{audit['build']['cited_key_count']}`",
         f"- Panel score floor: `{audit['evidence_gates']['panel_score_floor']}`",
+        "- External proceedings metadata ready: "
+        f"`{audit['evidence_gates']['external_proceedings_metadata_ready']}`",
         "- Target formatting profile: "
         f"`{audit['target_formatting_profile']['profile_id']}` "
         f"ok=`{str(audit['target_formatting_profile']['ok']).lower()}`",
@@ -573,6 +598,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--claim-audit-json", default=str(DEFAULT_CLAIM_AUDIT_JSON))
     parser.add_argument("--panel-review-json", default=str(DEFAULT_PANEL_REVIEW_JSON))
     parser.add_argument("--metadata-followup-json", default=str(DEFAULT_METADATA_FOLLOWUP_JSON))
+    parser.add_argument("--external-metadata-audit-json", default=str(DEFAULT_EXTERNAL_METADATA_AUDIT_JSON))
     parser.add_argument("--target-profile-json", default=str(DEFAULT_TARGET_PROFILE_JSON))
     parser.add_argument("--target-profile-id")
     parser.add_argument("--max-pages", type=int, default=9)
@@ -591,6 +617,7 @@ def main() -> int:
         claim_audit_json=args.claim_audit_json,
         panel_review_json=args.panel_review_json,
         metadata_followup_json=args.metadata_followup_json,
+        external_metadata_audit_json=args.external_metadata_audit_json,
         target_profile_json=args.target_profile_json,
         target_profile_id=args.target_profile_id,
         max_pages=args.max_pages,

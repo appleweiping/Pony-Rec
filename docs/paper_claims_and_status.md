@@ -44,6 +44,28 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 external proceedings metadata recheck.** Codex added
+`scripts/audit/main_audit_external_proceedings_metadata.py` and
+`configs/paper_external_proceedings_metadata_checks.json` to turn the remaining
+ProEx/ProMax citation-metadata caution into a reproducible ARIS
+`aris-citation-audit` artifact. The generated live audit
+`outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.{json,md}`
+reports `ok=true`, `external_proceedings_metadata_ready=false`, and
+`final_submission_ready=false`. ProEx is supported by the local BibTeX page
+range plus DBLP search API evidence for KDD 2026 pages `1940-1951` and DOI
+`10.1145/3770854.3780284`; Crossref/DOI resolver `404` responses are retained
+as warnings. ProMax remains final-blocking because the local BibTeX entry has
+`numpages=11` but no final `pages` range, and live Crossref/DOI resolver checks
+for `10.1145/3805712.3809600` return `404` even though arXiv `2604.26231`
+remains reachable and confirms the SIGIR 2026 acceptance/11-page metadata. The
+submission-package and metadata-packet audits now consume this artifact and
+carry the concrete blockers:
+`promax:final_page_range_missing_in_bib`,
+`promax:crossref_registry_not_visible:status=404`,
+`promax:doi_resolver_not_visible:status=404`, and the manual
+submission-system checklist. This improves auditability but does not close
+final submission readiness.
+
 **2026-06-12 submission metadata packet.** Codex added
 `scripts/audit/main_build_submission_metadata_packet.py` and
 `configs/paper_submission_metadata.json` to prepare the submission-system fields

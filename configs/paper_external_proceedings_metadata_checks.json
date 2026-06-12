@@ -1,0 +1,56 @@
+{
+  "schema_version": "2026-06-12.paper_external_proceedings_metadata_checks.v1",
+  "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "checks": [
+    {
+      "key": "proex",
+      "display_name": "ProEx",
+      "expected_entry_type": "inproceedings",
+      "expected_doi": "10.1145/3770854.3780284",
+      "expected_year": 2026,
+      "require_pages_in_bib": true,
+      "require_crossref_visible_for_final": false,
+      "require_doi_resolvable_for_final": false,
+      "source_checks": [
+        {
+          "name": "dblp_search_proex_kdd_2026",
+          "url": "https://dblp.org/search/publ/api?q=ProEx%20Profile%20Extrapolation%20Recommendation&format=json",
+          "required_patterns": [
+            "ProEx: A Unified Framework",
+            "1940-1951",
+            "10.1145/3770854.3780284"
+          ],
+          "required_for_final": true
+        }
+      ],
+      "notes": [
+        "ProEx currently has complete page-range metadata in the local BibTeX; DBLP visibility is enough for this local pre-submission recheck if ACM/Crossref remains gated."
+      ]
+    },
+    {
+      "key": "promax",
+      "display_name": "ProMax",
+      "expected_entry_type": "inproceedings",
+      "expected_doi": "10.1145/3805712.3809600",
+      "expected_year": 2026,
+      "expected_arxiv": "2604.26231",
+      "require_pages_in_bib": true,
+      "require_crossref_visible_for_final": true,
+      "require_doi_resolvable_for_final": true,
+      "source_checks": [
+        {
+          "name": "arxiv_2604_26231",
+          "url": "https://arxiv.org/abs/2604.26231",
+          "required_patterns": [
+            "accepted by SIGIR 2026",
+            "11 pages"
+          ],
+          "required_for_final": true
+        }
+      ],
+      "notes": [
+        "ProMax remains final-blocking until final ACM page range and DOI registry visibility are public enough to verify immediately before submission."
+      ]
+    }
+  ]
+}
