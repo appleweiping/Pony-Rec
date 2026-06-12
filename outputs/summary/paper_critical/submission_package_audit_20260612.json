@@ -40,7 +40,7 @@
     "underfull_hbox_count": 6,
     "underfull_vbox_count": 8
   },
-  "created_at_utc": "2026-06-12T07:06:28.236554+00:00",
+  "created_at_utc": "2026-06-12T07:21:07.807868+00:00",
   "evidence_gates": {
     "claim_audit_ok": true,
     "metadata_followup_verdict": "PDF_PACKAGE_POLISH_PASS_METADATA_CAUTION",
@@ -94,6 +94,11 @@
       "exists": true,
       "path": "Paper\\figures\\framework_overview.svg",
       "size_bytes": 143379
+    },
+    "main_bbl": {
+      "exists": true,
+      "path": "Paper\\main.bbl",
+      "size_bytes": 17039
     },
     "main_blg": {
       "exists": true,
@@ -242,6 +247,161 @@
       "Paper\\tables\\significance_summary.tex",
       "Paper\\tables\\uncertainty_stratification.tex"
     ]
+  },
+  "source_package_manifest": {
+    "external_source_references": [],
+    "file_count": 21,
+    "files": [
+      {
+        "exists": true,
+        "path": "Paper\\figures\\framework_overview.pdf",
+        "role": "figure",
+        "sha256": "9a3c4d9418c22a527b3c168f53f019ec67a14072ba73995f918b2c29307dce96",
+        "size_bytes": 33541
+      },
+      {
+        "exists": true,
+        "path": "Paper\\main.bbl",
+        "role": "compiled_bibliography",
+        "sha256": "38af445dcd2b75261c3436e963add70f2bd5ab8fd09443ed80368347c8ec1129",
+        "size_bytes": 17039
+      },
+      {
+        "exists": true,
+        "path": "Paper\\main.pdf",
+        "role": "compiled_pdf",
+        "sha256": "588afd8311c634569e029e8061c9a8cbefd1d6b2bd53a162b89857b5296cdc86",
+        "size_bytes": 546669
+      },
+      {
+        "exists": true,
+        "path": "Paper\\main.tex",
+        "role": "tex_source",
+        "sha256": "3d4bdc8a2fe0d7c400d72f0c81a39a2a3e6bf28e4d7e482541378c7b383edf60",
+        "size_bytes": 840
+      },
+      {
+        "exists": true,
+        "path": "Paper\\references.bib",
+        "role": "bibliography_source",
+        "sha256": "3633084d6ec06b5615e77b2485c0b0013f86bb72a1e36a314f97d5b032fdd953",
+        "size_bytes": 10448
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\abstract.tex",
+        "role": "tex_source",
+        "sha256": "45758fa192e1256d02c2d9c7421eaeefee9a65a9862e1c2fdf4498ce1f2db182",
+        "size_bytes": 1603
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\analysis.tex",
+        "role": "tex_source",
+        "sha256": "e5c4dd0b4097803114b99ea43bc17cf0cff3abc00645e2ca05645cc952227055",
+        "size_bytes": 4155
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\conclusion.tex",
+        "role": "tex_source",
+        "sha256": "a1ebae3acc1c6cfd46289d6fae2404919f77ea3a6b639af626c080f37ec9ba44",
+        "size_bytes": 1148
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\experiments.tex",
+        "role": "tex_source",
+        "sha256": "1b5bb0b303b2e878cbe53ee0f96af0be3db6c1d5725dd258091883e81f50024d",
+        "size_bytes": 5724
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\introduction.tex",
+        "role": "tex_source",
+        "sha256": "3cad6649407214205ae6fa5d73fe55c74c3cb19361919f67f2e394123dc07a2d",
+        "size_bytes": 3477
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\method.tex",
+        "role": "tex_source",
+        "sha256": "62b2b62b2f778d97def9b07cfda79cf71101f3dea30dfc7b1d93061207bc0946",
+        "size_bytes": 9982
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\related-work.tex",
+        "role": "tex_source",
+        "sha256": "96d45e397140bb4329fd2193bd613dd386249a157456e4bbab1f0b4cde9599b0",
+        "size_bytes": 3633
+      },
+      {
+        "exists": true,
+        "path": "Paper\\sections\\results.tex",
+        "role": "tex_source",
+        "sha256": "846c411eb07be4a2b4ede420a069dcbd76fc6013bf76f427587b1297013c4896",
+        "size_bytes": 4682
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\ablation_ndcg10_summary.tex",
+        "role": "tex_source",
+        "sha256": "103718f1eca6dd823ff65ba7337bdb97951fd41bb8ba9e0f7680c2bed768cbc5",
+        "size_bytes": 951
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\baseline_provenance_summary.tex",
+        "role": "tex_source",
+        "sha256": "8ddaf584dff364e6c977f8ca7a9d10c5cc458ccbba77839b41be82cbb4520f87",
+        "size_bytes": 1497
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\ccrp_rank_by_metric.tex",
+        "role": "tex_source",
+        "sha256": "fbd6dcc1854fe17daedff9b8e03be95bbee187443e51316c7c569b8df6005f54",
+        "size_bytes": 738
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\full_official_ndcg10_ranking.tex",
+        "role": "tex_source",
+        "sha256": "dbaf2e4dc1c7e95b0bce218ddf6528e8fe28c03b930ac09592295620b4db594e",
+        "size_bytes": 2395
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\main_results.tex",
+        "role": "tex_source",
+        "sha256": "9d19f3d9cd817d48280d4977d34c2f7fd3f7d2935f6c2ac12c5b323c662a8b5b",
+        "size_bytes": 1590
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\module_evidence.tex",
+        "role": "tex_source",
+        "sha256": "30a11d0bfd07dd865bf2b6677f36295fa4459c80f625ab99b89afe9543879f57",
+        "size_bytes": 1293
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\significance_summary.tex",
+        "role": "tex_source",
+        "sha256": "55fb2f6b8097507600343259863f9f0476e341ab8d70887f2d8a9b9f6a2f3449",
+        "size_bytes": 643
+      },
+      {
+        "exists": true,
+        "path": "Paper\\tables\\uncertainty_stratification.tex",
+        "role": "tex_source",
+        "sha256": "2371bc8dad85ebaf20f4598f193f995c8e57753c03736545d863e8f8b4c8b682",
+        "size_bytes": 643
+      }
+    ],
+    "manifest_sha256": "4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa",
+    "total_bytes": 652691
   },
   "submission_package_ready_for_target_formatting": true,
   "verdict": "READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION",

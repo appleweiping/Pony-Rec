@@ -1,6 +1,6 @@
 # Submission Package Audit
 
-Generated: 2026-06-12T07:06:28.236554+00:00
+Generated: 2026-06-12T07:21:07.807868+00:00
 
 - Verdict: `READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`
 - OK: `true`
@@ -13,6 +13,8 @@ Generated: 2026-06-12T07:06:28.236554+00:00
 - Underfull hbox/vbox warnings: `6` / `8`
 - Cited keys: `21`
 - Panel score floor: `8.0`
+- Source package manifest files: `21`
+- Source package manifest sha256: `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`
 
 ## Remaining Blockers
 

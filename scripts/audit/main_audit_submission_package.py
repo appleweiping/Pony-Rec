@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from datetime import datetime, timezone
@@ -51,6 +52,21 @@ def _file_state(path: Path, root: Path) -> dict[str, Any]:
         "exists": path.exists(),
         "size_bytes": path.stat().st_size if path.exists() and path.is_file() else 0,
     }
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _manifest_entry(path: Path, *, root: Path, role: str) -> dict[str, Any]:
+    state = _file_state(path, root)
+    state["role"] = role
+    state["sha256"] = _sha256_file(path) if path.exists() and path.is_file() else ""
+    return state
 
 
 def _candidate_tex_paths(raw: str, *, paper_dir: Path, current_dir: Path) -> list[Path]:
@@ -172,6 +188,47 @@ def _parse_build_state(paper_dir: Path, root: Path) -> dict[str, Any]:
     }
 
 
+def _build_source_package_manifest(paper_dir: Path, root: Path, source: dict[str, Any]) -> dict[str, Any]:
+    files: dict[str, dict[str, Any]] = {}
+
+    def add(path: Path, role: str) -> None:
+        if not path.exists() or not path.is_file():
+            return
+        rel = _rel(path, root)
+        existing = files.get(rel)
+        if existing is None:
+            files[rel] = _manifest_entry(path, root=root, role=role)
+        elif role not in existing["role"].split(","):
+            existing["role"] = existing["role"] + "," + role
+
+    for rel in source["tex_files"]:
+        add(root / rel, "tex_source")
+    add(paper_dir / "references.bib", "bibliography_source")
+    add(paper_dir / "main.bbl", "compiled_bibliography")
+    add(paper_dir / "main.pdf", "compiled_pdf")
+    for graphic in source["graphics"]:
+        if graphic["exists"]:
+            add(root / graphic["resolved"], "figure")
+
+    ordered = [files[key] for key in sorted(files)]
+    manifest_lines = [
+        f"{entry['sha256']}  {entry['path']}  {entry['role']}  {entry['size_bytes']}"
+        for entry in ordered
+    ]
+    external_refs = [
+        entry["path"]
+        for entry in ordered
+        if not entry["path"].replace("\\", "/").startswith(_rel(paper_dir, root).replace("\\", "/") + "/")
+    ]
+    return {
+        "file_count": len(ordered),
+        "total_bytes": sum(int(entry["size_bytes"]) for entry in ordered),
+        "manifest_sha256": hashlib.sha256("\n".join(manifest_lines).encode("utf-8")).hexdigest(),
+        "files": ordered,
+        "external_source_references": external_refs,
+    }
+
+
 def _audit_anonymity(paper_dir: Path) -> dict[str, Any]:
     main_text = _read_text(paper_dir / "main.tex")
     authors = [author.strip() for author in AUTHOR_RE.findall(main_text)]
@@ -210,6 +267,7 @@ def build_submission_package_audit(
 
     source = _discover_source_closure(paper, repo)
     build = _parse_build_state(paper, repo)
+    source_manifest = _build_source_package_manifest(paper, repo, source)
     anonymity = _audit_anonymity(paper)
     claim_audit = _read_json(claim_path)
     panel_review = _read_json(panel_path)
@@ -224,6 +282,7 @@ def build_submission_package_audit(
         "main_pdf": paper / "main.pdf",
         "main_log": paper / "main.log",
         "main_blg": paper / "main.blg",
+        "main_bbl": paper / "main.bbl",
         "framework_overview_pdf": paper / "figures" / "framework_overview.pdf",
         "framework_overview_svg": paper / "figures" / "framework_overview.svg",
     }
@@ -258,6 +317,8 @@ def build_submission_package_audit(
             "underfull_layout_warnings:"
             f"hbox={build['underfull_hbox_count']},vbox={build['underfull_vbox_count']}"
         )
+    for rel in source_manifest["external_source_references"]:
+        failures.append(f"external_source_file_reference:{rel}")
 
     if not anonymity["anonymous_author"] or not anonymity["anonymous_affiliation"]:
         failures.append("anonymous_author_or_affiliation_not_ready")
@@ -322,6 +383,7 @@ def build_submission_package_audit(
         },
         "required_files": {label: _file_state(path, repo) for label, path in required_files.items()},
         "source_closure": source,
+        "source_package_manifest": source_manifest,
         "build": build,
         "anonymity": anonymity,
         "evidence_gates": {
@@ -361,6 +423,8 @@ def _write_md(path: Path, audit: dict[str, Any]) -> None:
         f"`{audit['build']['underfull_vbox_count']}`",
         f"- Cited keys: `{audit['build']['cited_key_count']}`",
         f"- Panel score floor: `{audit['evidence_gates']['panel_score_floor']}`",
+        f"- Source package manifest files: `{audit['source_package_manifest']['file_count']}`",
+        f"- Source package manifest sha256: `{audit['source_package_manifest']['manifest_sha256']}`",
         "",
         "## Remaining Blockers",
         "",

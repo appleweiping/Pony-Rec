@@ -225,6 +225,10 @@ python -m scripts.audit.main_audit_submission_package \
 This command is a package/source/PDF gate, not a license to mark the work
 final-submission-ready. It must keep `final_submission_ready=false` while
 external metadata cautions or target-conference formatting checks remain open.
+Its source-package manifest should include `main.tex`, all transitively included
+section/table sources, bibliography sources, compiled `main.bbl`, the checked
+PDF, and local figure assets, with no references to files outside the paper
+source package.
 
 ## Likely Reviewer Objections
 

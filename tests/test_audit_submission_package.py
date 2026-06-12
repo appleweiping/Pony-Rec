@@ -43,6 +43,7 @@ def _seed_package(tmp_path: Path) -> dict[str, Path]:
     )
     _write(paper / "main.blg", "warning$ -- 0\n")
     _write(paper / "main.aux", "\\citation{x}\n")
+    _write(paper / "main.bbl", "\\begin{thebibliography}{1}\\bibitem{x} X.\\end{thebibliography}\n")
     _write(paper / "figures" / "framework_overview.pdf", "pdf\n")
     _write(paper / "figures" / "framework_overview.svg", "<svg />\n")
     claim = _write_json(
@@ -97,6 +98,12 @@ def test_submission_package_audit_passes_package_but_keeps_final_ready_false(tmp
     assert audit["build"]["overfull_hbox_count"] == 0
     assert audit["evidence_gates"]["panel_score_floor"] == 8.0
     assert audit["remaining_blockers"]
+    assert audit["source_package_manifest"]["file_count"] >= 6
+    assert audit["source_package_manifest"]["manifest_sha256"]
+    assert audit["source_package_manifest"]["external_source_references"] == []
+    manifest_paths = {entry["path"].replace("\\", "/") for entry in audit["source_package_manifest"]["files"]}
+    assert "Paper/main.bbl" in manifest_paths
+    assert "Paper/figures/framework_overview.pdf" in manifest_paths
 
 
 def test_submission_package_audit_fails_on_overfull_or_missing_graphic(tmp_path: Path) -> None:
@@ -140,3 +147,28 @@ def test_submission_package_audit_rejects_nonanonymous_author(tmp_path: Path) ->
 
     assert audit["ok"] is False
     assert "anonymous_author_or_affiliation_not_ready" in audit["failures"]
+
+
+def test_submission_package_audit_rejects_existing_external_source_reference(tmp_path: Path) -> None:
+    paths = _seed_package(tmp_path)
+    _write(tmp_path / "external" / "framework_overview.pdf", "outside paper package\n")
+    text = (paths["paper"] / "main.tex").read_text(encoding="utf-8")
+    (paths["paper"] / "main.tex").write_text(
+        text.replace(
+            "\\includegraphics{figures/framework_overview.pdf}",
+            "\\includegraphics{../external/framework_overview.pdf}",
+        ),
+        encoding="utf-8",
+    )
+
+    audit = build_submission_package_audit(
+        root=tmp_path,
+        paper_dir=paths["paper"].relative_to(tmp_path),
+        claim_audit_json=paths["claim"].relative_to(tmp_path),
+        panel_review_json=paths["panel"].relative_to(tmp_path),
+        metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+    )
+
+    assert audit["ok"] is False
+    normalized_failures = {failure.replace("\\", "/") for failure in audit["failures"]}
+    assert "external_source_file_reference:external/framework_overview.pdf" in normalized_failures

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 09:01 CEST
+Last updated: 2026-06-12 09:16 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -20,6 +20,12 @@ cycle.
   `Paper/main.pdf` (9 pages, 546669 bytes), `Paper/main.blg` warning count
   `0`, no undefined citations/references, `overfull_hbox_count=0`, cited key
   count `21`, final panel score floor `8.0`, and the scoped claim-audit state.
+  The audit now also emits a source-package manifest with `file_count=21`,
+  `total_bytes=652691`, manifest sha256
+  `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`, and
+  `external_source_references=[]`; the manifest covers `main.tex`, all included
+  section/table sources, `references.bib`, `main.bbl`, `main.pdf`, and the
+  paper-local framework figure.
   Remaining blockers are deliberately preserved rather than hidden: ProMax
   final ACM page range/Crossref visibility and the external
   target-conference formatting pass. Latest public spot-checks still show

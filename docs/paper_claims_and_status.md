@@ -55,7 +55,12 @@ reports `ok=true`, `submission_package_ready_for_target_formatting=true`,
 closure, local framework figure files, anonymous ACM paper shell, 9-page
 `Paper/main.pdf`, zero BibTeX warnings, no undefined citations/references, zero
 overfull hbox warnings, final-panel score floor `8.0`, and the scoped
-claim-audit state. This advances the paper package to the target-formatting
+claim-audit state. The audit also emits a source-package manifest with
+`file_count=21`, `total_bytes=652691`, manifest sha256
+`4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`, and no
+external source references; it covers `main.tex`, included section/table
+sources, `references.bib`, `main.bbl`, `main.pdf`, and the paper-local framework
+figure. This advances the paper package to the target-formatting
 gate, but it does not close final submission readiness: ProMax final ACM page
 range/Crossref visibility and external target-specific formatting remain
 blocking conditions.
