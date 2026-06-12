@@ -48,8 +48,11 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`
    records an 8-page PDF, explicit uncertainty-stratification table, expanded
    method/protocol/result text, and `66 passed` paper-critical tests. The
-   current priority is final ARIS citation/claim spot-check and section-level
-   top-conference review, then apply the requested edits.
+   expanded-manuscript claim-text audit at
+   `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`
+   reports `READY_WITH_SCOPE_GUARDS` with no unsupported, overclaimed, or
+   contradicted claims. The current priority is final citation spot-check and
+   section-level top-conference review, then apply the requested edits.
 3. Treat performance/table evidence as complete for the current same-candidate
    claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
    all eight official-code-level baseline rows complete; the four-new-domain

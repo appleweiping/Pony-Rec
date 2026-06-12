@@ -77,12 +77,18 @@ scientific limitations. The structural expansion audit is saved at
 `outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`.
 The paper-critical pytest subset reports `66 passed`; full local pytest
 collection remains blocked by pre-existing import-path issues in historical
-official-runner tests, so it is not used as the manuscript gate. The manuscript audit
+official-runner tests, so it is not used as the manuscript gate. A follow-up
+ARIS paper-claim-audit pass on the expanded manuscript is saved at
+`outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`;
+it reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
+`submission_gate_verdict=NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`,
+`SUPPORTED=11`, `WEAKLY_SUPPORTED=1`, `UNSUPPORTED=0`, `OVERCLAIMED=0`, and
+`CONTRADICTED=0`. The manuscript audit
 at
 `outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
 now reports `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`: the remaining blockers
-are final ARIS citation/claim spot-check and section-level top-conference
-review, plus any edits required by those reviews. GPT-5.5 xhigh post-rewrite
+are final citation spot-check and section-level top-conference review, plus any
+edits required by those reviews. GPT-5.5 xhigh post-rewrite
 review rated claim safety `8.3/10`, writing/top-conference readiness `7.2/10`,
 and combined manuscript score `7.7/10` before citation repair, table
 supplementation, and this structural expansion. Do not claim final submission

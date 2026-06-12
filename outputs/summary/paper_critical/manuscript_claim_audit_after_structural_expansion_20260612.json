@@ -1,0 +1,81 @@
+{
+  "audit_name": "manuscript_claim_audit_after_structural_expansion",
+  "project": "uncertainty",
+  "agent": "codex",
+  "aris_skill": "aris-paper-claim-audit",
+  "timestamp_cest": "2026-06-12 06:24:00 +02:00",
+  "claim_text_verdict": "READY_WITH_SCOPE_GUARDS",
+  "submission_gate_verdict": "NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION",
+  "final_submission_ready": false,
+  "summary_statistics": {
+    "claims_extracted": 12,
+    "supported": 11,
+    "weakly_supported": 1,
+    "unsupported": 0,
+    "overclaimed": 0,
+    "contradicted": 0
+  },
+  "supported_claims": [
+    {
+      "claim": "All methods rank the same 101 candidates per user under the same importer, metrics, provenance checks, and paired tests.",
+      "locations": ["abstract", "introduction", "experiments"],
+      "evidence": "paper_result_tables_audit_20260612 and final_paper_claim_audit_20260612"
+    },
+    {
+      "claim": "C-CRP decomposes uncertainty into boundary ambiguity, calibration gap, evidence support, and counterevidence, then uses risk-adjusted reranking.",
+      "locations": ["abstract", "method", "conclusion"],
+      "evidence": "Paper/sections/method.tex and src/shadow/ccrp.py"
+    },
+    {
+      "claim": "C-CRP ranks first against eight official-code-level baselines across Sports, Toys, Home, and Tools on HR@5/@10/@20, NDCG@5/@10/@20, and MRR.",
+      "locations": ["abstract", "introduction", "results", "conclusion"],
+      "evidence": "new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.json and paper result tables"
+    },
+    {
+      "claim": "All 56 per-domain C-CRP-vs-baseline tests are positive and Holm-significant in each domain.",
+      "locations": ["abstract", "results", "conclusion"],
+      "evidence": "Paper/tables/significance_summary.tex and paper_result_tables_audit_20260612"
+    },
+    {
+      "claim": "Event-level uncertainty stratifies ranking reliability in all four domains.",
+      "locations": ["abstract", "results", "analysis", "conclusion"],
+      "evidence": "observation_four_domain aggregate and Paper/tables/uncertainty_stratification.tex"
+    },
+    {
+      "claim": "Several uncertainty terms are weak or redundant rather than uniformly necessary.",
+      "locations": ["abstract", "results", "analysis", "conclusion"],
+      "evidence": "ccrp_component_ablation_four_domain aggregate"
+    },
+    {
+      "claim": "Validation-selected hyperparameters are stable within the pre-registered tolerance on NDCG@10.",
+      "locations": ["abstract", "results"],
+      "evidence": "ccrp_hyperparameter_four_domain aggregate"
+    },
+    {
+      "claim": "The paper does not make a full-catalog recommender SOTA claim.",
+      "locations": ["abstract", "introduction", "results", "analysis", "conclusion"],
+      "evidence": "explicit manuscript scope boundary"
+    }
+  ],
+  "weak_claims": [
+    {
+      "claim": "LLM recommendation scores do not by themselves reveal decision reliability.",
+      "locations": ["abstract", "introduction"],
+      "status": "weakly_supported_contextual_motivation",
+      "note": "This is a broad motivation claim backed by the project framing and related-work discussion, not a standalone theorem or exhaustive empirical statement."
+    }
+  ],
+  "red_flag_scan": {
+    "significant": "backed by Holm-corrected paired tests",
+    "all": "used only for enumerated four-domain/eight-baseline/56-test statements or explicit negations",
+    "necessary": "used primarily to deny necessity claims; no unsupported necessity claim found",
+    "SOTA": "only appears inside full-catalog/non-universal disclaimer wording",
+    "causal": "only appears in disclaimers; no causal uncertainty effect claimed",
+    "optimal": "only appears inside a non-optimality disclaimer"
+  },
+  "required_next_steps": [
+    "Run final citation spot-check against Paper/references.bib before submission readiness.",
+    "Run section-level top-conference review and apply requested edits.",
+    "If future edits add new performance, novelty, or generality claims, rerun this audit."
+  ]
+}

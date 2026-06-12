@@ -27,8 +27,14 @@ cycle.
   `outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`.
   Full local pytest collection is blocked by pre-existing local import-path
   issues in historical official-runner tests; no paper-critical test failed.
-  Remaining blockers are final ARIS claim/citation spot-check and section-level
-  top-conference review, with any edits those reviews require.
+  A follow-up ARIS paper-claim-audit pass on the expanded manuscript is saved at
+  `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`:
+  `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
+  `submission_gate_verdict=NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`,
+  `SUPPORTED=11`, `WEAKLY_SUPPORTED=1`, `UNSUPPORTED=0`,
+  `OVERCLAIMED=0`, and `CONTRADICTED=0`. Remaining blockers are final citation
+  spot-check and section-level top-conference review, with any edits those
+  reviews require.
 - Manuscript rewrite/citation checkpoint: the stale `paper/` draft has been migrated
   from the older calibration/old-domain narrative to the current C-CRP
   same-candidate evidence spine. Updated files include `paper/main.tex`,

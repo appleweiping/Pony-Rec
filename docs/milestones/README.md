@@ -94,8 +94,11 @@ uncertainty-stratification table, numeric diagnostic summaries, and updated
 limitations; the audit lives at
 `outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`.
 The remaining blockers are no longer missing citations or the initial
-compressed draft; they are final ARIS claim/citation spot-check, section-level
-top-conference review, and any edits required by those reviews.
+compressed draft; the expanded-manuscript claim-text audit at
+`outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`
+reports `READY_WITH_SCOPE_GUARDS` with no unsupported, overclaimed, or
+contradicted claims. Remaining blockers are final citation spot-check,
+section-level top-conference review, and any edits required by those reviews.
 
 Historical execution detail follows.
 
