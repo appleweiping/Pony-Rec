@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 07:17 CEST
+Last updated: 2026-06-12 07:45 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -87,7 +87,20 @@ cycle.
   conditional pass/pass-with-scope-guards. Both reviewers agreed that the
   citation/claim gate is conditionally passed, no new experiment is required,
   and `final_submission_ready` must remain `false` until the remaining metadata
-  cautions and final manuscript signoff are closed.
+  cautions and final manuscript signoff are closed. Full-manuscript panel review
+  is saved at
+  `outputs/summary/paper_critical/final_full_manuscript_panel_review_20260612.{json,md}`:
+  Faraday returned `28/35 = 8.0/10`, Avicenna returned `29/35 = 8.3/10`, and
+  Meitner returned `28/35 = 8.0/10`, all weak-accept/conditional-pass under
+  scope guards. No new experiment is required. The panel's actionable fixes
+  were applied: `Paper/sections/method.tex` now states that the scorer consumes
+  the schema field `calibrated_relevance_probability` without fitting a new
+  post-hoc calibrator on test rows, and `Paper/figures/framework_overview.{pdf,svg}`
+  now carries the framework figure with `Paper/sections/method.tex` using a
+  paper-local include path. The regenerated
+  `outputs/summary/paper_critical/final_paper_claim_audit_after_full_panel_review_20260612.{json,md}`
+  remains `ok=true`, `paper_evidence_ready_for_drafting=true`, and
+  `final_submission_ready=false`.
 - Manuscript structural expansion checkpoint: first expansion/rebalancing pass
   is complete, but the paper is still not final submission-ready. The method
   section now gives the reranking-scope contract, C-CRP posterior notation,

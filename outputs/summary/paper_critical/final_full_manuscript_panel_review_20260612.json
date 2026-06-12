@@ -1,0 +1,86 @@
+{
+  "audit_name": "final_full_manuscript_panel_review",
+  "project": "uncertainty",
+  "generated_utc": "2026-06-12T05:45:05Z",
+  "aris_skills": [
+    "aris-auto-review-loop",
+    "aris-paper-claim-audit"
+  ],
+  "review_scope": [
+    "Paper/main.tex",
+    "Paper/sections/*.tex",
+    "Paper/tables/*.tex",
+    "Paper/references.bib",
+    "outputs/summary/paper_critical/*"
+  ],
+  "panel_reviews": [
+    {
+      "reviewer": "Faraday existing subagent",
+      "score_35": "28/35",
+      "score_10": "8.0/10",
+      "verdict": "conditional_weak_accept_final_panel_conditional_pass",
+      "kill_argument": "The actionable-uncertainty mechanism is partly undercut by diagnostics showing weak or redundant uncertainty/risk terms; the current manuscript survives only under the scoped same-candidate ranking plus reliability-stratification claim.",
+      "final_submission_ready": false
+    },
+    {
+      "reviewer": "Avicenna existing subagent",
+      "score_35": "29/35",
+      "score_10": "8.3/10",
+      "verdict": "weak_accept_conditional_pass_ready_with_scope_guards",
+      "kill_argument": "Performance may be driven more by calibrated posterior/ranking setup than by the full uncertainty decomposition, but the manuscript mostly neutralizes this with scope guards.",
+      "final_submission_ready": false
+    },
+    {
+      "reviewer": "Meitner existing subagent",
+      "score_35": "28/35",
+      "score_10": "8.0/10",
+      "verdict": "conditional_pass_weak_accept_territory",
+      "kill_argument": "Actionable uncertainty remains the strongest mechanism-scope attack; stronger component-necessity language would reopen rejection risk.",
+      "final_submission_ready": false
+    }
+  ],
+  "reviewer_consensus": {
+    "score_floor": "8.0/10",
+    "score_ceiling": "8.3/10",
+    "verdict": "weak_accept_conditional_pass_under_scope_guards",
+    "new_experiment_required": false,
+    "claim_boundary_ok": true,
+    "final_submission_ready": false
+  },
+  "blocking_issues_before_local_fixes": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility remain a pre-submission metadata blocker.",
+    "ProEx ACM-visible metadata should be checked immediately before submission because Crossref returned 404 in this environment.",
+    "The method text did not name the exact calibration source/rule for p_i.",
+    "The framework figure was included from ../outputs rather than from the paper source package.",
+    "Small LaTeX overfull/underfull warnings remain presentation-polish items."
+  ],
+  "fixes_applied_in_this_pass": [
+    "Clarified that p_i is the paper-facing schema field calibrated_relevance_probability consumed by the scorer; no new post-hoc calibrator is fitted on test rows.",
+    "Clarified that validation controls select score family, weights, and eta, while the raw-versus-calibrated gap is an uncertainty term.",
+    "Copied framework_overview.pdf and framework_overview.svg into Paper/figures/ and changed the manuscript include path to figures/framework_overview.pdf.",
+    "Recompiled after soft-wrapping the calibrated_relevance_probability field to remove the new large overfull warning."
+  ],
+  "remaining_blockers_after_local_fixes": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "ProEx ACM-visible metadata should be rechecked immediately before submission because Crossref returned 404 in this environment.",
+    "A superseding final signoff should not set final_submission_ready=true until the metadata cautions are closed.",
+    "Small LaTeX overfull/underfull warnings remain as final PDF polish, though no undefined citation/reference or BibTeX blocker remains."
+  ],
+  "regenerated_artifacts": [
+    "outputs/summary/paper_critical/final_paper_claim_audit_after_full_panel_review_20260612.json",
+    "outputs/summary/paper_critical/final_paper_claim_audit_after_full_panel_review_20260612.md"
+  ],
+  "verification": {
+    "latex_chain": "pdflatex -> bibtex -> pdflatex -> pdflatex passed",
+    "bibtex_warning_count": 0,
+    "bibtex_warning_line": "warning$ -- 0",
+    "pdf_path": "Paper/main.pdf",
+    "pdf_bytes": 546751,
+    "citation_key_check": "cited_count=21; bibliography_entry_count=21; missing_in_bib=[]; uncited_in_bib=[]; placeholder_hits=[]",
+    "paper_critical_pytest": "66 passed",
+    "project_readiness_check": "project_readiness_ok=True",
+    "agentmemory_status": "agentmemory CLI unavailable; durable state mirrored in repo docs and committed audit artifacts",
+    "claim_audit_ok": true,
+    "claim_audit_final_submission_ready": false
+  }
+}

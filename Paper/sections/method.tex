@@ -71,12 +71,16 @@ and the amount of unresolved risk. The final score exporter keeps all candidate
 keys aligned with the same-candidate task so downstream metrics can be audited
 without relying on candidate order or missing-score imputation.
 
-Let $\hat{p}_i$ denote the raw probability emitted by the LLM evidence parser
-and let $p_i$ denote the calibrated probability used for ranking. Calibration is
-validation-controlled: the calibration layer is fitted or selected before test
-evaluation and is recorded in the signal-row provenance. For candidate evidence
-we also record support $s_i\in[0,1]$ and counterevidence $q_i\in[0,1]$. The
-effective evidence score is
+Let $\hat{p}_i$ denote the raw probability emitted by the LLM evidence parser,
+and let $p_i$ denote the schema field
+\texttt{calibrated\_relevance\_\allowbreak{}probability} consumed by the
+paper-facing scorer. The current reconstruction does not fit a new post-hoc
+calibrator on test rows: validation controls select the score family, weights,
+and $\eta$, while the scorer records the gap $|\hat{p}_i-p_i|$ as an
+uncertainty term. If the calibrated field is absent, the exporter falls back to
+the raw probability and the provenance exposes that source choice. For
+candidate evidence we also record support $s_i\in[0,1]$ and counterevidence
+$q_i\in[0,1]$. The effective evidence score is
 \begin{equation}
     e_i = \max(0, \min(1, s_i-q_i)).
 \end{equation}
@@ -177,7 +181,7 @@ entering the paper table without exact candidate coverage.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{../outputs/summary/paper_critical/framework_overview/framework_overview.pdf}
+\includegraphics[width=\textwidth]{figures/framework_overview.pdf}
 \caption{Framework overview. \method{} converts same-candidate user-item
 events into task-grounded LLM evidence, calibrates candidate relevance
 posteriors, estimates uncertainty, and applies a validation-controlled ranking

@@ -106,7 +106,20 @@ Faraday returned `8.0/10` conditional pass and Meitner returned `8.5/10`
 conditional pass/pass-with-scope-guards. Both reviewers agreed that the
 citation/claim gate is conditionally passed, no new experiment is required, and
 `final_submission_ready` must remain `false` until the remaining metadata
-cautions and final manuscript signoff are closed.
+cautions and final manuscript signoff are closed. Full-manuscript panel review
+is saved at
+`outputs/summary/paper_critical/final_full_manuscript_panel_review_20260612.{json,md}`:
+Faraday returned `28/35 = 8.0/10`, Avicenna returned `29/35 = 8.3/10`, and
+Meitner returned `28/35 = 8.0/10`, all weak-accept/conditional-pass under
+scope guards. No new experiment is required. The actionable panel fixes were
+applied in the manuscript: `Paper/sections/method.tex` now names
+`calibrated_relevance_probability` as the paper-facing score field consumed by
+the scorer rather than implying a new test-fitted calibrator, and
+`Paper/figures/framework_overview.{pdf,svg}` makes the framework figure local
+to the paper package. The regenerated
+`outputs/summary/paper_critical/final_paper_claim_audit_after_full_panel_review_20260612.{json,md}`
+remains `ok=true`, `paper_evidence_ready_for_drafting=true`, and
+`final_submission_ready=false`.
 A previous ARIS paper-claim-audit pass on the expanded manuscript is saved at
 `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`;
 it reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
