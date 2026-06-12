@@ -95,7 +95,12 @@ visibility remain unresolved. The submission package audit now includes a
 privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission
-gate now has a
+package can also be staged locally from the audited source manifest via
+`scripts/audit/main_build_submission_source_package.py`; the current staging
+manifest reports 21 copied files and a copied manifest sha256 matching the
+source audit manifest under ignored `artifacts/submission_source_package_20260612/`.
+This is an artifact handoff aid, not final submission readiness. The manual
+submission gate now has a
 privacy-preserving closure path:
 `configs/paper_manual_submission_private_confirmation.template.json` plus the
 optional `--private-confirmation-json` argument to

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 17:05 CEST
+Last updated: 2026-06-12 18:16 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -40,6 +40,32 @@ cycle.
   now also reflects the strengthened ProMax source check below and preserves
   the same external/manual blockers instead of treating freshness as submission
   approval.
+
+- Anonymous source-package staging added:
+  `scripts/audit/main_build_submission_source_package.py` now builds a local
+  anonymous source-package staging directory from the already audited
+  `source_package_manifest` in
+  `outputs/summary/paper_critical/submission_package_audit_20260612.json`.
+  The current generated manifest
+  `outputs/summary/paper_critical/submission_source_package_20260612.{json,md}`
+  reports `ok=true`, `submission_source_package_ready=true`,
+  `final_submission_ready=false`, `21` copied files, `652691` copied bytes, and
+  copied manifest sha256
+  `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`, matching
+  the source audit manifest exactly. The copied file tree lives under ignored
+  `artifacts/submission_source_package_20260612/files/` and is not committed.
+  The builder fails closed if the package audit is not OK, if
+  `final_submission_ready` is not exactly false, if audit failures are present,
+  if anonymous source leak scan is not OK, if external source references are
+  present, if manifest entries lack `exists=true`, nonempty role, positive size,
+  or 64-hex sha256, if a source file hash/size changed, if a path escapes the
+  repo/package root, if a private/manual/COI/reviewer/account path appears, or
+  if a source is untracked/ignored without being a known generated paper
+  artifact. With `--overwrite`, it rebuilds through a temporary directory and
+  replaces the exact output package tree only after full validation, so stale
+  private or extra files cannot survive inside the package. This improves local
+  artifact handoff but does not close final readiness while ProMax metadata and
+  private submission-system gates remain open.
 
 - Final submission gate added:
   `scripts/audit/main_build_final_submission_gate.py` aggregates the four

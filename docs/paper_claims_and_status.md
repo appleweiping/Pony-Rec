@@ -76,6 +76,25 @@ passes a required SIGIR 2026 accepted-papers source check for the ProMax title
 and author line, strengthening the accepted-paper evidence while leaving final
 page-range/DOI-registry blockers intact.
 
+**2026-06-12 anonymous source-package staging.** Codex added
+`scripts/audit/main_build_submission_source_package.py` to turn the audited
+source manifest into a local anonymous source-package staging directory without
+expanding the file set. The generated
+`outputs/summary/paper_critical/submission_source_package_20260612.{json,md}`
+reports `ok=true`, `submission_source_package_ready=true`,
+`final_submission_ready=false`, `21` copied files, `652691` copied bytes, and a
+copied manifest sha256 matching the package-audit source manifest sha256
+`4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`. The copied
+tree is kept in ignored `artifacts/submission_source_package_20260612/files/`
+rather than committed. The builder is fail-closed on non-OK package audits,
+non-false `final_submission_ready`, nonempty audit failures, anonymous-source
+leak-scan failure, external source references, invalid or duplicate manifest
+entries, missing/changed source hashes, path escapes, private/manual/COI/
+reviewer/account path fragments, and untracked/ignored files outside the
+explicit generated-paper allowlist. This is local artifact staging only; it does
+not close final submission readiness while ProMax metadata and manual
+submission-system gates remain open.
+
 **2026-06-12 final submission gate.** Codex added
 `scripts/audit/main_build_final_submission_gate.py` as the final local
 pre-submission aggregator over the package audit, metadata packet, external

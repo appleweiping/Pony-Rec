@@ -238,6 +238,23 @@ non-anonymous author macros, or non-anonymous affiliation macros may appear in
 the TeX closure. If a sensitive match is detected, the audit may record only
 file/line/type and a short hash token, never the raw private value.
 
+To stage the audited anonymous source package locally, build only from the
+package-audit source manifest:
+
+```bash
+python -m scripts.audit.main_build_submission_source_package --overwrite
+```
+
+This copies exactly the audited manifest files into
+`artifacts/submission_source_package_YYYYMMDD/files/` and writes
+`outputs/summary/paper_critical/submission_source_package_YYYYMMDD.{json,md}`.
+It is not a final-submission-ready signal: it must keep
+`final_submission_ready=false` until external proceedings metadata and private
+manual submission-system gates are closed. The builder must fail if the audited
+manifest is not clean, if source hashes changed, if paths escape the package,
+if private/manual/COI/reviewer/account files appear, or if stale output files
+would survive an overwrite.
+
 After running the package audit, metadata packet, external proceedings
 metadata audit, and manual submission checklist, build the final local gate:
 
