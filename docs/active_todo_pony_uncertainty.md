@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 11:17 CEST
+Last updated: 2026-06-12 11:42 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,19 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Pre-submission gate refresh added:
+  `scripts/audit/main_refresh_pre_submission_gates.py` is now the preferred
+  one-command refresh for final submission status. It runs, in order, external
+  proceedings metadata, submission package, submission metadata packet, manual
+  submission checklist, and final submission gate, then writes
+  `outputs/summary/paper_critical/pre_submission_gate_refresh_20260612.{json,md}`.
+  The latest live refresh reports `ok=true`,
+  `final_submission_ready=false`, and final verdict
+  `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. It refreshes the
+  dependent gate outputs in dependency order, avoiding stale JSON or parallel
+  ordering races. Remaining blockers are unchanged: ProMax final page range and
+  DOI/Crossref visibility, plus private manual submission-system fields.
 
 - Final submission gate added:
   `scripts/audit/main_build_final_submission_gate.py` aggregates the four

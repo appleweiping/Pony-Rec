@@ -247,6 +247,19 @@ This is the single local summary for pre-submission status. It must not mark
 proceedings metadata is ready, and manual submission-system items have actually
 been completed.
 
+To refresh the whole local pre-submission stack in dependency order, use:
+
+```bash
+python -m scripts.audit.main_refresh_pre_submission_gates \
+  --stamp YYYYMMDD \
+  --output-json outputs/summary/paper_critical/pre_submission_gate_refresh_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/pre_submission_gate_refresh_YYYYMMDD.md
+```
+
+This is the preferred command immediately before any submission-status report
+because it regenerates external metadata, package, metadata packet, manual
+checklist, and final-gate artifacts in the correct order.
+
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
 

@@ -44,6 +44,19 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 pre-submission gate refresh.** Codex added
+`scripts/audit/main_refresh_pre_submission_gates.py` as the preferred
+single-command refresh for the final submission gate stack. It runs the external
+proceedings metadata audit, submission package audit, submission metadata
+packet, manual submission checklist, and final submission gate in dependency
+order, then writes
+`outputs/summary/paper_critical/pre_submission_gate_refresh_20260612.{json,md}`.
+The latest live refresh reports `ok=true`, `final_submission_ready=false`, and
+final verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. This
+improves reproducibility and prevents stale or out-of-order gate artifacts, but
+does not close final readiness while ProMax public proceedings metadata and
+private manual submission-system fields remain unresolved.
+
 **2026-06-12 final submission gate.** Codex added
 `scripts/audit/main_build_final_submission_gate.py` as the final local
 pre-submission aggregator over the package audit, metadata packet, external

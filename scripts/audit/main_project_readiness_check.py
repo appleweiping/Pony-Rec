@@ -61,6 +61,7 @@ REQUIRED_FILES = [
     "scripts/audit/main_audit_external_proceedings_metadata.py",
     "scripts/audit/main_build_manual_submission_checklist.py",
     "scripts/audit/main_build_final_submission_gate.py",
+    "scripts/audit/main_refresh_pre_submission_gates.py",
     "scripts/audit/main_project_bootstrap.py",
 ]
 
