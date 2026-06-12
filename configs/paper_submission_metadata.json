@@ -1,0 +1,30 @@
+{
+  "schema_version": "2026-06-12.paper_submission_metadata.v1",
+  "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "paper_type": "full research paper",
+  "submission_title": "Actionable Uncertainty for LLM-Based Recommendation",
+  "anonymous_submission": true,
+  "suggested_keywords": [
+    "LLM-based recommendation",
+    "uncertainty estimation",
+    "calibration",
+    "candidate reranking",
+    "same-candidate evaluation"
+  ],
+  "suggested_topic_areas": [
+    "Recommender systems",
+    "Evaluation and reproducibility",
+    "Large language models",
+    "Uncertainty and calibration"
+  ],
+  "manual_fields_not_stored": [
+    "author names and affiliations",
+    "conflicts of interest",
+    "reviewer suggestions or exclusions",
+    "submission-system declarations"
+  ],
+  "notes": [
+    "This metadata packet is for an anonymous review submission shell.",
+    "Final submission readiness remains false until external proceedings metadata and submission-system checks are closed."
+  ]
+}

@@ -233,6 +233,20 @@ section/table sources, bibliography sources, compiled `main.bbl`, the checked
 PDF, and local figure assets, with no references to files outside the paper
 source package.
 
+For submission-system fields that are safe to prepare in the anonymous repo,
+run:
+
+```bash
+python -m scripts.audit.main_build_submission_metadata_packet \
+  --output-json outputs/summary/paper_critical/submission_metadata_packet_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/submission_metadata_packet_YYYYMMDD.md
+```
+
+The metadata packet may contain title, abstract, keywords, topic areas, target
+profile, PDF/source-manifest identifiers, and remaining blockers. It must not
+store author identities, conflicts of interest, reviewer suggestions/exclusions,
+or private submission-system declarations in the repository.
+
 ## Likely Reviewer Objections
 
 | risk | defense |

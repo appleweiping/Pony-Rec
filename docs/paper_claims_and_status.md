@@ -44,6 +44,20 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 submission metadata packet.** Codex added
+`scripts/audit/main_build_submission_metadata_packet.py` and
+`configs/paper_submission_metadata.json` to prepare the submission-system fields
+that can be safely stored in the anonymous repo. The generated packet
+`outputs/summary/paper_critical/submission_metadata_packet_20260612.{json,md}`
+reports `ok=true`, `submission_metadata_packet_ready=true`,
+`final_submission_ready=false`, title
+`Actionable Uncertainty for LLM-Based Recommendation`, a 212-word abstract,
+five suggested keywords, four topic areas, and the same paper/source manifest
+sha256 as the package audit. Author identities, conflicts, reviewer
+suggestions/exclusions, and submission-system declarations remain manual-only
+fields and are not stored in the repository. The packet reduces the final
+manual submission checklist but does not close final readiness.
+
 **2026-06-12 submission-package audit.** Codex added
 `scripts/audit/main_audit_submission_package.py` as the local, read-only gate
 between manuscript evidence readiness and target-conference formatting. The

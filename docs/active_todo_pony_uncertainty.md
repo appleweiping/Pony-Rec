@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 09:36 CEST
+Last updated: 2026-06-12 09:48 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Submission metadata packet added:
+  `scripts/audit/main_build_submission_metadata_packet.py` with config
+  `configs/paper_submission_metadata.json`. The generated packet
+  `outputs/summary/paper_critical/submission_metadata_packet_20260612.{json,md}`
+  reports `ok=true`, `submission_metadata_packet_ready=true`,
+  `final_submission_ready=false`, title
+  `Actionable Uncertainty for LLM-Based Recommendation`, abstract length
+  `212` words / `1565` chars, five suggested keywords, four suggested topic
+  areas, PDF `Paper/main.pdf` with `9` pages / `546669` bytes, and source
+  manifest sha256
+  `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`.
+  Manual-only submission-system fields are explicitly not stored in the repo:
+  author names/affiliations, conflicts of interest, reviewer suggestions or
+  exclusions, and system declarations. Remaining blockers stay unchanged:
+  ProMax final ACM page range/Crossref visibility and final manual
+  submission-system metadata/format checklist.
 
 - Submission-package audit command added:
   `scripts/audit/main_audit_submission_package.py`. The current generated
