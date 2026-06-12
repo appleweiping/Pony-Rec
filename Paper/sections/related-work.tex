@@ -15,12 +15,11 @@ methods} such as ELMRec~\cite{elmrec}, RLMRec~\cite{rlmrec}, and
 IRLLRec~\cite{irllrec} combine collaborative structure or user intent with
 language-derived representations.
 
-These methods differ in architecture and training objective, which makes a
-fair comparison difficult unless the evaluation protocol is tightly controlled.
-Our work treats these systems as official external baselines: each method keeps
-its declared architecture and objective, while the data adapter, LLM backbone,
-and score exporter are standardized so all methods are evaluated over the same
-candidate rows.
+Because these methods differ in architecture and training objective, fair
+comparison requires a tightly controlled protocol. We treat them as official
+external baselines: each method keeps its declared architecture and objective,
+while the data adapter, LLM backbone, and score exporter are standardized so
+all methods are evaluated over the same candidate rows.
 
 \subsection{Calibration and Uncertainty}
 

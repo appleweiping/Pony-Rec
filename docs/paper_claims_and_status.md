@@ -44,6 +44,21 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 final PDF polish/metadata follow-up.** The latest ARIS
+claim/citation follow-up is saved at
+`outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.{json,md}`.
+The server preflight found no matching running experiment and an idle GPU. The
+current manuscript polish removes the remaining local overfull hbox warnings
+(`overfull_hbox_count=0`) while preserving the audited claim boundary; only
+underfull float/table/bibliography line-wrap warnings remain. `Paper/main.pdf`
+is 546669 bytes and `Paper/main.blg` reports `warning$ -- 0`. ProEx proceedings
+metadata is now resolved by a visible DBLP spot-check for KDD 2026 V.1, pages
+1940-1951, DOI `10.1145/3770854.3780284`. ProMax remains a final-submission
+metadata caution: arXiv `2604.26231` lists `11 pages, 8 figures, accepted by
+SIGIR 2026`, and the current BibTeX uses ACM DOI `10.1145/3805712.3809600`, but
+the final ACM page range/registry visibility must be rechecked immediately
+before submission. `final_submission_ready` remains `false`.
+
 **2026-06-12 manuscript/evidence gate.** The Phase 2.5 evidence layer is now
 ready for strict manuscript-level claim/citation review, but the paper is not
 submission-ready. Codex added a reproducible final claim gate at

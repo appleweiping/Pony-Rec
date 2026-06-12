@@ -1,0 +1,71 @@
+{
+  "artifact": "final_pdf_polish_metadata_followup_20260612",
+  "generated_at_utc": "2026-06-12T06:00:02Z",
+  "generated_at_local": "2026-06-12 08:00 CEST",
+  "repo_commit_before_followup": "570d70a9c9932622af16c411281a0d13fb0c57aa",
+  "skill_protocols": [
+    "aris-paper-claim-audit",
+    "aris-citation-audit"
+  ],
+  "server_preflight": {
+    "active_python_experiments_matching_project": 0,
+    "gpu_utilization": "0 %",
+    "gpu_memory_used": "15 MiB",
+    "gpu_memory_total": "49140 MiB",
+    "ccrp_v3_log_tail_status": "ALL C-CRP v3 INFERENCE COMPLETE"
+  },
+  "paper_build_snapshot": {
+    "pdf_path": "Paper/main.pdf",
+    "pdf_bytes": 546669,
+    "bibtex_warning_count": 0,
+    "overfull_hbox_count_after_polish": 0,
+    "underfull_hbox_count_after_polish": 6,
+    "underfull_vbox_count_after_polish": 8,
+    "remaining_warning_class": "underfull layout and bibliography line-break warnings only"
+  },
+  "polish_edits": [
+    {
+      "file": "Paper/sections/introduction.tex",
+      "change": "Shortened the first contribution item while preserving official-baseline, Qwen3-8B, coverage, metric, Holm-test, and provenance claims."
+    },
+    {
+      "file": "Paper/sections/related-work.tex",
+      "change": "Compressed the official external-baseline protocol paragraph without changing the fairness policy."
+    },
+    {
+      "file": "Paper/sections/method.tex",
+      "change": "Shortened the counterevidence bullet to remove the local overfull line."
+    },
+    {
+      "file": "Paper/sections/analysis.tex",
+      "change": "Shortened the LLM/domain-family limitation wording while preserving the scope guard."
+    }
+  ],
+  "citation_metadata_followup": {
+    "proex": {
+      "status": "resolved_by_visible_dblp_spot_check",
+      "title": "ProEx: A Unified Framework Leveraging Large Language Model with Profile Extrapolation for Recommendation",
+      "venue_detail": "Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.1, KDD 2026",
+      "pages": "1940-1951",
+      "doi": "10.1145/3770854.3780284",
+      "source_url": "https://dblp.org/db/conf/kdd/kdd2026-1.html"
+    },
+    "promax": {
+      "status": "pending_final_acm_page_range",
+      "title": "ProMax: Exploring the Potential of LLM-derived Profiles with Distribution Shaping for Recommender Systems",
+      "known_metadata": {
+        "arxiv": "2604.26231",
+        "comments": "11 pages, 8 figures, accepted by SIGIR 2026",
+        "acm_doi_in_current_bib": "10.1145/3805712.3809600"
+      },
+      "source_url": "https://arxiv.org/abs/2604.26231"
+    }
+  },
+  "verdict": "PDF_PACKAGE_POLISH_PASS_METADATA_CAUTION",
+  "final_submission_ready": false,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "Final submission package still needs the external submission-target-specific formatting pass."
+  ],
+  "agentmemory_status": "agentmemory CLI unavailable in this environment; canonical docs and git commit are used as durable mirror."
+}

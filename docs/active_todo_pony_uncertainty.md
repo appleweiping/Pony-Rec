@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 07:45 CEST
+Last updated: 2026-06-12 08:00 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,21 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Final PDF polish/metadata follow-up:
+  `outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.{json,md}`.
+  Server preflight found no matching experiment process and an idle GPU
+  (`0 %`, `15 MiB / 49140 MiB`). The current manuscript polish reduces
+  `Paper/main.log` to `overfull_hbox_count=0`; remaining warnings are
+  underfull layout/bibliography line-wrap warnings only. `Paper/main.pdf` is
+  546669 bytes and `Paper/main.blg` still reports `warning$ -- 0`. ProEx
+  proceedings metadata is now resolved by a visible DBLP spot-check for KDD
+  2026 V.1, pages 1940-1951, DOI `10.1145/3770854.3780284`. ProMax remains the
+  only citation metadata caution: arXiv `2604.26231` lists `11 pages, 8
+  figures, accepted by SIGIR 2026`, and the current BibTeX carries ACM DOI
+  `10.1145/3805712.3809600`, but final ACM page range/registry visibility must
+  still be checked immediately before submission. `final_submission_ready`
+  therefore remains `false`.
 
 - Final citation/section-review checkpoint: ARIS `aris-citation-audit`
   spot-check now lives at
