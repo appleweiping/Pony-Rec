@@ -78,6 +78,20 @@ warnings. This is a local artifact release candidate only; final submission
 remains blocked by ProMax final page-range / DOI-Crossref visibility and
 private manual submission-system confirmation.
 
+**2026-06-12 submission release-candidate stack refresh.** Codex added
+`scripts/audit/main_refresh_submission_release_candidate_stack.py` as the
+preferred local handoff wrapper over the pre-submission refresh, freshness
+audit, and release-candidate packet. The generated
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`
+reports `ok=true`, `refresh_ok=true`, `freshness_ok=true`,
+`refresh_artifact_fresh=true`, `release_candidate_ok=true`,
+`local_release_candidate_ready=true`, `readiness_scope=local_artifacts_only`,
+`blocking_status=external_or_manual_blocked`, and
+`final_submission_ready=false`. The stack artifact has zero failures and keeps
+the same nine remaining blockers instead of treating local consistency as
+final submission approval. Future agents should use this wrapper for routine
+status refreshes, then inspect sub-gates only when the stack fails.
+
 **2026-06-12 pre-submission gate refresh.** Codex added
 `scripts/audit/main_refresh_pre_submission_gates.py` as the preferred
 single-command refresh for the final submission gate stack. It runs the external

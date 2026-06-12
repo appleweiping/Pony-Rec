@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 21:10 CEST
+Last updated: 2026-06-12 21:34 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Submission release-candidate stack refresh added:
+  `scripts/audit/main_refresh_submission_release_candidate_stack.py` is now the
+  preferred one-command local handoff refresh for pre-submission status. It
+  runs, in strict order, the pre-submission gate refresh, the refresh-freshness
+  audit, and the local release-candidate packet builder, then writes
+  `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`.
+  The generated stack artifact reports `ok=true`,
+  `local_release_candidate_ready=true`, `readiness_scope=local_artifacts_only`,
+  `blocking_status=external_or_manual_blocked`,
+  `refresh_ok=true`, `freshness_ok=true`,
+  `refresh_artifact_fresh=true`, `release_candidate_ok=true`, and
+  `final_submission_ready=false`. It has zero failures and preserves the nine
+  remaining external/manual blockers, led by ProMax final page-range /
+  DOI-Crossref visibility and private manual submission-system confirmation.
+  Use this stack command for future local status refreshes instead of manually
+  running the three commands separately unless debugging a specific sub-gate.
 
 - External proceedings metadata discovery enhanced:
   `scripts/audit/main_audit_external_proceedings_metadata.py` now includes an

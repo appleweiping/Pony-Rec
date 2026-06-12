@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-12T19:08:32.741440+00:00",
+  "created_at_utc": "2026-06-12T19:28:12.858019+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-12T19:08:00.580261+00:00",
+      "created_at_utc": "2026-06-12T19:27:29.509841+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T19:08:32.553742+00:00",
+      "created_at_utc": "2026-06-12T19:28:12.708306+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T19:08:32.473540+00:00",
+      "created_at_utc": "2026-06-12T19:28:12.678753+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_source_package_rebuild",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T19:08:00.069552+00:00",
+      "created_at_utc": "2026-06-12T19:27:28.952638+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -87,7 +87,7 @@
       "path": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
-        "size_bytes": 20808
+        "size_bytes": 20806
       },
       "ready": false,
       "ready_field": "external_proceedings_metadata_ready",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T19:08:32.619815+00:00",
+      "created_at_utc": "2026-06-12T19:28:12.752870+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",

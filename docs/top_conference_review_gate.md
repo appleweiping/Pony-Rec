@@ -329,6 +329,22 @@ internally consistent, not that the paper can be submitted. It must copy
 external/manual blockers such as ProMax page-range/DOI visibility and private
 submission-system confirmation.
 
+For routine local status handoff, prefer the sequential stack refresh wrapper:
+
+```bash
+python -m scripts.audit.main_refresh_submission_release_candidate_stack \
+  --stamp YYYYMMDD \
+  --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md
+```
+
+This runs the pre-submission refresh, freshness audit, and release-candidate
+packet in order. It is the safest command for status refreshes because it
+prevents manual omission or stale ordering between the three local handoff
+artifacts. It still has `readiness_scope=local_artifacts_only` and must keep
+`final_submission_ready=false` until the final submission gate closes all
+external/manual blockers.
+
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
 

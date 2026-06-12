@@ -19,7 +19,7 @@ server evidence locally before cleanup.
 - **Current collaboration routing**: Claude reviewer tooling is unavailable in
   this thread; when multi-agent review is required, use GPT-5.5 xhigh
   sub-agents instead.
-- **Stage**: M5 (C-CRP v3 complete; sports/toys/home/tools official gates passed; paper-critical modules next)
+- **Stage**: M5/M6 handoff (C-CRP v3 and sports/toys/home/tools official gates passed; Phase 2.5 paper-critical modules closed; local submission-package/release-candidate stack ready, but final submission blocked by ProMax public page-range/DOI-Crossref visibility and private manual submission-system confirmation)
 - **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
 - **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
 - **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.

@@ -461,15 +461,15 @@ When in doubt, downgrade the claim, not the evidence standard.
 13. **超参曲线必做** — eta、C-CRP weights、confidence weight、uncertainty gates/thresholds、SRPD lr/lambda 等真实控制量需要合理 sweep 和 matplotlib 曲线
 14. **框架图必做** — 论文 ready 前必须准备清晰 pipeline/framework overview figure，标出 uncertainty、calibration/evidence 和 risk-adjusted ranking 位置
 
-## Experiment Roadmap（2026-06-05 更新）
+## Experiment Roadmap（2026-06-12 更新）
 
 ```text
 Phase 1: C-CRP v3 on 8 domains (sports✓ toys✓ home✓ tools✓)
 Phase 2: 8 official baselines on 4 new domains complete (sports✓ 8/8 + gate✓; toys✓ 8/8 + gate✓; home✓ 8/8 + gate✓; tools✓ 8/8 + gate✓; Tools `llmesr_sasrec` completed/gated 2026-06-05 21:19 CST; Tools C-CRP import/domain/comparison gate `outputs/summary/tools_official_ccrp_gate_post_cleanup_20260605.{json,csv}` and `outputs/summary/tools_official_ccrp_20260605_*` passed with C-CRP rank 1 on all 7 metrics and 56/56 positive Holm-significant paired tests; compact four-new-domain gate certificate `outputs/summary/new_domains_official_ccrp_cross_domain_20260605_*` passed blocking checks but is not a paper-readiness verdict; no more official baseline rows should be launched unless a later audit finds a concrete invalid row)
-Phase 2.5: Paper-critical modules before readiness claim: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure
-Phase 3: Full comparison table + statistical significance tests
-Phase 4: Paper writing (ARIS paper-write skill)
-Phase 5: Per-module tri-reviewer review-as-you-go (Codex GPT xhigh + GPT-5.5 xhigh + 2nd Claude Opus 4.8), run after each module — not a single end-gate
+Phase 2.5: Paper-critical modules closed as manuscript-supporting evidence: uncertainty observation/motivation figure, full C-CRP component ablations, real hyperparameter curves, framework overview figure; keep their status labels as motivation/supplementary where documented
+Phase 3: Full comparison table + statistical significance tests complete for the current four-new-domain same-candidate claim; do not launch more official rows unless a later audit finds an invalid row
+Phase 4: Paper writing and local submission-package gates in progress; current local release-candidate stack is ready, but final submission remains blocked by ProMax public page-range/DOI-Crossref visibility and private manual submission-system confirmation
+Phase 5: Review-as-you-go/section review continues; GPT-5.5 section-level score reached 8.0 conditional pass, but Claude Opus reviewer coverage was missing and final-submission blockers remain
 ```
 
 ## Artifact Management（产物管理规则）

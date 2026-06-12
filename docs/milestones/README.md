@@ -94,7 +94,14 @@ now aggregates that freshness audit, the final gate, source package, independent
 rebuild, metadata packet, manual checklist, and external metadata audit; it
 reports `local_release_candidate_ready=true`,
 `readiness_scope=local_artifacts_only`, `blocking_status=external_or_manual_blocked`,
-and still `final_submission_ready=false`. The refreshed external metadata audit also
+and still `final_submission_ready=false`. The sequential wrapper
+`scripts/audit/main_refresh_submission_release_candidate_stack.py` now runs the
+refresh, freshness audit, and local release-candidate packet in order and
+writes
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`;
+the current stack artifact reports `ok=true`,
+`local_release_candidate_ready=true`, zero failures, and the same
+`final_submission_ready=false` external/manual blockers. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
 in addition to arXiv `2604.26231`, and now reports advisory Crossref
 title-discovery candidates. The discovery layer found `5` ProMax title-search
