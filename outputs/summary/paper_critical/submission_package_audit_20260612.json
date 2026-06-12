@@ -1,0 +1,255 @@
+{
+  "anonymity": {
+    "anonymous_affiliation": true,
+    "anonymous_author": true,
+    "authors": [
+      "Anonymous"
+    ],
+    "email_macro_count": 0,
+    "thanks_macro_count": 0
+  },
+  "build": {
+    "aux": {
+      "exists": true,
+      "path": "Paper\\main.aux",
+      "size_bytes": 13442
+    },
+    "bibtex_warning_count": 0,
+    "blg": {
+      "exists": true,
+      "path": "Paper\\main.blg",
+      "size_bytes": 1606
+    },
+    "cited_key_count": 21,
+    "log": {
+      "exists": true,
+      "path": "Paper\\main.log",
+      "size_bytes": 55332
+    },
+    "logged_pdf_bytes": 546669,
+    "overfull_hbox_count": 0,
+    "page_count": 9,
+    "pdf": {
+      "exists": true,
+      "path": "Paper\\main.pdf",
+      "size_bytes": 546669
+    },
+    "rerun_warning_count": 0,
+    "undefined_citation_count": 0,
+    "undefined_reference_count": 0,
+    "underfull_hbox_count": 6,
+    "underfull_vbox_count": 8
+  },
+  "created_at_utc": "2026-06-12T07:06:28.236554+00:00",
+  "evidence_gates": {
+    "claim_audit_ok": true,
+    "metadata_followup_verdict": "PDF_PACKAGE_POLISH_PASS_METADATA_CAUTION",
+    "panel_review_ok": true,
+    "panel_score_floor": 8.0
+  },
+  "failures": [],
+  "final_submission_ready": false,
+  "input_paths": {
+    "claim_audit": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\final_paper_claim_audit_after_full_panel_review_20260612.json",
+      "size_bytes": 13282
+    },
+    "metadata_followup": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\final_pdf_polish_metadata_followup_20260612.json",
+      "size_bytes": 3056
+    },
+    "panel_review": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\final_full_manuscript_panel_review_20260612.json",
+      "size_bytes": 4596
+    }
+  },
+  "limits": {
+    "max_overfull_hbox": 0,
+    "max_pages": 9,
+    "target_formatting_closed": false
+  },
+  "mode": "local_read_only_submission_package_audit",
+  "next_actions": [
+    "Run the target-conference formatting checklist on the audited Paper package.",
+    "Recheck ProMax final ACM page range and ACM/Crossref visibility immediately before submission.",
+    "Keep final_submission_ready=false until external metadata and formatting blockers are closed."
+  ],
+  "ok": true,
+  "paper_dir": "Paper",
+  "read_only": true,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "Final submission package still needs the external submission-target-specific formatting pass."
+  ],
+  "required_files": {
+    "framework_overview_pdf": {
+      "exists": true,
+      "path": "Paper\\figures\\framework_overview.pdf",
+      "size_bytes": 33541
+    },
+    "framework_overview_svg": {
+      "exists": true,
+      "path": "Paper\\figures\\framework_overview.svg",
+      "size_bytes": 143379
+    },
+    "main_blg": {
+      "exists": true,
+      "path": "Paper\\main.blg",
+      "size_bytes": 1606
+    },
+    "main_log": {
+      "exists": true,
+      "path": "Paper\\main.log",
+      "size_bytes": 55332
+    },
+    "main_pdf": {
+      "exists": true,
+      "path": "Paper\\main.pdf",
+      "size_bytes": 546669
+    },
+    "main_tex": {
+      "exists": true,
+      "path": "Paper\\main.tex",
+      "size_bytes": 840
+    },
+    "references_bib": {
+      "exists": true,
+      "path": "Paper\\references.bib",
+      "size_bytes": 10448
+    }
+  },
+  "root": "D:\\Research\\Uncertainty",
+  "schema_version": "2026-06-12.submission_package_audit.v1",
+  "source_closure": {
+    "entry": {
+      "exists": true,
+      "path": "Paper\\main.tex",
+      "size_bytes": 840
+    },
+    "forbidden_hits": [],
+    "graphics": [
+      {
+        "exists": true,
+        "from": "Paper\\sections\\method.tex",
+        "graphic": "figures/framework_overview.pdf",
+        "resolved": "Paper\\figures\\framework_overview.pdf",
+        "size_bytes": 33541
+      }
+    ],
+    "input_edges": [
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/abstract",
+        "resolved": "Paper\\sections\\abstract.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/introduction",
+        "resolved": "Paper\\sections\\introduction.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/related-work",
+        "resolved": "Paper\\sections\\related-work.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/method",
+        "resolved": "Paper\\sections\\method.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/experiments",
+        "resolved": "Paper\\sections\\experiments.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/results",
+        "resolved": "Paper\\sections\\results.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/analysis",
+        "resolved": "Paper\\sections\\analysis.tex"
+      },
+      {
+        "from": "Paper\\main.tex",
+        "input": "sections/conclusion",
+        "resolved": "Paper\\sections\\conclusion.tex"
+      },
+      {
+        "from": "Paper\\sections\\experiments.tex",
+        "input": "tables/baseline_provenance_summary",
+        "resolved": "Paper\\tables\\baseline_provenance_summary.tex"
+      },
+      {
+        "from": "Paper\\sections\\experiments.tex",
+        "input": "tables/main_results",
+        "resolved": "Paper\\tables\\main_results.tex"
+      },
+      {
+        "from": "Paper\\sections\\results.tex",
+        "input": "tables/significance_summary",
+        "resolved": "Paper\\tables\\significance_summary.tex"
+      },
+      {
+        "from": "Paper\\sections\\results.tex",
+        "input": "tables/ccrp_rank_by_metric",
+        "resolved": "Paper\\tables\\ccrp_rank_by_metric.tex"
+      },
+      {
+        "from": "Paper\\sections\\results.tex",
+        "input": "tables/full_official_ndcg10_ranking",
+        "resolved": "Paper\\tables\\full_official_ndcg10_ranking.tex"
+      },
+      {
+        "from": "Paper\\sections\\results.tex",
+        "input": "tables/uncertainty_stratification",
+        "resolved": "Paper\\tables\\uncertainty_stratification.tex"
+      },
+      {
+        "from": "Paper\\sections\\results.tex",
+        "input": "tables/ablation_ndcg10_summary",
+        "resolved": "Paper\\tables\\ablation_ndcg10_summary.tex"
+      },
+      {
+        "from": "Paper\\sections\\results.tex",
+        "input": "tables/module_evidence",
+        "resolved": "Paper\\tables\\module_evidence.tex"
+      }
+    ],
+    "missing_graphics": [],
+    "missing_inputs": [],
+    "tex_files": [
+      "Paper\\main.tex",
+      "Paper\\sections\\abstract.tex",
+      "Paper\\sections\\analysis.tex",
+      "Paper\\sections\\conclusion.tex",
+      "Paper\\sections\\experiments.tex",
+      "Paper\\sections\\introduction.tex",
+      "Paper\\sections\\method.tex",
+      "Paper\\sections\\related-work.tex",
+      "Paper\\sections\\results.tex",
+      "Paper\\tables\\ablation_ndcg10_summary.tex",
+      "Paper\\tables\\baseline_provenance_summary.tex",
+      "Paper\\tables\\ccrp_rank_by_metric.tex",
+      "Paper\\tables\\full_official_ndcg10_ranking.tex",
+      "Paper\\tables\\main_results.tex",
+      "Paper\\tables\\module_evidence.tex",
+      "Paper\\tables\\significance_summary.tex",
+      "Paper\\tables\\uncertainty_stratification.tex"
+    ]
+  },
+  "submission_package_ready_for_target_formatting": true,
+  "verdict": "READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION",
+  "warnings": [
+    "underfull_layout_warnings:hbox=6,vbox=8"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

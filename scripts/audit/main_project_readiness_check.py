@@ -52,6 +52,7 @@ REQUIRED_FILES = [
     "scripts/train/main_train_score_proex_upstream_adapter.py",
     "scripts/train/main_train_score_promax_upstream_adapter.py",
     "scripts/misc/main_import_same_candidate_baseline_scores.py",
+    "scripts/audit/main_audit_submission_package.py",
     "scripts/audit/main_project_bootstrap.py",
 ]
 

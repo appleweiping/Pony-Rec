@@ -44,6 +44,22 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 submission-package audit.** Codex added
+`scripts/audit/main_audit_submission_package.py` as the local, read-only gate
+between manuscript evidence readiness and target-conference formatting. The
+current output
+`outputs/summary/paper_critical/submission_package_audit_20260612.{json,md}`
+reports `ok=true`, `submission_package_ready_for_target_formatting=true`,
+`final_submission_ready=false`, and verdict
+`READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`. It verifies the paper source
+closure, local framework figure files, anonymous ACM paper shell, 9-page
+`Paper/main.pdf`, zero BibTeX warnings, no undefined citations/references, zero
+overfull hbox warnings, final-panel score floor `8.0`, and the scoped
+claim-audit state. This advances the paper package to the target-formatting
+gate, but it does not close final submission readiness: ProMax final ACM page
+range/Crossref visibility and external target-specific formatting remain
+blocking conditions.
+
 **2026-06-12 final PDF polish/metadata follow-up.** The latest ARIS
 claim/citation follow-up is saved at
 `outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.{json,md}`.

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 08:00 CEST
+Last updated: 2026-06-12 09:01 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Submission-package audit command added:
+  `scripts/audit/main_audit_submission_package.py`. The current generated
+  package audit is
+  `outputs/summary/paper_critical/submission_package_audit_20260612.{json,md}`:
+  `ok=true`, `submission_package_ready_for_target_formatting=true`,
+  `final_submission_ready=false`, and verdict
+  `READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`. It verifies the paper
+  source closure, local framework figure files, anonymous ACM paper shell,
+  `Paper/main.pdf` (9 pages, 546669 bytes), `Paper/main.blg` warning count
+  `0`, no undefined citations/references, `overfull_hbox_count=0`, cited key
+  count `21`, final panel score floor `8.0`, and the scoped claim-audit state.
+  Remaining blockers are deliberately preserved rather than hidden: ProMax
+  final ACM page range/Crossref visibility and the external
+  target-conference formatting pass. Latest public spot-checks still show
+  ProMax as arXiv `2604.26231`, 11 pages, accepted by SIGIR 2026, without a
+  final ACM page range.
 
 - Final PDF polish/metadata follow-up:
   `outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.{json,md}`.

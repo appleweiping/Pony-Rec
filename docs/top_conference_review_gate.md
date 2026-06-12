@@ -213,6 +213,19 @@ and artifact packaging rather than continuing to add new experiments. If they
 do not pass, report the minimum remaining gates and avoid open-ended
 "one more baseline" drift.
 
+After the evidence/manuscript gates pass, run the local submission-package
+audit before declaring target-formatting readiness:
+
+```bash
+python -m scripts.audit.main_audit_submission_package \
+  --output-json outputs/summary/paper_critical/submission_package_audit_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/submission_package_audit_YYYYMMDD.md
+```
+
+This command is a package/source/PDF gate, not a license to mark the work
+final-submission-ready. It must keep `final_submission_ready=false` while
+external metadata cautions or target-conference formatting checks remain open.
+
 ## Likely Reviewer Objections
 
 | risk | defense |
