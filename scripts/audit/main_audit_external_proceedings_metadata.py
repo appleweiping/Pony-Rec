@@ -223,6 +223,128 @@ def _without_text(result: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in result.items() if key != "text"}
 
 
+def _first_text(value: Any) -> str:
+    if isinstance(value, list) and value:
+        return str(value[0] or "")
+    return str(value or "")
+
+
+def _issued_year(item: dict[str, Any]) -> Any:
+    for field in ("published-print", "published-online", "issued"):
+        parts = ((item.get(field) or {}).get("date-parts") or [[None]])
+        if parts and parts[0]:
+            return parts[0][0]
+    return None
+
+
+def _crossref_discovery_url(query: str, rows: int) -> str:
+    encoded_query = quote(query, safe="")
+    return f"https://api.crossref.org/works?query.bibliographic={encoded_query}&rows={rows}"
+
+
+def _crossref_title_discovery(
+    check: dict[str, Any],
+    *,
+    network_mode: str,
+    timeout_seconds: int,
+    fixtures: dict[str, Any],
+) -> dict[str, Any]:
+    reports: list[dict[str, Any]] = []
+    expected_doi = str(check.get("expected_doi") or "").strip().lower()
+    expected_year = str(check.get("expected_year") or "").strip()
+    for query_def in check.get("crossref_discovery_queries") or []:
+        query = str(query_def.get("query") or "").strip()
+        if not query:
+            reports.append(
+                {
+                    "name": query_def.get("name") or "unnamed_discovery_query",
+                    "query": "",
+                    "url": "",
+                    "ok": False,
+                    "status_code": None,
+                    "error": "empty_query",
+                    "candidate_count": 0,
+                    "candidates": [],
+                }
+            )
+            continue
+        rows = int(query_def.get("rows") or 5)
+        rows = max(1, min(rows, 20))
+        url = _crossref_discovery_url(query, rows)
+        fetched = _network_check(
+            url,
+            network_mode=network_mode,
+            timeout_seconds=timeout_seconds,
+            fixtures=fixtures,
+        )
+        candidates: list[dict[str, Any]] = []
+        parse_error = ""
+        if fetched.get("text"):
+            try:
+                payload = json.loads(str(fetched.get("text") or ""))
+                items = (payload.get("message") or {}).get("items") or []
+                for item in items[:rows]:
+                    doi = str(item.get("DOI") or "")
+                    year = _issued_year(item)
+                    page = str(item.get("page") or "")
+                    candidates.append(
+                        {
+                            "doi": doi,
+                            "title": _first_text(item.get("title")),
+                            "container_title": _first_text(item.get("container-title")),
+                            "year": year,
+                            "page": page,
+                            "url": item.get("URL") or "",
+                            "type": item.get("type") or "",
+                            "score": item.get("score"),
+                            "expected_doi_match": bool(expected_doi)
+                            and doi.strip().lower() == expected_doi,
+                            "expected_year_match": bool(expected_year) and str(year or "") == expected_year,
+                            "has_page_range": bool(page.strip()),
+                        }
+                    )
+            except json.JSONDecodeError:
+                parse_error = "crossref_discovery_json_decode_failed"
+        reports.append(
+            {
+                "name": query_def.get("name") or "crossref_discovery_query",
+                "query": query,
+                "url": url,
+                "ok": bool(fetched.get("ok")) and not parse_error,
+                "status_code": fetched.get("status_code"),
+                "final_url": fetched.get("final_url"),
+                "error": parse_error or fetched.get("error") or "",
+                "candidate_count": len(candidates),
+                "candidates": candidates,
+            }
+        )
+
+    all_candidates = [candidate for report in reports for candidate in report.get("candidates", [])]
+    exact_doi_candidates = [candidate for candidate in all_candidates if candidate.get("expected_doi_match")]
+    exact_doi_with_pages = [
+        candidate for candidate in exact_doi_candidates if candidate.get("has_page_range")
+    ]
+    alternate_doi_candidates = [
+        candidate
+        for candidate in all_candidates
+        if expected_doi and candidate.get("doi") and not candidate.get("expected_doi_match")
+    ]
+    return {
+        "enabled": bool(check.get("crossref_discovery_queries")),
+        "reports": reports,
+        "candidate_count": len(all_candidates),
+        "exact_doi_candidate_count": len(exact_doi_candidates),
+        "exact_doi_with_pages_count": len(exact_doi_with_pages),
+        "alternate_doi_candidate_count": len(alternate_doi_candidates),
+        "alternate_doi_candidates": alternate_doi_candidates[:5],
+        "policy": (
+            "Discovery candidates are advisory only. They help detect newly public "
+            "or changed metadata, but they do not by themselves satisfy the exact "
+            "BibTeX page-range, DOI resolver, or Crossref final-readiness gates."
+        ),
+    }
+
+
 def _has_expected(value: str | None, expected: Any) -> bool:
     if expected is None:
         return True
@@ -330,6 +452,20 @@ def _entry_report(
         elif not source_ok:
             warnings.append(f"{key}:source_check_not_visible:{source.get('name')}")
 
+    discovery = _crossref_title_discovery(
+        check,
+        network_mode=network_mode,
+        timeout_seconds=timeout_seconds,
+        fixtures=fixtures,
+    )
+    if discovery["enabled"]:
+        if discovery["candidate_count"] == 0:
+            warnings.append(f"{key}:crossref_discovery_no_candidates")
+        if discovery["alternate_doi_candidate_count"] > 0:
+            warnings.append(f"{key}:crossref_discovery_alternate_doi_candidates_present")
+        if discovery["exact_doi_candidate_count"] > 0 and not crossref_ok:
+            warnings.append(f"{key}:crossref_discovery_expected_doi_seen_but_direct_not_visible")
+
     ready = not failures and not blockers
     return {
         "key": key,
@@ -349,6 +485,7 @@ def _entry_report(
             "eprint": fields.get("eprint", ""),
         },
         "network": network,
+        "discovery": discovery,
         "source_checks": source_reports,
         "warnings": warnings,
         "failures": failures,
@@ -461,6 +598,32 @@ def _write_md(path: Path, audit: dict[str, Any]) -> None:
                 f"- Source `{source['name']}`: ok=`{str(source['ok']).lower()}`, "
                 f"status=`{source['status_code']}`, missing_patterns={source['missing_patterns']}"
             )
+        discovery = report.get("discovery") or {}
+        if discovery.get("enabled"):
+            lines.extend(
+                [
+                    f"- Crossref discovery candidates: `{discovery.get('candidate_count', 0)}`",
+                    f"- Discovery exact-DOI candidates: `{discovery.get('exact_doi_candidate_count', 0)}`",
+                    f"- Discovery exact-DOI candidates with pages: `{discovery.get('exact_doi_with_pages_count', 0)}`",
+                    f"- Discovery alternate-DOI candidates: `{discovery.get('alternate_doi_candidate_count', 0)}`",
+                    f"- Discovery policy: {discovery.get('policy', '')}",
+                ]
+            )
+            for query in discovery.get("reports", []):
+                lines.append(
+                    f"- Discovery query `{query.get('name')}`: ok=`{str(query.get('ok')).lower()}`, "
+                    f"status=`{query.get('status_code')}`, candidates=`{query.get('candidate_count')}`, "
+                    f"error=`{query.get('error') or ''}`"
+                )
+                for candidate in (query.get("candidates") or [])[:3]:
+                    lines.append(
+                        "  - candidate "
+                        f"doi=`{candidate.get('doi', '')}`, "
+                        f"year=`{candidate.get('year', '')}`, "
+                        f"pages=`{candidate.get('page', '')}`, "
+                        f"expected_doi_match=`{str(candidate.get('expected_doi_match')).lower()}`, "
+                        f"title=`{candidate.get('title', '')}`"
+                    )
         lines.extend(["", "Blockers:"])
         blockers = report.get("blockers") or []
         lines.extend(f"- `{item}`" for item in blockers) if blockers else lines.append("- None")

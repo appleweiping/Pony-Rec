@@ -15,6 +15,160 @@
         "year": "2026"
       },
       "blockers": [],
+      "discovery": {
+        "alternate_doi_candidate_count": 5,
+        "alternate_doi_candidates": [
+          {
+            "container_title": "",
+            "doi": "10.2139/ssrn.5841223",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": false,
+            "page": "",
+            "score": 33.250393,
+            "title": "A Unified Reinforcement Learning Framework for Dynamic User Profiling and Predictive Recommendation",
+            "type": "posted-content",
+            "url": "https://doi.org/10.2139/ssrn.5841223",
+            "year": null
+          },
+          {
+            "container_title": "",
+            "doi": "10.20944/preprints202510.1143.v1",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": false,
+            "page": "",
+            "score": 31.673695,
+            "title": "A Unified Reinforcement Learning Framework for Dynamic User Profiling and Predictive Recommendation",
+            "type": "posted-content",
+            "url": "https://doi.org/10.20944/preprints202510.1143.v1",
+            "year": null
+          },
+          {
+            "container_title": "",
+            "doi": "10.3403/30434665",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": false,
+            "page": "",
+            "score": 29.388159,
+            "title": "Information technology. Object Management Group Unified Architecture Framework (OMG UAF)",
+            "type": "standard",
+            "url": "https://doi.org/10.3403/30434665",
+            "year": null
+          },
+          {
+            "container_title": "",
+            "doi": "10.3403/30434665u",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": false,
+            "page": "",
+            "score": 29.363567,
+            "title": "Information technology. Object Management Group Unified Architecture Framework (OMG UAF)",
+            "type": "standard",
+            "url": "https://doi.org/10.3403/30434665u",
+            "year": null
+          },
+          {
+            "container_title": "",
+            "doi": "10.70675/440ee556z65e4z4b9fz9160z27b24b6fbad6",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": false,
+            "page": "",
+            "score": 29.2551,
+            "title": "Usage-driven unified model for user profile and data source profile extraction",
+            "type": "dissertation",
+            "url": "https://doi.org/10.70675/440ee556z65e4z4b9fz9160z27b24b6fbad6",
+            "year": null
+          }
+        ],
+        "candidate_count": 5,
+        "enabled": true,
+        "exact_doi_candidate_count": 0,
+        "exact_doi_with_pages_count": 0,
+        "policy": "Discovery candidates are advisory only. They help detect newly public or changed metadata, but they do not by themselves satisfy the exact BibTeX page-range, DOI resolver, or Crossref final-readiness gates.",
+        "reports": [
+          {
+            "candidate_count": 5,
+            "candidates": [
+              {
+                "container_title": "",
+                "doi": "10.2139/ssrn.5841223",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": false,
+                "page": "",
+                "score": 33.250393,
+                "title": "A Unified Reinforcement Learning Framework for Dynamic User Profiling and Predictive Recommendation",
+                "type": "posted-content",
+                "url": "https://doi.org/10.2139/ssrn.5841223",
+                "year": null
+              },
+              {
+                "container_title": "",
+                "doi": "10.20944/preprints202510.1143.v1",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": false,
+                "page": "",
+                "score": 31.673695,
+                "title": "A Unified Reinforcement Learning Framework for Dynamic User Profiling and Predictive Recommendation",
+                "type": "posted-content",
+                "url": "https://doi.org/10.20944/preprints202510.1143.v1",
+                "year": null
+              },
+              {
+                "container_title": "",
+                "doi": "10.3403/30434665",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": false,
+                "page": "",
+                "score": 29.388159,
+                "title": "Information technology. Object Management Group Unified Architecture Framework (OMG UAF)",
+                "type": "standard",
+                "url": "https://doi.org/10.3403/30434665",
+                "year": null
+              },
+              {
+                "container_title": "",
+                "doi": "10.3403/30434665u",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": false,
+                "page": "",
+                "score": 29.363567,
+                "title": "Information technology. Object Management Group Unified Architecture Framework (OMG UAF)",
+                "type": "standard",
+                "url": "https://doi.org/10.3403/30434665u",
+                "year": null
+              },
+              {
+                "container_title": "",
+                "doi": "10.70675/440ee556z65e4z4b9fz9160z27b24b6fbad6",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": false,
+                "page": "",
+                "score": 29.2551,
+                "title": "Usage-driven unified model for user profile and data source profile extraction",
+                "type": "dissertation",
+                "url": "https://doi.org/10.70675/440ee556z65e4z4b9fz9160z27b24b6fbad6",
+                "year": null
+              }
+            ],
+            "error": "",
+            "final_url": "https://api.crossref.org/works?query.bibliographic=ProEx%20A%20Unified%20Framework%20for%20User%20Profile%20Extrapolation%20in%20Sequential%20Recommendation&rows=5",
+            "name": "crossref_title_search_proex",
+            "ok": true,
+            "query": "ProEx A Unified Framework for User Profile Extrapolation in Sequential Recommendation",
+            "status_code": 200,
+            "url": "https://api.crossref.org/works?query.bibliographic=ProEx%20A%20Unified%20Framework%20for%20User%20Profile%20Extrapolation%20in%20Sequential%20Recommendation&rows=5"
+          }
+        ]
+      },
       "display_name": "ProEx",
       "external_metadata_ready": true,
       "failures": [],
@@ -56,7 +210,8 @@
       ],
       "warnings": [
         "proex:crossref_not_visible:status=404",
-        "proex:doi_resolver_not_visible:status=404"
+        "proex:doi_resolver_not_visible:status=404",
+        "proex:crossref_discovery_alternate_doi_candidates_present"
       ]
     },
     "promax": {
@@ -77,6 +232,160 @@
         "promax:crossref_registry_not_visible:status=404",
         "promax:doi_resolver_not_visible:status=404"
       ],
+      "discovery": {
+        "alternate_doi_candidate_count": 5,
+        "alternate_doi_candidates": [
+          {
+            "container_title": "",
+            "doi": "10.26481/dis.20220324sh",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": false,
+            "page": "",
+            "score": 30.600826,
+            "title": "Health recommender systems for behavior change",
+            "type": "dissertation",
+            "url": "https://doi.org/10.26481/dis.20220324sh",
+            "year": null
+          },
+          {
+            "container_title": "Building Recommender Systems Using Large Language Models",
+            "doi": "10.1007/978-3-032-01152-7_4",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": true,
+            "page": "99-129",
+            "score": 29.655355,
+            "title": "LLM as Recommender",
+            "type": "book-chapter",
+            "url": "https://doi.org/10.1007/978-3-032-01152-7_4",
+            "year": 2025
+          },
+          {
+            "container_title": "Companion Proceedings of the ACM on Web Conference 2025",
+            "doi": "10.1145/3701716.3717734",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": true,
+            "page": "2102-2111",
+            "score": 29.65155,
+            "title": "Improving LLM-Based Recommender Systems with User-Controllable Profiles",
+            "type": "proceedings-article",
+            "url": "https://doi.org/10.1145/3701716.3717734",
+            "year": 2025
+          },
+          {
+            "container_title": "Proceedings of the Nineteenth ACM Conference on Recommender Systems",
+            "doi": "10.1145/3705328.3748167",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": true,
+            "page": "746-754",
+            "score": 29.37709,
+            "title": "Exploring the Potential of LLMs for Serendipity Evaluation in Recommender Systems",
+            "type": "proceedings-article",
+            "url": "https://doi.org/10.1145/3705328.3748167",
+            "year": 2025
+          },
+          {
+            "container_title": "Proceedings of the Nineteenth ACM Conference on Recommender Systems",
+            "doi": "10.1145/3705328.3748030",
+            "expected_doi_match": false,
+            "expected_year_match": false,
+            "has_page_range": true,
+            "page": "527-532",
+            "score": 29.343288,
+            "title": "Biases in LLM-Generated Musical Taste Profiles for Recommendation",
+            "type": "proceedings-article",
+            "url": "https://doi.org/10.1145/3705328.3748030",
+            "year": 2025
+          }
+        ],
+        "candidate_count": 5,
+        "enabled": true,
+        "exact_doi_candidate_count": 0,
+        "exact_doi_with_pages_count": 0,
+        "policy": "Discovery candidates are advisory only. They help detect newly public or changed metadata, but they do not by themselves satisfy the exact BibTeX page-range, DOI resolver, or Crossref final-readiness gates.",
+        "reports": [
+          {
+            "candidate_count": 5,
+            "candidates": [
+              {
+                "container_title": "",
+                "doi": "10.26481/dis.20220324sh",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": false,
+                "page": "",
+                "score": 30.600826,
+                "title": "Health recommender systems for behavior change",
+                "type": "dissertation",
+                "url": "https://doi.org/10.26481/dis.20220324sh",
+                "year": null
+              },
+              {
+                "container_title": "Building Recommender Systems Using Large Language Models",
+                "doi": "10.1007/978-3-032-01152-7_4",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": true,
+                "page": "99-129",
+                "score": 29.655355,
+                "title": "LLM as Recommender",
+                "type": "book-chapter",
+                "url": "https://doi.org/10.1007/978-3-032-01152-7_4",
+                "year": 2025
+              },
+              {
+                "container_title": "Companion Proceedings of the ACM on Web Conference 2025",
+                "doi": "10.1145/3701716.3717734",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": true,
+                "page": "2102-2111",
+                "score": 29.65155,
+                "title": "Improving LLM-Based Recommender Systems with User-Controllable Profiles",
+                "type": "proceedings-article",
+                "url": "https://doi.org/10.1145/3701716.3717734",
+                "year": 2025
+              },
+              {
+                "container_title": "Proceedings of the Nineteenth ACM Conference on Recommender Systems",
+                "doi": "10.1145/3705328.3748167",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": true,
+                "page": "746-754",
+                "score": 29.37709,
+                "title": "Exploring the Potential of LLMs for Serendipity Evaluation in Recommender Systems",
+                "type": "proceedings-article",
+                "url": "https://doi.org/10.1145/3705328.3748167",
+                "year": 2025
+              },
+              {
+                "container_title": "Proceedings of the Nineteenth ACM Conference on Recommender Systems",
+                "doi": "10.1145/3705328.3748030",
+                "expected_doi_match": false,
+                "expected_year_match": false,
+                "has_page_range": true,
+                "page": "527-532",
+                "score": 29.343288,
+                "title": "Biases in LLM-Generated Musical Taste Profiles for Recommendation",
+                "type": "proceedings-article",
+                "url": "https://doi.org/10.1145/3705328.3748030",
+                "year": 2025
+              }
+            ],
+            "error": "",
+            "final_url": "https://api.crossref.org/works?query.bibliographic=ProMax%20Exploring%20the%20Potential%20of%20LLM-derived%20Profiles%20with%20Distribution%20Shaping%20for%20Recommender%20Systems&rows=5",
+            "name": "crossref_title_search_promax",
+            "ok": true,
+            "query": "ProMax Exploring the Potential of LLM-derived Profiles with Distribution Shaping for Recommender Systems",
+            "status_code": 200,
+            "url": "https://api.crossref.org/works?query.bibliographic=ProMax%20Exploring%20the%20Potential%20of%20LLM-derived%20Profiles%20with%20Distribution%20Shaping%20for%20Recommender%20Systems&rows=5"
+          }
+        ]
+      },
       "display_name": "ProMax",
       "external_metadata_ready": false,
       "failures": [],
@@ -126,11 +435,13 @@
           "url": "https://sigir2026.org/en-AU/pages/program/accepted-papers"
         }
       ],
-      "warnings": []
+      "warnings": [
+        "promax:crossref_discovery_alternate_doi_candidates_present"
+      ]
     }
   },
   "checked_entry_count": 2,
-  "created_at_utc": "2026-06-12T17:54:49.674670+00:00",
+  "created_at_utc": "2026-06-12T19:08:00.069552+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
@@ -158,7 +469,9 @@
   "target_profile_id": "sigir2026_full_paper_acm_anonymous",
   "warnings": [
     "proex:crossref_not_visible:status=404",
-    "proex:doi_resolver_not_visible:status=404"
+    "proex:doi_resolver_not_visible:status=404",
+    "proex:crossref_discovery_alternate_doi_candidates_present",
+    "promax:crossref_discovery_alternate_doi_candidates_present"
   ],
   "will_copy": false,
   "will_delete": false,

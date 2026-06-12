@@ -11,6 +11,13 @@
       "require_pages_in_bib": true,
       "require_crossref_visible_for_final": false,
       "require_doi_resolvable_for_final": false,
+      "crossref_discovery_queries": [
+        {
+          "name": "crossref_title_search_proex",
+          "query": "ProEx A Unified Framework for User Profile Extrapolation in Sequential Recommendation",
+          "rows": 5
+        }
+      ],
       "source_checks": [
         {
           "name": "dblp_search_proex_kdd_2026",
@@ -37,6 +44,13 @@
       "require_pages_in_bib": true,
       "require_crossref_visible_for_final": true,
       "require_doi_resolvable_for_final": true,
+      "crossref_discovery_queries": [
+        {
+          "name": "crossref_title_search_promax",
+          "query": "ProMax Exploring the Potential of LLM-derived Profiles with Distribution Shaping for Recommender Systems",
+          "rows": 5
+        }
+      ],
       "source_checks": [
         {
           "name": "arxiv_2604_26231",

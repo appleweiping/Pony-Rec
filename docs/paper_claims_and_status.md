@@ -44,6 +44,21 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 external metadata discovery enhancement.** Codex strengthened
+`scripts/audit/main_audit_external_proceedings_metadata.py` with advisory
+Crossref title discovery for ProEx/ProMax. The discovery layer records candidate
+DOI/title/container/page/year/URL/type/score information and is visible in the
+generated Markdown report, but it remains separate from the exact final gates:
+BibTeX page range, direct Crossref `/works/{doi}`, DOI resolver, and configured
+required source checks. The refreshed live audit
+`outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.{json,md}`
+still reports `external_proceedings_metadata_ready=false` and
+`final_submission_ready=false`. ProMax discovery currently finds `5` Crossref
+title-search candidates, but `0` candidates matching the expected DOI
+`10.1145/3805712.3809600`; therefore the ProMax page-range, Crossref, and DOI
+resolver blockers remain final-blocking rather than being silently replaced by
+fuzzy search evidence.
+
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local
 handoff index over the final gate, refresh freshness audit, anonymous source

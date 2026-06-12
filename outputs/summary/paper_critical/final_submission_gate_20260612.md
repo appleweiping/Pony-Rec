@@ -1,6 +1,6 @@
 # Final Submission Gate
 
-Generated: 2026-06-12T17:55:53.099983+00:00
+Generated: 2026-06-12T19:08:32.741440+00:00
 
 - Verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - OK: `true`
@@ -39,6 +39,8 @@ Generated: 2026-06-12T17:55:53.099983+00:00
 - `submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
 
 ## Next Actions
 

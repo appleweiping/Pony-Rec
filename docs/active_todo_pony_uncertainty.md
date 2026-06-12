@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 20:29 CEST
+Last updated: 2026-06-12 21:10 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,25 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- External proceedings metadata discovery enhanced:
+  `scripts/audit/main_audit_external_proceedings_metadata.py` now includes an
+  advisory Crossref title-discovery layer for ProEx/ProMax in addition to the
+  exact DOI, BibTeX page-range, DOI resolver, arXiv/DBLP/SIGIR source checks.
+  Discovery candidates are written under a separate `discovery` object and are
+  shown in the Markdown report; they never by themselves satisfy
+  `external_proceedings_metadata_ready`. The refreshed live artifact
+  `outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.{json,md}`
+  still reports `external_proceedings_metadata_ready=false` and
+  `final_submission_ready=false`. For ProMax, Crossref title discovery returned
+  `5` candidates, `0` exact expected-DOI candidates, `0` exact expected-DOI
+  candidates with pages, and `5` alternate-DOI candidates. The concrete final
+  blockers remain `promax:final_page_range_missing_in_bib`,
+  `promax:crossref_registry_not_visible:status=404`, and
+  `promax:doi_resolver_not_visible:status=404`, plus manual submission-system
+  confirmation. The pre-submission refresh/freshness/RC stack was regenerated
+  afterward and still reports `local_release_candidate_ready=true` but
+  `final_submission_ready=false`.
 
 - Submission release-candidate packet added:
   `scripts/audit/main_build_submission_release_candidate_packet.py` now builds

@@ -390,6 +390,11 @@ visibility against `Paper/references.bib`. It may clear a citation-metadata
 caution only when the expected public evidence is actually visible; otherwise
 it must keep `external_proceedings_metadata_ready=false` and preserve concrete
 blockers such as a missing final page range or unresolved DOI registry entry.
+The command may also report advisory Crossref title-discovery candidates for
+ProEx/ProMax. Treat those candidates as hints for changed or newly public
+metadata only: they must not replace the configured DOI, fill missing BibTeX
+pages, or close `external_proceedings_metadata_ready` unless the exact
+BibTeX/direct-DOI/source gates also pass.
 
 ## Likely Reviewer Objections
 

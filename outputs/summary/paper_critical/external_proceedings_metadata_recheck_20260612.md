@@ -1,6 +1,6 @@
 # External Proceedings Metadata Audit
 
-Generated: 2026-06-12T17:54:49.674670+00:00
+Generated: 2026-06-12T19:08:00.069552+00:00
 
 - OK: `true`
 - External proceedings metadata ready: `false`
@@ -21,6 +21,15 @@ Generated: 2026-06-12T17:54:49.674670+00:00
 - Crossref: ok=`false`, status=`404`
 - DOI resolver: ok=`false`, status=`404`
 - Source `dblp_search_proex_kdd_2026`: ok=`true`, status=`200`, missing_patterns=[]
+- Crossref discovery candidates: `5`
+- Discovery exact-DOI candidates: `0`
+- Discovery exact-DOI candidates with pages: `0`
+- Discovery alternate-DOI candidates: `5`
+- Discovery policy: Discovery candidates are advisory only. They help detect newly public or changed metadata, but they do not by themselves satisfy the exact BibTeX page-range, DOI resolver, or Crossref final-readiness gates.
+- Discovery query `crossref_title_search_proex`: ok=`true`, status=`200`, candidates=`5`, error=``
+  - candidate doi=`10.2139/ssrn.5841223`, year=`None`, pages=``, expected_doi_match=`false`, title=`A Unified Reinforcement Learning Framework for Dynamic User Profiling and Predictive Recommendation`
+  - candidate doi=`10.20944/preprints202510.1143.v1`, year=`None`, pages=``, expected_doi_match=`false`, title=`A Unified Reinforcement Learning Framework for Dynamic User Profiling and Predictive Recommendation`
+  - candidate doi=`10.3403/30434665`, year=`None`, pages=``, expected_doi_match=`false`, title=`Information technology. Object Management Group Unified Architecture Framework (OMG UAF)`
 
 Blockers:
 - None
@@ -28,6 +37,7 @@ Blockers:
 Warnings:
 - `proex:crossref_not_visible:status=404`
 - `proex:doi_resolver_not_visible:status=404`
+- `proex:crossref_discovery_alternate_doi_candidates_present`
 
 ### ProMax (`promax`)
 
@@ -41,6 +51,15 @@ Warnings:
 - DOI resolver: ok=`false`, status=`404`
 - Source `arxiv_2604_26231`: ok=`true`, status=`200`, missing_patterns=[]
 - Source `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing_patterns=[]
+- Crossref discovery candidates: `5`
+- Discovery exact-DOI candidates: `0`
+- Discovery exact-DOI candidates with pages: `0`
+- Discovery alternate-DOI candidates: `5`
+- Discovery policy: Discovery candidates are advisory only. They help detect newly public or changed metadata, but they do not by themselves satisfy the exact BibTeX page-range, DOI resolver, or Crossref final-readiness gates.
+- Discovery query `crossref_title_search_promax`: ok=`true`, status=`200`, candidates=`5`, error=``
+  - candidate doi=`10.26481/dis.20220324sh`, year=`None`, pages=``, expected_doi_match=`false`, title=`Health recommender systems for behavior change`
+  - candidate doi=`10.1007/978-3-032-01152-7_4`, year=`2025`, pages=`99-129`, expected_doi_match=`false`, title=`LLM as Recommender`
+  - candidate doi=`10.1145/3701716.3717734`, year=`2025`, pages=`2102-2111`, expected_doi_match=`false`, title=`Improving LLM-Based Recommender Systems with User-Controllable Profiles`
 
 Blockers:
 - `promax:final_page_range_missing_in_bib`
@@ -48,7 +67,7 @@ Blockers:
 - `promax:doi_resolver_not_visible:status=404`
 
 Warnings:
-- None
+- `promax:crossref_discovery_alternate_doi_candidates_present`
 
 ## Remaining Blockers
 
@@ -65,6 +84,8 @@ Warnings:
 
 - `proex:crossref_not_visible:status=404`
 - `proex:doi_resolver_not_visible:status=404`
+- `proex:crossref_discovery_alternate_doi_candidates_present`
+- `promax:crossref_discovery_alternate_doi_candidates_present`
 
 ## Next Actions
 

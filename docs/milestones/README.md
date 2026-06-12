@@ -96,8 +96,11 @@ reports `local_release_candidate_ready=true`,
 `readiness_scope=local_artifacts_only`, `blocking_status=external_or_manual_blocked`,
 and still `final_submission_ready=false`. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
-in addition to arXiv `2604.26231`, but ProMax final page range and DOI/Crossref
-visibility remain unresolved. The submission package audit now includes a
+in addition to arXiv `2604.26231`, and now reports advisory Crossref
+title-discovery candidates. The discovery layer found `5` ProMax title-search
+candidates but `0` matching the expected DOI, so it does not close any final
+metadata gate; ProMax final page range and DOI/Crossref visibility remain
+unresolved. The submission package audit now includes a
 privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission
