@@ -93,6 +93,16 @@ passing arXiv HTML / SIGIR accepted-paper source probes. The probe is now the
 first external-metadata command in the blocker closure packet, but it cannot by
 itself mark the paper final-submission-ready.
 
+**2026-06-13 ProMax public metadata recheck.** The latest live probe
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
+still reports `promax_public_metadata_ready=false`: Crossref `/works` for
+`10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`, and
+ACM DL returns `403`; arXiv HTML ACM metadata and SIGIR accepted-paper probes
+remain passing. The refreshed closure packet
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
+uses the current final gate/stack plus this latest probe and preserves
+`final_submission_ready=false`.
+
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local
 handoff index over the final gate, refresh freshness audit, anonymous source

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 23:45 CEST
+Last updated: 2026-06-13 00:12 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,19 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- 2026-06-13 ProMax public metadata recheck:
+  `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
+  is the latest lightweight live probe. It reports `ok=true`,
+  `promax_public_metadata_ready=false`, and `final_submission_ready=false`.
+  Direct public checks still do not close the blocker: Crossref `/works` is
+  `404`, the DOI resolver is `404`, and ACM DL is `403`, while arXiv HTML ACM
+  metadata and SIGIR accepted-paper source probes pass. The refreshed
+  `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
+  uses the 2026-06-12 final gate/stack plus this 2026-06-13 public probe and
+  still reports local artifact handoff `ready`, external proceedings metadata
+  `blocked`, manual submission system `manual_private_pending`, and
+  `final_submission_ready=false`.
 
 - ProMax public metadata probe added:
   `scripts/audit/main_probe_promax_public_metadata.py` is now the lightweight

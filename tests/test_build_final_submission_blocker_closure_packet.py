@@ -113,11 +113,37 @@ def _seed_inputs(tmp_path: Path) -> dict[str, Path]:
             ],
         },
     )
+    probe = _write_json(
+        out / "promax_public_metadata_probe_test.json",
+        {
+            "schema_version": "probe.v1",
+            "created_at_utc": "2026-06-13T00:00:00+00:00",
+            "ok": True,
+            "promax_public_metadata_ready": False,
+            "final_submission_ready": False,
+            "direct_checks": {
+                "crossref": {"status_code": 404},
+                "doi_resolver": {"status_code": 404},
+                "acm_dl": {"status_code": 403},
+            },
+            "source_probes": [
+                {
+                    "name": "arxiv_html_promax_acm_metadata",
+                    "ok": True,
+                    "status_code": 200,
+                    "missing_patterns": [],
+                }
+            ],
+            "remaining_blockers": ["promax:crossref_registry_not_visible"],
+            "warnings": ["acm_dl_not_accessible:status=403"],
+        },
+    )
     return {
         "final": final_gate,
         "external": external,
         "manual": manual,
         "stack": stack,
+        "probe": probe,
     }
 
 
@@ -132,6 +158,7 @@ def test_final_submission_blocker_closure_packet_groups_external_and_manual(
         external_metadata_json=paths["external"].relative_to(tmp_path),
         manual_checklist_json=paths["manual"].relative_to(tmp_path),
         release_candidate_stack_json=paths["stack"].relative_to(tmp_path),
+        promax_probe_json=paths["probe"].relative_to(tmp_path),
     )
 
     assert packet["ok"] is True
@@ -154,6 +181,10 @@ def test_final_submission_blocker_closure_packet_groups_external_and_manual(
         groups["external_proceedings_metadata"]["current_evidence"]["bibtex"]["isbn"]
         == "979-8-4007-2599-9"
     )
+    probe = groups["external_proceedings_metadata"]["latest_public_probe"]
+    assert probe["provided"] is True
+    assert probe["created_at_utc"] == "2026-06-13T00:00:00+00:00"
+    assert probe["crossref_status_code"] == 404
 
 
 def test_final_submission_blocker_closure_packet_markdown_has_commands(
@@ -166,6 +197,7 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
         external_metadata_json=paths["external"].relative_to(tmp_path),
         manual_checklist_json=paths["manual"].relative_to(tmp_path),
         release_candidate_stack_json=paths["stack"].relative_to(tmp_path),
+        promax_probe_json=paths["probe"].relative_to(tmp_path),
     )
     output = tmp_path / "packet.md"
 
@@ -178,3 +210,5 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
     assert "Source manifest sha256: `" + "a" * 64 + "`" in text
     assert "main_probe_promax_public_metadata" in text
     assert "main_refresh_submission_release_candidate_stack" in text
+    assert "Latest public probe" in text
+    assert "ACM DL status: `403`" in text

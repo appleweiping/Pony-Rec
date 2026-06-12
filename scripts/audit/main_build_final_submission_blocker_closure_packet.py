@@ -91,6 +91,32 @@ def _promax_evidence(external: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _promax_probe_evidence(probe: dict[str, Any] | None) -> dict[str, Any]:
+    if not probe:
+        return {"provided": False}
+    direct = probe.get("direct_checks") or {}
+    return {
+        "provided": True,
+        "created_at_utc": probe.get("created_at_utc", ""),
+        "promax_public_metadata_ready": probe.get("promax_public_metadata_ready") is True,
+        "final_submission_ready": probe.get("final_submission_ready") is True,
+        "crossref_status_code": ((direct.get("crossref") or {}).get("status_code")),
+        "doi_resolver_status_code": ((direct.get("doi_resolver") or {}).get("status_code")),
+        "acm_dl_status_code": ((direct.get("acm_dl") or {}).get("status_code")),
+        "remaining_blockers": list(probe.get("remaining_blockers") or []),
+        "warnings": list(probe.get("warnings") or []),
+        "source_probes": [
+            {
+                "name": item.get("name", ""),
+                "ok": item.get("ok") is True,
+                "status_code": item.get("status_code"),
+                "missing_patterns": list(item.get("missing_patterns") or []),
+            }
+            for item in probe.get("source_probes") or []
+        ],
+    }
+
+
 def build_final_submission_blocker_closure_packet(
     *,
     root: str | Path = ".",
@@ -100,6 +126,7 @@ def build_final_submission_blocker_closure_packet(
     external_metadata_json: str | Path | None = None,
     manual_checklist_json: str | Path | None = None,
     release_candidate_stack_json: str | Path | None = None,
+    promax_probe_json: str | Path | None = None,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
     out_dir = repo / output_dir
@@ -116,11 +143,13 @@ def build_final_submission_blocker_closure_packet(
         release_candidate_stack_json
         or out_dir / f"submission_release_candidate_stack_refresh_{stamp}.json"
     )
+    probe_path = repo / promax_probe_json if promax_probe_json else None
 
     final_gate = _read_json(final_path)
     external = _read_json(external_path)
     manual = _read_json(manual_path)
     stack = _read_json(stack_path)
+    probe = _read_json(probe_path) if probe_path else None
 
     blockers = _dedupe(
         list(final_gate.get("remaining_blockers") or [])
@@ -164,6 +193,7 @@ def build_final_submission_blocker_closure_packet(
             "public_safe": True,
             "can_close_without_private_data": True,
             "current_evidence": _promax_evidence(external),
+            "latest_public_probe": _promax_probe_evidence(probe),
             "remaining_blockers": classified["external_proceedings_metadata"],
             "closure_conditions": [
                 "Add the final ProMax ACM page range to Paper/references.bib when it is public.",
@@ -232,6 +262,7 @@ def build_final_submission_blocker_closure_packet(
             "external_metadata_json": _path_state(external_path, repo),
             "manual_checklist_json": _path_state(manual_path, repo),
             "release_candidate_stack_json": _path_state(stack_path, repo),
+            "promax_probe_json": _path_state(probe_path, repo) if probe_path else {"path": "", "exists": False, "size_bytes": 0},
         },
         "remaining_blocker_count": len(blockers),
         "remaining_blockers": blockers,
@@ -290,6 +321,7 @@ def _write_md(path: Path, packet: dict[str, Any]) -> None:
         evidence = group.get("current_evidence") or {}
         if group["group_id"] == "external_proceedings_metadata":
             bib = (evidence.get("bibtex") or {})
+            probe = group.get("latest_public_probe") or {}
             lines.extend(
                 [
                     "",
@@ -303,6 +335,18 @@ def _write_md(path: Path, packet: dict[str, Any]) -> None:
                     f"- DOI resolver status: `{evidence.get('doi_resolver_status_code')}`",
                 ]
             )
+            if probe.get("provided"):
+                lines.extend(
+                    [
+                        "",
+                        "Latest public probe:",
+                        f"- Created: `{probe.get('created_at_utc', '')}`",
+                        f"- ProMax public metadata ready: `{str(probe.get('promax_public_metadata_ready')).lower()}`",
+                        f"- Crossref status: `{probe.get('crossref_status_code')}`",
+                        f"- DOI resolver status: `{probe.get('doi_resolver_status_code')}`",
+                        f"- ACM DL status: `{probe.get('acm_dl_status_code')}`",
+                    ]
+                )
         if group["group_id"] == "manual_submission_system":
             lines.extend(
                 [
@@ -336,6 +380,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--external-metadata-json")
     parser.add_argument("--manual-checklist-json")
     parser.add_argument("--release-candidate-stack-json")
+    parser.add_argument("--promax-probe-json")
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     return parser.parse_args()
@@ -351,6 +396,7 @@ def main() -> int:
         external_metadata_json=args.external_metadata_json,
         manual_checklist_json=args.manual_checklist_json,
         release_candidate_stack_json=args.release_candidate_stack_json,
+        promax_probe_json=args.promax_probe_json,
     )
     if args.output_json:
         _write_json(Path(args.output_json), packet)

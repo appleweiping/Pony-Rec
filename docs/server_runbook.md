@@ -75,9 +75,13 @@ PIDs, audit summaries, and missing-file errors.
    DOI/ISBN/venue/location and exposes BibTeX `isbn`/`location`, but final ACM
    page range plus Crossref/DOI resolver visibility are still unresolved.
    For a compact closure view, read
-   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`;
+   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`;
    it groups local artifact, external metadata, and private manual submission
    blockers and gives the exact next commands without storing private fields.
+   The latest ProMax public probe is
+   `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
+   Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,
+   and `promax_public_metadata_ready=false`.
    The current priority is paper-critical tests/readiness checks and another
    section-level review on this latest draft before any final-readiness claim;
    Claude Opus reviewer coverage was still missing in this session.

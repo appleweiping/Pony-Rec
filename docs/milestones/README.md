@@ -125,7 +125,13 @@ now checks BibTeX pages, Crossref, DOI resolver, ACM DL, arXiv HTML ACM
 metadata, and the SIGIR accepted-paper source without running the full
 submission stack; it reports Crossref `404`, DOI resolver `404`, ACM DL `403`,
 source probes passing, and `promax_public_metadata_ready=false`, so it is
-monitoring evidence rather than a readiness upgrade. The submission package
+monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
+continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
+probes passing, and `promax_public_metadata_ready=false`. The matching
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
+uses the 2026-06-12 final gate/stack plus the 2026-06-13 public probe and keeps
+`final_submission_ready=false`. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission
