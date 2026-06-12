@@ -1,0 +1,31 @@
+{
+  "schema_version": "2026-06-12.paper_submission_profiles.v1",
+  "default_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "profiles": {
+    "sigir2026_full_paper_acm_anonymous": {
+      "description": "Working target profile for an ACM SIGIR-family full-paper anonymous review submission.",
+      "venue_family": "ACM SIGIR",
+      "year": 2026,
+      "official_sources": [
+        "https://sigir2026.org/en-AU/pages/submissions/full-papers-track",
+        "https://www.acm.org/publications/proceedings-template"
+      ],
+      "checked_at_utc": "2026-06-12T07:30:00Z",
+      "documentclass": "acmart",
+      "required_documentclass_options": [
+        "sigconf"
+      ],
+      "max_total_pages": 9,
+      "require_anonymous_author_shell": true,
+      "require_single_pdf": true,
+      "require_local_source_manifest": true,
+      "require_bibtex_clean": true,
+      "require_no_undefined_references": true,
+      "require_no_overfull_hbox": true,
+      "notes": [
+        "This local profile intentionally checks the whole compiled PDF against 9 pages, which is stricter than content-only page interpretations.",
+        "Passing this profile is not the same as final submission readiness; final metadata and submission-system checks still apply."
+      ]
+    }
+  }
+}

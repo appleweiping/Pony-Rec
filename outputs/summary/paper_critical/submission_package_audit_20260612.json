@@ -40,12 +40,20 @@
     "underfull_hbox_count": 6,
     "underfull_vbox_count": 8
   },
-  "created_at_utc": "2026-06-12T07:21:07.807868+00:00",
+  "created_at_utc": "2026-06-12T07:40:27.291669+00:00",
+  "documentclass": {
+    "documentclass": "acmart",
+    "options": [
+      "nonacm",
+      "sigconf"
+    ]
+  },
   "evidence_gates": {
     "claim_audit_ok": true,
     "metadata_followup_verdict": "PDF_PACKAGE_POLISH_PASS_METADATA_CAUTION",
     "panel_review_ok": true,
-    "panel_score_floor": 8.0
+    "panel_score_floor": 8.0,
+    "target_formatting_profile_ok": true
   },
   "failures": [],
   "final_submission_ready": false,
@@ -64,6 +72,11 @@
       "exists": true,
       "path": "outputs\\summary\\paper_critical\\final_full_manuscript_panel_review_20260612.json",
       "size_bytes": 4596
+    },
+    "target_profile": {
+      "exists": true,
+      "path": "configs\\paper_submission_profiles.json",
+      "size_bytes": 1276
     }
   },
   "limits": {
@@ -73,7 +86,7 @@
   },
   "mode": "local_read_only_submission_package_audit",
   "next_actions": [
-    "Run the target-conference formatting checklist on the audited Paper package.",
+    "Run the final manual submission-system metadata/format checklist on the audited Paper package.",
     "Recheck ProMax final ACM page range and ACM/Crossref visibility immediately before submission.",
     "Keep final_submission_ready=false until external metadata and formatting blockers are closed."
   ],
@@ -82,7 +95,7 @@
   "read_only": true,
   "remaining_blockers": [
     "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
-    "Final submission package still needs the external submission-target-specific formatting pass."
+    "Final manual submission-system metadata/format checklist is not closed."
   ],
   "required_files": {
     "framework_overview_pdf": {
@@ -404,6 +417,44 @@
     "total_bytes": 652691
   },
   "submission_package_ready_for_target_formatting": true,
+  "target_formatting_profile": {
+    "configured": true,
+    "documentclass": {
+      "documentclass": "acmart",
+      "options": [
+        "nonacm",
+        "sigconf"
+      ]
+    },
+    "failures": [],
+    "ok": true,
+    "profile": {
+      "checked_at_utc": "2026-06-12T07:30:00Z",
+      "description": "Working target profile for an ACM SIGIR-family full-paper anonymous review submission.",
+      "documentclass": "acmart",
+      "max_total_pages": 9,
+      "notes": [
+        "This local profile intentionally checks the whole compiled PDF against 9 pages, which is stricter than content-only page interpretations.",
+        "Passing this profile is not the same as final submission readiness; final metadata and submission-system checks still apply."
+      ],
+      "official_sources": [
+        "https://sigir2026.org/en-AU/pages/submissions/full-papers-track",
+        "https://www.acm.org/publications/proceedings-template"
+      ],
+      "require_anonymous_author_shell": true,
+      "require_bibtex_clean": true,
+      "require_local_source_manifest": true,
+      "require_no_overfull_hbox": true,
+      "require_no_undefined_references": true,
+      "require_single_pdf": true,
+      "required_documentclass_options": [
+        "sigconf"
+      ],
+      "venue_family": "ACM SIGIR",
+      "year": 2026
+    },
+    "profile_id": "sigir2026_full_paper_acm_anonymous"
+  },
   "verdict": "READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION",
   "warnings": [
     "underfull_layout_warnings:hbox=6,vbox=8"

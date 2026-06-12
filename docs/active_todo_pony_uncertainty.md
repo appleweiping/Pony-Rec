@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 09:16 CEST
+Last updated: 2026-06-12 09:36 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -26,11 +26,17 @@ cycle.
   `external_source_references=[]`; the manifest covers `main.tex`, all included
   section/table sources, `references.bib`, `main.bbl`, `main.pdf`, and the
   paper-local framework figure.
-  Remaining blockers are deliberately preserved rather than hidden: ProMax
-  final ACM page range/Crossref visibility and the external
-  target-conference formatting pass. Latest public spot-checks still show
-  ProMax as arXiv `2604.26231`, 11 pages, accepted by SIGIR 2026, without a
-  final ACM page range.
+  `configs/paper_submission_profiles.json` now defines the working
+  `sigir2026_full_paper_acm_anonymous` target profile from official SIGIR 2026
+  full-paper and ACM template sources; the current audit reports
+  `target_formatting_profile_ok=true` for ACM `acmart` with `sigconf`, anonymous
+  shell, 9-page PDF, local source manifest, clean BibTeX, no undefined
+  references, and zero overfull hbox warnings. Remaining blockers are
+  deliberately preserved rather than hidden: ProMax final ACM page
+  range/Crossref visibility and the final manual submission-system
+  metadata/format checklist. Latest public spot-checks still show ProMax as
+  arXiv `2604.26231`, 11 pages, accepted by SIGIR 2026, without a final ACM page
+  range.
 
 - Final PDF polish/metadata follow-up:
   `outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.{json,md}`.

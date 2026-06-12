@@ -1,6 +1,6 @@
 # Submission Package Audit
 
-Generated: 2026-06-12T07:21:07.807868+00:00
+Generated: 2026-06-12T07:40:27.291669+00:00
 
 - Verdict: `READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`
 - OK: `true`
@@ -13,13 +13,14 @@ Generated: 2026-06-12T07:21:07.807868+00:00
 - Underfull hbox/vbox warnings: `6` / `8`
 - Cited keys: `21`
 - Panel score floor: `8.0`
+- Target formatting profile: `sigir2026_full_paper_acm_anonymous` ok=`true`
 - Source package manifest files: `21`
 - Source package manifest sha256: `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`
 
 ## Remaining Blockers
 
 - ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.
-- Final submission package still needs the external submission-target-specific formatting pass.
+- Final manual submission-system metadata/format checklist is not closed.
 
 ## Failures
 
@@ -31,6 +32,6 @@ Generated: 2026-06-12T07:21:07.807868+00:00
 
 ## Next Actions
 
-- Run the target-conference formatting checklist on the audited Paper package.
+- Run the final manual submission-system metadata/format checklist on the audited Paper package.
 - Recheck ProMax final ACM page range and ACM/Crossref visibility immediately before submission.
 - Keep final_submission_ready=false until external metadata and formatting blockers are closed.

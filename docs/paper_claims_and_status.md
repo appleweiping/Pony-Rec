@@ -60,10 +60,14 @@ claim-audit state. The audit also emits a source-package manifest with
 `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`, and no
 external source references; it covers `main.tex`, included section/table
 sources, `references.bib`, `main.bbl`, `main.pdf`, and the paper-local framework
-figure. This advances the paper package to the target-formatting
-gate, but it does not close final submission readiness: ProMax final ACM page
-range/Crossref visibility and external target-specific formatting remain
-blocking conditions.
+figure. `configs/paper_submission_profiles.json` now defines the working
+`sigir2026_full_paper_acm_anonymous` profile from official SIGIR 2026 full-paper
+and ACM template sources; the current audit reports
+`target_formatting_profile_ok=true` for the ACM `acmart`/`sigconf` anonymous
+9-page source package. This advances the paper package through the local target
+profile gate, but it does not close final submission readiness: ProMax final ACM
+page range/Crossref visibility and the final manual submission-system
+metadata/format checklist remain blocking conditions.
 
 **2026-06-12 final PDF polish/metadata follow-up.** The latest ARIS
 claim/citation follow-up is saved at

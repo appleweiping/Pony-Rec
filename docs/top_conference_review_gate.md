@@ -214,7 +214,10 @@ do not pass, report the minimum remaining gates and avoid open-ended
 "one more baseline" drift.
 
 After the evidence/manuscript gates pass, run the local submission-package
-audit before declaring target-formatting readiness:
+audit before declaring target-formatting readiness. The default working profile
+is `sigir2026_full_paper_acm_anonymous`, defined in
+`configs/paper_submission_profiles.json` from the official SIGIR 2026 full-paper
+page and ACM proceedings-template source:
 
 ```bash
 python -m scripts.audit.main_audit_submission_package \

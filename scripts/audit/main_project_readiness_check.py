@@ -32,6 +32,7 @@ REQUIRED_FILES = [
     "docs/archive/legacy_root_reports/OFFICIAL_EXTERNAL_BASELINE_UPGRADE_PLAN_2026-05-07.md",
     "configs/official_external_baselines.yaml",
     "configs/baseline/week8_external_same_candidate_manifest.yaml",
+    "configs/paper_submission_profiles.json",
     "scripts/run_week8_large_scale_10k_100neg.sh",
     "scripts/run_week8_shadow_large_scale_diagnostic.sh",
     "scripts/run_week8_light_large_scale_ablation.sh",

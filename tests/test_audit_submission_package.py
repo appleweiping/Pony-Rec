@@ -75,7 +75,26 @@ def _seed_package(tmp_path: Path) -> dict[str, Path]:
             ],
         },
     )
-    return {"paper": paper, "claim": claim, "panel": panel, "metadata": metadata}
+    profile = _write_json(
+        tmp_path / "profiles.json",
+        {
+            "default_profile_id": "test_acm_profile",
+            "profiles": {
+                "test_acm_profile": {
+                    "documentclass": "acmart",
+                    "required_documentclass_options": ["sigconf"],
+                    "max_total_pages": 9,
+                    "require_anonymous_author_shell": True,
+                    "require_single_pdf": True,
+                    "require_local_source_manifest": True,
+                    "require_bibtex_clean": True,
+                    "require_no_undefined_references": True,
+                    "require_no_overfull_hbox": True,
+                }
+            },
+        },
+    )
+    return {"paper": paper, "claim": claim, "panel": panel, "metadata": metadata, "profile": profile}
 
 
 def test_submission_package_audit_passes_package_but_keeps_final_ready_false(tmp_path: Path) -> None:
@@ -87,6 +106,7 @@ def test_submission_package_audit_passes_package_but_keeps_final_ready_false(tmp
         claim_audit_json=paths["claim"].relative_to(tmp_path),
         panel_review_json=paths["panel"].relative_to(tmp_path),
         metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+        target_profile_json=paths["profile"].relative_to(tmp_path),
     )
 
     assert audit["ok"] is True
@@ -97,6 +117,8 @@ def test_submission_package_audit_passes_package_but_keeps_final_ready_false(tmp
     assert audit["build"]["bibtex_warning_count"] == 0
     assert audit["build"]["overfull_hbox_count"] == 0
     assert audit["evidence_gates"]["panel_score_floor"] == 8.0
+    assert audit["evidence_gates"]["target_formatting_profile_ok"] is True
+    assert audit["target_formatting_profile"]["profile_id"] == "test_acm_profile"
     assert audit["remaining_blockers"]
     assert audit["source_package_manifest"]["file_count"] >= 6
     assert audit["source_package_manifest"]["manifest_sha256"]
@@ -120,6 +142,7 @@ def test_submission_package_audit_fails_on_overfull_or_missing_graphic(tmp_path:
         claim_audit_json=paths["claim"].relative_to(tmp_path),
         panel_review_json=paths["panel"].relative_to(tmp_path),
         metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+        target_profile_json=paths["profile"].relative_to(tmp_path),
         max_pages=9,
     )
 
@@ -127,6 +150,7 @@ def test_submission_package_audit_fails_on_overfull_or_missing_graphic(tmp_path:
     assert "missing_graphic:figures/framework_overview.pdf" in audit["failures"]
     assert "page_count_exceeds_limit:10 > 9" in audit["failures"]
     assert "overfull_hbox_count:1 > 0" in audit["failures"]
+    assert "target_profile:target_profile_page_count_exceeds_limit:10 > 9" in audit["failures"]
 
 
 def test_submission_package_audit_rejects_nonanonymous_author(tmp_path: Path) -> None:
@@ -143,10 +167,12 @@ def test_submission_package_audit_rejects_nonanonymous_author(tmp_path: Path) ->
         claim_audit_json=paths["claim"].relative_to(tmp_path),
         panel_review_json=paths["panel"].relative_to(tmp_path),
         metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+        target_profile_json=paths["profile"].relative_to(tmp_path),
     )
 
     assert audit["ok"] is False
     assert "anonymous_author_or_affiliation_not_ready" in audit["failures"]
+    assert "target_profile:target_profile_requires_anonymous_author_shell" in audit["failures"]
 
 
 def test_submission_package_audit_rejects_existing_external_source_reference(tmp_path: Path) -> None:
@@ -167,6 +193,7 @@ def test_submission_package_audit_rejects_existing_external_source_reference(tmp
         claim_audit_json=paths["claim"].relative_to(tmp_path),
         panel_review_json=paths["panel"].relative_to(tmp_path),
         metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+        target_profile_json=paths["profile"].relative_to(tmp_path),
     )
 
     assert audit["ok"] is False

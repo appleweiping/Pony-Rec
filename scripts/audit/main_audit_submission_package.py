@@ -18,11 +18,13 @@ DEFAULT_PANEL_REVIEW_JSON = Path(
 DEFAULT_METADATA_FOLLOWUP_JSON = Path(
     "outputs/summary/paper_critical/final_pdf_polish_metadata_followup_20260612.json"
 )
+DEFAULT_TARGET_PROFILE_JSON = Path("configs/paper_submission_profiles.json")
 
 INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
 GRAPHICS_RE = re.compile(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}")
 OUTPUT_RE = re.compile(r"Output written on .*?\((\d+) pages?, (\d+) bytes\)")
 AUTHOR_RE = re.compile(r"\\author\{([^{}]+)\}")
+DOCUMENTCLASS_RE = re.compile(r"\\documentclass(?:\[([^\]]*)\])?\{([^}]+)\}")
 FORBIDDEN_TOKEN_RE = re.compile(r"\b(TODO|TBD|FIXME|PLACEHOLDER)\b|\?\?\?", re.IGNORECASE)
 
 
@@ -241,6 +243,98 @@ def _audit_anonymity(paper_dir: Path) -> dict[str, Any]:
     }
 
 
+def _documentclass_state(paper_dir: Path) -> dict[str, Any]:
+    main_text = _read_text(paper_dir / "main.tex")
+    match = DOCUMENTCLASS_RE.search(main_text)
+    options = [item.strip() for item in match.group(1).split(",")] if match and match.group(1) else []
+    return {
+        "documentclass": match.group(2).strip() if match else "",
+        "options": sorted(option for option in options if option),
+    }
+
+
+def _load_target_profile(path: Path, profile_id: str | None) -> dict[str, Any]:
+    if not path.exists():
+        return {
+            "configured": False,
+            "profile_id": profile_id or "",
+            "failures": [f"missing_target_profile_json:{path}"],
+        }
+    payload = _read_json(path)
+    selected_id = profile_id or str(payload.get("default_profile_id") or "")
+    profiles = payload.get("profiles") or {}
+    profile = profiles.get(selected_id)
+    if not isinstance(profile, dict):
+        return {
+            "configured": False,
+            "profile_id": selected_id,
+            "failures": [f"missing_target_profile:{selected_id}"],
+        }
+    return {
+        "configured": True,
+        "profile_id": selected_id,
+        "schema_version": payload.get("schema_version"),
+        "profile": profile,
+        "failures": [],
+    }
+
+
+def _audit_target_profile(
+    *,
+    profile_state: dict[str, Any],
+    documentclass: dict[str, Any],
+    build: dict[str, Any],
+    anonymity: dict[str, Any],
+    source_manifest: dict[str, Any],
+) -> dict[str, Any]:
+    failures = list(profile_state.get("failures") or [])
+    profile = profile_state.get("profile") or {}
+    if not profile_state.get("configured"):
+        return {
+            "configured": False,
+            "profile_id": profile_state.get("profile_id") or "",
+            "ok": False,
+            "profile": profile,
+            "documentclass": documentclass,
+            "failures": failures,
+        }
+
+    required_class = str(profile.get("documentclass") or "")
+    if required_class and documentclass["documentclass"] != required_class:
+        failures.append(f"documentclass_mismatch:{documentclass['documentclass']} != {required_class}")
+    options = set(documentclass["options"])
+    for option in profile.get("required_documentclass_options") or []:
+        if option not in options:
+            failures.append(f"missing_documentclass_option:{option}")
+
+    max_pages = profile.get("max_total_pages")
+    if max_pages is not None and build["page_count"] is not None and int(build["page_count"]) > int(max_pages):
+        failures.append(f"target_profile_page_count_exceeds_limit:{build['page_count']} > {max_pages}")
+    if profile.get("require_anonymous_author_shell") and not anonymity["anonymous_author"]:
+        failures.append("target_profile_requires_anonymous_author_shell")
+    if profile.get("require_single_pdf") and not build["pdf"]["exists"]:
+        failures.append("target_profile_requires_single_pdf")
+    if profile.get("require_local_source_manifest") and source_manifest["external_source_references"]:
+        failures.append("target_profile_requires_local_source_manifest")
+    if profile.get("require_bibtex_clean") and build["bibtex_warning_count"] != 0:
+        failures.append("target_profile_requires_clean_bibtex")
+    if profile.get("require_no_undefined_references") and (
+        build["undefined_citation_count"] or build["undefined_reference_count"]
+    ):
+        failures.append("target_profile_requires_defined_references")
+    if profile.get("require_no_overfull_hbox") and build["overfull_hbox_count"] != 0:
+        failures.append("target_profile_requires_no_overfull_hbox")
+
+    return {
+        "configured": True,
+        "profile_id": profile_state["profile_id"],
+        "ok": not failures,
+        "profile": profile,
+        "documentclass": documentclass,
+        "failures": failures,
+    }
+
+
 def _score_floor(panel_review: dict[str, Any]) -> float | None:
     consensus = panel_review.get("reviewer_consensus") or {}
     raw = str(consensus.get("score_floor") or "")
@@ -255,6 +349,8 @@ def build_submission_package_audit(
     claim_audit_json: str | Path = DEFAULT_CLAIM_AUDIT_JSON,
     panel_review_json: str | Path = DEFAULT_PANEL_REVIEW_JSON,
     metadata_followup_json: str | Path = DEFAULT_METADATA_FOLLOWUP_JSON,
+    target_profile_json: str | Path = DEFAULT_TARGET_PROFILE_JSON,
+    target_profile_id: str | None = None,
     max_pages: int = 9,
     max_overfull_hbox: int = 0,
     target_formatting_closed: bool = False,
@@ -264,11 +360,21 @@ def build_submission_package_audit(
     claim_path = repo / claim_audit_json
     panel_path = repo / panel_review_json
     metadata_path = repo / metadata_followup_json
+    target_profile_path = repo / target_profile_json
 
     source = _discover_source_closure(paper, repo)
     build = _parse_build_state(paper, repo)
     source_manifest = _build_source_package_manifest(paper, repo, source)
     anonymity = _audit_anonymity(paper)
+    documentclass = _documentclass_state(paper)
+    profile_state = _load_target_profile(target_profile_path, target_profile_id)
+    target_profile = _audit_target_profile(
+        profile_state=profile_state,
+        documentclass=documentclass,
+        build=build,
+        anonymity=anonymity,
+        source_manifest=source_manifest,
+    )
     claim_audit = _read_json(claim_path)
     panel_review = _read_json(panel_path)
     metadata_followup = _read_json(metadata_path)
@@ -319,6 +425,7 @@ def build_submission_package_audit(
         )
     for rel in source_manifest["external_source_references"]:
         failures.append(f"external_source_file_reference:{rel}")
+    failures.extend(f"target_profile:{failure}" for failure in target_profile["failures"])
 
     if not anonymity["anonymous_author"] or not anonymity["anonymous_affiliation"]:
         failures.append("anonymous_author_or_affiliation_not_ready")
@@ -346,7 +453,17 @@ def build_submission_package_audit(
         failures.append("final_panel_review_not_in_expected_conditional_pass_state")
 
     remaining_blockers = list(metadata_followup.get("remaining_blockers") or [])
-    if not target_formatting_closed and not any("format" in blocker.lower() for blocker in remaining_blockers):
+    if target_profile["ok"]:
+        remaining_blockers = [
+            blocker
+            for blocker in remaining_blockers
+            if "format" not in blocker.lower() and "target" not in blocker.lower()
+        ]
+        if not target_formatting_closed:
+            remaining_blockers.append(
+                "Final manual submission-system metadata/format checklist is not closed."
+            )
+    elif not any("format" in blocker.lower() for blocker in remaining_blockers):
         remaining_blockers.append("External submission-target-specific formatting pass is not closed.")
     final_submission_ready = not failures and target_formatting_closed and not remaining_blockers
 
@@ -380,23 +497,27 @@ def build_submission_package_audit(
             "claim_audit": _file_state(claim_path, repo),
             "panel_review": _file_state(panel_path, repo),
             "metadata_followup": _file_state(metadata_path, repo),
+            "target_profile": _file_state(target_profile_path, repo),
         },
         "required_files": {label: _file_state(path, repo) for label, path in required_files.items()},
         "source_closure": source,
         "source_package_manifest": source_manifest,
         "build": build,
         "anonymity": anonymity,
+        "documentclass": documentclass,
+        "target_formatting_profile": target_profile,
         "evidence_gates": {
             "claim_audit_ok": claim_ok,
             "panel_review_ok": panel_ok,
             "panel_score_floor": floor,
             "metadata_followup_verdict": metadata_followup.get("verdict"),
+            "target_formatting_profile_ok": target_profile["ok"],
         },
         "warnings": warnings,
         "failures": failures,
         "remaining_blockers": remaining_blockers,
         "next_actions": [
-            "Run the target-conference formatting checklist on the audited Paper package.",
+            "Run the final manual submission-system metadata/format checklist on the audited Paper package.",
             "Recheck ProMax final ACM page range and ACM/Crossref visibility immediately before submission.",
             "Keep final_submission_ready=false until external metadata and formatting blockers are closed.",
         ],
@@ -423,6 +544,9 @@ def _write_md(path: Path, audit: dict[str, Any]) -> None:
         f"`{audit['build']['underfull_vbox_count']}`",
         f"- Cited keys: `{audit['build']['cited_key_count']}`",
         f"- Panel score floor: `{audit['evidence_gates']['panel_score_floor']}`",
+        "- Target formatting profile: "
+        f"`{audit['target_formatting_profile']['profile_id']}` "
+        f"ok=`{str(audit['target_formatting_profile']['ok']).lower()}`",
         f"- Source package manifest files: `{audit['source_package_manifest']['file_count']}`",
         f"- Source package manifest sha256: `{audit['source_package_manifest']['manifest_sha256']}`",
         "",
@@ -449,6 +573,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--claim-audit-json", default=str(DEFAULT_CLAIM_AUDIT_JSON))
     parser.add_argument("--panel-review-json", default=str(DEFAULT_PANEL_REVIEW_JSON))
     parser.add_argument("--metadata-followup-json", default=str(DEFAULT_METADATA_FOLLOWUP_JSON))
+    parser.add_argument("--target-profile-json", default=str(DEFAULT_TARGET_PROFILE_JSON))
+    parser.add_argument("--target-profile-id")
     parser.add_argument("--max-pages", type=int, default=9)
     parser.add_argument("--max-overfull-hbox", type=int, default=0)
     parser.add_argument("--target-formatting-closed", action="store_true")
@@ -465,6 +591,8 @@ def main() -> int:
         claim_audit_json=args.claim_audit_json,
         panel_review_json=args.panel_review_json,
         metadata_followup_json=args.metadata_followup_json,
+        target_profile_json=args.target_profile_json,
+        target_profile_id=args.target_profile_id,
         max_pages=args.max_pages,
         max_overfull_hbox=args.max_overfull_hbox,
         target_formatting_closed=args.target_formatting_closed,
