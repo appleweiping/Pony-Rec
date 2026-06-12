@@ -71,7 +71,7 @@ The repository is currently between M4 and M5:
   baselines, Shadow large-scale diagnostics, and LoRA/generative modules are
   completed under the same protocol.
 
-## Current Evidence Integrity (updated 2026-06-12)
+## Current Evidence Integrity (updated 2026-06-13)
 
 Phase 2.5 evidence is ready for strict manuscript-level claim and citation
 review, but not final submission. `scripts/audit/main_build_final_paper_claim_audit.py`
@@ -101,7 +101,13 @@ writes
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`;
 the current stack artifact reports `ok=true`,
 `local_release_candidate_ready=true`, zero failures, and the same
-`final_submission_ready=false` external/manual blockers. The new closure packet
+`final_submission_ready=false` external/manual blockers. The 2026-06-13 full
+local release-candidate refresh
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`
+also reports `ok=true`, `local_release_candidate_ready=true`,
+`refresh_artifact_fresh=true`, `blocking_status=external_or_manual_blocked`,
+and `final_submission_ready=false`; this is now the latest stack artifact for
+handoff. The new closure packet
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`
 is now the compact first-read artifact for the two remaining blocker classes:
 external ProMax proceedings metadata and private manual submission-system
@@ -130,7 +136,8 @@ monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. The matching
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
-uses the 2026-06-12 final gate/stack plus the 2026-06-13 public probe and keeps
+now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
+full release-candidate stack, and public probe while keeping
 `final_submission_ready=false`. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,

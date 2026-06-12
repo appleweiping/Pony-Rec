@@ -1,0 +1,368 @@
+{
+  "copied_manifest": {
+    "file_count": 21,
+    "files": [
+      {
+        "copied_size_bytes": 33541,
+        "git_state": {
+          "allowed_generated_artifact": true,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\figures\\framework_overview.pdf",
+        "path": "Paper\\figures\\framework_overview.pdf",
+        "role": "figure",
+        "sha256": "9a3c4d9418c22a527b3c168f53f019ec67a14072ba73995f918b2c29307dce96",
+        "source_path": "Paper\\figures\\framework_overview.pdf",
+        "source_size_bytes": 33541
+      },
+      {
+        "copied_size_bytes": 17039,
+        "git_state": {
+          "allowed_generated_artifact": true,
+          "git_available": true,
+          "ignored": true,
+          "tracked": false
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\main.bbl",
+        "path": "Paper\\main.bbl",
+        "role": "compiled_bibliography",
+        "sha256": "38af445dcd2b75261c3436e963add70f2bd5ab8fd09443ed80368347c8ec1129",
+        "source_path": "Paper\\main.bbl",
+        "source_size_bytes": 17039
+      },
+      {
+        "copied_size_bytes": 546669,
+        "git_state": {
+          "allowed_generated_artifact": true,
+          "git_available": true,
+          "ignored": true,
+          "tracked": false
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\main.pdf",
+        "path": "Paper\\main.pdf",
+        "role": "compiled_pdf",
+        "sha256": "588afd8311c634569e029e8061c9a8cbefd1d6b2bd53a162b89857b5296cdc86",
+        "source_path": "Paper\\main.pdf",
+        "source_size_bytes": 546669
+      },
+      {
+        "copied_size_bytes": 840,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\main.tex",
+        "path": "Paper\\main.tex",
+        "role": "tex_source",
+        "sha256": "3d4bdc8a2fe0d7c400d72f0c81a39a2a3e6bf28e4d7e482541378c7b383edf60",
+        "source_path": "Paper\\main.tex",
+        "source_size_bytes": 840
+      },
+      {
+        "copied_size_bytes": 10520,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\references.bib",
+        "path": "Paper\\references.bib",
+        "role": "bibliography_source",
+        "sha256": "733bec25cf32665dd627217ddb089d91d06e3afe4eeae2a609e680e355a32bd5",
+        "source_path": "Paper\\references.bib",
+        "source_size_bytes": 10520
+      },
+      {
+        "copied_size_bytes": 1603,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\abstract.tex",
+        "path": "Paper\\sections\\abstract.tex",
+        "role": "tex_source",
+        "sha256": "45758fa192e1256d02c2d9c7421eaeefee9a65a9862e1c2fdf4498ce1f2db182",
+        "source_path": "Paper\\sections\\abstract.tex",
+        "source_size_bytes": 1603
+      },
+      {
+        "copied_size_bytes": 4155,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\analysis.tex",
+        "path": "Paper\\sections\\analysis.tex",
+        "role": "tex_source",
+        "sha256": "e5c4dd0b4097803114b99ea43bc17cf0cff3abc00645e2ca05645cc952227055",
+        "source_path": "Paper\\sections\\analysis.tex",
+        "source_size_bytes": 4155
+      },
+      {
+        "copied_size_bytes": 1148,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\conclusion.tex",
+        "path": "Paper\\sections\\conclusion.tex",
+        "role": "tex_source",
+        "sha256": "a1ebae3acc1c6cfd46289d6fae2404919f77ea3a6b639af626c080f37ec9ba44",
+        "source_path": "Paper\\sections\\conclusion.tex",
+        "source_size_bytes": 1148
+      },
+      {
+        "copied_size_bytes": 5724,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\experiments.tex",
+        "path": "Paper\\sections\\experiments.tex",
+        "role": "tex_source",
+        "sha256": "1b5bb0b303b2e878cbe53ee0f96af0be3db6c1d5725dd258091883e81f50024d",
+        "source_path": "Paper\\sections\\experiments.tex",
+        "source_size_bytes": 5724
+      },
+      {
+        "copied_size_bytes": 3477,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\introduction.tex",
+        "path": "Paper\\sections\\introduction.tex",
+        "role": "tex_source",
+        "sha256": "3cad6649407214205ae6fa5d73fe55c74c3cb19361919f67f2e394123dc07a2d",
+        "source_path": "Paper\\sections\\introduction.tex",
+        "source_size_bytes": 3477
+      },
+      {
+        "copied_size_bytes": 9982,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\method.tex",
+        "path": "Paper\\sections\\method.tex",
+        "role": "tex_source",
+        "sha256": "62b2b62b2f778d97def9b07cfda79cf71101f3dea30dfc7b1d93061207bc0946",
+        "source_path": "Paper\\sections\\method.tex",
+        "source_size_bytes": 9982
+      },
+      {
+        "copied_size_bytes": 3633,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\related-work.tex",
+        "path": "Paper\\sections\\related-work.tex",
+        "role": "tex_source",
+        "sha256": "96d45e397140bb4329fd2193bd613dd386249a157456e4bbab1f0b4cde9599b0",
+        "source_path": "Paper\\sections\\related-work.tex",
+        "source_size_bytes": 3633
+      },
+      {
+        "copied_size_bytes": 4682,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\results.tex",
+        "path": "Paper\\sections\\results.tex",
+        "role": "tex_source",
+        "sha256": "846c411eb07be4a2b4ede420a069dcbd76fc6013bf76f427587b1297013c4896",
+        "source_path": "Paper\\sections\\results.tex",
+        "source_size_bytes": 4682
+      },
+      {
+        "copied_size_bytes": 951,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\ablation_ndcg10_summary.tex",
+        "path": "Paper\\tables\\ablation_ndcg10_summary.tex",
+        "role": "tex_source",
+        "sha256": "103718f1eca6dd823ff65ba7337bdb97951fd41bb8ba9e0f7680c2bed768cbc5",
+        "source_path": "Paper\\tables\\ablation_ndcg10_summary.tex",
+        "source_size_bytes": 951
+      },
+      {
+        "copied_size_bytes": 1497,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\baseline_provenance_summary.tex",
+        "path": "Paper\\tables\\baseline_provenance_summary.tex",
+        "role": "tex_source",
+        "sha256": "8ddaf584dff364e6c977f8ca7a9d10c5cc458ccbba77839b41be82cbb4520f87",
+        "source_path": "Paper\\tables\\baseline_provenance_summary.tex",
+        "source_size_bytes": 1497
+      },
+      {
+        "copied_size_bytes": 738,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\ccrp_rank_by_metric.tex",
+        "path": "Paper\\tables\\ccrp_rank_by_metric.tex",
+        "role": "tex_source",
+        "sha256": "fbd6dcc1854fe17daedff9b8e03be95bbee187443e51316c7c569b8df6005f54",
+        "source_path": "Paper\\tables\\ccrp_rank_by_metric.tex",
+        "source_size_bytes": 738
+      },
+      {
+        "copied_size_bytes": 2395,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\full_official_ndcg10_ranking.tex",
+        "path": "Paper\\tables\\full_official_ndcg10_ranking.tex",
+        "role": "tex_source",
+        "sha256": "dbaf2e4dc1c7e95b0bce218ddf6528e8fe28c03b930ac09592295620b4db594e",
+        "source_path": "Paper\\tables\\full_official_ndcg10_ranking.tex",
+        "source_size_bytes": 2395
+      },
+      {
+        "copied_size_bytes": 1590,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\main_results.tex",
+        "path": "Paper\\tables\\main_results.tex",
+        "role": "tex_source",
+        "sha256": "9d19f3d9cd817d48280d4977d34c2f7fd3f7d2935f6c2ac12c5b323c662a8b5b",
+        "source_path": "Paper\\tables\\main_results.tex",
+        "source_size_bytes": 1590
+      },
+      {
+        "copied_size_bytes": 1293,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\module_evidence.tex",
+        "path": "Paper\\tables\\module_evidence.tex",
+        "role": "tex_source",
+        "sha256": "30a11d0bfd07dd865bf2b6677f36295fa4459c80f625ab99b89afe9543879f57",
+        "source_path": "Paper\\tables\\module_evidence.tex",
+        "source_size_bytes": 1293
+      },
+      {
+        "copied_size_bytes": 643,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\significance_summary.tex",
+        "path": "Paper\\tables\\significance_summary.tex",
+        "role": "tex_source",
+        "sha256": "55fb2f6b8097507600343259863f9f0476e341ab8d70887f2d8a9b9f6a2f3449",
+        "source_path": "Paper\\tables\\significance_summary.tex",
+        "source_size_bytes": 643
+      },
+      {
+        "copied_size_bytes": 643,
+        "git_state": {
+          "allowed_generated_artifact": false,
+          "git_available": true,
+          "ignored": false,
+          "tracked": true
+        },
+        "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\tables\\uncertainty_stratification.tex",
+        "path": "Paper\\tables\\uncertainty_stratification.tex",
+        "role": "tex_source",
+        "sha256": "2371bc8dad85ebaf20f4598f193f995c8e57753c03736545d863e8f8b4c8b682",
+        "source_path": "Paper\\tables\\uncertainty_stratification.tex",
+        "source_size_bytes": 643
+      }
+    ],
+    "manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
+    "total_bytes": 652763
+  },
+  "created_at_utc": "2026-06-12T22:36:19.700117+00:00",
+  "failures": [],
+  "final_submission_ready": false,
+  "input_paths": {
+    "submission_package_audit_json": "outputs\\summary\\paper_critical\\submission_package_audit_20260613.json"
+  },
+  "mode": "local_copy_from_audited_source_manifest",
+  "next_actions": [
+    "Use this package directory as the local anonymous source-package staging area.",
+    "Do not add private confirmation files, author metadata, COI data, or submission-account data to this package.",
+    "Rebuild this package after any Paper source, BibTeX, figure, or PDF change.",
+    "Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are closed."
+  ],
+  "ok": true,
+  "output": {
+    "files_dir": "artifacts\\submission_source_package_20260613\\files",
+    "overwrite": true,
+    "package_dir": "artifacts\\submission_source_package_20260613"
+  },
+  "read_only": false,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed."
+  ],
+  "schema_version": "2026-06-12.submission_source_package.v1",
+  "source_audit_crosscheck": {
+    "anonymous_source_leak_scan_ok": true,
+    "audit_final_submission_ready": false,
+    "source_manifest_external_source_references": [],
+    "source_manifest_file_count": 21,
+    "source_manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
+    "source_manifest_total_bytes": 652763,
+    "submission_package_audit_ok": true,
+    "submission_package_ready_for_target_formatting": true
+  },
+  "submission_source_package_ready": true,
+  "warnings": [],
+  "will_copy": true,
+  "will_delete": true,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

@@ -98,9 +98,15 @@ itself mark the paper final-submission-ready.
 still reports `promax_public_metadata_ready=false`: Crossref `/works` for
 `10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`, and
 ACM DL returns `403`; arXiv HTML ACM metadata and SIGIR accepted-paper probes
-remain passing. The refreshed closure packet
+remain passing. Codex also refreshed the complete local release-candidate stack
+as
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
+it reports `ok=true`, `local_release_candidate_ready=true`,
+`refresh_artifact_fresh=true`, `blocking_status=external_or_manual_blocked`,
+and `final_submission_ready=false`. The refreshed closure packet
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
-uses the current final gate/stack plus this latest probe and preserves
+now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
+release-candidate stack, and latest probe while preserving
 `final_submission_ready=false`.
 
 **2026-06-12 submission release-candidate packet.** Codex added

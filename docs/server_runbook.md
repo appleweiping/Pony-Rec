@@ -34,7 +34,7 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order (2026-06-12)
+## Current Priority Order (2026-06-13)
 
 ```text
 1. Pull latest repo state.
@@ -66,18 +66,20 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`
    (`READY_WITH_SCOPE_GUARDS`, 12 supported manuscript claims, no overclaims).
    The current local handoff index is
-   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`:
-   it reports `local_release_candidate_ready=true` under
-   `readiness_scope=local_artifacts_only`, while preserving
-   `final_submission_ready=false` because ProMax public proceedings metadata
-   and private manual submission-system confirmation remain open. The ProMax
+   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`:
+   it reports `ok=true`, `local_release_candidate_ready=true`,
+   `refresh_artifact_fresh=true`, `blocking_status=external_or_manual_blocked`,
+   and `final_submission_ready=false` because ProMax public proceedings
+   metadata and private manual submission-system confirmation remain open. The ProMax
    audit now records passing arXiv HTML ACM-metadata evidence for the expected
    DOI/ISBN/venue/location and exposes BibTeX `isbn`/`location`, but final ACM
    page range plus Crossref/DOI resolver visibility are still unresolved.
    For a compact closure view, read
    `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`;
-   it groups local artifact, external metadata, and private manual submission
-   blockers and gives the exact next commands without storing private fields.
+   it now uses the 2026-06-13 final gate, external metadata audit, manual
+   checklist, full release-candidate stack, and public probe; it groups local
+   artifact, external metadata, and private manual submission blockers and
+   gives the exact next commands without storing private fields.
    The latest ProMax public probe is
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
    Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,
