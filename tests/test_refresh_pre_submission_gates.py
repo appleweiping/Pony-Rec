@@ -216,6 +216,8 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     assert refresh["ok"] is True
     assert refresh["final_submission_ready"] is False
     assert refresh["final_verdict"] == "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED"
+    assert "git_state_before_refresh" in refresh
+    assert refresh["input_fingerprints"]
     assert [step["step_id"] for step in refresh["steps"]] == [
         "external_proceedings_metadata",
         "submission_package",
@@ -231,5 +233,9 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
         "final_submission_gate_test.json",
     ]:
         assert (tmp_path / "out" / name).exists()
+    assert all(step["json"]["sha256"] for step in refresh["steps"])
+    input_paths = {item["path"].replace("\\", "/") for item in refresh["input_fingerprints"]}
+    assert "Paper/main.tex" in input_paths
+    assert "Paper/references.bib" in input_paths
     assert "promax:final_page_range_missing_in_bib" in refresh["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in refresh["remaining_blockers"]

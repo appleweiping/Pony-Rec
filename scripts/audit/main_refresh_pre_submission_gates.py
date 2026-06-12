@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -42,6 +44,14 @@ def _write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _file_state(path: Path, root: Path) -> dict[str, Any]:
     try:
         display_path = str(path.resolve().relative_to(root.resolve()))
@@ -51,7 +61,58 @@ def _file_state(path: Path, root: Path) -> dict[str, Any]:
         "path": display_path,
         "exists": path.exists(),
         "size_bytes": path.stat().st_size if path.exists() and path.is_file() else 0,
+        "sha256": _sha256_file(path) if path.exists() and path.is_file() else "",
     }
+
+
+def _run_git(root: Path, args: list[str]) -> tuple[int, str, str]:
+    try:
+        result = subprocess.run(
+            ["git", *args],
+            cwd=root,
+            text=True,
+            capture_output=True,
+            timeout=15,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return 1, "", str(exc)
+    return result.returncode, result.stdout.strip(), result.stderr.strip()
+
+
+def _git_state(root: Path) -> dict[str, Any]:
+    code, head, err = _run_git(root, ["rev-parse", "HEAD"])
+    if code != 0:
+        return {
+            "available": False,
+            "head": "",
+            "tracked_dirty": None,
+            "tracked_dirty_paths": [],
+            "error": err or "git_rev_parse_failed",
+        }
+    status_code, status, status_err = _run_git(root, ["status", "--short", "--untracked-files=no"])
+    tracked_paths = [line.strip() for line in status.splitlines() if line.strip()] if status_code == 0 else []
+    return {
+        "available": True,
+        "head": head,
+        "tracked_dirty": bool(tracked_paths),
+        "tracked_dirty_paths": tracked_paths,
+        "error": "" if status_code == 0 else status_err,
+    }
+
+
+def _input_fingerprints(root: Path, paths: list[str | Path]) -> list[dict[str, Any]]:
+    result: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for raw_path in paths:
+        path = root / raw_path
+        state = _file_state(path, root)
+        key = state["path"]
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(state)
+    return result
 
 
 def _step_record(
@@ -100,6 +161,7 @@ def refresh_pre_submission_gates(
     repo = Path(root).resolve()
     out_dir = repo / output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
+    git_state_before_refresh = _git_state(repo)
 
     external_json = out_dir / f"external_proceedings_metadata_recheck_{stamp}.json"
     external_md = out_dir / f"external_proceedings_metadata_recheck_{stamp}.md"
@@ -111,6 +173,29 @@ def refresh_pre_submission_gates(
     manual_md = out_dir / f"manual_submission_checklist_{stamp}.md"
     final_json = out_dir / f"final_submission_gate_{stamp}.json"
     final_md = out_dir / f"final_submission_gate_{stamp}.md"
+    input_fingerprints = _input_fingerprints(
+        repo,
+        [
+            Path(paper_dir) / "main.tex",
+            Path(paper_dir) / "references.bib",
+            Path(paper_dir) / "main.pdf",
+            Path(paper_dir) / "main.log",
+            Path(paper_dir) / "main.blg",
+            external_config_path,
+            claim_audit_json,
+            panel_review_json,
+            metadata_followup_json,
+            target_profile_json,
+            metadata_config,
+            manual_config,
+            "scripts/audit/main_refresh_pre_submission_gates.py",
+            "scripts/audit/main_audit_external_proceedings_metadata.py",
+            "scripts/audit/main_audit_submission_package.py",
+            "scripts/audit/main_build_submission_metadata_packet.py",
+            "scripts/audit/main_build_manual_submission_checklist.py",
+            "scripts/audit/main_build_final_submission_gate.py",
+        ],
+    )
 
     external = build_external_proceedings_metadata_audit(
         root=repo,
@@ -227,6 +312,8 @@ def refresh_pre_submission_gates(
         "stamp": stamp,
         "output_dir": str(Path(output_dir)),
         "external_network_mode": external_network_mode,
+        "git_state_before_refresh": git_state_before_refresh,
+        "input_fingerprints": input_fingerprints,
         "ok": not failures,
         "final_submission_ready": final_gate.get("final_submission_ready") is True,
         "final_verdict": final_gate.get("verdict"),
@@ -253,6 +340,9 @@ def _write_md(path: Path, refresh: dict[str, Any]) -> None:
         f"- Final verdict: `{refresh['final_verdict']}`",
         f"- External network mode: `{refresh['external_network_mode']}`",
         f"- Stamp: `{refresh['stamp']}`",
+        f"- Git HEAD before refresh: `{(refresh.get('git_state_before_refresh') or {}).get('head', '')}`",
+        "- Tracked dirty before refresh: "
+        f"`{str((refresh.get('git_state_before_refresh') or {}).get('tracked_dirty')).lower()}`",
         "",
         "## Steps",
         "",
@@ -262,6 +352,14 @@ def _write_md(path: Path, refresh: dict[str, Any]) -> None:
             f"- `{step['step_id']}`: ok=`{str(step['ok']).lower()}`, "
             f"ready=`{str(step['ready']).lower()}`, json=`{step['json']['path']}`"
         )
+    lines.extend(["", "## Input Fingerprints", ""])
+    for item in refresh.get("input_fingerprints", []):
+        if item.get("exists"):
+            lines.append(
+                f"- `{item['path']}`: `{item['sha256']}` ({item['size_bytes']} bytes)"
+            )
+        else:
+            lines.append(f"- `{item['path']}`: MISSING")
     lines.extend(["", "## Remaining Blockers", ""])
     blockers = refresh.get("remaining_blockers") or []
     lines.extend(f"- {blocker}" for blocker in blockers) if blockers else lines.append("- None")

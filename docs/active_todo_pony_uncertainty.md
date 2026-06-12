@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 11:42 CEST
+Last updated: 2026-06-12 12:15 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -19,8 +19,13 @@ cycle.
   `final_submission_ready=false`, and final verdict
   `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. It refreshes the
   dependent gate outputs in dependency order, avoiding stale JSON or parallel
-  ordering races. Remaining blockers are unchanged: ProMax final page range and
-  DOI/Crossref visibility, plus private manual submission-system fields.
+  ordering races. The refresh summary now records `git_state_before_refresh`,
+  input file sha256 fingerprints for the paper, bibliography, profiles,
+  configs, evidence audits, and gate scripts, plus sha256/size for each
+  generated gate JSON/MD. This makes the final submission status reproducible
+  from a specific code/input state. Remaining blockers are unchanged: ProMax
+  final page range and DOI/Crossref visibility, plus private manual
+  submission-system fields.
 
 - Final submission gate added:
   `scripts/audit/main_build_final_submission_gate.py` aggregates the four

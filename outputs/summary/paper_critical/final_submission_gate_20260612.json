@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-12T09:41:25.985642+00:00",
+  "created_at_utc": "2026-06-12T10:14:25.092376+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-12T09:41:25.619023+00:00",
+      "created_at_utc": "2026-06-12T10:14:24.300390+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T09:41:25.804028+00:00",
+      "created_at_utc": "2026-06-12T10:14:24.863973+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T09:41:23.696943+00:00",
+      "created_at_utc": "2026-06-12T10:14:20.332034+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T09:41:25.888156+00:00",
+      "created_at_utc": "2026-06-12T10:14:24.937170+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",

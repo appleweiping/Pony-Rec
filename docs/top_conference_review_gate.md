@@ -258,7 +258,10 @@ python -m scripts.audit.main_refresh_pre_submission_gates \
 
 This is the preferred command immediately before any submission-status report
 because it regenerates external metadata, package, metadata packet, manual
-checklist, and final-gate artifacts in the correct order.
+checklist, and final-gate artifacts in the correct order. The refresh artifact
+should be treated as stale if its recorded Git HEAD, tracked dirty state, input
+fingerprints, or generated gate hashes no longer match the worktree being
+submitted.
 
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
