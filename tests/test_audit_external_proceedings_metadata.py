@@ -40,6 +40,15 @@ def _seed_config(tmp_path: Path) -> Path:
                             "url": "https://arxiv.org/abs/2604.26231",
                             "required_patterns": ["accepted by SIGIR 2026"],
                             "required_for_final": True,
+                        },
+                        {
+                            "name": "sigir_accepted",
+                            "url": "https://sigir2026.org/en-AU/pages/program/accepted-papers",
+                            "required_patterns": [
+                                "ProMax: Exploring the Potential of LLM-derived Profiles with Distribution Shaping for Recommender Systems",
+                                "Yi Zhang, Yiwen Zhang, Kai Zheng, Tong Chen, Hongzhi Yin",
+                            ],
+                            "required_for_final": True,
                         }
                     ],
                 }
@@ -88,6 +97,15 @@ def test_external_proceedings_metadata_flags_promax_final_blockers(tmp_path: Pat
                 "status_code": 200,
                 "text": "accepted by SIGIR 2026",
             },
+            "https://sigir2026.org/en-AU/pages/program/accepted-papers": {
+                "ok": True,
+                "status_code": 200,
+                "text": (
+                    "ProMax: Exploring the Potential of LLM-derived Profiles with "
+                    "Distribution Shaping for Recommender Systems\n"
+                    "Yi Zhang, Yiwen Zhang, Kai Zheng, Tong Chen, Hongzhi Yin"
+                ),
+            },
         },
     )
 
@@ -105,6 +123,8 @@ def test_external_proceedings_metadata_flags_promax_final_blockers(tmp_path: Pat
     assert "promax:final_page_range_missing_in_bib" in audit["remaining_blockers"]
     assert "promax:crossref_registry_not_visible:status=404" in audit["remaining_blockers"]
     assert "promax:doi_resolver_not_visible:status=404" in audit["remaining_blockers"]
+    sources = {item["name"]: item for item in audit["checked_entries"]["promax"]["source_checks"]}
+    assert sources["sigir_accepted"]["ok"] is True
 
 
 def test_external_proceedings_metadata_fails_on_doi_mismatch(tmp_path: Path) -> None:

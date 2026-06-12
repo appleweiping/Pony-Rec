@@ -1,6 +1,6 @@
 # External Proceedings Metadata Audit
 
-Generated: 2026-06-12T11:15:00.676791+00:00
+Generated: 2026-06-12T11:55:54.620380+00:00
 
 - OK: `true`
 - External proceedings metadata ready: `false`
@@ -40,6 +40,7 @@ Warnings:
 - Crossref: ok=`false`, status=`404`
 - DOI resolver: ok=`false`, status=`404`
 - Source `arxiv_2604_26231`: ok=`true`, status=`200`, missing_patterns=[]
+- Source `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing_patterns=[]
 
 Blockers:
 - `promax:final_page_range_missing_in_bib`

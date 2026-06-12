@@ -1,13 +1,13 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-12T11:15:02.812463+00:00
+Generated: 2026-06-12T11:56:04.125519+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260612`
-- Git HEAD before refresh: `db0804b3bf1288b5a6f794aff1f056f8b7d0ce2b`
+- Git HEAD before refresh: `64b8302a46796757a82912ee09d1c2c7eb40db2f`
 - Tracked dirty before refresh: `true`
 
 ## Steps
@@ -25,7 +25,7 @@ Generated: 2026-06-12T11:15:02.812463+00:00
 - `Paper\main.pdf`: `588afd8311c634569e029e8061c9a8cbefd1d6b2bd53a162b89857b5296cdc86` (546669 bytes)
 - `Paper\main.log`: `38fedd0e191668ca890ca4bf0d5b048594adcfd195f36c68366144d377a6abf2` (55332 bytes)
 - `Paper\main.blg`: `da6ab355903a0f836bf20461604568a97e46bd57723631cbd77d103771afeafb` (1606 bytes)
-- `configs\paper_external_proceedings_metadata_checks.json`: `8c4928e950269962512702513857ef944d95f8026483d2873292f1786f4d812b` (1926 bytes)
+- `configs\paper_external_proceedings_metadata_checks.json`: `fac1d47fac2905188d507a546dad4c808071dda7741bddf01c5a5a8367b6483d` (2354 bytes)
 - `outputs\summary\paper_critical\final_paper_claim_audit_after_full_panel_review_20260612.json`: `ceb6ff1eb1393580dab990e58b37afe8ff1dcb4324134ca2d04969c6c376a6db` (13282 bytes)
 - `outputs\summary\paper_critical\final_full_manuscript_panel_review_20260612.json`: `6cbad714fe6488e649bc580c1e952054ebcc6a37075050ecf0e47c4152fbad84` (4596 bytes)
 - `outputs\summary\paper_critical\final_pdf_polish_metadata_followup_20260612.json`: `dea9fc1b54dbe6ca37cc228c303e332a08009cb0d1968e5ae3a16a2d898c7e7d` (3056 bytes)

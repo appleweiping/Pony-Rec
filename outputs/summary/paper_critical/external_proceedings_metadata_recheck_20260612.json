@@ -114,13 +114,23 @@
           "required_for_final": true,
           "status_code": 200,
           "url": "https://arxiv.org/abs/2604.26231"
+        },
+        {
+          "error": "",
+          "final_url": "https://sigir2026.org/en-AU/pages/program/accepted-papers",
+          "missing_patterns": [],
+          "name": "sigir2026_accepted_papers_promax",
+          "ok": true,
+          "required_for_final": true,
+          "status_code": 200,
+          "url": "https://sigir2026.org/en-AU/pages/program/accepted-papers"
         }
       ],
       "warnings": []
     }
   },
   "checked_entry_count": 2,
-  "created_at_utc": "2026-06-12T11:15:00.676791+00:00",
+  "created_at_utc": "2026-06-12T11:55:54.620380+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,

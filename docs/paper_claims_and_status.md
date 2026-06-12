@@ -71,7 +71,10 @@ The current freshness artifact
 `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
 reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints and
 `10` generated gate files checked, zero hash mismatches, and
-`final_submission_ready=false`.
+`final_submission_ready=false`. The refreshed external metadata audit now also
+passes a required SIGIR 2026 accepted-papers source check for the ProMax title
+and author line, strengthening the accepted-paper evidence while leaving final
+page-range/DOI-registry blockers intact.
 
 **2026-06-12 final submission gate.** Codex added
 `scripts/audit/main_build_final_submission_gate.py` as the final local
@@ -115,10 +118,12 @@ range plus DBLP search API evidence for KDD 2026 pages `1940-1951` and DOI
 `10.1145/3770854.3780284`; Crossref/DOI resolver `404` responses are retained
 as warnings. ProMax remains final-blocking because the local BibTeX entry has
 `numpages=11` but no final `pages` range, and live Crossref/DOI resolver checks
-for `10.1145/3805712.3809600` return `404` even though arXiv `2604.26231`
-remains reachable and confirms the SIGIR 2026 acceptance/11-page metadata. The
-submission-package and metadata-packet audits now consume this artifact and
-carry the concrete blockers:
+for `10.1145/3805712.3809600` return `404`. The external audit now verifies two
+accepted-paper sources for ProMax: arXiv `2604.26231` confirms the SIGIR 2026
+acceptance/11-page metadata, and the official SIGIR 2026 accepted-papers page
+contains the ProMax title and author line. The submission-package and
+metadata-packet audits now consume this artifact and carry the concrete
+blockers:
 `promax:final_page_range_missing_in_bib`,
 `promax:crossref_registry_not_visible:status=404`,
 `promax:doi_resolver_not_visible:status=404`, and the manual

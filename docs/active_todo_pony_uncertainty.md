@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 13:02 CEST
+Last updated: 2026-06-12 13:59 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -37,8 +37,9 @@ cycle.
   reports `ok=true`, `refresh_artifact_fresh=true`,
   `final_submission_ready=false`, `19` input fingerprints checked, `10`
   generated gate files checked, and zero input/output hash mismatches. It
-  preserves the same external/manual blockers instead of treating freshness as
-  submission approval.
+  now also reflects the strengthened ProMax source check below and preserves
+  the same external/manual blockers instead of treating freshness as submission
+  approval.
 
 - Final submission gate added:
   `scripts/audit/main_build_final_submission_gate.py` aggregates the four
@@ -85,10 +86,13 @@ cycle.
   `1940-1951`, and DOI `10.1145/3770854.3780284`, although Crossref/DOI
   resolver still returned `404` in this environment and is recorded as a
   warning. ProMax arXiv `2604.26231` is reachable and confirms `11 pages` and
-  accepted-by-SIGIR-2026 metadata, but final ACM/Crossref evidence remains
-  unresolved: `Paper/references.bib` has no final page range for `promax`, and
-  both Crossref and the DOI resolver return `404` for
-  `10.1145/3805712.3809600`. The concrete remaining blockers are
+  accepted-by-SIGIR-2026 metadata; the audit config now also requires the
+  official SIGIR 2026 accepted-papers page to contain the ProMax title and
+  author line, and the live 2026-06-12 refresh passes that source check with
+  status `200`. Final ACM/Crossref evidence remains unresolved:
+  `Paper/references.bib` has no final page range for `promax`, and both
+  Crossref and the DOI resolver return `404` for `10.1145/3805712.3809600`.
+  The concrete remaining blockers are
   `promax:final_page_range_missing_in_bib`,
   `promax:crossref_registry_not_visible:status=404`,
   `promax:doi_resolver_not_visible:status=404`, plus the manual

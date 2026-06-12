@@ -88,7 +88,10 @@ artifact
 `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
 reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints,
 `10` generated gate files, zero mismatches, and
-`final_submission_ready=false`. The recorded Git HEAD is generation provenance,
+`final_submission_ready=false`. The refreshed external metadata audit also
+passes a required official SIGIR 2026 accepted-papers source check for ProMax,
+in addition to arXiv `2604.26231`, but ProMax final page range and DOI/Crossref
+visibility remain unresolved. The recorded Git HEAD is generation provenance,
 not a strict post-commit freshness condition. The stale
 `paper/` draft was rewritten to the current C-CRP same-candidate
 official-baseline spine, stale calibration table removed, current main/module
