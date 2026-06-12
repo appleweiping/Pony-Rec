@@ -1097,21 +1097,28 @@ xhigh + a second Claude Opus 4.8) with no unresolved major objection. This
 per-module cadence replaces the prior single end-of-project GPT-5.5/Codex xhigh
 ≥ 8/10 gate.
 
-2026-06-11 hyperparameter-module status: execution support is hardened, but no
-paper-facing hyperparameter evidence has been run or accepted yet. The new
+2026-06-12 hyperparameter-module status: execution support is hardened and
+three of the four target full-scale domain packages are accepted. The
 saved-signal entrypoint
 `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py` produces valid/test
 sweep CSVs and provenance from already audited full-scale C-CRP signal rows
 without LLM re-query, score import, or retained per-grid prediction/score
 dumps. The main controls are `eta` and `weight_grid_label`; `confidence_weight`
 is diagnostic-only for `confidence_plus_evidence` and must not be used as a
-full-mode main C-CRP curve. The package audit now requires
-`test_not_used_for_selection=true`, sweep-source provenance, exact valid/test
-row counts, cleanup status proving no bulk sweep artifacts remain, coverage
-`1.0`, and audit/degeneracy flags. Focused checks passed on 2026-06-11:
-`python -m pytest tests\test_audit_paper_critical_modules.py tests\test_build_ccrp_hyperparameter_sweep.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_audit_phase2_5_module_package.py tests\test_plan_ccrp_signal_generation.py -q`
--> `58 passed`. Before launching the full-scale server sweep, rerun the
-required design/code review to clear the earlier engineering reviewer block.
+full-mode main C-CRP curve. Sports, Toys, and Home each now have complete local
+and server packages under
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_{sports,toys,home}/`
+with Phase 2.5 package audits reporting `ok=true`, `paper_claim_ready=true`,
+and `failures=[]`. These packages show valid/test stability within the
+pre-registered tolerance, but they support only sensitivity/stability wording,
+not test-set hyperparameter selection or main-table SOTA claims. A
+four-domain-only aggregator,
+`scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py`, is now
+available and fails closed on missing package audits, invalid row counts or
+coverage, unstable controls, or test-selection provenance. The remaining
+single-domain blocker is Tools; after Tools passes, run the aggregate and the
+post-module ARIS/reviewer pass before claiming the hyperparameter module is
+closed.
 
 ### Remaining for paper submission
 

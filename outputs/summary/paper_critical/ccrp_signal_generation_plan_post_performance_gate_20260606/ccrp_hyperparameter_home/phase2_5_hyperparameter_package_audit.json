@@ -1,0 +1,40 @@
+{
+  "schema_version": "2026-06-06.phase2_5_module_package_audit.v1",
+  "created_at_utc": "2026-06-12T00:20:14+00:00",
+  "mode": "local_read_only_phase2_5_module_package_audit",
+  "read_only": true,
+  "will_start_experiment": false,
+  "will_delete": false,
+  "package_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home",
+  "module": "hyperparameter_analysis",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "ok": true,
+  "paper_claim_ready": true,
+  "module_audit": {
+    "module": "hyperparameter_analysis",
+    "ok": true,
+    "paper_claim_ready": true,
+    "status_label": "paper_critical_hyperparameter_curve_ready",
+    "summary_rows": 22,
+    "controls": [
+      "eta",
+      "weight_grid_label"
+    ],
+    "expected_controls": [
+      "eta",
+      "weight_grid_label"
+    ],
+    "reporting_mode": "valid_and_test",
+    "figures": [
+      "fig_hyper_eta_curve.png",
+      "fig_hyper_eta_curve.pdf",
+      "fig_hyper_weight_simplex_or_lines.png",
+      "fig_hyper_weight_simplex_or_lines.pdf"
+    ],
+    "failures": [],
+    "warnings": []
+  },
+  "failures": [],
+  "warnings": []
+}

@@ -365,11 +365,17 @@ Required plots:
 - `ccrp_hyperparameter_curve_summary.csv` and
   `ccrp_hyperparameter_curve_provenance.json` with sweep paths, hashes, fixed
   controls, min-values gate, status label, and paper-claim scope.
+- After all four single-domain packages pass audit, aggregate them with
+  `ccrp_hyperparameter_four_domain_{curve_rows,stability_rows,control_summary}.csv`
+  plus `ccrp_hyperparameter_four_domain_provenance.json`. This aggregate is
+  supplementary stability/sensitivity evidence only; it cannot select a method
+  setting or replace paired official-baseline comparisons.
 
 Implementation anchor:
 
 - `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py`
 - `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py`
+- `scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py`
 
 Current command template after audited valid/test signal rows exist:
 

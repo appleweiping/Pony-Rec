@@ -1,18 +1,18 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-11 20:58 CEST
+Last updated: 2026-06-12 02:25 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
 official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
-## Current Checkpoint (2026-06-11)
+## Current Checkpoint (2026-06-12)
 
-- Server live state: the server is idle for this project (`nvidia-smi` reported
-  `0%`, `15 MiB / 49140 MiB`, and no matching Pony/C-CRP/baseline Python
-  process). Disk is about `18G` free / `91%` used. Do not start a new GPU
-  experiment without a fresh preflight, but there is no active run to wait on.
+- Server live state at the Home hyperparameter checkpoint: the Home sweep
+  finished normally, the GPU was idle during the saved-signal sweep, and disk
+  remained about `17G` free / `92%` used. Do not start a new server job without
+  a fresh process/GPU/disk preflight.
 - Tools test signal rows are complete, source-audited, and locally synced:
   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/`
   has `test_ccrp_signal_rows.csv` with `1,010,000` rows, provenance
@@ -143,8 +143,19 @@ cycle.
   yet been synced to the hardened commit. To avoid disturbing the dirty main
   server checkout, Codex created a clean detached server worktree at
   `~/projects/pony-rec-rescue-shadow-v6-code-4cf95b5` with HEAD
-  `4cf95b54f2bc8fff655ada3f923e585a003a96af`; experiments run from that code
-  while reading/writing the canonical server project data paths.
+  `4cf95b54f2bc8fff655ada3f923e585a003a96af`; it was later updated to
+  `0b9e2e441d61281fc792c4880d419b1e7c61faf7` for the tie-aware stability-rank
+  fix. Experiments run from that code while reading/writing the canonical
+  server project data paths.
+- Four-domain hyperparameter aggregation support was added on 2026-06-12:
+  `scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py` consumes
+  only package-audited `ccrp_hyperparameter_{sports,toys,home,tools}` packages,
+  fails closed on missing package audits, invalid row counts/coverage, unstable
+  controls, or test-selection provenance, and emits four-domain curve,
+  stability, and control-summary tables plus figures. Focused local checks
+  passed:
+  `python -m pytest tests\test_aggregate_ccrp_hyperparameter_analysis.py tests\test_audit_paper_critical_modules.py tests\test_ccrp_hyperparameter_sweep_plot.py tests\test_audit_phase2_5_module_package.py -q`
+  -> `58 passed`.
 - Sports hyperparameter package is complete and locally synced:
   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports/`.
   Server sweep log `ccrp_hyperparameter_sports_20260612_051743.log` returned
@@ -180,11 +191,28 @@ cycle.
   `relative_drop_from_test_best=0.00019790098296872946`. Toys therefore
   supports stability/sensitivity within the pre-registered tolerance, not a
   test-selection or unique-best hyperparameter claim.
-- Next bounded action: continue hyperparameter curves one domain at a time on
-  the server, starting with Home and then Tools if each previous domain passes
-  sweep/provenance/package-audit gates. After all four domains pass, aggregate
-  and run post-module review. Do not rerun observation or component ablation
-  unless a concrete audit failure is found.
+- Home hyperparameter package is complete and locally synced:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home/`.
+  The first Home launch attempt failed before computation because the wrapper
+  used stale argument names; it wrote no sweep output and is not evidence. The
+  corrected server sweep log `ccrp_hyperparameter_home_20260612_074036.log`
+  returned `ok=true`, `valid_rows=16`, `test_rows=16`; valid/test sweep CSVs
+  each have 17 lines including the header. Plotting produced 22 summary rows
+  and eta/weight-grid PNG/PDF figures. Server and local Phase 2.5 package
+  audits both report `ok=true`, `paper_claim_ready=true`, `failures=[]`; the
+  local/server manifest comparison checks 11 lightweight files with matching
+  sha256/size. Key Home result: for `eta`, valid-best and test-best are both
+  `0` with `relative_drop_from_test_best=0` and
+  `test_rank_of_valid_best=1`; for `weight_grid_label`, valid-best and
+  test-best are both `0.7,0.2,0.1` with `relative_drop_from_test_best=0` and
+  `test_rank_of_valid_best=1`. This is sensitivity/stability evidence only,
+  not test-set hyperparameter selection.
+- Next bounded action: run the Tools hyperparameter curve on the server after
+  a fresh preflight. If Tools passes sweep/provenance/package-audit gates,
+  aggregate the four domain packages with
+  `scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py` and run
+  post-module review. Do not rerun observation or component ablation unless a
+  concrete audit failure is found.
   The selector import command now points to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py` and includes
   `--tie_break_seed`; if a future agent sees selector import failures, first

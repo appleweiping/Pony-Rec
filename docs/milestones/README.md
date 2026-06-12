@@ -1259,17 +1259,20 @@ not as a reason to silently rerun completed metric rows.
 3. Paper-critical modules (Phase 2.5/3 gate) — observation/motivation figure,
    C-CRP component ablations, hyperparameter curves, and framework overview
    figure.
-   2026-06-11 update: observation/motivation and four-domain component-ablation
+   2026-06-12 update: observation/motivation and four-domain component-ablation
    packages are closed as paper-critical supporting evidence under their
-   scoped labels. Hyperparameter-curve execution support is hardened but not
-   yet evidence-complete: use
+   scoped labels. Hyperparameter-curve execution is active and partially
+   packaged: Sports, Toys, and Home pass local/server Phase 2.5 package audits
+   as sensitivity/stability evidence only; Tools remains the next single-domain
+   package before four-domain aggregation and post-module review. Use
    `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py` to build
    valid/test sweeps from audited saved signal rows, then
    `scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py` with the sweep
    provenance. Main controls are `eta` and `weight_grid_label`;
    `confidence_weight` is diagnostic-only for `confidence_plus_evidence`.
-   Re-run the required design/code review before launching the full-scale
-   server sweep.
+   After all four packages pass audit, aggregate with
+   `scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py` and keep
+   the claim limited to supplementary hyperparameter stability/sensitivity.
 4. Full comparison table + statistical tests (Phase 3)
 5. Paper writing with ARIS skill (Phase 4)
 6. GPT-5.5/Codex review cycle until 8/10 (Phase 5)
