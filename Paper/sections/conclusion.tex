@@ -4,14 +4,14 @@
 We studied whether a task-grounded uncertainty framework can improve LLM-based
 reranking under a controlled same-candidate protocol. \method{} turns LLM
 evidence into a calibrated candidate relevance posterior, estimates
-uncertainty, and applies validation-controlled risk-adjusted ranking. Across
-Sports, Toys, Home, and Tools, it ranks first against eight
-official-code-level baselines on the full HR/NDCG/MRR metric set, with all
-paired Holm-corrected tests positive and significant in each domain.
+uncertainty, and applies a validation-controlled ranking family whose risk term
+is audited rather than assumed necessary. Across Sports, Toys, Home, and Tools,
+it ranks first against eight official-code-level baselines on HR/NDCG/MRR, with
+all paired Holm-corrected tests positive and significant in each domain.
 
 The diagnostic modules refine this result. Event-level uncertainty stratifies
 ranking reliability, supporting the motivation for actionable uncertainty.
-Component ablations and hyperparameter curves show a more nuanced picture:
+Component ablations and hyperparameter analyses show a more nuanced picture:
 some uncertainty terms are weak or redundant, and positive risk penalty is not
 necessary in the current sweeps. This honesty is part of the contribution. The
 paper supports a scoped claim that C-CRP improves controlled same-candidate

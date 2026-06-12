@@ -97,8 +97,26 @@ The remaining blockers are no longer missing citations or the initial
 compressed draft; the expanded-manuscript claim-text audit at
 `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`
 reports `READY_WITH_SCOPE_GUARDS` with no unsupported, overclaimed, or
-contradicted claims. Remaining blockers are final citation spot-check,
-section-level top-conference review, and any edits required by those reviews.
+contradicted claims. Final citation spot-check is now complete at
+`outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
+with `must_add_count=0`, all 19 cited keys resolved, all eight official
+baselines cited, and `Paper/main.blg` still at `warning$ -- 0`. A GPT-5.5 xhigh
+section-level review returned `8.0/10` conditional pass and requested more
+visible provenance/rank/diagnostic detail and risk-penalty wording discipline;
+the applied-fix audit lives at
+`outputs/summary/paper_critical/section_level_review_20260612.{json,md}`. The
+latest draft adds visible official-baseline provenance, all-metric rank-first,
+and ablation summary tables and compiles to `Paper/main.pdf` (9 pages, 541654
+bytes). The evidence-to-claim gate was rerun at
+`outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md,csv}`
+and remains `ok=true`, `paper_evidence_ready_for_drafting=true`,
+`final_submission_ready=false`. A fresh ARIS claim-text pass at
+`outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`
+reports `READY_WITH_SCOPE_GUARDS` with 12 supported manuscript claims and no
+unsupported, overclaimed, or contradicted manuscript claims. Remaining blockers
+are paper-critical tests/readiness checks, another section-level review on this
+latest draft, missing Claude Opus reviewer perspective for the final panel, and
+pre-submission ProEx/ProMax proceedings metadata recheck.
 
 Historical execution detail follows.
 

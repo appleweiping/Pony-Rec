@@ -22,9 +22,10 @@ the candidate set and evaluation schema are held fixed?
 We propose \methodfull{} (\method), which turns LLM-derived relevance evidence
 into a calibrated candidate posterior and an event-level uncertainty signal.
 The uncertainty combines boundary ambiguity, calibration gap, evidence support,
-and counterevidence. \method{} then applies a risk-adjusted ranking rule that
-can downweight candidates whose relevance estimate is high but poorly
-supported. Hyperparameters are fixed or selected on validation data only; test
+and counterevidence. \method{} defines a validation-controlled ranking family:
+one setting can downweight candidates whose relevance estimate is high but
+poorly supported, while the $\eta=0$ setting reduces to the calibrated
+posterior. Hyperparameters are fixed or selected on validation data only; test
 rows are used only for final reporting and paired significance tests.
 
 The resulting evidence supports a scoped conclusion. On four Amazon domains
@@ -32,9 +33,9 @@ The resulting evidence supports a scoped conclusion. On four Amazon domains
 official-code-level baselines under the unified Qwen3-8B, same-candidate
 protocol. The same evidence also limits the story: component ablations show
 that several uncertainty terms are neutral, weak, or redundant, and
-hyperparameter curves support stability rather than a claim that every risk
-term is necessary. We therefore frame \method{} as an actionable uncertainty
-framework for controlled reranking reliability, not as a universal
+hyperparameter stability analyses support robustness rather than a claim that
+every risk term is necessary. We therefore frame \method{} as an actionable
+uncertainty framework for controlled reranking reliability, not as a universal
 recommendation architecture.
 
 Our contributions are:
@@ -42,17 +43,19 @@ Our contributions are:
 \begin{enumerate}
     \item \textbf{Controlled official comparison.} We build a four-domain,
     10,000-user, 101-candidate same-candidate benchmark with eight
-    official-code-level LLM-based recommendation baselines, unified Qwen3-8B
-    usage, exact score-coverage checks, full HR/NDCG/MRR reporting, and paired
-    Holm-corrected tests.
+    official-code-level adapted LLM-based recommendation baselines,
+    unified Qwen3-8B usage, exact score-coverage checks, full HR/NDCG/MRR
+    reporting, paired Holm-corrected tests, and visible provenance
+    summarized in Table~\ref{tab:baseline_provenance}.
 
     \item \textbf{Method.} We introduce \method, a calibrated candidate
     relevance posterior with task-grounded uncertainty components and a
-    validation-controlled risk-adjusted reranking rule.
+    validation-controlled ranking family whose risk term is explicitly
+    ablated.
 
     \item \textbf{Evidence discipline.} We pair the main comparison with
     paper-critical diagnostic modules: an uncertainty motivation study,
-    leave-one-component-out ablations, hyperparameter stability curves, and a
+    leave-one-component-out ablations, hyperparameter stability analyses, and a
     framework overview. These modules define what can be claimed and what must
     be downgraded.
 \end{enumerate}

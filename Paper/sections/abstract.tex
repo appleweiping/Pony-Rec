@@ -9,16 +9,17 @@ and paired tests.
 
 We propose \method, a task-grounded calibrated candidate relevance posterior
 that decomposes uncertainty into boundary ambiguity, calibration gap, evidence
-support, and counterevidence, then uses the resulting uncertainty in a
-risk-adjusted reranking rule. Across Sports, Toys, Home, and Tools, \method
-ranks first against eight official-code-level LLM-based recommendation
-baselines on HR@5/@10/@20, NDCG@5/@10/@20, and MRR. All 56 per-domain paired
-C-CRP-vs-baseline tests are positive and Holm-significant in each domain. We
-also provide paper-critical diagnostic evidence: event-level uncertainty
-stratifies ranking reliability in all four domains, component ablations reveal
-that several uncertainty terms are weak or redundant rather than uniformly
-necessary, and validation-selected hyperparameters are stable within the
-pre-registered tolerance on NDCG@10. The result is a scoped claim: the C-CRP
-framework improves controlled same-candidate ranking, while its uncertainty
-signal stratifies reliability; it is not a full-catalog recommender SOTA claim.
+support, and counterevidence, and defines a validation-controlled ranking
+family whose zero-risk special case is explicitly allowed. Across Sports,
+Toys, Home, and Tools, \method ranks first against eight official-code-level
+LLM-based recommendation baselines on HR@5/@10/@20, NDCG@5/@10/@20, and MRR.
+All 56 per-domain paired C-CRP-vs-baseline tests are positive and
+Holm-significant in each domain. We also provide paper-critical diagnostic
+evidence: event-level uncertainty stratifies ranking reliability in all four
+domains, component ablations reveal that several uncertainty terms are weak or
+redundant rather than uniformly necessary, and validation-selected
+hyperparameters are stable within the pre-registered tolerance on NDCG@10. The
+result is a scoped claim: the C-CRP ranking line improves controlled
+same-candidate ranking, while its uncertainty signal stratifies reliability; it
+is not a full-catalog recommender SOTA claim.
 \end{abstract}

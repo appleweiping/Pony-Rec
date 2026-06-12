@@ -16,12 +16,14 @@ row counts. For each domain, the paired test family contains 56 comparisons
 Holm-significant in every domain. Table~\ref{tab:significance_summary}
 summarizes the paired-test gate, and Table~\ref{tab:full_official_ndcg10}
 shows the complete per-domain NDCG@10 ranking over all eight official
-baselines plus \method{}.
+baselines plus \method{}. Table~\ref{tab:ccrp_rank_by_metric} makes the
+all-metric rank-first claim explicit.
 
 This supports a controlled reranking claim. It does not establish full-catalog
 recommendation SOTA because candidate generation is not evaluated here.
 
 \input{tables/significance_summary}
+\input{tables/ccrp_rank_by_metric}
 \input{tables/full_official_ndcg10_ranking}
 
 \subsection{Uncertainty as a Reliability Signal}
@@ -58,6 +60,8 @@ removing the risk penalty improves the mean by 0.00082 and is nonworse in 4/4
 domains. Removing calibration gap is mixed (mean -0.00078; nonworse in 2/4
 domains), and removing evidence support is directionally harmful but small
 (mean -0.00013; nonworse in 1/4 domains).
+
+\input{tables/ablation_ndcg10_summary}
 
 The honest conclusion is that the full \method{} design is a useful
 paper-facing method line under the same-candidate comparison, while several

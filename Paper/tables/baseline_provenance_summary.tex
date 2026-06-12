@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Official-code-level baseline provenance summary. Each baseline keeps
+the declared official mechanism while adapting only the data bridge, Qwen3-8B
+representation interface, and final same-candidate score export required by
+the unified protocol. Coverage/status is identical across Sports, Toys, Home,
+and Tools.}
+\label{tab:baseline_provenance}
+\begin{tabular}{llllll}
+\toprule
+Method & Official source & Commit & Preserved mechanism & Hparams & Coverage/status \\
+\midrule
+ELMRec & WangXFng/ELMRec & b28c4f78 & High-order interaction module & Default/recommended & 1.0; completed \\
+IRLLRec & wangyu0627/IRLLRec & ee8330b4 & Intent representation module & Default/recommended & 1.0; completed \\
+LLM2Rec & HappyPointer/LLM2Rec & 73b481f7 & SASRec + LLM embedding path & Default/recommended & 1.0; completed \\
+LLMEmb & Applied-ML-Lab/LLMEmb & 3458a5e2 & LLM embedding generator & Default/recommended & 1.0; completed \\
+LLM-ESR & Applied-ML-Lab/LLM-ESR & e5dc388c & SASRec + LLM enhancement path & Default/recommended & 1.0; completed \\
+ProEx & BlueGhostYi/ProRec & 48a3a3d5 & Profile extrapolation path & Default/recommended & 1.0; completed \\
+ProMax & BlueGhostYi/ProRec & 48a3a3d5 & Profile distribution shaping path & Default/recommended & 1.0; completed \\
+RLMRec & HKUDS/RLMRec & 22413752 & Representation/graph contrastive path & Default/recommended & 1.0; completed \\
+\bottomrule
+\end{tabular}
+\end{table*}

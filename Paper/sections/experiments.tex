@@ -32,6 +32,14 @@ wrappers. Validation rows are used only for selection or calibration decisions
 declared in advance, while test rows are reserved for final reporting and
 paired tests.
 
+The task package keeps validation and test artifacts separate. Each domain has
+train-history files for the corresponding task split, validation ranking rows
+for selection, test ranking rows for final reporting, and a test
+\texttt{candidate\_items.csv} file that defines the exact key set every
+paper-facing score file must cover. This separation prevents validation
+selection code from silently reading test histories and prevents a method from
+entering the table with a different candidate universe.
+
 A result is table-eligible only if its score file exactly matches the candidate
 key set, has no duplicate or missing keys, contains finite numeric scores, and
 passes the local/server provenance checks. The score contract is deliberately
@@ -55,14 +63,14 @@ repositories are not imported into the paper table.
 LLM-based recommendation baselines:
 
 \begin{itemize}
-    \item \textbf{ELMRec}~\cite{elmrec}: Graph-enhanced LLM recommendation
-    \item \textbf{IRLLRec}~\cite{irllrec}: Intent-aware retrieval with LLM
-    \item \textbf{LLM2Rec}~\cite{llm2rec}: LLM-to-recommendation with SASRec
-    \item \textbf{LLMEmb}~\cite{llmemb}: LLM embedding for recommendation
-    \item \textbf{LLM-ESR}~\cite{llmesr}: LLM-enhanced sequential recommendation
-    \item \textbf{ProEx}~\cite{proex}: Profile-based explanation recommendation
-    \item \textbf{ProMax}~\cite{promax}: Profile-maximized recommendation
-    \item \textbf{RLMRec}~\cite{rlmrec}: Reinforcement learning meets LLM recommendation
+    \item \textbf{ELMRec}~\cite{elmrec}: High-order interaction-aware LLM recommendation
+    \item \textbf{IRLLRec}~\cite{irllrec}: Intent representation learning with LLMs
+    \item \textbf{LLM2Rec}~\cite{llm2rec}: LLM embedding with sequential recommendation
+    \item \textbf{LLMEmb}~\cite{llmemb}: LLM-generated embeddings for recommendation
+    \item \textbf{LLM-ESR}~\cite{llmesr}: LLM-enhanced long-tailed sequential recommendation
+    \item \textbf{ProEx}~\cite{proex}: Profile extrapolation with LLMs
+    \item \textbf{ProMax}~\cite{promax}: LLM-derived profiles with distribution shaping
+    \item \textbf{RLMRec}~\cite{rlmrec}: Representation learning with LLMs
 \end{itemize}
 
 Baselines use official default or recommended hyperparameters unless a
@@ -71,14 +79,17 @@ official repository, pinned commit, adaptation mode, checkpoint or
 representation artifact when applicable, score path, score hash, and coverage
 audit. Test-set model selection is forbidden for both baselines and \method.
 
+\input{tables/baseline_provenance_summary}
+
 \paragraph{Metrics and Statistics.} We report HR@$k$ and NDCG@$k$ for
 $k\in\{5,10,20\}$, plus MRR. The paired unit is the user event: for each
 method and metric, we compare the per-event score of \method{} with the
 corresponding per-event score of an official baseline. For each domain,
 \method{} is compared against each official baseline on all seven metrics,
 yielding 56 paired tests (8 baselines $\times$ 7 metrics). We use paired
-bootstrap confidence intervals and Holm correction over the full family of
-56 tests in that domain.
+event bootstrap confidence intervals with 2,000 bootstrap samples, 95\%
+percentile intervals, and Holm correction at $\alpha=0.05$ over the full
+family of 56 tests in that domain.
 
 \paragraph{Evidence Packaging.} Every completed row has a lightweight local
 evidence package with metrics, row counts, provenance, score audits, logs, and

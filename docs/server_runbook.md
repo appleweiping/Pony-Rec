@@ -51,8 +51,23 @@ PIDs, audit summaries, and missing-file errors.
    expanded-manuscript claim-text audit at
    `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`
    reports `READY_WITH_SCOPE_GUARDS` with no unsupported, overclaimed, or
-   contradicted claims. The current priority is final citation spot-check and
-   section-level top-conference review, then apply the requested edits.
+   contradicted claims. Final citation spot-check is now saved at
+   `outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
+   with `must_add_count=0`, all eight official baselines cited, no unresolved
+   citation keys, and `Paper/main.blg` still at `warning$ -- 0`. GPT-5.5 xhigh
+   section-level review returned `8.0/10` conditional pass but not
+   submission-ready; the applied fixes are recorded in
+   `outputs/summary/paper_critical/section_level_review_20260612.{json,md}`.
+   The latest `Paper/main.pdf` compiles to 9 pages / 541654 bytes with visible
+   official-baseline provenance, all-metric rank-first, and four-domain
+   ablation summary tables. Codex has already rerun the evidence-to-claim gate at
+   `outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md,csv}`
+   (`ok=true`, `final_submission_ready=false`) and added a claim-text audit at
+   `outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`
+   (`READY_WITH_SCOPE_GUARDS`, 12 supported manuscript claims, no overclaims).
+   The current priority is paper-critical tests/readiness checks and another
+   section-level review on this latest draft before any final-readiness claim;
+   Claude Opus reviewer coverage was still missing in this session.
 3. Treat performance/table evidence as complete for the current same-candidate
    claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
    all eight official-code-level baseline rows complete; the four-new-domain

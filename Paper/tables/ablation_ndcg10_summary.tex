@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Four-domain leave-one-component-out summary on NDCG@10. Deltas are
+removal-minus-full; positive values mean the ablated variant is higher than
+the full \method{} row. The table is diagnostic and does not support a claim
+that every component is necessary.}
+\label{tab:ablation_ndcg10}
+\begin{tabular}{lrrp{0.42\textwidth}}
+\toprule
+Ablation & Mean $\Delta$ & Nonworse domains & Interpretation \\
+\midrule
+Without boundary uncertainty & 0.00000 & 4/4 & Inert under the frozen configuration. \\
+Without calibration gap & -0.00078 & 2/4 & Mixed; small evidence for retaining the term. \\
+Without evidence support & -0.00013 & 1/4 & Directionally helpful but weak. \\
+Without counterevidence & +0.00168 & 4/4 & Removal is nonworse; term is redundant or harmful here. \\
+Without risk penalty & +0.00082 & 4/4 & Positive risk exponent is not necessary in current sweeps. \\
+\bottomrule
+\end{tabular}
+\end{table*}

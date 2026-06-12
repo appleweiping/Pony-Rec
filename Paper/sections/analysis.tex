@@ -58,4 +58,16 @@ method story.
     same-candidate scoring. This gives a fair controlled comparison, but it is
     not the same claim as reproducing each method under its original full-catalog
     serving stack.
+    \item \textbf{LLM cost and latency.} \method{} relies on task-grounded LLM
+    evidence before score export. The current paper audits ranking quality and
+    evidence integrity, but it does not optimize serving latency, token cost, or
+    online batching.
+    \item \textbf{Prompt and parser dependence.} The signal rows are
+    fail-closed and source-audited, yet they still depend on the chosen prompt,
+    output schema, and parser. Different prompt templates may change
+    calibration and evidence-support behavior.
+    \item \textbf{Sampled negative candidate sets.} The same-candidate protocol
+    uses one positive and 100 sampled negatives per event. This is appropriate
+    for controlled reranking, but conclusions may differ under larger or
+    retriever-generated candidate pools.
 \end{enumerate}

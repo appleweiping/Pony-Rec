@@ -33,9 +33,17 @@ final score before the shared importer computes metrics.
 
 For each user-candidate pair, the LLM is asked to evaluate the candidate under
 the next-interaction task rather than under a generic similarity task. The
-structured output contains a raw relevance probability, a calibrated relevance
-probability, evidence support, counterevidence strength, and a short rationale.
+signal row records a raw relevance probability, the calibrated posterior used
+for ranking, evidence support, counterevidence strength, and a short rationale.
 The prompt does not reveal the positive item index or test label.
+
+The signal package is reproducible at the artifact level. Provenance records
+the generation command, split-specific task paths, parser-compatible schema,
+row counts, parse-failure count, and hashes for the signal and candidate
+files. Rows with invalid probability, support, counterevidence, or key fields
+are rejected before score export. The formal packages used for the paper pass
+with 10,000 events, 1,010,000 candidate rows, exact candidate-key coverage, and
+zero parse failures per domain.
 
 This evidence format separates three roles that are often conflated in LLM
 recommendation: the model's relevance estimate, the support for that estimate,
@@ -126,6 +134,20 @@ diagnostics, and hyperparameter sensitivity plots. The test hyperparameter
 sweeps reported in the paper are descriptive stability checks and cannot change
 the method.
 
+The paper-facing selection space is deliberately small. The main score mode is
+\texttt{full}; diagnostic-only score modes are excluded from the main table.
+The reported sensitivity grid is:
+\[
+\begin{aligned}
+\eta &\in \{0,0.25,0.5,1,2,4\},\\
+w &\in \{(0.5,0.3,0.2),(0.7,0.2,0.1),(0.4,0.4,0.2),\\
+  &\qquad (0.4,0.2,0.4),(0.33,0.33,0.34)\}.
+\end{aligned}
+\]
+The \texttt{confidence\_weight} control is kept diagnostic-only under
+\texttt{confidence\_plus\_evidence} and cannot be used to select the full
+C-CRP row.
+
 The fail-closed implementation checks this discipline mechanically. A score
 file is rejected if it has missing candidate keys, extra keys, duplicate keys,
 non-finite scores, excessive fully-constant events, or evidence rows that do
@@ -138,9 +160,9 @@ entering the paper table without exact candidate coverage.
 \includegraphics[width=\textwidth]{../outputs/summary/paper_critical/framework_overview/framework_overview.pdf}
 \caption{Framework overview. \method{} converts same-candidate user-item
 events into task-grounded LLM evidence, calibrates candidate relevance
-posteriors, estimates uncertainty, and applies risk-adjusted reranking. The
-official baselines and \method{} share the same candidate rows, metric importer,
-and evidence gates.}
+posteriors, estimates uncertainty, and applies a validation-controlled ranking
+family whose risk term is ablated in diagnostics. The official baselines and
+\method{} share the same candidate rows, metric importer, and evidence gates.}
 \Description{Pipeline diagram showing same-candidate task construction, LLM
 signal extraction, calibration, C-CRP uncertainty, risk-adjusted ranking, and
 shared evidence gates for official baselines and C-CRP.}

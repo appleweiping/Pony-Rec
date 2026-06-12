@@ -1,0 +1,144 @@
+{
+  "audit_name": "manuscript_claim_audit_after_section_review",
+  "project": "uncertainty",
+  "agent": "codex",
+  "aris_skill": "aris-paper-claim-audit",
+  "timestamp_cest": "2026-06-12 06:38:00 +02:00",
+  "manuscript": "Paper/main.tex",
+  "claim_text_verdict": "READY_WITH_SCOPE_GUARDS",
+  "submission_gate_verdict": "NEEDS_FINAL_PANEL_REVIEW_BEFORE_SUBMISSION",
+  "final_submission_ready": false,
+  "summary_statistics": {
+    "total_claims_extracted": 12,
+    "supported": 12,
+    "weakly_supported": 0,
+    "unsupported": 0,
+    "overclaimed": 0,
+    "contradicted": 0
+  },
+  "master_claim_table": [
+    {
+      "id": "M1",
+      "claim": "Every method ranks the same 101 candidates per user under the same score schema, importer, metrics, provenance checks, and paired tests.",
+      "locations": ["Abstract", "Experiments"],
+      "category": "protocol",
+      "status": "SUPPORTED",
+      "evidence": "paper-facing ledger, same-candidate gates, and evidence packaging audits"
+    },
+    {
+      "id": "M2",
+      "claim": "All methods use Qwen3-8B whenever an LLM or LLM-derived representation is required.",
+      "locations": ["Abstract", "Experiments"],
+      "category": "protocol",
+      "status": "SUPPORTED",
+      "evidence": "official baseline provenance and fairness policy"
+    },
+    {
+      "id": "M3",
+      "claim": "C-CRP defines a calibrated candidate posterior with uncertainty components and a validation-controlled ranking family.",
+      "locations": ["Abstract", "Introduction", "Method", "Conclusion"],
+      "category": "method",
+      "status": "SUPPORTED",
+      "evidence": "Method equations, signal provenance, selector grid, and fail-closed gates"
+    },
+    {
+      "id": "M4",
+      "claim": "C-CRP ranks first against eight official-code-level LLM recommendation baselines on HR@5/@10/@20, NDCG@5/@10/@20, and MRR across Sports, Toys, Home, and Tools.",
+      "locations": ["Abstract", "Results", "Conclusion"],
+      "category": "performance",
+      "status": "SUPPORTED",
+      "evidence": "cross-domain certificate, full metric ledger, main results table, and rank-by-metric table"
+    },
+    {
+      "id": "M5",
+      "claim": "All 56 per-domain C-CRP-vs-baseline paired tests are positive and Holm-significant in each domain.",
+      "locations": ["Abstract", "Results", "Conclusion"],
+      "category": "statistical",
+      "status": "SUPPORTED",
+      "evidence": "paired-test summary using 2,000 paired event bootstrap samples and Holm alpha 0.05"
+    },
+    {
+      "id": "M6",
+      "claim": "C-CRP event-level uncertainty stratifies ranking reliability in all four domains.",
+      "locations": ["Abstract", "Results", "Discussion", "Conclusion"],
+      "category": "qualitative",
+      "status": "SUPPORTED",
+      "evidence": "observation_four_domain provenance and uncertainty stratification table"
+    },
+    {
+      "id": "M7",
+      "claim": "Component ablations reveal several uncertainty terms are weak, neutral, or redundant rather than uniformly necessary.",
+      "locations": ["Abstract", "Results", "Discussion", "Conclusion"],
+      "category": "ablation",
+      "status": "SUPPORTED",
+      "evidence": "component_ablation_four_domain provenance and ablation_ndcg10_summary table"
+    },
+    {
+      "id": "M8",
+      "claim": "Validation-selected eta and uncertainty-weight settings are stable within the pre-registered NDCG@10 tolerance.",
+      "locations": ["Abstract", "Results"],
+      "category": "hyperparameter",
+      "status": "SUPPORTED",
+      "evidence": "ccrp_hyperparameter_four_domain provenance and stability rows"
+    },
+    {
+      "id": "M9",
+      "claim": "A positive risk penalty is not necessary or uniformly beneficial in current sweeps.",
+      "locations": ["Method", "Results", "Discussion", "Conclusion"],
+      "category": "hyperparameter",
+      "status": "SUPPORTED",
+      "evidence": "eta test-best zero in all four domains and risk-penalty ablation"
+    },
+    {
+      "id": "M10",
+      "claim": "The result is scoped to controlled same-candidate reranking, not full-catalog recommender SOTA.",
+      "locations": ["Abstract", "Introduction", "Results", "Discussion", "Conclusion"],
+      "category": "generality",
+      "status": "SUPPORTED",
+      "evidence": "protocol definition and explicit exclusion of candidate generation/full-catalog retrieval"
+    },
+    {
+      "id": "M11",
+      "claim": "Official-code-level baselines preserve their declared mechanisms and use official/default or recommended hyperparameters under the unified score contract.",
+      "locations": ["Introduction", "Experiments", "Baseline provenance table"],
+      "category": "fairness",
+      "status": "SUPPORTED",
+      "evidence": "baseline_provenance_summary table, official baseline configs, and local evidence ledger"
+    },
+    {
+      "id": "M12",
+      "claim": "Current limitations include LLM cost/latency, prompt/parser dependence, sampled-negative candidate sets, external adapter policy, and no full-catalog claim.",
+      "locations": ["Discussion"],
+      "category": "limitation",
+      "status": "SUPPORTED",
+      "evidence": "explicit limitations section"
+    }
+  ],
+  "red_flag_scan": {
+    "significantly": "Appears only in Holm-significant paired-test context and is backed by paired tests.",
+    "SOTA": "Appears only as a negated full-catalog SOTA boundary.",
+    "first": "No first/novel priority claim is used.",
+    "necessary": "Positive necessity claims are explicitly negated for components/risk penalty.",
+    "robust": "The text uses stability/sensitivity for hyperparameters rather than broad robustness."
+  },
+  "consistency_checks": {
+    "abstract_vs_tables": "PASS",
+    "introduction_vs_experiments": "PASS",
+    "conclusion_vs_results": "PASS",
+    "method_vs_experiments": "PASS",
+    "baseline_names": "PASS",
+    "dataset_details": "PASS",
+    "risk_penalty_scope": "PASS"
+  },
+  "critical_issues": [],
+  "major_issues": [],
+  "minor_issues": [
+    "Remaining small overfull hbox warnings are layout polish, not claim blockers.",
+    "ProEx and ProMax proceedings metadata should be rechecked immediately before final submission."
+  ],
+  "remaining_process_blockers": [
+    "Run another section-level top-conference review on the latest draft.",
+    "Claude Opus reviewer perspective remains unavailable in this session.",
+    "Do not convert this claim-text pass into final submission readiness without the remaining review process."
+  ]
+}

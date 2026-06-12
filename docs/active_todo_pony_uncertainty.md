@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 06:06 CEST
+Last updated: 2026-06-12 06:38 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -9,6 +9,46 @@ cycle.
 
 ## Current Checkpoint (2026-06-12)
 
+- Final citation/section-review checkpoint: ARIS `aris-citation-audit`
+  spot-check now lives at
+  `outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
+  and reports `overall_citation_health=HEALTHY_WITH_PROCEEDINGS_METADATA_CAUTION`,
+  `must_add_count=0`, `missing_in_bib=[]`, `uncited_in_bib=[]`,
+  `placeholder_hits=[]`, `bibtex_warning_count=0`, and all eight official
+  baselines cited. External spot-checks verified ProEx ACM DOI
+  `10.1145/3770854.3780284`, ProMax arXiv `2604.26231`, RLMRec ACM DOI
+  `10.1145/3589334.3645458`, ELMRec ACL `2024.emnlp-main.653`, and Lin et al.
+  via OpenReview/TMLR plus arXiv `2205.14334`; ProEx/ProMax proceedings
+  metadata should still be rechecked immediately before final submission. A
+  GPT-5.5 xhigh section-level review returned `8.0/10` conditional pass but
+  not submission-ready. The follow-up audit is saved at
+  `outputs/summary/paper_critical/section_level_review_20260612.{json,md}`.
+  Applied fixes include artifact-level signal/provenance and selection-grid
+  detail in `Paper/sections/method.tex`, visible official baseline provenance
+  table `Paper/tables/baseline_provenance_summary.tex`, all-metric rank-first
+  table `Paper/tables/ccrp_rank_by_metric.tex`, four-domain ablation summary
+  table `Paper/tables/ablation_ndcg10_summary.tex`, explicit 2,000-sample
+  paired event bootstrap/95% CI/Holm alpha 0.05 wording, top-minus-bottom
+  uncertainty-quintile caption, risk-penalty-necessity downgrades across
+  abstract/introduction/method/conclusion, and limitations for LLM
+  cost/latency, prompt/parser dependence, and sampled-negative candidate sets.
+  `pdflatex -> bibtex -> pdflatex -> pdflatex` now produces
+  `Paper/main.pdf` (9 pages, 541654 bytes), with `Paper/main.blg` still
+  reporting `warning$ -- 0` and no unresolved citations/references. Remaining
+  The evidence-to-claim gate was rerun as
+  `outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md,csv}`
+  with `ok=true`, `paper_evidence_ready_for_drafting=true`,
+  `final_submission_ready=false`, `SUPPORTED=6`, `CONTRADICTED=2`, and
+  `UNSUPPORTED=2`, preserving the forbidden strong-mechanism/full-catalog
+  boundaries. A fresh ARIS `aris-paper-claim-audit` text pass is saved at
+  `outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`:
+  `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
+  `submission_gate_verdict=NEEDS_FINAL_PANEL_REVIEW_BEFORE_SUBMISSION`,
+  `SUPPORTED=12`, `WEAKLY_SUPPORTED=0`, `UNSUPPORTED=0`, `OVERCLAIMED=0`, and
+  `CONTRADICTED=0`. Remaining blockers: another section-level top-conference
+  review on the latest draft, missing Claude Opus reviewer perspective in this
+  session, and final ProEx/ProMax proceedings metadata recheck before any
+  submission-ready claim.
 - Manuscript structural expansion checkpoint: first expansion/rebalancing pass
   is complete, but the paper is still not final submission-ready. The method
   section now gives the reranking-scope contract, C-CRP posterior notation,

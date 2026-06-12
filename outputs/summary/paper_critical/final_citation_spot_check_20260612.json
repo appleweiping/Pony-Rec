@@ -1,0 +1,63 @@
+{
+  "audit_name": "final_citation_spot_check",
+  "project": "uncertainty",
+  "agent": "codex",
+  "aris_skill": "aris-citation-audit",
+  "timestamp_cest": "2026-06-12 06:38:00 +02:00",
+  "overall_citation_health": "HEALTHY_WITH_PROCEEDINGS_METADATA_CAUTION",
+  "final_submission_ready": false,
+  "manuscript": "Paper/main.tex",
+  "bibliography": "Paper/references.bib",
+  "bibtex_log": "Paper/main.blg",
+  "automated_checks": {
+    "cited_key_count": 19,
+    "bibliography_entry_count": 19,
+    "missing_in_bib": [],
+    "uncited_in_bib": [],
+    "placeholder_hits": [],
+    "bibtex_warning_count": 0,
+    "unresolved_citation_count": 0
+  },
+  "completeness": {
+    "must_add_count": 0,
+    "official_baselines_cited": [
+      "ELMRec",
+      "IRLLRec",
+      "LLM2Rec",
+      "LLMEmb",
+      "LLM-ESR",
+      "ProEx",
+      "ProMax",
+      "RLMRec"
+    ],
+    "foundation_categories_satisfied": [
+      "sequential recommendation",
+      "calibration",
+      "LLM confidence and uncertainty",
+      "Bayesian or distribution-free uncertainty",
+      "sampled/same-candidate recommendation evaluation"
+    ]
+  },
+  "fairness_repairs": [
+    "Changed ELMRec descriptor to high-order interaction-aware LLM recommendation.",
+    "Changed IRLLRec descriptor to intent representation learning with LLMs.",
+    "Changed ProEx descriptor to profile extrapolation with LLMs.",
+    "Changed ProMax descriptor to LLM-derived profiles with distribution shaping.",
+    "Changed RLMRec descriptor to representation learning with LLMs; removed the incorrect reinforcement-learning wording."
+  ],
+  "bibtex_repairs": [
+    "Added arXiv DOI for ProMax.",
+    "Added arXiv eprint/DOI fields for Lin et al. while keeping TMLR as a note to avoid ACM BibTeX volume/page warnings."
+  ],
+  "external_spot_checks": [
+    "ProEx metadata checked against ACM DOI 10.1145/3770854.3780284.",
+    "ProMax metadata checked against arXiv 2604.26231.",
+    "RLMRec metadata checked against ACM DOI 10.1145/3589334.3645458.",
+    "ELMRec metadata checked against ACL Anthology 2024.emnlp-main.653.",
+    "Lin et al. metadata checked against OpenReview/TMLR plus arXiv 2205.14334."
+  ],
+  "remaining_cautions": [
+    "ProEx and ProMax are 2026 entries; re-check proceedings metadata immediately before final submission.",
+    "Citation spot-check does not replace section-level top-conference review."
+  ]
+}

@@ -86,14 +86,35 @@ it reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
 `CONTRADICTED=0`. The manuscript audit
 at
 `outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
-now reports `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`: the remaining blockers
-are final citation spot-check and section-level top-conference review, plus any
-edits required by those reviews. GPT-5.5 xhigh post-rewrite
-review rated claim safety `8.3/10`, writing/top-conference readiness `7.2/10`,
-and combined manuscript score `7.7/10` before citation repair, table
-supplementation, and this structural expansion. Do not claim final submission
-readiness until fresh ARIS paper-claim/citation audits and section-level
-reviews pass.
+reported `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION` before the final spot-check
+and section-review edits. That review gate has now advanced but is still not
+closed: `outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
+reports `overall_citation_health=HEALTHY_WITH_PROCEEDINGS_METADATA_CAUTION`,
+`must_add_count=0`, all 19 cited keys resolved, all eight official baselines
+cited, and `Paper/main.blg` still at `warning$ -- 0`; ProEx/ProMax proceedings
+metadata remains a pre-submission recheck caution. GPT-5.5 xhigh section-level
+review returned `8.0/10` conditional pass, not submission-ready. The follow-up
+audit at `outputs/summary/paper_critical/section_level_review_20260612.{json,md}`
+records the applied fixes: visible official baseline provenance table,
+all-metric C-CRP rank table, four-domain ablation summary table, method
+provenance/selection-grid detail, exact bootstrap/Holm wording, risk-penalty
+necessity downgrades, and expanded limitations. After these edits,
+`pdflatex -> bibtex -> pdflatex -> pdflatex` produces `Paper/main.pdf`
+(9 pages, 541654 bytes) with no undefined citation/reference or BibTeX blocker.
+The evidence-to-claim gate was rerun at
+`outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md,csv}`
+and remains `ok=true`, `paper_evidence_ready_for_drafting=true`,
+`final_submission_ready=false`, with the same explicit contradicted claims:
+every component necessary and positive eta/risk penalty necessary. A fresh ARIS
+claim-text pass at
+`outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`
+reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
+`submission_gate_verdict=NEEDS_FINAL_PANEL_REVIEW_BEFORE_SUBMISSION`, 12
+supported claims, and no weakly supported, unsupported, overclaimed, or
+contradicted manuscript claims. Do not claim final submission readiness until
+paper-critical tests/readiness checks remain green and another section-level
+top-conference review passes on this latest draft; Claude Opus reviewer
+perspective was still unavailable in this session.
 
 **2026-06-11 observation/motivation closure.** The Phase 2.5
 observation/motivation module is now closed as descriptive motivation-only

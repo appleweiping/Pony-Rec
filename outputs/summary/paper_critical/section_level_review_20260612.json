@@ -1,0 +1,48 @@
+{
+  "audit_name": "section_level_top_conference_review",
+  "project": "uncertainty",
+  "agent": "codex",
+  "timestamp_cest": "2026-06-12 06:38:00 +02:00",
+  "review_source": "GPT-5.5 xhigh sidecar reviewer Meitner",
+  "review_verdict_before_edits": "CONDITIONAL_PASS_NOT_SUBMISSION_READY",
+  "review_score_before_edits": 8.0,
+  "final_submission_ready": false,
+  "missing_reviewer_perspective": "Claude Opus reviewer tooling unavailable in this session.",
+  "major_findings": [
+    "Method reproducibility detail was too thin: prompt/parser/provenance, calibration, selection grid, and validation/test discipline needed to be more visible.",
+    "Official-code-level baselines needed visible provenance rather than only hidden ledger references.",
+    "The all-metric rank-first claim needed a compact visible rank-by-metric table.",
+    "Diagnostic presentation needed more concrete ablation evidence in the manuscript.",
+    "Risk-adjusted ranking should not be implied as the source of gains because test-best eta is zero."
+  ],
+  "applied_fixes": [
+    "Added artifact-level C-CRP signal provenance, parse-failure, row-count, and selection-grid details to Paper/sections/method.tex.",
+    "Added Paper/tables/baseline_provenance_summary.tex and referenced it from the controlled official comparison contribution and Experiments.",
+    "Added Paper/tables/ccrp_rank_by_metric.tex to make C-CRP rank 1/9 on all seven metrics visible for all four domains.",
+    "Added Paper/tables/ablation_ndcg10_summary.tex to expose the four-domain leave-one-component-out NDCG@10 result and its negative/weak component interpretation.",
+    "Updated paired-test wording to state 2,000 paired event bootstrap samples, 95 percent percentile intervals, and Holm alpha 0.05.",
+    "Updated uncertainty-stratification caption to define top-minus-bottom uncertainty quintiles and approximate bin size.",
+    "Downgraded abstract, introduction, method figure caption, and conclusion wording from positive risk-penalty necessity to validation-controlled ranking family plus ablated risk term.",
+    "Expanded limitations with LLM cost/latency, prompt/parser dependence, and sampled-negative candidate-set dependence.",
+    "Repaired baseline descriptors and citation metadata in Paper/references.bib and Paper/sections/experiments.tex."
+  ],
+  "verification": {
+    "latex_command": "pdflatex -interaction=nonstopmode -halt-on-error main.tex; bibtex main; pdflatex -interaction=nonstopmode -halt-on-error main.tex; pdflatex -interaction=nonstopmode -halt-on-error main.tex",
+    "latex_status": "PASS",
+    "pdf_path": "Paper/main.pdf",
+    "pdf_pages": 9,
+    "pdf_bytes": 541654,
+    "bibtex_warning_count": 0,
+    "undefined_reference_or_citation_count": 0,
+    "remaining_layout_notes": [
+      "A few minor overfull hbox warnings remain in dense ACM two-column prose and bibliography URL wrapping.",
+      "No LaTeX compile error, undefined reference, undefined citation, or BibTeX warning remains."
+    ]
+  },
+  "remaining_blockers": [
+    "Run a fresh ARIS manuscript claim/citation audit after these section-review edits.",
+    "Run the paper-critical pytest/readiness subset after doc/audit edits.",
+    "Run another section-level top-conference review pass before claiming submission readiness.",
+    "Re-check ProEx and ProMax proceedings metadata immediately before final submission."
+  ]
+}
