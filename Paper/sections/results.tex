@@ -27,24 +27,37 @@ recommendation SOTA because candidate generation is not evaluated here.
 \subsection{Uncertainty as a Reliability Signal}
 
 The observation module asks whether \method{} uncertainty is informative about
-ranking reliability. Events are binned by C-CRP event-level uncertainty, and
-the low- and high-uncertainty bins are compared. In all four domains, the
-high-uncertainty bin has lower NDCG@10, MRR, and HR@10 than the low-uncertainty
-bin. This supports the motivation that the uncertainty signal stratifies
-same-candidate ranking reliability.
+ranking reliability before using it as a decision feature. We compute
+event-level uncertainty from the candidate-level C-CRP rows, bin events into
+five uncertainty quantiles, and compare the lowest and highest bins under the
+same ranking records used by the main metric importer. The package audit checks
+1,010,000 finite uncertainty rows per domain, exactly 101 candidates per event,
+exact candidate-key alignment, and score coverage 1.0.
+
+Table~\ref{tab:uncertainty_stratification} reports the high-minus-low
+differences for \method{}. Across all four domains, the high-uncertainty bin is
+worse on NDCG@10, MRR, and HR@10. The largest gap appears on Toys
+($\Delta$NDCG@10 = -0.3038), while Home and Tools still show clear NDCG@10
+drops of -0.0690 and -0.0849. This supports the motivation that the uncertainty
+signal stratifies same-candidate ranking reliability.
 
 The module is descriptive. It does not show that manipulating uncertainty
 causes a metric change, and it is not a substitute for the official-baseline
 comparison in Table~\ref{tab:main_results}.
 
+\input{tables/uncertainty_stratification}
+
 \subsection{Component Ablations}
 
 Table~\ref{tab:module_evidence} summarizes the paper-critical diagnostic
 modules. The component ablation is especially important because it prevents a
-too-clean story. Boundary uncertainty is inert across all four domains.
-Removing counterevidence or the risk penalty is nonworse or better on NDCG@10
-in all four domains. Evidence support is directionally helpful but small, and
-the calibration gap is mixed.
+too-clean story. Using removal-minus-full deltas on NDCG@10, boundary
+uncertainty is exactly inert across all four domains (mean delta 0). Removing
+counterevidence improves the mean by 0.00168 and is nonworse in 4/4 domains;
+removing the risk penalty improves the mean by 0.00082 and is nonworse in 4/4
+domains. Removing calibration gap is mixed (mean -0.00078; nonworse in 2/4
+domains), and removing evidence support is directionally harmful but small
+(mean -0.00013; nonworse in 1/4 domains).
 
 The honest conclusion is that the full \method{} design is a useful
 paper-facing method line under the same-candidate comparison, while several
@@ -57,9 +70,12 @@ diagnostics, not as proof that every component is necessary.
 The hyperparameter module evaluates two real controls: the risk exponent
 $\eta$ and the uncertainty-weight grid. Validation-selected values are compared
 against reporting-only test sweeps on NDCG@10. Both controls are stable within
-the pre-registered relative-drop tolerance in all four domains. The maximum
-relative drop from the test-best value is $1.25\times 10^{-5}$ for $\eta$ and
-$2.97\times 10^{-4}$ for the weight grid.
+the pre-registered 5\% relative-drop tolerance in all four domains. For
+$\eta$, the validation-selected value matches the test-best value in Sports,
+Home, and Tools; Toys selects $\eta=0.25$ on validation while $\eta=0$ is
+test-best, but the relative drop is only $1.25\times 10^{-5}$. For the weight
+grid, the selected value is test-best on Home and within tolerance on Sports,
+Toys, and Tools; the maximum relative drop is $2.97\times 10^{-4}$.
 
 The same result also limits the interpretation. The test-best $\eta$ is zero
 in all four domains, so the paper must not claim that a positive risk penalty

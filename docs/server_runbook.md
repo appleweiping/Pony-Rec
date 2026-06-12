@@ -43,9 +43,13 @@ PIDs, audit summaries, and missing-file errors.
    repair for `paper/references.bib` is complete enough for audit:
    `Paper/main.blg` reports `warning$ -- 0`,
    `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
-   reports `must_add_count=0`, and `paper/main.pdf` compiles.
-   The current priority is final ARIS citation/claim spot-check, section-level
-   top-conference review, and expansion/rebalancing of the compressed draft.
+   reports `must_add_count=0`, and `Paper/main.pdf` compiles. The first
+   structural expansion pass is complete:
+   `outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`
+   records an 8-page PDF, explicit uncertainty-stratification table, expanded
+   method/protocol/result text, and `66 passed` paper-critical tests. The
+   current priority is final ARIS citation/claim spot-check and section-level
+   top-conference review, then apply the requested edits.
 3. Treat performance/table evidence as complete for the current same-candidate
    claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
    all eight official-code-level baseline rows complete; the four-new-domain

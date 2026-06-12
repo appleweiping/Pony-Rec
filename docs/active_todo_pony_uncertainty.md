@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 05:46 CEST
+Last updated: 2026-06-12 06:06 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -9,6 +9,26 @@ cycle.
 
 ## Current Checkpoint (2026-06-12)
 
+- Manuscript structural expansion checkpoint: first expansion/rebalancing pass
+  is complete, but the paper is still not final submission-ready. The method
+  section now gives the reranking-scope contract, C-CRP posterior notation,
+  uncertainty decomposition, risk-adjusted ranking formula, validation-only
+  selection, and fail-closed score gates. The experiments section now spells out
+  the same-candidate protocol, Qwen3-8B fairness policy, official/default
+  baseline policy, provenance requirements, paired-test family, and evidence
+  packaging rules. The results section now includes an explicit uncertainty
+  stratification table at `Paper/tables/uncertainty_stratification.tex`, with
+  high-minus-low C-CRP drops on NDCG@10/MRR/HR@10 for Sports, Toys, Home, and
+  Tools, plus numeric component-ablation and hyperparameter-stability summaries.
+  `pdflatex -> bibtex -> pdflatex -> pdflatex` now produces `Paper/main.pdf`
+  (8 pages, 533021 bytes), `Paper/main.blg` still reports `warning$ -- 0`, and
+  the paper-critical pytest subset reports `66 passed`. The lightweight
+  structural audit is saved at
+  `outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`.
+  Full local pytest collection is blocked by pre-existing local import-path
+  issues in historical official-runner tests; no paper-critical test failed.
+  Remaining blockers are final ARIS claim/citation spot-check and section-level
+  top-conference review, with any edits those reviews require.
 - Manuscript rewrite/citation checkpoint: the stale `paper/` draft has been migrated
   from the older calibration/old-domain narrative to the current C-CRP
   same-candidate evidence spine. Updated files include `paper/main.tex`,
@@ -17,7 +37,7 @@ cycle.
   `paper/tables/{module_evidence,significance_summary,full_official_ndcg10_ranking}.tex`,
   and `paper/CLAIM_MAP.md`; stale `paper/tables/calibration_results.tex` was
   removed. `pdflatex -> bibtex -> pdflatex -> pdflatex` now produces
-  `paper/main.pdf` (6 pages, 504041 bytes). `paper/references.bib` has been
+  `paper/main.pdf` (superseded by the 8-page structural expansion pass). `paper/references.bib` has been
   repaired to 19 used references with no `Anonymous` author placeholders, and
   `Paper/main.blg` reports `warning$ -- 0`. The ARIS-style citation repair
   audit at `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
@@ -26,8 +46,7 @@ cycle.
   The manuscript is still not submission-ready:
   `outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
   records `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`; the remaining blockers are
-  final ARIS citation/claim spot-check, section-level top-conference review,
-  and expansion/rebalancing of the compressed draft.
+  final ARIS citation/claim spot-check and section-level top-conference review.
 - Result-table supplementation checkpoint:
   `scripts/analysis/main_build_paper_result_tables.py` generates the visible
   full-baseline and significance tables from existing local evidence only.

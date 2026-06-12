@@ -22,14 +22,14 @@ consolidation. It replaces the older pre-Phase-2.5 calibration narrative.
 |---|---|---|
 | Every C-CRP component is necessary. | Contradicted | Leave-one-component-out diagnostics show neutral or nonworse removals, including boundary uncertainty and risk/counterevidence terms. |
 | Positive eta or risk penalty is necessary. | Contradicted | The hyperparameter sweep reports test-best eta = 0 in all four domains. |
-| The project is final submission-ready. | Unsupported | The evidence is ready for manuscript-level claim/citation audit, but references still need verified non-placeholder BibTeX and full section review. |
+| The project is final submission-ready. | Unsupported | The evidence is ready for manuscript-level claim/citation audit, and BibTeX warnings are repaired, but the manuscript still needs final ARIS spot-checks, section-level top-conference review, and balance/clarity passes. |
 | C-CRP is full-catalog or universal recommender SOTA. | Unsupported | All formal claims are scoped to controlled same-candidate reranking. |
 
 ## Next Manuscript Gates
 
-1. Replace placeholder BibTeX entries with verified citations for every
-   official baseline and key related-work category.
-2. Re-run ARIS paper-claim-audit on the actual manuscript text after each
+1. Re-run ARIS paper-claim-audit on the actual manuscript text after each
    major rewrite.
-3. Run ARIS citation-audit on `paper/references.bib` before any submission
-   readiness claim.
+2. Run the final ARIS citation spot-check before any submission-readiness
+   claim, even though the 2026-06-12 repair removed BibTeX warnings.
+3. Run section-level top-conference review after the compressed method,
+   protocol, result, and limitation sections have been expanded and balanced.

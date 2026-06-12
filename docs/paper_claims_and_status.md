@@ -69,17 +69,25 @@ BibTeX with 19 used references; `Paper/main.blg` reports `warning$ -- 0`, and
 `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
 reports `overall_citation_health=MINOR_ISSUES_AFTER_REPAIR`,
 `must_add_count=0`, `bibtex_warning_count=0`, and recency verdict `Good`.
-`pdflatex -> bibtex -> pdflatex -> pdflatex` produces `paper/main.pdf`
-(6 pages, 504041 bytes). The manuscript audit
+`pdflatex -> bibtex -> pdflatex -> pdflatex` now produces `Paper/main.pdf`
+(8 pages, 533021 bytes) after the first structural expansion pass. The
+expansion added detailed method notation, protocol/fairness details, an
+uncertainty-stratification table, numeric diagnostic summaries, and updated
+scientific limitations. The structural expansion audit is saved at
+`outputs/summary/paper_critical/manuscript_structural_expansion_audit_20260612.{json,md}`.
+The paper-critical pytest subset reports `66 passed`; full local pytest
+collection remains blocked by pre-existing import-path issues in historical
+official-runner tests, so it is not used as the manuscript gate. The manuscript audit
 at
 `outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
 now reports `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`: the remaining blockers
-are final ARIS citation/claim spot-check, section-level top-conference review,
-and expansion/rebalancing of the compressed draft. GPT-5.5 xhigh post-rewrite
+are final ARIS citation/claim spot-check and section-level top-conference
+review, plus any edits required by those reviews. GPT-5.5 xhigh post-rewrite
 review rated claim safety `8.3/10`, writing/top-conference readiness `7.2/10`,
-and combined manuscript score `7.7/10` before citation repair and table
-supplementation. Do not claim final submission readiness until fresh ARIS
-paper-claim/citation audits and section-level reviews pass.
+and combined manuscript score `7.7/10` before citation repair, table
+supplementation, and this structural expansion. Do not claim final submission
+readiness until fresh ARIS paper-claim/citation audits and section-level
+reviews pass.
 
 **2026-06-11 observation/motivation closure.** The Phase 2.5
 observation/motivation module is now closed as descriptive motivation-only

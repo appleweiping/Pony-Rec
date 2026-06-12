@@ -1,0 +1,47 @@
+{
+  "audit_name": "manuscript_structural_expansion_audit",
+  "project": "uncertainty",
+  "agent": "codex",
+  "timestamp_cest": "2026-06-12 06:06:53 +02:00",
+  "status": "FIRST_STRUCTURE_EXPANSION_PASS_COMPLETE",
+  "final_submission_ready": false,
+  "server_preflight": {
+    "matching_python_processes": 0,
+    "gpu_utilization": "0 %",
+    "gpu_memory": "15 MiB / 49140 MiB",
+    "disk": "17G free / 92% used"
+  },
+  "paper_changes": [
+    "Expanded Method with the reranking-scope contract, C-CRP posterior notation, uncertainty decomposition, risk-adjusted ranking, validation-only selection, and fail-closed score gates.",
+    "Expanded Experiments with the same-candidate protocol, Qwen3-8B fairness policy, official/default baseline policy, provenance requirements, paired-test family, and evidence packaging rules.",
+    "Expanded Results with an explicit uncertainty-stratification table, observation row-count gates, component-ablation deltas, and hyperparameter-stability values.",
+    "Updated Discussion limitations to scientific scope boundaries instead of the stale citation-repair blocker.",
+    "Updated CLAIM_MAP to reflect that BibTeX warnings are repaired while final ARIS spot-checks and section-level review remain required."
+  ],
+  "new_or_updated_artifacts": [
+    "Paper/tables/uncertainty_stratification.tex",
+    "Paper/main.pdf",
+    "Paper/CLAIM_MAP.md",
+    "Paper/sections/method.tex",
+    "Paper/sections/experiments.tex",
+    "Paper/sections/results.tex",
+    "Paper/sections/analysis.tex"
+  ],
+  "verification": {
+    "latex_chain": "pdflatex -> bibtex -> pdflatex -> pdflatex succeeded",
+    "pdf_pages": 8,
+    "pdf_bytes": 533021,
+    "bibtex_warning_count": 0,
+    "paper_critical_pytest_subset": "66 passed",
+    "readiness_check": "project_readiness_ok=True",
+    "bootstrap_check": "bootstrap_ok=true",
+    "stale_paper_scan": "No matches for old calibration/old-domain/SRPD/full-SOTA narrative in Paper/",
+    "full_pytest_status": "collection blocked by pre-existing local import-path issues for historical official-runner tests; no paper-critical tests failed"
+  },
+  "remaining_blockers": [
+    "Run final ARIS paper-claim-audit on the expanded manuscript text.",
+    "Run final ARIS citation spot-check before any submission-readiness claim.",
+    "Run section-level top-conference review and apply its edits.",
+    "Do not claim full-catalog SOTA, every-component necessity, or positive-risk-penalty necessity."
+  ]
+}

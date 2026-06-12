@@ -40,16 +40,22 @@ method story.
     \item \textbf{No full-catalog claim.} We evaluate controlled reranking over
     101 candidates per user. Candidate generation and full-catalog retrieval
     remain future work.
-    \item \textbf{Single LLM family.} The current formal comparison uses a
-    unified Qwen3-8B backbone. Other LLM families may change the calibration
-    and uncertainty behavior.
+    \item \textbf{Single LLM family and domain family.} The current formal
+    comparison uses a unified Qwen3-8B backbone and four Amazon-domain
+    same-candidate tasks. Other LLM families, item catalogs, and retrieval
+    distributions may change calibration and uncertainty behavior.
+    \item \textbf{Descriptive uncertainty diagnostics.} The observation module
+    shows that uncertainty stratifies reliability, but it is not a causal
+    intervention. It does not prove that changing uncertainty alone would change
+    ranking utility.
     \item \textbf{Component necessity is not established.} Several uncertainty
     components are weak or redundant in leave-one-component-out diagnostics.
     The paper therefore claims that the C-CRP ranking framework improves
     controlled same-candidate ranking and that its uncertainty signal
     stratifies reliability, not that every decomposed term is essential.
-    \item \textbf{Citation and manuscript maturity.} The evidence ledger is
-    stronger than the current bibliography. Final submission requires a full
-    citation audit and replacement of placeholder references with verified
-    published or official sources.
+    \item \textbf{External adapter policy.} We preserve official-code-level
+    baseline mechanisms and use a shared Qwen3-8B representation bridge for
+    same-candidate scoring. This gives a fair controlled comparison, but it is
+    not the same claim as reproducing each method under its original full-catalog
+    serving stack.
 \end{enumerate}

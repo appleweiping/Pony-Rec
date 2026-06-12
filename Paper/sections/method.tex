@@ -22,6 +22,13 @@ the score reduces to the calibrated posterior. This special case is important:
 our hyperparameter analysis treats it as a valid setting, and the paper does
 not claim that a positive risk exponent is always necessary.
 
+The formulation is intentionally limited to reranking. It assumes a candidate
+set has already been generated and asks whether a language-model scoring layer
+can expose enough calibrated evidence to make the ordering more reliable. This
+choice gives the method a narrow but auditable contract: for every event, each
+candidate must receive exactly one posterior, one uncertainty value, and one
+final score before the shared importer computes metrics.
+
 \subsection{Task-Grounded Candidate Evidence}
 
 For each user-candidate pair, the LLM is asked to evaluate the candidate under
@@ -35,6 +42,19 @@ recommendation: the model's relevance estimate, the support for that estimate,
 and the amount of unresolved risk. The final score exporter keeps all candidate
 keys aligned with the same-candidate task so downstream metrics can be audited
 without relying on candidate order or missing-score imputation.
+
+Let $\hat{p}_i$ denote the raw probability emitted by the LLM evidence parser
+and let $p_i$ denote the calibrated probability used for ranking. Calibration is
+validation-controlled: the calibration layer is fitted or selected before test
+evaluation and is recorded in the signal-row provenance. For candidate evidence
+we also record support $s_i\in[0,1]$ and counterevidence $q_i\in[0,1]$. The
+effective evidence score is
+\begin{equation}
+    e_i = \max(0, \min(1, s_i-q_i)).
+\end{equation}
+This makes counterevidence part of the evidence channel rather than a separate
+post-hoc penalty. The leave-one-component-out diagnostics later test whether
+this channel is useful under the frozen same-candidate configuration.
 
 \subsection{Uncertainty Decomposition}
 
@@ -58,14 +78,60 @@ reports leave-one-component-out diagnostics rather than assuming that every
 component is beneficial. In fact, the current evidence shows that several
 components are neutral or redundant under the frozen configuration.
 
+In the current implementation, boundary ambiguity is computed as
+$b_i=4p_i(1-p_i)$, which is largest near the posterior boundary and smallest
+near 0 or 1. The calibration-gap term is $g_i=|\hat{p}_i-p_i|$. Evidence
+insufficiency is $1-e_i$. With a validation-controlled weight triple
+$w=(w_b,w_g,w_e)$, normalized to sum to one, the candidate uncertainty is
+\begin{equation}
+    U_i = \operatorname{clip}_{[0,1]}
+    \left(w_b b_i + w_g g_i + w_e(1-e_i)\right).
+    \label{eq:uncertainty}
+\end{equation}
+The default/preregistered weight triple is $(0.5,0.3,0.2)$, and the
+hyperparameter module reports validation/test sensitivity over the allowed
+weight grid. The counterevidence ablation sets $q_i=0$ before computing
+$e_i$; the boundary, calibration-gap, and evidence-support ablations remove
+one uncertainty term and renormalize the remaining uncertainty weights. This
+renormalization is why we interpret ablations as diagnostic redistribution
+tests, not as proofs of independent causal necessity.
+
+\subsection{Risk-Adjusted Ranking}
+
+The final ranking score in Equation~\ref{eq:risk-score} is multiplicative:
+uncertainty reduces the calibrated base score through $(1-U_i)^\eta$. This is
+different from subtracting a fixed uncertainty penalty, and it matters for
+claim interpretation. A low-probability candidate cannot become attractive
+only because it is certain, while a high-probability but high-uncertainty
+candidate can be damped. When the risk-penalty ablation is active, or when a
+diagnostic score mode does not use uncertainty, the score is the base posterior
+or evidence score directly.
+
+For each event, candidates are sorted by descending risk-adjusted score. Ties
+are broken by a deterministic hash keyed by source event, user, item, and a
+fixed seed; this removes any dependence on original candidate order while
+preserving exact reproducibility. The score exporter emits only the required
+same-candidate schema $(\texttt{source\_event\_id},\texttt{user\_id},
+\texttt{item\_id},\texttt{score})$ for the final metric importer.
+
 \subsection{Validation Discipline}
 
 All method choices that can affect the final score are frozen or selected
 before test evaluation. Validation rows choose among allowed score modes,
-weights, and $\eta$ settings; test rows are used only for final metric
-reporting, paired tests, observation figures, component diagnostics, and
-hyperparameter sensitivity plots. The test hyperparameter sweeps reported in
-the paper are descriptive stability checks and cannot change the method.
+weights, and $\eta$ settings when a validation-selected variant is used; the
+current paper-facing comparison uses the preregistered full C-CRP setting and
+reports validation/test sweeps as sensitivity evidence. Test rows are used only
+for final metric reporting, paired tests, observation figures, component
+diagnostics, and hyperparameter sensitivity plots. The test hyperparameter
+sweeps reported in the paper are descriptive stability checks and cannot change
+the method.
+
+The fail-closed implementation checks this discipline mechanically. A score
+file is rejected if it has missing candidate keys, extra keys, duplicate keys,
+non-finite scores, excessive fully-constant events, or evidence rows that do
+not align with the same-candidate task. These checks are part of the method
+contract because they prevent a superficially plausible uncertainty score from
+entering the paper table without exact candidate coverage.
 
 \begin{figure*}[t]
 \centering

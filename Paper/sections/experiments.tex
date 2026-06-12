@@ -3,9 +3,9 @@
 
 \subsection{Experimental Setup}
 
-\paragraph{Datasets.} We evaluate on four Amazon product-review domains:
-Sports, Toys, Home, and Tools. Each domain uses 10,000 test users and a
-101-candidate same-candidate task.
+\paragraph{Datasets and Candidate Protocol.} We evaluate on four Amazon
+product-review domains: Sports, Toys, Home, and Tools. Each domain uses
+10,000 test users and a 101-candidate same-candidate task.
 
 \begin{table}[h]
 \centering
@@ -25,15 +25,31 @@ Tools & 10,000 & 101 & 1,010,000 \\
 \end{table}
 
 Each test instance consists of one ground-truth next item and 100 negatives.
-The same candidate rows are shared by all methods. A result is table-eligible
-only if its score file exactly matches the candidate key set, has no duplicate
-or missing keys, contains finite numeric scores, and passes the local/server
-provenance checks.
+The same candidate rows are shared by all methods; no method receives a
+different negative set or a different candidate order as an advantage. The
+positive item is hidden from the scoring prompt and from the baseline scoring
+wrappers. Validation rows are used only for selection or calibration decisions
+declared in advance, while test rows are reserved for final reporting and
+paired tests.
 
-\paragraph{Backbone Model.} All methods use Qwen3-8B whenever an LLM or
-LLM-derived representation is required. Baseline-specific adapters,
+A result is table-eligible only if its score file exactly matches the candidate
+key set, has no duplicate or missing keys, contains finite numeric scores, and
+passes the local/server provenance checks. The score contract is deliberately
+minimal:
+\[
+(\texttt{source\_event\_id},\texttt{user\_id},\texttt{item\_id},\texttt{score}).
+\]
+This contract lets official baselines keep their native training objective
+while forcing their final candidate scores through the same metric code.
+
+\paragraph{Backbone and Fairness Policy.} All methods use Qwen3-8B whenever an
+LLM or LLM-derived representation is required. Baseline-specific adapters,
 checkpoints, graph modules, intent modules, or representation learners are
-preserved when they are part of the official algorithm.
+preserved when they are part of the official algorithm. We do not retune every
+baseline on the test split; the primary comparison uses official default or
+recommended baseline hyperparameters, while \method{} uses fixed or
+validation-controlled settings. Full-catalog metrics reported by upstream
+repositories are not imported into the paper table.
 
 \paragraph{Baselines.} We compare against eight official-code-level
 LLM-based recommendation baselines:
@@ -50,19 +66,37 @@ LLM-based recommendation baselines:
 \end{itemize}
 
 Baselines use official default or recommended hyperparameters unless a
-documented bridge is required by the unified protocol. Test-set model selection
-is forbidden for both baselines and \method.
+documented bridge is required by the unified protocol. Each row must record the
+official repository, pinned commit, adaptation mode, checkpoint or
+representation artifact when applicable, score path, score hash, and coverage
+audit. Test-set model selection is forbidden for both baselines and \method.
 
 \paragraph{Metrics and Statistics.} We report HR@$k$ and NDCG@$k$ for
-$k\in\{5,10,20\}$, plus MRR. For each domain, \method{} is compared against
-each official baseline on all seven metrics, yielding 56 paired tests
-(8 baselines $\times$ 7 metrics). We use paired bootstrap confidence intervals
-and Holm correction.
+$k\in\{5,10,20\}$, plus MRR. The paired unit is the user event: for each
+method and metric, we compare the per-event score of \method{} with the
+corresponding per-event score of an official baseline. For each domain,
+\method{} is compared against each official baseline on all seven metrics,
+yielding 56 paired tests (8 baselines $\times$ 7 metrics). We use paired
+bootstrap confidence intervals and Holm correction over the full family of
+56 tests in that domain.
 
 \paragraph{Evidence Packaging.} Every completed row has a lightweight local
 evidence package with metrics, row counts, provenance, score audits, logs, and
 server manifest hashes. Large score files, prediction files, checkpoints, and
 embeddings remain server-side unless an archive decision requires otherwise.
+This separation keeps the GitHub artifact small while preserving enough hashes
+and row counts to detect missing or accidentally cleaned evidence. The
+paper-facing ledger contains 36 rows: 32 official baseline rows and four
+\method{} rows.
+
+\paragraph{Diagnostic Modules.} The main comparison is accompanied by three
+paper-critical diagnostics. The observation module bins events by C-CRP
+uncertainty and checks whether higher uncertainty corresponds to lower ranking
+reliability. The component module evaluates leave-one-component-out variants
+under the frozen same-candidate protocol. The hyperparameter module sweeps
+real controls, especially $\eta$ and the uncertainty weight grid, with
+validation-only selection and reporting-only test curves. These diagnostics
+are not allowed to replace the main official-baseline comparison.
 
 \subsection{Main Results}
 
