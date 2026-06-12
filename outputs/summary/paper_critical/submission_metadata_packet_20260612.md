@@ -1,6 +1,6 @@
 # Submission Metadata Packet
 
-Generated: 2026-06-12T19:28:12.708306+00:00
+Generated: 2026-06-12T20:42:15.033838+00:00
 
 - OK: `true`
 - Submission metadata packet ready: `true`
@@ -13,7 +13,7 @@ Generated: 2026-06-12T19:28:12.708306+00:00
 - Topic areas: Recommender systems, Evaluation and reproducibility, Large language models, Uncertainty and calibration
 - PDF: `Paper\main.pdf`, `9` pages, `546669` bytes
 - Source manifest files: `21`
-- Source manifest sha256: `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`
+- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
 
 ## Abstract
 

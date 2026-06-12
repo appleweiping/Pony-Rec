@@ -1,6 +1,6 @@
 # Submission Release-Candidate Stack Refresh
 
-Generated: 2026-06-12T19:28:15.017558+00:00
+Generated: 2026-06-12T20:42:18.392496+00:00
 
 - OK: `true`
 - Local release candidate ready: `true`
@@ -45,12 +45,14 @@ Generated: 2026-06-12T19:28:15.017558+00:00
 - `pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 - `pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
 - `pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation`
 - `submission_release_candidate:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
 - `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 - `submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
 - `submission_release_candidate:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `submission_release_candidate:pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation`
 - `submission_release_candidate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `submission_release_candidate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `submission_release_candidate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`

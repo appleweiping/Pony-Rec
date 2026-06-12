@@ -62,6 +62,17 @@
           "required_for_final": true
         },
         {
+          "name": "arxiv_html_promax_acm_metadata",
+          "url": "https://arxiv.org/html/2604.26231v1",
+          "required_patterns": [
+            "10.1145/3805712.3809600",
+            "979-8-4007-2599-9/2026/07",
+            "49th International ACM SIGIR Conference",
+            "Melbourne, VIC, Australia"
+          ],
+          "required_for_final": true
+        },
+        {
           "name": "sigir2026_accepted_papers_promax",
           "url": "https://sigir2026.org/en-AU/pages/program/accepted-papers",
           "required_patterns": [

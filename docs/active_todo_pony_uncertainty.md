@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 21:34 CEST
+Last updated: 2026-06-12 22:44 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -41,9 +41,15 @@ cycle.
   blockers remain `promax:final_page_range_missing_in_bib`,
   `promax:crossref_registry_not_visible:status=404`, and
   `promax:doi_resolver_not_visible:status=404`, plus manual submission-system
-  confirmation. The pre-submission refresh/freshness/RC stack was regenerated
-  afterward and still reports `local_release_candidate_ready=true` but
-  `final_submission_ready=false`.
+  confirmation. Codex also added a required ProMax arXiv HTML ACM-metadata
+  source check (`arxiv_html_promax_acm_metadata`) and updated the local ProMax
+  BibTeX entry with ISBN `979-8-4007-2599-9` and location
+  `Melbourne, VIC, Australia`, both visible in the refreshed audit. That
+  source check confirms the expected DOI/ISBN/venue metadata from the arXiv
+  HTML front matter, but it deliberately does not close the missing final ACM
+  page range, Crossref registry, or DOI resolver gates. The pre-submission
+  refresh/freshness/RC stack was regenerated afterward and still reports
+  `local_release_candidate_ready=true` but `final_submission_ready=false`.
 
 - Submission release-candidate packet added:
   `scripts/audit/main_build_submission_release_candidate_packet.py` now builds

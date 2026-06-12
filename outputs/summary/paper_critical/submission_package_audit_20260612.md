@@ -1,6 +1,6 @@
 # Submission Package Audit
 
-Generated: 2026-06-12T19:27:29.509841+00:00
+Generated: 2026-06-12T20:41:27.498753+00:00
 
 - Verdict: `READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`
 - OK: `true`
@@ -17,7 +17,7 @@ Generated: 2026-06-12T19:27:29.509841+00:00
 - External proceedings metadata ready: `False`
 - Target formatting profile: `sigir2026_full_paper_acm_anonymous` ok=`true`
 - Source package manifest files: `21`
-- Source package manifest sha256: `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`
+- Source package manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
 
 ## Remaining Blockers
 

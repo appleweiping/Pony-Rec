@@ -79,6 +79,8 @@ def _seed_bib(tmp_path: Path, *, doi: str = "10.1145/3805712.3809600", pages: st
         "  year = {2026},\n"
         f"{pages_line}"
         "  numpages = {11},\n"
+        "  isbn = {979-8-4007-2599-9},\n"
+        "  location = {Melbourne, VIC, Australia},\n"
         "  eprint = {2604.26231},\n"
         "  archivePrefix = {arXiv},\n"
         f"  doi = {{{doi}}},\n"
@@ -169,6 +171,11 @@ def test_external_proceedings_metadata_flags_promax_final_blockers(tmp_path: Pat
     assert "promax:crossref_discovery_expected_doi_seen_but_direct_not_visible" in audit["warnings"]
     sources = {item["name"]: item for item in audit["checked_entries"]["promax"]["source_checks"]}
     assert sources["sigir_accepted"]["ok"] is True
+    assert audit["checked_entries"]["promax"]["bibtex"]["isbn"] == "979-8-4007-2599-9"
+    assert (
+        audit["checked_entries"]["promax"]["bibtex"]["location"]
+        == "Melbourne, VIC, Australia"
+    )
 
 
 def test_external_proceedings_metadata_fails_on_doi_mismatch(tmp_path: Path) -> None:
@@ -488,3 +495,5 @@ def test_external_proceedings_metadata_markdown_includes_discovery_summary(tmp_p
     text = output_md.read_text(encoding="utf-8")
     assert "Crossref discovery candidates" in text
     assert "Discovery policy" in text
+    assert "ISBN: `979-8-4007-2599-9`" in text
+    assert "Location: `Melbourne, VIC, Australia`" in text

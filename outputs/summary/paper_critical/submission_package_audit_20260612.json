@@ -57,7 +57,7 @@
     "underfull_hbox_count": 6,
     "underfull_vbox_count": 8
   },
-  "created_at_utc": "2026-06-12T19:27:29.509841+00:00",
+  "created_at_utc": "2026-06-12T20:41:27.498753+00:00",
   "documentclass": {
     "documentclass": "acmart",
     "options": [
@@ -85,7 +85,7 @@
     "external_metadata_audit": {
       "exists": true,
       "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
-      "size_bytes": 20806
+      "size_bytes": 21291
     },
     "metadata_followup": {
       "exists": true,
@@ -163,7 +163,7 @@
     "references_bib": {
       "exists": true,
       "path": "Paper\\references.bib",
-      "size_bytes": 10448
+      "size_bytes": 10520
     }
   },
   "root": "D:\\Research\\Uncertainty",
@@ -324,8 +324,8 @@
         "exists": true,
         "path": "Paper\\references.bib",
         "role": "bibliography_source",
-        "sha256": "3633084d6ec06b5615e77b2485c0b0013f86bb72a1e36a314f97d5b032fdd953",
-        "size_bytes": 10448
+        "sha256": "733bec25cf32665dd627217ddb089d91d06e3afe4eeae2a609e680e355a32bd5",
+        "size_bytes": 10520
       },
       {
         "exists": true,
@@ -440,8 +440,8 @@
         "size_bytes": 643
       }
     ],
-    "manifest_sha256": "4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa",
-    "total_bytes": 652691
+    "manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
+    "total_bytes": 652763
   },
   "submission_package_ready_for_target_formatting": true,
   "target_formatting_profile": {

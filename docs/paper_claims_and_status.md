@@ -57,7 +57,15 @@ still reports `external_proceedings_metadata_ready=false` and
 title-search candidates, but `0` candidates matching the expected DOI
 `10.1145/3805712.3809600`; therefore the ProMax page-range, Crossref, and DOI
 resolver blockers remain final-blocking rather than being silently replaced by
-fuzzy search evidence.
+fuzzy search evidence. Codex then added a required ProMax arXiv HTML
+ACM-metadata source check and updated the local ProMax BibTeX entry with ISBN
+`979-8-4007-2599-9` and location `Melbourne, VIC, Australia`. The refreshed
+audit records source check `arxiv_html_promax_acm_metadata` as passing, and the
+external metadata report now exposes BibTeX `isbn` and `location` fields. This
+strengthens the provenance for the expected DOI/ISBN/venue metadata, but it is
+still not final proceedings metadata: ProMax has no final page range in BibTeX,
+Crossref `/works/10.1145/3805712.3809600` remains 404, and the DOI resolver
+remains 404.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

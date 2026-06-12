@@ -66,11 +66,14 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`
    (`READY_WITH_SCOPE_GUARDS`, 12 supported manuscript claims, no overclaims).
    The current local handoff index is
-   `outputs/summary/paper_critical/submission_release_candidate_20260612.{json,md}`:
+   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260612.{json,md}`:
    it reports `local_release_candidate_ready=true` under
    `readiness_scope=local_artifacts_only`, while preserving
    `final_submission_ready=false` because ProMax public proceedings metadata
-   and private manual submission-system confirmation remain open.
+   and private manual submission-system confirmation remain open. The ProMax
+   audit now records passing arXiv HTML ACM-metadata evidence for the expected
+   DOI/ISBN/venue/location and exposes BibTeX `isbn`/`location`, but final ACM
+   page range plus Crossref/DOI resolver visibility are still unresolved.
    The current priority is paper-critical tests/readiness checks and another
    section-level review on this latest draft before any final-readiness claim;
    Claude Opus reviewer coverage was still missing in this session.

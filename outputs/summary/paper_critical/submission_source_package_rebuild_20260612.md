@@ -1,13 +1,13 @@
 # Submission Source Package Rebuild Audit
 
-Generated: 2026-06-12T19:28:12.678753+00:00
+Generated: 2026-06-12T20:42:14.986057+00:00
 
 - OK: `true`
 - Submission source package rebuild ready: `true`
 - Final submission ready: `false`
 - Work dir: `artifacts\submission_source_package_rebuild_20260612\work`
 - Verified files: `21`
-- PDF: `artifacts\submission_source_package_rebuild_20260612\work\Paper\main.pdf`, `9` pages, `546669` bytes
+- PDF: `artifacts\submission_source_package_rebuild_20260612\work\Paper\main.pdf`, `9` pages, `546716` bytes
 - BibTeX warnings: `0`
 - Overfull hbox warnings: `0`
 - Underfull hbox/vbox warnings: `6` / `8`

@@ -1,14 +1,14 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-12T19:28:13.239685+00:00
+Generated: 2026-06-12T20:42:15.655163+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260612`
-- Git HEAD before refresh: `74543a9ef142971113d44c4208f9ac00c1f77396`
-- Tracked dirty before refresh: `false`
+- Git HEAD before refresh: `03a9afc19519c2ec06a5422c208dadef73220a0f`
+- Tracked dirty before refresh: `true`
 
 ## Steps
 
@@ -23,11 +23,11 @@ Generated: 2026-06-12T19:28:13.239685+00:00
 ## Input Fingerprints
 
 - `Paper\main.tex`: `3d4bdc8a2fe0d7c400d72f0c81a39a2a3e6bf28e4d7e482541378c7b383edf60` (840 bytes)
-- `Paper\references.bib`: `3633084d6ec06b5615e77b2485c0b0013f86bb72a1e36a314f97d5b032fdd953` (10448 bytes)
+- `Paper\references.bib`: `733bec25cf32665dd627217ddb089d91d06e3afe4eeae2a609e680e355a32bd5` (10520 bytes)
 - `Paper\main.pdf`: `588afd8311c634569e029e8061c9a8cbefd1d6b2bd53a162b89857b5296cdc86` (546669 bytes)
 - `Paper\main.log`: `38fedd0e191668ca890ca4bf0d5b048594adcfd195f36c68366144d377a6abf2` (55332 bytes)
 - `Paper\main.blg`: `da6ab355903a0f836bf20461604568a97e46bd57723631cbd77d103771afeafb` (1606 bytes)
-- `configs\paper_external_proceedings_metadata_checks.json`: `14a3cb2e177ea6c4b399831791a3a26365fa9e76021865a611c1df2a4c590833` (2862 bytes)
+- `configs\paper_external_proceedings_metadata_checks.json`: `d9ecfe176f8ed66e4a98964f20987dc422d3a8fd254c0bf48f7956ceb5c52437` (3249 bytes)
 - `outputs\summary\paper_critical\final_paper_claim_audit_after_full_panel_review_20260612.json`: `ceb6ff1eb1393580dab990e58b37afe8ff1dcb4324134ca2d04969c6c376a6db` (13282 bytes)
 - `outputs\summary\paper_critical\final_full_manuscript_panel_review_20260612.json`: `6cbad714fe6488e649bc580c1e952054ebcc6a37075050ecf0e47c4152fbad84` (4596 bytes)
 - `outputs\summary\paper_critical\final_pdf_polish_metadata_followup_20260612.json`: `dea9fc1b54dbe6ca37cc228c303e332a08009cb0d1968e5ae3a16a2d898c7e7d` (3056 bytes)
@@ -35,7 +35,7 @@ Generated: 2026-06-12T19:28:13.239685+00:00
 - `configs\paper_submission_metadata.json`: `908484005b171a66d3e9424d36986d26286e86a0272a456b461a9e75b204e1c1` (1005 bytes)
 - `configs\paper_manual_submission_checklist.json`: `e8bbef232cc418ca45976cb675411e2128075b6d8eae6d3ce23b561ecf666174` (4732 bytes)
 - `scripts\audit\main_refresh_pre_submission_gates.py`: `46ddd247e030ecd5edaf32f03f036c36f2fa4102e361a02399b64fbb463e3569` (20314 bytes)
-- `scripts\audit\main_audit_external_proceedings_metadata.py`: `848bf01c257f4dedede948f45a7bf380cc42e3e97a77e5c7f5f90516804fd88f` (26997 bytes)
+- `scripts\audit\main_audit_external_proceedings_metadata.py`: `0663e10b9d9aefb74346c23f63241167b50654f591acb0c7ec0c6373474389ff` (27205 bytes)
 - `scripts\audit\main_audit_submission_package.py`: `abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53` (33787 bytes)
 - `scripts\audit\main_build_submission_source_package.py`: `9de0d0402285cab61cb6b5acd8a1c6e1870bac5e3365b495d126ddd292ec2796` (18252 bytes)
 - `scripts\audit\main_audit_submission_source_package_rebuild.py`: `4c5ae6571bd2ba5e82e88eb43b3aa4aaaef35dee5330b429d0ce6188498dc726` (21775 bytes)

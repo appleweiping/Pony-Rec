@@ -1,6 +1,6 @@
 # External Proceedings Metadata Audit
 
-Generated: 2026-06-12T19:27:28.952638+00:00
+Generated: 2026-06-12T20:41:26.069540+00:00
 
 - OK: `true`
 - External proceedings metadata ready: `false`
@@ -17,6 +17,8 @@ Generated: 2026-06-12T19:27:28.952638+00:00
 - DOI: `10.1145/3770854.3780284`
 - Pages: `1940--1951`
 - Num pages: ``
+- ISBN: ``
+- Location: ``
 - arXiv: ``
 - Crossref: ok=`false`, status=`404`
 - DOI resolver: ok=`false`, status=`404`
@@ -46,10 +48,13 @@ Warnings:
 - DOI: `10.1145/3805712.3809600`
 - Pages: ``
 - Num pages: `11`
+- ISBN: `979-8-4007-2599-9`
+- Location: `Melbourne, VIC, Australia`
 - arXiv: `2604.26231`
 - Crossref: ok=`false`, status=`404`
 - DOI resolver: ok=`false`, status=`404`
 - Source `arxiv_2604_26231`: ok=`true`, status=`200`, missing_patterns=[]
+- Source `arxiv_html_promax_acm_metadata`: ok=`true`, status=`200`, missing_patterns=[]
 - Source `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing_patterns=[]
 - Crossref discovery candidates: `5`
 - Discovery exact-DOI candidates: `0`
