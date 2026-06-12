@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-12T21:05:39.942635+00:00
+Generated: 2026-06-12T21:43:46.601252+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -48,6 +48,7 @@ Closure conditions:
 - Rerun the external proceedings metadata audit and the release-candidate stack after metadata changes.
 
 Next commands:
+- `python -m scripts.audit.main_probe_promax_public_metadata --network-mode live --timeout-seconds 45 --output-json outputs/summary/paper_critical/promax_public_metadata_probe_YYYYMMDD.json --output-md outputs/summary/paper_critical/promax_public_metadata_probe_YYYYMMDD.md`
 - `python -m scripts.audit.main_audit_external_proceedings_metadata --network-mode live --timeout-seconds 45 --output-json outputs/summary/paper_critical/external_proceedings_metadata_recheck_YYYYMMDD.json --output-md outputs/summary/paper_critical/external_proceedings_metadata_recheck_YYYYMMDD.md`
 - `python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md`
 

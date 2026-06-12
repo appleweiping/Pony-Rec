@@ -176,4 +176,5 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
     assert "external_proceedings_metadata" in text
     assert "manual_submission_system" in text
     assert "Source manifest sha256: `" + "a" * 64 + "`" in text
+    assert "main_probe_promax_public_metadata" in text
     assert "main_refresh_submission_release_candidate_stack" in text

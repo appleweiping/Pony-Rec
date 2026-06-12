@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 23:08 CEST
+Last updated: 2026-06-12 23:45 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,19 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- ProMax public metadata probe added:
+  `scripts/audit/main_probe_promax_public_metadata.py` is now the lightweight
+  live monitor for the remaining public ProMax proceedings blocker. It checks
+  the local ProMax BibTeX page field, direct Crossref `/works` lookup, DOI
+  resolver, ACM DL, arXiv HTML ACM metadata, and the SIGIR 2026 accepted-papers
+  source without running the full submission stack. The generated
+  `outputs/summary/paper_critical/promax_public_metadata_probe_20260612.{json,md}`
+  reports `ok=true`, `promax_public_metadata_ready=false`, and
+  `final_submission_ready=false`: Crossref remains `404`, DOI resolver remains
+  `404`, ACM DL returns `403`, while arXiv HTML and SIGIR accepted-page source
+  probes pass. The final blocker closure packet now lists this probe as the
+  first command for the `external_proceedings_metadata` closure group.
 
 - Final submission blocker closure packet added:
   `scripts/audit/main_build_final_submission_blocker_closure_packet.py` now

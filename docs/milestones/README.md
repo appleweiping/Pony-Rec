@@ -118,8 +118,15 @@ location; the local BibTeX entry records ISBN `979-8-4007-2599-9` and location
 `Melbourne, VIC, Australia`, and the audit JSON/Markdown now exposes those
 fields. The discovery layer found `5` ProMax title-search candidates but `0`
 matching the expected DOI, so it does not close any final metadata gate; ProMax
-final page range and DOI/Crossref visibility remain unresolved. The submission package audit now includes a
-privacy-preserving anonymous source leak scan over the TeX closure and the
+final page range and DOI/Crossref visibility remain unresolved. The lightweight
+ProMax public metadata probe
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260612.{json,md}`
+now checks BibTeX pages, Crossref, DOI resolver, ACM DL, arXiv HTML ACM
+metadata, and the SIGIR accepted-paper source without running the full
+submission stack; it reports Crossref `404`, DOI resolver `404`, ACM DL `403`,
+source probes passing, and `promax_public_metadata_ready=false`, so it is
+monitoring evidence rather than a readiness upgrade. The submission package
+audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission
 package can also be staged locally from the audited source manifest via

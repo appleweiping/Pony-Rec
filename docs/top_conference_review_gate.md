@@ -359,6 +359,20 @@ local artifact, public external metadata, and private manual-submission closure
 paths, records the source-manifest sha256 needed for the private confirmation
 file, and gives the exact recheck commands.
 
+For quick ProMax-only public metadata monitoring before running the broader
+external metadata audit, use:
+
+```bash
+python -m scripts.audit.main_probe_promax_public_metadata \
+  --network-mode live \
+  --timeout-seconds 45 \
+  --output-json outputs/summary/paper_critical/promax_public_metadata_probe_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/promax_public_metadata_probe_YYYYMMDD.md
+```
+
+This probe checks whether the public page/Crossref/DOI conditions have become
+true. It cannot mark final submission ready by itself.
+
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
 

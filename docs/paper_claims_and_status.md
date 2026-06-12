@@ -83,6 +83,16 @@ manual item IDs needed in a future untracked private confirmation file. It
 does not store private author/COI/reviewer/account data and does not close
 final submission readiness.
 
+**2026-06-12 ProMax public metadata probe.** Codex added
+`scripts/audit/main_probe_promax_public_metadata.py` as a lightweight live
+monitor for the public ProMax metadata blocker. The generated
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260612.{json,md}`
+reports `promax_public_metadata_ready=false`, `final_submission_ready=false`,
+Crossref status `404`, DOI resolver status `404`, ACM DL status `403`, and
+passing arXiv HTML / SIGIR accepted-paper source probes. The probe is now the
+first external-metadata command in the blocker closure packet, but it cannot by
+itself mark the paper final-submission-ready.
+
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local
 handoff index over the final gate, refresh freshness audit, anonymous source
