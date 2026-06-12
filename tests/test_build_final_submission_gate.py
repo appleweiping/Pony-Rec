@@ -1,0 +1,111 @@
+import json
+from pathlib import Path
+
+from scripts.audit.main_build_final_submission_gate import build_final_submission_gate
+
+
+def _write_json(path: Path, payload: dict) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def _seed_inputs(tmp_path: Path) -> dict[str, Path]:
+    package = _write_json(
+        tmp_path / "submission_package.json",
+        {
+            "schema_version": "package.v1",
+            "created_at_utc": "2026-06-12T00:00:00Z",
+            "ok": True,
+            "submission_package_ready_for_target_formatting": True,
+            "final_submission_ready": False,
+            "warnings": [],
+            "failures": [],
+            "remaining_blockers": ["promax:final_page_range_missing_in_bib"],
+        },
+    )
+    metadata = _write_json(
+        tmp_path / "metadata_packet.json",
+        {
+            "schema_version": "metadata.v1",
+            "created_at_utc": "2026-06-12T00:00:00Z",
+            "ok": True,
+            "submission_metadata_packet_ready": True,
+            "final_submission_ready": False,
+            "warnings": [],
+            "failures": [],
+            "remaining_blockers": ["promax:final_page_range_missing_in_bib"],
+        },
+    )
+    external = _write_json(
+        tmp_path / "external_metadata.json",
+        {
+            "schema_version": "external.v1",
+            "created_at_utc": "2026-06-12T00:00:00Z",
+            "ok": True,
+            "external_proceedings_metadata_ready": False,
+            "final_submission_ready": False,
+            "warnings": ["proex:crossref_not_visible:status=404"],
+            "failures": [],
+            "remaining_blockers": ["promax:crossref_registry_not_visible:status=404"],
+        },
+    )
+    manual = _write_json(
+        tmp_path / "manual_checklist.json",
+        {
+            "schema_version": "manual.v1",
+            "created_at_utc": "2026-06-12T00:00:00Z",
+            "ok": True,
+            "manual_submission_checklist_ready": True,
+            "manual_submission_system_ready": False,
+            "final_submission_ready": False,
+            "warnings": [],
+            "failures": [],
+            "remaining_blockers": ["manual_submission_system_items_not_confirmed"],
+        },
+    )
+    return {"package": package, "metadata": metadata, "external": external, "manual": manual}
+
+
+def test_final_submission_gate_aggregates_external_and_manual_blockers(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+
+    gate = build_final_submission_gate(
+        root=tmp_path,
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        external_metadata_audit_json=paths["external"].relative_to(tmp_path),
+        manual_checklist_json=paths["manual"].relative_to(tmp_path),
+    )
+
+    assert gate["ok"] is True
+    assert gate["all_local_artifact_gates_ok"] is True
+    assert gate["external_proceedings_metadata_ready"] is False
+    assert gate["manual_submission_system_ready"] is False
+    assert gate["final_submission_ready"] is False
+    assert gate["verdict"] == "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED"
+    assert "external_proceedings_metadata_not_ready" in gate["remaining_blockers"]
+    assert "manual_submission_system_not_ready" in gate["remaining_blockers"]
+    assert "promax:crossref_registry_not_visible:status=404" in gate["remaining_blockers"]
+    assert "manual_submission_system_items_not_confirmed" in gate["remaining_blockers"]
+    assert gate["warnings"] == ["external_proceedings_metadata:proex:crossref_not_visible:status=404"]
+
+
+def test_final_submission_gate_fails_closed_on_unexpected_subgate_final_ready(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    package = json.loads(paths["package"].read_text(encoding="utf-8"))
+    package["final_submission_ready"] = True
+    paths["package"].write_text(json.dumps(package), encoding="utf-8")
+
+    gate = build_final_submission_gate(
+        root=tmp_path,
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        external_metadata_audit_json=paths["external"].relative_to(tmp_path),
+        manual_checklist_json=paths["manual"].relative_to(tmp_path),
+    )
+
+    assert gate["ok"] is False
+    assert gate["final_submission_ready"] is False
+    assert "submission_package:unexpected_local_final_submission_ready" in gate["failures"]
+    assert gate["verdict"] == "FINAL_SUBMISSION_GATE_NEEDS_REPAIR"

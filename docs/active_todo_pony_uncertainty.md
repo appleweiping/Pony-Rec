@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 10:55 CEST
+Last updated: 2026-06-12 11:17 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Final submission gate added:
+  `scripts/audit/main_build_final_submission_gate.py` aggregates the four
+  local pre-submission gates:
+  `submission_package_audit_20260612.json`,
+  `submission_metadata_packet_20260612.json`,
+  `external_proceedings_metadata_recheck_20260612.json`, and
+  `manual_submission_checklist_20260612.json`. The generated summary
+  `outputs/summary/paper_critical/final_submission_gate_20260612.{json,md}`
+  reports `ok=true`, `all_local_artifact_gates_ok=true`,
+  `external_proceedings_metadata_ready=false`,
+  `manual_submission_system_ready=false`, `final_submission_ready=false`, and
+  verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. This is now the
+  single first-read artifact for final submission status. It prevents the
+  package/metadata/checklist local passes from being mistaken for final
+  readiness while ProMax page-range/DOI registry visibility and private
+  submission-system fields remain unresolved.
 
 - Manual submission checklist packet added:
   `scripts/audit/main_build_manual_submission_checklist.py` with config

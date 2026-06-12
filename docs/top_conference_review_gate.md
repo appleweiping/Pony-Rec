@@ -233,6 +233,20 @@ section/table sources, bibliography sources, compiled `main.bbl`, the checked
 PDF, and local figure assets, with no references to files outside the paper
 source package.
 
+After running the package audit, metadata packet, external proceedings
+metadata audit, and manual submission checklist, build the final local gate:
+
+```bash
+python -m scripts.audit.main_build_final_submission_gate \
+  --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md
+```
+
+This is the single local summary for pre-submission status. It must not mark
+`final_submission_ready=true` unless all local artifact gates pass, external
+proceedings metadata is ready, and manual submission-system items have actually
+been completed.
+
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
 

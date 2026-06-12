@@ -44,6 +44,20 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 final submission gate.** Codex added
+`scripts/audit/main_build_final_submission_gate.py` as the final local
+pre-submission aggregator over the package audit, metadata packet, external
+proceedings metadata audit, and manual submission checklist. The generated
+`outputs/summary/paper_critical/final_submission_gate_20260612.{json,md}`
+reports `ok=true`, `all_local_artifact_gates_ok=true`,
+`external_proceedings_metadata_ready=false`,
+`manual_submission_system_ready=false`, `final_submission_ready=false`, and
+verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. This is the
+current authoritative local submission-status summary: it confirms that the
+repository-side artifacts are ready enough for target formatting, but final
+submission is still blocked by ProMax final page-range/DOI registry visibility
+and by private manual submission-system fields that cannot be stored in git.
+
 **2026-06-12 manual submission checklist packet.** Codex added
 `scripts/audit/main_build_manual_submission_checklist.py` and
 `configs/paper_manual_submission_checklist.json` to make the remaining

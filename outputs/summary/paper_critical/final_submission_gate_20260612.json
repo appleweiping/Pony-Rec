@@ -1,0 +1,145 @@
+{
+  "all_local_artifact_gates_ok": true,
+  "created_at_utc": "2026-06-12T09:16:32.163778+00:00",
+  "external_proceedings_metadata_ready": false,
+  "failures": [],
+  "final_submission_ready": false,
+  "gates": [
+    {
+      "created_at_utc": "2026-06-12T08:23:57.123527+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "gate_id": "submission_package",
+      "ok": true,
+      "path": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json",
+        "size_bytes": 15541
+      },
+      "ready": true,
+      "ready_field": "submission_package_ready_for_target_formatting",
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed."
+      ],
+      "schema_version": "2026-06-12.submission_package_audit.v1",
+      "warnings": [
+        "underfull_layout_warnings:hbox=6,vbox=8"
+      ]
+    },
+    {
+      "created_at_utc": "2026-06-12T08:25:06.557597+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "gate_id": "submission_metadata_packet",
+      "ok": true,
+      "path": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.json",
+        "size_bytes": 4325
+      },
+      "ready": true,
+      "ready_field": "submission_metadata_packet_ready",
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed."
+      ],
+      "schema_version": "2026-06-12.submission_metadata_packet.v1",
+      "warnings": []
+    },
+    {
+      "created_at_utc": "2026-06-12T08:22:52.960413+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "gate_id": "external_proceedings_metadata",
+      "ok": true,
+      "path": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
+        "size_bytes": 6060
+      },
+      "ready": false,
+      "ready_field": "external_proceedings_metadata_ready",
+      "remaining_blockers": [
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed."
+      ],
+      "schema_version": "2026-06-12.external_proceedings_metadata_audit.v1",
+      "warnings": [
+        "proex:crossref_not_visible:status=404",
+        "proex:doi_resolver_not_visible:status=404"
+      ]
+    },
+    {
+      "created_at_utc": "2026-06-12T08:53:32.851903+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "gate_id": "manual_submission_checklist",
+      "ok": true,
+      "path": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.json",
+        "size_bytes": 14457
+      },
+      "ready": false,
+      "ready_field": "manual_submission_system_ready",
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed.",
+        "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+        "manual_submission_system_items_not_confirmed"
+      ],
+      "schema_version": "2026-06-12.manual_submission_checklist.v1",
+      "warnings": []
+    }
+  ],
+  "input_paths": {
+    "external_metadata_audit": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
+    "manual_checklist": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.json",
+    "submission_metadata_packet": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.json",
+    "submission_package_audit": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json"
+  },
+  "manual_submission_system_ready": false,
+  "mode": "local_read_only_final_submission_gate",
+  "next_actions": [
+    "Rerun external proceedings metadata recheck immediately before final submission.",
+    "Rerun submission package, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.",
+    "Complete private author/COI/reviewer/declaration fields only inside the submission system.",
+    "Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are both ready."
+  ],
+  "ok": true,
+  "read_only": true,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed.",
+    "external_proceedings_metadata_not_ready",
+    "manual_submission_system_not_ready",
+    "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+    "manual_submission_system_items_not_confirmed"
+  ],
+  "schema_version": "2026-06-12.final_submission_gate.v1",
+  "verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED",
+  "warnings": [
+    "submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "external_proceedings_metadata:proex:crossref_not_visible:status=404",
+    "external_proceedings_metadata:proex:doi_resolver_not_visible:status=404"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}
