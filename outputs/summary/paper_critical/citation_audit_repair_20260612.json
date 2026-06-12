@@ -1,0 +1,63 @@
+{
+  "schema_version": "2026-06-12.citation_audit_repair.v1",
+  "generated_at_utc": "2026-06-12T03:50:00Z",
+  "skill_used": "aris-citation-audit",
+  "manuscript": "Paper/main.tex",
+  "bibliography": "Paper/references.bib",
+  "bibtex_log": "Paper/main.blg",
+  "overall_citation_health": "MINOR_ISSUES_AFTER_REPAIR",
+  "completeness": {
+    "official_baselines_cited": [
+      "llm2rec",
+      "llmemb",
+      "llmesr",
+      "irllrec",
+      "proex",
+      "promax",
+      "elmrec",
+      "rlmrec"
+    ],
+    "official_baseline_count": 8,
+    "foundation_categories_satisfied": [
+      "sequential_recommendation",
+      "calibration",
+      "llm_uncertainty",
+      "bayesian_or_distribution_free_uncertainty",
+      "sampled_same_candidate_evaluation"
+    ],
+    "must_add_count": 0
+  },
+  "fairness": {
+    "all_competing_methods_cited": true,
+    "strawman_detected": false,
+    "major_competing_group_excluded": false,
+    "placeholder_authors_remaining": 0,
+    "cautions": [
+      "ProEx and ProMax are 2026 accepted/future proceedings entries as of 2026-06-12; re-check final proceedings metadata before submission."
+    ]
+  },
+  "recency": {
+    "total_citations": 19,
+    "citations_2024_2026": 8,
+    "citations_2024_2026_fraction": 0.42105263157894735,
+    "citations_2022_2026": 11,
+    "citations_2022_2026_fraction": 0.5789473684210527,
+    "most_recent_year": 2026,
+    "oldest_year": 1999,
+    "verdict": "Good"
+  },
+  "bibtex_quality": {
+    "bibtex_pass": true,
+    "bibtex_warning_count": 0,
+    "main_blg_warning_function_count": 0,
+    "unresolved_citation_count": 0,
+    "anonymous_author_entries": 0,
+    "placeholder_entries_removed": true
+  },
+  "final_submission_ready": false,
+  "remaining_actions": [
+    "Re-run citation audit after any new related-work paragraph or baseline is added.",
+    "Spot-check ProEx/ProMax final proceedings metadata before submission.",
+    "Continue manuscript section review; citation repair alone does not make the paper submission-ready."
+  ]
+}

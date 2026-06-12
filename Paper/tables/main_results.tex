@@ -1,55 +1,30 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Main results on four Amazon domains. All methods use Qwen3-8B backbone with 101-candidate same-candidate protocol. \textbf{Bold}: best result. \underline{Underline}: second best. $\dagger$: our method.}
+\caption{Main same-candidate results. Each domain has 10,000 users and 101
+candidates per user. We show \method{} and the strongest official baseline by
+NDCG@10; the full evidence ledger contains all eight official baselines per
+domain. Bold marks the better value between the two shown rows.}
 \label{tab:main_results}
-\begin{tabular}{ll|ccc|ccc|c}
+\begin{tabular}{llrrrrrrr}
 \toprule
 Domain & Method & HR@5 & HR@10 & HR@20 & NDCG@5 & NDCG@10 & NDCG@20 & MRR \\
 \midrule
-\multirow{9}{*}{Beauty}
-& ProEx & \textbf{0.164} & \textbf{0.253} & \textbf{0.385} & \textbf{0.123} & \textbf{0.151} & \textbf{0.184} & \textbf{0.143} \\
-& \textbf{Ours}$^\dagger$ & \underline{0.157} & \underline{0.229} & \underline{0.369} & \underline{0.111} & \underline{0.134} & \underline{0.169} & \underline{0.128} \\
-& IRLLRec & 0.152 & 0.220 & 0.343 & 0.107 & 0.129 & 0.160 & 0.124 \\
-& ProMax & 0.151 & 0.214 & 0.312 & 0.107 & 0.127 & 0.152 & 0.122 \\
-& RLMRec & 0.139 & 0.197 & 0.312 & 0.106 & 0.125 & 0.153 & 0.125 \\
-& LLMEmb & 0.138 & 0.238 & 0.360 & 0.090 & 0.123 & 0.153 & 0.110 \\
-& LLM-ESR & 0.121 & 0.207 & 0.335 & 0.077 & 0.104 & 0.136 & 0.097 \\
-& ELMRec & 0.085 & 0.144 & 0.232 & 0.060 & 0.079 & 0.101 & 0.081 \\
-& LLM2Rec & 0.062 & 0.104 & 0.209 & 0.038 & 0.052 & 0.078 & 0.058 \\
+\multirow{2}{*}{Sports}
+& Best official (LLMEmb) & 0.2124 & 0.3384 & 0.4900 & 0.1389 & 0.1795 & 0.2177 & 0.1539 \\
+& \textbf{\method} & \textbf{0.2745} & \textbf{0.3819} & \textbf{0.5172} & \textbf{0.1985} & \textbf{0.2329} & \textbf{0.2670} & \textbf{0.2076} \\
 \midrule
-\multirow{9}{*}{Books}
-& \textbf{Ours}$^\dagger$ & \textbf{0.374} & \textbf{0.476} & \underline{0.592} & \textbf{0.300} & \textbf{0.333} & \textbf{0.362} & \textbf{0.306} \\
-& LLMEmb & \underline{0.335} & \underline{0.472} & \textbf{0.631} & \underline{0.229} & \underline{0.274} & \underline{0.314} & \underline{0.233} \\
-& LLM2Rec & 0.262 & 0.372 & 0.505 & 0.188 & 0.223 & 0.257 & 0.198 \\
-& IRLLRec & 0.180 & 0.306 & 0.577 & 0.127 & 0.166 & 0.235 & 0.155 \\
-& RLMRec & 0.152 & 0.232 & 0.435 & 0.105 & 0.130 & 0.181 & 0.127 \\
-& ProEx & 0.153 & 0.257 & 0.394 & 0.097 & 0.130 & 0.165 & 0.114 \\
-& ProMax & 0.114 & 0.171 & 0.266 & 0.080 & 0.098 & 0.122 & 0.097 \\
-& LLM-ESR & 0.083 & 0.148 & 0.249 & 0.051 & 0.072 & 0.098 & 0.073 \\
-& ELMRec & 0.057 & 0.109 & 0.211 & 0.036 & 0.052 & 0.078 & 0.058 \\
+\multirow{2}{*}{Toys}
+& Best official (LLMEmb) & 0.2499 & 0.3505 & 0.4866 & 0.1725 & 0.2049 & 0.2391 & 0.1814 \\
+& \textbf{\method} & \textbf{0.3172} & \textbf{0.3964} & \textbf{0.5059} & \textbf{0.2452} & \textbf{0.2708} & \textbf{0.2983} & \textbf{0.2503} \\
 \midrule
-\multirow{9}{*}{Electronics}
-& \textbf{Ours}$^\dagger$ & \textbf{0.218} & \textbf{0.299} & \textbf{0.418} & \textbf{0.157} & \textbf{0.183} & \textbf{0.213} & \textbf{0.168} \\
-& LLMEmb & \underline{0.140} & \underline{0.245} & \underline{0.400} & \underline{0.086} & \underline{0.120} & \underline{0.159} & \underline{0.107} \\
-& IRLLRec & 0.121 & 0.188 & 0.317 & 0.078 & 0.100 & 0.132 & 0.097 \\
-& RLMRec & 0.097 & 0.161 & 0.272 & 0.061 & 0.082 & 0.109 & 0.081 \\
-& LLM-ESR & 0.077 & 0.143 & 0.250 & 0.047 & 0.068 & 0.095 & 0.068 \\
-& ProEx & 0.071 & 0.131 & 0.252 & 0.044 & 0.063 & 0.093 & 0.067 \\
-& ProMax & 0.073 & 0.123 & 0.220 & 0.046 & 0.062 & 0.086 & 0.066 \\
-& LLM2Rec & 0.060 & 0.117 & 0.233 & 0.035 & 0.053 & 0.082 & 0.058 \\
-& ELMRec & 0.056 & 0.105 & 0.205 & 0.033 & 0.049 & 0.074 & 0.055 \\
+\multirow{2}{*}{Home}
+& Best official (LLMEmb) & 0.1079 & 0.1856 & 0.3169 & 0.0690 & 0.0939 & 0.1267 & 0.0901 \\
+& \textbf{\method} & \textbf{0.1561} & \textbf{0.2264} & \textbf{0.3505} & \textbf{0.1098} & \textbf{0.1324} & \textbf{0.1635} & \textbf{0.1259} \\
 \midrule
-\multirow{9}{*}{Movies}
-& LLMEmb & \textbf{0.199} & \textbf{0.334} & \textbf{0.515} & \textbf{0.126} & \textbf{0.169} & \textbf{0.215} & \textbf{0.144} \\
-& LLM2Rec & \underline{0.175} & \underline{0.267} & 0.394 & \underline{0.117} & \underline{0.146} & 0.178 & \underline{0.132} \\
-& IRLLRec & 0.164 & 0.263 & \underline{0.456} & 0.108 & 0.140 & \underline{0.188} & 0.129 \\
-& RLMRec & 0.153 & 0.247 & 0.377 & 0.098 & 0.128 & 0.161 & 0.116 \\
-& \textbf{Ours}$^\dagger$ & 0.145 & 0.208 & 0.331 & 0.108 & 0.128 & 0.159 & 0.127 \\
-& ProEx & 0.146 & 0.245 & 0.384 & 0.094 & 0.125 & 0.160 & 0.112 \\
-& ProMax & 0.140 & 0.218 & 0.333 & 0.093 & 0.118 & 0.147 & 0.109 \\
-& LLM-ESR & 0.083 & 0.162 & 0.305 & 0.049 & 0.075 & 0.111 & 0.073 \\
-& ELMRec & 0.075 & 0.141 & 0.255 & 0.046 & 0.067 & 0.095 & 0.068 \\
+\multirow{2}{*}{Tools}
+& Best official (LLMEmb) & 0.1365 & 0.2257 & 0.3637 & 0.0875 & 0.1159 & 0.1505 & 0.1065 \\
+& \textbf{\method} & \textbf{0.1937} & \textbf{0.2696} & \textbf{0.3931} & \textbf{0.1419} & \textbf{0.1661} & \textbf{0.1970} & \textbf{0.1559} \\
 \bottomrule
 \end{tabular}
 \end{table*}

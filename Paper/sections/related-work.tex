@@ -3,28 +3,55 @@
 
 \subsection{LLM-Based Recommendation}
 
-The integration of large language models into recommendation systems has followed several paradigms. \textbf{Embedding-based methods} such as LLMEmb~\cite{llmemb} extract item representations from LLM hidden states and compute similarity scores. \textbf{Sequential methods} like LLM2Rec~\cite{llm2rec} and LLM-ESR~\cite{llmesr} combine LLM features with sequential models (SASRec~\cite{sasrec}) for next-item prediction. \textbf{Profile-based methods} including ProEx~\cite{proex} and ProMax~\cite{promax} leverage LLMs to generate user profiles that guide recommendation. \textbf{Graph-enhanced methods} such as ELMRec~\cite{elmrec} and RLMRec~\cite{rlmrec} combine graph collaborative signals with LLM reasoning.
+The integration of large language models into recommendation systems has
+followed several paradigms. \textbf{Embedding-based methods} such as
+LLMEmb~\cite{llmemb} extract item representations from LLM hidden states and
+compute similarity scores. \textbf{Sequential methods} such as
+LLM2Rec~\cite{llm2rec} and LLM-ESR~\cite{llmesr} combine LLM features with
+sequential recommenders such as SASRec~\cite{sasrec}. \textbf{Profile-based
+methods} including ProEx~\cite{proex} and ProMax~\cite{promax} use LLM-derived
+profiles as preference signals. \textbf{Graph and intent methods} such as
+ELMRec~\cite{elmrec}, RLMRec~\cite{rlmrec}, and IRLLRec~\cite{irllrec}
+combine collaborative structure with language-derived representations.
 
-While these methods demonstrate the versatility of LLMs for recommendation, they share a common limitation: none explicitly addresses the calibration quality of their scoring outputs. Our work is orthogonal to architectural choices — we focus on \emph{how} the LLM is prompted to produce scores, which can be applied to any LLM-based recommender.
+These methods differ in architecture and training objective, which makes a
+fair comparison difficult unless the evaluation protocol is tightly controlled.
+Our work treats these systems as official external baselines: each method keeps
+its declared architecture and objective, while the data adapter, LLM backbone,
+and score exporter are standardized so all methods are evaluated over the same
+candidate rows.
 
-\subsection{Confidence and Calibration in Neural Networks}
+\subsection{Calibration and Uncertainty}
 
-Calibration of neural network predictions has been extensively studied~\cite{guo2017calibration, niculescu2005predicting}. Post-hoc methods such as temperature scaling~\cite{guo2017calibration}, Platt scaling~\cite{platt1999probabilistic}, and isotonic regression~\cite{zadrozny2002transforming} can improve calibration without retraining. However, these methods assume access to a held-out calibration set and primarily improve Expected Calibration Error (ECE) without necessarily improving discriminative performance (AUROC).
+Calibration of neural predictions has been extensively studied in supervised
+learning~\cite{guo2017calibration,niculescu2005predicting}. Post-hoc methods
+such as temperature scaling, Platt scaling~\cite{platt1999probabilistic}, and
+isotonic regression~\cite{zadrozny2002transforming} can improve probability
+calibration when a suitable calibration set is available. In the LLM setting,
+prior work has studied whether models can express their own uncertainty in
+words or probabilities~\cite{kadavath2022language,tian2023just,lin2022teaching}.
 
-In the LLM era, calibration of verbalized confidence has been studied for question answering~\cite{kadavath2022language, tian2023just} and factual knowledge~\cite{lin2022teaching}. These works find that LLMs can be prompted to output calibrated probabilities for factual questions. We extend this finding to the recommendation domain, where the ``question'' is whether a user will interact with a specific item.
+Recommendation adds a different challenge: uncertainty must be useful for a
+ranking decision rather than only well calibrated as a scalar probability. We
+therefore evaluate whether an event-level uncertainty signal stratifies ranking
+reliability and whether risk-adjusted scores improve same-candidate
+performance under paired tests.
 
 \subsection{Uncertainty in Recommendation}
 
-Uncertainty quantification for recommendation has been explored through Bayesian approaches~\cite{zhang2020bayesian}, ensemble methods~\cite{mcauley2012learning}, and conformal prediction~\cite{angelopoulos2021gentle}. However, these methods typically require model modifications or multiple forward passes. Our approach achieves calibrated uncertainty \emph{for free} — the probability estimate is a natural byproduct of the scoring prompt, requiring no additional computation.
+Uncertainty quantification for recommendation has been explored through
+Bayesian approaches~\cite{wang2016bayesian}, ensembles, and conformal
+prediction~\cite{angelopoulos2021gentle}. Much of this work focuses on model
+uncertainty or prediction-set validity. Our focus is complementary: we construct
+a task-grounded candidate-level posterior and study whether its uncertainty
+components are actionable for reranking under the same candidate set.
 
-\subsection{Knowledge Distillation and Preference Learning}
+\subsection{Same-Candidate Evaluation}
 
-Knowledge distillation~\cite{hinton2015distilling} transfers capabilities from a large teacher model to a smaller student. In recommendation, this paradigm has gained traction as LLMs demonstrate strong zero-shot ranking ability but remain too expensive for production serving. PEAPOD~\cite{peapod2024} distills personalized preferences from LLM outputs into compact generative recommenders. Bidirectional KD~\cite{bidirectional_kd2025} enables mutual learning between LLMs and sequential models. Rank-DistiLLM~\cite{rankdistillm2024} distills LLM ranking knowledge into cross-encoders for efficient re-ranking. Beyond simple output matching, DRDO~\cite{drdo2024} jointly optimizes reward distillation and preference alignment.
-
-Parameter-efficient fine-tuning via LoRA~\cite{hu2022lora} offers an alternative path: rather than distilling into a separate architecture, one can specialize the LLM itself through low-rank adaptation. Multi-Scale LoRA~\cite{multiscale_lora2025} explores rank allocation strategies for recommendation tasks, while mechanistic analysis~\cite{mechanistic_lora2025} reveals how LoRA adapters modify attention patterns for reranking. The gap between LLM and traditional recommender performance can also be closed from the other direction — \citet{empowering_seq2024} show that sequential models with LLM-derived training signals approach LLM-level accuracy.
-
-Our SRPD method occupies a distinct position: we use the base LLM's own ranking as a \emph{structured preference signal} to train domain-specific LoRA adapters. Unlike standard distillation that transfers from a larger to a smaller model, SRPD distills from the model's \emph{zero-shot ranking behavior} back into itself via supervised fine-tuning, creating a self-improving loop that preserves the model's generative capabilities while specializing its ranking preferences.
-
-\subsection{Prompt Engineering for Recommendation}
-
-Recent work has explored various prompting strategies for LLM-based recommendation~\cite{wang2023recmind, dai2023uncovering}. Most focus on improving ranking accuracy through better context formatting or chain-of-thought reasoning. Our contribution is distinct: we show that the \emph{output format} (asking for a probability with justification) is more important than the input format, and that this simple change simultaneously improves both ranking and calibration.
+Sampled candidate evaluation can introduce subtle fairness risks if different
+methods score different candidates or if full-catalog metrics are mixed with
+reranking metrics~\cite{krichene2020sampled}. For this reason, our comparison
+uses a same-candidate score contract: every method must emit a finite score for
+the exact candidate key set, and all metrics are computed by a shared importer.
+This does not replace full-catalog retrieval evaluation, but it makes the
+reranking claim auditable.

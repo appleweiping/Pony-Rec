@@ -3,78 +3,80 @@
 
 \subsection{Problem Formulation}
 
-Given a user $u$ with interaction history $H_u = \{h_1, h_2, \ldots, h_m\}$ and a candidate set $C = \{c_1, c_2, \ldots, c_n\}$ containing one positive item $c^+$ and $n-1$ negative items, the task is to rank candidates such that $c^+$ appears as high as possible.
+Given a user $u$ with interaction history $H_u$ and a candidate set
+$C_u=\{c_1,\ldots,c_n\}$, the same-candidate reranking task is to order all
+candidates so that the held-out next item is ranked as highly as possible. In
+our formal setting, $n=101$ for every test event: one positive item and 100
+negatives. Every compared method must produce one finite score per
+$(u,c_i)$ pair under the same key schema.
 
-In LLM-based recommendation, a language model $\mathcal{M}$ assigns a relevance score $s_i = f_\mathcal{M}(H_u, c_i)$ to each candidate. The ranking is determined by sorting candidates in descending order of $s_i$.
-
-\subsection{Observation: LLM Confidence is Informative but Unreliable}
-
-We first establish the motivating observation. When prompting Qwen3-8B to output a confidence score alongside its recommendation decision, we find:
-
-\begin{enumerate}
-    \item \textbf{Informative:} The confidence signal correlates with correctness (AUROC $> 0.5$ across all domains).
-    \item \textbf{Unreliable:} The confidence is severely miscalibrated (ECE $\in [0.31, 0.66]$ for all baselines), with Maximum Calibration Error (MCE) exceeding 0.88 in every case.
-    \item \textbf{Domain-dependent:} The same method's calibration quality varies unpredictably across domains (e.g., LLM2Rec AUROC ranges from 0.50 on Beauty to 0.70 on Books).
-\end{enumerate}
-
-This observation holds not only for our method but for all LLM-based recommendation baselines that produce numerical scores, establishing it as a \emph{backbone-level phenomenon} rather than a method-specific artifact.
-
-\subsection{Task-Grounded Relevance Probability Scoring}
-
-Instead of relying on implicit confidence or post-hoc calibration, we propose \textbf{task-grounded relevance probability scoring}: directly prompting the LLM to estimate the probability that a candidate is the user's next interaction, grounded in explicit reasoning about the user's history.
-
-\paragraph{Prompt Design.} For each user-candidate pair $(u, c_i)$, we construct a structured prompt:
-
-\begin{enumerate}
-    \item Present the user's recent interaction history (up to 5 most recent items)
-    \item Present the candidate item with title and description
-    \item Ask the model to estimate $P(\text{relevant} | H_u, c_i) \in [0, 1]$
-    \item Require a one-sentence justification (``reason'')
-\end{enumerate}
-
-The key design choice is asking for a \emph{task-specific probability} rather than a generic confidence score. The model must ground its estimate in observable evidence: category alignment, attribute matching, and purchase trajectory patterns.
-
-\paragraph{Scoring Function.} The relevance probability output is used directly as the ranking score:
+The core object in \method{} is a calibrated candidate relevance posterior
+$p_i=P(y_i=1\mid H_u,c_i)$ and an uncertainty estimate $U_i\in[0,1]$ attached
+to that posterior. The final ranking score is risk-adjusted:
 \begin{equation}
-    s_i = P_\mathcal{M}(\text{relevant} | H_u, c_i)
+    r_i = p_i(1-U_i)^\eta ,
+    \label{eq:risk-score}
 \end{equation}
+where $\eta$ is fixed or selected using validation data only. When $\eta=0$,
+the score reduces to the calibrated posterior. This special case is important:
+our hyperparameter analysis treats it as a valid setting, and the paper does
+not claim that a positive risk exponent is always necessary.
 
-Candidates are ranked by $s_i$ in descending order. No post-hoc calibration, temperature scaling, or uncertainty penalty is applied.
+\subsection{Task-Grounded Candidate Evidence}
 
-\subsection{Why This Works}
+For each user-candidate pair, the LLM is asked to evaluate the candidate under
+the next-interaction task rather than under a generic similarity task. The
+structured output contains a raw relevance probability, a calibrated relevance
+probability, evidence support, counterevidence strength, and a short rationale.
+The prompt does not reveal the positive item index or test label.
 
-The effectiveness of task-grounded relevance probability scoring stems from three properties:
+This evidence format separates three roles that are often conflated in LLM
+recommendation: the model's relevance estimate, the support for that estimate,
+and the amount of unresolved risk. The final score exporter keeps all candidate
+keys aligned with the same-candidate task so downstream metrics can be audited
+without relying on candidate order or missing-score imputation.
 
-\begin{enumerate}
-    \item \textbf{Evidence grounding:} By requiring the model to justify its estimate, hallucinated high-confidence scores become less likely. The model must identify concrete evidence (category match, trajectory continuation) rather than pattern-matching surface features.
+\subsection{Uncertainty Decomposition}
 
-    \item \textbf{Probability framing:} Asking for a probability $\in [0,1]$ naturally produces a more calibrated output than asking for a ranking score or binary decision. The model's pretraining on probabilistic reasoning tasks transfers to this setting.
+\method{} computes event-level and candidate-level uncertainty from four
+signals:
 
-    \item \textbf{Task specificity:} The prompt explicitly frames the task as ``next interaction prediction'' rather than generic relevance. This aligns the model's output distribution with the evaluation metric (HR@$k$, NDCG@$k$).
-\end{enumerate}
+\begin{itemize}
+    \item \textbf{Boundary ambiguity:} candidates close to the decision
+    boundary are treated as less certain than clearly high- or low-relevance
+    candidates.
+    \item \textbf{Calibration gap:} disagreement between raw and calibrated
+    relevance estimates indicates posterior instability.
+    \item \textbf{Evidence insufficiency:} weak support from user history and
+    item evidence increases uncertainty.
+    \item \textbf{Counterevidence:} explicit evidence against relevance raises
+    the risk attached to an otherwise high score.
+\end{itemize}
 
-\subsection{Comparison with Existing Approaches}
+These components are deliberately auditable. Section~\ref{sec:results}
+reports leave-one-component-out diagnostics rather than assuming that every
+component is beneficial. In fact, the current evidence shows that several
+components are neutral or redundant under the frozen configuration.
 
-Table~\ref{tab:method_comparison} contrasts our approach with existing LLM-based recommendation methods:
+\subsection{Validation Discipline}
 
-\begin{table}[h]
+All method choices that can affect the final score are frozen or selected
+before test evaluation. Validation rows choose among allowed score modes,
+weights, and $\eta$ settings; test rows are used only for final metric
+reporting, paired tests, observation figures, component diagnostics, and
+hyperparameter sensitivity plots. The test hyperparameter sweeps reported in
+the paper are descriptive stability checks and cannot change the method.
+
+\begin{figure*}[t]
 \centering
-\small
-\caption{Comparison of scoring approaches in LLM-based recommendation.}
-\label{tab:method_comparison}
-\begin{tabular}{lcccc}
-\toprule
-Method & Score Type & Calibrated & Evidence & Task-Specific \\
-\midrule
-LLMEmb & Embedding sim. & \xmark & \xmark & \xmark \\
-LLM2Rec & Log-likelihood & \xmark & \xmark & Partial \\
-IRLLRec & Intent score & \xmark & \xmark & Partial \\
-ProEx/ProMax & Profile score & \xmark & \xmark & \cmark \\
-RLMRec & Graph + LLM & \xmark & \xmark & \xmark \\
-\midrule
-\textbf{Ours} & Relevance prob. & \cmark & \cmark & \cmark \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Our method is the only approach that simultaneously produces calibrated scores, requires evidence grounding, and is task-specific. This combination explains its strong performance on domains where title/description information is sufficient for preference inference (Books, Electronics) and its competitive performance on domains with shorter, less informative item descriptions (Beauty, Movies).
+\includegraphics[width=\textwidth]{../outputs/summary/paper_critical/framework_overview/framework_overview.pdf}
+\caption{Framework overview. \method{} converts same-candidate user-item
+events into task-grounded LLM evidence, calibrates candidate relevance
+posteriors, estimates uncertainty, and applies risk-adjusted reranking. The
+official baselines and \method{} share the same candidate rows, metric importer,
+and evidence gates.}
+\Description{Pipeline diagram showing same-candidate task construction, LLM
+signal extraction, calibration, C-CRP uncertainty, risk-adjusted ranking, and
+shared evidence gates for official baselines and C-CRP.}
+\label{fig:framework}
+\end{figure*}

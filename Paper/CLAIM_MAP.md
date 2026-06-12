@@ -1,40 +1,35 @@
 # Claim-Evidence Map
 
-Every claim in the paper mapped to its supporting evidence.
+Current source of truth: `outputs/summary/paper_critical/final_paper_claim_audit_20260612.*`.
 
-## Main Claims
+This map records what the manuscript may claim after the 2026-06-12 evidence
+consolidation. It replaces the older pre-Phase-2.5 calibration narrative.
 
-| # | Claim | Evidence | Source | Strength |
-|---|-------|----------|--------|----------|
-| C1 | All baselines exhibit severe miscalibration (ECE 0.31-0.66) | Baseline calibration diagnostic | `outputs/baseline_calibration_diagnostic/` | Strong (16 measurements, 4 methods × 4 domains) |
-| C2 | MCE > 0.88 universally | Same as C1 | Same | Strong |
-| C3 | C-CRP v3 achieves SOTA on Books (NDCG@10 +21.5%) | Main comparison table | `outputs/ccrp_v3_formal/books/report.json` | Strong (10,000 users) |
-| C4 | C-CRP v3 achieves SOTA on Electronics (NDCG@10 +52.5%) | Main comparison table | `outputs/ccrp_v3_formal/electronics/report.json` | Strong (10,000 users) |
-| C5 | C-CRP v3 is competitive on Beauty (#2) | Main comparison table | `outputs/ccrp_v3_formal/beauty/report.json` | Strong (973 users) |
-| C6 | C-CRP v3 produces better-calibrated scores (ECE 0.24) | C-CRP diagnostic | `outputs/beauty_supplementary_smallerN_100neg_qwen3_shadow_v1/tables/diagnostic_metrics.csv` | Moderate (beauty only for our method's ECE) |
-| C7 | Performance correlates with text information density | Domain analysis | Title length + NDCG correlation | Moderate (observational) |
+## Supported Claims
 
-## Ablation Claims
+| ID | Claim | Evidence | Boundary |
+|---|---|---|---|
+| C1 | C-CRP v3 ranks first against eight official-code-level baselines on Sports, Toys, Home, and Tools under 10k-user/101-candidate same-candidate evaluation. | `outputs/summary/paper_critical/cross_domain_official_ccrp_certificate_audit_post_ccrp_backfill_20260606_0255.json` | Same-candidate reranking only; not full-catalog SOTA. |
+| C2 | The comparison ledger has 32 official rows and 4 C-CRP rows with complete metrics, row counts, score coverage, provenance, and local/server evidence checks. | `outputs/summary/paper_critical/new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.json` | Ledger supports table drafting, not final submission readiness alone. |
+| C3 | C-CRP event-level uncertainty stratifies same-candidate ranking reliability in all four domains. | `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_four_domain/` | Descriptive motivation only; no causal/statistical bin-effect claim. |
+| C4 | Component ablation packages are complete and support a diagnostic discussion of weak, redundant, or mixed components. | `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_component_ablation_four_domain/` | Supplementary diagnostic evidence only. |
+| C5 | Eta and uncertainty weight choices are stable within tolerance on NDCG@10 across the four domains. | `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain/` | Stability/sensitivity only; not all-metric robustness or universal optimum. |
+| C6 | The framework figure can explain the same-candidate pipeline, calibration, uncertainty, and risk-adjusted ranking. | `outputs/summary/paper_critical/framework_overview/` | Figure is not evidence that modules are complete. |
 
-| # | Claim | Evidence | Source | Strength |
-|---|-------|----------|--------|----------|
-| A1 | Uncertainty decomposition hurts performance | Formal C-CRP beauty result | `outputs/beauty_ccrp_formal_selected_same_candidate/` | Strong (same data, same users) |
-| A2 | Enhanced prompt (v4) hurts movies | V4 movies result | `outputs/ccrp_v4_enhanced/movies/report.json` | Strong (10,000 users) |
-| A3 | Temperature scaling is mathematically ineffective for ranking | Mathematical proof | Monotonic transformation preserves order | Definitive |
+## Contradicted Or Forbidden Claims
 
-## Hedged Claims (need careful wording)
+| Claim | Status | Why forbidden |
+|---|---|---|
+| Every C-CRP component is necessary. | Contradicted | Leave-one-component-out diagnostics show neutral or nonworse removals, including boundary uncertainty and risk/counterevidence terms. |
+| Positive eta or risk penalty is necessary. | Contradicted | The hyperparameter sweep reports test-best eta = 0 in all four domains. |
+| The project is final submission-ready. | Unsupported | The evidence is ready for manuscript-level claim/citation audit, but references still need verified non-placeholder BibTeX and full section review. |
+| C-CRP is full-catalog or universal recommender SOTA. | Unsupported | All formal claims are scoped to controlled same-candidate reranking. |
 
-| # | Claim | Issue | Recommended Wording |
-|---|-------|-------|---------------------|
-| H1 | "Best-calibrated scores across all domains" | Only have our ECE for beauty, not 3 other domains from diagnostic | "significantly better-calibrated on the tested domain" |
-| H2 | "Universal phenomenon" | 4 baselines × 4 domains, not all 8 | "observed across all tested methods and domains" |
-| H3 | Movies performance | Not SOTA | "competitive performance" not "state-of-the-art" |
+## Next Manuscript Gates
 
-## Missing Evidence (limitations to acknowledge)
-
-| Item | Status | Impact |
-|------|--------|--------|
-| Statistical significance (multiple seeds) | Not done | Must acknowledge in limitations |
-| Our method's ECE for books/electronics/movies | Diagnostic running but raw_scores exist | Can compute offline |
-| Full-catalog evaluation | Not done | Acknowledge as future work |
-| Other LLM backbones | Not done | Acknowledge as future work |
+1. Replace placeholder BibTeX entries with verified citations for every
+   official baseline and key related-work category.
+2. Re-run ARIS paper-claim-audit on the actual manuscript text after each
+   major rewrite.
+3. Run ARIS citation-audit on `paper/references.bib` before any submission
+   readiness claim.

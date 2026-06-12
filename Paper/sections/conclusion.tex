@@ -1,8 +1,19 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We identified a universal calibration problem in LLM-based recommendation: across 8 methods and 4 domains, all produce severely miscalibrated confidence signals (ECE 0.31--0.66). This finding challenges the implicit assumption that higher model scores indicate higher relevance reliability.
+We studied whether a task-grounded uncertainty framework can improve LLM-based
+reranking under a controlled same-candidate protocol. \method{} turns LLM
+evidence into a calibrated candidate relevance posterior, estimates
+uncertainty, and applies validation-controlled risk-adjusted ranking. Across
+Sports, Toys, Home, and Tools, it ranks first against eight
+official-code-level baselines on the full HR/NDCG/MRR metric set, with all
+paired Holm-corrected tests positive and significant in each domain.
 
-Our solution — task-grounded relevance probability scoring — is remarkably simple: prompt the LLM to directly estimate relevance probability with evidence-based justification. Without fine-tuning, post-hoc calibration, or architectural modifications, this approach achieves state-of-the-art ranking on 2/4 domains (NDCG@10: +21.5\% Books, +52.5\% Electronics) while producing the best-calibrated scores across all domains.
-
-Our results suggest that the \emph{interface} between LLMs and recommendation tasks — specifically, how we ask the model to express its predictions — deserves more attention than architectural innovations built on top of miscalibrated signals. Future work should explore combining task-grounded scoring with collaborative signals for domains where textual information alone is insufficient, and extending the approach to other LLM backbones and full-catalog settings.
+The diagnostic modules refine this result. Event-level uncertainty stratifies
+ranking reliability, supporting the motivation for actionable uncertainty.
+Component ablations and hyperparameter curves show a more nuanced picture:
+some uncertainty terms are weak or redundant, and positive risk penalty is not
+necessary in the current sweeps. This honesty is part of the contribution. The
+paper supports a scoped claim that C-CRP improves controlled same-candidate
+ranking while uncertainty stratifies reliability, not a universal full-catalog
+recommender SOTA result.

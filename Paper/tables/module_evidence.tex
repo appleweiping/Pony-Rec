@@ -1,0 +1,26 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Paper-critical diagnostic modules. These results constrain the
+mechanistic interpretation of the main comparison and are not additional
+main-table SOTA evidence.}
+\label{tab:module_evidence}
+\begin{tabular}{p{0.18\textwidth}p{0.33\textwidth}p{0.37\textwidth}}
+\toprule
+Module & Supported claim & Claim boundary \\
+\midrule
+Uncertainty motivation
+& High-uncertainty \method{} event bins have lower NDCG@10, MRR, and HR@10 than low-uncertainty bins in all four domains.
+& Descriptive stratification only; no causal or statistically significant bin-effect claim. \\
+\midrule
+Component ablation
+& Leave-one-component-out diagnostics are complete across four domains.
+Evidence support is directionally helpful but small; calibration gap is mixed.
+& Boundary uncertainty is inert; removing counterevidence or risk penalty is nonworse or better on NDCG@10 in all four domains. Do not claim every component is necessary. \\
+\midrule
+Hyperparameter stability
+& For NDCG@10, $\eta$ and uncertainty-weight choices are stable in 4/4 domains within the pre-registered relative-drop tolerance.
+& Test sweeps are reporting-only. Do not claim universal optima, all-metric robustness, or that positive $\eta$ is necessary. \\
+\bottomrule
+\end{tabular}
+\end{table*}

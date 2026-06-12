@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 02:25 CEST
+Last updated: 2026-06-12 05:46 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -9,6 +9,47 @@ cycle.
 
 ## Current Checkpoint (2026-06-12)
 
+- Manuscript rewrite/citation checkpoint: the stale `paper/` draft has been migrated
+  from the older calibration/old-domain narrative to the current C-CRP
+  same-candidate evidence spine. Updated files include `paper/main.tex`,
+  `paper/sections/{abstract,introduction,related-work,method,experiments,results,analysis,conclusion}.tex`,
+  `paper/tables/main_results.tex`, new
+  `paper/tables/{module_evidence,significance_summary,full_official_ndcg10_ranking}.tex`,
+  and `paper/CLAIM_MAP.md`; stale `paper/tables/calibration_results.tex` was
+  removed. `pdflatex -> bibtex -> pdflatex -> pdflatex` now produces
+  `paper/main.pdf` (6 pages, 504041 bytes). `paper/references.bib` has been
+  repaired to 19 used references with no `Anonymous` author placeholders, and
+  `Paper/main.blg` reports `warning$ -- 0`. The ARIS-style citation repair
+  audit at `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
+  reports `overall_citation_health=MINOR_ISSUES_AFTER_REPAIR`,
+  `must_add_count=0`, `bibtex_warning_count=0`, and `recency verdict=Good`.
+  The manuscript is still not submission-ready:
+  `outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
+  records `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`; the remaining blockers are
+  final ARIS citation/claim spot-check, section-level top-conference review,
+  and expansion/rebalancing of the compressed draft.
+- Result-table supplementation checkpoint:
+  `scripts/analysis/main_build_paper_result_tables.py` generates the visible
+  full-baseline and significance tables from existing local evidence only.
+  `outputs/summary/paper_critical/paper_result_tables_audit_20260612.{json,md}`
+  reports `ok=true`, `method_row_count=36`, each domain has eight official
+  rows plus one C-CRP row, C-CRP ranks first by NDCG@10, and each domain has
+  `56/56` positive Holm-significant paired tests. This closes the GPT-5.5
+  objection that the manuscript only showed the best official baseline.
+- Final evidence-to-claim gate: `scripts/audit/main_build_final_paper_claim_audit.py`
+  and `outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md}`
+  report `ok=true`, `paper_evidence_ready_for_drafting=true`,
+  `final_submission_ready=false`, and verdict
+  `READY_FOR_MANUSCRIPT_LEVEL_CLAIM_AND_CITATION_AUDIT`. Claim counts are
+  `SUPPORTED=6`, `CONTRADICTED=2`, `UNSUPPORTED=2`. The contradicted claims are
+  exactly the forbidden strong-mechanism claims: every component necessary and
+  positive eta/risk penalty necessary.
+- Review status update: GPT-5.5 xhigh pre-rewrite review rated the evidence
+  `CONDITIONAL PASS, 8.2/10` and the stale manuscript `NEEDS REVISION, 6.4/10`;
+  the post-rewrite review rated claim safety `8.3/10`,
+  writing/top-conference readiness `7.2/10`, and combined manuscript score
+  `7.7/10` before citation repair and table supplementation. Claude reviewer
+  was attempted again and failed with `Claude CLI did not return JSON output`.
 - Server live state after the hyperparameter module: no matching
   Pony/C-CRP/baseline/uncertainty Python process is active, `nvidia-smi`
   reports `0%`, `15 MiB / 49140 MiB`, and disk remains about `17G` free /

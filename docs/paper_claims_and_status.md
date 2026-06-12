@@ -43,6 +43,44 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 manuscript/evidence gate.** The Phase 2.5 evidence layer is now
+ready for strict manuscript-level claim/citation review, but the paper is not
+submission-ready. Codex added a reproducible final claim gate at
+`scripts/audit/main_build_final_paper_claim_audit.py`; the generated
+`outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md}` and
+claims CSV report `ok=true`, `paper_evidence_ready_for_drafting=true`,
+`final_submission_ready=false`, and verdict
+`READY_FOR_MANUSCRIPT_LEVEL_CLAIM_AND_CITATION_AUDIT`. The gate allows six
+supported claims (same-candidate official comparison, full evidence ledger,
+uncertainty stratification, diagnostic component ablation, NDCG@10
+hyperparameter stability, and framework figure use) and explicitly marks two
+strong mechanism claims as contradicted: every C-CRP component is necessary,
+and positive eta/risk penalty is necessary. The stale `paper/` draft was
+rewritten to the current C-CRP same-candidate evidence spine, stale calibration
+table removed, current main/module tables added, and
+`scripts/analysis/main_build_paper_result_tables.py` now generates visible
+full-baseline and significance tables from existing local evidence. The table
+audit at
+`outputs/summary/paper_critical/paper_result_tables_audit_20260612.{json,md}`
+reports `ok=true`, `method_row_count=36`, eight official rows per domain, C-CRP
+rank 1 by NDCG@10 in every domain, and `56/56` positive Holm-significant paired
+tests in every domain. Citation repair replaced placeholder/incomplete
+BibTeX with 19 used references; `Paper/main.blg` reports `warning$ -- 0`, and
+`outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
+reports `overall_citation_health=MINOR_ISSUES_AFTER_REPAIR`,
+`must_add_count=0`, `bibtex_warning_count=0`, and recency verdict `Good`.
+`pdflatex -> bibtex -> pdflatex -> pdflatex` produces `paper/main.pdf`
+(6 pages, 504041 bytes). The manuscript audit
+at
+`outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
+now reports `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`: the remaining blockers
+are final ARIS citation/claim spot-check, section-level top-conference review,
+and expansion/rebalancing of the compressed draft. GPT-5.5 xhigh post-rewrite
+review rated claim safety `8.3/10`, writing/top-conference readiness `7.2/10`,
+and combined manuscript score `7.7/10` before citation repair and table
+supplementation. Do not claim final submission readiness until fresh ARIS
+paper-claim/citation audits and section-level reviews pass.
+
 **2026-06-11 observation/motivation closure.** The Phase 2.5
 observation/motivation module is now closed as descriptive motivation-only
 evidence. Sports/Toys/Home/Tools packages at

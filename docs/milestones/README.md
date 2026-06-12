@@ -71,7 +71,29 @@ The repository is currently between M4 and M5:
   baselines, Shadow large-scale diagnostics, and LoRA/generative modules are
   completed under the same protocol.
 
-## Current Evidence Integrity (updated 2026-06-11)
+## Current Evidence Integrity (updated 2026-06-12)
+
+Phase 2.5 evidence is ready for strict manuscript-level claim and citation
+review, but not final submission. `scripts/audit/main_build_final_paper_claim_audit.py`
+generates
+`outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md,csv}`
+with `paper_evidence_ready_for_drafting=true`, `final_submission_ready=false`,
+and verdict `READY_FOR_MANUSCRIPT_LEVEL_CLAIM_AND_CITATION_AUDIT`. The stale
+`paper/` draft was rewritten to the current C-CRP same-candidate
+official-baseline spine, stale calibration table removed, current main/module
+tables added, and `scripts/analysis/main_build_paper_result_tables.py`
+generates visible full-baseline and paired-test summary tables from the local
+36-row evidence ledger. `paper/references.bib` has been repaired to 19 used
+references with no `Anonymous` placeholders, `Paper/main.blg` reports
+`warning$ -- 0`,
+`outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
+reports `must_add_count=0` and recency verdict `Good`, and
+`pdflatex -> bibtex -> pdflatex -> pdflatex` produces
+`paper/main.pdf` (6 pages). The remaining blockers are no longer missing
+citations; they are final ARIS claim/citation spot-check, section-level
+top-conference review, and expansion/rebalancing of the compressed draft.
+
+Historical execution detail follows.
 
 Phase 2.5 is in active execution, not writing-ready closure. As of
 2026-06-11, Tools test signal-row generation completed, passed source/package

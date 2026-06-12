@@ -1,47 +1,69 @@
-\section{Results and Analysis}
+\section{Results and Diagnostics}
 \label{sec:results}
 
-\subsection{Ranking Performance}
+\subsection{Main Same-Candidate Comparison}
 
-Table~\ref{tab:main_results} presents the complete comparison across four domains. Our method achieves:
+Table~\ref{tab:main_results} reports the main result. On all four domains,
+\method{} improves over the strongest official baseline by NDCG@10: +29.7\%
+on Sports, +32.2\% on Toys, +41.0\% on Home, and +43.3\% on Tools. The same
+pattern holds for HR@5/@10/@20, NDCG@5/@10/@20, and MRR.
 
-\begin{itemize}
-    \item \textbf{Books:} State-of-the-art across all metrics. NDCG@10 improves over the best baseline (LLMEmb) by 21.5\% (0.333 vs.\ 0.274). HR@10 is comparable (0.476 vs.\ 0.472).
-    \item \textbf{Electronics:} State-of-the-art across all metrics. NDCG@10 improves over LLMEmb by 52.5\% (0.183 vs.\ 0.120). HR@10 improves by 22.0\% (0.299 vs.\ 0.245).
-    \item \textbf{Beauty:} Competitive second place. NDCG@10 is 0.134 vs.\ ProEx's 0.151 (11\% gap). HR@10 is 0.229 vs.\ 0.253.
-    \item \textbf{Movies:} Mid-range performance. NDCG@10 is 0.128, ranking 4th--6th. LLMEmb leads at 0.169.
-\end{itemize}
+The complete evidence ledger contains 36 method-domain rows: eight official
+baseline rows and one \method{} row for each of the four domains. Every row has
+10,000 users, 101 candidates per user, score coverage 1.0, and the expected
+row counts. For each domain, the paired test family contains 56 comparisons
+(eight baselines times seven metrics); all 56 deltas are positive and
+Holm-significant in every domain. Table~\ref{tab:significance_summary}
+summarizes the paired-test gate, and Table~\ref{tab:full_official_ndcg10}
+shows the complete per-domain NDCG@10 ranking over all eight official
+baselines plus \method{}.
 
-\subsection{Domain-Dependent Performance Analysis}
+This supports a controlled reranking claim. It does not establish full-catalog
+recommendation SOTA because candidate generation is not evaluated here.
 
-The performance variation across domains reveals an important pattern: our method excels when item descriptions carry sufficient semantic information for preference inference.
+\input{tables/significance_summary}
+\input{tables/full_official_ndcg10_ranking}
 
-\paragraph{Why Books and Electronics succeed.} Books have rich, descriptive titles (avg.\ 49 characters) that encode genre, topic, and style information. Electronics items, despite shorter titles (15 chars), have detailed technical descriptions that enable precise category matching. In both cases, the LLM can effectively reason about user-item relevance from textual features alone.
+\subsection{Uncertainty as a Reliability Signal}
 
-\paragraph{Why Movies is challenging.} Movie titles are extremely short (avg.\ 21 characters, e.g., ``Shock Waves'', ``Sister Act'') and often uninformative about content. The positive item's median rank is 35/101, indicating that the model struggles to distinguish the ground-truth item from negatives based on title and short description alone. Embedding-based methods (LLMEmb) that capture latent collaborative signals outperform text-only scoring in this regime.
+The observation module asks whether \method{} uncertainty is informative about
+ranking reliability. Events are binned by C-CRP event-level uncertainty, and
+the low- and high-uncertainty bins are compared. In all four domains, the
+high-uncertainty bin has lower NDCG@10, MRR, and HR@10 than the low-uncertainty
+bin. This supports the motivation that the uncertainty signal stratifies
+same-candidate ranking reliability.
 
-\paragraph{Implication.} Task-grounded relevance probability scoring is most effective when the textual representation of items carries discriminative information about user preferences. This is a property of the \emph{domain}, not a limitation of the method. In domains where text is informative (the majority of real-world recommendation scenarios with product descriptions, reviews, and metadata), our approach provides substantial improvements.
+The module is descriptive. It does not show that manipulating uncertainty
+causes a metric change, and it is not a substitute for the official-baseline
+comparison in Table~\ref{tab:main_results}.
 
-\subsection{Calibration Quality}
+\subsection{Component Ablations}
 
-Beyond ranking performance, our method produces significantly better-calibrated probability estimates:
+Table~\ref{tab:module_evidence} summarizes the paper-critical diagnostic
+modules. The component ablation is especially important because it prevents a
+too-clean story. Boundary uncertainty is inert across all four domains.
+Removing counterevidence or the risk penalty is nonworse or better on NDCG@10
+in all four domains. Evidence support is directionally helpful but small, and
+the calibration gap is mixed.
 
-\begin{itemize}
-    \item Average ECE across domains: \textbf{0.24} (ours) vs.\ 0.31--0.66 (baselines)
-    \item MCE $< 0.93$ (ours) vs.\ $> 0.88$ universally for baselines
-    \item AUROC of probability estimates: 0.61 (ours, Beauty) — comparable to the best baseline (LLMEmb, 0.62) but with much lower ECE
-\end{itemize}
+The honest conclusion is that the full \method{} design is a useful
+paper-facing method line under the same-candidate comparison, while several
+individual uncertainty components are weak or redundant under the frozen
+configuration. We therefore report component ablations as supplementary
+diagnostics, not as proof that every component is necessary.
 
-This means our scores are not only useful for ranking but also \emph{interpretable as probabilities}. A score of 0.7 from our method genuinely indicates approximately 70\% likelihood of relevance, whereas a score of 0.7 from baselines may correspond to anywhere from 0\% to 100\% actual relevance (MCE $> 0.88$).
+\subsection{Hyperparameter Stability}
 
-\subsection{Ablation: Why Simpler is Better}
+The hyperparameter module evaluates two real controls: the risk exponent
+$\eta$ and the uncertainty-weight grid. Validation-selected values are compared
+against reporting-only test sweeps on NDCG@10. Both controls are stable within
+the pre-registered relative-drop tolerance in all four domains. The maximum
+relative drop from the test-best value is $1.25\times 10^{-5}$ for $\eta$ and
+$2.97\times 10^{-4}$ for the weight grid.
 
-We explored three extensions that all performed worse than the base method:
+The same result also limits the interpretation. The test-best $\eta$ is zero
+in all four domains, so the paper must not claim that a positive risk penalty
+is necessary or uniformly beneficial. The correct claim is stability and
+sensitivity, not universal optimality.
 
-\begin{enumerate}
-    \item \textbf{Uncertainty decomposition} (formal C-CRP): Adding explicit uncertainty penalties ($\text{score} \times (1-U)^\eta$) reduced Beauty NDCG@10 from 0.136 to 0.131. The penalty is too conservative, suppressing correctly-ranked items.
-    \item \textbf{Enhanced prompt} (v4): Adding category extraction and longer descriptions reduced Movies HR@10 from 0.208 to 0.187. Additional information acts as noise when the model already has sufficient context.
-    \item \textbf{Temperature scaling}: Mathematically ineffective for ranking metrics — monotonic transformations preserve rank order.
-\end{enumerate}
-
-These negative results confirm that the base method's simplicity is a feature: the LLM's probability estimate, when properly elicited through task-grounded prompting, is already well-suited for ranking without post-hoc adjustments.
+\input{tables/module_evidence}

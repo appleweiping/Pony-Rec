@@ -1,20 +1,58 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Large language models (LLMs) have emerged as powerful tools for recommendation, leveraging their world knowledge and reasoning capabilities to understand user preferences from interaction histories~\cite{llm4rec_survey}. Recent methods such as LLM2Rec~\cite{llm2rec}, LLMEmb~\cite{llmemb}, and ProEx~\cite{proex} demonstrate that LLMs can achieve competitive recommendation performance through various scoring mechanisms: embedding similarity, log-likelihood, profile matching, and intent inference.
+Large language models (LLMs) have become a common component in modern
+recommendation systems. Recent methods use LLM-derived embeddings,
+sequential adapters, graph representations, profile modules, or intent
+representations to improve candidate scoring~\cite{llm2rec,llmemb,llmesr,irllrec,proex,promax,elmrec,rlmrec}.
+These systems are normally judged by ranking metrics, but the decision problem
+faced by a recommender is richer than rank alone: when should a high-scoring
+candidate be trusted, and when should the system recognize that the evidence is
+thin, conflicting, or near a decision boundary?
 
-However, a critical question remains underexplored: \emph{how reliable are the confidence signals produced by these LLM-based recommenders?} When an LLM assigns a high score to a candidate item, does this genuinely indicate high relevance, or is it an artifact of miscalibration?
+This paper studies actionable uncertainty for LLM-based recommendation under a
+strict controlled evaluation setting. We focus on the reranking stage: each
+method receives the same user histories and the same 101 candidates per event,
+and all outputs are converted into the same score schema before metrics are
+computed. This same-candidate protocol intentionally avoids claims about
+full-catalog retrieval. It asks a narrower but sharper question: can
+task-grounded uncertainty improve the reliability of candidate ranking when
+the candidate set and evaluation schema are held fixed?
 
-We conduct a systematic calibration analysis across 4 Amazon domains and 8 official LLM-based recommendation baselines, all using the same Qwen3-8B backbone. Our findings reveal a \textbf{backbone-level phenomenon}: every baseline exhibits severe miscalibration (Expected Calibration Error 0.31--0.66, Maximum Calibration Error $>$ 0.88), meaning their scores are informative for ranking but \emph{unreliable as probability estimates}. This miscalibration is not method-specific — it persists across embedding-based, likelihood-based, and profile-based approaches.
+We propose \methodfull{} (\method), which turns LLM-derived relevance evidence
+into a calibrated candidate posterior and an event-level uncertainty signal.
+The uncertainty combines boundary ambiguity, calibration gap, evidence support,
+and counterevidence. \method{} then applies a risk-adjusted ranking rule that
+can downweight candidates whose relevance estimate is high but poorly
+supported. Hyperparameters are fixed or selected on validation data only; test
+rows are used only for final reporting and paired significance tests.
 
-Motivated by this observation, we propose \textbf{task-grounded relevance probability scoring}: instead of extracting implicit confidence from model internals, we directly prompt the LLM to estimate the probability that a candidate is the user's next interaction, grounded in explicit reasoning about purchase history patterns. This simple but principled approach produces scores that are simultaneously effective for ranking and well-calibrated as probabilities.
+The resulting evidence supports a scoped conclusion. On four Amazon domains
+(Sports, Toys, Home, and Tools), \method{} ranks first against eight
+official-code-level baselines under the unified Qwen3-8B, same-candidate
+protocol. The same evidence also limits the story: component ablations show
+that several uncertainty terms are neutral, weak, or redundant, and
+hyperparameter curves support stability rather than a claim that every risk
+term is necessary. We therefore frame \method{} as an actionable uncertainty
+framework for controlled reranking reliability, not as a universal
+recommendation architecture.
 
 Our contributions are:
 
 \begin{enumerate}
-    \item \textbf{Observation:} We establish that LLM confidence miscalibration is a universal phenomenon across 8 methods and 4 domains under controlled same-backbone evaluation, with ECE consistently exceeding 0.31.
+    \item \textbf{Controlled official comparison.} We build a four-domain,
+    10,000-user, 101-candidate same-candidate benchmark with eight
+    official-code-level LLM-based recommendation baselines, unified Qwen3-8B
+    usage, exact score-coverage checks, full HR/NDCG/MRR reporting, and paired
+    Holm-corrected tests.
 
-    \item \textbf{Method:} We propose task-grounded relevance probability scoring — a prompt-based approach that elicits calibrated probability estimates by requiring evidence-grounded justification. The method requires no fine-tuning, no post-hoc calibration, and no additional model components.
+    \item \textbf{Method.} We introduce \method, a calibrated candidate
+    relevance posterior with task-grounded uncertainty components and a
+    validation-controlled risk-adjusted reranking rule.
 
-    \item \textbf{Evaluation:} Under a rigorous same-candidate protocol (101 items, unified Qwen3-8B backbone, official baseline implementations), our method achieves state-of-the-art NDCG@10 on Books (+21.5\%) and Electronics (+52.5\%), competitive performance on Beauty, and provides the best-calibrated scores across all domains.
+    \item \textbf{Evidence discipline.} We pair the main comparison with
+    paper-critical diagnostic modules: an uncertainty motivation study,
+    leave-one-component-out ablations, hyperparameter stability curves, and a
+    framework overview. These modules define what can be claimed and what must
+    be downgraded.
 \end{enumerate}

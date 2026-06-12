@@ -3,30 +3,40 @@
 
 \subsection{Experimental Setup}
 
-\paragraph{Datasets.} We evaluate on four Amazon product review domains with varying characteristics:
+\paragraph{Datasets.} We evaluate on four Amazon product-review domains:
+Sports, Toys, Home, and Tools. Each domain uses 10,000 test users and a
+101-candidate same-candidate task.
 
 \begin{table}[h]
 \centering
 \small
 \caption{Dataset statistics.}
 \label{tab:datasets}
-\begin{tabular}{lrrrl}
+\begin{tabular}{lrrr}
 \toprule
-Domain & Test Users & Candidates & Avg Title Len & Characteristics \\
+Domain & Test Users & Candidates/User & Candidate Rows \\
 \midrule
-Beauty & 973 & 101 & 37 chars & Short titles, niche categories \\
-Books & 10,000 & 101 & 49 chars & Rich titles, diverse genres \\
-Electronics & 10,000 & 101 & 15 chars & Technical specs, short titles \\
-Movies & 10,000 & 101 & 21 chars & Very short titles, genre-driven \\
+Sports & 10,000 & 101 & 1,010,000 \\
+Toys & 10,000 & 101 & 1,010,000 \\
+Home & 10,000 & 101 & 1,010,000 \\
+Tools & 10,000 & 101 & 1,010,000 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Each test instance consists of 1 positive item (ground-truth next interaction) and 100 randomly sampled negative items, following the standard same-candidate evaluation protocol~\cite{krichene2020sampled}.
+Each test instance consists of one ground-truth next item and 100 negatives.
+The same candidate rows are shared by all methods. A result is table-eligible
+only if its score file exactly matches the candidate key set, has no duplicate
+or missing keys, contains finite numeric scores, and passes the local/server
+provenance checks.
 
-\paragraph{Backbone Model.} All methods use Qwen3-8B as the unified language model backbone. This ensures fair comparison: differences in performance reflect the \emph{scoring methodology}, not the model capacity.
+\paragraph{Backbone Model.} All methods use Qwen3-8B whenever an LLM or
+LLM-derived representation is required. Baseline-specific adapters,
+checkpoints, graph modules, intent modules, or representation learners are
+preserved when they are part of the official algorithm.
 
-\paragraph{Baselines.} We compare against 8 official LLM-based recommendation methods, all adapted to use Qwen3-8B:
+\paragraph{Baselines.} We compare against eight official-code-level
+LLM-based recommendation baselines:
 
 \begin{itemize}
     \item \textbf{ELMRec}~\cite{elmrec}: Graph-enhanced LLM recommendation
@@ -39,25 +49,21 @@ Each test instance consists of 1 positive item (ground-truth next interaction) a
     \item \textbf{RLMRec}~\cite{rlmrec}: Reinforcement learning meets LLM recommendation
 \end{itemize}
 
-All baselines use their official code or official-code-level implementations with default hyperparameters, adapted only for the unified backbone and data interface.
+Baselines use official default or recommended hyperparameters unless a
+documented bridge is required by the unified protocol. Test-set model selection
+is forbidden for both baselines and \method.
 
-\paragraph{Metrics.} We report HR@$k$ (Hit Rate), NDCG@$k$ (Normalized Discounted Cumulative Gain) for $k \in \{5, 10, 20\}$, and MRR (Mean Reciprocal Rank).
+\paragraph{Metrics and Statistics.} We report HR@$k$ and NDCG@$k$ for
+$k\in\{5,10,20\}$, plus MRR. For each domain, \method{} is compared against
+each official baseline on all seven metrics, yielding 56 paired tests
+(8 baselines $\times$ 7 metrics). We use paired bootstrap confidence intervals
+and Holm correction.
 
-\paragraph{Implementation Details.} Our method uses vLLM for batch inference with \texttt{max\_model\_len=2048}, \texttt{temperature=0.1}, \texttt{max\_new\_tokens=100}, and prefix caching enabled. The prompt uses the 5 most recent history items and up to 200 characters of candidate description.
+\paragraph{Evidence Packaging.} Every completed row has a lightweight local
+evidence package with metrics, row counts, provenance, score audits, logs, and
+server manifest hashes. Large score files, prediction files, checkpoints, and
+embeddings remain server-side unless an archive decision requires otherwise.
 
 \subsection{Main Results}
 
 \input{tables/main_results}
-
-\subsection{Calibration Analysis}
-
-To validate our motivating observation, we compute calibration metrics for all methods that produce numerical scores (4 out of 8 baselines output raw scores; the remaining 4 produce only ranked lists without scores).
-
-\input{tables/calibration_results}
-
-Key findings:
-\begin{enumerate}
-    \item All baselines exhibit severe miscalibration (ECE $> 0.31$) across all domains.
-    \item Maximum Calibration Error exceeds 0.88 universally, indicating that certain confidence regions are completely unreliable.
-    \item Our method achieves the lowest ECE in all tested domains, confirming that task-grounded probability scoring produces better-calibrated outputs.
-\end{enumerate}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "2026-06-12.manuscript_claim_citation_audit.v1",
+  "generated_at_utc": "2026-06-12T03:46:00Z",
+  "manuscript": "paper/main.tex",
+  "evidence_gate": "outputs/summary/paper_critical/final_paper_claim_audit_20260612.json",
+  "compile_check": {
+    "pdflatex_bibtex_pdflatex_pdflatex_completed": true,
+    "pdf_path": "paper/main.pdf",
+    "pdf_size_bytes": 504041,
+    "pdf_pages": 6,
+    "latex_fatal_errors": [],
+    "bibtex_warning_count": 0,
+    "bibtex_warning_log": "Paper/main.blg reports warning$ -- 0 after citation repair."
+  },
+  "verdict": "NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION",
+  "final_submission_ready": false,
+  "claim_audit": {
+    "old_manuscript_spine_repaired": true,
+    "supported_claims": [
+      "C-CRP v3 ranks first against eight official-code-level baselines on Sports, Toys, Home, and Tools under the 10k-user/101-candidate same-candidate protocol.",
+      "Each domain has 56/56 positive Holm-significant C-CRP-vs-official paired metric tests.",
+      "Event-level C-CRP uncertainty stratifies ranking reliability as descriptive motivation evidence.",
+      "Component ablations are complete and show weak, redundant, or mixed component behavior rather than universal component necessity.",
+      "Hyperparameter evidence supports NDCG@10 stability/sensitivity for eta and the uncertainty weight grid.",
+      "The framework figure is usable as a pipeline overview."
+    ],
+    "visible_result_tables": [
+      "Paper/tables/main_results.tex",
+      "Paper/tables/significance_summary.tex",
+      "Paper/tables/full_official_ndcg10_ranking.tex",
+      "Paper/tables/module_evidence.tex"
+    ],
+    "forbidden_claims": [
+      "full-catalog recommender SOTA",
+      "universal recommender SOTA beyond tested same-candidate domains",
+      "every C-CRP component is necessary",
+      "positive eta or risk penalty is necessary or uniformly beneficial",
+      "all-metric hyperparameter robustness",
+      "older calibration/ECE or older-domain SOTA narrative without fresh current evidence gate"
+    ]
+  },
+  "citation_audit": {
+    "status": "REPAIRED_BIBTEX_NEEDS_FINAL_ARIS_SPOT_CHECK",
+    "bibtex_runs": true,
+    "bibtex_warning_count": 0,
+    "primary_blockers": [],
+    "remaining_checks": [
+      "Run a final ARIS citation audit/spot-check against publisher pages before submission.",
+      "Check future/accepted 2026 ProEx/ProMax venue metadata again when proceedings pages are final."
+    ],
+    "no_fabricated_bibtex_entries": true
+  },
+  "result_table_audit": {
+    "status": "PASS",
+    "audit_path": "outputs/summary/paper_critical/paper_result_tables_audit_20260612.json",
+    "method_row_count": 36,
+    "official_rows_per_domain": 8,
+    "significance_summary_visible": true,
+    "full_official_ndcg10_ranking_visible": true
+  },
+  "review_status": {
+    "gpt55_pre_rewrite": "CONDITIONAL PASS evidence 8.2/10; old manuscript NEEDS REVISION 6.4/10",
+    "gpt55_post_rewrite": "claim safety 8.3/10; writing/top-conference readiness 7.2/10; combined manuscript score 7.7/10 before citation repair and table supplementation",
+    "claude": "failed_twice: Claude CLI did not return JSON output"
+  },
+  "required_next_actions": [
+    "Run final ARIS citation-audit/spot-check on the repaired bibliography.",
+    "Run a fresh ARIS paper-claim-audit on the current manuscript after citation and table repair.",
+    "Expand/rebalance the six-page compressed draft into a fuller top-conference manuscript.",
+    "Run GPT-5.5/Codex section-level review before marking the paper submission-ready."
+  ]
+}

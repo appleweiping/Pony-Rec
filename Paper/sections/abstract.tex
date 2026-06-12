@@ -1,5 +1,24 @@
 \begin{abstract}
-Large language models (LLMs) are increasingly used for recommendation, yet the reliability of their scoring signals remains poorly understood. We conduct a systematic calibration analysis across 8 official LLM-based recommendation methods and 4 Amazon domains, all using the same Qwen3-8B backbone. We find a universal phenomenon: every method exhibits severe miscalibration (ECE 0.31--0.66, MCE $>$ 0.88), meaning their scores are informative for ranking but unreliable as confidence estimates.
+Large language models (LLMs) are increasingly used as scoring and
+representation engines for recommendation, but high ranking scores do not by
+themselves tell us when a recommendation decision is reliable. We study this
+problem under a controlled same-candidate protocol: every method ranks the same
+101 candidates for each user, uses the same Qwen3-8B backbone when an LLM is
+required, and is evaluated with the same importer, metrics, provenance checks,
+and paired tests.
 
-Motivated by this observation, we propose task-grounded relevance probability scoring — a prompt-based approach that directly elicits calibrated probability estimates by requiring the LLM to ground its predictions in explicit evidence from user history. Without any fine-tuning or post-hoc calibration, our method achieves state-of-the-art ranking performance on 2 out of 4 domains (NDCG@10: +21.5\% on Books, +52.5\% on Electronics vs.\ the best baseline) and competitive performance on the remaining 2, while producing significantly better-calibrated probability estimates (ECE 0.24 vs.\ 0.31--0.66). Our results demonstrate that \emph{how} an LLM is asked to score candidates matters more than architectural innovations built on top of miscalibrated signals.
+We propose \method, a task-grounded calibrated candidate relevance posterior
+that decomposes uncertainty into boundary ambiguity, calibration gap, evidence
+support, and counterevidence, then uses the resulting uncertainty in a
+risk-adjusted reranking rule. Across Sports, Toys, Home, and Tools, \method
+ranks first against eight official-code-level LLM-based recommendation
+baselines on HR@5/@10/@20, NDCG@5/@10/@20, and MRR. All 56 per-domain paired
+C-CRP-vs-baseline tests are positive and Holm-significant in each domain. We
+also provide paper-critical diagnostic evidence: event-level uncertainty
+stratifies ranking reliability in all four domains, component ablations reveal
+that several uncertainty terms are weak or redundant rather than uniformly
+necessary, and validation-selected hyperparameters are stable within the
+pre-registered tolerance on NDCG@10. The result is a scoped claim: the C-CRP
+framework improves controlled same-candidate ranking, while its uncertainty
+signal stratifies reliability; it is not a full-catalog recommender SOTA claim.
 \end{abstract}

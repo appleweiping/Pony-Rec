@@ -1,0 +1,52 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Complete same-candidate NDCG@10 ranking for the four new domains. Each domain contains 10,000 users, 101 candidates per user, one C-CRP row, and all eight official-code-level baseline rows.}
+\label{tab:full_official_ndcg10}
+\begin{tabular}{llrrrr}
+\toprule
+Domain & Method & Rank & NDCG@10 & HR@10 & MRR \\
+\midrule
+Sports & \method{} & 1 & \textbf{0.2329} & \textbf{0.3819} & \textbf{0.2076} \\
+Sports & LLMEmb & 2 & 0.1795 & 0.3384 & 0.1539 \\
+Sports & IRLLRec & 3 & 0.1269 & 0.2215 & 0.1244 \\
+Sports & RLMRec & 4 & 0.1000 & 0.1879 & 0.0972 \\
+Sports & LLM2Rec & 5 & 0.0957 & 0.2060 & 0.0883 \\
+Sports & LLM-ESR & 6 & 0.0758 & 0.1564 & 0.0751 \\
+Sports & ProEx & 7 & 0.0742 & 0.1527 & 0.0743 \\
+Sports & ProMax & 8 & 0.0722 & 0.1387 & 0.0741 \\
+Sports & ELMRec & 9 & 0.0484 & 0.1054 & 0.0537 \\
+\midrule
+Toys & \method{} & 1 & \textbf{0.2708} & \textbf{0.3964} & \textbf{0.2503} \\
+Toys & LLMEmb & 2 & 0.2049 & 0.3505 & 0.1814 \\
+Toys & LLM2Rec & 3 & 0.1789 & 0.3172 & 0.1592 \\
+Toys & IRLLRec & 4 & 0.1338 & 0.2293 & 0.1312 \\
+Toys & RLMRec & 5 & 0.1065 & 0.1885 & 0.1058 \\
+Toys & ProEx & 6 & 0.0810 & 0.1615 & 0.0812 \\
+Toys & ProMax & 7 & 0.0794 & 0.1435 & 0.0818 \\
+Toys & LLM-ESR & 8 & 0.0546 & 0.1172 & 0.0584 \\
+Toys & ELMRec & 9 & 0.0486 & 0.1043 & 0.0543 \\
+\midrule
+Home & \method{} & 1 & \textbf{0.1324} & \textbf{0.2264} & \textbf{0.1259} \\
+Home & LLMEmb & 2 & 0.0939 & 0.1856 & 0.0901 \\
+Home & IRLLRec & 3 & 0.0709 & 0.1443 & 0.0742 \\
+Home & RLMRec & 4 & 0.0599 & 0.1268 & 0.0640 \\
+Home & LLM-ESR & 5 & 0.0554 & 0.1163 & 0.0597 \\
+Home & ProEx & 6 & 0.0549 & 0.1177 & 0.0593 \\
+Home & LLM2Rec & 7 & 0.0509 & 0.1101 & 0.0564 \\
+Home & ProMax & 8 & 0.0469 & 0.1019 & 0.0535 \\
+Home & ELMRec & 9 & 0.0460 & 0.1021 & 0.0520 \\
+\midrule
+Tools & \method{} & 1 & \textbf{0.1661} & \textbf{0.2696} & \textbf{0.1559} \\
+Tools & LLMEmb & 2 & 0.1159 & 0.2257 & 0.1065 \\
+Tools & IRLLRec & 3 & 0.0853 & 0.1651 & 0.0867 \\
+Tools & LLM2Rec & 4 & 0.0815 & 0.1625 & 0.0810 \\
+Tools & RLMRec & 5 & 0.0684 & 0.1354 & 0.0722 \\
+Tools & LLM-ESR & 6 & 0.0606 & 0.1270 & 0.0633 \\
+Tools & ProEx & 7 & 0.0557 & 0.1177 & 0.0607 \\
+Tools & ProMax & 8 & 0.0503 & 0.1046 & 0.0565 \\
+Tools & ELMRec & 9 & 0.0459 & 0.1010 & 0.0524 \\
+\bottomrule
+\end{tabular}
+\end{table*}

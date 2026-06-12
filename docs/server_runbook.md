@@ -38,25 +38,33 @@ PIDs, audit summaries, and missing-file errors.
 
 ```text
 1. Pull latest repo state.
-2. Treat performance/table evidence as complete for the current same-candidate
+2. Do not launch a new default experiment. Phase 2.5 evidence is ready for
+   strict manuscript-level claim/citation review, not final submission. Citation
+   repair for `paper/references.bib` is complete enough for audit:
+   `Paper/main.blg` reports `warning$ -- 0`,
+   `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}`
+   reports `must_add_count=0`, and `paper/main.pdf` compiles.
+   The current priority is final ARIS citation/claim spot-check, section-level
+   top-conference review, and expansion/rebalancing of the compressed draft.
+3. Treat performance/table evidence as complete for the current same-candidate
    claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
    all eight official-code-level baseline rows complete; the four-new-domain
    paper-facing ledger has `official_row_count=32`, `ccrp_row_count=4`, and
    per-domain 56/56 positive Holm-significant paired tests.
-3. Do not launch more official baseline rows unless a later audit finds a
+4. Do not launch more official baseline rows unless a later audit finds a
    concrete failed or invalid row.
-4. Phase 2.5 component ablation is now closed as supplementary diagnostic
+5. Phase 2.5 component ablation is now closed as supplementary diagnostic
    evidence: Sports/Toys/Home/Tools component packages and the four-domain
    aggregation pass their audits, with table eligibility limited to
    `supplementary_diagnostic_only`. Do not claim every component is necessary.
-5. Phase 2.5 observation/motivation is now closed as descriptive
+6. Phase 2.5 observation/motivation is now closed as descriptive
    motivation-only evidence: Sports/Toys/Home/Tools observation packages and
    the four-domain aggregate pass their hardened gates, with table eligibility
    limited to `motivation_only_not_main_table_sota`. Use wording that C-CRP
    event-level uncertainty stratifies ranking reliability; do not claim
    causality, statistical significance, exhaustive baseline behavior, or
    main-table SOTA evidence from this module.
-6. Phase 2.5 hyperparameter analysis is now closed as supplementary
+7. Phase 2.5 hyperparameter analysis is now closed as supplementary
    stability/sensitivity evidence: Sports/Toys/Home/Tools single-domain
    packages and the four-domain aggregate pass their hardened gates. The
    aggregate lives at
@@ -65,7 +73,7 @@ PIDs, audit summaries, and missing-file errors.
    `weight_grid_label` on NDCG@10. Do not call this main-table SOTA evidence,
    all-metric robustness, test-selected tuning, or proof that the risk penalty
    is necessary.
-7. If a future audit finds no saved signal rows pass audit, use the guarded
+8. If a future audit finds no saved signal rows pass audit, use the guarded
    signal-row runner
    `experiments/rsc/run_ccrp_v3_signal_rows.py` to generate valid/test
    recomputable signal rows on the server, then audit them before selector use.
@@ -77,10 +85,10 @@ PIDs, audit summaries, and missing-file errors.
    `505000/505000`, while a 10k-user valid/test split still expects
    `1,010,000` final signal rows. Do not treat one `505000/505000` progress
    line as completion; require process exit plus final CSV/provenance files.
-8. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
+9. Keep SETRec excluded while blocked by upstream `tokenize_all` CUDA OOM
    failures; do not include it in the main official block unless a future
    memory-stable run passes all gates.
-9. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
+10. Build Signal/Decision/Generative LoRA artifacts only after teacher data and
    validation gates exist.
 ```
 
@@ -112,6 +120,9 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_execute_phase2_5_retention_cleanup.py` | Fail-closed retention cleanup action renderer/executor; defaults to dry-run, validates the plan, packet audit, and live preapproval audit, and requires `--execute` plus the exact approval token before any remote command runs |
 | `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` | Local-only audit for the compact Sports/Toys/Home/Tools official+C-CRP comparison certificate; verifies domain gates, method rows, paired-test counts, evidence consistency, and paper-scope disclaimers |
 | `scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py` | Local-only builder for the 36-row paper-facing full-metric evidence ledger; joins metrics, row counts, provenance/status, gate paths, paired-test paths, score audits, server-final audits, and local-light evidence paths |
+| `scripts/audit/main_build_final_paper_claim_audit.py` | Local-only final evidence-to-claim gate for the current paper-facing evidence package; emits supported/contradicted/unsupported claim rows and citation/manuscript readiness status without SSH or experiment execution |
+| `scripts/analysis/main_build_paper_result_tables.py` | Local-only paper-table builder for the visible complete NDCG@10 ranking over all eight official baselines plus C-CRP and the per-domain paired-test summary; reads existing local CSV evidence only |
+| `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}` | ARIS-style citation repair audit for the active manuscript; records all eight official baseline citations, recency counts, and `bibtex main` warning status |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 | `experiments/rsc/run_ccrp_v3_signal_rows.py` | Phase 2.5 server-side C-CRP signal-row runner; emits recomputable rows with identity, raw/calibrated relevance probability, evidence support, counterevidence strength, provenance, and parse-failure audit; do not use outputs until `main_audit_ccrp_uncertainty_sources.py` passes |
 
