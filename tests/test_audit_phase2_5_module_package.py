@@ -86,6 +86,29 @@ def _general_files(root: Path) -> None:
     )
 
 
+def _write_manifest_checks(root: Path, files: tuple[str, ...]) -> None:
+    manifest_checks = {
+        name: {
+            "ok": True,
+            "local_sha256": TEST_SHA256,
+            "server_sha256": TEST_SHA256,
+            "expected": TEST_SHA256,
+            "actual": TEST_SHA256,
+            "local_size": 1,
+            "server_size": 1,
+        }
+        for name in files
+    }
+    _json(
+        root / "local_server_manifest_comparison.json",
+        {
+            "ok": True,
+            "comparison_scope": "server_to_local_lightweight_sync",
+            "manifest_checks": manifest_checks,
+        },
+    )
+
+
 def _complete_observation_package(root: Path) -> None:
     _general_files(root)
     header = _metric_header(["domain", "method", "uncertainty_bin_index", "uncertainty_bin", "n_events"])
@@ -461,6 +484,22 @@ def test_component_ablation_package_audit_rejects_bad_coverage_totals(tmp_path):
 
 def _complete_hyperparameter_package(root: Path) -> None:
     _general_files(root)
+    required_manifest_files = (
+        "valid_ccrp_hyperparameter_sweep.csv",
+        "test_ccrp_hyperparameter_sweep.csv",
+        "ccrp_hyperparameter_sweep_provenance.json",
+        "ccrp_hyperparameter_curve_summary.csv",
+        "ccrp_hyperparameter_curve_provenance.json",
+        "fig_hyper_eta_curve.png",
+        "fig_hyper_eta_curve.pdf",
+        "fig_hyper_weight_simplex_or_lines.png",
+        "fig_hyper_weight_simplex_or_lines.pdf",
+        "run_config.json",
+        "log_snippets.md",
+    )
+    _write(root / "valid_ccrp_hyperparameter_sweep.csv", "split,control\nvalid,eta\n")
+    _write(root / "test_ccrp_hyperparameter_sweep.csv", "split,control\ntest,eta\n")
+    _json(root / "ccrp_hyperparameter_sweep_provenance.json", {"ok": True})
     rows = []
     for split in ("valid", "test"):
         for control in ("eta", "weight_grid_label"):
@@ -533,6 +572,7 @@ def _complete_hyperparameter_package(root: Path) -> None:
             "figure_paths": figures,
         },
     )
+    _write_manifest_checks(root, required_manifest_files)
 
 
 def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
@@ -542,6 +582,19 @@ def test_hyperparameter_package_audit_accepts_valid_and_test_package(tmp_path):
 
     assert audit["ok"] is True
     assert audit["paper_claim_ready"] is True
+
+
+def test_hyperparameter_package_audit_requires_manifest_coverage(tmp_path):
+    _complete_hyperparameter_package(tmp_path)
+    path = tmp_path / "local_server_manifest_comparison.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload["manifest_checks"].pop("run_config.json")
+    _json(path, payload)
+
+    audit = build_audit(module="hyperparameter_analysis", package_dir=tmp_path)
+
+    assert audit["ok"] is False
+    assert "local_server_manifest_missing_required_file:run_config.json" in audit["failures"]
 
 
 def test_hyperparameter_package_audit_requires_sweep_source_provenance(tmp_path):

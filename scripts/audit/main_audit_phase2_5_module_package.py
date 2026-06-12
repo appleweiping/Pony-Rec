@@ -293,6 +293,39 @@ def _comparison_has_substance(comparison: dict[str, Any]) -> bool:
     return _node_has_hash_evidence(comparison)
 
 
+def _check_manifest_covers_files(base: Path, required_files: tuple[str, ...], failures: list[str]) -> None:
+    comparisons = _present(base, SERVER_COMPARISON_FILES)
+    if not comparisons:
+        return
+    covered: dict[str, Any] = {}
+    saw_manifest_checks = False
+    for name in comparisons:
+        try:
+            comparison = _read_json(base / name)
+        except Exception:
+            continue
+        manifest_checks = comparison.get("manifest_checks")
+        if isinstance(manifest_checks, dict):
+            saw_manifest_checks = True
+            covered.update(manifest_checks)
+    if not saw_manifest_checks:
+        failures.append("local_server_manifest_missing_manifest_checks")
+        return
+    for required in required_files:
+        row = covered.get(required)
+        if not isinstance(row, dict):
+            failures.append(f"local_server_manifest_missing_required_file:{required}")
+            continue
+        if row.get("ok") is not True:
+            failures.append(f"local_server_manifest_required_file_not_ok:{required}")
+        local_sha = _clean_sha256(row.get("local_sha256") or row.get("actual"))
+        server_sha = _clean_sha256(row.get("server_sha256") or row.get("expected"))
+        if not local_sha or not server_sha:
+            failures.append(f"local_server_manifest_required_file_missing_hash:{required}")
+        elif local_sha != server_sha:
+            failures.append(f"local_server_manifest_required_file_hash_mismatch:{required}")
+
+
 def _check_general_package(base: Path, provenance: dict[str, Any], failures: list[str], warnings: list[str]) -> None:
     if not _has_nonempty_command(provenance, base):
         failures.append("missing_command_record")
@@ -977,6 +1010,23 @@ def _audit_hyperparameter(
     provenance = _load_required_json(base, "ccrp_hyperparameter_curve_provenance.json", failures)
 
     _check_general_package(base, provenance, failures, warnings)
+    _check_manifest_covers_files(
+        base,
+        (
+            "valid_ccrp_hyperparameter_sweep.csv",
+            "test_ccrp_hyperparameter_sweep.csv",
+            "ccrp_hyperparameter_sweep_provenance.json",
+            "ccrp_hyperparameter_curve_summary.csv",
+            "ccrp_hyperparameter_curve_provenance.json",
+            "fig_hyper_eta_curve.png",
+            "fig_hyper_eta_curve.pdf",
+            "fig_hyper_weight_simplex_or_lines.png",
+            "fig_hyper_weight_simplex_or_lines.pdf",
+            "run_config.json",
+            "log_snippets.md",
+        ),
+        failures,
+    )
     for column in ("split", "control", "control_value", "metric_name", "metric_value"):
         if column not in summary_header:
             failures.append(f"hyperparameter_summary_missing_column:{column}")

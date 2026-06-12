@@ -7,6 +7,8 @@ import json
 import math
 import statistics
 import subprocess
+import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -124,6 +126,19 @@ def _classification(rows: list[dict[str, Any]], *, tolerance: float) -> str:
             return "same_valid_test_best_all_domains"
         return "stable_with_domain_specific_best_values"
     return "mixed_or_unstable_hyperparameter_sensitivity"
+
+
+def _file_manifest(paths: list[Path]) -> dict[str, dict[str, Any]]:
+    manifest: dict[str, dict[str, Any]] = {}
+    for path in paths:
+        if not path.exists() or not path.is_file():
+            continue
+        manifest[path.name] = {
+            "path": str(path),
+            "sha256": sha256_file(path),
+            "size_bytes": path.stat().st_size,
+        }
+    return manifest
 
 
 def _plot_stability(rows: list[dict[str, Any]], output_dir: Path, *, metric: str) -> list[str]:
@@ -335,6 +350,13 @@ def aggregate_hyperparameter_analysis(
                 failures.append(f"stability_metric_mismatch:{domain}:{control}:{report.get('metric')}")
             if report.get("stable_within_tolerance") is not True:
                 failures.append(f"stability_not_ready:{domain}:{control}:{report.get('reason')}")
+            drop = _as_float(report.get("relative_drop_from_test_best"))
+            if not math.isfinite(drop):
+                failures.append(f"aggregate_stability_drop_nonfinite:{domain}:{control}:{report.get('relative_drop_from_test_best')}")
+            elif drop > relative_drop_tolerance + 1e-12:
+                failures.append(
+                    f"aggregate_stability_drop_exceeds_tolerance:{domain}:{control}:{drop}>{relative_drop_tolerance}"
+                )
             row_out = dict(report)
             row_out["domain"] = domain
             stability_rows.append(row_out)
@@ -363,6 +385,9 @@ def aggregate_hyperparameter_analysis(
     curve_path = out / "ccrp_hyperparameter_four_domain_curve_rows.csv"
     stability_path = out / "ccrp_hyperparameter_four_domain_stability_rows.csv"
     control_path = out / "ccrp_hyperparameter_four_domain_control_summary.csv"
+    summary_md_path = out / "ccrp_hyperparameter_four_domain_summary.md"
+    run_config_path = out / "run_config.json"
+    log_snippets_path = out / "log_snippets.md"
     _write_csv(curve_path, all_curve_rows)
     _write_csv(stability_path, stability_rows)
     _write_csv(control_path, control_rows)
@@ -370,10 +395,64 @@ def aggregate_hyperparameter_analysis(
     if not skip_plot:
         figure_paths.extend(_plot_stability(stability_rows, out, metric=metric))
         figure_paths.extend(_plot_mean_curves(all_curve_rows, out, metric=metric, controls=controls))
-    input_sha256 = {name: sha256_file(path) for name, path in input_paths.items() if Path(path).exists()}
-    all_controls_stable = bool(control_rows) and all(
-        row["stable_domain_count"] == row["domain_count"] == len(domains) for row in control_rows
+    md_lines = [
+        "# Four-Domain C-CRP Hyperparameter Sensitivity",
+        "",
+        f"- OK: `{not failures}`",
+        f"- Paper claim ready: `{not failures and exact_four_domain_set}`",
+        "- Table eligibility: `supplementary_hyperparameter_stability_only`",
+        f"- Metric: `{metric}`",
+        f"- Controls: `{', '.join(controls)}`",
+        "",
+        "| control | stable domains | max relative drop | worst test rank | classification |",
+        "| --- | ---: | ---: | ---: | --- |",
+    ]
+    for row in control_rows:
+        md_lines.append(
+            "| {control} | {stable_domain_count}/{domain_count} | {max_relative_drop_from_test_best:.12g} | {worst_test_rank_of_valid_best} | {classification} |".format(
+                **row
+            )
+        )
+    if failures:
+        md_lines.extend(["", "## Failures", *[f"- `{failure}`" for failure in failures]])
+    summary_md_path.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
+    command = " ".join(sys.argv)
+    git_commit = _git_commit()
+    run_config = {
+        "artifact_class": "paper_critical_hyperparameter_cross_domain_run_config",
+        "domain_count": len(domains),
+        "domains": list(domains),
+        "controls": list(controls),
+        "metric": metric,
+        "expected_events": expected_events,
+        "expected_candidates_per_event": expected_candidates_per_event,
+        "relative_drop_tolerance": relative_drop_tolerance,
+        "package_root": str(root),
+        "output_dir": str(out),
+        "git_commit": git_commit,
+        "command": command,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    _write_json(run_config_path, run_config)
+    log_snippets_path.write_text(
+        "# Four-Domain C-CRP Hyperparameter Aggregate Log Snippet\n\n"
+        f"- Command: `{command}`\n"
+        f"- OK: `{not failures}`\n"
+        f"- Input domains: `{', '.join(domains)}`\n"
+        f"- Curve rows: `{len(all_curve_rows)}`\n"
+        f"- Stability rows: `{len(stability_rows)}`\n"
+        f"- Control summary rows: `{len(control_rows)}`\n"
+        f"- Failures: `{len(failures)}`\n",
+        encoding="utf-8",
     )
+    input_sha256 = {name: sha256_file(path) for name, path in input_paths.items() if Path(path).exists()}
+    all_controls_stable = bool(control_rows) and not failures and all(
+        row["stable_domain_count"] == row["domain_count"] == len(domains)
+        and _as_float(row.get("max_relative_drop_from_test_best")) <= relative_drop_tolerance + 1e-12
+        for row in control_rows
+    )
+    output_files = [curve_path, stability_path, control_path, summary_md_path, run_config_path, log_snippets_path]
+    output_files.extend(Path(path) for path in figure_paths)
     provenance = {
         "artifact_class": "paper_critical_hyperparameter_cross_domain_sensitivity",
         "status_label": "paper_critical_hyperparameter_cross_domain_ready" if not failures else "blocked",
@@ -390,13 +469,18 @@ def aggregate_hyperparameter_analysis(
         "expected_candidates_per_event": expected_candidates_per_event,
         "relative_drop_tolerance": relative_drop_tolerance,
         "all_controls_stable": all_controls_stable,
-        "git_commit": _git_commit(),
+        "git_commit": git_commit,
+        "command": command,
         "input_paths": input_paths,
         "input_sha256": input_sha256,
+        "output_manifest": _file_manifest(output_files),
         "outputs": {
             "curve_rows_csv": str(curve_path),
             "stability_rows_csv": str(stability_path),
             "control_summary_csv": str(control_path),
+            "summary_md": str(summary_md_path),
+            "run_config_json": str(run_config_path),
+            "log_snippets_md": str(log_snippets_path),
             "figure_paths": figure_paths,
         },
         "table_eligibility": "supplementary_hyperparameter_stability_only",
@@ -408,27 +492,6 @@ def aggregate_hyperparameter_analysis(
         ],
     }
     _write_json(out / "ccrp_hyperparameter_four_domain_provenance.json", provenance)
-    md_lines = [
-        "# Four-Domain C-CRP Hyperparameter Sensitivity",
-        "",
-        f"- OK: `{provenance['ok']}`",
-        f"- Paper claim ready: `{provenance['paper_claim_ready']}`",
-        f"- Table eligibility: `{provenance['table_eligibility']}`",
-        f"- Metric: `{metric}`",
-        f"- Controls: `{', '.join(controls)}`",
-        "",
-        "| control | stable domains | max relative drop | worst test rank | classification |",
-        "| --- | ---: | ---: | ---: | --- |",
-    ]
-    for row in control_rows:
-        md_lines.append(
-            "| {control} | {stable_domain_count}/{domain_count} | {max_relative_drop_from_test_best:.12g} | {worst_test_rank_of_valid_best} | {classification} |".format(
-                **row
-            )
-        )
-    if failures:
-        md_lines.extend(["", "## Failures", *[f"- `{failure}`" for failure in failures]])
-    (out / "ccrp_hyperparameter_four_domain_summary.md").write_text("\n".join(md_lines) + "\n", encoding="utf-8")
     return provenance
 
 

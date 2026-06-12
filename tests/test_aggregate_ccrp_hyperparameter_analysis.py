@@ -142,6 +142,11 @@ def test_aggregate_hyperparameter_analysis_passes_four_domain_stability(tmp_path
     assert provenance["paper_claim_ready"] is True
     assert provenance["all_controls_stable"] is True
     assert provenance["table_eligibility"] == "supplementary_hyperparameter_stability_only"
+    assert provenance["command"]
+    assert "ccrp_hyperparameter_four_domain_control_summary.csv" in provenance["output_manifest"]
+    assert "ccrp_hyperparameter_four_domain_summary.md" in provenance["output_manifest"]
+    assert (tmp_path / "out" / "run_config.json").exists()
+    assert (tmp_path / "out" / "log_snippets.md").exists()
     summary = (tmp_path / "out" / "ccrp_hyperparameter_four_domain_control_summary.csv").read_text(encoding="utf-8")
     assert "stable_with_domain_specific_best_values" in summary
 
@@ -166,6 +171,26 @@ def test_aggregate_hyperparameter_analysis_fails_on_unstable_control(tmp_path):
 
     assert provenance["ok"] is False
     assert "stability_not_ready:toys:eta:test_drop_exceeds_tolerance" in provenance["failures"]
+
+
+def test_aggregate_hyperparameter_analysis_enforces_requested_tolerance(tmp_path):
+    root = tmp_path / "packages"
+    for domain in ("sports", "toys", "home", "tools"):
+        _seed_package(root, domain)
+
+    provenance = aggregate_hyperparameter_analysis(
+        package_root=root,
+        output_dir=tmp_path / "out",
+        relative_drop_tolerance=0.001,
+        skip_plot=True,
+    )
+
+    assert provenance["ok"] is False
+    assert provenance["paper_claim_ready"] is False
+    assert any(
+        failure.startswith("aggregate_stability_drop_exceeds_tolerance:")
+        for failure in provenance["failures"]
+    )
 
 
 def test_aggregate_hyperparameter_analysis_writes_figures(tmp_path):
