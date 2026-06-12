@@ -1,6 +1,6 @@
 # Submission Metadata Packet
 
-Generated: 2026-06-12T22:37:04.194121+00:00
+Generated: 2026-06-12T23:22:01.310509+00:00
 
 - OK: `true`
 - Submission metadata packet ready: `true`
@@ -11,9 +11,9 @@ Generated: 2026-06-12T22:37:04.194121+00:00
 - Abstract words/chars: `212` / `1565`
 - Keywords: LLM-based recommendation, uncertainty estimation, calibration, candidate reranking, same-candidate evaluation
 - Topic areas: Recommender systems, Evaluation and reproducibility, Large language models, Uncertainty and calibration
-- PDF: `Paper\main.pdf`, `9` pages, `546669` bytes
+- PDF: `Paper\main.pdf`, `9` pages, `546716` bytes
 - Source manifest files: `21`
-- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
+- Source manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
 
 ## Abstract
 

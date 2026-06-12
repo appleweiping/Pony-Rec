@@ -1,0 +1,185 @@
+{
+  "additional_review_paths": [
+    {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\gpt55_section_review_after_handoff_20260613.json",
+      "sha256": "5593f1450fef9ce0bdf85943cb2f3ce733ed6acbddeb32c26ee190b12b82b00e",
+      "size_bytes": 4476
+    }
+  ],
+  "aris_skills": [
+    "aris-auto-review-loop",
+    "aris-paper-claim-audit",
+    "aris-citation-audit"
+  ],
+  "classified_remaining_blockers": {
+    "external_proceedings_metadata": [
+      "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+      "promax:final_page_range_missing_in_bib",
+      "promax:crossref_registry_not_visible:status=404",
+      "promax:doi_resolver_not_visible:status=404",
+      "external_proceedings_metadata_not_ready",
+      "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed"
+    ],
+    "manual_submission_system": [
+      "Final manual submission-system metadata/format checklist is not closed.",
+      "manual_submission_system_not_ready",
+      "manual_submission_system_items_not_confirmed"
+    ],
+    "other": []
+  },
+  "created_at_utc": "2026-06-12T23:23:17.826223+00:00",
+  "failures": [],
+  "final_panel_coverage_complete": false,
+  "final_submission_ready": false,
+  "final_submission_ready_policy": "Always false here; this packet is a review-continuation handoff and cannot close external proceedings metadata or private submission-system confirmations.",
+  "gate_summary": {
+    "claim_audit_ok": true,
+    "closure_other_blockers": [],
+    "closure_packet_ok": true,
+    "external_proceedings_metadata_ready": false,
+    "manual_submission_system_ready": false,
+    "panel_ok": true,
+    "promax_probe_expected_blocked": true,
+    "promax_public_metadata_ready": false,
+    "release_candidate_stack_ok": true,
+    "submission_package_audit_ok": true
+  },
+  "input_paths": {
+    "claim_audit": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\final_paper_claim_audit_after_full_panel_review_20260612.json",
+      "sha256": "ceb6ff1eb1393580dab990e58b37afe8ff1dcb4324134ca2d04969c6c376a6db",
+      "size_bytes": 13282
+    },
+    "closure_packet": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
+      "sha256": "561ff5673e1a6d06935f4ce610467fd6389a6469d9ce5d4d0d478a4b3fdc11b7",
+      "size_bytes": 15256
+    },
+    "panel_review": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\final_full_manuscript_panel_review_20260612.json",
+      "sha256": "6cbad714fe6488e649bc580c1e952054ebcc6a37075050ecf0e47c4152fbad84",
+      "size_bytes": 4596
+    },
+    "promax_probe": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
+      "sha256": "e8eb87f5cce39fd80dc757f0200379dfb6ba634c04b67cb29ce496da999cd6b7",
+      "size_bytes": 4742
+    },
+    "release_candidate_stack": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\submission_release_candidate_stack_refresh_20260613.json",
+      "sha256": "366d4da4a40268e8bea785a4e3355c04ecd2b0cd821ab8a257e114ccc73f9e0a",
+      "size_bytes": 11649
+    },
+    "submission_package_audit": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260613.json",
+      "sha256": "1289653dc7794d1b93399f6f133f3a58ae21a14b1ab830bfc685735081e21549",
+      "size_bytes": 16084
+    }
+  },
+  "local_release_candidate_ready": true,
+  "mode": "local_read_only_review_continuation_packet",
+  "next_actions": [
+    "Attach explicit Claude Opus and fresh GPT-5.5 reviewer outputs as additional review JSONs if they complete.",
+    "Keep final_submission_ready=false until ProMax page-range/Crossref/DOI and private manual checklist close.",
+    "After any manuscript, bibliography, package, or metadata change, rerun the release-candidate stack and this packet."
+  ],
+  "ok": true,
+  "project": "uncertainty",
+  "read_only": true,
+  "ready_for_human_handoff": true,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed.",
+    "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+    "manual_submission_system_items_not_confirmed",
+    "external_proceedings_metadata_not_ready",
+    "manual_submission_system_not_ready",
+    "promax:crossref_registry_not_visible",
+    "promax:doi_resolver_not_visible",
+    "explicit_claude_opus_review"
+  ],
+  "review_continuation_ready": true,
+  "reviewer_coverage": {
+    "additional_review_count": 1,
+    "explicit_claude_opus_present": false,
+    "explicit_gpt55_present": true,
+    "final_panel_coverage_complete": false,
+    "missing_perspectives": [
+      "explicit_claude_opus_review"
+    ],
+    "panel_review_count": 3,
+    "reviewer_names": [
+      "Faraday existing subagent",
+      "Avicenna existing subagent",
+      "Meitner existing subagent",
+      "gpt-5.5-xhigh"
+    ],
+    "score_floor_0_to_10": 8.0,
+    "score_floor_meets_8": true,
+    "score_values_0_to_10": [
+      8.0,
+      8.0,
+      8.3,
+      8.0,
+      8.0
+    ]
+  },
+  "schema_version": "2026-06-13.review_continuation_packet.v1",
+  "verdict": "REVIEW_CONTINUATION_READY_FINAL_BLOCKED",
+  "warnings": [
+    "underfull_layout_warnings:hbox=6,vbox=8",
+    "pre_submission_gate_refresh:external_proceedings_metadata:proex:crossref_not_visible:status=404",
+    "pre_submission_gate_refresh:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404",
+    "pre_submission_gate_refresh:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present",
+    "pre_submission_gate_refresh:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present",
+    "pre_submission_gate_refresh:submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "pre_submission_gate_refresh:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
+    "pre_submission_gate_refresh:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
+    "pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404",
+    "pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404",
+    "pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present",
+    "pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present",
+    "pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation",
+    "submission_release_candidate:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "submission_release_candidate:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
+    "submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404",
+    "submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404",
+    "submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present",
+    "submission_release_candidate:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present",
+    "submission_release_candidate:pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation",
+    "submission_release_candidate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
+    "submission_release_candidate:external_proceedings_metadata:proex:crossref_not_visible:status=404",
+    "submission_release_candidate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404",
+    "submission_release_candidate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present",
+    "submission_release_candidate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present",
+    "submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
+    "external_proceedings_metadata:proex:crossref_not_visible:status=404",
+    "external_proceedings_metadata:proex:doi_resolver_not_visible:status=404",
+    "external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present",
+    "external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present",
+    "acm_dl_not_accessible:status=403"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

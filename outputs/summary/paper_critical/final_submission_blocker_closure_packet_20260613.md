@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-12T22:40:02.820517+00:00
+Generated: 2026-06-12T23:22:57.995816+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -62,7 +62,7 @@ Current ProMax evidence:
 - DOI resolver status: `404`
 
 Latest public probe:
-- Created: `2026-06-12T22:38:43.848080+00:00`
+- Created: `2026-06-12T23:22:32.493230+00:00`
 - ProMax public metadata ready: `false`
 - Crossref status: `404`
 - DOI resolver status: `404`
@@ -90,7 +90,7 @@ Next commands:
 - `python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --manual-private-confirmation-json path/to/untracked_private_confirmation.json --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md`
 
 Manual confirmation safe fields:
-- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
+- Source manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
 - Unconfirmed item IDs: `select_track_and_paper_type, paste_title, paste_abstract, paste_keywords, select_topic_areas, upload_pdf, upload_source_if_required, confirm_anonymous_shell, enter_authors, complete_conflicts, complete_reviewer_preferences, complete_declarations, final_preview_and_submit`
 - Private item IDs: `enter_authors, complete_conflicts, complete_reviewer_preferences, complete_declarations, final_preview_and_submit`
 

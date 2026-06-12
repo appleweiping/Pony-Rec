@@ -1,0 +1,90 @@
+{
+  "agent": "codex",
+  "aris_skill": "aris-citation-audit",
+  "audit_name": "final_citation_spot_check",
+  "automated_checks": {
+    "bibliography_entry_count": 21,
+    "bibtex_warning_count": 0,
+    "cited_key_count": 21,
+    "missing_in_bib": [],
+    "placeholder_hits": [],
+    "uncited_in_bib": [],
+    "unresolved_citation_count": 0
+  },
+  "bibtex_repairs": [
+    "ProMax records arXiv eprint, ISBN, location, and expected ACM DOI while final pages remain pending.",
+    "Lin et al. keeps TMLR as note with arXiv DOI to avoid ACM BibTeX volume/page warnings."
+  ],
+  "completeness": {
+    "foundation_categories_satisfied": [
+      "sequential recommendation",
+      "calibration",
+      "LLM confidence and uncertainty",
+      "Bayesian or distribution-free uncertainty",
+      "sampled/same-candidate recommendation evaluation",
+      "selective/risk-aware prediction"
+    ],
+    "must_add_count": 0,
+    "official_baselines_cited": [
+      "ELMRec",
+      "IRLLRec",
+      "LLM2Rec",
+      "LLMEmb",
+      "LLM-ESR",
+      "ProEx",
+      "ProMax",
+      "RLMRec"
+    ]
+  },
+  "created_at_utc": "2026-06-12T23:22:30.851701+00:00",
+  "external_spot_checks": [
+    "ProEx metadata checked by external proceedings metadata audit.",
+    "ProMax metadata checked by public metadata probe and still awaits final ACM/Crossref visibility.",
+    "RLMRec, ELMRec, and Lin et al. entries remain resolved in the current BibTeX build."
+  ],
+  "failures": [],
+  "fairness_repairs": [
+    "ELMRec described as high-order interaction-aware LLM recommendation.",
+    "IRLLRec described as intent representation learning with LLMs.",
+    "ProEx described as profile extrapolation with LLMs.",
+    "ProMax described as LLM-derived profiles with distribution shaping.",
+    "RLMRec described as representation learning with LLMs, not reinforcement learning."
+  ],
+  "final_submission_ready": false,
+  "input_paths": {
+    "aux": {
+      "exists": true,
+      "path": "Paper\\main.aux",
+      "size_bytes": 13442
+    },
+    "bibliography": {
+      "exists": true,
+      "path": "Paper\\references.bib",
+      "size_bytes": 10520
+    },
+    "bibtex_log": {
+      "exists": true,
+      "path": "Paper\\main.blg",
+      "size_bytes": 1606
+    },
+    "manuscript": {
+      "exists": true,
+      "path": "Paper\\main.tex",
+      "size_bytes": 840
+    }
+  },
+  "mode": "local_read_only_final_citation_spot_check",
+  "ok": true,
+  "overall_citation_health": "HEALTHY_WITH_PROCEEDINGS_METADATA_CAUTION",
+  "project": "uncertainty",
+  "read_only": true,
+  "remaining_cautions": [
+    "ProMax final ACM page range and DOI/Crossref visibility remain final-submission blockers.",
+    "Citation spot-check does not replace section-level top-conference review."
+  ],
+  "schema_version": "2026-06-13.final_citation_spot_check.v1",
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

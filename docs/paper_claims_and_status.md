@@ -109,6 +109,31 @@ now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
 release-candidate stack, and latest probe while preserving
 `final_submission_ready=false`.
 
+**2026-06-13 review-continuation packet.** A fresh GPT-5.5 xhigh reviewer pass
+after the handoff refresh rated the paper `8.0/10` with verdict
+`CONDITIONAL_PASS`, table eligibility limited to the scoped controlled
+same-candidate reranking claim, and `final_submission_ready_claim_allowed=false`.
+Codex applied the actionable non-experimental fixes: the abstract now uses
+`\method{} ranks` to avoid the PDF-visible `C-CRPranks` spacing issue; the
+post-section-review claim-audit CSV compatibility path
+`outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.csv`
+exists; and the current citation spot-check was refreshed as
+`outputs/summary/paper_critical/final_citation_spot_check_20260613.{json,md}`
+with `cited_key_count=21`, `bibliography_entry_count=21`,
+`missing_in_bib=[]`, `uncited_in_bib=[]`, `bibtex_warning_count=0`, and
+`must_add_count=0`. After the source change, Codex reran the LaTeX/BibTeX
+chain and the complete 2026-06-13 release-candidate stack before rebuilding
+the final blocker closure packet. The review-continuation handoff
+`outputs/summary/paper_critical/review_continuation_packet_20260613.{json,md}`
+reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
+`local_release_candidate_ready=true`, `ready_for_human_handoff=true`, and
+`final_submission_ready=false`. It also keeps
+`final_panel_coverage_complete=false` because explicit Claude Opus reviewer
+output has not yet been captured. The attempted Claude Opus review job failed
+with `Claude CLI did not return JSON output`; the failure record is
+`outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json` and
+is intentionally not counted as valid reviewer evidence.
+
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local
 handoff index over the final gate, refresh freshness audit, anonymous source

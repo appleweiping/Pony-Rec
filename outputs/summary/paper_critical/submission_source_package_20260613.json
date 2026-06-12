@@ -18,7 +18,7 @@
         "source_size_bytes": 33541
       },
       {
-        "copied_size_bytes": 17039,
+        "copied_size_bytes": 17098,
         "git_state": {
           "allowed_generated_artifact": true,
           "git_available": true,
@@ -28,12 +28,12 @@
         "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\main.bbl",
         "path": "Paper\\main.bbl",
         "role": "compiled_bibliography",
-        "sha256": "38af445dcd2b75261c3436e963add70f2bd5ab8fd09443ed80368347c8ec1129",
+        "sha256": "be342f68e2cec53ddaaf190fe8f2e85e35142d58ab02951ed42ce4d9aa623243",
         "source_path": "Paper\\main.bbl",
-        "source_size_bytes": 17039
+        "source_size_bytes": 17098
       },
       {
-        "copied_size_bytes": 546669,
+        "copied_size_bytes": 546716,
         "git_state": {
           "allowed_generated_artifact": true,
           "git_available": true,
@@ -43,9 +43,9 @@
         "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\main.pdf",
         "path": "Paper\\main.pdf",
         "role": "compiled_pdf",
-        "sha256": "588afd8311c634569e029e8061c9a8cbefd1d6b2bd53a162b89857b5296cdc86",
+        "sha256": "7e8cfda401fdfe179753fe511c5766d3a41323d60287af929175deec536d3e23",
         "source_path": "Paper\\main.pdf",
-        "source_size_bytes": 546669
+        "source_size_bytes": 546716
       },
       {
         "copied_size_bytes": 840,
@@ -78,7 +78,7 @@
         "source_size_bytes": 10520
       },
       {
-        "copied_size_bytes": 1603,
+        "copied_size_bytes": 1605,
         "git_state": {
           "allowed_generated_artifact": false,
           "git_available": true,
@@ -88,9 +88,9 @@
         "package_path": "artifacts\\submission_source_package_20260613\\files\\Paper\\sections\\abstract.tex",
         "path": "Paper\\sections\\abstract.tex",
         "role": "tex_source",
-        "sha256": "45758fa192e1256d02c2d9c7421eaeefee9a65a9862e1c2fdf4498ce1f2db182",
+        "sha256": "34b3aff5da743e3894d04c5cb93957eb552e2a428b90c5c6430347a65692516c",
         "source_path": "Paper\\sections\\abstract.tex",
-        "source_size_bytes": 1603
+        "source_size_bytes": 1605
       },
       {
         "copied_size_bytes": 4155,
@@ -318,10 +318,10 @@
         "source_size_bytes": 643
       }
     ],
-    "manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
-    "total_bytes": 652763
+    "manifest_sha256": "91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424",
+    "total_bytes": 652871
   },
-  "created_at_utc": "2026-06-12T22:36:19.700117+00:00",
+  "created_at_utc": "2026-06-12T23:21:45.806464+00:00",
   "failures": [],
   "final_submission_ready": false,
   "input_paths": {
@@ -354,8 +354,8 @@
     "audit_final_submission_ready": false,
     "source_manifest_external_source_references": [],
     "source_manifest_file_count": 21,
-    "source_manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
-    "source_manifest_total_bytes": 652763,
+    "source_manifest_sha256": "91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424",
+    "source_manifest_total_bytes": 652871,
     "submission_package_audit_ok": true,
     "submission_package_ready_for_target_formatting": true
   },

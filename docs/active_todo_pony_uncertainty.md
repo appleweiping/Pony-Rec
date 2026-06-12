@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 00:45 CEST
+Last updated: 2026-06-13 01:20 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,28 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 review-continuation refresh after GPT-5.5 xhigh handoff:
+  GPT-5.5 xhigh returned an `8.0/10` `CONDITIONAL_PASS`, while keeping
+  `final_submission_ready_claim_allowed=false`. Codex fixed the PDF-visible
+  abstract spacing issue (`\method{} ranks`), restored the missing
+  `outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.csv`
+  compatibility artifact, and refreshed citation evidence at
+  `outputs/summary/paper_critical/final_citation_spot_check_20260613.{json,md}`.
+  The new citation spot-check reports `cited_key_count=21`,
+  `bibliography_entry_count=21`, `missing_in_bib=[]`, `uncited_in_bib=[]`,
+  `bibtex_warning_count=0`, and `must_add_count=0`. The new review handoff
+  artifact
+  `outputs/summary/paper_critical/review_continuation_packet_20260613.{json,md}`
+  reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
+  `local_release_candidate_ready=true`, `ready_for_human_handoff=true`, and
+  `final_submission_ready=false`. It also records
+  `final_panel_coverage_complete=false` because explicit Claude Opus reviewer
+  output is still missing. A Claude Opus review was attempted through
+  `mcp__claude_review` but failed with `Claude CLI did not return JSON output`;
+  the failed attempt is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json` and
+  does not count as reviewer coverage.
 
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`

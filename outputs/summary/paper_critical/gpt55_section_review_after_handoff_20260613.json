@@ -1,0 +1,69 @@
+{
+  "reviewer": "gpt-5.5-xhigh",
+  "created_at_utc": "2026-06-12T23:04:37+00:00",
+  "source": "multi_agent_v1 subagent 019ebe13-5a44-73f2-bfa7-dd0273986014",
+  "score_0_to_10": 8.0,
+  "verdict": "CONDITIONAL_PASS",
+  "final_submission_ready_claim_allowed": false,
+  "table_eligibility": {
+    "main_results": "ELIGIBLE for scoped controlled same-candidate reranking claim only",
+    "full_baseline_rank_and_significance_tables": "ELIGIBLE as supporting evidence",
+    "uncertainty_observation": "MOTIVATION/DIAGNOSTIC only, not causal or SOTA evidence",
+    "component_ablation_and_hyperparameter_tables": "SUPPLEMENTARY/DIAGNOSTIC only",
+    "forbidden": "full-catalog recommender SOTA, universal winner, every-component-necessary, positive-risk-penalty-necessary"
+  },
+  "critical_blockers": [
+    "Final submission gate is explicitly false: external proceedings metadata and manual submission-system gates remain open.",
+    "ProMax final ACM page range is missing; Crossref /works and DOI resolver for 10.1145/3805712.3809600 still return 404.",
+    "Private manual submission-system confirmation is not completed; author/COI/reviewer/declaration/final-preview fields remain manual/private pending."
+  ],
+  "major_required_fixes": [
+    "Do not call the paper final-submission-ready until final_submission_gate reports true.",
+    "Regenerate or restore outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.csv, or update docs that claim the .csv exists.",
+    "Refresh the final citation spot-check: the named 20260612 spot-check reports 19 cited keys, while current Paper/references.bib and Paper/main.aux show 21.",
+    "Fix the PDF-visible abstract spacing typo: source has \\\\method ranks, rendering as C-CRPranks.",
+    "After any BibTeX/source fix, rerun package, source rebuild, external metadata, release-candidate stack, and final gate."
+  ],
+  "minor_suggestions": [
+    "Underfull hbox/vbox warnings are nonblocking but worth polishing.",
+    "Keep the current limitation wording; it is doing important anti-overclaim work.",
+    "No new GPU experiments are required by the inspected claim/table state."
+  ],
+  "overclaim_risks": [
+    "The phrase ranks first against eight official-code-level baselines is supported only under the four-domain 10k-user/101-candidate same-candidate protocol.",
+    "Actionable uncertainty is acceptable only with the current caveat that several components are weak/redundant.",
+    "Calibrated is defensible because method text clarifies the paper-facing calibrated field and no new test-fitted calibrator."
+  ],
+  "citation_or_metadata_risks": [
+    "ProMax remains the main metadata blocker: arXiv confirms 11 pages and SIGIR 2026 acceptance, but no final ACM page range / DOI registry visibility yet.",
+    "External author/publication pages do not close ACM/Crossref metadata.",
+    "ProEx is classified ready in the 20260613 external audit via pages/DBLP-style source evidence, but DOI/Crossref live checks still returned 404, so keep it as a warning."
+  ],
+  "requested_but_missing": [
+    "outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.csv"
+  ],
+  "exact_files_inspected": [
+    "AGENTS.md",
+    "docs/top_conference_review_gate.md",
+    "docs/paper_claims_and_status.md",
+    "docs/milestones/README.md",
+    "docs/server_runbook.md",
+    "Paper/main.tex",
+    "Paper/sections/abstract.tex through conclusion.tex",
+    "Paper/tables/*.tex",
+    "Paper/references.bib",
+    "Paper/main.pdf",
+    "Paper/main.log",
+    "Paper/main.blg",
+    "outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md}",
+    "outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}",
+    "outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}",
+    "outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}",
+    "outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}",
+    "outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}",
+    "outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260613.{json,md}",
+    "outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}",
+    "outputs/summary/paper_critical/submission_package_audit_20260613.{json,md}",
+    "outputs/summary/paper_critical/manual_submission_checklist_20260613.{json,md}"
+  ]
+}

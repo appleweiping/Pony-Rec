@@ -1,6 +1,6 @@
 # Manual Submission Checklist
 
-Generated: 2026-06-12T22:37:04.241173+00:00
+Generated: 2026-06-12T23:22:01.360011+00:00
 
 - OK: `true`
 - Manual submission checklist ready: `true`
@@ -9,7 +9,7 @@ Generated: 2026-06-12T22:37:04.241173+00:00
 - Target profile: `sigir2026_full_paper_acm_anonymous`
 - Checklist ID: `sigir2026_anonymous_full_paper_manual_submission`
 - Items: `14`
-- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
+- Source manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
 
 ## Private Confirmation
 
@@ -92,7 +92,7 @@ Generated: 2026-06-12T22:37:04.241173+00:00
 - Private: `false`
 - Storage policy: `repo_evidence_manifest_only`
 - Prefill source: `package_crosscheck.source_manifest_sha256`
-- Prefill summary: 795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc
+- Prefill summary: 91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424
 - Blockers: None
 
 ### `confirm_anonymous_shell`

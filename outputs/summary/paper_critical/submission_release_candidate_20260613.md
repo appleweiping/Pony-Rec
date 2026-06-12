@@ -1,6 +1,6 @@
 # Submission Release-Candidate Packet
 
-Generated: 2026-06-12T22:37:09.997755+00:00
+Generated: 2026-06-12T23:22:02.714041+00:00
 
 - Verdict: `LOCAL_RELEASE_CANDIDATE_READY_FINAL_BLOCKED`
 - OK: `true`
@@ -26,8 +26,8 @@ Generated: 2026-06-12T22:37:09.997755+00:00
 ## Package Summary
 
 - Source files: `21`
-- Source bytes: `652763`
-- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
+- Source bytes: `652871`
+- Source manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
 - Rebuild PDF pages: `9`
 - Rebuild PDF bytes: `546716`
 - BibTeX warnings: `0`
@@ -57,6 +57,7 @@ Generated: 2026-06-12T22:37:09.997755+00:00
 - `final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 - `final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
 - `final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation`
 - `submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`

@@ -43,13 +43,13 @@
       "path": "Paper\\main.log",
       "size_bytes": 55332
     },
-    "logged_pdf_bytes": 546669,
+    "logged_pdf_bytes": 546716,
     "overfull_hbox_count": 0,
     "page_count": 9,
     "pdf": {
       "exists": true,
       "path": "Paper\\main.pdf",
-      "size_bytes": 546669
+      "size_bytes": 546716
     },
     "rerun_warning_count": 0,
     "undefined_citation_count": 0,
@@ -57,7 +57,7 @@
     "underfull_hbox_count": 6,
     "underfull_vbox_count": 8
   },
-  "created_at_utc": "2026-06-12T22:35:29.032297+00:00",
+  "created_at_utc": "2026-06-12T23:21:34.917082+00:00",
   "documentclass": {
     "documentclass": "acmart",
     "options": [
@@ -85,7 +85,7 @@
     "external_metadata_audit": {
       "exists": true,
       "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260613.json",
-      "size_bytes": 21295
+      "size_bytes": 21291
     },
     "metadata_followup": {
       "exists": true,
@@ -138,7 +138,7 @@
     "main_bbl": {
       "exists": true,
       "path": "Paper\\main.bbl",
-      "size_bytes": 17039
+      "size_bytes": 17098
     },
     "main_blg": {
       "exists": true,
@@ -153,7 +153,7 @@
     "main_pdf": {
       "exists": true,
       "path": "Paper\\main.pdf",
-      "size_bytes": 546669
+      "size_bytes": 546716
     },
     "main_tex": {
       "exists": true,
@@ -303,15 +303,15 @@
         "exists": true,
         "path": "Paper\\main.bbl",
         "role": "compiled_bibliography",
-        "sha256": "38af445dcd2b75261c3436e963add70f2bd5ab8fd09443ed80368347c8ec1129",
-        "size_bytes": 17039
+        "sha256": "be342f68e2cec53ddaaf190fe8f2e85e35142d58ab02951ed42ce4d9aa623243",
+        "size_bytes": 17098
       },
       {
         "exists": true,
         "path": "Paper\\main.pdf",
         "role": "compiled_pdf",
-        "sha256": "588afd8311c634569e029e8061c9a8cbefd1d6b2bd53a162b89857b5296cdc86",
-        "size_bytes": 546669
+        "sha256": "7e8cfda401fdfe179753fe511c5766d3a41323d60287af929175deec536d3e23",
+        "size_bytes": 546716
       },
       {
         "exists": true,
@@ -331,8 +331,8 @@
         "exists": true,
         "path": "Paper\\sections\\abstract.tex",
         "role": "tex_source",
-        "sha256": "45758fa192e1256d02c2d9c7421eaeefee9a65a9862e1c2fdf4498ce1f2db182",
-        "size_bytes": 1603
+        "sha256": "34b3aff5da743e3894d04c5cb93957eb552e2a428b90c5c6430347a65692516c",
+        "size_bytes": 1605
       },
       {
         "exists": true,
@@ -440,8 +440,8 @@
         "size_bytes": 643
       }
     ],
-    "manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
-    "total_bytes": 652763
+    "manifest_sha256": "91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424",
+    "total_bytes": 652871
   },
   "submission_package_ready_for_target_formatting": true,
   "target_formatting_profile": {

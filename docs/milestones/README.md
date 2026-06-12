@@ -138,7 +138,23 @@ probes passing, and `promax_public_metadata_ready=false`. The matching
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
 now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
 full release-candidate stack, and public probe while keeping
-`final_submission_ready=false`. The submission package
+`final_submission_ready=false`. A fresh GPT-5.5 xhigh post-handoff review rated
+the current manuscript `8.0/10` with `CONDITIONAL_PASS` and no new GPU
+experiment requirement, but still forbids a final-submission-ready claim.
+Codex fixed the reviewer-caught abstract spacing issue (`\method{} ranks`),
+restored the post-section-review claim-audit `.csv` compatibility artifact, and
+refreshed
+`outputs/summary/paper_critical/final_citation_spot_check_20260613.{json,md}`,
+which now reports `21` cited keys, `21` bibliography entries, no missing or
+uncited keys, zero BibTeX warnings, and `must_add_count=0`. The new
+`outputs/summary/paper_critical/review_continuation_packet_20260613.{json,md}`
+reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
+`local_release_candidate_ready=true`, `ready_for_human_handoff=true`, and
+`final_submission_ready=false`; explicit Claude Opus reviewer output remains
+missing, so `final_panel_coverage_complete=false`. The attempted Claude Opus
+review job failed with `Claude CLI did not return JSON output` and is recorded
+at `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json`;
+it does not count as reviewer coverage. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission

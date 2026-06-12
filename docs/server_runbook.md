@@ -51,14 +51,28 @@ PIDs, audit summaries, and missing-file errors.
    expanded-manuscript claim-text audit at
    `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`
    reports `READY_WITH_SCOPE_GUARDS` with no unsupported, overclaimed, or
-   contradicted claims. Final citation spot-check is now saved at
-   `outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
-   with `must_add_count=0`, all eight official baselines cited, no unresolved
-   citation keys, and `Paper/main.blg` still at `warning$ -- 0`. GPT-5.5 xhigh
+   contradicted claims. Final citation spot-check is now refreshed at
+   `outputs/summary/paper_critical/final_citation_spot_check_20260613.{json,md}`
+   with `cited_key_count=21`, `bibliography_entry_count=21`,
+   `must_add_count=0`, all eight official baselines cited, no missing or
+   uncited keys, and `Paper/main.blg` still at `warning$ -- 0`. GPT-5.5 xhigh
    section-level review returned `8.0/10` conditional pass but not
    submission-ready; the applied fixes are recorded in
    `outputs/summary/paper_critical/section_level_review_20260612.{json,md}`.
-   The latest `Paper/main.pdf` compiles to 9 pages / 541654 bytes with visible
+   The post-handoff GPT-5.5 xhigh review also returned `8.0/10`
+   `CONDITIONAL_PASS`; Codex fixed the abstract `C-CRPranks` spacing issue,
+   restored
+   `outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.csv`,
+   and recorded the handoff at
+   `outputs/summary/paper_critical/review_continuation_packet_20260613.{json,md}`.
+   That packet reports `ok=true`, `review_continuation_ready=true`, score floor
+   `8.0`, and `final_submission_ready=false`, while keeping
+   `final_panel_coverage_complete=false` because explicit Claude Opus reviewer
+   output is still missing. The attempted Claude Opus review job failed with
+   `Claude CLI did not return JSON output`; the failed attempt is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json`
+   and does not count as reviewer coverage. The latest `Paper/main.pdf` compiles to 9 pages /
+   546716 bytes with visible
    official-baseline provenance, all-metric rank-first, and four-domain
    ablation summary tables. Codex has already rerun the evidence-to-claim gate at
    `outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md,csv}`
@@ -84,9 +98,10 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
    Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,
    and `promax_public_metadata_ready=false`.
-   The current priority is paper-critical tests/readiness checks and another
-   section-level review on this latest draft before any final-readiness claim;
-   Claude Opus reviewer coverage was still missing in this session.
+   The current priority is to capture explicit Claude Opus reviewer output if
+   available, then keep monitoring the ProMax public metadata and private manual
+   submission-system blockers. Do not claim final readiness until the final
+   submission gate reports true.
 3. Treat performance/table evidence as complete for the current same-candidate
    claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
    all eight official-code-level baseline rows complete; the four-new-domain
@@ -162,6 +177,8 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_cross_domain_official_ccrp_certificate.py` | Local-only audit for the compact Sports/Toys/Home/Tools official+C-CRP comparison certificate; verifies domain gates, method rows, paired-test counts, evidence consistency, and paper-scope disclaimers |
 | `scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py` | Local-only builder for the 36-row paper-facing full-metric evidence ledger; joins metrics, row counts, provenance/status, gate paths, paired-test paths, score audits, server-final audits, and local-light evidence paths |
 | `scripts/audit/main_build_final_paper_claim_audit.py` | Local-only final evidence-to-claim gate for the current paper-facing evidence package; emits supported/contradicted/unsupported claim rows and citation/manuscript readiness status without SSH or experiment execution |
+| `scripts/audit/main_build_final_citation_spot_check.py` | Local-only ARIS citation spot-check over the current TeX aux/BibTeX files; verifies cited/bibliography key counts, missing/uncited keys, BibTeX warnings, official-baseline citation coverage, and keeps final readiness false while metadata blockers remain |
+| `scripts/audit/main_build_review_continuation_packet.py` | Local-only review-continuation handoff over the full-panel review, claim audit, submission package audit, release-candidate stack, closure packet, ProMax probe, and optional fresh reviewer JSONs; records score floor, missing reviewer perspectives, and final-blocked status |
 | `scripts/analysis/main_build_paper_result_tables.py` | Local-only paper-table builder for the visible complete NDCG@10 ranking over all eight official baselines plus C-CRP and the per-domain paired-test summary; reads existing local CSV evidence only |
 | `scripts/audit/main_audit_submission_package.py` | Local read-only package/source/PDF gate for the anonymous ACM submission package; verifies source closure, local figures, BibTeX/build health, profile constraints, source manifest, final-panel evidence, external metadata blockers, and privacy-preserving anonymous source leak scan counts |
 | `scripts/audit/main_build_submission_source_package.py` | Local-only anonymous source-package staging builder; copies exactly the audited `source_package_manifest` files into ignored `artifacts/`, validates hashes/sizes/git allowlist/private-path exclusions/exact tree replacement, and writes a compact JSON/MD manifest without changing final submission readiness |

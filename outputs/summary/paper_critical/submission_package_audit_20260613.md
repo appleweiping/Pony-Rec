@@ -1,13 +1,13 @@
 # Submission Package Audit
 
-Generated: 2026-06-12T22:35:29.032297+00:00
+Generated: 2026-06-12T23:21:34.917082+00:00
 
 - Verdict: `READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`
 - OK: `true`
 - Submission package ready for target formatting: `true`
 - Final submission ready: `false`
 - PDF pages: `9`
-- PDF bytes: `546669`
+- PDF bytes: `546716`
 - BibTeX warnings: `0`
 - Overfull hbox warnings: `0`
 - Underfull hbox/vbox warnings: `6` / `8`
@@ -17,7 +17,7 @@ Generated: 2026-06-12T22:35:29.032297+00:00
 - External proceedings metadata ready: `False`
 - Target formatting profile: `sigir2026_full_paper_acm_anonymous` ok=`true`
 - Source package manifest files: `21`
-- Source package manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
+- Source package manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
 
 ## Remaining Blockers
 

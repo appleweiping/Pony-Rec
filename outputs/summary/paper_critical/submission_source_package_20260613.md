@@ -1,6 +1,6 @@
 # Submission Source Package
 
-Generated: 2026-06-12T22:36:19.700117+00:00
+Generated: 2026-06-12T23:21:45.806464+00:00
 
 - OK: `true`
 - Submission source package ready: `true`
@@ -10,18 +10,18 @@ Generated: 2026-06-12T22:36:19.700117+00:00
 - Source audit OK: `true`
 - Anonymous source leak scan OK: `true`
 - Copied files: `21`
-- Copied total bytes: `652763`
-- Copied manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
-- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
+- Copied total bytes: `652871`
+- Copied manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
+- Source manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
 
 ## Copied Files
 
 - `Paper\figures\framework_overview.pdf` (figure, 33541 bytes)
-- `Paper\main.bbl` (compiled_bibliography, 17039 bytes)
-- `Paper\main.pdf` (compiled_pdf, 546669 bytes)
+- `Paper\main.bbl` (compiled_bibliography, 17098 bytes)
+- `Paper\main.pdf` (compiled_pdf, 546716 bytes)
 - `Paper\main.tex` (tex_source, 840 bytes)
 - `Paper\references.bib` (bibliography_source, 10520 bytes)
-- `Paper\sections\abstract.tex` (tex_source, 1603 bytes)
+- `Paper\sections\abstract.tex` (tex_source, 1605 bytes)
 - `Paper\sections\analysis.tex` (tex_source, 4155 bytes)
 - `Paper\sections\conclusion.tex` (tex_source, 1148 bytes)
 - `Paper\sections\experiments.tex` (tex_source, 5724 bytes)

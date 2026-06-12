@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-12T22:37:04.194121+00:00",
+  "created_at_utc": "2026-06-12T23:22:01.310509+00:00",
   "failures": [],
   "final_submission_ready": false,
   "input_paths": {
@@ -25,9 +25,9 @@
   "package_crosscheck": {
     "pdf_pages": 9,
     "pdf_path": "Paper\\main.pdf",
-    "pdf_size_bytes": 546669,
+    "pdf_size_bytes": 546716,
     "source_manifest_file_count": 21,
-    "source_manifest_sha256": "795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc",
+    "source_manifest_sha256": "91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424",
     "submission_audit_ok": true,
     "target_formatting_profile_ok": true
   },
