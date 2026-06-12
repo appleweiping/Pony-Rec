@@ -1,19 +1,21 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-12T15:18:44.446480+00:00
+Generated: 2026-06-12T17:55:53.673592+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260612`
-- Git HEAD before refresh: `6be395c7a3a5be3f1ca3527a2b251373fc25fb58`
+- Git HEAD before refresh: `95926b8a0c12a38ca26f203eb2bea3012698a7e5`
 - Tracked dirty before refresh: `false`
 
 ## Steps
 
 - `external_proceedings_metadata`: ok=`true`, ready=`false`, json=`outputs\summary\paper_critical\external_proceedings_metadata_recheck_20260612.json`
 - `submission_package`: ok=`true`, ready=`true`, json=`outputs\summary\paper_critical\submission_package_audit_20260612.json`
+- `submission_source_package`: ok=`true`, ready=`true`, json=`outputs\summary\paper_critical\submission_source_package_20260612.json`
+- `submission_source_package_rebuild`: ok=`true`, ready=`true`, json=`outputs\summary\paper_critical\submission_source_package_rebuild_20260612.json`
 - `submission_metadata_packet`: ok=`true`, ready=`true`, json=`outputs\summary\paper_critical\submission_metadata_packet_20260612.json`
 - `manual_submission_checklist`: ok=`true`, ready=`true`, json=`outputs\summary\paper_critical\manual_submission_checklist_20260612.json`
 - `final_submission_gate`: ok=`true`, ready=`false`, json=`outputs\summary\paper_critical\final_submission_gate_20260612.json`
@@ -32,12 +34,14 @@ Generated: 2026-06-12T15:18:44.446480+00:00
 - `configs\paper_submission_profiles.json`: `00a083d7fca48c521814ce9effe6bf9294c7ddf7e071879edaa4739f39a67d2d` (1276 bytes)
 - `configs\paper_submission_metadata.json`: `908484005b171a66d3e9424d36986d26286e86a0272a456b461a9e75b204e1c1` (1005 bytes)
 - `configs\paper_manual_submission_checklist.json`: `e8bbef232cc418ca45976cb675411e2128075b6d8eae6d3ce23b561ecf666174` (4732 bytes)
-- `scripts\audit\main_refresh_pre_submission_gates.py`: `8814ad9b1571d43e01d1425a23805b84f2487342d05a05bfd1a5be6590b14802` (17527 bytes)
+- `scripts\audit\main_refresh_pre_submission_gates.py`: `46ddd247e030ecd5edaf32f03f036c36f2fa4102e361a02399b64fbb463e3569` (20314 bytes)
 - `scripts\audit\main_audit_external_proceedings_metadata.py`: `0143492e15967b3ee582329934b88f47211ce52454d950fb3af568b5b0e63b9f` (19677 bytes)
 - `scripts\audit\main_audit_submission_package.py`: `abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53` (33787 bytes)
+- `scripts\audit\main_build_submission_source_package.py`: `9de0d0402285cab61cb6b5acd8a1c6e1870bac5e3365b495d126ddd292ec2796` (18252 bytes)
+- `scripts\audit\main_audit_submission_source_package_rebuild.py`: `4c5ae6571bd2ba5e82e88eb43b3aa4aaaef35dee5330b429d0ce6188498dc726` (21775 bytes)
 - `scripts\audit\main_build_submission_metadata_packet.py`: `01b66efe8a816d5681cef351fdf87a594ad935193e1f9bf2336f5d8a559e513c` (10113 bytes)
 - `scripts\audit\main_build_manual_submission_checklist.py`: `c6e50da192f1c8ee970e96e0241d2d614f739b2507b258dec88877d7d0d9dce3` (21881 bytes)
-- `scripts\audit\main_build_final_submission_gate.py`: `892a3291518209df27c8b1f2954c34288ba01be539319915adb6dfd94accaeec` (11207 bytes)
+- `scripts\audit\main_build_final_submission_gate.py`: `0e75e043eabcf65f7dcdb320d04cf826a4d4af6c02da92f6d1690cccfa1d17f4` (12405 bytes)
 - `scripts\audit\main_audit_pre_submission_refresh_freshness.py`: `6c0ebf3d3243b552005226cee4cc5d2065d3b2c3c55dfc95f7016545e0740f91` (13914 bytes)
 
 ## Remaining Blockers
@@ -61,7 +65,9 @@ Generated: 2026-06-12T15:18:44.446480+00:00
 - `external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 - `submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 

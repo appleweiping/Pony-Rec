@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-12T15:18:44.446480+00:00",
+  "created_at_utc": "2026-06-12T17:55:53.673592+00:00",
   "external_network_mode": "live",
   "failures": [],
   "final_submission_ready": false,
@@ -7,7 +7,7 @@
   "git_state_before_refresh": {
     "available": true,
     "error": "",
-    "head": "6be395c7a3a5be3f1ca3527a2b251373fc25fb58",
+    "head": "95926b8a0c12a38ca26f203eb2bea3012698a7e5",
     "tracked_dirty": false,
     "tracked_dirty_paths": []
   },
@@ -87,8 +87,8 @@
     {
       "exists": true,
       "path": "scripts\\audit\\main_refresh_pre_submission_gates.py",
-      "sha256": "8814ad9b1571d43e01d1425a23805b84f2487342d05a05bfd1a5be6590b14802",
-      "size_bytes": 17527
+      "sha256": "46ddd247e030ecd5edaf32f03f036c36f2fa4102e361a02399b64fbb463e3569",
+      "size_bytes": 20314
     },
     {
       "exists": true,
@@ -101,6 +101,18 @@
       "path": "scripts\\audit\\main_audit_submission_package.py",
       "sha256": "abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53",
       "size_bytes": 33787
+    },
+    {
+      "exists": true,
+      "path": "scripts\\audit\\main_build_submission_source_package.py",
+      "sha256": "9de0d0402285cab61cb6b5acd8a1c6e1870bac5e3365b495d126ddd292ec2796",
+      "size_bytes": 18252
+    },
+    {
+      "exists": true,
+      "path": "scripts\\audit\\main_audit_submission_source_package_rebuild.py",
+      "sha256": "4c5ae6571bd2ba5e82e88eb43b3aa4aaaef35dee5330b429d0ce6188498dc726",
+      "size_bytes": 21775
     },
     {
       "exists": true,
@@ -117,8 +129,8 @@
     {
       "exists": true,
       "path": "scripts\\audit\\main_build_final_submission_gate.py",
-      "sha256": "892a3291518209df27c8b1f2954c34288ba01be539319915adb6dfd94accaeec",
-      "size_bytes": 11207
+      "sha256": "0e75e043eabcf65f7dcdb320d04cf826a4d4af6c02da92f6d1690cccfa1d17f4",
+      "size_bytes": 12405
     },
     {
       "exists": true,
@@ -127,7 +139,7 @@
       "size_bytes": 13914
     }
   ],
-  "mode": "local_read_only_pre_submission_gate_refresh",
+  "mode": "local_artifact_pre_submission_gate_refresh",
   "next_actions": [
     "Use final_submission_gate as the first-read final submission status.",
     "Rerun this refresh after any Paper, BibTeX, target profile, or submission metadata change.",
@@ -135,7 +147,7 @@
   ],
   "ok": true,
   "output_dir": "outputs\\summary\\paper_critical",
-  "read_only": true,
+  "read_only": false,
   "remaining_blockers": [
     "promax:final_page_range_missing_in_bib",
     "promax:crossref_registry_not_visible:status=404",
@@ -151,19 +163,19 @@
   "stamp": "20260612",
   "steps": [
     {
-      "created_at_utc": "2026-06-12T15:18:41.823193+00:00",
+      "created_at_utc": "2026-06-12T17:54:49.674670+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
-        "sha256": "b344a5f6f72f05d59f5bbdaf8bf5d0049872011be40c8cdc70b2691fdc9e937a",
+        "sha256": "e0654b83967a8570f910dbd56bb8556e52c9ee7c8b09e44dbff65c8cd180163a",
         "size_bytes": 6453
       },
       "md": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.md",
-        "sha256": "820ae96870bbe97823a9b65ff52aa1d9ee225dde7cf389550365541df7fca0c0",
+        "sha256": "589e4b417cb8704fd8c59f5b5e93d380cf419447f6da39bd770ebfdadff40eb9",
         "size_bytes": 2030
       },
       "ok": true,
@@ -183,19 +195,19 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T15:18:43.629667+00:00",
+      "created_at_utc": "2026-06-12T17:54:50.397520+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json",
-        "sha256": "b294a034b3fa00cd881170180468d7099b3388e0262583a22e26b2fc6a0c4c70",
+        "sha256": "fb1fc93ef6d50e142363c9c9780bd4d9885f3c7653bcf3f2aad8b89ac5cd9660",
         "size_bytes": 16083
       },
       "md": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.md",
-        "sha256": "43be16534eb83b53fa5fe0c719712d44867d6a2b4d34a573fd1217f09872abd6",
+        "sha256": "25a189d8570376354841f1f10514fe1d65d495d506d59c2ddd6546d897402d0a",
         "size_bytes": 1548
       },
       "ok": true,
@@ -215,19 +227,81 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T15:18:43.897977+00:00",
+      "created_at_utc": "2026-06-12T17:55:06.347457+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "json": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_source_package_20260612.json",
+        "sha256": "7e9ff571124e8cf673e592f5e0b34663c340f567904708db24a61d70b73e1377",
+        "size_bytes": 15066
+      },
+      "md": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_source_package_20260612.md",
+        "sha256": "78c3bc6ee5fd58a6d633bd4e623fde6b3c8adc9868973fde9bb46d27729509c1",
+        "size_bytes": 2753
+      },
+      "ok": true,
+      "ready": true,
+      "ready_field": "submission_source_package_ready",
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed."
+      ],
+      "schema_version": "2026-06-12.submission_source_package.v1",
+      "step_id": "submission_source_package",
+      "warnings": []
+    },
+    {
+      "created_at_utc": "2026-06-12T17:55:52.811031+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "json": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_source_package_rebuild_20260612.json",
+        "sha256": "57b4898c0941af90d755c2bd5353c10620c23cdd0c4b4dcf099ffac42b290534",
+        "size_bytes": 11507
+      },
+      "md": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_source_package_rebuild_20260612.md",
+        "sha256": "268d6fd3de9aaa3adf28999de460bbe384fd9f93b7a33783b42aea2c3b3f166e",
+        "size_bytes": 1529
+      },
+      "ok": true,
+      "ready": true,
+      "ready_field": "submission_source_package_rebuild_ready",
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed."
+      ],
+      "schema_version": "2026-06-12.submission_source_package_rebuild.v1",
+      "step_id": "submission_source_package_rebuild",
+      "warnings": [
+        "rebuilt_underfull_layout_warnings:hbox=6,vbox=8"
+      ]
+    },
+    {
+      "created_at_utc": "2026-06-12T17:55:52.878310+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.json",
-        "sha256": "d5a7418e2b66ecb1437badc902d1ece366bc20a072e5e78094d4bd20df66abf6",
+        "sha256": "8747259b6219fa7452fba2f2ad2647a427c50effeae9ed757952df5fd8d3643e",
         "size_bytes": 4325
       },
       "md": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.md",
-        "sha256": "384103509bd356e8759aa3ef470732b62d1ac09b82b13642f5480df0259ad55d",
+        "sha256": "1c2be0208764b6e01438b9edd412dbafdc6c3588b859ccf3a9710d364fd7492a",
         "size_bytes": 3327
       },
       "ok": true,
@@ -245,19 +319,19 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T15:18:43.953595+00:00",
+      "created_at_utc": "2026-06-12T17:55:52.949895+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.json",
-        "sha256": "b5dd8cd35dc5b8433d4c3ce6c2a2460bd8bcc81d8cbabff62d208a9018586b29",
+        "sha256": "74e635094b52ca7589bc61692713ac3810f15ab40d2100594a698b750499ed2c",
         "size_bytes": 15331
       },
       "md": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.md",
-        "sha256": "c2e014281bfe72fe7c6e57a6b0dcc81a953a3b904342da1162bb9d840072fba3",
+        "sha256": "37a933e7d13f43aa7ac73400eb21bb11809aa53200f44758028d1114fd9549ea",
         "size_bytes": 6493
       },
       "ok": true,
@@ -277,20 +351,20 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T15:18:44.067710+00:00",
+      "created_at_utc": "2026-06-12T17:55:53.099983+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\final_submission_gate_20260612.json",
-        "sha256": "63052ec22ce73f48cb6baa366995445a05fc76c9723130ad562f75a81f20aacb",
-        "size_bytes": 6506
+        "sha256": "73a933c8920bda1d9d29ad509efd469c905d9c9f6403b91c5287e1ac62af6c64",
+        "size_bytes": 7819
       },
       "md": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\final_submission_gate_20260612.md",
-        "sha256": "72aa1930e891b08ac604dba9b9bd3b9b1fb77d81fe59eab43372548e5cd517a7",
-        "size_bytes": 2251
+        "sha256": "6cc6ef6e5d1693999ede7f208f8105a0d9a9868d215df7e4b2cdb725fd00ffe8",
+        "size_bytes": 2542
       },
       "ok": true,
       "ready": false,
@@ -310,6 +384,7 @@
       "step_id": "final_submission_gate",
       "warnings": [
         "submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+        "submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
         "external_proceedings_metadata:proex:crossref_not_visible:status=404",
         "external_proceedings_metadata:proex:doi_resolver_not_visible:status=404"
       ]
@@ -319,12 +394,14 @@
     "external_proceedings_metadata:proex:crossref_not_visible:status=404",
     "external_proceedings_metadata:proex:doi_resolver_not_visible:status=404",
     "submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
     "final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
     "final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404",
     "final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404"
   ],
-  "will_copy": false,
-  "will_delete": false,
+  "will_copy": true,
+  "will_delete": true,
   "will_ssh": false,
   "will_start_experiment": false
 }

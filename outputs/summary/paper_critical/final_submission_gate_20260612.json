@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-12T15:18:44.067710+00:00",
+  "created_at_utc": "2026-06-12T17:55:53.099983+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-12T15:18:43.629667+00:00",
+      "created_at_utc": "2026-06-12T17:54:50.397520+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T15:18:43.897977+00:00",
+      "created_at_utc": "2026-06-12T17:55:52.878310+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,32 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T15:18:41.823193+00:00",
+      "created_at_utc": "2026-06-12T17:55:52.811031+00:00",
+      "failures": [],
+      "final_submission_ready": false,
+      "gate_id": "submission_source_package_rebuild",
+      "ok": true,
+      "path": {
+        "exists": true,
+        "path": "outputs\\summary\\paper_critical\\submission_source_package_rebuild_20260612.json",
+        "size_bytes": 11507
+      },
+      "ready": true,
+      "ready_field": "submission_source_package_rebuild_ready",
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "Final manual submission-system metadata/format checklist is not closed."
+      ],
+      "schema_version": "2026-06-12.submission_source_package_rebuild.v1",
+      "warnings": [
+        "rebuilt_underfull_layout_warnings:hbox=6,vbox=8"
+      ]
+    },
+    {
+      "created_at_utc": "2026-06-12T17:54:49.674670+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -79,7 +104,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T15:18:43.953595+00:00",
+      "created_at_utc": "2026-06-12T17:55:52.949895+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",
@@ -108,13 +133,14 @@
     "external_metadata_audit": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
     "manual_checklist": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.json",
     "submission_metadata_packet": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.json",
-    "submission_package_audit": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json"
+    "submission_package_audit": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json",
+    "submission_source_package_rebuild": "outputs\\summary\\paper_critical\\submission_source_package_rebuild_20260612.json"
   },
   "manual_submission_system_ready": false,
   "mode": "local_read_only_final_submission_gate",
   "next_actions": [
     "Rerun external proceedings metadata recheck immediately before final submission.",
-    "Rerun submission package, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.",
+    "Rerun submission package, source-package staging/rebuild, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.",
     "Complete private author/COI/reviewer/declaration fields only inside the submission system.",
     "Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are both ready."
   ],
@@ -135,6 +161,7 @@
   "verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED",
   "warnings": [
     "submission_package:underfull_layout_warnings:hbox=6,vbox=8",
+    "submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
     "external_proceedings_metadata:proex:crossref_not_visible:status=404",
     "external_proceedings_metadata:proex:doi_resolver_not_visible:status=404"
   ],

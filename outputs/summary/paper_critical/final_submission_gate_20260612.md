@@ -1,6 +1,6 @@
 # Final Submission Gate
 
-Generated: 2026-06-12T15:18:44.067710+00:00
+Generated: 2026-06-12T17:55:53.099983+00:00
 
 - Verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - OK: `true`
@@ -13,6 +13,7 @@ Generated: 2026-06-12T15:18:44.067710+00:00
 
 - `submission_package`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_package_audit_20260612.json`
 - `submission_metadata_packet`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_metadata_packet_20260612.json`
+- `submission_source_package_rebuild`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_source_package_rebuild_20260612.json`
 - `external_proceedings_metadata`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\external_proceedings_metadata_recheck_20260612.json`
 - `manual_submission_checklist`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\manual_submission_checklist_20260612.json`
 
@@ -35,12 +36,13 @@ Generated: 2026-06-12T15:18:44.067710+00:00
 ## Warnings
 
 - `submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 
 ## Next Actions
 
 - Rerun external proceedings metadata recheck immediately before final submission.
-- Rerun submission package, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.
+- Rerun submission package, source-package staging/rebuild, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.
 - Complete private author/COI/reviewer/declaration fields only inside the submission system.
 - Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are both ready.
