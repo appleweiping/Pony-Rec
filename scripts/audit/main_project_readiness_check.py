@@ -35,6 +35,7 @@ REQUIRED_FILES = [
     "configs/paper_submission_profiles.json",
     "configs/paper_submission_metadata.json",
     "configs/paper_external_proceedings_metadata_checks.json",
+    "configs/paper_manual_submission_checklist.json",
     "scripts/run_week8_large_scale_10k_100neg.sh",
     "scripts/run_week8_shadow_large_scale_diagnostic.sh",
     "scripts/run_week8_light_large_scale_ablation.sh",
@@ -58,6 +59,7 @@ REQUIRED_FILES = [
     "scripts/audit/main_audit_submission_package.py",
     "scripts/audit/main_build_submission_metadata_packet.py",
     "scripts/audit/main_audit_external_proceedings_metadata.py",
+    "scripts/audit/main_build_manual_submission_checklist.py",
     "scripts/audit/main_project_bootstrap.py",
 ]
 

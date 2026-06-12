@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 10:25 CEST
+Last updated: 2026-06-12 10:55 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Manual submission checklist packet added:
+  `scripts/audit/main_build_manual_submission_checklist.py` with config
+  `configs/paper_manual_submission_checklist.json`. The generated packet
+  `outputs/summary/paper_critical/manual_submission_checklist_20260612.{json,md}`
+  reports `ok=true`, `manual_submission_checklist_ready=true`,
+  `manual_submission_system_ready=false`, and `final_submission_ready=false`.
+  It enumerates `14` submission-system actions and keeps private fields out of
+  the repository: author names/affiliations, author order/contribution
+  declarations, conflicts of interest, reviewer suggestions/exclusions,
+  submission-system declarations, and private account metadata. Public
+  pre-fill items are sourced from the metadata packet (title, 212-word
+  abstract, keywords, topic areas, PDF path, and source manifest sha256), while
+  private/manual items remain `manual_pending` or `manual_private_not_stored`.
+  Remaining blockers are now explicit:
+  `manual_submission_system_items_not_confirmed`, the ProMax external metadata
+  blockers, and `confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed`.
 
 - External proceedings metadata recheck added:
   `scripts/audit/main_audit_external_proceedings_metadata.py` with config

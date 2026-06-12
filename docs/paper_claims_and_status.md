@@ -44,6 +44,22 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 manual submission checklist packet.** Codex added
+`scripts/audit/main_build_manual_submission_checklist.py` and
+`configs/paper_manual_submission_checklist.json` to make the remaining
+submission-system work auditable without storing private author/reviewer/COI
+data in the repository. The generated packet
+`outputs/summary/paper_critical/manual_submission_checklist_20260612.{json,md}`
+reports `ok=true`, `manual_submission_checklist_ready=true`,
+`manual_submission_system_ready=false`, and `final_submission_ready=false`.
+It lists `14` manual actions, pre-fills only public metadata from the existing
+submission metadata packet, records the source manifest sha256, and explicitly
+keeps author identities, conflicts, reviewer preferences, declarations, and
+private submission account metadata out of git. This reduces the manual blocker
+from a prose reminder to a concrete checklist, but it cannot close final
+readiness until a human completes the submission-system fields and the ProMax
+external metadata blockers are resolved.
+
 **2026-06-12 external proceedings metadata recheck.** Codex added
 `scripts/audit/main_audit_external_proceedings_metadata.py` and
 `configs/paper_external_proceedings_metadata_checks.json` to turn the remaining

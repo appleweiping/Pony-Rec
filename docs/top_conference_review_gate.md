@@ -247,6 +247,21 @@ profile, PDF/source-manifest identifiers, and remaining blockers. It must not
 store author identities, conflicts of interest, reviewer suggestions/exclusions,
 or private submission-system declarations in the repository.
 
+For the private/manual submission-system work that cannot be stored in the
+repository, run:
+
+```bash
+python -m scripts.audit.main_build_manual_submission_checklist \
+  --output-json outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.md
+```
+
+This command prepares a public checklist and safe prefill values only. It must
+not store author identities, conflicts of interest, reviewer preferences,
+private declarations, or submission account metadata in git, and it must keep
+`final_submission_ready=false` until a human completes those fields inside the
+submission system.
+
 For the remaining external proceedings metadata caution, run the ARIS
 citation-audit-backed recheck:
 

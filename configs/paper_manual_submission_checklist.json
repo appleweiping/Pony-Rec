@@ -1,0 +1,134 @@
+{
+  "schema_version": "2026-06-12.paper_manual_submission_checklist.v1",
+  "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
+  "manual_private_fields_not_stored": [
+    "author names and affiliations",
+    "author order and contribution declarations",
+    "conflicts of interest",
+    "reviewer suggestions or exclusions",
+    "submission-system declarations",
+    "private submission account metadata"
+  ],
+  "items": [
+    {
+      "id": "select_track_and_paper_type",
+      "category": "submission_system",
+      "label": "Select the target track and full research paper type",
+      "storage_policy": "manual_confirmation_only",
+      "private": false,
+      "requires_submission_system": true
+    },
+    {
+      "id": "paste_title",
+      "category": "metadata",
+      "label": "Paste and verify the title from the metadata packet",
+      "storage_policy": "repo_prefill_public_value",
+      "private": false,
+      "requires_submission_system": true,
+      "prefill_source": "submission_fields.title"
+    },
+    {
+      "id": "paste_abstract",
+      "category": "metadata",
+      "label": "Paste and verify the abstract from the metadata packet",
+      "storage_policy": "repo_prefill_public_value",
+      "private": false,
+      "requires_submission_system": true,
+      "prefill_source": "submission_fields.abstract"
+    },
+    {
+      "id": "paste_keywords",
+      "category": "metadata",
+      "label": "Paste and verify keywords",
+      "storage_policy": "repo_prefill_public_value",
+      "private": false,
+      "requires_submission_system": true,
+      "prefill_source": "submission_fields.keywords"
+    },
+    {
+      "id": "select_topic_areas",
+      "category": "metadata",
+      "label": "Select topic areas",
+      "storage_policy": "repo_prefill_public_value",
+      "private": false,
+      "requires_submission_system": true,
+      "prefill_source": "submission_fields.topic_areas"
+    },
+    {
+      "id": "upload_pdf",
+      "category": "files",
+      "label": "Upload the audited anonymous PDF",
+      "storage_policy": "repo_evidence_path_only",
+      "private": false,
+      "requires_submission_system": true,
+      "prefill_source": "package_crosscheck.pdf_path"
+    },
+    {
+      "id": "upload_source_if_required",
+      "category": "files",
+      "label": "Upload source package if required by the submission system",
+      "storage_policy": "repo_evidence_manifest_only",
+      "private": false,
+      "requires_submission_system": true,
+      "prefill_source": "package_crosscheck.source_manifest_sha256"
+    },
+    {
+      "id": "confirm_anonymous_shell",
+      "category": "formatting",
+      "label": "Confirm anonymous PDF/source shell in the submission system",
+      "storage_policy": "repo_evidence_plus_manual_confirmation",
+      "private": false,
+      "requires_submission_system": true
+    },
+    {
+      "id": "enter_authors",
+      "category": "private_metadata",
+      "label": "Enter authors, affiliations, and order inside the submission system",
+      "storage_policy": "not_stored_in_repo",
+      "private": true,
+      "requires_submission_system": true
+    },
+    {
+      "id": "complete_conflicts",
+      "category": "private_metadata",
+      "label": "Complete conflict-of-interest fields inside the submission system",
+      "storage_policy": "not_stored_in_repo",
+      "private": true,
+      "requires_submission_system": true
+    },
+    {
+      "id": "complete_reviewer_preferences",
+      "category": "private_metadata",
+      "label": "Complete reviewer suggestions/exclusions only inside the submission system if requested",
+      "storage_policy": "not_stored_in_repo",
+      "private": true,
+      "requires_submission_system": true
+    },
+    {
+      "id": "complete_declarations",
+      "category": "declarations",
+      "label": "Complete submission-system declarations, ethics, artifact, and policy checkboxes",
+      "storage_policy": "manual_confirmation_only",
+      "private": true,
+      "requires_submission_system": true
+    },
+    {
+      "id": "confirm_external_proceedings_metadata",
+      "category": "external_metadata",
+      "label": "Confirm external proceedings metadata blockers are closed",
+      "storage_policy": "repo_external_audit_plus_manual_confirmation",
+      "private": false,
+      "requires_submission_system": false,
+      "external_gate": "external_proceedings_metadata_ready"
+    },
+    {
+      "id": "final_preview_and_submit",
+      "category": "final_review",
+      "label": "Review final submission preview and submit",
+      "storage_policy": "manual_confirmation_only",
+      "private": true,
+      "requires_submission_system": true
+    }
+  ]
+}
