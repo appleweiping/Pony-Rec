@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 19:35 CEST
+Last updated: 2026-06-12 20:29 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,27 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-12)
+
+- Submission release-candidate packet added:
+  `scripts/audit/main_build_submission_release_candidate_packet.py` now builds
+  the local handoff index after the refresh/freshness/final-gate stack. The
+  generated
+  `outputs/summary/paper_critical/submission_release_candidate_20260612.{json,md}`
+  reports `ok=true`, `readiness_scope=local_artifacts_only`,
+  `local_release_candidate_ready=true`,
+  `blocking_status=external_or_manual_blocked`, and
+  `final_submission_ready=false`. It explicitly copies
+  `final_submission_ready` from
+  `outputs/summary/paper_critical/final_submission_gate_20260612.json` instead
+  of recomputing it, so local package consistency cannot be mistaken for final
+  submission approval. The packet cross-checks seven dated gate inputs, all
+  sharing stamp `20260612`; source manifest sha256 values all match
+  `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`; the
+  staged source package has `21` files / `652691` bytes; the independent
+  rebuild audit produced a `9`-page / `546669`-byte PDF with `0` BibTeX
+  warnings and `0` overfull hbox warnings. Remaining blockers are still ProMax
+  final ACM page range / DOI-Crossref visibility and the private manual
+  submission-system confirmation.
 
 - Pre-submission gate refresh added:
   `scripts/audit/main_refresh_pre_submission_gates.py` is now the preferred

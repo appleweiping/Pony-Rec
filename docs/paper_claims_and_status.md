@@ -44,6 +44,25 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-12 submission release-candidate packet.** Codex added
+`scripts/audit/main_build_submission_release_candidate_packet.py` as a local
+handoff index over the final gate, refresh freshness audit, anonymous source
+package, source-package rebuild, metadata packet, manual checklist, and
+external proceedings metadata audit. The generated
+`outputs/summary/paper_critical/submission_release_candidate_20260612.{json,md}`
+reports `ok=true`, `readiness_scope=local_artifacts_only`,
+`local_release_candidate_ready=true`, `blocking_status=external_or_manual_blocked`,
+and `final_submission_ready=false`. The packet deliberately copies
+`final_submission_ready` from
+`outputs/summary/paper_critical/final_submission_gate_20260612.json` rather than
+recomputing it. It verifies the dated gate inputs share stamp `20260612`, the
+source manifest sha256 values agree across package/rebuild/metadata artifacts,
+the staged source package contains `21` files / `652691` bytes, and the
+independent rebuild produced a `9`-page PDF with zero BibTeX and overfull hbox
+warnings. This is a local artifact release candidate only; final submission
+remains blocked by ProMax final page-range / DOI-Crossref visibility and
+private manual submission-system confirmation.
+
 **2026-06-12 pre-submission gate refresh.** Codex added
 `scripts/audit/main_refresh_pre_submission_gates.py` as the preferred
 single-command refresh for the final submission gate stack. It runs the external

@@ -88,7 +88,13 @@ artifact
 `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
 reports `ok=true`, `refresh_artifact_fresh=true`, `21` input fingerprints,
 `14` generated gate files, zero mismatches, and
-`final_submission_ready=false`. The refreshed external metadata audit also
+`final_submission_ready=false`. The local release-candidate handoff packet
+`outputs/summary/paper_critical/submission_release_candidate_20260612.{json,md}`
+now aggregates that freshness audit, the final gate, source package, independent
+rebuild, metadata packet, manual checklist, and external metadata audit; it
+reports `local_release_candidate_ready=true`,
+`readiness_scope=local_artifacts_only`, `blocking_status=external_or_manual_blocked`,
+and still `final_submission_ready=false`. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
 in addition to arXiv `2604.26231`, but ProMax final page range and DOI/Crossref
 visibility remain unresolved. The submission package audit now includes a

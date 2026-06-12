@@ -312,6 +312,23 @@ strict current-HEAD equality condition, because committing generated artifacts
 necessarily changes HEAD. If any recorded input or generated gate hash no
 longer matches, rerun the refresh before using the final-submission status.
 
+After the freshness audit passes, build the local release-candidate handoff
+packet:
+
+```bash
+python -m scripts.audit.main_build_submission_release_candidate_packet \
+  --output-json outputs/summary/paper_critical/submission_release_candidate_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/submission_release_candidate_YYYYMMDD.md
+```
+
+This packet has `readiness_scope=local_artifacts_only`. It may report
+`local_release_candidate_ready=true` while `final_submission_ready=false`; that
+means the repo-side package, rebuild, metadata, and freshness artifacts are
+internally consistent, not that the paper can be submitted. It must copy
+`final_submission_ready` exactly from the final submission gate and preserve
+external/manual blockers such as ProMax page-range/DOI visibility and private
+submission-system confirmation.
+
 For submission-system fields that are safe to prepare in the anonymous repo,
 run:
 

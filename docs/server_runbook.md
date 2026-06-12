@@ -65,6 +65,12 @@ PIDs, audit summaries, and missing-file errors.
    (`ok=true`, `final_submission_ready=false`) and added a claim-text audit at
    `outputs/summary/paper_critical/manuscript_claim_audit_after_section_review_20260612.{json,md}`
    (`READY_WITH_SCOPE_GUARDS`, 12 supported manuscript claims, no overclaims).
+   The current local handoff index is
+   `outputs/summary/paper_critical/submission_release_candidate_20260612.{json,md}`:
+   it reports `local_release_candidate_ready=true` under
+   `readiness_scope=local_artifacts_only`, while preserving
+   `final_submission_ready=false` because ProMax public proceedings metadata
+   and private manual submission-system confirmation remain open.
    The current priority is paper-critical tests/readiness checks and another
    section-level review on this latest draft before any final-readiness claim;
    Claude Opus reviewer coverage was still missing in this session.
@@ -149,6 +155,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_submission_source_package_rebuild.py` | Local-only rebuildability audit for the staged anonymous source package; verifies exact staged tree/hash match, rebuilds in ignored `artifacts/` with `pdflatex -> bibtex -> pdflatex -> pdflatex`, checks PDF/log/BibTeX/overfull gates, and remains separate from final submission readiness |
 | `scripts/audit/main_refresh_pre_submission_gates.py` | Preferred one-command local artifact refresh for final submission status; regenerates external proceedings metadata, submission package, source-package staging, source-package rebuild, metadata packet, manual checklist, and final gate in dependency order, while recording Git HEAD, tracked dirty state, input sha256 fingerprints, and generated gate hashes |
 | `scripts/audit/main_audit_pre_submission_refresh_freshness.py` | Local read-only freshness audit for a pre-submission refresh artifact; verifies recorded input fingerprints and generated gate JSON/MD hashes against the current worktree, treating Git HEAD as generation provenance rather than a strict post-commit equality gate |
+| `scripts/audit/main_build_submission_release_candidate_packet.py` | Local read-only release-candidate handoff index over the final gate, freshness audit, source package, rebuild audit, metadata packet, manual checklist, and external metadata audit; distinguishes `local_release_candidate_ready` from `final_submission_ready` |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, external proceedings metadata, and manual checklist; keeps final readiness false while external DOI/page-range or private submission-system blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_audit_external_proceedings_metadata.py` | Local read-only ARIS citation/proceedings metadata recheck for ProEx/ProMax; records BibTeX, DOI/Crossref, arXiv, and DBLP visibility and keeps final submission blocked while public page-range/registry evidence is missing |
