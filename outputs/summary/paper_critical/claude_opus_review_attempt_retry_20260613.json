@@ -1,0 +1,13 @@
+{
+  "reviewer": "claude-opus",
+  "created_at_utc": "2026-06-12T23:36:40+00:00",
+  "completed_at_utc": "2026-06-12T23:36:41+00:00",
+  "source": "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
+  "status": "failed",
+  "valid_review_evidence": false,
+  "error": "Claude CLI did not return JSON output",
+  "notes": [
+    "This second attempt did not count as explicit Claude Opus reviewer coverage.",
+    "The review-continuation packet records the failed attempt separately from valid reviewer JSONs."
+  ]
+}

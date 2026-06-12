@@ -71,7 +71,13 @@ PIDs, audit summaries, and missing-file errors.
    output is still missing. The attempted Claude Opus review job failed with
    `Claude CLI did not return JSON output`; the failed attempt is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json`
-   and does not count as reviewer coverage. The latest `Paper/main.pdf` compiles to 9 pages /
+   and does not count as reviewer coverage. A second retry failed with the
+   same error and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+   `scripts/audit/main_build_review_continuation_packet.py` records failed
+   reviewer attempts separately from valid reviewer JSONs; the current packet
+   reports two failed attempts and still keeps `explicit_claude_opus_present=false`.
+   The latest `Paper/main.pdf` compiles to 9 pages /
    546716 bytes with visible
    official-baseline provenance, all-metric rank-first, and four-domain
    ablation summary tables. Codex has already rerun the evidence-to-claim gate at

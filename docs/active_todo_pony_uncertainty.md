@@ -29,7 +29,13 @@ cycle.
   `mcp__claude_review` but failed with `Claude CLI did not return JSON output`;
   the failed attempt is recorded at
   `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json` and
-  does not count as reviewer coverage.
+  does not count as reviewer coverage. A second retry failed with the same
+  error and is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+  `scripts/audit/main_build_review_continuation_packet.py` now records failed
+  reviewer attempts separately from valid reviewer JSONs; the refreshed packet
+  reports `failed_review_attempts` count `2` while keeping
+  `explicit_claude_opus_present=false`.
 
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`

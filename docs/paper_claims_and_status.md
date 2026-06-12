@@ -132,7 +132,12 @@ reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
 output has not yet been captured. The attempted Claude Opus review job failed
 with `Claude CLI did not return JSON output`; the failure record is
 `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json` and
-is intentionally not counted as valid reviewer evidence.
+is intentionally not counted as valid reviewer evidence. A second retry failed
+with the same error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+The review-continuation packet builder now records failed reviewer attempts
+separately from valid reviewer JSONs, so the refreshed packet exposes two
+failed Claude attempts while preserving `explicit_claude_opus_present=false`.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

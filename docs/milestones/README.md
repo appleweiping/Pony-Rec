@@ -154,7 +154,12 @@ reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
 missing, so `final_panel_coverage_complete=false`. The attempted Claude Opus
 review job failed with `Claude CLI did not return JSON output` and is recorded
 at `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json`;
-it does not count as reviewer coverage. The submission package
+it does not count as reviewer coverage. A second retry failed with the same
+error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+The review-continuation packet now records both failed Claude attempts
+separately from valid reviewer JSONs and still keeps
+`explicit_claude_opus_present=false`. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission

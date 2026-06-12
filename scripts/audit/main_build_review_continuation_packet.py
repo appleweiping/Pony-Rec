@@ -172,6 +172,22 @@ def _load_additional_reviews(
     return reviews, states, failures
 
 
+def _load_failed_review_attempts(
+    paths: list[str | Path], *, root: Path
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
+    attempts: list[dict[str, Any]] = []
+    states: list[dict[str, Any]] = []
+    failures: list[str] = []
+    for raw_path in paths:
+        path = (root / raw_path).resolve()
+        states.append(_path_state(path, root))
+        payload, errors = _read_json(path)
+        failures.extend(errors)
+        if payload:
+            attempts.append(payload)
+    return attempts, states, failures
+
+
 def build_review_continuation_packet(
     *,
     root: str | Path = ".",
@@ -182,6 +198,7 @@ def build_review_continuation_packet(
     closure_packet_json: str | Path = DEFAULT_CLOSURE_PACKET_JSON,
     promax_probe_json: str | Path = DEFAULT_PROMAX_PROBE_JSON,
     additional_review_jsons: list[str | Path] | None = None,
+    failed_review_attempt_jsons: list[str | Path] | None = None,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
     paths = {
@@ -204,6 +221,11 @@ def build_review_continuation_packet(
         root=repo,
     )
     failures.extend([f"additional_review:{failure}" for failure in additional_failures])
+    failed_attempts, failed_attempt_states, failed_attempt_failures = _load_failed_review_attempts(
+        list(failed_review_attempt_jsons or []),
+        root=repo,
+    )
+    failures.extend([f"failed_review_attempt:{failure}" for failure in failed_attempt_failures])
 
     panel = loaded["panel_review"]
     claim = loaded["claim_audit"]
@@ -304,6 +326,17 @@ def build_review_continuation_packet(
         ),
         "input_paths": {key: _path_state(path, repo) for key, path in paths.items()},
         "additional_review_paths": additional_states,
+        "failed_review_attempt_paths": failed_attempt_states,
+        "failed_review_attempts": [
+            {
+                "reviewer": str(attempt.get("reviewer") or ""),
+                "status": str(attempt.get("status") or ""),
+                "valid_review_evidence": attempt.get("valid_review_evidence") is True,
+                "error": str(attempt.get("error") or ""),
+                "source": str(attempt.get("source") or ""),
+            }
+            for attempt in failed_attempts
+        ],
         "reviewer_coverage": coverage,
         "gate_summary": {
             "panel_ok": panel_ok,
@@ -364,6 +397,7 @@ def _write_md(path: Path, packet: dict[str, Any]) -> None:
         f"- Explicit GPT-5.5 present: `{str(coverage.get('explicit_gpt55_present')).lower()}`",
         f"- Explicit Claude Opus present: `{str(coverage.get('explicit_claude_opus_present')).lower()}`",
         f"- Missing perspectives: `{', '.join(coverage.get('missing_perspectives') or []) or 'none'}`",
+        f"- Failed review attempts recorded: `{len(packet.get('failed_review_attempts') or [])}`",
         "",
         "## Gate Summary",
         "",
@@ -421,6 +455,12 @@ def main() -> int:
         default=[],
         help="Optional structured reviewer JSON to include in coverage.",
     )
+    parser.add_argument(
+        "--failed-review-attempt-json",
+        action="append",
+        default=[],
+        help="Optional failed reviewer attempt JSON to record without counting as coverage.",
+    )
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     args = parser.parse_args()
@@ -439,6 +479,7 @@ def main() -> int:
         closure_packet_json=args.closure_packet_json,
         promax_probe_json=args.promax_probe_json,
         additional_review_jsons=args.additional_review_json,
+        failed_review_attempt_jsons=args.failed_review_attempt_json,
     )
     _write_json(output_json, packet)
     _write_md(output_md, packet)

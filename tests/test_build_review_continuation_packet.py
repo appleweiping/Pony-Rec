@@ -131,3 +131,41 @@ def test_review_continuation_accepts_additional_claude_review(tmp_path: Path) ->
     assert packet["final_panel_coverage_complete"] is True
     assert packet["reviewer_coverage"]["explicit_claude_opus_present"] is True
     assert packet["reviewer_coverage"]["score_floor_0_to_10"] == 8.0
+
+
+def test_failed_claude_attempt_is_recorded_but_not_coverage(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    failed = _write_json(
+        tmp_path / "failed_claude.json",
+        {
+            "reviewer": "claude-opus",
+            "status": "failed",
+            "valid_review_evidence": False,
+            "error": "Claude CLI did not return JSON output",
+            "source": "claude_review.review_start job test",
+        },
+    )
+
+    packet = build_review_continuation_packet(
+        root=tmp_path,
+        panel_review_json=paths["panel"].relative_to(tmp_path),
+        claim_audit_json=paths["claim"].relative_to(tmp_path),
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        release_candidate_stack_json=paths["stack"].relative_to(tmp_path),
+        closure_packet_json=paths["closure"].relative_to(tmp_path),
+        promax_probe_json=paths["promax"].relative_to(tmp_path),
+        failed_review_attempt_jsons=[failed.relative_to(tmp_path)],
+    )
+
+    assert packet["ok"] is True
+    assert packet["final_panel_coverage_complete"] is False
+    assert packet["reviewer_coverage"]["explicit_claude_opus_present"] is False
+    assert packet["failed_review_attempts"] == [
+        {
+            "reviewer": "claude-opus",
+            "status": "failed",
+            "valid_review_evidence": False,
+            "error": "Claude CLI did not return JSON output",
+            "source": "claude_review.review_start job test",
+        }
+    ]
