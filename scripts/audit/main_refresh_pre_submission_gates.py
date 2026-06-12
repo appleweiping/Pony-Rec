@@ -194,6 +194,7 @@ def refresh_pre_submission_gates(
             "scripts/audit/main_build_submission_metadata_packet.py",
             "scripts/audit/main_build_manual_submission_checklist.py",
             "scripts/audit/main_build_final_submission_gate.py",
+            "scripts/audit/main_audit_pre_submission_refresh_freshness.py",
         ],
     )
 

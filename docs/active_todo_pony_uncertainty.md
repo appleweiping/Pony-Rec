@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 12:15 CEST
+Last updated: 2026-06-12 13:02 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -22,10 +22,23 @@ cycle.
   ordering races. The refresh summary now records `git_state_before_refresh`,
   input file sha256 fingerprints for the paper, bibliography, profiles,
   configs, evidence audits, and gate scripts, plus sha256/size for each
-  generated gate JSON/MD. This makes the final submission status reproducible
-  from a specific code/input state. Remaining blockers are unchanged: ProMax
-  final page range and DOI/Crossref visibility, plus private manual
-  submission-system fields.
+  generated gate JSON/MD. Codex also added
+  `scripts/audit/main_audit_pre_submission_refresh_freshness.py` to verify the
+  recorded input fingerprints and generated gate hashes against the current
+  worktree after a refresh has been produced. The freshness audit treats the
+  recorded Git HEAD as generation provenance rather than a strict
+  current-HEAD equality check, because committing generated refresh artifacts
+  necessarily changes HEAD; the freshness decision is based on file hashes and
+  generated gate hashes. This makes the final submission status reproducible
+  without overclaiming final readiness. Remaining blockers are unchanged:
+  ProMax final page range and DOI/Crossref visibility, plus private manual
+  submission-system fields. The current freshness artifact
+  `outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
+  reports `ok=true`, `refresh_artifact_fresh=true`,
+  `final_submission_ready=false`, `19` input fingerprints checked, `10`
+  generated gate files checked, and zero input/output hash mismatches. It
+  preserves the same external/manual blockers instead of treating freshness as
+  submission approval.
 
 - Final submission gate added:
   `scripts/audit/main_build_final_submission_gate.py` aggregates the four

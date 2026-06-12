@@ -1,0 +1,51 @@
+# Pre-Submission Refresh Freshness Audit
+
+Generated: 2026-06-12T11:21:44.956866+00:00
+
+- OK: `true`
+- Refresh artifact fresh: `true`
+- Final submission ready: `false`
+- Refresh JSON: `outputs\summary\paper_critical\pre_submission_gate_refresh_20260612.json`
+- Refresh verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
+- Input fingerprints checked: `19`
+- Generated step files checked: `10`
+- Input mismatches: `0`
+- Generated output mismatches: `0`
+
+## Git Provenance Policy
+
+Git HEAD is provenance for the code/input state that generated the refresh. Freshness is decided by current file fingerprints and generated gate hashes, because committing generated artifacts necessarily changes HEAD.
+
+- Refresh generation HEAD: `db0804b3bf1288b5a6f794aff1f056f8b7d0ce2b`
+- Current HEAD: `db0804b3bf1288b5a6f794aff1f056f8b7d0ce2b`
+- HEAD changed since refresh generation: `false`
+
+## Failures
+
+- None
+
+## Warnings
+
+- `refresh_recorded_tracked_dirty_inputs_before_generation`
+
+## Mismatched Files
+
+- None
+
+## Remaining Blockers
+
+- promax:final_page_range_missing_in_bib
+- promax:crossref_registry_not_visible:status=404
+- promax:doi_resolver_not_visible:status=404
+- Final manual submission-system metadata/format checklist is not closed.
+- ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.
+- confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
+- manual_submission_system_items_not_confirmed
+- external_proceedings_metadata_not_ready
+- manual_submission_system_not_ready
+
+## Next Actions
+
+- If any fingerprint mismatch is present, rerun main_refresh_pre_submission_gates.
+- Use final_submission_gate as the semantic readiness summary after freshness passes.
+- Keep final_submission_ready=false until external proceedings metadata and private manual submission-system checks are closed.

@@ -79,6 +79,17 @@ generates
 `outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md,csv}`
 with `paper_evidence_ready_for_drafting=true`, `final_submission_ready=false`,
 and verdict `READY_FOR_MANUSCRIPT_LEVEL_CLAIM_AND_CITATION_AUDIT`. The stale
+pre-submission status can now be regenerated and freshness-checked locally:
+`scripts/audit/main_refresh_pre_submission_gates.py` writes the ordered
+submission gate stack, and
+`scripts/audit/main_audit_pre_submission_refresh_freshness.py` verifies the
+recorded input fingerprints and generated gate hashes. The current freshness
+artifact
+`outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
+reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints,
+`10` generated gate files, zero mismatches, and
+`final_submission_ready=false`. The recorded Git HEAD is generation provenance,
+not a strict post-commit freshness condition. The stale
 `paper/` draft was rewritten to the current C-CRP same-candidate
 official-baseline spine, stale calibration table removed, current main/module
 tables added, and `scripts/analysis/main_build_paper_result_tables.py`

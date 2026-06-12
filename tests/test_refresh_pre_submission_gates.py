@@ -237,5 +237,6 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     input_paths = {item["path"].replace("\\", "/") for item in refresh["input_fingerprints"]}
     assert "Paper/main.tex" in input_paths
     assert "Paper/references.bib" in input_paths
+    assert "scripts/audit/main_audit_pre_submission_refresh_freshness.py" in input_paths
     assert "promax:final_page_range_missing_in_bib" in refresh["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in refresh["remaining_blockers"]

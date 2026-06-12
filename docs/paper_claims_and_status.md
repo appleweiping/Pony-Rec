@@ -59,6 +59,19 @@ state, sha256 fingerprints for paper/source/config/evidence/script inputs, and
 sha256/size for each generated gate JSON/MD. It still does not close final
 readiness while ProMax public proceedings metadata and private manual
 submission-system fields remain unresolved.
+Codex then added
+`scripts/audit/main_audit_pre_submission_refresh_freshness.py` as the companion
+freshness gate for that refresh artifact. It checks the stored
+`input_fingerprints` and every generated step JSON/MD sha256/size against the
+current worktree, fails closed on mismatches or missing files, and keeps
+`final_submission_ready=false` while external/manual blockers remain. The
+recorded Git HEAD is interpreted as generation provenance, not as a strict
+current-HEAD equality condition after committing generated artifacts.
+The current freshness artifact
+`outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260612.{json,md}`
+reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints and
+`10` generated gate files checked, zero hash mismatches, and
+`final_submission_ready=false`.
 
 **2026-06-12 final submission gate.** Codex added
 `scripts/audit/main_build_final_submission_gate.py` as the final local

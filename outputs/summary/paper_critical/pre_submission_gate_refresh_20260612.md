@@ -1,13 +1,13 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-12T10:14:25.646700+00:00
+Generated: 2026-06-12T11:15:02.812463+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260612`
-- Git HEAD before refresh: `3a3556c885ad55711ad89194e6ed49da69abb79f`
+- Git HEAD before refresh: `db0804b3bf1288b5a6f794aff1f056f8b7d0ce2b`
 - Tracked dirty before refresh: `true`
 
 ## Steps
@@ -32,12 +32,13 @@ Generated: 2026-06-12T10:14:25.646700+00:00
 - `configs\paper_submission_profiles.json`: `00a083d7fca48c521814ce9effe6bf9294c7ddf7e071879edaa4739f39a67d2d` (1276 bytes)
 - `configs\paper_submission_metadata.json`: `908484005b171a66d3e9424d36986d26286e86a0272a456b461a9e75b204e1c1` (1005 bytes)
 - `configs\paper_manual_submission_checklist.json`: `e8bbef232cc418ca45976cb675411e2128075b6d8eae6d3ce23b561ecf666174` (4732 bytes)
-- `scripts\audit\main_refresh_pre_submission_gates.py`: `46ffd55a33c313edb093eeef75e3760af9914b2978f762a265b79f00d627c077` (16984 bytes)
+- `scripts\audit\main_refresh_pre_submission_gates.py`: `9ec4c6e11f41ed8bcbfecaef5e42a86050f15cbd8989c3144f50ea2259dc8db0` (17060 bytes)
 - `scripts\audit\main_audit_external_proceedings_metadata.py`: `0143492e15967b3ee582329934b88f47211ce52454d950fb3af568b5b0e63b9f` (19677 bytes)
 - `scripts\audit\main_audit_submission_package.py`: `dba948bb101588d3e4ceb56ae8a8436b4265ffde2de29fb9b363ea39403ff490` (27574 bytes)
 - `scripts\audit\main_build_submission_metadata_packet.py`: `01b66efe8a816d5681cef351fdf87a594ad935193e1f9bf2336f5d8a559e513c` (10113 bytes)
 - `scripts\audit\main_build_manual_submission_checklist.py`: `7fd40913aa9d86537911155d3f6c754b8e93c19c4eee1f79419d218a06e6345f` (14428 bytes)
 - `scripts\audit\main_build_final_submission_gate.py`: `892a3291518209df27c8b1f2954c34288ba01be539319915adb6dfd94accaeec` (11207 bytes)
+- `scripts\audit\main_audit_pre_submission_refresh_freshness.py`: `6c0ebf3d3243b552005226cee4cc5d2065d3b2c3c55dfc95f7016545e0740f91` (13914 bytes)
 
 ## Remaining Blockers
 
