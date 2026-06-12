@@ -172,7 +172,45 @@ def test_submission_package_audit_rejects_nonanonymous_author(tmp_path: Path) ->
 
     assert audit["ok"] is False
     assert "anonymous_author_or_affiliation_not_ready" in audit["failures"]
+    assert "anonymity_nonanonymous_author_hits:1" in audit["failures"]
     assert "target_profile:target_profile_requires_anonymous_author_shell" in audit["failures"]
+    assert "target_profile:target_profile_requires_anonymous_source_leak_scan" in audit["failures"]
+    assert "Named Author" not in json.dumps(audit)
+
+
+def test_submission_package_audit_rejects_anonymity_source_leaks_without_echoing_private_tokens(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_package(tmp_path)
+    _write(
+        paths["paper"] / "sections" / "intro.tex",
+        "\\section{Intro}\n"
+        "Contact hidden.author@example.edu for details.\n"
+        "ORCID 0000-0002-1825-0097.\n"
+        "Local draft path C:\\Users\\PrivateAuthor\\paper.\n"
+        "\\begin{acks}Private funding details.\\end{acks}\n",
+    )
+
+    audit = build_submission_package_audit(
+        root=tmp_path,
+        paper_dir=paths["paper"].relative_to(tmp_path),
+        claim_audit_json=paths["claim"].relative_to(tmp_path),
+        panel_review_json=paths["panel"].relative_to(tmp_path),
+        metadata_followup_json=paths["metadata"].relative_to(tmp_path),
+        target_profile_json=paths["profile"].relative_to(tmp_path),
+    )
+
+    assert audit["ok"] is False
+    assert audit["anonymity"]["source_leak_scan_ok"] is False
+    assert "anonymity_email_hits:1" in audit["failures"]
+    assert "anonymity_orcid_hits:1" in audit["failures"]
+    assert "anonymity_local_path_hits:1" in audit["failures"]
+    assert "anonymity_acknowledgment_hits:1" in audit["failures"]
+    assert "target_profile:target_profile_requires_anonymous_source_leak_scan" in audit["failures"]
+    serialized = json.dumps(audit)
+    assert "hidden.author@example.edu" not in serialized
+    assert "0000-0002-1825-0097" not in serialized
+    assert "PrivateAuthor" not in serialized
 
 
 def test_submission_package_audit_rejects_existing_external_source_reference(tmp_path: Path) -> None:

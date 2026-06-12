@@ -164,7 +164,13 @@ reports `ok=true`, `submission_package_ready_for_target_formatting=true`,
 closure, local framework figure files, anonymous ACM paper shell, 9-page
 `Paper/main.pdf`, zero BibTeX warnings, no undefined citations/references, zero
 overfull hbox warnings, final-panel score floor `8.0`, and the scoped
-claim-audit state. The audit also emits a source-package manifest with
+claim-audit state. It now includes a privacy-preserving anonymous source leak
+scan over the TeX closure, failing closed on email addresses, ORCID identifiers,
+acknowledgment/acks macros, absolute local paths, non-anonymous author macros,
+or non-anonymous affiliation macros. Sensitive matches are reported only by
+file/line/type and short sha256 token, not by raw private text. The current
+audit reports `source_leak_scan_ok=true` and zero hits for all leak categories.
+The audit also emits a source-package manifest with
 `file_count=21`, `total_bytes=652691`, manifest sha256
 `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`, and no
 external source references; it covers `main.tex`, included section/table

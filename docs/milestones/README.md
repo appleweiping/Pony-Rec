@@ -91,7 +91,11 @@ reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints,
 `final_submission_ready=false`. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
 in addition to arXiv `2604.26231`, but ProMax final page range and DOI/Crossref
-visibility remain unresolved. The manual submission gate now has a
+visibility remain unresolved. The submission package audit now includes a
+privacy-preserving anonymous source leak scan over the TeX closure and the
+current package has zero email, ORCID, acknowledgment, local-path,
+non-anonymous-author, or non-anonymous-affiliation hits. The manual submission
+gate now has a
 privacy-preserving closure path:
 `configs/paper_manual_submission_private_confirmation.template.json` plus the
 optional `--private-confirmation-json` argument to

@@ -29,6 +29,13 @@ OUTPUT_RE = re.compile(r"Output written on .*?\((\d+) pages?, (\d+) bytes\)")
 AUTHOR_RE = re.compile(r"\\author\{([^{}]+)\}")
 DOCUMENTCLASS_RE = re.compile(r"\\documentclass(?:\[([^\]]*)\])?\{([^}]+)\}")
 FORBIDDEN_TOKEN_RE = re.compile(r"\b(TODO|TBD|FIXME|PLACEHOLDER)\b|\?\?\?", re.IGNORECASE)
+EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
+ORCID_RE = re.compile(r"\b\d{4}-\d{4}-\d{4}-\d{3}[\dX]\b", re.IGNORECASE)
+LOCAL_PATH_RE = re.compile(r"(?i)([A-Z]:\\|/home/[^\s{}]+|/users/[^\s{}]+)")
+ACKNOWLEDGMENT_RE = re.compile(
+    r"\\(?:begin\{acks\}|section\*?\{acknowledg(?:e)?ments?\}|acks\b)",
+    re.IGNORECASE,
+)
 
 
 def _read_text(path: Path) -> str:
@@ -65,6 +72,10 @@ def _sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8", errors="replace")).hexdigest()
 
 
 def _manifest_entry(path: Path, *, root: Path, role: str) -> dict[str, Any]:
@@ -234,15 +245,112 @@ def _build_source_package_manifest(paper_dir: Path, root: Path, source: dict[str
     }
 
 
-def _audit_anonymity(paper_dir: Path) -> dict[str, Any]:
+def _redact_macro_values(values: list[str], *, allowed_token: str) -> list[str]:
+    redacted: list[str] = []
+    for value in values:
+        normalized = value.strip()
+        if allowed_token.lower() in normalized.lower():
+            redacted.append(normalized)
+        else:
+            redacted.append(f"[redacted_sha256:{_sha256_text(normalized)[:16]}]")
+    return redacted
+
+
+def _redacted_hit(path: Path, *, root: Path, line: int, pattern: str, token: str = "") -> dict[str, Any]:
+    hit = {"file": _rel(path, root), "line": line, "pattern": pattern}
+    if token:
+        hit["token_sha256"] = _sha256_text(token)[:16]
+    return hit
+
+
+def _scan_anonymity_source_leaks(paper_dir: Path, root: Path, source: dict[str, Any]) -> dict[str, Any]:
+    email_hits: list[dict[str, Any]] = []
+    orcid_hits: list[dict[str, Any]] = []
+    acknowledgment_hits: list[dict[str, Any]] = []
+    local_path_hits: list[dict[str, Any]] = []
+    nonanonymous_author_hits: list[dict[str, Any]] = []
+    nonanonymous_affiliation_hits: list[dict[str, Any]] = []
+
+    for rel in source.get("tex_files") or []:
+        path = root / rel
+        text = _read_text(path)
+        for line_no, line in enumerate(text.splitlines(), start=1):
+            for match in EMAIL_RE.finditer(line):
+                email_hits.append(
+                    _redacted_hit(path, root=root, line=line_no, pattern="email", token=match.group(0))
+                )
+            for match in ORCID_RE.finditer(line):
+                orcid_hits.append(
+                    _redacted_hit(path, root=root, line=line_no, pattern="orcid", token=match.group(0))
+                )
+            if ACKNOWLEDGMENT_RE.search(line):
+                acknowledgment_hits.append(
+                    _redacted_hit(path, root=root, line=line_no, pattern="acknowledgment_or_acks")
+                )
+            if LOCAL_PATH_RE.search(line):
+                local_path_hits.append(_redacted_hit(path, root=root, line=line_no, pattern="local_path"))
+            for raw_author in AUTHOR_RE.findall(line):
+                if "anonymous" not in raw_author.lower():
+                    nonanonymous_author_hits.append(
+                        _redacted_hit(
+                            path,
+                            root=root,
+                            line=line_no,
+                            pattern="nonanonymous_author_macro",
+                            token=raw_author.strip(),
+                        )
+                    )
+            if "\\affiliation" in line and (
+                "Anonymous Institution" not in line or "\\city{Anonymous}" not in line
+            ):
+                nonanonymous_affiliation_hits.append(
+                    _redacted_hit(
+                        path,
+                        root=root,
+                        line=line_no,
+                        pattern="nonanonymous_affiliation_macro",
+                        token=line.strip(),
+                    )
+                )
+
+    ok = not (
+        email_hits
+        or orcid_hits
+        or acknowledgment_hits
+        or local_path_hits
+        or nonanonymous_author_hits
+        or nonanonymous_affiliation_hits
+    )
+    return {
+        "ok": ok,
+        "scanned_tex_file_count": len(source.get("tex_files") or []),
+        "email_hit_count": len(email_hits),
+        "orcid_hit_count": len(orcid_hits),
+        "acknowledgment_hit_count": len(acknowledgment_hits),
+        "local_path_hit_count": len(local_path_hits),
+        "nonanonymous_author_hit_count": len(nonanonymous_author_hits),
+        "nonanonymous_affiliation_hit_count": len(nonanonymous_affiliation_hits),
+        "email_hits": email_hits,
+        "orcid_hits": orcid_hits,
+        "acknowledgment_hits": acknowledgment_hits,
+        "local_path_hits": local_path_hits,
+        "nonanonymous_author_hits": nonanonymous_author_hits,
+        "nonanonymous_affiliation_hits": nonanonymous_affiliation_hits,
+    }
+
+
+def _audit_anonymity(paper_dir: Path, root: Path, source: dict[str, Any]) -> dict[str, Any]:
     main_text = _read_text(paper_dir / "main.tex")
     authors = [author.strip() for author in AUTHOR_RE.findall(main_text)]
+    leak_scan = _scan_anonymity_source_leaks(paper_dir, root, source)
     return {
-        "authors": authors,
+        "authors": _redact_macro_values(authors, allowed_token="anonymous"),
         "anonymous_author": bool(authors) and all("anonymous" in author.lower() for author in authors),
         "anonymous_affiliation": "Anonymous Institution" in main_text,
         "email_macro_count": main_text.count("\\email{"),
         "thanks_macro_count": main_text.count("\\thanks{"),
+        "source_leak_scan_ok": leak_scan["ok"],
+        "source_leak_scan": leak_scan,
     }
 
 
@@ -315,6 +423,8 @@ def _audit_target_profile(
         failures.append(f"target_profile_page_count_exceeds_limit:{build['page_count']} > {max_pages}")
     if profile.get("require_anonymous_author_shell") and not anonymity["anonymous_author"]:
         failures.append("target_profile_requires_anonymous_author_shell")
+    if profile.get("require_anonymous_author_shell") and not anonymity.get("source_leak_scan_ok"):
+        failures.append("target_profile_requires_anonymous_source_leak_scan")
     if profile.get("require_single_pdf") and not build["pdf"]["exists"]:
         failures.append("target_profile_requires_single_pdf")
     if profile.get("require_local_source_manifest") and source_manifest["external_source_references"]:
@@ -370,7 +480,7 @@ def build_submission_package_audit(
     source = _discover_source_closure(paper, repo)
     build = _parse_build_state(paper, repo)
     source_manifest = _build_source_package_manifest(paper, repo, source)
-    anonymity = _audit_anonymity(paper)
+    anonymity = _audit_anonymity(paper, repo, source)
     documentclass = _documentclass_state(paper)
     profile_state = _load_target_profile(target_profile_path, target_profile_id)
     target_profile = _audit_target_profile(
@@ -437,6 +547,21 @@ def build_submission_package_audit(
         failures.append("anonymous_author_or_affiliation_not_ready")
     if anonymity["email_macro_count"] or anonymity["thanks_macro_count"]:
         failures.append("author_email_or_thanks_macro_present")
+    leak_scan = anonymity["source_leak_scan"]
+    if leak_scan["email_hit_count"]:
+        failures.append(f"anonymity_email_hits:{leak_scan['email_hit_count']}")
+    if leak_scan["orcid_hit_count"]:
+        failures.append(f"anonymity_orcid_hits:{leak_scan['orcid_hit_count']}")
+    if leak_scan["acknowledgment_hit_count"]:
+        failures.append(f"anonymity_acknowledgment_hits:{leak_scan['acknowledgment_hit_count']}")
+    if leak_scan["local_path_hit_count"]:
+        failures.append(f"anonymity_local_path_hits:{leak_scan['local_path_hit_count']}")
+    if leak_scan["nonanonymous_author_hit_count"]:
+        failures.append(f"anonymity_nonanonymous_author_hits:{leak_scan['nonanonymous_author_hit_count']}")
+    if leak_scan["nonanonymous_affiliation_hit_count"]:
+        failures.append(
+            f"anonymity_nonanonymous_affiliation_hits:{leak_scan['nonanonymous_affiliation_hit_count']}"
+        )
 
     claim_ok = (
         claim_audit.get("ok") is True
@@ -567,6 +692,12 @@ def _write_md(path: Path, audit: dict[str, Any]) -> None:
         f"`{audit['build']['underfull_vbox_count']}`",
         f"- Cited keys: `{audit['build']['cited_key_count']}`",
         f"- Panel score floor: `{audit['evidence_gates']['panel_score_floor']}`",
+        "- Anonymous source leak scan: "
+        f"`{str(audit['anonymity']['source_leak_scan_ok']).lower()}` "
+        f"(emails=`{audit['anonymity']['source_leak_scan']['email_hit_count']}`, "
+        f"orcid=`{audit['anonymity']['source_leak_scan']['orcid_hit_count']}`, "
+        f"acks=`{audit['anonymity']['source_leak_scan']['acknowledgment_hit_count']}`, "
+        f"local_paths=`{audit['anonymity']['source_leak_scan']['local_path_hit_count']}`)",
         "- External proceedings metadata ready: "
         f"`{audit['evidence_gates']['external_proceedings_metadata_ready']}`",
         "- Target formatting profile: "

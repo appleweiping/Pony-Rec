@@ -232,6 +232,11 @@ Its source-package manifest should include `main.tex`, all transitively included
 section/table sources, bibliography sources, compiled `main.bbl`, the checked
 PDF, and local figure assets, with no references to files outside the paper
 source package.
+The package audit must also keep the anonymous-source leak scan clean: no email
+addresses, ORCID identifiers, acknowledgment/acks macros, absolute local paths,
+non-anonymous author macros, or non-anonymous affiliation macros may appear in
+the TeX closure. If a sensitive match is detected, the audit may record only
+file/line/type and a short hash token, never the raw private value.
 
 After running the package audit, metadata packet, external proceedings
 metadata audit, and manual submission checklist, build the final local gate:
