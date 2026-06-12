@@ -1,0 +1,3 @@
+control,metric,domain_count,stable_domain_count,best_value_match_domain_count,mean_relative_drop_from_test_best,max_relative_drop_from_test_best,worst_test_rank_of_valid_best,relative_drop_tolerance,classification
+eta,NDCG@10,4,4,3,3.1157374565728285e-06,1.2462949826291314e-05,2,0.05,stable_with_domain_specific_best_values
+weight_grid_label,NDCG@10,4,4,1,0.00012383384671906222,0.0002974344039075195,3,0.05,stable_with_domain_specific_best_values

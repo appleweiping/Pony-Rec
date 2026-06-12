@@ -1,8 +1,8 @@
 # Phase 2.5 Module Package Audit
 
-- Generated UTC: `2026-06-12T01:55:50+00:00`
+- Generated UTC: `2026-06-12T01:51:57+00:00`
 - Module: `hyperparameter_analysis`
-- Package: `/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_home`
+- Package: `outputs\summary\paper_critical\ccrp_signal_generation_plan_post_performance_gate_20260606\ccrp_hyperparameter_tools`
 - OK: `True`
 - Paper claim ready: `True`
 - Read only: `True`

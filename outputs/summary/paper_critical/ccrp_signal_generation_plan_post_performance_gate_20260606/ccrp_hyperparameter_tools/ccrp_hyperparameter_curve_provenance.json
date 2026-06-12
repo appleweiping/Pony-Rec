@@ -1,0 +1,205 @@
+{
+  "artifact_class": "paper_critical_hyperparameter_analysis",
+  "status_label": "paper_critical_hyperparameter_curve_ready",
+  "paper_claim_scope": "valid_and_test_stability_curve_candidate",
+  "incomplete_controls": [],
+  "unstable_controls": [],
+  "claim_limits": [
+    "Hyperparameter curves do not replace official-baseline, ablation, or paired-test gates.",
+    "Validation-only curves support selection/protocol transparency, not paper-facing stability claims.",
+    "Diagnostic or audit-not-enforced curves must not be used as main paper evidence."
+  ],
+  "domain": "tools",
+  "git_commit": "465761c8de06863c40bc83bfce951a95e020b7af",
+  "command": "scripts/analysis/main_plot_ccrp_hyperparameter_sweep.py --domain tools --sweep_csv /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/valid_ccrp_hyperparameter_sweep.csv --test_sweep_csv /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/test_ccrp_hyperparameter_sweep.csv --sweep_provenance_json /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/ccrp_hyperparameter_sweep_provenance.json --output_dir /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools --metric NDCG@10 --score_mode full --ablation full --eta 1.0 --confidence_weight 0.7 --weight_grid_label 0.5,0.3,0.2 --controls eta,weight_grid_label --min_values 3\r",
+  "sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/valid_ccrp_hyperparameter_sweep.csv",
+  "sweep_sha256": "bcba9bdd47868fccd95b88c466808aa94a22b05f89b5c74b7efce05ed84a74c2",
+  "test_sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/test_ccrp_hyperparameter_sweep.csv",
+  "test_sweep_sha256": "6857a180471b777191dd1511184badfcef7f64ca2109112b35b0e26ad307e4f5",
+  "reporting_mode": "valid_and_test",
+  "metric": "NDCG@10",
+  "filters": {
+    "score_mode": "full",
+    "ablation": "full",
+    "eta": 1.0,
+    "confidence_weight": 0.7,
+    "weight_grid_label": "0.5,0.3,0.2"
+  },
+  "controls": [
+    "eta",
+    "weight_grid_label"
+  ],
+  "min_values": 3,
+  "allow_incomplete": false,
+  "audit_summary": {
+    "input_rows": 32,
+    "audited_rows": 32,
+    "dropped_audit_rows": 0,
+    "require_audit_ok": true,
+    "required_audit_columns": [
+      "audit_ok",
+      "degeneracy_audit_ok",
+      "score_coverage_rate",
+      "candidate_key_count"
+    ],
+    "missing_audit_columns": []
+  },
+  "control_reports": [
+    {
+      "split": "test",
+      "control": "eta",
+      "source_rows": 6,
+      "curve_values": 6,
+      "meets_min_values": true
+    },
+    {
+      "split": "test",
+      "control": "weight_grid_label",
+      "source_rows": 5,
+      "curve_values": 5,
+      "meets_min_values": true
+    },
+    {
+      "split": "valid",
+      "control": "eta",
+      "source_rows": 6,
+      "curve_values": 6,
+      "meets_min_values": true
+    },
+    {
+      "split": "valid",
+      "control": "weight_grid_label",
+      "source_rows": 5,
+      "curve_values": 5,
+      "meets_min_values": true
+    }
+  ],
+  "stability_report": [
+    {
+      "control": "eta",
+      "metric": "NDCG@10",
+      "relative_drop_tolerance": 0.05,
+      "has_valid_and_test": true,
+      "valid_best_value": "0",
+      "test_best_value": "0",
+      "valid_metric_at_best": 0.1707498127123165,
+      "test_best_metric": 0.1711310231989598,
+      "test_metric_at_valid_best": 0.1711310231989598,
+      "relative_drop_from_test_best": 0.0,
+      "test_rank_of_valid_best": 1,
+      "best_value_match": true,
+      "stable_within_tolerance": true,
+      "reason": "within_tolerance"
+    },
+    {
+      "control": "weight_grid_label",
+      "metric": "NDCG@10",
+      "relative_drop_tolerance": 0.05,
+      "has_valid_and_test": true,
+      "valid_best_value": "0.7,0.2,0.1",
+      "test_best_value": "0.4,0.2,0.4",
+      "valid_metric_at_best": 0.1703691713328645,
+      "test_best_metric": 0.1696122179392921,
+      "test_metric_at_valid_best": 0.1695617694303539,
+      "relative_drop_from_test_best": 0.0002974344039075195,
+      "test_rank_of_valid_best": 3,
+      "best_value_match": false,
+      "stable_within_tolerance": true,
+      "reason": "within_tolerance"
+    }
+  ],
+  "test_not_used_for_selection": true,
+  "sweep_source_provenance": {
+    "artifact_class": "paper_critical_hyperparameter_sweep_inputs",
+    "status_label": "valid_test_saved_signal_hyperparameter_sweep_ready",
+    "ok": true,
+    "domain": "tools",
+    "git_commit": "465761c8de06863c40bc83bfce951a95e020b7af",
+    "command": "scripts/analysis/main_build_ccrp_hyperparameter_sweep.py --domain tools --valid_ranking_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl --valid_candidate_items_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv --valid_signal_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/valid/valid_ccrp_signal_rows.csv --test_ranking_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl --test_candidate_items_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv --test_signal_path /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_rows.csv --output_dir /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools --eta_grid 0,0.25,0.5,1,2,4 --weight_grid 0.5,0.3,0.2;0.7,0.2,0.1;0.4,0.4,0.2;0.4,0.2,0.4;0.33,0.33,0.34 --diagnostic_confidence_weights 0.1,0.3,0.5,0.7,0.9 --expected_events 10000 --expected_candidates_per_event 101",
+    "metric": "NDCG@10",
+    "test_not_used_for_selection": true,
+    "main_controls": [
+      "eta",
+      "weight_grid_label"
+    ],
+    "diagnostic_controls": [
+      "confidence_weight"
+    ],
+    "eta_grid": [
+      0.0,
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      4.0
+    ],
+    "weight_grid": [
+      "0.5,0.3,0.2",
+      "0.7,0.2,0.1",
+      "0.4,0.4,0.2",
+      "0.4,0.2,0.4",
+      "0.33,0.33,0.34"
+    ],
+    "diagnostic_confidence_weights": [
+      0.1,
+      0.3,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "expected_events": 10000,
+    "expected_candidates_per_event": 101,
+    "expected_candidate_key_count": 1010000,
+    "tie_break_seed": 20260607,
+    "max_tie_pair_rate": 0.7,
+    "max_constant_event_rate": 0.02,
+    "paths": {
+      "valid_ranking_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/ranking_valid.jsonl",
+      "test_ranking_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+      "valid_candidate_items_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_valid_same_candidate/candidate_items.csv",
+      "test_candidate_items_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/candidate_items.csv",
+      "valid_signal_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/valid/valid_ccrp_signal_rows.csv",
+      "test_signal_path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/test_ccrp_signal_rows.csv",
+      "valid_sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/valid_ccrp_hyperparameter_sweep.csv",
+      "test_sweep_csv": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/test_ccrp_hyperparameter_sweep.csv"
+    },
+    "sha256": {
+      "valid_ranking": "6802366bb4d85c16b3daeb1a1d99b761b388cc1d0750238616d876b1b92da59d",
+      "test_ranking": "576303e1730a2062dceb13edcee45c010a71c067e08484e9498906b3ec88d61b",
+      "valid_candidate_items": "2561887f855026b32a553e703142213ac7e86bf27131bbc55bcb85f4aedfec1d",
+      "test_candidate_items": "e866e9ee8b96910061b5a4c7d67aa3a4867aaa7e6575d0c02108a945724bea7b",
+      "valid_signal": "2b4e7f1b64cb573f5a823ddce1f9d2afb34cafe489355c535f25e029d72bf6a5",
+      "test_signal": "873d36c645d6113f04fb2bb0fc3865dbdc93a16118b29d1a14859ec039bb0e60",
+      "valid_sweep_csv": "bcba9bdd47868fccd95b88c466808aa94a22b05f89b5c74b7efce05ed84a74c2",
+      "test_sweep_csv": "6857a180471b777191dd1511184badfcef7f64ca2109112b35b0e26ad307e4f5"
+    },
+    "row_counts": {
+      "valid_rows": 16,
+      "test_rows": 16,
+      "valid_signal_rows": 1010000,
+      "test_signal_rows": 1010000,
+      "valid_candidate_rows": 1010000,
+      "test_candidate_rows": 1010000,
+      "valid_ranking_events": 10000,
+      "test_ranking_events": 10000
+    },
+    "cleanup_status": {
+      "retained_bulk_scores_csv": false,
+      "retained_prediction_jsonl": false,
+      "retained_scored_temp_rows": false,
+      "retained_checkpoints": false,
+      "policy": "metrics_only_no_per_grid_score_or_prediction_files"
+    },
+    "claim_limits": [
+      "Hyperparameter curves are sensitivity/stability evidence only.",
+      "Test sweep is reporting-only and cannot select or change the main method.",
+      "confidence_weight is diagnostic under confidence_plus_evidence and not a main full-mode hyperparameter."
+    ]
+  },
+  "figure_paths": [
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/fig_hyper_eta_curve.png",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/fig_hyper_eta_curve.pdf",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/fig_hyper_weight_simplex_or_lines.png",
+    "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/fig_hyper_weight_simplex_or_lines.pdf"
+  ]
+}

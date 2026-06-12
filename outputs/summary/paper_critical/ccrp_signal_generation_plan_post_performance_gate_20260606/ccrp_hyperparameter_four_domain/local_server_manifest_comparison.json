@@ -1,0 +1,127 @@
+{
+  "ok": true,
+  "comparison_scope": "server_to_local_hyperparameter_four_domain_sync",
+  "server_package_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain",
+  "local_package_dir": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_four_domain",
+  "missing_local": [],
+  "missing_server": [],
+  "manifest_checks": {
+    "ccrp_hyperparameter_four_domain_curve_rows.csv": {
+      "server_sha256": "c5129774fcb0e62f30912317fec8dd62894b5b80f4cbd235bbd956a04d51e94d",
+      "local_sha256": "c5129774fcb0e62f30912317fec8dd62894b5b80f4cbd235bbd956a04d51e94d",
+      "expected": "c5129774fcb0e62f30912317fec8dd62894b5b80f4cbd235bbd956a04d51e94d",
+      "actual": "c5129774fcb0e62f30912317fec8dd62894b5b80f4cbd235bbd956a04d51e94d",
+      "ok": true,
+      "local_size": 46542,
+      "server_size": 46542
+    },
+    "ccrp_hyperparameter_four_domain_stability_rows.csv": {
+      "server_sha256": "70631141312ebd6ffc15ee1ad5c00ae92652c56743dab5b02431c9a5d195bf09",
+      "local_sha256": "70631141312ebd6ffc15ee1ad5c00ae92652c56743dab5b02431c9a5d195bf09",
+      "expected": "70631141312ebd6ffc15ee1ad5c00ae92652c56743dab5b02431c9a5d195bf09",
+      "actual": "70631141312ebd6ffc15ee1ad5c00ae92652c56743dab5b02431c9a5d195bf09",
+      "ok": true,
+      "local_size": 1460,
+      "server_size": 1460
+    },
+    "ccrp_hyperparameter_four_domain_control_summary.csv": {
+      "server_sha256": "f4152409a46e4eabf83b52700a10e0fbad6492f5d5a477fd5281a62214f6a101",
+      "local_sha256": "f4152409a46e4eabf83b52700a10e0fbad6492f5d5a477fd5281a62214f6a101",
+      "expected": "f4152409a46e4eabf83b52700a10e0fbad6492f5d5a477fd5281a62214f6a101",
+      "actual": "f4152409a46e4eabf83b52700a10e0fbad6492f5d5a477fd5281a62214f6a101",
+      "ok": true,
+      "local_size": 452,
+      "server_size": 452
+    },
+    "ccrp_hyperparameter_four_domain_summary.md": {
+      "server_sha256": "99d0d8727c1a0eea754e44c4ed856fecab57d081cfaf93d62988de954348b1b0",
+      "local_sha256": "99d0d8727c1a0eea754e44c4ed856fecab57d081cfaf93d62988de954348b1b0",
+      "expected": "99d0d8727c1a0eea754e44c4ed856fecab57d081cfaf93d62988de954348b1b0",
+      "actual": "99d0d8727c1a0eea754e44c4ed856fecab57d081cfaf93d62988de954348b1b0",
+      "ok": true,
+      "local_size": 507,
+      "server_size": 507
+    },
+    "ccrp_hyperparameter_four_domain_provenance.json": {
+      "server_sha256": "5870b7bdb3e06ee359f42461aa3d5dd309363b47bdef5552f570d1639a160b90",
+      "local_sha256": "5870b7bdb3e06ee359f42461aa3d5dd309363b47bdef5552f570d1639a160b90",
+      "expected": "5870b7bdb3e06ee359f42461aa3d5dd309363b47bdef5552f570d1639a160b90",
+      "actual": "5870b7bdb3e06ee359f42461aa3d5dd309363b47bdef5552f570d1639a160b90",
+      "ok": true,
+      "local_size": 13313,
+      "server_size": 13313
+    },
+    "run_config.json": {
+      "server_sha256": "91303168eb8fccb3652c110409c7c48b33b2c27cbcdd716f70f25ec9c95d05f9",
+      "local_sha256": "91303168eb8fccb3652c110409c7c48b33b2c27cbcdd716f70f25ec9c95d05f9",
+      "expected": "91303168eb8fccb3652c110409c7c48b33b2c27cbcdd716f70f25ec9c95d05f9",
+      "actual": "91303168eb8fccb3652c110409c7c48b33b2c27cbcdd716f70f25ec9c95d05f9",
+      "ok": true,
+      "local_size": 1252,
+      "server_size": 1252
+    },
+    "log_snippets.md": {
+      "server_sha256": "995843c033866bc77d62973c89e726a9b845b210ed388cb6a1cd5ab44cbd226c",
+      "local_sha256": "995843c033866bc77d62973c89e726a9b845b210ed388cb6a1cd5ab44cbd226c",
+      "expected": "995843c033866bc77d62973c89e726a9b845b210ed388cb6a1cd5ab44cbd226c",
+      "actual": "995843c033866bc77d62973c89e726a9b845b210ed388cb6a1cd5ab44cbd226c",
+      "ok": true,
+      "local_size": 633,
+      "server_size": 633
+    },
+    "fig_hyperparameter_four_domain_stability.png": {
+      "server_sha256": "284cf9c8d8cecc9e1b52e224fe8056c8c2273ca7adced308c8ca439b51674efa",
+      "local_sha256": "284cf9c8d8cecc9e1b52e224fe8056c8c2273ca7adced308c8ca439b51674efa",
+      "expected": "284cf9c8d8cecc9e1b52e224fe8056c8c2273ca7adced308c8ca439b51674efa",
+      "actual": "284cf9c8d8cecc9e1b52e224fe8056c8c2273ca7adced308c8ca439b51674efa",
+      "ok": true,
+      "local_size": 133248,
+      "server_size": 133248
+    },
+    "fig_hyperparameter_four_domain_stability.pdf": {
+      "server_sha256": "96b3c5797ed498f47876e177b1627c1d26927f0fc01398a3c28e9099187ec78d",
+      "local_sha256": "96b3c5797ed498f47876e177b1627c1d26927f0fc01398a3c28e9099187ec78d",
+      "expected": "96b3c5797ed498f47876e177b1627c1d26927f0fc01398a3c28e9099187ec78d",
+      "actual": "96b3c5797ed498f47876e177b1627c1d26927f0fc01398a3c28e9099187ec78d",
+      "ok": true,
+      "local_size": 15971,
+      "server_size": 15971
+    },
+    "fig_hyperparameter_four_domain_eta.png": {
+      "server_sha256": "7f11e25c9f66a0d064934b9c7dab8df0828ad6e2213c69f4a3ba15ba1879b8df",
+      "local_sha256": "7f11e25c9f66a0d064934b9c7dab8df0828ad6e2213c69f4a3ba15ba1879b8df",
+      "expected": "7f11e25c9f66a0d064934b9c7dab8df0828ad6e2213c69f4a3ba15ba1879b8df",
+      "actual": "7f11e25c9f66a0d064934b9c7dab8df0828ad6e2213c69f4a3ba15ba1879b8df",
+      "ok": true,
+      "local_size": 92402,
+      "server_size": 92402
+    },
+    "fig_hyperparameter_four_domain_eta.pdf": {
+      "server_sha256": "c45d597840c3d25da81eccc9e36bec9a30c8ace9912e8db807a98aaf3e07c372",
+      "local_sha256": "c45d597840c3d25da81eccc9e36bec9a30c8ace9912e8db807a98aaf3e07c372",
+      "expected": "c45d597840c3d25da81eccc9e36bec9a30c8ace9912e8db807a98aaf3e07c372",
+      "actual": "c45d597840c3d25da81eccc9e36bec9a30c8ace9912e8db807a98aaf3e07c372",
+      "ok": true,
+      "local_size": 16161,
+      "server_size": 16161
+    },
+    "fig_hyperparameter_four_domain_weight.png": {
+      "server_sha256": "a23bb219732f83798fe1ac27a6bf7650ca4ddc3775aab0a8ecb20ab108d26424",
+      "local_sha256": "a23bb219732f83798fe1ac27a6bf7650ca4ddc3775aab0a8ecb20ab108d26424",
+      "expected": "a23bb219732f83798fe1ac27a6bf7650ca4ddc3775aab0a8ecb20ab108d26424",
+      "actual": "a23bb219732f83798fe1ac27a6bf7650ca4ddc3775aab0a8ecb20ab108d26424",
+      "ok": true,
+      "local_size": 97052,
+      "server_size": 97052
+    },
+    "fig_hyperparameter_four_domain_weight.pdf": {
+      "server_sha256": "8be77e06bacddadeb0be3c2452f04828ae5345d971f04833ef1157074a2707da",
+      "local_sha256": "8be77e06bacddadeb0be3c2452f04828ae5345d971f04833ef1157074a2707da",
+      "expected": "8be77e06bacddadeb0be3c2452f04828ae5345d971f04833ef1157074a2707da",
+      "actual": "8be77e06bacddadeb0be3c2452f04828ae5345d971f04833ef1157074a2707da",
+      "ok": true,
+      "local_size": 18069,
+      "server_size": 18069
+    }
+  }
+}

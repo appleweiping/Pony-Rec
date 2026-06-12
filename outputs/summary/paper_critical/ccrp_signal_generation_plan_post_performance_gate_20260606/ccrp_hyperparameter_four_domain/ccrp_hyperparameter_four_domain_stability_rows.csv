@@ -1,0 +1,9 @@
+control,metric,relative_drop_tolerance,has_valid_and_test,valid_best_value,test_best_value,valid_metric_at_best,test_best_metric,test_metric_at_valid_best,relative_drop_from_test_best,test_rank_of_valid_best,best_value_match,stable_within_tolerance,reason,domain
+eta,NDCG@10,0.05,True,0,0,0.2242728911735334,0.2286769117070504,0.2286769117070504,0.0,1,True,True,within_tolerance,sports
+weight_grid_label,NDCG@10,0.05,True,"0.5,0.3,0.2","0.4,0.4,0.2",0.2241492157434322,0.2280957895657901,0.2280957895657901,0.0,1,False,True,within_tolerance,sports
+eta,NDCG@10,0.05,True,0.25,0,0.2762755062764706,0.2717138285180185,0.2717104421622066,1.2462949826291314e-05,2,False,True,within_tolerance,toys
+weight_grid_label,NDCG@10,0.05,True,"0.4,0.4,0.2","0.7,0.2,0.1",0.2763054809569207,0.2717642245693846,0.2717104421622066,0.00019790098296872946,2,False,True,within_tolerance,toys
+eta,NDCG@10,0.05,True,0,0,0.1400215449931689,0.1374367737683685,0.1374367737683685,0.0,1,True,True,within_tolerance,home
+weight_grid_label,NDCG@10,0.05,True,"0.7,0.2,0.1","0.7,0.2,0.1",0.140022527538406,0.1364293960758505,0.1364293960758505,0.0,1,True,True,within_tolerance,home
+eta,NDCG@10,0.05,True,0,0,0.1707498127123165,0.1711310231989598,0.1711310231989598,0.0,1,True,True,within_tolerance,tools
+weight_grid_label,NDCG@10,0.05,True,"0.7,0.2,0.1","0.4,0.2,0.4",0.1703691713328645,0.1696122179392921,0.1695617694303539,0.0002974344039075195,3,False,True,within_tolerance,tools

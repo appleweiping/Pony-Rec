@@ -3,6 +3,8 @@
   "comparison_scope": "server_to_local_lightweight_sync",
   "server_package_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_sports",
   "local_package_dir": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_sports",
+  "missing_local": [],
+  "missing_server": [],
   "manifest_checks": {
     "valid_ccrp_hyperparameter_sweep.csv": {
       "server_sha256": "129553ccb5dc903d3ce69a6cf4028640f51bce9e8e047181b2e4054d310a8c90",
@@ -84,6 +86,24 @@
       "ok": true,
       "local_size": 16799,
       "server_size": 16799
+    },
+    "run_config.json": {
+      "server_sha256": "2b2fcadf939520a64afdf499195961c59f2a54c07511838b0d05bac42481eed3",
+      "local_sha256": "2b2fcadf939520a64afdf499195961c59f2a54c07511838b0d05bac42481eed3",
+      "expected": "2b2fcadf939520a64afdf499195961c59f2a54c07511838b0d05bac42481eed3",
+      "actual": "2b2fcadf939520a64afdf499195961c59f2a54c07511838b0d05bac42481eed3",
+      "ok": true,
+      "local_size": 915,
+      "server_size": 915
+    },
+    "log_snippets.md": {
+      "server_sha256": "61b33a8ba8355d988d775fee74ed5d7ddf5c43751e95885b094b9bc522d280e9",
+      "local_sha256": "61b33a8ba8355d988d775fee74ed5d7ddf5c43751e95885b094b9bc522d280e9",
+      "expected": "61b33a8ba8355d988d775fee74ed5d7ddf5c43751e95885b094b9bc522d280e9",
+      "actual": "61b33a8ba8355d988d775fee74ed5d7ddf5c43751e95885b094b9bc522d280e9",
+      "ok": true,
+      "local_size": 399,
+      "server_size": 399
     }
   }
 }

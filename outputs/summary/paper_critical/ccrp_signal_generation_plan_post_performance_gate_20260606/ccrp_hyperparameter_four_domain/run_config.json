@@ -1,0 +1,23 @@
+{
+  "artifact_class": "paper_critical_hyperparameter_cross_domain_run_config",
+  "domain_count": 4,
+  "domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools"
+  ],
+  "controls": [
+    "eta",
+    "weight_grid_label"
+  ],
+  "metric": "NDCG@10",
+  "expected_events": 10000,
+  "expected_candidates_per_event": 101,
+  "relative_drop_tolerance": 0.05,
+  "package_root": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606",
+  "output_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain",
+  "git_commit": "b1215b4420ddddec697cef024d15a496b40a7336",
+  "command": "scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py --package_root /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606 --output_dir /home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain --metric NDCG@10",
+  "generated_at": "2026-06-12T02:03:39.499402+00:00"
+}

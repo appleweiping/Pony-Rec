@@ -3,6 +3,8 @@
   "comparison_scope": "server_to_local_lightweight_sync",
   "server_package_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_toys",
   "local_package_dir": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_toys",
+  "missing_local": [],
+  "missing_server": [],
   "manifest_checks": {
     "valid_ccrp_hyperparameter_sweep.csv": {
       "server_sha256": "5d02bec605acfa0e915c37f0bd6466cf5f52739b893cbb9a4af212717081e063",
@@ -84,6 +86,24 @@
       "ok": true,
       "local_size": 16302,
       "server_size": 16302
+    },
+    "run_config.json": {
+      "server_sha256": "1249ce60d0b180c3878caa5cca8bef6d99ae2a3524d33e4861f79a286827b967",
+      "local_sha256": "1249ce60d0b180c3878caa5cca8bef6d99ae2a3524d33e4861f79a286827b967",
+      "expected": "1249ce60d0b180c3878caa5cca8bef6d99ae2a3524d33e4861f79a286827b967",
+      "actual": "1249ce60d0b180c3878caa5cca8bef6d99ae2a3524d33e4861f79a286827b967",
+      "ok": true,
+      "local_size": 913,
+      "server_size": 913
+    },
+    "log_snippets.md": {
+      "server_sha256": "094556038d06883f4787e2877fa56ca520aeeab0a280ec721206afa8ee640f50",
+      "local_sha256": "094556038d06883f4787e2877fa56ca520aeeab0a280ec721206afa8ee640f50",
+      "expected": "094556038d06883f4787e2877fa56ca520aeeab0a280ec721206afa8ee640f50",
+      "actual": "094556038d06883f4787e2877fa56ca520aeeab0a280ec721206afa8ee640f50",
+      "ok": true,
+      "local_size": 395,
+      "server_size": 395
     }
   }
 }

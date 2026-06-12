@@ -109,9 +109,10 @@ must be cautious: boundary uncertainty is inert across all four domains;
 counterevidence and risk-penalty removal are nonworse or better on NDCG@10;
 evidence support is directionally supportive but small; calibration gap is
 mixed. A GPT-5.5 xhigh post-module review rated the completed component module
-**CONDITIONAL PASS, 8.1/10**. The remaining Phase 2.5 blocker before final
-paper-readiness review is the real hyperparameter-curve package, followed by
-final claim/overclaim audit.
+**CONDITIONAL PASS, 8.1/10**. The real hyperparameter-curve package has since
+closed as supplementary stability/sensitivity evidence on 2026-06-12; the next
+paper-readiness step is final paper-facing evidence consolidation plus
+claim/overclaim/citation audit, not another default experiment launch.
 
 1. An observation/motivation study explaining why uncertainty should be used in
    this framework. It should use representative completed baselines and fair
@@ -1097,28 +1098,37 @@ xhigh + a second Claude Opus 4.8) with no unresolved major objection. This
 per-module cadence replaces the prior single end-of-project GPT-5.5/Codex xhigh
 ≥ 8/10 gate.
 
-2026-06-12 hyperparameter-module status: execution support is hardened and
-three of the four target full-scale domain packages are accepted. The
+2026-06-12 hyperparameter-module status: the module is closed as scoped
+supplementary stability/sensitivity evidence. The
 saved-signal entrypoint
 `scripts/analysis/main_build_ccrp_hyperparameter_sweep.py` produces valid/test
 sweep CSVs and provenance from already audited full-scale C-CRP signal rows
 without LLM re-query, score import, or retained per-grid prediction/score
 dumps. The main controls are `eta` and `weight_grid_label`; `confidence_weight`
 is diagnostic-only for `confidence_plus_evidence` and must not be used as a
-full-mode main C-CRP curve. Sports, Toys, and Home each now have complete local
-and server packages under
-`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_{sports,toys,home}/`
+full-mode main C-CRP curve. Sports, Toys, Home, and Tools each now have
+complete local and server packages under
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_{sports,toys,home,tools}/`
 with Phase 2.5 package audits reporting `ok=true`, `paper_claim_ready=true`,
-and `failures=[]`. These packages show valid/test stability within the
-pre-registered tolerance, but they support only sensitivity/stability wording,
-not test-set hyperparameter selection or main-table SOTA claims. A
-four-domain-only aggregator,
-`scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py`, is now
-available and fails closed on missing package audits, invalid row counts or
-coverage, unstable controls, or test-selection provenance. The remaining
-single-domain blocker is Tools; after Tools passes, run the aggregate and the
-post-module ARIS/reviewer pass before claiming the hyperparameter module is
-closed.
+and `failures=[]`; the hardened manifest gate covers 11/11 lightweight files
+per domain. The four-domain aggregate at
+`outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain/`
+reports `ok=true`, `paper_claim_ready=true`, `all_controls_stable=true`, and
+`table_eligibility=supplementary_hyperparameter_stability_only`. On NDCG@10,
+`eta` is stable in `4/4` domains with max relative drop
+`1.2462949826291314e-05`, and `weight_grid_label` is stable in `4/4` domains
+with max relative drop `0.0002974344039075195`. The aggregate includes command
+provenance, `run_config.json`, `log_snippets.md`, output hashes/sizes, and a
+local/server manifest comparison covering 13/13 lightweight files. GPT-5.5
+xhigh protocol review rated the module **CONDITIONAL PASS, 8.3/10**; Codex GPT
+xhigh engineering review rated it **CONDITIONAL PASS, 8.0/10** after the
+aggregate packaging/tolerance/manifest fixes. Claude Opus review tooling failed
+with `Claude CLI did not return JSON output`, so that reviewer perspective is
+missing. Paper wording may say validation-selected C-CRP `eta` and weight-grid
+settings remain within a 5% relative NDCG@10 drop of the test-best grid point
+across four full-scale domains. It must not claim test-selected tuning,
+main-table SOTA evidence, all-metric robustness, universal optima, or that the
+risk penalty is necessary.
 
 ### Remaining for paper submission
 

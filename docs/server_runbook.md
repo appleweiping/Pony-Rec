@@ -34,7 +34,7 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order (2026-06-11)
+## Current Priority Order (2026-06-12)
 
 ```text
 1. Pull latest repo state.
@@ -56,12 +56,15 @@ PIDs, audit summaries, and missing-file errors.
    event-level uncertainty stratifies ranking reliability; do not claim
    causality, statistical significance, exhaustive baseline behavior, or
    main-table SOTA evidence from this module.
-6. Run the remaining Phase 2.5 paper-critical module next: real
-   hyperparameter curves, then package audit and post-module review. Current
-   blocker is no longer missing full-scale signal rows for observation or
-   component ablation; use the completed signal and selector packages rather
-   than regenerating rows unless a concrete audit failure proves a
-   missing/invalid artifact.
+6. Phase 2.5 hyperparameter analysis is now closed as supplementary
+   stability/sensitivity evidence: Sports/Toys/Home/Tools single-domain
+   packages and the four-domain aggregate pass their hardened gates. The
+   aggregate lives at
+   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain/`
+   and reports `all_controls_stable=true` for `eta` and
+   `weight_grid_label` on NDCG@10. Do not call this main-table SOTA evidence,
+   all-metric robustness, test-selected tuning, or proof that the risk penalty
+   is necessary.
 7. If a future audit finds no saved signal rows pass audit, use the guarded
    signal-row runner
    `experiments/rsc/run_ccrp_v3_signal_rows.py` to generate valid/test

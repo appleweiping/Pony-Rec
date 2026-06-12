@@ -9,10 +9,11 @@ cycle.
 
 ## Current Checkpoint (2026-06-12)
 
-- Server live state at the Home hyperparameter checkpoint: the Home sweep
-  finished normally, the GPU was idle during the saved-signal sweep, and disk
-  remained about `17G` free / `92%` used. Do not start a new server job without
-  a fresh process/GPU/disk preflight.
+- Server live state after the hyperparameter module: no matching
+  Pony/C-CRP/baseline/uncertainty Python process is active, `nvidia-smi`
+  reports `0%`, `15 MiB / 49140 MiB`, and disk remains about `17G` free /
+  `92%` used. Do not start a new server job without a fresh process/GPU/disk
+  preflight.
 - Tools test signal rows are complete, source-audited, and locally synced:
   `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_signal_rows_tools/test/`
   has `test_ccrp_signal_rows.csv` with `1,010,000` rows, provenance
@@ -207,12 +208,47 @@ cycle.
   test-best are both `0.7,0.2,0.1` with `relative_drop_from_test_best=0` and
   `test_rank_of_valid_best=1`. This is sensitivity/stability evidence only,
   not test-set hyperparameter selection.
-- Next bounded action: run the Tools hyperparameter curve on the server after
-  a fresh preflight. If Tools passes sweep/provenance/package-audit gates,
-  aggregate the four domain packages with
-  `scripts/analysis/main_aggregate_ccrp_hyperparameter_analysis.py` and run
-  post-module review. Do not rerun observation or component ablation unless a
-  concrete audit failure is found.
+- Tools hyperparameter package is complete and locally synced:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_tools/`.
+  Server sweep log `ccrp_hyperparameter_tools_20260612_083526.log` returned
+  `ok=true`, `valid_rows=16`, `test_rows=16`; plotting produced 22 summary
+  rows and eta/weight-grid PNG/PDF figures. Server and local Phase 2.5 package
+  audits both report `ok=true`, `paper_claim_ready=true`, `failures=[]` after
+  the manifest gate was hardened to require 11/11 lightweight files. Key Tools
+  result: for `eta`, valid-best and test-best are both `0` with
+  `relative_drop_from_test_best=0` and `test_rank_of_valid_best=1`; for
+  `weight_grid_label`, valid-best is `0.7,0.2,0.1`, test-best is
+  `0.4,0.2,0.4`, and valid-best remains within tolerance with
+  `relative_drop_from_test_best=0.0002974344039075195` and
+  `test_rank_of_valid_best=3`.
+- The four-domain hyperparameter aggregate is complete:
+  `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain/`.
+  It reports `ok=true`, `paper_claim_ready=true`, `all_controls_stable=true`,
+  and `table_eligibility=supplementary_hyperparameter_stability_only`.
+  Aggregate NDCG@10 stability: `eta` is stable in `4/4` domains with max
+  relative drop `1.2462949826291314e-05` and worst test rank `2`;
+  `weight_grid_label` is stable in `4/4` domains with max relative drop
+  `0.0002974344039075195` and worst test rank `3`. The aggregate package now
+  includes command provenance, `run_config.json`, `log_snippets.md`, output
+  hashes/sizes in `ccrp_hyperparameter_four_domain_provenance.json`, and a
+  local/server manifest comparison covering 13/13 lightweight files.
+- Post-module reviews for the hyperparameter module: GPT-5.5 xhigh protocol
+  review returned **CONDITIONAL PASS, 8.3/10** as supplementary stability
+  evidence; Codex GPT xhigh engineering review returned **CONDITIONAL PASS,
+  8.0/10** after identifying and then fixing stale docs, aggregate packaging,
+  tolerance enforcement, and manifest coverage. Claude Opus reviewer tooling
+  failed in this session with `Claude CLI did not return JSON output`, so that
+  perspective remains explicitly missing. Required wording: the module supports
+  only NDCG@10 hyperparameter stability/sensitivity for `eta` and
+  `weight_grid_label`; test sweeps were reporting-only and cannot select or
+  change the method; do not claim risk penalty necessity, universal optima,
+  all-metric robustness, or main-table SOTA from this module.
+- Next bounded action: the Phase 2.5 paper-critical experiment modules
+  (observation/motivation, component ablation, hyperparameter stability, and
+  framework overview) are closed under scoped evidence labels. Move to final
+  paper-facing evidence consolidation and ARIS claim/overclaim/citation audit;
+  do not launch new experiments unless that audit finds a concrete invalid row
+  or missing gate.
   The selector import command now points to the real script path
   `scripts/misc/main_import_same_candidate_baseline_scores.py` and includes
   `--tie_break_seed`; if a future agent sees selector import failures, first
