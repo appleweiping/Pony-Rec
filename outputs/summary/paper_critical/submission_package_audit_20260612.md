@@ -1,6 +1,6 @@
 # Submission Package Audit
 
-Generated: 2026-06-12T13:22:17.393444+00:00
+Generated: 2026-06-12T15:18:43.629667+00:00
 
 - Verdict: `READY_FOR_TARGET_FORMATTING_NOT_FINAL_SUBMISSION`
 - OK: `true`
@@ -13,6 +13,7 @@ Generated: 2026-06-12T13:22:17.393444+00:00
 - Underfull hbox/vbox warnings: `6` / `8`
 - Cited keys: `21`
 - Panel score floor: `8.0`
+- Anonymous source leak scan: `true` (emails=`0`, orcid=`0`, acks=`0`, local_paths=`0`)
 - External proceedings metadata ready: `False`
 - Target formatting profile: `sigir2026_full_paper_acm_anonymous` ok=`true`
 - Source package manifest files: `21`

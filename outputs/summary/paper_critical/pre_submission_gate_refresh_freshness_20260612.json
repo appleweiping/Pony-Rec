@@ -2,18 +2,13 @@
   "aris_skill": "aris-citation-audit",
   "checked_input_fingerprint_count": 19,
   "checked_step_file_count": 10,
-  "created_at_utc": "2026-06-12T13:24:07.144209+00:00",
+  "created_at_utc": "2026-06-12T15:20:33.247224+00:00",
   "current_git_state": {
     "available": true,
     "error": "",
-    "head": "77b03f28eba465a6029329970bcf90feb39a645b",
+    "head": "6be395c7a3a5be3f1ca3527a2b251373fc25fb58",
     "tracked_dirty": true,
     "tracked_dirty_paths": [
-      "M docs/active_todo_pony_uncertainty.md",
-      "M docs/milestones/README.md",
-      "M docs/paper_claims_and_status.md",
-      "M docs/server_runbook.md",
-      "M docs/top_conference_review_gate.md",
       "M outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.json",
       "M outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260612.md",
       "M outputs/summary/paper_critical/final_submission_gate_20260612.json",
@@ -25,11 +20,7 @@
       "M outputs/summary/paper_critical/submission_metadata_packet_20260612.json",
       "M outputs/summary/paper_critical/submission_metadata_packet_20260612.md",
       "M outputs/summary/paper_critical/submission_package_audit_20260612.json",
-      "M outputs/summary/paper_critical/submission_package_audit_20260612.md",
-      "M scripts/audit/main_build_manual_submission_checklist.py",
-      "M scripts/audit/main_refresh_pre_submission_gates.py",
-      "M tests/test_build_final_submission_gate.py",
-      "M tests/test_build_manual_submission_checklist.py"
+      "M outputs/summary/paper_critical/submission_package_audit_20260612.md"
     ]
   },
   "failures": [],
@@ -40,12 +31,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
-        "sha256": "83c0ed76d8f28f23a060e3181d517984e30a9824faf7306f7f6cc2d664db84b0",
+        "sha256": "b344a5f6f72f05d59f5bbdaf8bf5d0049872011be40c8cdc70b2691fdc9e937a",
         "size_bytes": 6453
       },
       "expected": {
         "exists": true,
-        "sha256": "83c0ed76d8f28f23a060e3181d517984e30a9824faf7306f7f6cc2d664db84b0",
+        "sha256": "b344a5f6f72f05d59f5bbdaf8bf5d0049872011be40c8cdc70b2691fdc9e937a",
         "size_bytes": 6453
       },
       "matches": true,
@@ -59,12 +50,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.md",
-        "sha256": "4698e32e3f210276ebeb1944709148a6544f8b1ae9b5dc141a656d58d05960a9",
+        "sha256": "820ae96870bbe97823a9b65ff52aa1d9ee225dde7cf389550365541df7fca0c0",
         "size_bytes": 2030
       },
       "expected": {
         "exists": true,
-        "sha256": "4698e32e3f210276ebeb1944709148a6544f8b1ae9b5dc141a656d58d05960a9",
+        "sha256": "820ae96870bbe97823a9b65ff52aa1d9ee225dde7cf389550365541df7fca0c0",
         "size_bytes": 2030
       },
       "matches": true,
@@ -78,13 +69,13 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json",
-        "sha256": "a8305af9ea29576c2a7275bdd7d37ce302a7f8285d44723f03d484c2f3b14d29",
-        "size_bytes": 15541
+        "sha256": "b294a034b3fa00cd881170180468d7099b3388e0262583a22e26b2fc6a0c4c70",
+        "size_bytes": 16083
       },
       "expected": {
         "exists": true,
-        "sha256": "a8305af9ea29576c2a7275bdd7d37ce302a7f8285d44723f03d484c2f3b14d29",
-        "size_bytes": 15541
+        "sha256": "b294a034b3fa00cd881170180468d7099b3388e0262583a22e26b2fc6a0c4c70",
+        "size_bytes": 16083
       },
       "matches": true,
       "mismatches": [],
@@ -97,13 +88,13 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.md",
-        "sha256": "5bdb9437334281afb5be2dd355721a6ba755aa35cc6dc404541f499e738a44ec",
-        "size_bytes": 1459
+        "sha256": "43be16534eb83b53fa5fe0c719712d44867d6a2b4d34a573fd1217f09872abd6",
+        "size_bytes": 1548
       },
       "expected": {
         "exists": true,
-        "sha256": "5bdb9437334281afb5be2dd355721a6ba755aa35cc6dc404541f499e738a44ec",
-        "size_bytes": 1459
+        "sha256": "43be16534eb83b53fa5fe0c719712d44867d6a2b4d34a573fd1217f09872abd6",
+        "size_bytes": 1548
       },
       "matches": true,
       "mismatches": [],
@@ -116,12 +107,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.json",
-        "sha256": "1549772d8e49543a0bcf0a3a3cf522430780dfdac6df6445a7dca6cb29c27486",
+        "sha256": "d5a7418e2b66ecb1437badc902d1ece366bc20a072e5e78094d4bd20df66abf6",
         "size_bytes": 4325
       },
       "expected": {
         "exists": true,
-        "sha256": "1549772d8e49543a0bcf0a3a3cf522430780dfdac6df6445a7dca6cb29c27486",
+        "sha256": "d5a7418e2b66ecb1437badc902d1ece366bc20a072e5e78094d4bd20df66abf6",
         "size_bytes": 4325
       },
       "matches": true,
@@ -135,12 +126,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.md",
-        "sha256": "465df00e1f436b4b086c3a5b13d75f854d302144af22aabbbb66419b1c0eb99a",
+        "sha256": "384103509bd356e8759aa3ef470732b62d1ac09b82b13642f5480df0259ad55d",
         "size_bytes": 3327
       },
       "expected": {
         "exists": true,
-        "sha256": "465df00e1f436b4b086c3a5b13d75f854d302144af22aabbbb66419b1c0eb99a",
+        "sha256": "384103509bd356e8759aa3ef470732b62d1ac09b82b13642f5480df0259ad55d",
         "size_bytes": 3327
       },
       "matches": true,
@@ -154,12 +145,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.json",
-        "sha256": "39891e592f99357838cbc6f973ff50ffd54ef536430b56ac9e1b671b3a7da756",
+        "sha256": "b5dd8cd35dc5b8433d4c3ce6c2a2460bd8bcc81d8cbabff62d208a9018586b29",
         "size_bytes": 15331
       },
       "expected": {
         "exists": true,
-        "sha256": "39891e592f99357838cbc6f973ff50ffd54ef536430b56ac9e1b671b3a7da756",
+        "sha256": "b5dd8cd35dc5b8433d4c3ce6c2a2460bd8bcc81d8cbabff62d208a9018586b29",
         "size_bytes": 15331
       },
       "matches": true,
@@ -173,12 +164,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.md",
-        "sha256": "3226835658e8090d8d0638dfa5b8916fa705ccabcfc013702b209054f116ddc1",
+        "sha256": "c2e014281bfe72fe7c6e57a6b0dcc81a953a3b904342da1162bb9d840072fba3",
         "size_bytes": 6493
       },
       "expected": {
         "exists": true,
-        "sha256": "3226835658e8090d8d0638dfa5b8916fa705ccabcfc013702b209054f116ddc1",
+        "sha256": "c2e014281bfe72fe7c6e57a6b0dcc81a953a3b904342da1162bb9d840072fba3",
         "size_bytes": 6493
       },
       "matches": true,
@@ -192,12 +183,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\final_submission_gate_20260612.json",
-        "sha256": "567898d9768318120fdc247f23e4cbe9bcc68ed53c649e07e59ded123bddbfdf",
+        "sha256": "63052ec22ce73f48cb6baa366995445a05fc76c9723130ad562f75a81f20aacb",
         "size_bytes": 6506
       },
       "expected": {
         "exists": true,
-        "sha256": "567898d9768318120fdc247f23e4cbe9bcc68ed53c649e07e59ded123bddbfdf",
+        "sha256": "63052ec22ce73f48cb6baa366995445a05fc76c9723130ad562f75a81f20aacb",
         "size_bytes": 6506
       },
       "matches": true,
@@ -211,12 +202,12 @@
         "exists": true,
         "is_file": true,
         "path": "outputs\\summary\\paper_critical\\final_submission_gate_20260612.md",
-        "sha256": "1c3447502eef05b671afd80a79f7b714ae1e519dfdd5bd3525b12d067196e095",
+        "sha256": "72aa1930e891b08ac604dba9b9bd3b9b1fb77d81fe59eab43372548e5cd517a7",
         "size_bytes": 2251
       },
       "expected": {
         "exists": true,
-        "sha256": "1c3447502eef05b671afd80a79f7b714ae1e519dfdd5bd3525b12d067196e095",
+        "sha256": "72aa1930e891b08ac604dba9b9bd3b9b1fb77d81fe59eab43372548e5cd517a7",
         "size_bytes": 2251
       },
       "matches": true,
@@ -501,13 +492,13 @@
         "exists": true,
         "is_file": true,
         "path": "scripts\\audit\\main_audit_submission_package.py",
-        "sha256": "dba948bb101588d3e4ceb56ae8a8436b4265ffde2de29fb9b363ea39403ff490",
-        "size_bytes": 27574
+        "sha256": "abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53",
+        "size_bytes": 33787
       },
       "expected": {
         "exists": true,
-        "sha256": "dba948bb101588d3e4ceb56ae8a8436b4265ffde2de29fb9b363ea39403ff490",
-        "size_bytes": 27574
+        "sha256": "abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53",
+        "size_bytes": 33787
       },
       "matches": true,
       "mismatches": [],
@@ -602,25 +593,15 @@
   "ok": true,
   "read_only": true,
   "refresh_artifact_fresh": true,
-  "refresh_created_at_utc": "2026-06-12T13:22:19.882101+00:00",
+  "refresh_created_at_utc": "2026-06-12T15:18:44.446480+00:00",
   "refresh_final_submission_ready": false,
   "refresh_final_verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED",
   "refresh_git_state_before_refresh": {
     "available": true,
     "error": "",
-    "head": "77b03f28eba465a6029329970bcf90feb39a645b",
-    "tracked_dirty": true,
-    "tracked_dirty_paths": [
-      "M docs/active_todo_pony_uncertainty.md",
-      "M docs/milestones/README.md",
-      "M docs/paper_claims_and_status.md",
-      "M docs/server_runbook.md",
-      "M docs/top_conference_review_gate.md",
-      "M scripts/audit/main_build_manual_submission_checklist.py",
-      "M scripts/audit/main_refresh_pre_submission_gates.py",
-      "M tests/test_build_final_submission_gate.py",
-      "M tests/test_build_manual_submission_checklist.py"
-    ]
+    "head": "6be395c7a3a5be3f1ca3527a2b251373fc25fb58",
+    "tracked_dirty": false,
+    "tracked_dirty_paths": []
   },
   "refresh_json": "outputs\\summary\\paper_critical\\pre_submission_gate_refresh_20260612.json",
   "refresh_ok": true,
@@ -637,9 +618,7 @@
     "manual_submission_system_not_ready"
   ],
   "schema_version": "2026-06-12.pre_submission_refresh_freshness_audit.v1",
-  "warnings": [
-    "refresh_recorded_tracked_dirty_inputs_before_generation"
-  ],
+  "warnings": [],
   "will_copy": false,
   "will_delete": false,
   "will_ssh": false,

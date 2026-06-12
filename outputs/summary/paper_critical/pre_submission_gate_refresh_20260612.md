@@ -1,14 +1,14 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-12T13:22:19.882101+00:00
+Generated: 2026-06-12T15:18:44.446480+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260612`
-- Git HEAD before refresh: `77b03f28eba465a6029329970bcf90feb39a645b`
-- Tracked dirty before refresh: `true`
+- Git HEAD before refresh: `6be395c7a3a5be3f1ca3527a2b251373fc25fb58`
+- Tracked dirty before refresh: `false`
 
 ## Steps
 
@@ -34,7 +34,7 @@ Generated: 2026-06-12T13:22:19.882101+00:00
 - `configs\paper_manual_submission_checklist.json`: `e8bbef232cc418ca45976cb675411e2128075b6d8eae6d3ce23b561ecf666174` (4732 bytes)
 - `scripts\audit\main_refresh_pre_submission_gates.py`: `8814ad9b1571d43e01d1425a23805b84f2487342d05a05bfd1a5be6590b14802` (17527 bytes)
 - `scripts\audit\main_audit_external_proceedings_metadata.py`: `0143492e15967b3ee582329934b88f47211ce52454d950fb3af568b5b0e63b9f` (19677 bytes)
-- `scripts\audit\main_audit_submission_package.py`: `dba948bb101588d3e4ceb56ae8a8436b4265ffde2de29fb9b363ea39403ff490` (27574 bytes)
+- `scripts\audit\main_audit_submission_package.py`: `abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53` (33787 bytes)
 - `scripts\audit\main_build_submission_metadata_packet.py`: `01b66efe8a816d5681cef351fdf87a594ad935193e1f9bf2336f5d8a559e513c` (10113 bytes)
 - `scripts\audit\main_build_manual_submission_checklist.py`: `c6e50da192f1c8ee970e96e0241d2d614f739b2507b258dec88877d7d0d9dce3` (21881 bytes)
 - `scripts\audit\main_build_final_submission_gate.py`: `892a3291518209df27c8b1f2954c34288ba01be539319915adb6dfd94accaeec` (11207 bytes)

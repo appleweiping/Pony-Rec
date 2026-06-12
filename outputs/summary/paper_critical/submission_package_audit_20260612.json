@@ -6,6 +6,23 @@
       "Anonymous"
     ],
     "email_macro_count": 0,
+    "source_leak_scan": {
+      "acknowledgment_hit_count": 0,
+      "acknowledgment_hits": [],
+      "email_hit_count": 0,
+      "email_hits": [],
+      "local_path_hit_count": 0,
+      "local_path_hits": [],
+      "nonanonymous_affiliation_hit_count": 0,
+      "nonanonymous_affiliation_hits": [],
+      "nonanonymous_author_hit_count": 0,
+      "nonanonymous_author_hits": [],
+      "ok": true,
+      "orcid_hit_count": 0,
+      "orcid_hits": [],
+      "scanned_tex_file_count": 17
+    },
+    "source_leak_scan_ok": true,
     "thanks_macro_count": 0
   },
   "build": {
@@ -40,7 +57,7 @@
     "underfull_hbox_count": 6,
     "underfull_vbox_count": 8
   },
-  "created_at_utc": "2026-06-12T13:22:17.393444+00:00",
+  "created_at_utc": "2026-06-12T15:18:43.629667+00:00",
   "documentclass": {
     "documentclass": "acmart",
     "options": [
