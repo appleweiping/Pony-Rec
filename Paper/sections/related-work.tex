@@ -31,12 +31,18 @@ isotonic regression~\cite{zadrozny2002transforming} can improve probability
 calibration when a suitable calibration set is available. In the LLM setting,
 prior work has studied whether models can express their own uncertainty in
 words or probabilities~\cite{kadavath2022language,tian2023just,lin2022teaching}.
+Selective classification and risk-coverage formulations study when a predictor
+should abstain or control decision risk under uncertainty~\cite{elyaniv2010foundations,geifman2017selective}.
+Our setting differs because every method must rank every candidate; the
+selective-prediction connection is used only to motivate decision-useful
+uncertainty rather than an abstention claim.
 
 Recommendation adds a different challenge: uncertainty must be useful for a
 ranking decision rather than only well calibrated as a scalar probability. We
 therefore evaluate whether an event-level uncertainty signal stratifies ranking
-reliability and whether risk-adjusted scores improve same-candidate
-performance under paired tests.
+reliability and whether a validation-controlled C-CRP ranking line improves
+same-candidate performance under paired tests, while diagnostics test which
+uncertainty and risk terms actually matter.
 
 \subsection{Uncertainty in Recommendation}
 

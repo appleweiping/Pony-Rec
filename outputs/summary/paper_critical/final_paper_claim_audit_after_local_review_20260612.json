@@ -1,0 +1,239 @@
+{
+  "schema_version": "2026-06-12.final_paper_claim_audit.v1",
+  "created_at_utc": "2026-06-12T05:08:15+00:00",
+  "mode": "local_final_paper_facing_claim_audit",
+  "read_only": true,
+  "will_ssh": false,
+  "will_copy": false,
+  "will_delete": false,
+  "will_start_experiment": false,
+  "ok": true,
+  "paper_evidence_ready_for_drafting": true,
+  "final_submission_ready": false,
+  "verdict": "READY_FOR_MANUSCRIPT_LEVEL_CLAIM_AND_CITATION_AUDIT",
+  "root": "D:\\Research\\Uncertainty",
+  "input_paths": {
+    "certificate": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\cross_domain_official_ccrp_certificate_audit_post_ccrp_backfill_20260606_0255.json",
+      "exists": true,
+      "size_bytes": 4791
+    },
+    "ledger": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.json",
+      "exists": true,
+      "size_bytes": 171101
+    },
+    "observation": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\observation_four_domain_provenance.json",
+      "exists": true,
+      "size_bytes": 6406
+    },
+    "component": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\component_ablation_four_domain_provenance.json",
+      "exists": true,
+      "size_bytes": 5683
+    },
+    "component_summary": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\component_ablation_four_domain_component_summary.csv",
+      "exists": true,
+      "size_bytes": 6825
+    },
+    "hyperparameter": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_four_domain\\ccrp_hyperparameter_four_domain_provenance.json",
+      "exists": true,
+      "size_bytes": 13313
+    },
+    "hyperparameter_stability": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_four_domain\\ccrp_hyperparameter_four_domain_stability_rows.csv",
+      "exists": true,
+      "size_bytes": 1460
+    },
+    "framework": {
+      "path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\framework_overview\\framework_overview_provenance.json",
+      "exists": true,
+      "size_bytes": 2842
+    }
+  },
+  "evidence_gates": {
+    "comparison_ready": true,
+    "observation_ready": true,
+    "component_ready": true,
+    "hyperparameter_ready": true,
+    "framework_ready": true
+  },
+  "claim_status_counts": {
+    "CONTRADICTED": 2,
+    "SUPPORTED": 6,
+    "UNSUPPORTED": 2
+  },
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "C-CRP v3 ranks first against eight official-code-level baselines on Sports, Toys, Home, and Tools under 10k-user/101-candidate same-candidate evaluation, with all per-domain paired Holm tests positive and significant.",
+      "category": "performance",
+      "status": "SUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\cross_domain_official_ccrp_certificate_audit_post_ccrp_backfill_20260606_0255.json",
+      "allowed_wording": "C-CRP v3 ranks first in the four tested same-candidate new-domain certificates against eight official-code-level baselines.",
+      "forbidden_wording": "full-catalog SOTA; universal recommender SOTA; paper-ready SOTA without scoped modules and manuscript review",
+      "notes": "On Sports, Toys, Home, and Tools 10k-user/101-candidate same-candidate domains, C-CRP v3 ranks first against eight official-code-level baselines, with all 56 per-domain C-CRP-vs-official metric tests positive and Holm-significant."
+    },
+    {
+      "id": "C2",
+      "claim": "The main comparison ledger contains 32 official baseline rows and 4 C-CRP rows with complete full-metric, row-count, score-coverage, provenance, and local/server evidence checks.",
+      "category": "protocol",
+      "status": "SUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\new_domains_paper_facing_full_metric_evidence_ledger_post_ccrp_backfill_20260606_0255.json",
+      "allowed_wording": "The paper-facing ledger is complete for the declared four-domain same-candidate comparison.",
+      "forbidden_wording": "treating the ledger alone as a whole-paper readiness verdict",
+      "notes": "row_count=36; official_row_count=32; ccrp_row_count=4"
+    },
+    {
+      "id": "C3",
+      "claim": "C-CRP event-level uncertainty stratifies ranking reliability: high-uncertainty bins have lower NDCG@10, MRR, and HR@10 than low-uncertainty bins in all four domains.",
+      "category": "qualitative",
+      "status": "SUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\observation_four_domain\\observation_four_domain_provenance.json",
+      "allowed_wording": "Use as descriptive motivation evidence that C-CRP uncertainty stratifies same-candidate ranking reliability.",
+      "forbidden_wording": "causal uncertainty effect; statistically significant bin effect; exhaustive baseline calibration evidence",
+      "notes": "claim_status=uncertainty_stratifies_reliability; table_eligibility=motivation_only_not_main_table_sota"
+    },
+    {
+      "id": "C4",
+      "claim": "The four-domain component ablation is package-ready and supports a diagnostic discussion of weak, redundant, or mixed C-CRP components.",
+      "category": "ablation",
+      "status": "SUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\component_ablation_four_domain_provenance.json",
+      "allowed_wording": "Report leave-one-component-out diagnostics; several components are neutral, weak, redundant, or mixed.",
+      "forbidden_wording": "every component is necessary; every uncertainty term improves performance; component effects are statistically significant",
+      "notes": "nonworse_or_redundant_components=without_boundary_uncertainty,without_counterevidence,without_risk_penalty"
+    },
+    {
+      "id": "C5",
+      "claim": "Every nontrivial C-CRP component is necessary for the observed gains.",
+      "category": "ablation",
+      "status": "CONTRADICTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_component_ablation_four_domain\\component_ablation_four_domain_component_summary.csv",
+      "allowed_wording": "Do not make this claim.",
+      "forbidden_wording": "necessary; essential; each component contributes; removing any component hurts",
+      "notes": "Positive or neutral removal deltas directly contradict a strong necessity claim."
+    },
+    {
+      "id": "C6",
+      "claim": "The hyperparameter module supports NDCG@10 stability/sensitivity for eta and the uncertainty weight grid across four domains under validation-only selection and reporting-only test sweeps.",
+      "category": "hyperparameter",
+      "status": "SUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_four_domain\\ccrp_hyperparameter_four_domain_provenance.json",
+      "allowed_wording": "Eta and weight-grid choices are stable within the preregistered tolerance on NDCG@10 across the four domains.",
+      "forbidden_wording": "all-metric robustness; universal optimum; test-selected tuning; main-table SOTA evidence",
+      "notes": "controls=eta,weight_grid_label; metric=NDCG@10"
+    },
+    {
+      "id": "C7",
+      "claim": "A positive risk exponent or risk penalty is necessary or uniformly beneficial.",
+      "category": "hyperparameter",
+      "status": "CONTRADICTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_hyperparameter_four_domain\\ccrp_hyperparameter_four_domain_stability_rows.csv",
+      "allowed_wording": "Do not claim risk-penalty necessity; discuss eta as stable/sensitivity-only.",
+      "forbidden_wording": "eta must be positive; risk penalty is necessary; risk penalty uniformly improves",
+      "notes": "eta_test_best_zero_domains=home,sports,tools,toys"
+    },
+    {
+      "id": "C8",
+      "claim": "The framework overview figure is ready to describe the controlled same-candidate pipeline and evidence gates.",
+      "category": "method",
+      "status": "SUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\framework_overview\\framework_overview_provenance.json",
+      "allowed_wording": "Use the figure to explain the pipeline and where uncertainty/calibration and the ranking-family risk term enter.",
+      "forbidden_wording": "using the figure as evidence that observation, ablation, or hyperparameter modules are complete",
+      "notes": "claim_boundary=controlled_same_candidate_ranking_not_full_catalog"
+    },
+    {
+      "id": "C9",
+      "claim": "The project is submission-ready now.",
+      "category": "submission",
+      "status": "UNSUPPORTED",
+      "evidence_location": "manuscript/bibliography discovery",
+      "allowed_wording": "Evidence is ready for strict paper drafting and subsequent manuscript-level claim/citation review.",
+      "forbidden_wording": "submission-ready; final READY; cleared for camera-ready",
+      "notes": "citation_status=READY_FOR_MANUSCRIPT_AND_BIBTEX_AUDIT"
+    },
+    {
+      "id": "C10",
+      "claim": "The method is a full-catalog or universal recommender SOTA system.",
+      "category": "generality",
+      "status": "UNSUPPORTED",
+      "evidence_location": "outputs\\summary\\paper_critical\\cross_domain_official_ccrp_certificate_audit_post_ccrp_backfill_20260606_0255.json",
+      "allowed_wording": "Controlled same-candidate ranking/reranking reliability under the tested protocol.",
+      "forbidden_wording": "full-catalog SOTA; universal cross-domain winner beyond tested same-candidate domains",
+      "notes": "The certificate explicitly excludes full-catalog and universal SOTA claims."
+    }
+  ],
+  "component_negative_evidence": {
+    "ndcg10_row_count": 5,
+    "nonworse_or_redundant_components": [
+      "without_boundary_uncertainty",
+      "without_counterevidence",
+      "without_risk_penalty"
+    ],
+    "positive_mean_removal_components": [
+      "without_counterevidence",
+      "without_risk_penalty"
+    ],
+    "contradicts_all_components_necessary": true
+  },
+  "hyperparameter_eta_zero_evidence": {
+    "eta_domain_count": 4,
+    "eta_test_best_zero_domains": [
+      "home",
+      "sports",
+      "tools",
+      "toys"
+    ],
+    "eta_stable_domains": [
+      "home",
+      "sports",
+      "tools",
+      "toys"
+    ],
+    "contradicts_positive_eta_necessity": true
+  },
+  "citation_audit": {
+    "status": "READY_FOR_MANUSCRIPT_AND_BIBTEX_AUDIT",
+    "verdict": "NEEDS_MANUAL_REFERENCE_COMPLETENESS_CHECK",
+    "manuscript_state": {
+      "tex_files": [
+        "paper\\main.tex"
+      ],
+      "bib_files": [
+        "paper\\references.bib"
+      ],
+      "has_manuscript": true,
+      "has_bibliography": true
+    },
+    "must_add_categories": [
+      "LLM-based recommendation and sequential recommendation foundations",
+      "uncertainty estimation, calibration, and selective/risk-aware prediction",
+      "all eight official baselines used in the main same-candidate table",
+      "same-candidate/reranking evaluation protocol and paired significance testing",
+      "recent 2025-2026 LLM recommender and uncertainty-aware recommender work"
+    ],
+    "notes": [
+      "This audit does not fabricate BibTeX entries.",
+      "Run a full citation audit after a manuscript and .bib file exist."
+    ]
+  },
+  "red_flag_terms": {
+    "state-of-the-art": "Allowed only with controlled same-candidate scope; forbidden for full-catalog or universal claims.",
+    "significant": "Allowed for the paired official comparison only where Holm-significant tests are cited.",
+    "necessary": "Forbidden for all C-CRP components and positive eta/risk penalty.",
+    "robust": "Use stability/sensitivity for NDCG@10 controls, not broad robustness.",
+    "causal": "Unsupported by the observation module.",
+    "first": "Blocked until a literature-backed novelty and citation audit exists."
+  },
+  "failures": [],
+  "next_actions": [
+    "Draft the paper using only SUPPORTED allowed wording and the explicit forbidden-wording guardrails.",
+    "Run ARIS paper-claim-audit and aris-citation-audit on the existing manuscript and bibliography, then revise text to the allowed wording in this audit.",
+    "Run GPT-5.5/Codex review on each written section before calling the paper submission-ready."
+  ]
+}

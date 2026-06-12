@@ -1,0 +1,60 @@
+{
+  "generated_utc": "2026-06-12T05:05:52Z",
+  "audit_skill": "aris-auto-review-loop",
+  "agent_role": "codex_auditor_solution_architect",
+  "base_commit_before_edits": "b01d6f0",
+  "review_scope": [
+    "Paper/sections/introduction.tex",
+    "Paper/sections/related-work.tex",
+    "Paper/sections/method.tex",
+    "Paper/sections/analysis.tex",
+    "Paper/references.bib",
+    "Paper/CLAIM_MAP.md",
+    "docs/active_todo_pony_uncertainty.md",
+    "docs/paper_claims_and_status.md",
+    "scripts/audit/main_build_final_paper_claim_audit.py"
+  ],
+  "initial_external_review": {
+    "reviewer": "Meitner existing subagent",
+    "score": "26/35",
+    "normalized_score": "7.4/10",
+    "verdict": "borderline_conditional_fail_for_section_readiness",
+    "kill_argument": "The draft foregrounded actionable uncertainty and risk-adjusted ranking more strongly than the ablation and eta evidence supported."
+  },
+  "fixes_applied": [
+    "Downgraded risk-adjusted wording to validation-controlled ranking-family and risk-term wording.",
+    "Changed broad robustness wording to stability/sensitivity.",
+    "Added concrete signal-row schema, parser behavior, parse-failure threshold, and vLLM generation parameters to the method section.",
+    "Added selective classification/risk-coverage citations while explicitly avoiding an abstention claim.",
+    "Updated C8 claim-audit allowed wording to the ranking-family risk-term boundary.",
+    "Cleaned current canonical-doc SOTA shorthand in the historical C-CRP status block."
+  ],
+  "regenerated_artifacts": {
+    "claim_audit_json": "outputs/summary/paper_critical/final_paper_claim_audit_after_local_review_20260612.json",
+    "claim_audit_md": "outputs/summary/paper_critical/final_paper_claim_audit_after_local_review_20260612.md",
+    "claim_audit_csv_local_ignored": "outputs/summary/paper_critical/final_paper_claim_audit_after_local_review_20260612.csv"
+  },
+  "followup_review": {
+    "reviewer": "Meitner existing subagent",
+    "score": "28/35",
+    "normalized_score": "8.0/10",
+    "verdict": "section_readiness_bare_conditional_pass",
+    "final_submission_ready": false,
+    "remaining_blockers": [
+      "Final claim audit remains final_submission_ready=false.",
+      "Manual reference-completeness check remains required by the claim audit.",
+      "ProEx/ProMax proceedings metadata must be rechecked immediately before submission.",
+      "A final full panel, including the specifically requested Claude Opus perspective if available, is still a submission-process gate."
+    ]
+  },
+  "verification": {
+    "latex_chain": "pdflatex -> bibtex -> pdflatex -> pdflatex passed",
+    "bibtex_warning_count": 0,
+    "pdf_path": "Paper/main.pdf",
+    "pdf_bytes": 546561,
+    "paper_critical_pytest": "66 passed",
+    "project_readiness_check": "project_readiness_ok=True",
+    "server_experiment_status": "preflight found no matching active pony-rec/ccrp/baseline/uncertainty Python process; GPU idle"
+  },
+  "gate_verdict": "section_level_gate_passed_conditionally_at_8_0_of_10_not_final_submission_ready"
+}

@@ -29,8 +29,9 @@ not a generic recommender system.
    failure.
 2. Method: C-CRP, a task-grounded calibrated candidate relevance posterior with
    boundary uncertainty, calibration gap, and evidence insufficiency.
-3. Decision: risk-adjusted candidate ranking/reranking evaluated with utility,
-   calibration, coverage, exposure, robustness, and paired statistical tests.
+3. Decision: validation-controlled candidate ranking/reranking with an
+   ablated risk term, evaluated with utility metrics, uncertainty diagnostics,
+   provenance gates, and paired statistical tests.
 
 C-CRP is the main internal method line. SRPD is the trainable
 framework/ablation line and becomes paper-facing only after leakage-clean
@@ -78,7 +79,19 @@ scientific limitations. The structural expansion audit is saved at
 The paper-critical pytest subset reports `66 passed`; full local pytest
 collection remains blocked by pre-existing import-path issues in historical
 official-runner tests, so it is not used as the manuscript gate. A follow-up
-ARIS paper-claim-audit pass on the expanded manuscript is saved at
+section-level ARIS review after local claim-boundary fixes is saved at
+`outputs/summary/paper_critical/section_review_followup_after_local_review_20260612.{json,md}`.
+Meitner first returned `26/35 = 7.4/10`; after risk-term wording downgrades,
+stability/sensitivity wording, signal-row schema/parser/vLLM reproducibility
+details, selective-classification citations, and canonical-doc SOTA cleanup,
+the re-review returned `28/35 = 8.0/10`, a bare conditional section-readiness
+pass. The regenerated claim audit
+`outputs/summary/paper_critical/final_paper_claim_audit_after_local_review_20260612.{json,md}`
+still reports `final_submission_ready=false`, so final submission readiness
+remains blocked on manual reference completeness, ProEx/ProMax proceedings
+metadata recheck, and a final full review panel including the specifically
+requested Claude Opus perspective if available.
+A previous ARIS paper-claim-audit pass on the expanded manuscript is saved at
 `outputs/summary/paper_critical/manuscript_claim_audit_after_structural_expansion_20260612.{json,md}`;
 it reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
 `submission_gate_verdict=NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION`,
@@ -87,8 +100,9 @@ it reports `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
 at
 `outputs/summary/paper_critical/manuscript_claim_citation_audit_20260612.{json,md}`
 reported `NEEDS_SECTION_REVIEW_BEFORE_SUBMISSION` before the final spot-check
-and section-review edits. That review gate has now advanced but is still not
-closed: `outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
+and section-review edits. Later section-review passes advanced the section gate,
+but final submission readiness is still not closed:
+`outputs/summary/paper_critical/final_citation_spot_check_20260612.{json,md}`
 reports `overall_citation_health=HEALTHY_WITH_PROCEEDINGS_METADATA_CAUTION`,
 `must_add_count=0`, all 19 cited keys resolved, all eight official baselines
 cited, and `Paper/main.blg` still at `warning$ -- 0`; ProEx/ProMax proceedings
@@ -1042,7 +1056,7 @@ The canonical milestone map lives in `docs/milestones/README.md`.
 | M2 Light series | precursor / negative-control ablation | supplementary unless explicitly completed under main protocol |
 | M3 Shadow series | task-grounded signal family | diagnostic unless large-scale protocol and validation gates are complete |
 | M4 Baseline system | fairness and reviewer defense | yes for completed classical rows; official external rows only after provenance passes |
-| M5 Four-domain validation | robustness evidence | yes when 100neg outputs, audits, and paired tests are complete |
+| M5 Four-domain validation | scoped stability/sensitivity evidence | yes when 100neg outputs, audits, and paired tests are complete |
 | M6 Complete recommender system | future full-system roadmap | no until official baselines, Shadow, LoRA, and generated-title verification are completed |
 
 The `*_style_*` LLM-rec rows are paper-style supplementary rows, not official
@@ -1112,8 +1126,8 @@ preferences before scoring each candidate. All domains use 10k users,
 | Domain | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR | vs Best Baseline |
 |--------|------|-------|-------|--------|---------|---------|-----|------------------|
 | beauty (973u) | 0.157 | 0.229 | 0.369 | 0.111 | 0.134 | 0.169 | 0.128 | #2 (ProEx=0.253) |
-| books | 0.374 | **0.476** | 0.592 | 0.300 | **0.333** | 0.362 | 0.306 | **SOTA** (+0.8% vs LLMEmb) |
-| electronics | 0.218 | **0.299** | 0.418 | 0.157 | **0.183** | 0.213 | 0.168 | **SOTA** (+22% vs LLMEmb) |
+| books | 0.374 | **0.476** | 0.592 | 0.300 | **0.333** | 0.362 | 0.306 | historical rank 1 (+0.8% vs LLMEmb) |
+| electronics | 0.218 | **0.299** | 0.418 | 0.157 | **0.183** | 0.213 | 0.168 | historical rank 1 (+22% vs LLMEmb) |
 | movies | 0.145 | 0.208 | 0.331 | 0.108 | 0.128 | 0.159 | 0.127 | #5 (LLMEmb=0.334) |
 | sports | 0.275 | 0.382 | 0.517 | 0.198 | 0.233 | 0.267 | 0.208 | domain gate PASS |
 | toys | 0.317 | 0.396 | 0.506 | 0.245 | 0.271 | 0.298 | 0.250 | domain gate PASS |
@@ -1158,13 +1172,13 @@ current strict evidence gate because final provenance/audit files are not
 co-located with the imported tables. Reconcile those evidence packs before
 paper submission; do not rerun or relabel them without a provenance decision.
 
-### Strategy for SOTA
+### Historical Rank-First Strategy
 
-C-CRP v3 achieves SOTA on books and electronics under the current comparison
+C-CRP v3 ranked first on books and electronics under the historical comparison
 table, and sports/toys/home/tools now pass domain-level official-baseline and
-paired-test gates. Paper-wide SOTA wording is still not submission-ready until
-the four-domain comparison is consolidated into the paper table, ARIS
-claim/citation audits pass, the paper-critical observation/ablation/
+paired-test gates. Full-catalog or universal SOTA wording is still forbidden;
+paper-facing wording must stay scoped to controlled same-candidate ranking until
+ARIS claim/citation audits pass, the paper-critical observation/ablation/
 hyperparameter/figure modules are complete, and each completed module has passed
 the per-module tri-reviewer review-as-you-go pass (Codex GPT xhigh + GPT-5.5
 xhigh + a second Claude Opus 4.8) with no unresolved major objection. This

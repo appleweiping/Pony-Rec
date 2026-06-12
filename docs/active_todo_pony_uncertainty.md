@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 06:38 CEST
+Last updated: 2026-06-12 07:05 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -34,8 +34,8 @@ cycle.
   cost/latency, prompt/parser dependence, and sampled-negative candidate sets.
   `pdflatex -> bibtex -> pdflatex -> pdflatex` now produces
   `Paper/main.pdf` (9 pages, 541654 bytes), with `Paper/main.blg` still
-  reporting `warning$ -- 0` and no unresolved citations/references. Remaining
-  The evidence-to-claim gate was rerun as
+  reporting `warning$ -- 0` and no unresolved citations/references. The
+  evidence-to-claim gate was rerun as
   `outputs/summary/paper_critical/final_paper_claim_audit_post_section_review_20260612.{json,md,csv}`
   with `ok=true`, `paper_evidence_ready_for_drafting=true`,
   `final_submission_ready=false`, `SUPPORTED=6`, `CONTRADICTED=2`, and
@@ -45,14 +45,30 @@ cycle.
   `claim_text_verdict=READY_WITH_SCOPE_GUARDS`,
   `submission_gate_verdict=NEEDS_FINAL_PANEL_REVIEW_BEFORE_SUBMISSION`,
   `SUPPORTED=12`, `WEAKLY_SUPPORTED=0`, `UNSUPPORTED=0`, `OVERCLAIMED=0`, and
-  `CONTRADICTED=0`. Remaining blockers: another section-level top-conference
-  review on the latest draft, missing Claude Opus reviewer perspective in this
-  session, and final ProEx/ProMax proceedings metadata recheck before any
-  submission-ready claim.
+  `CONTRADICTED=0`. Follow-up ARIS section review after local claim-boundary
+  fixes is saved at
+  `outputs/summary/paper_critical/section_review_followup_after_local_review_20260612.{json,md}`:
+  Meitner first returned `26/35 = 7.4/10`, then re-reviewed the patched
+  worktree and returned `28/35 = 8.0/10`, a bare conditional section-readiness
+  pass. The fixes downgraded risk-adjusted wording to ranking-family/risk-term
+  wording, changed robustness wording to stability/sensitivity, added concrete
+  signal-row schema/parser/vLLM details, added selective-classification
+  citations, cleaned current SOTA shorthand in canonical docs, and regenerated
+  `outputs/summary/paper_critical/final_paper_claim_audit_after_local_review_20260612.{json,md}`
+  with `ok=true`, `paper_evidence_ready_for_drafting=true`, and
+  `final_submission_ready=false`. Verification passed:
+  `pdflatex -> bibtex -> pdflatex -> pdflatex`, `Paper/main.blg` reports
+  `warning$ -- 0`, `Paper/main.pdf` is 546561 bytes, the paper-critical pytest
+  subset reports `66 passed`, and
+  `python -m scripts.audit.main_project_readiness_check` reports
+  `project_readiness_ok=True`. Remaining blockers: manual reference
+  completeness/final citation sweep, final ProEx/ProMax proceedings metadata
+  recheck before any submission-ready claim, and a final full review panel
+  including the specifically requested Claude Opus perspective if available.
 - Manuscript structural expansion checkpoint: first expansion/rebalancing pass
   is complete, but the paper is still not final submission-ready. The method
   section now gives the reranking-scope contract, C-CRP posterior notation,
-  uncertainty decomposition, risk-adjusted ranking formula, validation-only
+  uncertainty decomposition, ranking-family formula and risk term, validation-only
   selection, and fail-closed score gates. The experiments section now spells out
   the same-candidate protocol, Qwen3-8B fairness policy, official/default
   baseline policy, provenance requirements, paired-test family, and evidence
@@ -749,7 +765,7 @@ to final writing or claiming readiness, add and gate these top-priority modules:
    rows.
 4. Framework overview figure: prepare a clean paper figure showing the full
    pipeline, where task-grounded uncertainty is estimated, which components
-   enter C-CRP, and where risk-adjusted ranking is applied. Script entry:
+   enter C-CRP, and where the ranking-family risk term is applied. Script entry:
    `scripts/analysis/main_build_framework_overview_figure.py`; generated SVG
    is the editable source, with PDF/PNG/caption/provenance exports. Draft
    local package generated at 2026-06-04 04:43 CST under

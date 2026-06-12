@@ -12,7 +12,7 @@ $(u,c_i)$ pair under the same key schema.
 
 The core object in \method{} is a calibrated candidate relevance posterior
 $p_i=P(y_i=1\mid H_u,c_i)$ and an uncertainty estimate $U_i\in[0,1]$ attached
-to that posterior. The final ranking score is risk-adjusted:
+to that posterior. The ranking family score is
 \begin{equation}
     r_i = p_i(1-U_i)^\eta ,
     \label{eq:risk-score}
@@ -44,6 +44,26 @@ files. Rows with invalid probability, support, counterevidence, or key fields
 are rejected before score export. The formal packages used for the paper pass
 with 10,000 events, 1,010,000 candidate rows, exact candidate-key coverage, and
 zero parse failures per domain.
+
+The concrete signal-row runner fixes one parser-compatible schema and requests
+only JSON fields:
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+schema & \texttt{ccrp\_v3\_signal\_rows.2026-06-06}\\
+field & \texttt{relevance\_probability}\\
+field & \texttt{calibrated\_relevance\_probability}\\
+field & \texttt{evidence\_support}\\
+field & \texttt{counterevidence\_strength}\\
+field & \texttt{reason}
+\end{tabular}
+\end{center}
+The parser first accepts strict JSON or a JSON-object substring, then
+field-level numeric fallbacks; fallback rows are marked through the
+parse-success flag. Paper packages have zero parse failures under a maximum
+allowed rate of 0.005. Generation provenance records the Qwen3-8B vLLM path,
+temperature 0.1, 120 maximum new tokens, 5,000 users per chunk, and 101
+expected candidates per event.
 
 This evidence format separates three roles that are often conflated in LLM
 recommendation: the model's relevance estimate, the support for that estimate,
@@ -104,7 +124,7 @@ one uncertainty term and renormalize the remaining uncertainty weights. This
 renormalization is why we interpret ablations as diagnostic redistribution
 tests, not as proofs of independent causal necessity.
 
-\subsection{Risk-Adjusted Ranking}
+\subsection{Ranking Family and Risk Term}
 
 The final ranking score in Equation~\ref{eq:risk-score} is multiplicative:
 uncertainty reduces the calibrated base score through $(1-U_i)^\eta$. This is
@@ -115,7 +135,7 @@ candidate can be damped. When the risk-penalty ablation is active, or when a
 diagnostic score mode does not use uncertainty, the score is the base posterior
 or evidence score directly.
 
-For each event, candidates are sorted by descending risk-adjusted score. Ties
+For each event, candidates are sorted by descending final score. Ties
 are broken by a deterministic hash keyed by source event, user, item, and a
 fixed seed; this removes any dependence on original candidate order while
 preserving exact reproducibility. The score exporter emits only the required
@@ -164,7 +184,7 @@ posteriors, estimates uncertainty, and applies a validation-controlled ranking
 family whose risk term is ablated in diagnostics. The official baselines and
 \method{} share the same candidate rows, metric importer, and evidence gates.}
 \Description{Pipeline diagram showing same-candidate task construction, LLM
-signal extraction, calibration, C-CRP uncertainty, risk-adjusted ranking, and
-shared evidence gates for official baselines and C-CRP.}
+signal extraction, calibration, C-CRP uncertainty, the ranking-family risk
+term, and shared evidence gates for official baselines and C-CRP.}
 \label{fig:framework}
 \end{figure*}

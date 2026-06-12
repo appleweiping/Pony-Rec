@@ -14,7 +14,7 @@ consolidation. It replaces the older pre-Phase-2.5 calibration narrative.
 | C3 | C-CRP event-level uncertainty stratifies same-candidate ranking reliability in all four domains. | `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/observation_four_domain/` | Descriptive motivation only; no causal/statistical bin-effect claim. |
 | C4 | Component ablation packages are complete and support a diagnostic discussion of weak, redundant, or mixed components. | `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_component_ablation_four_domain/` | Supplementary diagnostic evidence only. |
 | C5 | Eta and uncertainty weight choices are stable within tolerance on NDCG@10 across the four domains. | `outputs/summary/paper_critical/ccrp_signal_generation_plan_post_performance_gate_20260606/ccrp_hyperparameter_four_domain/` | Stability/sensitivity only; not all-metric robustness or universal optimum. |
-| C6 | The framework figure can explain the same-candidate pipeline, calibration, uncertainty, and risk-adjusted ranking. | `outputs/summary/paper_critical/framework_overview/` | Figure is not evidence that modules are complete. |
+| C6 | The framework figure can explain the same-candidate pipeline, calibration, uncertainty, and the ranking-family risk term. | `outputs/summary/paper_critical/framework_overview/` | Figure is not evidence that modules are complete. |
 
 ## Contradicted Or Forbidden Claims
 

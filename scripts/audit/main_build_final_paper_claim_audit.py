@@ -355,7 +355,7 @@ def build_final_claim_audit(
             category="method",
             status=_status(framework_ready),
             evidence_location=str(paths["framework"].relative_to(repo)),
-            allowed_wording="Use the figure to explain the pipeline and where uncertainty/calibration/risk-adjusted ranking enter.",
+            allowed_wording="Use the figure to explain the pipeline and where uncertainty/calibration and the ranking-family risk term enter.",
             forbidden_wording="using the figure as evidence that observation, ablation, or hyperparameter modules are complete",
             notes=f"claim_boundary={framework.get('claim_boundary')}",
         ),
