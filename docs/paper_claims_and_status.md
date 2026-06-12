@@ -105,6 +105,15 @@ private submission account metadata out of git. This reduces the manual blocker
 from a prose reminder to a concrete checklist, but it cannot close final
 readiness until a human completes the submission-system fields and the ProMax
 external metadata blockers are resolved.
+Codex also added
+`configs/paper_manual_submission_private_confirmation.template.json` and
+optional `--private-confirmation-json` support. A future untracked local
+confirmation file can mark submission-system items completed while recording
+only a file hash, source-manifest match, and completed item IDs; the checker
+rejects forbidden private keys such as authors, affiliations, conflicts,
+reviewer preferences, and account metadata. This gives the manual gate a
+privacy-preserving closure path but does not change the current committed
+status: `manual_submission_system_ready=false`.
 
 **2026-06-12 external proceedings metadata recheck.** Codex added
 `scripts/audit/main_audit_external_proceedings_metadata.py` and

@@ -109,3 +109,35 @@ def test_final_submission_gate_fails_closed_on_unexpected_subgate_final_ready(tm
     assert gate["final_submission_ready"] is False
     assert "submission_package:unexpected_local_final_submission_ready" in gate["failures"]
     assert gate["verdict"] == "FINAL_SUBMISSION_GATE_NEEDS_REPAIR"
+
+
+def test_final_submission_gate_can_mark_ready_when_all_gates_ready(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    for key, ready_field in [
+        ("external", "external_proceedings_metadata_ready"),
+        ("manual", "manual_submission_system_ready"),
+    ]:
+        payload = json.loads(paths[key].read_text(encoding="utf-8"))
+        payload[ready_field] = True
+        payload["remaining_blockers"] = []
+        paths[key].write_text(json.dumps(payload), encoding="utf-8")
+    for key in ["package", "metadata"]:
+        payload = json.loads(paths[key].read_text(encoding="utf-8"))
+        payload["remaining_blockers"] = []
+        paths[key].write_text(json.dumps(payload), encoding="utf-8")
+
+    gate = build_final_submission_gate(
+        root=tmp_path,
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        submission_metadata_packet_json=paths["metadata"].relative_to(tmp_path),
+        external_metadata_audit_json=paths["external"].relative_to(tmp_path),
+        manual_checklist_json=paths["manual"].relative_to(tmp_path),
+    )
+
+    assert gate["ok"] is True
+    assert gate["all_local_artifact_gates_ok"] is True
+    assert gate["external_proceedings_metadata_ready"] is True
+    assert gate["manual_submission_system_ready"] is True
+    assert gate["final_submission_ready"] is True
+    assert gate["verdict"] == "FINAL_SUBMISSION_READY"
+    assert gate["remaining_blockers"] == []

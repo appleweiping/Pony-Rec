@@ -157,6 +157,7 @@ def refresh_pre_submission_gates(
     target_profile_id: str | None = None,
     metadata_config: str | Path = DEFAULT_METADATA_CONFIG,
     manual_config: str | Path = DEFAULT_MANUAL_CONFIG,
+    manual_private_confirmation_json: str | Path | None = None,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
     out_dir = repo / output_dir
@@ -173,30 +174,30 @@ def refresh_pre_submission_gates(
     manual_md = out_dir / f"manual_submission_checklist_{stamp}.md"
     final_json = out_dir / f"final_submission_gate_{stamp}.json"
     final_md = out_dir / f"final_submission_gate_{stamp}.md"
-    input_fingerprints = _input_fingerprints(
-        repo,
-        [
-            Path(paper_dir) / "main.tex",
-            Path(paper_dir) / "references.bib",
-            Path(paper_dir) / "main.pdf",
-            Path(paper_dir) / "main.log",
-            Path(paper_dir) / "main.blg",
-            external_config_path,
-            claim_audit_json,
-            panel_review_json,
-            metadata_followup_json,
-            target_profile_json,
-            metadata_config,
-            manual_config,
-            "scripts/audit/main_refresh_pre_submission_gates.py",
-            "scripts/audit/main_audit_external_proceedings_metadata.py",
-            "scripts/audit/main_audit_submission_package.py",
-            "scripts/audit/main_build_submission_metadata_packet.py",
-            "scripts/audit/main_build_manual_submission_checklist.py",
-            "scripts/audit/main_build_final_submission_gate.py",
-            "scripts/audit/main_audit_pre_submission_refresh_freshness.py",
-        ],
-    )
+    input_paths: list[str | Path] = [
+        Path(paper_dir) / "main.tex",
+        Path(paper_dir) / "references.bib",
+        Path(paper_dir) / "main.pdf",
+        Path(paper_dir) / "main.log",
+        Path(paper_dir) / "main.blg",
+        external_config_path,
+        claim_audit_json,
+        panel_review_json,
+        metadata_followup_json,
+        target_profile_json,
+        metadata_config,
+        manual_config,
+        "scripts/audit/main_refresh_pre_submission_gates.py",
+        "scripts/audit/main_audit_external_proceedings_metadata.py",
+        "scripts/audit/main_audit_submission_package.py",
+        "scripts/audit/main_build_submission_metadata_packet.py",
+        "scripts/audit/main_build_manual_submission_checklist.py",
+        "scripts/audit/main_build_final_submission_gate.py",
+        "scripts/audit/main_audit_pre_submission_refresh_freshness.py",
+    ]
+    if manual_private_confirmation_json:
+        input_paths.append(manual_private_confirmation_json)
+    input_fingerprints = _input_fingerprints(repo, input_paths)
 
     external = build_external_proceedings_metadata_audit(
         root=repo,
@@ -236,6 +237,7 @@ def refresh_pre_submission_gates(
         metadata_packet_json=metadata_json.relative_to(repo),
         submission_package_audit_json=package_json.relative_to(repo),
         external_metadata_audit_json=external_json.relative_to(repo),
+        private_confirmation_json=manual_private_confirmation_json,
     )
     _write_json(manual_json, manual)
     write_manual_md(manual_md, manual)
@@ -393,6 +395,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--target-profile-id")
     parser.add_argument("--metadata-config", default=str(DEFAULT_METADATA_CONFIG))
     parser.add_argument("--manual-config", default=str(DEFAULT_MANUAL_CONFIG))
+    parser.add_argument(
+        "--manual-private-confirmation-json",
+        help="Optional untracked/private JSON confirming submission-system fields were completed without storing private values.",
+    )
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     return parser.parse_args()
@@ -416,6 +422,7 @@ def main() -> int:
         target_profile_id=args.target_profile_id,
         metadata_config=args.metadata_config,
         manual_config=args.manual_config,
+        manual_private_confirmation_json=args.manual_private_confirmation_json,
     )
     if args.output_json:
         output = Path(args.output_json)

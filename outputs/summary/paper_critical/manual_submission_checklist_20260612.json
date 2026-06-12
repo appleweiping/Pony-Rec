@@ -1,6 +1,6 @@
 {
   "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
-  "created_at_utc": "2026-06-12T11:56:03.140014+00:00",
+  "created_at_utc": "2026-06-12T13:22:18.620227+00:00",
   "crosscheck": {
     "external_metadata_ok": true,
     "external_proceedings_metadata_ready": false,
@@ -15,6 +15,7 @@
     "config": "configs\\paper_manual_submission_checklist.json",
     "external_metadata_audit": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260612.json",
     "metadata_packet": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260612.json",
+    "private_confirmation_json": "",
     "submission_package_audit": "outputs\\summary\\paper_critical\\submission_package_audit_20260612.json"
   },
   "item_count": 14,
@@ -306,11 +307,23 @@
   "mode": "local_read_only_manual_submission_checklist",
   "next_actions": [
     "Use this checklist while filling the submission system; do not copy private author/COI/reviewer data into the repository.",
+    "Optionally pass --private-confirmation-json to audit a local untracked confirmation file after the submission-system fields are completed.",
     "Rerun the external proceedings metadata audit immediately before final submission.",
     "Rerun submission package, metadata packet, and this checklist after any paper/source/BibTeX change.",
     "Keep final_submission_ready=false until manual submission-system items and external metadata blockers are all closed."
   ],
   "ok": true,
+  "private_confirmation": {
+    "completed_item_ids": [],
+    "confirmed_in_submission_system": false,
+    "exists": false,
+    "no_private_fields_stored": false,
+    "path": "",
+    "provided": false,
+    "schema_version": "",
+    "sha256": "",
+    "size_bytes": 0
+  },
   "read_only": true,
   "remaining_blockers": [
     "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
@@ -323,6 +336,21 @@
   ],
   "schema_version": "2026-06-12.manual_submission_checklist.v1",
   "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "unconfirmed_required_item_ids": [
+    "select_track_and_paper_type",
+    "paste_title",
+    "paste_abstract",
+    "paste_keywords",
+    "select_topic_areas",
+    "upload_pdf",
+    "upload_source_if_required",
+    "confirm_anonymous_shell",
+    "enter_authors",
+    "complete_conflicts",
+    "complete_reviewer_preferences",
+    "complete_declarations",
+    "final_preview_and_submit"
+  ],
   "warnings": [],
   "will_copy": false,
   "will_delete": false,

@@ -147,7 +147,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_refresh_pre_submission_gates.py` | Preferred one-command local refresh for final submission status; regenerates external proceedings metadata, submission package, metadata packet, manual checklist, and final gate in dependency order, while recording Git HEAD, tracked dirty state, input sha256 fingerprints, and generated gate hashes |
 | `scripts/audit/main_audit_pre_submission_refresh_freshness.py` | Local read-only freshness audit for a pre-submission refresh artifact; verifies recorded input fingerprints and generated gate JSON/MD hashes against the current worktree, treating Git HEAD as generation provenance rather than a strict post-commit equality gate |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, external proceedings metadata, and manual checklist; keeps final readiness false while external DOI/page-range or private submission-system blockers remain |
-| `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
+| `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_audit_external_proceedings_metadata.py` | Local read-only ARIS citation/proceedings metadata recheck for ProEx/ProMax; records BibTeX, DOI/Crossref, arXiv, and DBLP visibility and keeps final submission blocked while public page-range/registry evidence is missing |
 | `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}` | ARIS-style citation repair audit for the active manuscript; records all eight official baseline citations, recency counts, and `bibtex main` warning status |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
@@ -164,6 +164,21 @@ python -m scripts.audit.main_audit_pre_submission_refresh_freshness \
 
 This command is local-only. A changed Git HEAD is not a failure by itself; file
 fingerprint mismatches are.
+
+Private manual submission confirmation, after a human has completed the
+submission-system fields:
+
+```bash
+python -m scripts.audit.main_build_manual_submission_checklist \
+  --private-confirmation-json path/to/untracked_private_confirmation.json \
+  --output-json outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.md
+```
+
+Use `configs/paper_manual_submission_private_confirmation.template.json` as the
+safe shape, but keep the filled confirmation file untracked. It must contain no
+author names, COI details, reviewer preferences, declarations, account
+metadata, or other private payload.
 
 ## Monitoring
 

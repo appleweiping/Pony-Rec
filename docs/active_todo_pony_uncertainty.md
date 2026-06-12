@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-12 13:59 CEST
+Last updated: 2026-06-12 15:11 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -71,6 +71,16 @@ cycle.
   pre-fill items are sourced from the metadata packet (title, 212-word
   abstract, keywords, topic areas, PDF path, and source manifest sha256), while
   private/manual items remain `manual_pending` or `manual_private_not_stored`.
+  Codex added `configs/paper_manual_submission_private_confirmation.template.json`
+  and optional `--private-confirmation-json` support so a human can later
+  provide an untracked local confirmation file after filling the submission
+  system. The checker records only the confirmation file's presence, sha256,
+  source-manifest match, and completed item IDs; it rejects forbidden private
+  payload keys such as authors, affiliations, conflicts, reviewer preferences,
+  and account metadata. This creates a path for `manual_submission_system_ready`
+  to become true without storing private fields in git, but the current
+  committed refresh still has no private confirmation and remains
+  `manual_submission_system_ready=false`.
   Remaining blockers are now explicit:
   `manual_submission_system_items_not_confirmed`, the ProMax external metadata
   blockers, and `confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed`.

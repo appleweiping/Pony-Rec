@@ -91,8 +91,16 @@ reports `ok=true`, `refresh_artifact_fresh=true`, `19` input fingerprints,
 `final_submission_ready=false`. The refreshed external metadata audit also
 passes a required official SIGIR 2026 accepted-papers source check for ProMax,
 in addition to arXiv `2604.26231`, but ProMax final page range and DOI/Crossref
-visibility remain unresolved. The recorded Git HEAD is generation provenance,
-not a strict post-commit freshness condition. The stale
+visibility remain unresolved. The manual submission gate now has a
+privacy-preserving closure path:
+`configs/paper_manual_submission_private_confirmation.template.json` plus the
+optional `--private-confirmation-json` argument to
+`scripts/audit/main_build_manual_submission_checklist.py`; a future untracked
+confirmation file can prove submission-system items are done by hash and item
+IDs without storing author/COI/reviewer/account payloads in git. The current
+committed state has no private confirmation and remains
+`manual_submission_system_ready=false`. The recorded Git HEAD is generation
+provenance, not a strict post-commit freshness condition. The stale
 `paper/` draft was rewritten to the current C-CRP same-candidate
 official-baseline spine, stale calibration table removed, current main/module
 tables added, and `scripts/analysis/main_build_paper_result_tables.py`

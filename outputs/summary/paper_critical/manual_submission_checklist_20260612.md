@@ -1,6 +1,6 @@
 # Manual Submission Checklist
 
-Generated: 2026-06-12T11:56:03.140014+00:00
+Generated: 2026-06-12T13:22:18.620227+00:00
 
 - OK: `true`
 - Manual submission checklist ready: `true`
@@ -10,6 +10,13 @@ Generated: 2026-06-12T11:56:03.140014+00:00
 - Checklist ID: `sigir2026_anonymous_full_paper_manual_submission`
 - Items: `14`
 - Source manifest sha256: `4f2a9856f722c98ffaf6b7073af27f6890c3086fffe23fa596ebe9fc62aa3cfa`
+
+## Private Confirmation
+
+- Provided: `false`
+- Exists: `false`
+- SHA256: ``
+- Completed item count: `0`
 
 ## Items
 
@@ -181,6 +188,7 @@ Generated: 2026-06-12T11:56:03.140014+00:00
 ## Next Actions
 
 - Use this checklist while filling the submission system; do not copy private author/COI/reviewer data into the repository.
+- Optionally pass --private-confirmation-json to audit a local untracked confirmation file after the submission-system fields are completed.
 - Rerun the external proceedings metadata audit immediately before final submission.
 - Rerun submission package, metadata packet, and this checklist after any paper/source/BibTeX change.
 - Keep final_submission_ready=false until manual submission-system items and external metadata blockers are all closed.

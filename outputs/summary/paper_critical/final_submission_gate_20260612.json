@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-12T11:56:03.403114+00:00",
+  "created_at_utc": "2026-06-12T13:22:18.979126+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-12T11:56:01.700124+00:00",
+      "created_at_utc": "2026-06-12T13:22:17.393444+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T11:56:02.988152+00:00",
+      "created_at_utc": "2026-06-12T13:22:18.434728+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T11:55:54.620380+00:00",
+      "created_at_utc": "2026-06-12T13:22:11.248294+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T11:56:03.140014+00:00",
+      "created_at_utc": "2026-06-12T13:22:18.620227+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",
@@ -87,7 +87,7 @@
       "path": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260612.json",
-        "size_bytes": 14457
+        "size_bytes": 15331
       },
       "ready": false,
       "ready_field": "manual_submission_system_ready",

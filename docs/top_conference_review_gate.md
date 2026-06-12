@@ -303,6 +303,24 @@ private declarations, or submission account metadata in git, and it must keep
 `final_submission_ready=false` until a human completes those fields inside the
 submission system.
 
+After a human completes the private submission-system fields, copy
+`configs/paper_manual_submission_private_confirmation.template.json` to an
+untracked local path, fill only booleans, the current source-manifest sha256,
+and completed item IDs, and rerun:
+
+```bash
+python -m scripts.audit.main_build_manual_submission_checklist \
+  --private-confirmation-json path/to/untracked_private_confirmation.json \
+  --output-json outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.md
+```
+
+The confirmation file must not contain author names, affiliations, conflicts,
+reviewer preferences, declarations, account metadata, or other private payload.
+The checker records only the confirmation file hash, source-manifest match, and
+completed item IDs, and it still cannot override an external-proceedings
+metadata blocker.
+
 For the remaining external proceedings metadata caution, run the ARIS
 citation-audit-backed recheck:
 
