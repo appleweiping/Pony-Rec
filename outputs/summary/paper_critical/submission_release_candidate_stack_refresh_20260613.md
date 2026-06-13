@@ -1,6 +1,6 @@
 # Submission Release-Candidate Stack Refresh
 
-Generated: 2026-06-13T05:12:03.848932+00:00
+Generated: 2026-06-13T05:13:39.686997+00:00
 
 - OK: `true`
 - Local release candidate ready: `true`
@@ -45,7 +45,6 @@ Generated: 2026-06-13T05:12:03.848932+00:00
 - `pre_submission_gate_refresh:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `pre_submission_gate_refresh:acm_dl_not_accessible:status=403`
 - `pre_submission_gate_refresh:refresh_recorded_tracked_dirty_inputs_before_generation`
-- `pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation`
 - `submission_release_candidate:underfull_layout_warnings:hbox=6,vbox=8`
 - `submission_release_candidate:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `submission_release_candidate:proex:crossref_not_visible:status=404`
