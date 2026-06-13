@@ -128,6 +128,53 @@ def _contains_any(value: str, needles: list[str]) -> bool:
     return any(needle in lower for needle in needles)
 
 
+def _is_claude_review(review: dict[str, Any]) -> bool:
+    return _contains_any(str(review.get("reviewer") or ""), ["claude", "opus"])
+
+
+def _validate_additional_review(review: dict[str, Any]) -> tuple[bool, list[str]]:
+    failures: list[str] = []
+    reviewer = str(review.get("reviewer") or "")
+    score = _parse_score_10(review.get("score_0_to_10") or review.get("score_10"))
+    if not reviewer:
+        failures.append("missing_reviewer")
+    if score is None:
+        failures.append("missing_score_0_to_10")
+    if _is_claude_review(review):
+        if review.get("valid_review_evidence") is not True:
+            failures.append("claude_valid_review_evidence_not_true")
+        if review.get("claim_boundary_ok") is not True:
+            failures.append("claude_claim_boundary_ok_not_true")
+        if review.get("final_submission_ready_claim_allowed") is not False:
+            failures.append("claude_final_submission_ready_claim_allowed_not_false")
+        for key in ["kill_argument", "verdict"]:
+            if not str(review.get(key) or "").strip():
+                failures.append(f"claude_missing_{key}")
+        for key in ["major_concerns", "required_changes", "remaining_blockers_acknowledged"]:
+            values = review.get(key)
+            if not isinstance(values, list) or not values:
+                failures.append(f"claude_missing_{key}")
+    return not failures, failures
+
+
+def _additional_review_validation(reviews: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    countable: list[dict[str, Any]] = []
+    states: list[dict[str, Any]] = []
+    for idx, review in enumerate(reviews):
+        valid, failures = _validate_additional_review(review)
+        states.append(
+            {
+                "index": idx,
+                "reviewer": str(review.get("reviewer") or ""),
+                "counted_for_coverage": valid,
+                "validation_failures": failures,
+            }
+        )
+        if valid:
+            countable.append(review)
+    return countable, states
+
+
 def _reviewer_coverage(
     panel_review: dict[str, Any], additional_reviews: list[dict[str, Any]]
 ) -> dict[str, Any]:
@@ -142,6 +189,7 @@ def _reviewer_coverage(
         missing.append("explicit_claude_opus_review")
     if not explicit_gpt55:
         missing.append("explicit_gpt55_or_recorded_equivalent_review")
+
     return {
         "reviewer_names": names,
         "panel_review_count": panel_count,
@@ -221,6 +269,7 @@ def build_review_continuation_packet(
         root=repo,
     )
     failures.extend([f"additional_review:{failure}" for failure in additional_failures])
+    countable_additional_reviews, additional_review_validation = _additional_review_validation(additional_reviews)
     failed_attempts, failed_attempt_states, failed_attempt_failures = _load_failed_review_attempts(
         list(failed_review_attempt_jsons or []),
         root=repo,
@@ -234,7 +283,7 @@ def build_review_continuation_packet(
     closure = loaded["closure_packet"]
     promax = loaded["promax_probe"]
 
-    coverage = _reviewer_coverage(panel, additional_reviews)
+    coverage = _reviewer_coverage(panel, countable_additional_reviews)
     package_gates = package.get("evidence_gates") or {}
     classified = closure.get("classified_remaining_blockers") or {}
     other_blockers = list(classified.get("other") or [])
@@ -298,6 +347,13 @@ def build_review_continuation_packet(
         + coverage["missing_perspectives"]
     )
     ok = not failures
+    validation_warnings = [
+        "additional_review_not_counted:"
+        f"index={state['index']}:reviewer={state['reviewer']}:"
+        f"{','.join(state['validation_failures'])}"
+        for state in additional_review_validation
+        if not state["counted_for_coverage"]
+    ]
     return {
         "schema_version": "2026-06-13.review_continuation_packet.v1",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -326,6 +382,7 @@ def build_review_continuation_packet(
         ),
         "input_paths": {key: _path_state(path, repo) for key, path in paths.items()},
         "additional_review_paths": additional_states,
+        "additional_review_validation": additional_review_validation,
         "failed_review_attempt_paths": failed_attempt_states,
         "failed_review_attempts": [
             {
@@ -361,6 +418,7 @@ def build_review_continuation_packet(
             + list(stack.get("warnings") or [])
             + list(closure.get("warnings") or [])
             + list(promax.get("warnings") or [])
+            + validation_warnings
         ),
         "next_actions": [
             "Attach explicit Claude Opus and fresh GPT-5.5 reviewer outputs as additional review JSONs if they complete.",
@@ -399,9 +457,28 @@ def _write_md(path: Path, packet: dict[str, Any]) -> None:
         f"- Missing perspectives: `{', '.join(coverage.get('missing_perspectives') or []) or 'none'}`",
         f"- Failed review attempts recorded: `{len(packet.get('failed_review_attempts') or [])}`",
         "",
-        "## Gate Summary",
+        "## Additional Review Validation",
         "",
     ]
+    validations = packet.get("additional_review_validation") or []
+    if validations:
+        for item in validations:
+            failures = ", ".join(item.get("validation_failures") or [])
+            lines.append(
+                "- "
+                f"index=`{item.get('index')}`, reviewer=`{item.get('reviewer')}`, "
+                f"counted=`{str(item.get('counted_for_coverage')).lower()}`, "
+                f"failures=`{failures or 'none'}`"
+            )
+    else:
+        lines.append("- none")
+    lines.extend(
+        [
+            "",
+            "## Gate Summary",
+            "",
+        ]
+    )
     for key in [
         "panel_ok",
         "claim_audit_ok",

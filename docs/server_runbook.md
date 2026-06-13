@@ -88,7 +88,13 @@ PIDs, audit summaries, and missing-file errors.
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
    before trying another Claude route; it contains the exact prompt/schema for
-   a valid additional review JSON and is not itself reviewer coverage.
+   a valid additional review JSON and is not itself reviewer coverage. The
+   review-continuation builder now validates additional reviewer JSONs before
+   counting them for panel coverage; a Claude/Opus JSON must be complete
+   substantive evidence (`valid_review_evidence=true`, scoped claim boundary,
+   final-ready claim disallowed, kill-argument, concerns, required changes, and
+   acknowledged remaining blockers), so a name+score shell cannot close the
+   explicit Claude gap.
    The latest `Paper/main.pdf` compiles to 9 pages /
    546716 bytes with visible
    official-baseline provenance, all-metric rank-first, and four-domain
@@ -207,7 +213,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_build_new_domains_paper_facing_evidence_ledger.py` | Local-only builder for the 36-row paper-facing full-metric evidence ledger; joins metrics, row counts, provenance/status, gate paths, paired-test paths, score audits, server-final audits, and local-light evidence paths |
 | `scripts/audit/main_build_final_paper_claim_audit.py` | Local-only final evidence-to-claim gate for the current paper-facing evidence package; emits supported/contradicted/unsupported claim rows and citation/manuscript readiness status without SSH or experiment execution |
 | `scripts/audit/main_build_final_citation_spot_check.py` | Local-only ARIS citation spot-check over the current TeX aux/BibTeX files; verifies cited/bibliography key counts, missing/uncited keys, BibTeX warnings, official-baseline citation coverage, and keeps final readiness false while metadata blockers remain |
-| `scripts/audit/main_build_review_continuation_packet.py` | Local-only review-continuation handoff over the full-panel review, claim audit, submission package audit, release-candidate stack, closure packet, ProMax probe, and optional fresh reviewer JSONs; records score floor, missing reviewer perspectives, and final-blocked status |
+| `scripts/audit/main_build_review_continuation_packet.py` | Local-only review-continuation handoff over the full-panel review, claim audit, submission package audit, release-candidate stack, closure packet, ProMax probe, and optional fresh reviewer JSONs; validates additional reviewer JSONs before coverage, records score floor, missing reviewer perspectives, and final-blocked status |
 | `scripts/audit/main_build_claude_review_request_packet.py` | Local-only request-packet builder for the missing explicit Claude Opus review; emits a public-safe prompt, expected JSON schema, failed-attempt summary, and follow-up command without counting as reviewer coverage |
 | `scripts/analysis/main_build_paper_result_tables.py` | Local-only paper-table builder for the visible complete NDCG@10 ranking over all eight official baselines plus C-CRP and the per-domain paired-test summary; reads existing local CSV evidence only |
 | `scripts/audit/main_audit_submission_package.py` | Local read-only package/source/PDF gate for the anonymous ACM submission package; verifies source closure, local figures, BibTeX/build health, profile constraints, source manifest, final-panel evidence, external metadata blockers, and privacy-preserving anonymous source leak scan counts |

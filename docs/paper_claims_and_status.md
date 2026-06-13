@@ -164,7 +164,13 @@ so the refreshed packet exposes five failed Claude attempts while preserving
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for the next valid Claude Opus review.
 The request packet is not reviewer coverage and does not close final
-readiness.
+readiness. The review-continuation packet builder now validates additional
+reviewer JSONs before counting them for panel coverage: a Claude/Opus review
+must be valid substantive evidence with `valid_review_evidence=true`,
+`claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`, a
+kill-argument, major concerns, required changes, and acknowledged remaining
+blockers. This prevents an empty Claude name+score JSON from closing the
+explicit Claude Opus review blocker.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

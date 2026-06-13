@@ -184,7 +184,13 @@ The refreshed packet records five failed attempts and still keeps
 `scripts/audit/main_build_claude_review_request_packet.py`, generating
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for a future valid Claude Opus review;
-this request packet is not reviewer coverage. The submission package
+this request packet is not reviewer coverage. The review-continuation gate now
+validates additional reviewer JSONs before counting them for panel coverage:
+Claude/Opus JSON must include `valid_review_evidence=true`,
+`claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`,
+substantive kill-argument/concerns/required changes, and acknowledged
+remaining blockers; a name+score shell cannot close the explicit Claude gap.
+The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission

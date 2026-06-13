@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 02:53 CEST
+Last updated: 2026-06-13 03:05 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -49,7 +49,13 @@ cycle.
   so the next valid Claude Opus review can be requested with a stable
   public-safe prompt and then attached through `--additional-review-json`.
   This request packet is not reviewer coverage and does not close final
-  readiness.
+  readiness. `scripts/audit/main_build_review_continuation_packet.py` now
+  validates additional reviewer JSONs before they can count as coverage:
+  Claude/Opus review JSON must set `valid_review_evidence=true`,
+  `claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`, and
+  include substantive kill-argument, concerns, required changes, and
+  acknowledged remaining blockers. A minimal name+score Claude JSON is recorded
+  but cannot close `explicit_claude_opus_review`.
 
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`

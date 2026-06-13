@@ -8,6 +8,14 @@
       "size_bytes": 4476
     }
   ],
+  "additional_review_validation": [
+    {
+      "counted_for_coverage": true,
+      "index": 0,
+      "reviewer": "gpt-5.5-xhigh",
+      "validation_failures": []
+    }
+  ],
   "aris_skills": [
     "aris-auto-review-loop",
     "aris-paper-claim-audit",
@@ -29,7 +37,7 @@
     ],
     "other": []
   },
-  "created_at_utc": "2026-06-13T00:52:40.052538+00:00",
+  "created_at_utc": "2026-06-13T01:04:55.821989+00:00",
   "failed_review_attempt_paths": [
     {
       "exists": true,
