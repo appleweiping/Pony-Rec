@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-13T06:12:20.325349+00:00",
+  "created_at_utc": "2026-06-13T06:22:38.489917+00:00",
   "failures": [],
   "final_blocker_consistency_ok": true,
   "final_submission_ready": false,
@@ -78,10 +78,12 @@
       "explicit_claude_opus_review"
     ]
   },
-  "schema_version": "2026-06-13.final_blocker_consistency_audit.v1",
+  "schema_version": "2026-06-13.final_blocker_consistency_audit.v2",
   "summary": {
     "blocking_status": "external_manual_or_review_blocked",
     "claude_request_failed_attempt_count": 11,
+    "claude_request_has_response_template": true,
+    "claude_request_template_valid_review_evidence": false,
     "closure_promax_probe_provided": true,
     "closure_promax_probe_status": {
       "acm_dl": 403,
@@ -102,7 +104,11 @@
     },
     "promax_public_metadata_ready": false,
     "recursive_warning_regression_count": 0,
-    "review_failed_claude_attempt_count": 11
+    "review_failed_claude_attempt_count": 11,
+    "review_required_claude_ack_groups": [
+      "manual_submission_system",
+      "promax_public_metadata"
+    ]
   },
   "warning_regressions": [],
   "will_copy": false,

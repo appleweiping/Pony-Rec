@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 08:10 CEST
+Last updated: 2026-06-13 08:25 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,24 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 final-blocker consistency audit v2:
+  Codex extended
+  `scripts/audit/main_audit_final_blocker_consistency.py` so the final blocker
+  consistency audit now verifies the Claude external-review intake safeguards,
+  not only the failed-attempt count. The audit fails if the Claude request
+  packet loses its `response_template`, if that template defaults
+  `valid_review_evidence` to anything other than `false`, if the request packet
+  stops requiring ProMax/manual blocker acknowledgement, or if the current
+  review-continuation packet stops exposing required Claude blocker ack groups
+  for the open ProMax public metadata and private manual submission-system
+  blockers. The refreshed
+  `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
+  reports schema `2026-06-13.final_blocker_consistency_audit.v2`, `ok=true`,
+  `claude_request_has_response_template=true`, template
+  `valid_review_evidence=false`,
+  `review_required_claude_ack_groups=["manual_submission_system",
+  "promax_public_metadata"]`, and still `final_submission_ready=false`.
 
 - 2026-06-13 Claude external-review intake hardening:
   Codex tightened the public-safe external Claude Opus handoff path without

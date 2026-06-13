@@ -258,6 +258,10 @@ count as explicit Claude Opus coverage. The refreshed
 `review_continuation_packet_20260613.json` exposes
 `required_claude_blocker_ack_groups=["manual_submission_system",
 "promax_public_metadata"]` while keeping `final_submission_ready=false`.
+The final-blocker consistency audit is now schema
+`2026-06-13.final_blocker_consistency_audit.v2` and checks that these Claude
+intake safeguards remain present before any final-readiness report can pass the
+local consistency layer.
 The final submission gate has also been hardened to consume the
 review-continuation packet directly: the refreshed
 `outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`

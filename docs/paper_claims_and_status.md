@@ -256,6 +256,12 @@ explicit Claude Opus coverage. The refreshed review-continuation packet exposes
 `required_claude_blocker_ack_groups=["manual_submission_system",
 "promax_public_metadata"]`, still records failed Claude attempts `11`, and
 keeps `final_submission_ready=false`.
+The final-blocker consistency audit is now schema
+`2026-06-13.final_blocker_consistency_audit.v2` and explicitly guards this
+handoff path: it fails if the Claude request packet loses the response template,
+if the template defaults `valid_review_evidence` to true, if ProMax/manual
+blocker-acknowledgement rules disappear, or if the current review-continuation
+packet stops exposing the required Claude blocker acknowledgement groups.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local

@@ -75,6 +75,10 @@ def _seed_inputs(tmp_path: Path, *, overrides: dict[str, dict] | None = None) ->
     review = {
         "ok": True,
         "final_submission_ready": False,
+        "required_claude_blocker_ack_groups": [
+            "manual_submission_system",
+            "promax_public_metadata",
+        ],
         "reviewer_coverage": {
             "explicit_claude_opus_present": False,
             "final_panel_coverage_complete": False,
@@ -101,6 +105,21 @@ def _seed_inputs(tmp_path: Path, *, overrides: dict[str, dict] | None = None) ->
         "ok": True,
         "claude_review_needed": True,
         "failed_claude_attempt_summary": {"count": 2},
+        "expected_additional_review_json": {
+            "response_template": {
+                "reviewer": "claude-opus",
+                "valid_review_evidence": False,
+                "remaining_blockers_acknowledged": [
+                    "promax_public_metadata: final page range, Crossref, and DOI resolver visibility remain open",
+                    "manual_submission_system: private submission-system confirmation remains open",
+                ],
+            },
+            "response_template_sha256": "b" * 64,
+            "must_count_as_coverage": [
+                "remaining_blockers_acknowledged names the ProMax public metadata blocker",
+                "remaining_blockers_acknowledged names the private manual submission-system blocker",
+            ],
+        },
         "warnings": [],
     }
     promax = {
@@ -175,6 +194,12 @@ def test_final_blocker_consistency_audit_passes_on_expected_blocked_state(tmp_pa
     assert audit["final_submission_ready"] is False
     assert audit["summary"]["review_failed_claude_attempt_count"] == 2
     assert audit["summary"]["claude_request_failed_attempt_count"] == 2
+    assert audit["summary"]["claude_request_has_response_template"] is True
+    assert audit["summary"]["claude_request_template_valid_review_evidence"] is False
+    assert audit["summary"]["review_required_claude_ack_groups"] == [
+        "manual_submission_system",
+        "promax_public_metadata",
+    ]
     assert audit["summary"]["promax_direct_status"] == {
         "crossref": 404,
         "doi_resolver": 404,
@@ -246,3 +271,36 @@ def test_final_blocker_consistency_audit_rejects_closure_missing_promax_probe(
     assert audit["ok"] is False
     assert "closure_missing_promax_probe_input" in audit["failures"]
     assert "closure_missing_latest_public_promax_probe" in audit["failures"]
+
+
+def test_final_blocker_consistency_audit_rejects_missing_claude_response_template(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_inputs(
+        tmp_path,
+        overrides={"claude_request": {"expected_additional_review_json": {}}},
+    )
+
+    audit = _run(paths, tmp_path)
+
+    assert audit["ok"] is False
+    assert "claude_request_missing_response_template" in audit["failures"]
+    assert "claude_request_missing_response_template_sha256" in audit["failures"]
+
+
+def test_final_blocker_consistency_audit_rejects_missing_current_claude_ack_group(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_inputs(
+        tmp_path,
+        overrides={
+            "review": {
+                "required_claude_blocker_ack_groups": ["promax_public_metadata"],
+            }
+        },
+    )
+
+    audit = _run(paths, tmp_path)
+
+    assert audit["ok"] is False
+    assert "review_missing_required_claude_ack_group:manual_submission_system" in audit["failures"]

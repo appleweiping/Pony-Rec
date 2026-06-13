@@ -229,6 +229,11 @@ PIDs, audit summaries, and missing-file errors.
    coverage; the refreshed review-continuation packet exposes
    `required_claude_blocker_ack_groups=["manual_submission_system",
    "promax_public_metadata"]`.
+   `scripts/audit/main_audit_final_blocker_consistency.py` now uses schema
+   `2026-06-13.final_blocker_consistency_audit.v2` and fails if those Claude
+   intake safeguards disappear from the request packet or review-continuation
+   packet. Rerun it after any Claude request/review, final-gate, closure, or
+   release-stack refresh.
    The current priority is to capture explicit Claude Opus reviewer output
    using the request packet if available, then keep monitoring the ProMax public
    metadata and private manual submission-system blockers. Do not claim final

@@ -179,6 +179,31 @@ def audit_final_blocker_consistency(
         failures.append("review_coverage_missing_explicit_claude_gap")
     if claude_request.get("claude_review_needed") is not True:
         failures.append("claude_request_not_needed_despite_missing_claude")
+    expected_review_ack_groups = ["manual_submission_system", "promax_public_metadata"]
+    request_review_spec = claude_request.get("expected_additional_review_json") or {}
+    response_template = request_review_spec.get("response_template") or {}
+    must_count_rules = _string_list(request_review_spec.get("must_count_as_coverage"))
+    required_ack_groups = _string_list(review.get("required_claude_blocker_ack_groups"))
+    if not response_template:
+        failures.append("claude_request_missing_response_template")
+    elif response_template.get("valid_review_evidence") is not False:
+        failures.append("claude_request_template_valid_review_evidence_not_false")
+    if not request_review_spec.get("response_template_sha256"):
+        failures.append("claude_request_missing_response_template_sha256")
+    for group in expected_review_ack_groups:
+        if group not in required_ack_groups:
+            failures.append(f"review_missing_required_claude_ack_group:{group}")
+    for expected_rule in [
+        "remaining_blockers_acknowledged names the ProMax public metadata blocker",
+        "remaining_blockers_acknowledged names the private manual submission-system blocker",
+    ]:
+        if expected_rule not in must_count_rules:
+            failures.append(f"claude_request_missing_must_count_rule:{expected_rule}")
+    response_ack_text = " ".join(_string_list(response_template.get("remaining_blockers_acknowledged"))).lower()
+    if response_template and "promax" not in response_ack_text:
+        failures.append("claude_request_template_missing_promax_ack")
+    if response_template and "manual" not in response_ack_text:
+        failures.append("claude_request_template_missing_manual_ack")
 
     promax_blockers = _string_list(promax.get("remaining_blockers"))
     if promax.get("promax_public_metadata_ready") is not False:
@@ -253,7 +278,7 @@ def audit_final_blocker_consistency(
             failures.append(f"final_gate_missing_blocker:{blocker}")
 
     return {
-        "schema_version": "2026-06-13.final_blocker_consistency_audit.v1",
+        "schema_version": "2026-06-13.final_blocker_consistency_audit.v2",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "mode": "local_read_only_final_blocker_consistency_audit",
         "read_only": True,
@@ -272,6 +297,9 @@ def audit_final_blocker_consistency(
             "final_gate_remaining_blocker_count": len(final_blockers),
             "review_failed_claude_attempt_count": failed_count,
             "claude_request_failed_attempt_count": claude_summary.get("count"),
+            "claude_request_has_response_template": bool(response_template),
+            "claude_request_template_valid_review_evidence": response_template.get("valid_review_evidence"),
+            "review_required_claude_ack_groups": required_ack_groups,
             "explicit_claude_opus_present": coverage.get("explicit_claude_opus_present"),
             "final_panel_coverage_complete": coverage.get("final_panel_coverage_complete"),
             "promax_public_metadata_ready": promax.get("promax_public_metadata_ready"),
@@ -310,6 +338,9 @@ def render_markdown(audit: dict[str, Any]) -> str:
         f"- Local release candidate ready: `{str(summary.get('local_release_candidate_ready')).lower()}`",
         f"- Closure ready for human handoff: `{str(summary.get('closure_ready_for_human_handoff')).lower()}`",
         f"- Failed Claude attempts: `{summary.get('review_failed_claude_attempt_count')}`",
+        f"- Claude request has response template: `{str(summary.get('claude_request_has_response_template')).lower()}`",
+        f"- Claude template valid_review_evidence: `{summary.get('claude_request_template_valid_review_evidence')}`",
+        f"- Claude required ack groups: `{', '.join(summary.get('review_required_claude_ack_groups') or []) or 'none'}`",
         f"- Explicit Claude Opus present: `{str(summary.get('explicit_claude_opus_present')).lower()}`",
         f"- ProMax public metadata ready: `{str(summary.get('promax_public_metadata_ready')).lower()}`",
         f"- Closure carries ProMax probe: `{str(summary.get('closure_promax_probe_provided')).lower()}`",
