@@ -203,11 +203,12 @@ PIDs, audit summaries, and missing-file errors.
    `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
    `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
    `2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`,
-   `2026-06-13T05:42:19Z`, `2026-06-13T06:04:37Z`, and
-   `2026-06-13T06:52:21Z` again found Crossref `404`, DOI resolver `404`, ACM
+   `2026-06-13T05:42:19Z`, `2026-06-13T06:04:37Z`,
+   `2026-06-13T06:52:21Z`, and `2026-06-13T07:37:42Z` again found Crossref
+   `404`, DOI resolver `404`, ACM
    DL `403`, and all `5/5` public source probes passing. After the
    latest probe, the closure packet was refreshed again at
-   `2026-06-13T06:53:47Z`;
+   `2026-06-13T07:38:58Z`;
    the closure Markdown now lists those latest public source probes and
    explicitly keeps the review-panel blockers. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate

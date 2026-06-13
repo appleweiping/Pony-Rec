@@ -106,12 +106,12 @@ Follow-up live probes at `2026-06-13T00:49:05Z`,
 `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
 `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
 `2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`,
-`2026-06-13T05:42:19Z`, `2026-06-13T06:04:37Z`, and
-`2026-06-13T06:52:21Z` found the same direct
+`2026-06-13T05:42:19Z`, `2026-06-13T06:04:37Z`,
+`2026-06-13T06:52:21Z`, and `2026-06-13T07:37:42Z` found the same direct
 blocker state: Crossref `404`,
 DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes passing.
 The closure packet was refreshed after the latest probe at
-`2026-06-13T06:53:47Z`; this is stronger public accepted-paper provenance, not
+`2026-06-13T07:38:58Z`; this is stronger public accepted-paper provenance, not
 a readiness upgrade. The closure packet Markdown now lists latest public source
 probes in addition to direct Crossref/DOI/ACM statuses and explicitly carries
 the review-panel blockers.

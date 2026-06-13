@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 09:16 CEST
+Last updated: 2026-06-13 09:41 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -34,14 +34,15 @@ cycle.
 
 - 2026-06-13 bounded ProMax live-probe refresh:
   Codex reran the ARIS citation/proceedings metadata live probe for ProMax at
-  `2026-06-13T06:52:21Z`. The refreshed
+  `2026-06-13T07:37:42Z`. The refreshed
   `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
   still reports `promax_public_metadata_ready=false`: Crossref `/works` for
   DOI `10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`,
   ACM DL returns `403`, and all `5/5` public source probes pass. Codex
   refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
-  so the handoff packet carries this latest probe, then reran
+  at `2026-06-13T07:38:58Z` so the handoff packet carries this latest probe,
+  then reran
   `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`;
   the audit reports `ok=true`, `closure_promax_probe_provided=true`, matching
   direct status `404/404/403`, and `final_submission_ready=false`. This is
@@ -89,7 +90,7 @@ cycle.
   "promax_public_metadata"]`, keeps failed Claude attempts at `13`, keeps
   `explicit_claude_opus_present=false`, and keeps
   `final_submission_ready=false`. The latest live ProMax public metadata probe
-  at `2026-06-13T06:52:21Z` still reports Crossref `404`, DOI resolver `404`,
+  at `2026-06-13T07:37:42Z` still reports Crossref `404`, DOI resolver `404`,
   ACM DL `403`, and all `5/5` public source probes passing.
 
 - 2026-06-13 Claude connector-health audit:
@@ -146,7 +147,7 @@ cycle.
   The refreshed review-continuation packet, Claude request packet, and
   final-blocker consistency audit all record failed Claude attempts `13` while
   preserving the explicit Claude Opus blocker. The latest live ProMax probe at
-  `2026-06-13T06:52:21Z` still reports
+  `2026-06-13T07:37:42Z` still reports
   Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
   source probes passing.
 
@@ -419,12 +420,12 @@ cycle.
   author Google Sites publications page, and the UQ Experts profile source
   probes pass. Follow-up live probes at `2026-06-13T00:49:05Z`,
   `2026-06-13T01:59:36Z`, and `2026-06-13T02:32:01Z` found the same direct
-  blocker state; later probes through `2026-06-13T06:52:21Z` found the same
+  blocker state; later probes through `2026-06-13T07:37:42Z` found the same
   direct blocker state. After the eighth failed Claude connector attempt, the
   review-continuation packet refreshed at `2026-06-13T02:50:20Z`, the request
   packet refreshed at `2026-06-13T02:50:36Z`, and the release-candidate stack
   refreshed at `2026-06-13T02:51:34Z`. The current closure packet was refreshed
-  after the latest probe at `2026-06-13T06:53:47Z` while keeping
+  after the latest probe at `2026-06-13T07:38:58Z` while keeping
   `final_submission_ready=false`. This strengthens public accepted-paper
   provenance but is not a readiness upgrade. The refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
