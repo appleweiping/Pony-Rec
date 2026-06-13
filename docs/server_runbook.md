@@ -71,12 +71,14 @@ PIDs, audit summaries, and missing-file errors.
    output is still missing. The attempted Claude Opus review job failed with
    `Claude CLI did not return JSON output`; the failed attempt is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json`
-   and does not count as reviewer coverage. A second retry failed with the
-   same error and is recorded at
-   `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+   and does not count as reviewer coverage. A second retry and a third
+   tool-discovered retry failed with the same error and are recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`
+   and
+   `outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
    `scripts/audit/main_build_review_continuation_packet.py` records failed
    reviewer attempts separately from valid reviewer JSONs; the current packet
-   reports two failed attempts and still keeps `explicit_claude_opus_present=false`.
+   reports three failed attempts and still keeps `explicit_claude_opus_present=false`.
    The latest `Paper/main.pdf` compiles to 9 pages /
    546716 bytes with visible
    official-baseline provenance, all-metric rank-first, and four-domain
@@ -103,7 +105,10 @@ PIDs, audit summaries, and missing-file errors.
    The latest ProMax public probe is
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
    Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,
-   and `promax_public_metadata_ready=false`.
+   and `promax_public_metadata_ready=false`. A follow-up live probe at
+   `2026-06-12T23:48:38Z` found the same blocker state and refreshed the
+   closure packet at `2026-06-12T23:48:55Z`; this is fresh monitoring
+   evidence, not a readiness upgrade.
    The current priority is to capture explicit Claude Opus reviewer output if
    available, then keep monitoring the ProMax public metadata and private manual
    submission-system blockers. Do not claim final readiness until the final

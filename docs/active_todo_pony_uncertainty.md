@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 01:20 CEST
+Last updated: 2026-06-13 01:52 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -29,12 +29,14 @@ cycle.
   `mcp__claude_review` but failed with `Claude CLI did not return JSON output`;
   the failed attempt is recorded at
   `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json` and
-  does not count as reviewer coverage. A second retry failed with the same
-  error and is recorded at
-  `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+  does not count as reviewer coverage. A second retry and a third
+  tool-discovered retry failed with the same error and are recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`
+  and
+  `outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
   `scripts/audit/main_build_review_continuation_packet.py` now records failed
   reviewer attempts separately from valid reviewer JSONs; the refreshed packet
-  reports `failed_review_attempts` count `2` while keeping
+  reports `failed_review_attempts` count `3` while keeping
   `explicit_claude_opus_present=false`.
 
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
@@ -49,7 +51,10 @@ cycle.
   `promax_public_metadata_ready=false`, and `final_submission_ready=false`.
   Direct public checks still do not close the blocker: Crossref `/works` is
   `404`, the DOI resolver is `404`, and ACM DL is `403`, while arXiv HTML ACM
-  metadata and SIGIR accepted-paper source probes pass. The refreshed
+  metadata and SIGIR accepted-paper source probes pass. A follow-up live probe
+  at `2026-06-12T23:48:38Z` found the same blocker state and refreshed the
+  closure packet at `2026-06-12T23:48:55Z`; this is fresh monitoring evidence,
+  not a readiness upgrade. The refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
   now uses the 2026-06-13 final gate, external metadata audit, manual
   checklist, full release-candidate stack, and public probe. It still reports

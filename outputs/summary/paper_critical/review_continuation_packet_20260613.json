@@ -29,7 +29,7 @@
     ],
     "other": []
   },
-  "created_at_utc": "2026-06-12T23:38:54.246177+00:00",
+  "created_at_utc": "2026-06-12T23:51:33.173178+00:00",
   "failed_review_attempt_paths": [
     {
       "exists": true,
@@ -44,6 +44,13 @@
       "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_retry_20260613.json",
       "sha256": "9da30150d005ff3e108894b8babf921adbe2eb148558baca4093866864181828",
       "size_bytes": 528
+    },
+    {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_third_20260613.json",
+      "sha256": "e04a30471dacc5038202588b6ffd6b95a3e378522ec97b008b946153b0c0e464",
+      "size_bytes": 573
     }
   ],
   "failed_review_attempts": [
@@ -58,6 +65,13 @@
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
       "source": "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "error": "Claude CLI did not return JSON output",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357",
       "status": "failed",
       "valid_review_evidence": false
     }
@@ -90,7 +104,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "561ff5673e1a6d06935f4ce610467fd6389a6469d9ce5d4d0d478a4b3fdc11b7",
+      "sha256": "30d499316ec136c08fa25c5f099a3cd52f90af6508700be26adc5e8b51f614e8",
       "size_bytes": 15256
     },
     "panel_review": {
@@ -104,7 +118,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
-      "sha256": "e8eb87f5cce39fd80dc757f0200379dfb6ba634c04b67cb29ce496da999cd6b7",
+      "sha256": "bb4641076997f3c5a684952e37257fa02e6d58dfd4de5f5a4f005f868302a5f5",
       "size_bytes": 4742
     },
     "release_candidate_stack": {

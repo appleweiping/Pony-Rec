@@ -134,7 +134,10 @@ source probes passing, and `promax_public_metadata_ready=false`, so it is
 monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
-probes passing, and `promax_public_metadata_ready=false`. The matching
+probes passing, and `promax_public_metadata_ready=false`. A follow-up live
+probe at `2026-06-12T23:48:38Z` found the same blocker state and refreshed the
+closure packet at `2026-06-12T23:48:55Z`; this is fresh monitoring evidence,
+not a readiness upgrade. The matching
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
 now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
 full release-candidate stack, and public probe while keeping
@@ -154,10 +157,12 @@ reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
 missing, so `final_panel_coverage_complete=false`. The attempted Claude Opus
 review job failed with `Claude CLI did not return JSON output` and is recorded
 at `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json`;
-it does not count as reviewer coverage. A second retry failed with the same
-error and is recorded at
-`outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
-The review-continuation packet now records both failed Claude attempts
+it does not count as reviewer coverage. A second retry and a third
+tool-discovered retry failed with the same error and are recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`
+and
+`outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
+The review-continuation packet now records three failed Claude attempts
 separately from valid reviewer JSONs and still keeps
 `explicit_claude_opus_present=false`. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the

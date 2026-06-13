@@ -98,7 +98,10 @@ itself mark the paper final-submission-ready.
 still reports `promax_public_metadata_ready=false`: Crossref `/works` for
 `10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`, and
 ACM DL returns `403`; arXiv HTML ACM metadata and SIGIR accepted-paper probes
-remain passing. Codex also refreshed the complete local release-candidate stack
+remain passing. A follow-up live probe at `2026-06-12T23:48:38Z` found the
+same blocker state and refreshed the closure packet at
+`2026-06-12T23:48:55Z`; this is fresh monitoring evidence, not a readiness
+upgrade. Codex also refreshed the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
 it reports `ok=true`, `local_release_candidate_ready=true`,
@@ -132,11 +135,13 @@ reports `ok=true`, `review_continuation_ready=true`, score floor `8.0`,
 output has not yet been captured. The attempted Claude Opus review job failed
 with `Claude CLI did not return JSON output`; the failure record is
 `outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json` and
-is intentionally not counted as valid reviewer evidence. A second retry failed
-with the same error and is recorded at
-`outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`.
+is intentionally not counted as valid reviewer evidence. A second retry and a
+third tool-discovered retry failed with the same error and are recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`
+and
+`outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
 The review-continuation packet builder now records failed reviewer attempts
-separately from valid reviewer JSONs, so the refreshed packet exposes two
+separately from valid reviewer JSONs, so the refreshed packet exposes three
 failed Claude attempts while preserving `explicit_claude_opus_present=false`.
 
 **2026-06-12 submission release-candidate packet.** Codex added
