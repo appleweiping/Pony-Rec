@@ -183,13 +183,17 @@ def build_final_submission_blocker_closure_packet(
         release_candidate_stack_json
         or out_dir / f"submission_release_candidate_stack_refresh_{stamp}.json"
     )
-    probe_path = repo / promax_probe_json if promax_probe_json else None
+    probe_path = (
+        repo / promax_probe_json
+        if promax_probe_json
+        else out_dir / f"promax_public_metadata_probe_{stamp}.json"
+    )
 
     final_gate = _read_json(final_path)
     external = _read_json(external_path)
     manual = _read_json(manual_path)
     stack = _read_json(stack_path)
-    probe = _read_json(probe_path) if probe_path else None
+    probe = _read_json(probe_path) if probe_path.exists() and probe_path.is_file() else None
 
     blockers = _dedupe(
         list(final_gate.get("remaining_blockers") or [])
@@ -331,7 +335,7 @@ def build_final_submission_blocker_closure_packet(
             "external_metadata_json": _path_state(external_path, repo),
             "manual_checklist_json": _path_state(manual_path, repo),
             "release_candidate_stack_json": _path_state(stack_path, repo),
-            "promax_probe_json": _path_state(probe_path, repo) if probe_path else {"path": "", "exists": False, "size_bytes": 0},
+            "promax_probe_json": _path_state(probe_path, repo),
         },
         "remaining_blocker_count": len(blockers),
         "remaining_blockers": blockers,

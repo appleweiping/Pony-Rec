@@ -97,6 +97,13 @@ def _warning_regressions(**payloads: dict[str, Any]) -> list[dict[str, str]]:
     return regressions
 
 
+def _closure_group(closure: dict[str, Any], group_id: str) -> dict[str, Any]:
+    for group in _as_list(closure.get("closure_groups")):
+        if isinstance(group, dict) and group.get("group_id") == group_id:
+            return group
+    return {}
+
+
 def audit_final_blocker_consistency(
     *,
     root: str | Path = ".",
@@ -189,6 +196,34 @@ def audit_final_blocker_consistency(
         "doi_resolver": ((direct.get("doi_resolver") or {}).get("status_code")),
         "acm_dl": ((direct.get("acm_dl") or {}).get("status_code")),
     }
+    closure_inputs = closure.get("input_paths") or {}
+    closure_probe_path = closure_inputs.get("promax_probe_json") or {}
+    if closure_probe_path.get("exists") is not True:
+        failures.append("closure_missing_promax_probe_input")
+    closure_external_group = _closure_group(closure, "external_proceedings_metadata")
+    if not closure_external_group:
+        failures.append("closure_missing_external_metadata_group")
+    latest_probe = closure_external_group.get("latest_public_probe") or {}
+    if latest_probe.get("provided") is not True:
+        failures.append("closure_missing_latest_public_promax_probe")
+    closure_probe_status = {
+        "crossref": latest_probe.get("crossref_status_code"),
+        "doi_resolver": latest_probe.get("doi_resolver_status_code"),
+        "acm_dl": latest_probe.get("acm_dl_status_code"),
+    }
+    if latest_probe.get("provided") is True and closure_probe_status != promax_direct_status:
+        failures.append(
+            "closure_promax_probe_status_mismatch:"
+            + json.dumps(
+                {"closure": closure_probe_status, "probe": promax_direct_status},
+                sort_keys=True,
+            )
+        )
+    closure_review_group = _closure_group(closure, "review_panel_coverage")
+    closure_review_blockers = _string_list(closure_review_group.get("remaining_blockers"))
+    for blocker in ["review_panel_coverage_not_complete", "explicit_claude_opus_review"]:
+        if blocker not in closure_review_blockers:
+            failures.append(f"closure_review_group_missing_blocker:{blocker}")
 
     if manual.get("request_packet_ready") is not True:
         failures.append("manual_request_packet_not_ready")
@@ -241,6 +276,8 @@ def audit_final_blocker_consistency(
             "final_panel_coverage_complete": coverage.get("final_panel_coverage_complete"),
             "promax_public_metadata_ready": promax.get("promax_public_metadata_ready"),
             "promax_direct_status": promax_direct_status,
+            "closure_promax_probe_provided": latest_probe.get("provided") is True,
+            "closure_promax_probe_status": closure_probe_status,
             "manual_confirmation_needed": manual.get("manual_confirmation_needed"),
             "manual_submission_system_ready": manual.get("manual_submission_system_ready"),
             "recursive_warning_regression_count": len(warning_regressions),
@@ -275,6 +312,7 @@ def render_markdown(audit: dict[str, Any]) -> str:
         f"- Failed Claude attempts: `{summary.get('review_failed_claude_attempt_count')}`",
         f"- Explicit Claude Opus present: `{str(summary.get('explicit_claude_opus_present')).lower()}`",
         f"- ProMax public metadata ready: `{str(summary.get('promax_public_metadata_ready')).lower()}`",
+        f"- Closure carries ProMax probe: `{str(summary.get('closure_promax_probe_provided')).lower()}`",
         f"- Manual confirmation needed: `{str(summary.get('manual_confirmation_needed')).lower()}`",
         f"- Recursive warning regressions: `{summary.get('recursive_warning_regression_count')}`",
         "",

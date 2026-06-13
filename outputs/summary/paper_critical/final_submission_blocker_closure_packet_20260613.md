@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-13T04:34:14.285633+00:00
+Generated: 2026-06-13T04:50:28.753043+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -83,6 +83,20 @@ Current ProMax evidence:
 - Location: `Melbourne, VIC, Australia`
 - Crossref status: `404`
 - DOI resolver status: `404`
+
+Latest public probe:
+- Created: `2026-06-13T04:49:27.783097+00:00`
+- ProMax public metadata ready: `false`
+- Crossref status: `404`
+- DOI resolver status: `404`
+- ACM DL status: `403`
+
+Latest public source probes:
+- `arxiv_html_promax_acm_metadata`: ok=`true`, status=`200`, missing=``
+- `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing=``
+- `uq_author_profile_promax_sigir2026`: ok=`true`, status=`200`, missing=``
+- `author_publications_promax_sigir2026`: ok=`true`, status=`200`, missing=``
+- `uq_experts_profile_promax_sigir2026`: ok=`true`, status=`200`, missing=``
 
 ### manual_submission_system
 

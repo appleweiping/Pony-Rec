@@ -237,3 +237,38 @@ def test_infer_stamp_from_output_path_uses_dated_artifact_name() -> None:
         == "20260613"
     )
     assert _infer_stamp_from_output_path("outputs/summary/paper_critical/closure_packet_latest.json") is None
+
+
+def test_final_submission_blocker_closure_packet_reads_default_promax_probe_by_stamp(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_inputs(tmp_path)
+    default_probe = (
+        tmp_path
+        / "outputs"
+        / "summary"
+        / "paper_critical"
+        / "promax_public_metadata_probe_20260613.json"
+    )
+    default_probe.parent.mkdir(parents=True, exist_ok=True)
+    default_probe.write_text(paths["probe"].read_text(encoding="utf-8"), encoding="utf-8")
+
+    packet = build_final_submission_blocker_closure_packet(
+        root=tmp_path,
+        stamp="20260613",
+        final_gate_json=paths["final"].relative_to(tmp_path),
+        external_metadata_json=paths["external"].relative_to(tmp_path),
+        manual_checklist_json=paths["manual"].relative_to(tmp_path),
+        release_candidate_stack_json=paths["stack"].relative_to(tmp_path),
+    )
+
+    groups = {item["group_id"]: item for item in packet["closure_groups"]}
+    probe = groups["external_proceedings_metadata"]["latest_public_probe"]
+    assert packet["input_paths"]["promax_probe_json"]["exists"] is True
+    assert packet["input_paths"]["promax_probe_json"]["path"].endswith(
+        "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json"
+    ) or packet["input_paths"]["promax_probe_json"]["path"].endswith(
+        "outputs/summary/paper_critical/promax_public_metadata_probe_20260613.json"
+    )
+    assert probe["provided"] is True
+    assert probe["acm_dl_status_code"] == 403

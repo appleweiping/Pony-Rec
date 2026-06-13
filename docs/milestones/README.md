@@ -140,13 +140,13 @@ continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. Follow-up live probes
 at `2026-06-13T00:49:05Z`, `2026-06-13T01:59:36Z`,
 `2026-06-13T02:32:01Z`, `2026-06-13T03:16:11Z`,
-`2026-06-13T04:11:37Z`, and `2026-06-13T04:30:39Z` found the same direct
-blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
-accepted papers, UQ author profile, author Google Sites publications, and UQ
-Experts profile. The closure packet refreshed most recently at
-`2026-06-13T04:34:14Z` and now lists those source probes plus the explicit
-review-panel blockers in Markdown; this strengthens provenance but is not a
-readiness upgrade.
+`2026-06-13T04:11:37Z`, `2026-06-13T04:30:39Z`, and
+`2026-06-13T04:49:27Z` found the same direct blocker state with five source
+probes passing: arXiv HTML ACM metadata, SIGIR accepted papers, UQ author
+profile, author Google Sites publications, and UQ Experts profile. The closure
+packet refreshed most recently after the `04:49:27Z` probe and now lists those
+source probes plus the explicit review-panel blockers in Markdown; this
+strengthens provenance but is not a readiness upgrade.
 The complete release-candidate stack was also
 refreshed at `2026-06-13T04:31:25Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
@@ -160,6 +160,10 @@ full release-candidate stack, and public probe while keeping
 `final_submission_ready=false`. `scripts/audit/main_build_final_submission_blocker_closure_packet.py`
 now infers the input stamp from a dated output path when `--stamp` is omitted,
 preventing a 20260613 closure artifact from reading stale 20260612 inputs. A
+later hardening makes the same script default to the same-stamp
+`promax_public_metadata_probe_<stamp>.json` when available, while
+`scripts/audit/main_audit_final_blocker_consistency.py` now fails if the
+closure packet omits that probe or records mismatched direct status codes. A
 fresh GPT-5.5 xhigh post-handoff review rated
 the current manuscript `8.0/10` with `CONDITIONAL_PASS` and no new GPU
 experiment requirement, but still forbids a final-submission-ready claim.

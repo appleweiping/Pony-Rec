@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 06:36 CEST
+Last updated: 2026-06-13 06:52 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,25 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 closure ProMax-probe handoff guard:
+  Codex found that the 20260613 closure packet could be regenerated with the
+  correct stamp while still omitting the same-stamp
+  `promax_public_metadata_probe_20260613.json` unless the probe path was passed
+  explicitly. Codex fixed
+  `scripts/audit/main_build_final_submission_blocker_closure_packet.py` so the
+  closure builder now defaults to
+  `promax_public_metadata_probe_<stamp>.json` when present, and hardened
+  `scripts/audit/main_audit_final_blocker_consistency.py` so future audits fail
+  if the closure packet lacks the latest ProMax public probe or if the closure
+  probe statuses disagree with the standalone probe artifact. The latest live
+  ProMax probe at `2026-06-13T04:49:27Z` still reports
+  `promax_public_metadata_ready=false`: Crossref `404`, DOI resolver `404`,
+  ACM DL `403`, with all `5/5` public source probes passing. The regenerated
+  closure packet carries `latest_public_probe.provided=true`; the refreshed
+  final-blocker consistency audit reports `closure_promax_probe_provided=true`,
+  matching closure/probe direct status `404/404/403`, and
+  `final_submission_ready=false`.
 
 - 2026-06-13 bounded final-blocker refresh and closure-packet stamp fix:
   Codex reran the required server preflight and found no active Uncertainty

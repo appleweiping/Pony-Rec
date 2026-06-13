@@ -176,10 +176,10 @@ PIDs, audit summaries, and missing-file errors.
    Follow-up live probes at `2026-06-13T00:49:05Z`,
    `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
    `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`, and
-   `2026-06-13T04:30:39Z` found the same direct
-   blocker state. After the
-   latest probe, the closure packet refreshed most recently at
-   `2026-06-13T04:34:14Z`;
+   `2026-06-13T04:30:39Z` found the same direct blocker state. A later
+   `2026-06-13T04:49:27Z` probe again found Crossref `404`, DOI resolver
+   `404`, ACM DL `403`, and all `5/5` public source probes passing. After the
+   latest probe, the closure packet was refreshed again;
    the closure Markdown now lists those latest public source probes and
    explicitly keeps the review-panel blockers. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
@@ -194,7 +194,10 @@ PIDs, audit summaries, and missing-file errors.
    release-candidate, stack, and closure packet outputs. The closure-packet
    builder also now infers the input stamp from a dated `--output-json` or
    `--output-md` path when `--stamp` is omitted, preventing a 20260613 closure
-   artifact from silently reading 20260612 inputs.
+   artifact from silently reading 20260612 inputs. It also defaults to the
+   same-stamp `promax_public_metadata_probe_<stamp>.json` when available; the
+   final-blocker consistency audit now fails if the closure packet omits that
+   probe or records direct status codes inconsistent with the standalone probe.
    The current priority is to capture explicit Claude Opus reviewer output
    using the request packet if available, then keep monitoring the ProMax public
    metadata and private manual submission-system blockers. Do not claim final
@@ -285,9 +288,9 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_pre_submission_refresh_freshness.py` | Local read-only freshness audit for a pre-submission refresh artifact; verifies recorded input fingerprints and generated gate JSON/MD hashes against the current worktree, treating Git HEAD as generation provenance rather than a strict post-commit equality gate |
 | `scripts/audit/main_build_submission_release_candidate_packet.py` | Local read-only release-candidate handoff index over the final gate, freshness audit, source package, rebuild audit, metadata packet, manual checklist, and external metadata audit; distinguishes `local_release_candidate_ready` from `final_submission_ready` and surfaces `external_manual_or_review_blocked` when review coverage is still incomplete |
 | `scripts/audit/main_refresh_submission_release_candidate_stack.py` | Preferred sequential local handoff wrapper; runs pre-submission refresh, freshness audit, and release-candidate packet generation in order, then emits a compact stack artifact while preserving external/manual/review blockers and `final_submission_ready=false` |
-| `scripts/audit/main_audit_final_blocker_consistency.py` | Local read-only consistency audit over the final gate, release stack, closure packet, review-continuation packet, Claude request packet, ProMax probe, and manual request packet; catches stale failed-Claude counts, missing open blockers, unexpected final-ready states, and recursive warning-prefix regressions |
+| `scripts/audit/main_audit_final_blocker_consistency.py` | Local read-only consistency audit over the final gate, release stack, closure packet, review-continuation packet, Claude request packet, ProMax probe, and manual request packet; catches stale failed-Claude counts, missing open blockers, unexpected final-ready states, recursive warning-prefix regressions, and closure packets that omit or mismatch the same-stamp ProMax probe |
 | `scripts/audit/main_audit_final_blocker_doc_status.py` | Local read-only canonical-doc status audit over active TODO, claim/status, milestones, and server runbook current sections; compares them with the final-blocker consistency audit and catches stale current failed-Claude counts, old two-class blocker taxonomy, missing ProMax/manual/Claude blocker wording, or accidental final-ready wording |
-| `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, and release-candidate stack; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths; infers the stamp from dated output paths when `--stamp` is omitted |
+| `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, release-candidate stack, and same-stamp ProMax public probe; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths; infers the stamp from dated output paths when `--stamp` is omitted |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, source-package rebuild, external proceedings metadata, manual checklist, and review-continuation coverage; keeps final readiness false while external DOI/page-range, private submission-system, or explicit Claude Opus review blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py` | Local read-only public-safe request-packet builder for the private manual submission-system confirmation; emits the current source-manifest hash, safe confirmation skeleton, forbidden private fields/keys, recommended ignored path, and follow-up commands without consuming private data or closing final readiness |

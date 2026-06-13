@@ -40,6 +40,36 @@ def _seed_inputs(tmp_path: Path, *, overrides: dict[str, dict] | None = None) ->
         "final_submission_ready": False,
         "ready_for_human_handoff": True,
         "remaining_blockers": ["explicit_claude_opus_review"],
+        "input_paths": {
+            "promax_probe_json": {
+                "exists": True,
+                "path": "out/promax.json",
+                "size_bytes": 1,
+            }
+        },
+        "closure_groups": [
+            {
+                "group_id": "review_panel_coverage",
+                "remaining_blockers": [
+                    "review_panel_coverage_not_complete",
+                    "explicit_claude_opus_review",
+                ],
+            },
+            {
+                "group_id": "external_proceedings_metadata",
+                "latest_public_probe": {
+                    "provided": True,
+                    "crossref_status_code": 404,
+                    "doi_resolver_status_code": 404,
+                    "acm_dl_status_code": 403,
+                },
+                "remaining_blockers": [
+                    "promax:final_page_range_missing_in_bib",
+                    "promax:crossref_registry_not_visible",
+                    "promax:doi_resolver_not_visible",
+                ],
+            },
+        ],
         "warnings": ["underfull_layout_warnings:hbox=6,vbox=8"],
     }
     review = {
@@ -184,3 +214,35 @@ def test_final_blocker_consistency_audit_rejects_recursive_warning_regression(
     assert audit["ok"] is False
     assert "recursive_warning_prefix_regressions:1" in audit["failures"]
     assert audit["warning_regressions"][0]["artifact"] == "release_stack"
+
+
+def test_final_blocker_consistency_audit_rejects_closure_missing_promax_probe(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_inputs(
+        tmp_path,
+        overrides={
+            "closure": {
+                "input_paths": {"promax_probe_json": {"exists": False, "path": "", "size_bytes": 0}},
+                "closure_groups": [
+                    {
+                        "group_id": "review_panel_coverage",
+                        "remaining_blockers": [
+                            "review_panel_coverage_not_complete",
+                            "explicit_claude_opus_review",
+                        ],
+                    },
+                    {
+                        "group_id": "external_proceedings_metadata",
+                        "latest_public_probe": {"provided": False},
+                    },
+                ],
+            }
+        },
+    )
+
+    audit = _run(paths, tmp_path)
+
+    assert audit["ok"] is False
+    assert "closure_missing_promax_probe_input" in audit["failures"]
+    assert "closure_missing_latest_public_promax_probe" in audit["failures"]

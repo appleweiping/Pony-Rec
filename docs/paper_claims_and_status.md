@@ -104,8 +104,10 @@ source probe, and the UQ Experts profile source probe remain passing.
 Follow-up live probes at `2026-06-13T00:49:05Z`,
 `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
 `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`, and
-`2026-06-13T04:30:39Z` found the same direct blocker state, and the closure
-packet was refreshed most recently at `2026-06-13T04:34:14Z`; this is stronger
+`2026-06-13T04:30:39Z` found the same direct blocker state. A later probe at
+`2026-06-13T04:49:27Z` again found Crossref `404`, DOI resolver `404`, ACM DL
+`403`, and all `5/5` public source probes passing. The closure packet was
+refreshed most recently after that probe; this is stronger
 public accepted-paper provenance, not a readiness upgrade. The closure packet
 Markdown now lists latest public source probes in addition to direct
 Crossref/DOI/ACM statuses and explicitly carries the review-panel blockers.
@@ -256,6 +258,13 @@ packet now uses the 20260613 final gate, release stack, manual checklist,
 external metadata audit, and ProMax probe; its review-panel closure group
 explicitly lists `review_panel_coverage_not_complete` and
 `explicit_claude_opus_review`, and total remaining blocker count is `13`.
+Codex later fixed the matching ProMax-probe handoff guard: the closure builder
+now defaults to `promax_public_metadata_probe_<stamp>.json` when present, and
+the final-blocker consistency audit fails if the closure packet omits that
+probe or records direct statuses inconsistent with the standalone probe
+artifact. The refreshed consistency audit now reports
+`closure_promax_probe_provided=true`, closure/probe direct status `404/404/403`,
+and `final_submission_ready=false`.
 Codex then added
 `scripts/audit/main_audit_final_blocker_consistency.py` and
 `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
