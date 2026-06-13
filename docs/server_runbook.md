@@ -175,13 +175,15 @@ PIDs, audit summaries, and missing-file errors.
    Sites publications page, and the UQ Experts profile source probes all pass.
    Follow-up live probes at `2026-06-13T00:49:05Z`,
    `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
-   `2026-06-13T03:16:11Z`, and `2026-06-13T04:11:37Z` found the same direct
+   `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`, and
+   `2026-06-13T04:30:39Z` found the same direct
    blocker state. After the
    latest probe, the closure packet refreshed most recently at
-   `2026-06-13T03:28:25Z`;
-   the closure Markdown now lists those latest public source probes. This is
+   `2026-06-13T04:34:14Z`;
+   the closure Markdown now lists those latest public source probes and
+   explicitly keeps the review-panel blockers. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
-   stack was also refreshed at `2026-06-13T03:28:07Z`: it reports `ok=true`,
+   stack was also refreshed at `2026-06-13T04:31:25Z`: it reports `ok=true`,
    `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
    `failures=[]`, and `final_submission_ready=false`; the freshness audit has
    zero input or generated-gate mismatches, and the independent source-package
@@ -189,7 +191,10 @@ PIDs, audit summaries, and missing-file errors.
    The release-stack warning aggregators now normalize known nested gate
    prefixes before adding the current layer prefix, preventing recursive
    warning growth in review-continuation, final-gate, pre-submission-refresh,
-   release-candidate, stack, and closure packet outputs.
+   release-candidate, stack, and closure packet outputs. The closure-packet
+   builder also now infers the input stamp from a dated `--output-json` or
+   `--output-md` path when `--stamp` is omitted, preventing a 20260613 closure
+   artifact from silently reading 20260612 inputs.
    The current priority is to capture explicit Claude Opus reviewer output
    using the request packet if available, then keep monitoring the ProMax public
    metadata and private manual submission-system blockers. Do not claim final
@@ -282,7 +287,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_refresh_submission_release_candidate_stack.py` | Preferred sequential local handoff wrapper; runs pre-submission refresh, freshness audit, and release-candidate packet generation in order, then emits a compact stack artifact while preserving external/manual/review blockers and `final_submission_ready=false` |
 | `scripts/audit/main_audit_final_blocker_consistency.py` | Local read-only consistency audit over the final gate, release stack, closure packet, review-continuation packet, Claude request packet, ProMax probe, and manual request packet; catches stale failed-Claude counts, missing open blockers, unexpected final-ready states, and recursive warning-prefix regressions |
 | `scripts/audit/main_audit_final_blocker_doc_status.py` | Local read-only canonical-doc status audit over active TODO, claim/status, milestones, and server runbook current sections; compares them with the final-blocker consistency audit and catches stale current failed-Claude counts, old two-class blocker taxonomy, missing ProMax/manual/Claude blocker wording, or accidental final-ready wording |
-| `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, and release-candidate stack; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths |
+| `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, and release-candidate stack; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths; infers the stamp from dated output paths when `--stamp` is omitted |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, source-package rebuild, external proceedings metadata, manual checklist, and review-continuation coverage; keeps final readiness false while external DOI/page-range, private submission-system, or explicit Claude Opus review blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py` | Local read-only public-safe request-packet builder for the private manual submission-system confirmation; emits the current source-manifest hash, safe confirmation skeleton, forbidden private fields/keys, recommended ignored path, and follow-up commands without consuming private data or closing final readiness |

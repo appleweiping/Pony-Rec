@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from scripts.audit.main_build_final_submission_blocker_closure_packet import (
+    _infer_stamp_from_output_path,
     _write_md,
     build_final_submission_blocker_closure_packet,
 )
@@ -226,3 +227,13 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
     assert "Latest public source probes" in text
     assert "arxiv_html_promax_acm_metadata" in text
     assert "ACM DL status: `403`" in text
+
+
+def test_infer_stamp_from_output_path_uses_dated_artifact_name() -> None:
+    assert (
+        _infer_stamp_from_output_path(
+            "outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.json"
+        )
+        == "20260613"
+    )
+    assert _infer_stamp_from_output_path("outputs/summary/paper_critical/closure_packet_latest.json") is None

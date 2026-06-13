@@ -1,13 +1,13 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-13T04:16:16.711294+00:00
+Generated: 2026-06-13T04:31:24.315050+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260613`
-- Git HEAD before refresh: `33136f43331edbbea06e05a57bfa2e85db5ee1e6`
+- Git HEAD before refresh: `9d82155e0335e1ca8fc43903a8b84673291fc62f`
 - Tracked dirty before refresh: `true`
 
 ## Steps

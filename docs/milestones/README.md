@@ -138,15 +138,17 @@ monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. Follow-up live probes
-at `2026-06-13T00:49:05Z`, `2026-06-13T01:59:36Z`, and
-`2026-06-13T02:32:01Z` found the same direct blocker state with five source
-probes passing: arXiv HTML ACM metadata, SIGIR accepted papers, UQ author
-profile, author Google Sites publications, and UQ Experts profile. The closure
-packet refreshed most recently at `2026-06-13T02:32:56Z` and now lists those
-source probes in Markdown; this strengthens provenance but is not a readiness
-upgrade.
+at `2026-06-13T00:49:05Z`, `2026-06-13T01:59:36Z`,
+`2026-06-13T02:32:01Z`, `2026-06-13T03:16:11Z`,
+`2026-06-13T04:11:37Z`, and `2026-06-13T04:30:39Z` found the same direct
+blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
+accepted papers, UQ author profile, author Google Sites publications, and UQ
+Experts profile. The closure packet refreshed most recently at
+`2026-06-13T04:34:14Z` and now lists those source probes plus the explicit
+review-panel blockers in Markdown; this strengthens provenance but is not a
+readiness upgrade.
 The complete release-candidate stack was also
-refreshed at `2026-06-13T02:51:34Z` and reports `ok=true`,
+refreshed at `2026-06-13T04:31:25Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `failures=[]`, and `final_submission_ready=false`; its freshness audit checks
 `23` input fingerprints and `14` generated gate files with zero mismatches,
@@ -155,7 +157,10 @@ BibTeX and overfull hbox warnings. The matching
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
 now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
 full release-candidate stack, and public probe while keeping
-`final_submission_ready=false`. A fresh GPT-5.5 xhigh post-handoff review rated
+`final_submission_ready=false`. `scripts/audit/main_build_final_submission_blocker_closure_packet.py`
+now infers the input stamp from a dated output path when `--stamp` is omitted,
+preventing a 20260613 closure artifact from reading stale 20260612 inputs. A
+fresh GPT-5.5 xhigh post-handoff review rated
 the current manuscript `8.0/10` with `CONDITIONAL_PASS` and no new GPU
 experiment requirement, but still forbids a final-submission-ready claim.
 Codex fixed the reviewer-caught abstract spacing issue (`\method{} ranks`),

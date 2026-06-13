@@ -102,16 +102,18 @@ ACM DL returns `403`; arXiv HTML ACM metadata, the SIGIR accepted-paper page,
 the UQ author-profile source probe, the author Google Sites publications
 source probe, and the UQ Experts profile source probe remain passing.
 Follow-up live probes at `2026-06-13T00:49:05Z`,
-`2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`, and
-`2026-06-13T03:16:11Z` found the same direct blocker state, and the closure
-packet was refreshed most recently at `2026-06-13T03:28:25Z`; this is stronger
+`2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
+`2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`, and
+`2026-06-13T04:30:39Z` found the same direct blocker state, and the closure
+packet was refreshed most recently at `2026-06-13T04:34:14Z`; this is stronger
 public accepted-paper provenance, not a readiness upgrade. The closure packet
 Markdown now lists latest public source probes in addition to direct
-Crossref/DOI/ACM statuses. Codex also refreshed
+Crossref/DOI/ACM statuses and explicitly carries the review-panel blockers.
+Codex also refreshed
 the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
-the latest `2026-06-13T03:28:07Z` stack reports `ok=true`,
+the latest `2026-06-13T04:31:25Z` stack reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `blocking_status=external_manual_or_review_blocked`, `failures=[]`, and
 `final_submission_ready=false`. Its freshness audit checks `23` input
@@ -245,6 +247,15 @@ have compact warning lists with no detected recursive warning chains. This is
 an evidence-hygiene fix only; the final gate remains blocked by ProMax public
 metadata, private manual submission-system confirmation, and explicit Claude
 Opus review coverage.
+Codex later fixed a stale-stamp footgun in
+`scripts/audit/main_build_final_submission_blocker_closure_packet.py`: when
+`--stamp` is omitted, the script now infers the input stamp from a dated
+`--output-json` or `--output-md` path. This prevents a 20260613 closure packet
+from silently reading 20260612 gate inputs. The regenerated 20260613 closure
+packet now uses the 20260613 final gate, release stack, manual checklist,
+external metadata audit, and ProMax probe; its review-panel closure group
+explicitly lists `review_panel_coverage_not_complete` and
+`explicit_claude_opus_review`, and total remaining blocker count is `13`.
 Codex then added
 `scripts/audit/main_audit_final_blocker_consistency.py` and
 `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`

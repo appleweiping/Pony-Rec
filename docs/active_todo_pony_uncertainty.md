@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 06:18 CEST
+Last updated: 2026-06-13 06:36 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,30 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 bounded final-blocker refresh and closure-packet stamp fix:
+  Codex reran the required server preflight and found no active Uncertainty
+  experiment; C-CRP v3 still reports all-domain completion, while the GPU is
+  occupied by an unrelated TGL-Rec process that must not be touched. The live
+  ProMax public metadata probe was refreshed at
+  `2026-06-13T04:30:39Z`: `ok=true`,
+  `promax_public_metadata_ready=false`, Crossref remains `404`, DOI resolver
+  remains `404`, ACM DL remains `403`, and all `5/5` auxiliary source probes
+  still pass. The full release-candidate stack was refreshed at
+  `2026-06-13T04:31:25Z` and reports `ok=true`,
+  `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
+  `blocking_status=external_manual_or_review_blocked`, and
+  `final_submission_ready=false`. Codex then fixed
+  `scripts/audit/main_build_final_submission_blocker_closure_packet.py` so a
+  dated `--output-json` / `--output-md` path infers the matching input stamp
+  when `--stamp` is omitted; this prevents writing a 20260613 closure packet
+  from stale 20260612 inputs. The regenerated
+  `final_submission_blocker_closure_packet_20260613.{json,md}` at
+  `2026-06-13T04:34:14Z` now uses the 20260613 inputs, shows remaining blocker
+  count `13`, and explicitly lists `review_panel_coverage_not_complete` and
+  `explicit_claude_opus_review` in the review-panel closure group. The
+  refreshed final-blocker consistency and doc-status audits both report
+  `ok=true` while preserving `final_submission_ready=false`.
 
 - 2026-06-13 final-blocker doc-status audit:
   Codex added `scripts/audit/main_audit_final_blocker_doc_status.py` plus

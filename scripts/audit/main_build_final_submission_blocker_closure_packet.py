@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
-DEFAULT_STAMP = "20260612"
+DEFAULT_STAMP = "20260613"
+STAMP_RE = re.compile(r"_(20\d{6})(?:\.[^.]+)?$")
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -39,6 +41,13 @@ def _dedupe(values: list[str]) -> list[str]:
             seen.add(text)
             result.append(text)
     return result
+
+
+def _infer_stamp_from_output_path(path: str | None) -> str | None:
+    if not path:
+        return None
+    match = STAMP_RE.search(Path(path).stem)
+    return match.group(1) if match else None
 
 
 WARNING_PREFIXES = (
@@ -451,7 +460,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=".")
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
-    parser.add_argument("--stamp", default=DEFAULT_STAMP)
+    parser.add_argument("--stamp")
     parser.add_argument("--final-gate-json")
     parser.add_argument("--external-metadata-json")
     parser.add_argument("--manual-checklist-json")
@@ -464,10 +473,16 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    stamp = (
+        args.stamp
+        or _infer_stamp_from_output_path(args.output_json)
+        or _infer_stamp_from_output_path(args.output_md)
+        or DEFAULT_STAMP
+    )
     packet = build_final_submission_blocker_closure_packet(
         root=args.root,
         output_dir=args.output_dir,
-        stamp=args.stamp,
+        stamp=stamp,
         final_gate_json=args.final_gate_json,
         external_metadata_json=args.external_metadata_json,
         manual_checklist_json=args.manual_checklist_json,
