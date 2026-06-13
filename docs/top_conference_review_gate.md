@@ -275,6 +275,7 @@ submission checklist, build the final local gate:
 
 ```bash
 python -m scripts.audit.main_build_final_submission_gate \
+  --review-continuation-packet-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json \
   --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json \
   --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md
 ```
@@ -282,7 +283,10 @@ python -m scripts.audit.main_build_final_submission_gate \
 This is the single local summary for pre-submission status. It must not mark
 `final_submission_ready=true` unless all local artifact gates pass, including
 the source-package rebuild audit, external proceedings metadata is ready, and
-manual submission-system items have actually been completed.
+manual submission-system items have actually been completed. It also must not
+mark final readiness true until the review-continuation packet reports
+`final_panel_coverage_complete=true`; the current missing explicit Claude Opus
+review is a final blocker, not just a handoff note.
 
 To refresh the whole local pre-submission stack in dependency order, use:
 

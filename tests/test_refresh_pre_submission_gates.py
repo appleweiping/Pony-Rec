@@ -179,6 +179,20 @@ def _seed_package_inputs(tmp_path: Path) -> dict[str, Path]:
             ],
         },
     )
+    review_packet = _write_json(
+        tmp_path / "review_continuation.json",
+        {
+            "schema_version": "review.v1",
+            "created_at_utc": "2026-06-13T00:00:00Z",
+            "ok": True,
+            "review_continuation_ready": True,
+            "final_panel_coverage_complete": False,
+            "final_submission_ready": False,
+            "warnings": [],
+            "failures": [],
+            "remaining_blockers": ["explicit_claude_opus_review"],
+        },
+    )
     fixture = _write_json(
         tmp_path / "fixture.json",
         {
@@ -203,6 +217,7 @@ def _seed_package_inputs(tmp_path: Path) -> dict[str, Path]:
         "metadata_config": metadata_config,
         "external_config": external_config,
         "manual_config": manual_config,
+        "review_packet": review_packet,
         "fixture": fixture,
     }
 
@@ -225,6 +240,7 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
         target_profile_id="test_profile",
         metadata_config=paths["metadata_config"].relative_to(tmp_path),
         manual_config=paths["manual_config"].relative_to(tmp_path),
+        review_continuation_packet_json=paths["review_packet"].relative_to(tmp_path),
         source_package_output_dir="artifacts/source_package",
         source_rebuild_build_dir="artifacts/source_rebuild",
         source_rebuild_runner=_fake_latex_runner,
@@ -232,7 +248,7 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
 
     assert refresh["ok"] is True
     assert refresh["final_submission_ready"] is False
-    assert refresh["final_verdict"] == "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED"
+    assert refresh["final_verdict"] == "LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED"
     assert "git_state_before_refresh" in refresh
     assert refresh["input_fingerprints"]
     assert [step["step_id"] for step in refresh["steps"]] == [
@@ -263,3 +279,4 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     assert "scripts/audit/main_audit_submission_source_package_rebuild.py" in input_paths
     assert "promax:final_page_range_missing_in_bib" in refresh["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in refresh["remaining_blockers"]
+    assert "explicit_claude_opus_review" in refresh["remaining_blockers"]

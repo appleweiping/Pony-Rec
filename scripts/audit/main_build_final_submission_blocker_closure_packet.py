@@ -44,6 +44,7 @@ def _dedupe(values: list[str]) -> list[str]:
 def _classify_remaining_blockers(blockers: list[str]) -> dict[str, list[str]]:
     external: list[str] = []
     manual: list[str] = []
+    review: list[str] = []
     other: list[str] = []
     for blocker in blockers:
         lowered = blocker.lower()
@@ -51,11 +52,14 @@ def _classify_remaining_blockers(blockers: list[str]) -> dict[str, list[str]]:
             external.append(blocker)
         elif "manual" in lowered or "submission-system" in lowered:
             manual.append(blocker)
+        elif "review" in lowered or "claude" in lowered or "opus" in lowered or "panel_coverage" in lowered:
+            review.append(blocker)
         else:
             other.append(blocker)
     return {
         "external_proceedings_metadata": _dedupe(external),
         "manual_submission_system": _dedupe(manual),
+        "review_panel_coverage": _dedupe(review),
         "other": _dedupe(other),
     }
 
@@ -165,6 +169,7 @@ def build_final_submission_blocker_closure_packet(
     local_ready = stack.get("ok") is True and stack.get("local_release_candidate_ready") is True
     external_ready = external.get("external_proceedings_metadata_ready") is True
     manual_ready = manual.get("manual_submission_system_ready") is True
+    review_ready = final_gate.get("review_panel_coverage_complete") is True
     final_ready = final_gate.get("final_submission_ready") is True
 
     closure_groups = [
@@ -185,6 +190,28 @@ def build_final_submission_blocker_closure_packet(
             ],
             "next_commands": [
                 "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md",
+            ],
+        },
+        {
+            "group_id": "review_panel_coverage",
+            "status": "ready" if review_ready else "blocked",
+            "public_safe": True,
+            "can_close_without_private_data": True,
+            "current_evidence": {
+                "review_continuation_ready": final_gate.get("review_continuation_ready") is True,
+                "review_panel_coverage_complete": review_ready,
+                "final_gate_verdict": final_gate.get("verdict", ""),
+            },
+            "remaining_blockers": classified["review_panel_coverage"],
+            "closure_conditions": [
+                "Capture a substantive explicit Claude Opus review JSON that satisfies the review-continuation schema.",
+                "Rerun the review-continuation packet after attaching the valid review JSON.",
+                "Rerun the final submission gate and closure packet after review coverage changes.",
+            ],
+            "next_commands": [
+                "python -m scripts.audit.main_build_claude_review_request_packet --output-json outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.md",
+                "python -m scripts.audit.main_build_review_continuation_packet --additional-review-json outputs/summary/paper_critical/valid_claude_opus_review_YYYYMMDD.json --output-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.md",
+                "python -m scripts.audit.main_build_final_submission_gate --review-continuation-packet-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md",
             ],
         },
         {
@@ -237,7 +264,11 @@ def build_final_submission_blocker_closure_packet(
     failures: list[str] = []
     if not local_ready:
         failures.append("local_release_candidate_stack_not_ready")
-    if final_ready and (classified["external_proceedings_metadata"] or classified["manual_submission_system"]):
+    if final_ready and (
+        classified["external_proceedings_metadata"]
+        or classified["manual_submission_system"]
+        or classified["review_panel_coverage"]
+    ):
         failures.append("final_submission_ready_true_but_blockers_remain")
 
     return {
@@ -256,6 +287,7 @@ def build_final_submission_blocker_closure_packet(
         "final_submission_ready": final_ready,
         "external_proceedings_metadata_ready": external_ready,
         "manual_submission_system_ready": manual_ready,
+        "review_panel_coverage_complete": review_ready,
         "ready_for_human_handoff": local_ready and not final_ready,
         "input_paths": {
             "final_gate_json": _path_state(final_path, repo),
@@ -272,8 +304,9 @@ def build_final_submission_blocker_closure_packet(
         "warnings": _dedupe(list(final_gate.get("warnings") or []) + list(stack.get("warnings") or [])),
         "next_actions": [
             "Monitor or recheck ProMax public ACM/Crossref/DOI metadata; update BibTeX only after final public page range is available.",
+            "Attach a valid explicit Claude Opus review through the review-continuation packet before closing review coverage.",
             "Prepare the private manual submission confirmation outside git after the submission-system fields are completed.",
-            "Rerun the release-candidate stack and this closure packet after either blocker group changes.",
+            "Rerun the release-candidate stack and this closure packet after any blocker group changes.",
         ],
     }
 
@@ -295,6 +328,7 @@ def _write_md(path: Path, packet: dict[str, Any]) -> None:
         f"- Final submission ready: `{str(packet['final_submission_ready']).lower()}`",
         f"- External proceedings metadata ready: `{str(packet['external_proceedings_metadata_ready']).lower()}`",
         f"- Manual submission system ready: `{str(packet['manual_submission_system_ready']).lower()}`",
+        f"- Review panel coverage complete: `{str(packet['review_panel_coverage_complete']).lower()}`",
         f"- Remaining blocker count: `{packet['remaining_blocker_count']}`",
         "",
         "## Closure Groups",

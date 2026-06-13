@@ -1,12 +1,12 @@
 # Pre-Submission Refresh Freshness Audit
 
-Generated: 2026-06-13T00:04:17.029404+00:00
+Generated: 2026-06-13T01:26:02.895127+00:00
 
 - OK: `true`
 - Refresh artifact fresh: `true`
 - Final submission ready: `false`
 - Refresh JSON: `outputs\summary\paper_critical\pre_submission_gate_refresh_20260613.json`
-- Refresh verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
+- Refresh verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
 - Input fingerprints checked: `21`
 - Generated step files checked: `14`
 - Input mismatches: `0`
@@ -16,8 +16,8 @@ Generated: 2026-06-13T00:04:17.029404+00:00
 
 Git HEAD is provenance for the code/input state that generated the refresh. Freshness is decided by current file fingerprints and generated gate hashes, because committing generated artifacts necessarily changes HEAD.
 
-- Refresh generation HEAD: `9bce34ecc873367ea9f093d91a62b537e9764ecc`
-- Current HEAD: `9bce34ecc873367ea9f093d91a62b537e9764ecc`
+- Refresh generation HEAD: `3c3dff8ec8f355b1767bfc9a957048aa1bf3144e`
+- Current HEAD: `3c3dff8ec8f355b1767bfc9a957048aa1bf3144e`
 - HEAD changed since refresh generation: `false`
 
 ## Failures
@@ -26,7 +26,7 @@ Git HEAD is provenance for the code/input state that generated the refresh. Fres
 
 ## Warnings
 
-- None
+- `refresh_recorded_tracked_dirty_inputs_before_generation`
 
 ## Mismatched Files
 
@@ -43,6 +43,10 @@ Git HEAD is provenance for the code/input state that generated the refresh. Fres
 - manual_submission_system_items_not_confirmed
 - external_proceedings_metadata_not_ready
 - manual_submission_system_not_ready
+- review_panel_coverage_not_complete
+- promax:crossref_registry_not_visible
+- promax:doi_resolver_not_visible
+- explicit_claude_opus_review
 
 ## Next Actions
 

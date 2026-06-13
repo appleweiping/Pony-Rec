@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-13T00:52:22.413117+00:00
+Generated: 2026-06-13T01:26:59.967083+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -8,7 +8,8 @@ Generated: 2026-06-13T00:52:22.413117+00:00
 - Final submission ready: `false`
 - External proceedings metadata ready: `false`
 - Manual submission system ready: `false`
-- Remaining blocker count: `9`
+- Review panel coverage complete: `false`
+- Remaining blocker count: `13`
 
 ## Closure Groups
 
@@ -27,6 +28,26 @@ Closure conditions:
 Next commands:
 - `python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md`
 
+### review_panel_coverage
+
+- Status: `blocked`
+- Public safe: `true`
+- Can close without private data: `true`
+
+Remaining blockers:
+- review_panel_coverage_not_complete
+- explicit_claude_opus_review
+
+Closure conditions:
+- Capture a substantive explicit Claude Opus review JSON that satisfies the review-continuation schema.
+- Rerun the review-continuation packet after attaching the valid review JSON.
+- Rerun the final submission gate and closure packet after review coverage changes.
+
+Next commands:
+- `python -m scripts.audit.main_build_claude_review_request_packet --output-json outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.md`
+- `python -m scripts.audit.main_build_review_continuation_packet --additional-review-json outputs/summary/paper_critical/valid_claude_opus_review_YYYYMMDD.json --output-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.md`
+- `python -m scripts.audit.main_build_final_submission_gate --review-continuation-packet-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md`
+
 ### external_proceedings_metadata
 
 - Status: `blocked`
@@ -40,6 +61,8 @@ Remaining blockers:
 - promax:doi_resolver_not_visible:status=404
 - external_proceedings_metadata_not_ready
 - confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
+- promax:crossref_registry_not_visible
+- promax:doi_resolver_not_visible
 
 Closure conditions:
 - Add the final ProMax ACM page range to Paper/references.bib when it is public.
@@ -112,6 +135,10 @@ Manual confirmation safe fields:
 - manual_submission_system_not_ready
 - confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
 - manual_submission_system_items_not_confirmed
+- review_panel_coverage_not_complete
+- promax:crossref_registry_not_visible
+- promax:doi_resolver_not_visible
+- explicit_claude_opus_review
 
 ## Failures
 
@@ -120,5 +147,6 @@ Manual confirmation safe fields:
 ## Next Actions
 
 - Monitor or recheck ProMax public ACM/Crossref/DOI metadata; update BibTeX only after final public page range is available.
+- Attach a valid explicit Claude Opus review through the review-continuation packet before closing review coverage.
 - Prepare the private manual submission confirmation outside git after the submission-system fields are completed.
-- Rerun the release-candidate stack and this closure packet after either blocker group changes.
+- Rerun the release-candidate stack and this closure packet after any blocker group changes.

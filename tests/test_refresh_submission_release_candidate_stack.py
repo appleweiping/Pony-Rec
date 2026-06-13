@@ -11,7 +11,7 @@ def _refresh_payload() -> dict:
         "created_at_utc": "2026-06-12T00:00:00+00:00",
         "ok": True,
         "final_submission_ready": False,
-        "final_verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED",
+        "final_verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED",
         "external_network_mode": "fixture",
         "stamp": "test",
         "git_state_before_refresh": {
@@ -42,7 +42,7 @@ def _freshness_payload(*, ok: bool = True) -> dict:
         "refresh_artifact_fresh": ok,
         "final_submission_ready": False,
         "refresh_json": "out/pre_submission_gate_refresh_test.json",
-        "refresh_final_verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED",
+        "refresh_final_verdict": "LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED",
         "checked_input_fingerprint_count": 0,
         "checked_step_file_count": 0,
         "input_fingerprint_mismatch_count": 0 if ok else 1,
@@ -67,7 +67,7 @@ def _candidate_payload() -> dict:
         "ok": True,
         "local_release_candidate_ready": True,
         "readiness_scope": "local_artifacts_only",
-        "blocking_status": "external_or_manual_blocked",
+        "blocking_status": "external_manual_or_review_blocked",
         "final_submission_ready": False,
         "final_submission_ready_source": "out/final_submission_gate_test.json",
         "verdict": "LOCAL_RELEASE_CANDIDATE_READY_FINAL_BLOCKED",
@@ -129,7 +129,7 @@ def test_refresh_submission_release_candidate_stack_runs_in_order(tmp_path: Path
     assert stack["ok"] is True
     assert stack["local_release_candidate_ready"] is True
     assert stack["final_submission_ready"] is False
-    assert stack["blocking_status"] == "external_or_manual_blocked"
+    assert stack["blocking_status"] == "external_manual_or_review_blocked"
     assert [step["step_id"] for step in stack["steps"]] == [
         "pre_submission_gate_refresh",
         "pre_submission_refresh_freshness",

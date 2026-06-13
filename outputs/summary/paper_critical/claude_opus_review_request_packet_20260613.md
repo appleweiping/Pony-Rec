@@ -1,11 +1,11 @@
 # Claude Opus Review Request Packet
 
-- Created UTC: `2026-06-13T01:05:14.666307+00:00`
+- Created UTC: `2026-06-13T01:28:41.928704+00:00`
 - OK: `true`
 - Claude review needed: `true`
 - Existing score floor: `8.0`
 - Failed Claude attempts: `5`
-- Prompt sha256: `aeabc0d2d08caa95ea4e1b76887e6f9be90c91ca52d95a89a66692060ba012d2`
+- Prompt sha256: `77cff9a37307d06f687f6c85eab6a2cb11cd0122ca5f0a4e864b500c7476d94e`
 
 ## Missing Perspectives
 
@@ -148,14 +148,20 @@
         "promax:crossref_registry_not_visible:status=404",
         "promax:doi_resolver_not_visible:status=404",
         "external_proceedings_metadata_not_ready",
-        "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed"
+        "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+        "promax:crossref_registry_not_visible",
+        "promax:doi_resolver_not_visible"
       ],
       "manual_submission_system": [
         "Final manual submission-system metadata/format checklist is not closed.",
         "manual_submission_system_not_ready",
         "manual_submission_system_items_not_confirmed"
       ],
-      "other": []
+      "other": [],
+      "review_panel_coverage": [
+        "review_panel_coverage_not_complete",
+        "explicit_claude_opus_review"
+      ]
     }
   },
   "review_instructions": [

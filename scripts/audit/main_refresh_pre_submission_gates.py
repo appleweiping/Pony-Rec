@@ -25,6 +25,7 @@ from scripts.audit.main_audit_submission_source_package_rebuild import (
     audit_submission_source_package_rebuild,
 )
 from scripts.audit.main_audit_submission_source_package_rebuild import _write_md as write_source_rebuild_md
+from scripts.audit.main_build_final_submission_gate import DEFAULT_REVIEW_CONTINUATION_PACKET
 from scripts.audit.main_build_final_submission_gate import build_final_submission_gate
 from scripts.audit.main_build_final_submission_gate import _write_md as write_final_gate_md
 from scripts.audit.main_build_manual_submission_checklist import (
@@ -164,6 +165,7 @@ def refresh_pre_submission_gates(
     metadata_config: str | Path = DEFAULT_METADATA_CONFIG,
     manual_config: str | Path = DEFAULT_MANUAL_CONFIG,
     manual_private_confirmation_json: str | Path | None = None,
+    review_continuation_packet_json: str | Path = DEFAULT_REVIEW_CONTINUATION_PACKET,
     source_package_output_dir: str | Path | None = None,
     source_rebuild_build_dir: str | Path | None = None,
     source_rebuild_runner: Any = subprocess.run,
@@ -283,6 +285,7 @@ def refresh_pre_submission_gates(
         submission_source_package_rebuild_json=source_rebuild_json.relative_to(repo),
         external_metadata_audit_json=external_json.relative_to(repo),
         manual_checklist_json=manual_json.relative_to(repo),
+        review_continuation_packet_json=review_continuation_packet_json,
     )
     _write_json(final_json, final_gate)
     write_final_gate_md(final_md, final_gate)
@@ -450,6 +453,7 @@ def parse_args() -> argparse.Namespace:
         "--manual-private-confirmation-json",
         help="Optional untracked/private JSON confirming submission-system fields were completed without storing private values.",
     )
+    parser.add_argument("--review-continuation-packet-json", default=str(DEFAULT_REVIEW_CONTINUATION_PACKET))
     parser.add_argument("--source-package-output-dir")
     parser.add_argument("--source-rebuild-build-dir")
     parser.add_argument("--output-json")
@@ -476,6 +480,7 @@ def main() -> int:
         metadata_config=args.metadata_config,
         manual_config=args.manual_config,
         manual_private_confirmation_json=args.manual_private_confirmation_json,
+        review_continuation_packet_json=args.review_continuation_packet_json,
         source_package_output_dir=args.source_package_output_dir,
         source_rebuild_build_dir=args.source_rebuild_build_dir,
     )

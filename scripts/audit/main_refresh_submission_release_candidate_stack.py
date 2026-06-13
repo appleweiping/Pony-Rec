@@ -16,6 +16,7 @@ from scripts.audit.main_build_submission_release_candidate_packet import (
 from scripts.audit.main_build_submission_release_candidate_packet import _write_md as write_candidate_md
 from scripts.audit.main_refresh_pre_submission_gates import (
     DEFAULT_OUTPUT_DIR,
+    DEFAULT_REVIEW_CONTINUATION_PACKET,
     DEFAULT_STAMP,
     refresh_pre_submission_gates,
 )
@@ -241,6 +242,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--external-fixture-json")
     parser.add_argument("--external-timeout-seconds", type=int, default=20)
     parser.add_argument("--manual-private-confirmation-json")
+    parser.add_argument("--review-continuation-packet-json", default=str(DEFAULT_REVIEW_CONTINUATION_PACKET))
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     return parser.parse_args()
@@ -253,6 +255,7 @@ def main() -> int:
         "external_fixture_json": args.external_fixture_json,
         "external_timeout_seconds": args.external_timeout_seconds,
         "manual_private_confirmation_json": args.manual_private_confirmation_json,
+        "review_continuation_packet_json": args.review_continuation_packet_json,
     }
     stack = refresh_submission_release_candidate_stack(
         root=args.root,

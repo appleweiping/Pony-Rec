@@ -1,6 +1,6 @@
 # Review Continuation Packet
 
-Generated: 2026-06-13T01:04:55.821989+00:00
+Generated: 2026-06-13T01:27:50.911012+00:00
 
 - OK: `true`
 - Verdict: `REVIEW_CONTINUATION_READY_FINAL_BLOCKED`
@@ -45,6 +45,7 @@ Generated: 2026-06-13T01:04:55.821989+00:00
 - manual_submission_system_items_not_confirmed
 - external_proceedings_metadata_not_ready
 - manual_submission_system_not_ready
+- review_panel_coverage_not_complete
 - promax:crossref_registry_not_visible
 - promax:doi_resolver_not_visible
 - explicit_claude_opus_review

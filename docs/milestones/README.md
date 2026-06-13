@@ -190,6 +190,13 @@ Claude/Opus JSON must include `valid_review_evidence=true`,
 `claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`,
 substantive kill-argument/concerns/required changes, and acknowledged
 remaining blockers; a name+score shell cannot close the explicit Claude gap.
+The final submission gate has also been hardened to consume the
+review-continuation packet directly: the refreshed
+`outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`
+reports `review_panel_coverage_complete=false`, verdict
+`LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`, and
+`final_submission_ready=false`; the blocker closure packet now includes a
+separate `review_panel_coverage` group for `explicit_claude_opus_review`.
 The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,

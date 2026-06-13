@@ -1,6 +1,6 @@
 # Submission Release-Candidate Packet
 
-Generated: 2026-06-13T00:04:17.109412+00:00
+Generated: 2026-06-13T01:26:02.957002+00:00
 
 - Verdict: `LOCAL_RELEASE_CANDIDATE_READY_FINAL_BLOCKED`
 - OK: `true`
@@ -11,7 +11,7 @@ Generated: 2026-06-13T00:04:17.109412+00:00
 ## Status Boundary
 
 - Local RC: Repo-side audited package, source rebuild, metadata packet, manual checklist, external audit health, and freshness index are internally consistent.
-- Final submission: Submission may proceed only when the final submission gate also reports true; external proceedings metadata and private submission-system confirmation remain final blockers.
+- Final submission: Submission may proceed only when the final submission gate also reports true; external proceedings metadata, private submission-system confirmation, and final review-panel coverage remain final blockers.
 
 ## Gate Summary
 
@@ -44,6 +44,10 @@ Generated: 2026-06-13T00:04:17.109412+00:00
 - manual_submission_system_not_ready
 - confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
 - manual_submission_system_items_not_confirmed
+- review_panel_coverage_not_complete
+- promax:crossref_registry_not_visible
+- promax:doi_resolver_not_visible
+- explicit_claude_opus_review
 
 ## Failures
 
@@ -57,6 +61,38 @@ Generated: 2026-06-13T00:04:17.109412+00:00
 - `final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 - `final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
 - `final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:submission_release_candidate:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:submission_release_candidate:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `final_submission_gate:review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `final_submission_gate:review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:submission_release_candidate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:submission_release_candidate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `final_submission_gate:review_continuation:submission_release_candidate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `final_submission_gate:review_continuation:submission_release_candidate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:submission_release_candidate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `final_submission_gate:review_continuation:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `final_submission_gate:review_continuation:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `final_submission_gate:review_continuation:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `final_submission_gate:review_continuation:acm_dl_not_accessible:status=403`
+- `pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation`
 - `submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
@@ -67,5 +103,6 @@ Generated: 2026-06-13T00:04:17.109412+00:00
 
 - Use this packet as a local handoff index, not as final submission approval.
 - Resolve ProMax final page range and DOI/Crossref visibility, then rerun the external metadata audit and refresh stack.
+- Attach a valid explicit Claude Opus review, rerun review-continuation, then rerun the final gate and release-candidate packet.
 - Complete private submission-system fields with an untracked confirmation JSON, then rerun the manual checklist and refresh stack.
 - Rerun the refresh, freshness audit, final gate, and release-candidate packet after any paper/source/BibTeX/package change.

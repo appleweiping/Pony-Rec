@@ -172,6 +172,23 @@ kill-argument, major concerns, required changes, and acknowledged remaining
 blockers. This prevents an empty Claude name+score JSON from closing the
 explicit Claude Opus review blocker.
 
+**2026-06-13 final submission gate review-coverage hardening.** Codex updated
+`scripts/audit/main_build_final_submission_gate.py` so the final local
+submission gate directly consumes the review-continuation packet instead of
+leaving Claude Opus coverage only in a side handoff. The refreshed
+`outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`
+reports `ok=true`, `all_local_artifact_gates_ok=true`,
+`review_continuation_ready=true`, `review_panel_coverage_complete=false`, and
+`final_submission_ready=false` with verdict
+`LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`. The
+release-candidate packet and stack now expose
+`blocking_status=external_manual_or_review_blocked`, and
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
+adds a separate `review_panel_coverage` closure group containing
+`review_panel_coverage_not_complete` and `explicit_claude_opus_review`. This is
+a guardrail hardening, not a readiness upgrade: the paper remains locally
+handoff-ready but not final-submission-ready.
+
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local
 handoff index over the final gate, refresh freshness audit, anonymous source
@@ -189,7 +206,9 @@ the staged source package contains `21` files / `652691` bytes, and the
 independent rebuild produced a `9`-page PDF with zero BibTeX and overfull hbox
 warnings. This is a local artifact release candidate only; final submission
 remains blocked by ProMax final page-range / DOI-Crossref visibility and
-private manual submission-system confirmation.
+private manual submission-system confirmation. In the refreshed 2026-06-13
+packet this status is widened to `external_manual_or_review_blocked` because
+explicit Claude Opus review coverage is also final-blocking.
 
 **2026-06-12 submission release-candidate stack refresh.** Codex added
 `scripts/audit/main_refresh_submission_release_candidate_stack.py` as the
@@ -203,7 +222,9 @@ reports `ok=true`, `refresh_ok=true`, `freshness_ok=true`,
 `final_submission_ready=false`. The stack artifact has zero failures and keeps
 the same nine remaining blockers instead of treating local consistency as
 final submission approval. Future agents should use this wrapper for routine
-status refreshes, then inspect sub-gates only when the stack fails.
+status refreshes, then inspect sub-gates only when the stack fails. The
+refreshed 2026-06-13 stack now reports
+`blocking_status=external_manual_or_review_blocked`.
 
 **2026-06-12 pre-submission gate refresh.** Codex added
 `scripts/audit/main_refresh_pre_submission_gates.py` as the preferred
@@ -276,17 +297,20 @@ submission-system completion, or final submission readiness.
 **2026-06-12 final submission gate.** Codex added
 `scripts/audit/main_build_final_submission_gate.py` as the final local
 pre-submission aggregator over the package audit, metadata packet,
-source-package rebuild audit, external proceedings metadata audit, and manual
-submission checklist. The generated
+source-package rebuild audit, external proceedings metadata audit, manual
+submission checklist, and current review-continuation packet. The generated
 `outputs/summary/paper_critical/final_submission_gate_20260612.{json,md}`
 reports `ok=true`, `all_local_artifact_gates_ok=true`,
 `external_proceedings_metadata_ready=false`,
 `manual_submission_system_ready=false`, `final_submission_ready=false`, and
-verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. This is the
+verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`; the refreshed
+2026-06-13 gate additionally requires review-panel coverage and now reports
+`LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`. This is the
 current authoritative local submission-status summary: it confirms that the
 repository-side artifacts are ready enough for target formatting, but final
-submission is still blocked by ProMax final page-range/DOI registry visibility
-and by private manual submission-system fields that cannot be stored in git.
+submission is still blocked by ProMax final page-range/DOI registry visibility,
+private manual submission-system fields that cannot be stored in git, and the
+missing explicit Claude Opus review.
 
 **2026-06-12 manual submission checklist packet.** Codex added
 `scripts/audit/main_build_manual_submission_checklist.py` and

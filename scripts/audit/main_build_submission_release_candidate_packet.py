@@ -403,12 +403,14 @@ def build_submission_release_candidate_packet(
     external_ready = external_metadata.get("external_proceedings_metadata_ready") is True
     manual_system_ready = manual_checklist.get("manual_submission_system_ready") is True
     manual_checklist_ready = manual_checklist.get("manual_submission_checklist_ready") is True
+    review_panel_coverage_complete = final_gate.get("review_panel_coverage_complete") is True
     local_release_candidate_ready = not _dedupe(failures)
     blocking_status = (
         "none"
         if final_submission_ready
-        else "external_or_manual_blocked"
-        if local_release_candidate_ready and (not external_ready or not manual_system_ready)
+        else "external_manual_or_review_blocked"
+        if local_release_candidate_ready
+        and (not external_ready or not manual_system_ready or not review_panel_coverage_complete)
         else "local_artifact_repair_required"
     )
 
@@ -416,6 +418,8 @@ def build_submission_release_candidate_packet(
         remaining_blockers.append("external_proceedings_metadata_not_ready")
     if not manual_system_ready:
         remaining_blockers.append("manual_submission_system_not_ready")
+    if not review_panel_coverage_complete:
+        remaining_blockers.append("review_panel_coverage_not_complete")
 
     verdict = (
         "FINAL_SUBMISSION_READY_FROM_FINAL_GATE"
@@ -447,6 +451,7 @@ def build_submission_release_candidate_packet(
         "external_proceedings_metadata_ready": external_ready,
         "manual_submission_checklist_ready": manual_checklist_ready,
         "manual_submission_system_ready": manual_system_ready,
+        "review_panel_coverage_complete": review_panel_coverage_complete,
         "blocking_status": blocking_status,
         "final_submission_ready_source": str(Path(final_submission_gate_json)),
         "final_submission_ready_policy": (
@@ -461,7 +466,7 @@ def build_submission_release_candidate_packet(
             ),
             "final_submission_ready": (
                 "Submission may proceed only when the final submission gate also reports true; "
-                "external proceedings metadata and private submission-system confirmation remain final blockers."
+                "external proceedings metadata, private submission-system confirmation, and final review-panel coverage remain final blockers."
             ),
         },
         "git_state": _git_state(repo),
@@ -523,6 +528,7 @@ def build_submission_release_candidate_packet(
         "next_actions": [
             "Use this packet as a local handoff index, not as final submission approval.",
             "Resolve ProMax final page range and DOI/Crossref visibility, then rerun the external metadata audit and refresh stack.",
+            "Attach a valid explicit Claude Opus review, rerun review-continuation, then rerun the final gate and release-candidate packet.",
             "Complete private submission-system fields with an untracked confirmation JSON, then rerun the manual checklist and refresh stack.",
             "Rerun the refresh, freshness audit, final gate, and release-candidate packet after any paper/source/BibTeX/package change.",
         ],

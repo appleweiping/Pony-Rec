@@ -22,6 +22,9 @@ DEFAULT_EXTERNAL_METADATA_AUDIT = Path(
 DEFAULT_MANUAL_CHECKLIST = Path(
     "outputs/summary/paper_critical/manual_submission_checklist_20260612.json"
 )
+DEFAULT_REVIEW_CONTINUATION_PACKET = Path(
+    "outputs/summary/paper_critical/review_continuation_packet_20260613.json"
+)
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -91,6 +94,7 @@ def build_final_submission_gate(
     submission_source_package_rebuild_json: str | Path = DEFAULT_SUBMISSION_SOURCE_PACKAGE_REBUILD,
     external_metadata_audit_json: str | Path = DEFAULT_EXTERNAL_METADATA_AUDIT,
     manual_checklist_json: str | Path = DEFAULT_MANUAL_CHECKLIST,
+    review_continuation_packet_json: str | Path = DEFAULT_REVIEW_CONTINUATION_PACKET,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
     package_path = repo / submission_package_audit_json
@@ -98,12 +102,14 @@ def build_final_submission_gate(
     source_rebuild_path = repo / submission_source_package_rebuild_json
     external_path = repo / external_metadata_audit_json
     manual_path = repo / manual_checklist_json
+    review_path = repo / review_continuation_packet_json
 
     package = _read_json(package_path)
     metadata = _read_json(metadata_path)
     source_rebuild = _read_json(source_rebuild_path)
     external = _read_json(external_path)
     manual = _read_json(manual_path)
+    review = _read_json(review_path)
 
     gates = [
         _gate_record(
@@ -141,6 +147,13 @@ def build_final_submission_gate(
             payload=manual,
             ready_field="manual_submission_system_ready",
         ),
+        _gate_record(
+            gate_id="review_continuation",
+            path=review_path,
+            root=repo,
+            payload=review,
+            ready_field="review_continuation_ready",
+        ),
     ]
 
     failures: list[str] = []
@@ -159,6 +172,11 @@ def build_final_submission_gate(
             blockers.append("external_proceedings_metadata_not_ready")
         if gate["gate_id"] == "manual_submission_checklist" and not gate["ready"]:
             blockers.append("manual_submission_system_not_ready")
+        if gate["gate_id"] == "review_continuation":
+            if not gate["ready"]:
+                failures.append("review_continuation:not_ready")
+            if review.get("final_panel_coverage_complete") is not True:
+                blockers.append("review_panel_coverage_not_complete")
         if gate["final_submission_ready"]:
             failures.append(f"{gate['gate_id']}:unexpected_local_final_submission_ready")
         warnings.extend(f"{gate['gate_id']}:{warning}" for warning in gate["warnings"])
@@ -175,13 +193,18 @@ def build_final_submission_gate(
         and manual.get("ok") is True
         and manual.get("manual_submission_checklist_ready") is True
         and external.get("ok") is True
+        and review.get("ok") is True
+        and review.get("review_continuation_ready") is True
     )
     external_ready = external.get("external_proceedings_metadata_ready") is True
     manual_ready = manual.get("manual_submission_system_ready") is True
+    review_continuation_ready = review.get("review_continuation_ready") is True
+    review_panel_coverage_complete = review.get("final_panel_coverage_complete") is True
     final_submission_ready = (
         all_local_artifact_gates_ok
         and external_ready
         and manual_ready
+        and review_panel_coverage_complete
         and not failures
         and not blockers
     )
@@ -189,7 +212,7 @@ def build_final_submission_gate(
     verdict = (
         "FINAL_SUBMISSION_READY"
         if final_submission_ready
-        else "LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED"
+        else "LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED"
         if all_local_artifact_gates_ok and not failures
         else "FINAL_SUBMISSION_GATE_NEEDS_REPAIR"
     )
@@ -207,6 +230,8 @@ def build_final_submission_gate(
         "all_local_artifact_gates_ok": all_local_artifact_gates_ok,
         "external_proceedings_metadata_ready": external_ready,
         "manual_submission_system_ready": manual_ready,
+        "review_continuation_ready": review_continuation_ready,
+        "review_panel_coverage_complete": review_panel_coverage_complete,
         "final_submission_ready": final_submission_ready,
         "verdict": verdict,
         "input_paths": {
@@ -215,6 +240,7 @@ def build_final_submission_gate(
             "submission_source_package_rebuild": str(Path(submission_source_package_rebuild_json)),
             "external_metadata_audit": str(Path(external_metadata_audit_json)),
             "manual_checklist": str(Path(manual_checklist_json)),
+            "review_continuation_packet": str(Path(review_continuation_packet_json)),
         },
         "gates": gates,
         "failures": _dedupe(failures),
@@ -223,8 +249,9 @@ def build_final_submission_gate(
         "next_actions": [
             "Rerun external proceedings metadata recheck immediately before final submission.",
             "Rerun submission package, source-package staging/rebuild, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.",
+            "Attach a substantive explicit Claude Opus review and rerun the review-continuation packet before claiming final review-panel coverage.",
             "Complete private author/COI/reviewer/declaration fields only inside the submission system.",
-            "Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are both ready.",
+            "Keep final_submission_ready=false until external proceedings metadata, manual submission-system, and final review-panel coverage gates are all ready.",
         ],
     }
 
@@ -241,6 +268,8 @@ def _write_md(path: Path, gate: dict[str, Any]) -> None:
         "- External proceedings metadata ready: "
         f"`{str(gate['external_proceedings_metadata_ready']).lower()}`",
         f"- Manual submission system ready: `{str(gate['manual_submission_system_ready']).lower()}`",
+        f"- Review continuation ready: `{str(gate['review_continuation_ready']).lower()}`",
+        f"- Review panel coverage complete: `{str(gate['review_panel_coverage_complete']).lower()}`",
         f"- Final submission ready: `{str(gate['final_submission_ready']).lower()}`",
         "",
         "## Gate Summary",
@@ -281,6 +310,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--external-metadata-audit-json", default=str(DEFAULT_EXTERNAL_METADATA_AUDIT))
     parser.add_argument("--manual-checklist-json", default=str(DEFAULT_MANUAL_CHECKLIST))
+    parser.add_argument("--review-continuation-packet-json", default=str(DEFAULT_REVIEW_CONTINUATION_PACKET))
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     return parser.parse_args()
@@ -295,6 +325,7 @@ def main() -> int:
         submission_source_package_rebuild_json=args.submission_source_package_rebuild_json,
         external_metadata_audit_json=args.external_metadata_audit_json,
         manual_checklist_json=args.manual_checklist_json,
+        review_continuation_packet_json=args.review_continuation_packet_json,
     )
     if args.output_json:
         output = Path(args.output_json)

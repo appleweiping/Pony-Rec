@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 03:05 CEST
+Last updated: 2026-06-13 03:29 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,25 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 final submission gate hardening after review-continuation audit:
+  `scripts/audit/main_build_final_submission_gate.py` now consumes the
+  review-continuation packet as an explicit sixth gate. The refreshed
+  `outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`
+  reports `ok=true`, `all_local_artifact_gates_ok=true`,
+  `review_continuation_ready=true`, `review_panel_coverage_complete=false`,
+  `final_submission_ready=false`, and verdict
+  `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`. This prevents
+  final readiness from becoming true while the substantive Claude Opus review
+  is still missing. The release-candidate packet/stack now use
+  `blocking_status=external_manual_or_review_blocked`, and the refreshed
+  `final_submission_blocker_closure_packet_20260613.{json,md}` groups blockers
+  into local artifact handoff, review-panel coverage, external proceedings
+  metadata, and private manual submission-system closure paths. The refreshed
+  `review_continuation_packet_20260613.{json,md}` still reports
+  `review_continuation_ready=true`, failed Claude attempts `5`,
+  `explicit_claude_opus_present=false`, and
+  `final_panel_coverage_complete=false`.
 
 - 2026-06-13 review-continuation refresh after GPT-5.5 xhigh handoff:
   GPT-5.5 xhigh returned an `8.0/10` `CONDITIONAL_PASS`, while keeping
@@ -268,17 +287,22 @@ cycle.
   `submission_package_audit_20260612.json`,
   `submission_metadata_packet_20260612.json`,
   `submission_source_package_rebuild_20260612.json`,
-  `external_proceedings_metadata_recheck_20260612.json`, and
-  `manual_submission_checklist_20260612.json`. The generated summary
+  `external_proceedings_metadata_recheck_20260612.json`,
+  `manual_submission_checklist_20260612.json`, and the current
+  `review_continuation_packet_20260613.json`. The generated summary
   `outputs/summary/paper_critical/final_submission_gate_20260612.{json,md}`
   reports `ok=true`, `all_local_artifact_gates_ok=true`,
   `external_proceedings_metadata_ready=false`,
   `manual_submission_system_ready=false`, `final_submission_ready=false`, and
-  verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`. This is now the
+  verdict `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`; the refreshed
+  2026-06-13 gate now reports verdict
+  `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED` and also exposes
+  `review_panel_coverage_complete=false`. This is now the
   single first-read artifact for final submission status. It prevents the
   package/metadata/checklist local passes from being mistaken for final
-  readiness while ProMax page-range/DOI registry visibility and private
-  submission-system fields remain unresolved.
+  readiness while ProMax page-range/DOI registry visibility, private
+  submission-system fields, or explicit Claude Opus review coverage remain
+  unresolved.
 
 - Manual submission checklist packet added:
   `scripts/audit/main_build_manual_submission_checklist.py` with config

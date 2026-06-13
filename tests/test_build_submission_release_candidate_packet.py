@@ -25,12 +25,16 @@ def _seed_inputs(tmp_path: Path) -> dict[str, Path]:
             "all_local_artifact_gates_ok": True,
             "external_proceedings_metadata_ready": False,
             "manual_submission_system_ready": False,
+            "review_continuation_ready": True,
+            "review_panel_coverage_complete": False,
             "final_submission_ready": False,
             "warnings": [],
             "failures": [],
             "remaining_blockers": [
                 "external_proceedings_metadata_not_ready",
                 "manual_submission_system_not_ready",
+                "review_panel_coverage_not_complete",
+                "explicit_claude_opus_review",
             ],
         },
     )
@@ -203,15 +207,18 @@ def test_release_candidate_ready_while_final_submission_blocked(tmp_path: Path) 
     assert packet["final_submission_ready"] is False
     assert packet["verdict"] == "LOCAL_RELEASE_CANDIDATE_READY_FINAL_BLOCKED"
     assert packet["readiness_scope"] == "local_artifacts_only"
-    assert packet["blocking_status"] == "external_or_manual_blocked"
+    assert packet["blocking_status"] == "external_manual_or_review_blocked"
     assert packet["external_proceedings_metadata_ready"] is False
     assert packet["manual_submission_checklist_ready"] is True
     assert packet["manual_submission_system_ready"] is False
+    assert packet["review_panel_coverage_complete"] is False
     assert packet["source_manifest_crosscheck"]["all_match"] is True
     assert packet["input_stamp_check"]["all_dated_inputs_share_stamp"] is True
     assert packet["source_rebuild_summary"]["command_check"]["all_returncode_zero"] is True
     assert "manual_submission_system_not_ready" in packet["remaining_blockers"]
     assert "external_proceedings_metadata_not_ready" in packet["remaining_blockers"]
+    assert "review_panel_coverage_not_complete" in packet["remaining_blockers"]
+    assert "explicit_claude_opus_review" in packet["remaining_blockers"]
     assert "copied exactly from final_submission_gate" in packet["final_submission_ready_policy"]
     assert not packet["failures"]
 
@@ -265,6 +272,7 @@ def test_release_candidate_mirrors_final_ready_from_final_gate(tmp_path: Path) -
     final_gate = json.loads(paths["final_gate"].read_text(encoding="utf-8"))
     final_gate["external_proceedings_metadata_ready"] = True
     final_gate["manual_submission_system_ready"] = True
+    final_gate["review_panel_coverage_complete"] = True
     final_gate["final_submission_ready"] = True
     final_gate["remaining_blockers"] = []
     paths["final_gate"].write_text(json.dumps(final_gate), encoding="utf-8")

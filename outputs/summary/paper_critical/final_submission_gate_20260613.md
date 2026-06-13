@@ -1,12 +1,14 @@
 # Final Submission Gate
 
-Generated: 2026-06-13T00:04:16.174641+00:00
+Generated: 2026-06-13T01:26:01.999668+00:00
 
-- Verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_OR_MANUAL_BLOCKED`
+- Verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
 - OK: `true`
 - Local artifact gates OK: `true`
 - External proceedings metadata ready: `false`
 - Manual submission system ready: `false`
+- Review continuation ready: `true`
+- Review panel coverage complete: `false`
 - Final submission ready: `false`
 
 ## Gate Summary
@@ -16,6 +18,7 @@ Generated: 2026-06-13T00:04:16.174641+00:00
 - `submission_source_package_rebuild`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_source_package_rebuild_20260613.json`
 - `external_proceedings_metadata`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\external_proceedings_metadata_recheck_20260613.json`
 - `manual_submission_checklist`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\manual_submission_checklist_20260613.json`
+- `review_continuation`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\review_continuation_packet_20260613.json`
 
 ## Remaining Blockers
 
@@ -28,6 +31,10 @@ Generated: 2026-06-13T00:04:16.174641+00:00
 - manual_submission_system_not_ready
 - confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
 - manual_submission_system_items_not_confirmed
+- review_panel_coverage_not_complete
+- promax:crossref_registry_not_visible
+- promax:doi_resolver_not_visible
+- explicit_claude_opus_review
 
 ## Failures
 
@@ -41,10 +48,42 @@ Generated: 2026-06-13T00:04:16.174641+00:00
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
 - `external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
 - `external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:pre_submission_gate_refresh:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:pre_submission_gate_refresh:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:pre_submission_gate_refresh:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:pre_submission_gate_refresh:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:pre_submission_gate_refresh:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:submission_release_candidate:final_submission_gate:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:submission_release_candidate:final_submission_gate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:submission_release_candidate:final_submission_gate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:submission_release_candidate:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:submission_release_candidate:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `review_continuation:submission_release_candidate:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `review_continuation:submission_release_candidate:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:submission_release_candidate:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:submission_package:underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `review_continuation:external_proceedings_metadata:proex:crossref_not_visible:status=404`
+- `review_continuation:external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`
+- `review_continuation:external_proceedings_metadata:proex:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:external_proceedings_metadata:promax:crossref_discovery_alternate_doi_candidates_present`
+- `review_continuation:acm_dl_not_accessible:status=403`
 
 ## Next Actions
 
 - Rerun external proceedings metadata recheck immediately before final submission.
 - Rerun submission package, source-package staging/rebuild, metadata packet, manual checklist, and this final gate after any paper/source/BibTeX change.
+- Attach a substantive explicit Claude Opus review and rerun the review-continuation packet before claiming final review-panel coverage.
 - Complete private author/COI/reviewer/declaration fields only inside the submission system.
-- Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are both ready.
+- Keep final_submission_ready=false until external proceedings metadata, manual submission-system, and final review-panel coverage gates are all ready.

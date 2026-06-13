@@ -24,10 +24,14 @@ def _seed_inputs(tmp_path: Path) -> dict[str, Path]:
             "final_submission_ready": False,
             "external_proceedings_metadata_ready": False,
             "manual_submission_system_ready": False,
+            "review_continuation_ready": True,
+            "review_panel_coverage_complete": False,
             "remaining_blockers": [
                 "promax:final_page_range_missing_in_bib",
                 "external_proceedings_metadata_not_ready",
                 "manual_submission_system_items_not_confirmed",
+                "review_panel_coverage_not_complete",
+                "explicit_claude_opus_review",
             ],
             "warnings": [],
         },
@@ -165,6 +169,7 @@ def test_final_submission_blocker_closure_packet_groups_external_and_manual(
     assert packet["closure_packet_ready"] is True
     assert packet["local_release_candidate_ready"] is True
     assert packet["final_submission_ready"] is False
+    assert packet["review_panel_coverage_complete"] is False
     assert packet["ready_for_human_handoff"] is True
     assert "promax:final_page_range_missing_in_bib" in packet["classified_remaining_blockers"][
         "external_proceedings_metadata"
@@ -172,7 +177,11 @@ def test_final_submission_blocker_closure_packet_groups_external_and_manual(
     assert "manual_submission_system_items_not_confirmed" in packet["classified_remaining_blockers"][
         "manual_submission_system"
     ]
+    assert "explicit_claude_opus_review" in packet["classified_remaining_blockers"][
+        "review_panel_coverage"
+    ]
     groups = {item["group_id"]: item for item in packet["closure_groups"]}
+    assert groups["review_panel_coverage"]["status"] == "blocked"
     assert groups["external_proceedings_metadata"]["status"] == "blocked"
     assert groups["manual_submission_system"]["status"] == "manual_private_pending"
     assert groups["manual_submission_system"]["public_safe"] is False
@@ -207,6 +216,8 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
     assert "Final Submission Blocker Closure Packet" in text
     assert "external_proceedings_metadata" in text
     assert "manual_submission_system" in text
+    assert "review_panel_coverage" in text
+    assert "main_build_review_continuation_packet" in text
     assert "Source manifest sha256: `" + "a" * 64 + "`" in text
     assert "main_probe_promax_public_metadata" in text
     assert "main_refresh_submission_release_candidate_stack" in text
