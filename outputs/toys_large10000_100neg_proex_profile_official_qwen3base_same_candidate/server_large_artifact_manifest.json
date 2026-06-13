@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "proex_official_model.pt",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/proex_official_model.pt",
+      "size": 28828145,
+      "sha256": "d74a9c3aff70199e59c01259e09059358824f7a89dc0e2cd8bbb8e9673416304"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/scores.csv",
+      "size": 105958250,
+      "sha256": "e6cd2690f6de80c1b1ca1ff49708909d99e53baa51990fb19bbd82a7df21f664"
+    }
+  ],
+  "certified_missing_artifacts": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_proex_profile_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "status": "certified_missing_after_post_gate_cleanup",
+      "certified_by": "server_final_evidence_audit.json",
+      "certified_size": 817847830,
+      "certified_lines": 10000,
+      "sha256": "",
+      "reason": "File is absent at manifest backfill time, but server_final_evidence_audit.json certifies it existed and had the expected line count before approved cleanup."
+    }
+  ],
+  "file_count": 2,
+  "certified_missing_artifact_count": 1,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ],
+  "allow_certified_missing_prediction_jsonl": true,
+  "expected_prediction_lines": 10000
+}

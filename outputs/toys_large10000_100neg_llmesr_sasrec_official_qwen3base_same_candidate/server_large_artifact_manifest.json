@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "llmesr_official_model.pt",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size": 3847029499,
+      "sha256": "d83b5b7b88aaee704971fed7b050861546d1be427b2d383410c65d66b4b91b69"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "size": 104636823,
+      "sha256": "dab6bee6c272dce8ca4edac669aff0f9831566ff31eef590b0d5b8f0c47e36c1"
+    }
+  ],
+  "certified_missing_artifacts": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/toys_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "status": "certified_missing_after_post_gate_cleanup",
+      "certified_by": "server_final_evidence_audit.json",
+      "certified_size": 816526403,
+      "certified_lines": 10000,
+      "sha256": "",
+      "reason": "File is absent at manifest backfill time, but server_final_evidence_audit.json certifies it existed and had the expected line count before approved cleanup."
+    }
+  ],
+  "file_count": 2,
+  "certified_missing_artifact_count": 1,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ],
+  "allow_certified_missing_prediction_jsonl": true,
+  "expected_prediction_lines": 10000
+}

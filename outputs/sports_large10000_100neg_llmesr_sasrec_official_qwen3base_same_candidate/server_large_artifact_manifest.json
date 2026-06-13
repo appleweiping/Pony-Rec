@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "evidence_dir": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate",
+  "files": [
+    {
+      "rel_path": "llmesr_official_model.pt",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/llmesr_official_model.pt",
+      "size": 4167963387,
+      "sha256": "38571bd3e18ecfd9e1a3bcfd1f4a32329a94c4cbbc1e1283acd84098c1c6db0e"
+    },
+    {
+      "rel_path": "scores.csv",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/scores.csv",
+      "size": 104857740,
+      "sha256": "cf27e501a6f3f3027bd63a90b6ae4d1f8ce25abdd0fcfee1f2139f709bb53033"
+    }
+  ],
+  "certified_missing_artifacts": [
+    {
+      "rel_path": "predictions/rank_predictions.jsonl",
+      "path": "/home/ajifang/projects/pony-rec-rescue-shadow-v6/outputs/sports_large10000_100neg_llmesr_sasrec_official_qwen3base_same_candidate/predictions/rank_predictions.jsonl",
+      "status": "certified_missing_after_post_gate_cleanup",
+      "certified_by": "server_final_evidence_audit.json",
+      "certified_size": 700001221,
+      "certified_lines": 10000,
+      "sha256": "",
+      "reason": "File is absent at manifest backfill time, but server_final_evidence_audit.json certifies it existed and had the expected line count before approved cleanup."
+    }
+  ],
+  "file_count": 2,
+  "certified_missing_artifact_count": 1,
+  "model_artifact_count": 1,
+  "failures": [],
+  "warnings": [],
+  "required_relative_files": [
+    "scores.csv",
+    "predictions/rank_predictions.jsonl"
+  ],
+  "require_model_artifact": true,
+  "include_suffixes": [
+    ".bin",
+    ".ckpt",
+    ".npy",
+    ".npz",
+    ".pickle",
+    ".pkl",
+    ".pt",
+    ".pth",
+    ".safetensors"
+  ],
+  "allow_certified_missing_prediction_jsonl": true,
+  "expected_prediction_lines": 10000
+}
