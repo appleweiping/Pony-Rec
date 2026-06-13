@@ -9,11 +9,15 @@ importer, identical metrics, exact coverage checks, and paired Holm-corrected
 bootstrap tests. Under this protocol, our central finding is that a
 task-grounded pointwise LLM relevance posterior---the model's own per-candidate
 relevance probability used directly as the ranking score---ranks first against
-eight official-code-level baselines on HR/NDCG/MRR across Sports, Toys, Home,
-and Tools, improving NDCG@10 by 30--43\% over the strongest above-floor baseline
-(LLMEmb), with all 56 per-domain paired tests positive and Holm-significant.
-This is a scoped same-candidate reranking claim, not a full-catalog recommender
-SOTA result.
+eight official-code-level baselines in six of the eight Amazon domains we tested
+(Books, Electronics, Sports, Toys, Home, Tools), improving NDCG@10 by $+21.6\%$
+to $+53.2\%$ over the strongest baseline and leading on essentially all seven
+HR/NDCG/MRR metrics in those six. In the other two domains it is competitive but
+not first---rank~2 on Beauty ($-11\%$ NDCG@10) and rank~5 on Movies
+($-24\%$)---which we report rather than omit. On the four domains with full
+per-event signal rows all 56 per-domain paired tests are positive and
+Holm-significant. This is a scoped same-candidate reranking claim, not a
+full-catalog recommender SOTA result.
 
 The diagnostic modules locate this signal precisely and yield a rigorous
 negative result. Leave-one-component-out ablations and a raw-probability

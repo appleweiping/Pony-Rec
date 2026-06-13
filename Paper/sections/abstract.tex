@@ -8,12 +8,17 @@ same-candidate reranking protocol: every method ranks the same 101 candidates
 uses the same Qwen3-8B backbone when an LLM is required, and is evaluated with a
 shared importer, identical metrics, exact coverage checks, and paired
 Holm-corrected bootstrap tests, with full provenance. Against eight
-official-code-level LLM-based recommendation baselines on Sports, Toys, Home,
-and Tools, our central empirical finding is that a \emph{task-grounded
-pointwise LLM relevance posterior} -- the model's own per-candidate relevance
-probability, used directly as the ranking score -- ranks first on all seven
-metrics (HR@5/@10/@20, NDCG@5/@10/@20, MRR). Relative to the strongest
-above-floor baseline (LLMEmb), it improves NDCG@10 by 30--43\%, and all 56
+official-code-level LLM-based recommendation baselines across eight Amazon
+domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools), our
+central empirical finding is that a \emph{task-grounded pointwise LLM relevance
+posterior} -- the model's own per-candidate relevance probability, used directly
+as the ranking score -- ranks first in six of the eight domains, improving
+NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline (and on the six
+winning domains it leads on essentially all seven metrics HR@5/@10/@20,
+NDCG@5/@10/@20, MRR). In the remaining two domains it is competitive but not
+first: rank~2 on Beauty ($-11\%$ NDCG@10 behind ProEx) and rank~5 on Movies
+($-24\%$ behind LLMEmb). We report these two losses explicitly rather than
+dropping them. On the four domains with full per-event signal rows, all 56
 per-domain paired tests are positive and Holm-significant.
 
 We then report a rigorous \emph{negative result} on the design space this work
@@ -22,9 +27,9 @@ calibrated-uncertainty and risk-adjusted ranking family that decomposes
 uncertainty into boundary ambiguity, a calibration gap, evidence support, and
 counterevidence. Under a leave-one-component-out ablation and a
 raw-probability attribution, this machinery does not improve same-candidate
-ranking: the zero-risk setting is test-best in all four domains, a
-confidence-only variant matches or exceeds the full family in three of four
-domains, and individual uncertainty terms are inert or mildly harmful. The
+ranking: the zero-risk setting is test-best in all four diagnostic domains, a
+confidence-only variant matches or exceeds the full family in three of those
+four domains, and individual uncertainty terms are inert or mildly harmful. The
 working ranking signal lies in the posterior itself, not in the
 uncertainty decomposition. As a minor, descriptive observation -- and one we
 caveat as partly circular -- the event-level uncertainty signal does stratify

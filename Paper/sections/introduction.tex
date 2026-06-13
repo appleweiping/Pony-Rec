@@ -22,22 +22,28 @@ uses a single shared Qwen3-8B backbone, a shared importer, exact coverage
 checks, and paired Holm-corrected bootstrap tests, with visible provenance.
 This same-candidate protocol intentionally avoids claims about full-catalog
 retrieval; it isolates the question of which scoring signal ranks a fixed
-candidate set most accurately. We instantiate the protocol over four Amazon
-domains (Sports, Toys, Home, Tools), 10{,}000 users each, against eight
-official-code-level LLM-based recommendation baselines.
+candidate set most accurately. We instantiate the protocol over eight Amazon
+domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools),
+10{,}000 users each (Beauty 973), against the same eight official-code-level
+LLM-based recommendation baselines in every domain.
 
 Within this protocol, our central empirical finding is simple. A
 \emph{task-grounded pointwise LLM relevance posterior} -- the model's own
 per-candidate relevance probability, queried directly and used as the ranking
-score -- ranks first on all seven metrics (HR@5/@10/@20, NDCG@5/@10/@20, MRR)
-in every domain. Relative to the strongest above-floor baseline (LLMEmb), it
-improves NDCG@10 by 30--43\% (Sports, Toys, Home, Tools), and all 56 per-domain
-paired tests are positive and Holm-significant. A random floor and a
-popularity baseline both sit near NDCG@10~$\approx 0.045$, so the gain is over
-a genuinely informative comparison, not the floor. This says that for
+score -- ranks first in \emph{six of the eight} domains (Books, Electronics,
+Sports, Toys, Home, Tools), improving NDCG@10 by $+21.6\%$ to $+53.2\%$ over the
+strongest baseline; on these six domains it leads on essentially all seven
+metrics (HR@5/@10/@20, NDCG@5/@10/@20, MRR). It is not first in the other two:
+on Beauty it is rank~2, $-11\%$ on NDCG@10 behind ProEx, and on Movies it is
+rank~5, $-24\%$ behind LLMEmb. We state these two losses openly rather than
+restricting the reported domain set to the wins. A random floor and a popularity
+baseline both sit near NDCG@10~$\approx 0.045$, so the gains are over a
+genuinely informative comparison, not the floor. This says that for
 same-candidate reranking, a directly elicited pointwise posterior from a strong
-general-purpose LLM is a remarkably strong signal, ahead of trained-embedding
-and adapter-based recommenders run under identical conditions.
+general-purpose LLM is a remarkably strong signal in most domains, ahead of
+trained-embedding and adapter-based recommenders run under identical conditions,
+while leaving room for stronger baselines where the protocol favours
+profile- or embedding-based structure (Beauty, Movies).
 
 This work originally set out to study \emph{actionable uncertainty}: whether a
 calibrated candidate posterior, instrumented with a task-grounded uncertainty
@@ -46,18 +52,19 @@ counterevidence) and a validation-controlled risk-adjusted ranking family
 ($\eta=0$ recovering the bare posterior), could rank a fixed candidate set more
 reliably. We therefore report a rigorous \emph{negative result} about this
 design space. Under a leave-one-component-out ablation and a raw-probability
-attribution, the uncertainty decomposition and risk penalty do not improve
-same-candidate ranking: the zero-risk setting ($\eta=0$) is test-best in all
-four domains, a confidence-only variant (the calibrated posterior with no
-uncertainty and no risk) matches or exceeds the full family in three of four
-domains, and the raw probability without any calibration map tracks the full
-family within $\approx 0.003$ NDCG@10. The boundary-uncertainty term is inert
-in all four domains, and removing the counterevidence and risk terms is
+attribution (run on the four domains with full per-event signal rows: Sports,
+Toys, Home, Tools), the uncertainty decomposition and risk penalty do not
+improve same-candidate ranking: the zero-risk setting ($\eta=0$) is test-best in
+all four diagnostic domains, a confidence-only variant (the calibrated posterior
+with no uncertainty and no risk) matches or exceeds the full family in three of
+those four domains, and the raw probability without any calibration map tracks
+the full family within $\approx 0.003$ NDCG@10. The boundary-uncertainty term is
+inert in all four, and removing the counterevidence and risk terms is
 non-worse. The working ranking signal is located in the pointwise posterior
 itself, not in the uncertainty machinery built on top of it. As a minor,
 descriptive observation, the event-level uncertainty signal does stratify
-ranking reliability across all four domains, but this is partly circular and we
-do not claim it improves ranking. We accordingly present the
+ranking reliability across all four diagnostic domains, but this is partly
+circular and we do not claim it improves ranking. We accordingly present the
 calibrated-uncertainty/risk family as an analyzed and characterized design
 space, not as a validated headline contribution.
 
@@ -65,21 +72,25 @@ Our contributions are:
 
 \begin{enumerate}
     \item \textbf{A unified same-candidate reranking protocol and benchmark.}
-    We build a four-domain, 10{,}000-user, 101-candidate (one positive, 100
-    popularity-sampled negatives) same-candidate benchmark with eight
-    official-code-level adapted LLM recommendation baselines, a single shared
-    Qwen3-8B backbone, a shared importer, exact coverage checks, full
+    We build an eight-domain, 10{,}000-user (Beauty 973), 101-candidate (one
+    positive, 100 popularity-sampled negatives) same-candidate benchmark with
+    eight official-code-level adapted LLM recommendation baselines, a single
+    shared Qwen3-8B backbone, a shared importer, exact coverage checks, full
     HR/NDCG/MRR reporting, paired Holm-corrected bootstrap tests, and visible
     provenance (Table~\ref{tab:baseline_provenance}). This lets LLM-based
     scoring signals be compared without candidate-set, backbone, or
     importer confounds.
 
-    \item \textbf{A task-grounded pointwise LLM posterior ranks first.} Under
-    this protocol, the model's directly elicited per-candidate relevance
-    probability ranks first on all seven metrics across the four domains,
-    improving NDCG@10 by 30--43\% over the strongest above-floor baseline
-    (LLMEmb) with all 56 per-domain paired tests positive and Holm-significant.
-    The claim is scoped to same-candidate reranking, not full-catalog SOTA.
+    \item \textbf{A task-grounded pointwise LLM posterior ranks first in six of
+    eight domains.} Under this protocol, the model's directly elicited
+    per-candidate relevance probability ranks first in six of the eight domains,
+    improving NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline and
+    leading on essentially all seven metrics in those six domains. We report the
+    two non-winning domains explicitly (Beauty rank~2, $-11\%$; Movies rank~5,
+    $-24\%$) instead of dropping them. On the four domains with full per-event
+    signal rows, all 56 per-domain paired tests are positive and
+    Holm-significant. The claim is scoped to same-candidate reranking, not
+    full-catalog SOTA.
 
     \item \textbf{A rigorous negative result on calibrated uncertainty and
     risk.} Via leave-one-component-out ablations and a raw-probability

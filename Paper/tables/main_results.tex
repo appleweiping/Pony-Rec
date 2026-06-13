@@ -1,14 +1,35 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Main same-candidate results. Each domain has 10,000 users and 101
-candidates per user. We show \method{} and the strongest official baseline by
-NDCG@10; the full evidence ledger contains all eight official baselines per
-domain. Bold marks the better value between the two shown rows.}
+\setlength{\tabcolsep}{4pt}
+\caption{Main same-candidate results across all eight domains. Each domain has
+10,000 users (Beauty 973) and 101 candidates per user. For each domain we show
+\method{} and the strongest official baseline by NDCG@10 (named in
+parentheses); the full evidence ledger contains all eight official baselines per
+domain (Table~\ref{tab:full_official_ndcg10}). Bold marks the better value
+between the two shown rows. \method{} wins every metric in Electronics, Sports,
+Toys, Home, and Tools, and six of seven in Books (LLMEmb keeps HR@20); it is
+behind on Beauty (rank~2) and Movies (rank~5), shown honestly.}
 \label{tab:main_results}
 \begin{tabular}{llrrrrrrr}
 \toprule
 Domain & Method & HR@5 & HR@10 & HR@20 & NDCG@5 & NDCG@10 & NDCG@20 & MRR \\
+\midrule
+\multirow{2}{*}{Beauty}
+& \textbf{Best official (ProEx)} & \textbf{0.1644} & \textbf{0.2528} & \textbf{0.3854} & \textbf{0.1226} & \textbf{0.1506} & \textbf{0.1837} & \textbf{0.1429} \\
+& \method{} & 0.1572 & 0.2292 & 0.3690 & 0.1109 & 0.1341 & 0.1690 & 0.1276 \\
+\midrule
+\multirow{2}{*}{Books}
+& Best official (LLMEmb) & 0.3345 & 0.4722 & \textbf{0.6308} & 0.2293 & 0.2737 & 0.3137 & 0.2332 \\
+& \textbf{\method} & \textbf{0.3736} & \textbf{0.4758} & 0.5915 & \textbf{0.2999} & \textbf{0.3328} & \textbf{0.3619} & \textbf{0.3063} \\
+\midrule
+\multirow{2}{*}{Electronics}
+& Best official (LLMEmb) & 0.1395 & 0.2450 & 0.4003 & 0.0859 & 0.1196 & 0.1586 & 0.1067 \\
+& \textbf{\method} & \textbf{0.2180} & \textbf{0.2993} & \textbf{0.4178} & \textbf{0.1571} & \textbf{0.1833} & \textbf{0.2131} & \textbf{0.1683} \\
+\midrule
+\multirow{2}{*}{Movies}
+& \textbf{Best official (LLMEmb)} & \textbf{0.1986} & \textbf{0.3336} & \textbf{0.5151} & \textbf{0.1257} & \textbf{0.1690} & \textbf{0.2147} & \textbf{0.1443} \\
+& \method{} & 0.1447 & 0.2083 & 0.3306 & 0.1077 & 0.1281 & 0.1587 & 0.1271 \\
 \midrule
 \multirow{2}{*}{Sports}
 & Best official (LLMEmb) & 0.2124 & 0.3384 & 0.4900 & 0.1389 & 0.1795 & 0.2177 & 0.1539 \\

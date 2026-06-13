@@ -3,24 +3,59 @@
 
 \subsection{Main Same-Candidate Comparison}
 
-Table~\ref{tab:main_results} reports the main result. On all four domains,
-\method{} improves over the strongest official baseline by NDCG@10: +29.7\%
-on Sports, +32.2\% on Toys, +41.0\% on Home, and +43.3\% on Tools. The same
-pattern holds for HR@5/@10/@20, NDCG@5/@10/@20, and MRR.
+Table~\ref{tab:main_results} reports the main result across all eight domains.
+\method{} ranks first in six of the eight domains. Over the strongest official
+baseline, it improves NDCG@10 by +21.6\% on Books, +53.2\% on Electronics,
++29.7\% on Sports, +32.2\% on Toys, +41.0\% on Home, and +43.3\% on Tools; in
+these six domains the same pattern holds for HR@5/@10/@20, NDCG@5/@10/@20, and
+MRR (the lone exception is Books HR@20, where LLMEmb's deeper recall edges
+\method{}). In the remaining two domains \method{} is competitive but not
+first: on \textbf{Beauty} it is rank~2 of nine, trailing ProEx by $-11.0\%$
+NDCG@10 ($0.1341$ vs.\ $0.1506$), and on \textbf{Movies} it is rank~5 of nine,
+trailing LLMEmb by $-24.2\%$ ($0.1281$ vs.\ $0.1690$). We report these two
+losses explicitly; restricting the table to the six winning domains would
+overstate the method. Table~\ref{tab:improvement_over_strongest} gives the full
+per-domain per-metric improvement over the strongest baseline, including the
+negative Beauty and Movies deltas, and Table~\ref{tab:ccrp_rank_by_metric}
+gives the per-metric ranks.
 
-The complete evidence ledger contains 36 method-domain rows: eight official
-baseline rows and one \method{} row for each of the four domains. Every row has
-10,000 users, 101 candidates per user, score coverage 1.0, and the expected
-row counts. For each domain, the paired test family contains 56 comparisons
-(eight baselines times seven metrics); all 56 deltas are positive and
-Holm-significant in every domain. Table~\ref{tab:significance_summary}
-summarizes the paired-test gate, and Table~\ref{tab:full_official_ndcg10}
-shows the complete per-domain NDCG@10 ranking over all eight official
-baselines plus \method{}. Table~\ref{tab:ccrp_rank_by_metric} makes the
-all-metric rank-first claim explicit.
+The complete evidence ledger contains 72 method-domain rows: eight official
+baseline rows and one \method{} row for each of the eight domains. Every row has
+10,000 users (Beauty 973), 101 candidates per user, score coverage 1.0, and the
+expected row counts. For the four domains with full per-event signal rows
+(Sports, Toys, Home, Tools), the paired test family contains 56 comparisons
+(eight baselines times seven metrics) and all 56 deltas are positive and
+Holm-significant in every one of them. Table~\ref{tab:significance_summary}
+summarizes that paired-test gate, and Table~\ref{tab:full_official_ndcg10}
+shows the complete per-domain NDCG@10 ranking over all eight official baselines
+plus \method{} for all eight domains.
 
 This supports a controlled reranking claim. It does not establish full-catalog
 recommendation SOTA because candidate generation is not evaluated here.
+
+\paragraph{Why the posterior wins on six domains but not Beauty or Movies.} We
+read the two non-winning domains as informative rather than as noise, and offer
+the following analysis---hypothesized from domain characteristics, not proven by
+a controlled intervention. The six domains where the pointwise posterior wins
+are ones in which a strong general-purpose LLM can recover user-conditional
+relevance directly from item text and short histories. Beauty and Movies share
+two properties that work against a text-only pointwise scorer and in favour of
+the baselines that beat it. First, both are comparatively
+\emph{popularity- and taste-skewed}: Movies in particular has heavy blockbuster
+concentration and strong collaborative signal, which is exactly what LLMEmb's
+trained embeddings and ProEx's profile module capture and what a per-candidate
+text posterior does not. Second, both have \emph{denser, more homogeneous
+candidate descriptions} (cosmetics variants; films within a genre) where 101
+sampled items are textually close, so the LLM's per-candidate relevance gap is
+small and easily dominated by a learned collaborative ranker. Beauty also has
+by far the smallest test pool (973 users), so its margins are the least
+stable. Consistent with this, the methods that beat \method{} are precisely the
+embedding/profile baselines (LLMEmb on Movies, ProEx on Beauty) rather than the
+floor-level generative or graph baselines. We therefore frame the result as: a
+directly elicited pointwise LLM posterior is the strongest single reranking
+signal in most domains we tested, but it does not subsume trained collaborative
+structure in popularity-skewed, text-homogeneous catalogues. We flag this as
+analysis to motivate future hybridization, not as a validated causal claim.
 
 \paragraph{Attribution: the win is the pointwise posterior.} We are explicit
 about which signal produces the headline ranking. The reported \method{} rows
@@ -28,7 +63,8 @@ in Table~\ref{tab:main_results} are obtained by ranking the 101 same candidates
 by the raw task-grounded LLM relevance probability $\hat{p}$ alone---a pointwise
 posterior per candidate---ranked descending with a fixed seeded tie-break. The
 calibrated/uncertainty/risk-adjusted machinery is not what carries the gain.
-Two pieces of evidence support this. First, the leave-one-component-out summary
+Two pieces of evidence support this (computed on the four diagnostic domains
+with full per-event signal rows). First, the leave-one-component-out summary
 (Table~\ref{tab:ablation_ndcg10}) shows the uncertainty terms are inert or
 redundant for ranking: boundary uncertainty is exactly inert in 4/4 domains,
 and removing counterevidence or the risk penalty is nonworse in 4/4 domains on
@@ -51,6 +87,7 @@ expected-calibration-error guarantee.
 
 \input{tables/significance_summary}
 \input{tables/ccrp_rank_by_metric}
+\input{tables/improvement_over_strongest}
 \input{tables/full_official_ndcg10_ranking}
 
 \paragraph{Reading the absolute scale.} Several official baselines sit close to
@@ -62,20 +99,23 @@ the native advantages of approaches whose value lies outside same-candidate
 reranking: ELMRec is officially a T5 generative recommender bridged to Qwen3-8B
 representations, and the LightGCN-profile methods ProEx/ProMax derive much of
 their reported strength from full-catalog retrieval and popularity structure
-that a 101-candidate sampled panel does not reward. Indeed, a pure popularity ranking also scores at the random
-floor in all four domains (the \textit{Popularity} rows of
+that a 101-candidate sampled panel does not reward. Indeed, a pure popularity
+ranking also scores at the random floor in each of the four new domains for
+which we measured it (the \textit{Popularity} rows of
 Table~\ref{tab:full_official_ndcg10}): because the sampled negatives are
 themselves popularity-matched, the protocol deliberately neutralizes the
 popularity shortcut, so a row near the floor is not unfairly penalized---it
 simply fails to recover user-conditional relevance beyond a popularity prior.
-We therefore do not rest the
-claim on the weakest rows. The informative comparison is against the strongest
-baseline that is clearly above the floor, LLMEmb (NDCG@10 $0.094$--$0.205$):
-\method{} still improves over LLMEmb by 30--43\% NDCG@10 across the four domains,
-and all 56 per-domain paired tests remain positive and Holm-significant. The
-result is thus a robustness claim under a fair common-denominator reranking
-protocol, not a statement that these methods are weak in their native
-full-catalog setting (see Limitation~5).
+We therefore do not rest the claim on the weakest rows. The informative
+comparison is against the strongest baseline that is clearly above the floor:
+this is LLMEmb in seven of the eight domains (NDCG@10 $0.094$--$0.274$) and
+ProEx in Beauty (NDCG@10 $0.151$). On the six domains where \method{} ranks
+first, it improves over the strongest baseline by $+21.6\%$ to $+53.2\%$
+NDCG@10, and on the four new domains all 56 per-domain paired tests remain
+positive and Holm-significant; on Beauty and Movies the strongest baseline is
+ahead, as reported above. The result is thus a robustness claim under a fair
+common-denominator reranking protocol, not a statement that these methods are
+weak in their native full-catalog setting (see Limitation~5).
 
 \paragraph{Bridge fidelity.} To confirm the unified Qwen3-8B representation
 bridge is not itself responsible for the low baseline scores, we re-ran the

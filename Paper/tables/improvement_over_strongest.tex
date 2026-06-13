@@ -1,0 +1,29 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{Relative improvement of \method{} over the \emph{strongest official
+baseline on that metric}, per domain and per metric (\%). Positive values mean
+\method{} is better; negative values are shown explicitly rather than dropped.
+\method{} improves on every metric in the six domains where it ranks first
+(Books, Electronics, Sports, Toys, Home, Tools, with NDCG@10 gains of
+$+21.6\%$ to $+53.2\%$), is uniformly behind by a single-digit-to-$11\%$ margin
+in Beauty (rank~2), and trails by a larger margin in Movies (rank~5). The
+strongest baseline is selected per metric, so the reference method can differ
+across columns.}
+\label{tab:improvement_over_strongest}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Domain & HR@5 & HR@10 & HR@20 & NDCG@5 & NDCG@10 & NDCG@20 & MRR \\
+\midrule
+Beauty & $-4.4$ & $-9.3$ & $-4.3$ & $-9.5$ & $-11.0$ & $-8.0$ & $-10.7$ \\
+Books & $+11.7$ & $+0.8$ & $-6.2$ & $+30.8$ & $+21.6$ & $+15.4$ & $+31.4$ \\
+Electronics & $+56.3$ & $+22.2$ & $+4.4$ & $+82.9$ & $+53.2$ & $+34.4$ & $+57.8$ \\
+Movies & $-27.1$ & $-37.6$ & $-35.8$ & $-14.4$ & $-24.2$ & $-26.1$ & $-11.9$ \\
+Sports & $+29.2$ & $+12.9$ & $+5.6$ & $+42.9$ & $+29.7$ & $+22.7$ & $+34.9$ \\
+Toys & $+26.9$ & $+13.1$ & $+4.0$ & $+42.1$ & $+32.2$ & $+24.8$ & $+38.0$ \\
+Home & $+44.7$ & $+22.0$ & $+10.6$ & $+59.1$ & $+41.0$ & $+29.0$ & $+39.8$ \\
+Tools & $+41.9$ & $+19.5$ & $+8.1$ & $+62.2$ & $+43.3$ & $+30.9$ & $+46.4$ \\
+\bottomrule
+\end{tabular}
+\end{table*}

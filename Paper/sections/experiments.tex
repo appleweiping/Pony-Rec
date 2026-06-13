@@ -3,19 +3,26 @@
 
 \subsection{Experimental Setup}
 
-\paragraph{Datasets and Candidate Protocol.} We evaluate on four Amazon
-product-review domains: Sports, Toys, Home, and Tools. Each domain uses
-10,000 test users and a 101-candidate same-candidate task.
+\paragraph{Datasets and Candidate Protocol.} We evaluate on eight Amazon
+product-review domains: Beauty, Books, Electronics, Movies, Sports, Toys, Home,
+and Tools. Each domain uses a 101-candidate same-candidate task with 10,000 test
+users, except Beauty, whose smaller catalog yields 973 eligible test users.
 
 \begin{table}[h]
 \centering
 \small
-\caption{Dataset statistics.}
+\caption{Dataset statistics. All domains use the same 101-candidate
+same-candidate task (one positive, 100 popularity-sampled negatives); Beauty has
+a smaller test-user pool because of its catalog size.}
 \label{tab:datasets}
 \begin{tabular}{lrrr}
 \toprule
 Domain & Test Users & Candidates/User & Candidate Rows \\
 \midrule
+Beauty & 973 & 101 & 98,273 \\
+Books & 10,000 & 101 & 1,010,000 \\
+Electronics & 10,000 & 101 & 1,010,000 \\
+Movies & 10,000 & 101 & 1,010,000 \\
 Sports & 10,000 & 101 & 1,010,000 \\
 Toys & 10,000 & 101 & 1,010,000 \\
 Home & 10,000 & 101 & 1,010,000 \\
@@ -59,8 +66,8 @@ recommended baseline hyperparameters, while \method{} uses fixed or
 validation-controlled settings. Full-catalog metrics reported by upstream
 repositories are not imported into the paper table.
 
-\paragraph{Baselines.} We compare against eight official-code-level
-LLM-based recommendation baselines:
+\paragraph{Baselines.} In every domain we compare against the same eight
+official-code-level LLM-based recommendation baselines:
 
 \begin{itemize}
     \item \textbf{ELMRec}~\cite{elmrec}: High-order interaction-aware LLM recommendation
@@ -89,7 +96,10 @@ corresponding per-event score of an official baseline. For each domain,
 yielding 56 paired tests (8 baselines $\times$ 7 metrics). We use paired
 event bootstrap confidence intervals with 2,000 bootstrap samples, 95\%
 percentile intervals, and Holm correction at $\alpha=0.05$ over the full
-family of 56 tests in that domain.
+family of 56 tests in that domain. The Holm-corrected paired-test gate is
+reported for the four domains where \method{} ranks first on every metric
+(Sports, Toys, Home, Tools); for the four original domains we report ranks and
+per-metric improvements directly.
 
 \paragraph{Evidence Packaging.} Every completed row has a lightweight local
 evidence package with metrics, row counts, provenance, score audits, logs, and
@@ -97,17 +107,19 @@ server manifest hashes. Large score files, prediction files, checkpoints, and
 embeddings remain server-side unless an archive decision requires otherwise.
 This separation keeps the GitHub artifact small while preserving enough hashes
 and row counts to detect missing or accidentally cleaned evidence. The
-paper-facing ledger contains 36 rows: 32 official baseline rows and four
-\method{} rows.
+paper-facing ledger contains 72 rows: 64 official baseline rows (eight
+baselines $\times$ eight domains) and eight \method{} rows.
 
 \paragraph{Diagnostic Modules.} The main comparison is accompanied by three
-paper-critical diagnostics. The observation module bins events by C-CRP
-uncertainty and checks whether higher uncertainty corresponds to lower ranking
-reliability. The component module evaluates leave-one-component-out variants
-under the frozen same-candidate protocol. The hyperparameter module sweeps
-real controls, especially $\eta$ and the uncertainty weight grid, with
-validation-only selection and reporting-only test curves. These diagnostics
-are not allowed to replace the main official-baseline comparison.
+paper-critical diagnostics, run on the four domains (Sports, Toys, Home, Tools)
+for which the full per-event signal rows are packaged locally. The observation
+module bins events by C-CRP uncertainty and checks whether higher uncertainty
+corresponds to lower ranking reliability. The component module evaluates
+leave-one-component-out variants under the frozen same-candidate protocol. The
+hyperparameter module sweeps real controls, especially $\eta$ and the
+uncertainty weight grid, with validation-only selection and reporting-only test
+curves. These diagnostics are not allowed to replace the main official-baseline
+comparison.
 
 \subsection{Main Results}
 
