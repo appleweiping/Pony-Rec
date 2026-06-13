@@ -192,13 +192,17 @@ The eighth asynchronous Claude call with `mcp__claude_review.review_start` plus
 `review_status`, `model=opus`, tools disabled, and a short JSON-only prompt
 failed with the same connector-layer error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
-The refreshed packet records eight failed attempts and still keeps
+The ninth asynchronous Claude call through `mcp__claude_review.review_start`
+also failed with `Claude CLI did not return JSON output`; job
+`a3863723466147e9b9b849cf994ca8fd` is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_ninth_20260613.json`.
+The refreshed packet records nine failed attempts and still keeps
 `explicit_claude_opus_present=false`. Codex also added
 `scripts/audit/main_build_claude_review_request_packet.py`, generating
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for a future valid Claude Opus review;
-after the eighth failed connector attempt, that request packet was refreshed
-at `2026-06-13T02:50:36Z` and now records eight failed Claude attempts. The
+after the ninth failed connector attempt, that request packet was refreshed
+at `2026-06-13T03:28:45Z` and now records nine failed Claude attempts. The
 request packet is not reviewer coverage. The review-continuation gate now
 validates additional reviewer JSONs before counting them for panel coverage:
 Claude/Opus JSON must include `valid_review_evidence=true`,
@@ -219,6 +223,13 @@ packet. The refreshed freshness artifact reports `refresh_artifact_fresh=true`.
 `scripts/audit/main_build_review_continuation_packet.py` now accepts future
 closed ProMax/closure/release-candidate states instead of requiring the current
 blocked ProMax state as the only valid handoff shape.
+Codex also fixed recursive warning-prefix growth across the release-stack
+handoff artifacts by normalizing known aggregator prefixes before adding a new
+layer prefix in review-continuation, final-gate, pre-submission-refresh,
+release-candidate, stack, and closure packet builders. The refreshed artifacts
+now have compact warning lists and the stack still reports
+`blocking_status=external_manual_or_review_blocked` and
+`final_submission_ready=false`.
 The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,

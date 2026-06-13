@@ -99,6 +99,33 @@ def _dedupe(values: list[str]) -> list[str]:
     return result
 
 
+WARNING_PREFIXES = (
+    "pre_submission_gate_refresh:",
+    "pre_submission_refresh_freshness:",
+    "submission_release_candidate:",
+    "final_submission_gate:",
+    "review_continuation:",
+    "submission_package:",
+    "submission_source_package:",
+    "submission_source_package_rebuild:",
+    "submission_metadata_packet:",
+    "manual_submission_checklist:",
+    "external_proceedings_metadata:",
+)
+
+
+def _normalize_warning(value: Any) -> str:
+    text = str(value).strip()
+    changed = True
+    while changed:
+        changed = False
+        for prefix in WARNING_PREFIXES:
+            if text.startswith(prefix):
+                text = text[len(prefix) :]
+                changed = True
+    return text
+
+
 def _stamp_from_path(path_text: str) -> str:
     matches = re.findall(r"20\d{6}", path_text)
     return matches[-1] if matches else ""
@@ -346,7 +373,11 @@ def build_submission_release_candidate_packet(
         if gate["gate_id"] != "final_submission_gate" and gate["final_submission_ready"]:
             failures.append(f"{gate['gate_id']}:unexpected_local_final_submission_ready")
         failures.extend(f"{gate['gate_id']}:{item}" for item in gate["failures"])
-        warnings.extend(f"{gate['gate_id']}:{item}" for item in gate["warnings"])
+        warnings.extend(
+            f"{gate['gate_id']}:{normalized}"
+            for item in gate["warnings"]
+            if (normalized := _normalize_warning(item))
+        )
         remaining_blockers.extend(gate["remaining_blockers"])
 
     required_ready_fields = [

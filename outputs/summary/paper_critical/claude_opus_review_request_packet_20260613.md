@@ -1,11 +1,11 @@
 # Claude Opus Review Request Packet
 
-- Created UTC: `2026-06-13T02:50:36.106362+00:00`
+- Created UTC: `2026-06-13T03:28:44.761787+00:00`
 - OK: `true`
 - Claude review needed: `true`
 - Existing score floor: `8.0`
-- Failed Claude attempts: `8`
-- Prompt sha256: `0981de74eb1c772700e6c74c753e2eee14ae0f3e98b3967a0e6b598a9a5be13d`
+- Failed Claude attempts: `9`
+- Prompt sha256: `281d0404d10acf97392687c0ef56ca3dd5f0892d3ddf0fa0551b1a8e7b860a46`
 
 ## Missing Perspectives
 
@@ -53,8 +53,7 @@
     "existing_reviewers": [
       "Faraday existing subagent",
       "Avicenna existing subagent",
-      "Meitner existing subagent",
-      "gpt-5.5-xhigh"
+      "Meitner existing subagent"
     ],
     "panel_consensus": {
       "score_floor": "8.0/10",
@@ -69,7 +68,7 @@
       "explicit_claude_opus_review"
     ],
     "failed_claude_attempts": {
-      "count": 8,
+      "count": 9,
       "unique_errors": [
         "Claude CLI did not return JSON output"
       ],
@@ -81,7 +80,8 @@
         "mcp__claude_review.review minimal JSON-oriented no-tools call",
         "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled",
         "mcp__claude_review.review synchronous JSON-only call with model=opus, tools disabled, seventh attempt",
-        "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled"
+        "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled",
+        "mcp__claude_review.review_start async job a3863723466147e9b9b849cf994ca8fd with model=opus and tools disabled"
       ]
     },
     "gpt55_verdict": "CONDITIONAL_PASS",

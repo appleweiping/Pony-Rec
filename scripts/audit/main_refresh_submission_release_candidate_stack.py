@@ -51,6 +51,33 @@ def _dedupe(values: list[str]) -> list[str]:
     return result
 
 
+WARNING_PREFIXES = (
+    "pre_submission_gate_refresh:",
+    "pre_submission_refresh_freshness:",
+    "submission_release_candidate:",
+    "final_submission_gate:",
+    "review_continuation:",
+    "submission_package:",
+    "submission_source_package:",
+    "submission_source_package_rebuild:",
+    "submission_metadata_packet:",
+    "manual_submission_checklist:",
+    "external_proceedings_metadata:",
+)
+
+
+def _normalize_warning(value: Any) -> str:
+    text = str(value).strip()
+    changed = True
+    while changed:
+        changed = False
+        for prefix in WARNING_PREFIXES:
+            if text.startswith(prefix):
+                text = text[len(prefix) :]
+                changed = True
+    return text
+
+
 def _step_record(
     *,
     step_id: str,
@@ -160,7 +187,14 @@ def refresh_submission_release_candidate_stack(
         ),
     ]
     failures = _dedupe([f"{step['step_id']}:{item}" for step in steps for item in step["failures"]])
-    warnings = _dedupe([f"{step['step_id']}:{item}" for step in steps for item in step["warnings"]])
+    warnings = _dedupe(
+        [
+            f"{step['step_id']}:{normalized}"
+            for step in steps
+            for item in step["warnings"]
+            if (normalized := _normalize_warning(item))
+        ]
+    )
     blockers = _dedupe([str(item) for step in steps for item in step["remaining_blockers"]])
     ok = all(step["ok"] for step in steps) and not failures
 

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 05:06 CEST
+Last updated: 2026-06-13 05:29 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,45 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 bounded heartbeat refresh after manual-confirmation handoff:
+  Codex reran the required server preflight and found no active Uncertainty
+  experiment; C-CRP v3 still reports all-domain completion, while the GPU is
+  occupied by an unrelated TGL-Rec process that must not be touched. The live
+  ProMax public metadata probe was refreshed at
+  `2026-06-13T03:16:11Z`: `ok=true`,
+  `promax_public_metadata_ready=false`, Crossref remains `404`, DOI resolver
+  remains `404`, ACM DL remains `403`, and all `5/5` auxiliary source probes
+  still pass. Codex also retried the explicit Claude Opus route with
+  `mcp__claude_review.review_start`; job
+  `a3863723466147e9b9b849cf994ca8fd` again failed at the connector layer with
+  `Claude CLI did not return JSON output`. The failure is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_ninth_20260613.json`
+  with `valid_review_evidence=false`; the refreshed
+  `review_continuation_packet_20260613.{json,md}` and
+  `claude_opus_review_request_packet_20260613.{json,md}` now record failed
+  Claude attempts `9`, `explicit_claude_opus_present=false`, and
+  `final_panel_coverage_complete=false`.
+
+- 2026-06-13 release-stack warning normalization fix:
+  While refreshing the release-candidate stack, Codex found recursive warning
+  prefix growth across review-continuation, final-gate, pre-submission-refresh,
+  release-candidate, stack, and closure packet builders. Codex fixed the
+  aggregation layer in
+  `scripts/audit/main_build_review_continuation_packet.py`,
+  `scripts/audit/main_build_final_submission_gate.py`,
+  `scripts/audit/main_refresh_pre_submission_gates.py`,
+  `scripts/audit/main_build_submission_release_candidate_packet.py`,
+  `scripts/audit/main_refresh_submission_release_candidate_stack.py`, and
+  `scripts/audit/main_build_final_submission_blocker_closure_packet.py` by
+  normalizing known aggregator prefixes before adding the current layer prefix.
+  The regression test
+  `test_refresh_submission_release_candidate_stack_normalizes_recursive_warning_prefixes`
+  now protects this behavior. The refreshed artifacts have compact warning
+  lists with zero detected recursive warning chains; the stack still reports
+  `local_release_candidate_ready=true`,
+  `blocking_status=external_manual_or_review_blocked`, and
+  `final_submission_ready=false`.
 
 - 2026-06-13 private manual-submission confirmation request packet:
   Codex added

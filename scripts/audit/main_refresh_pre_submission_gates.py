@@ -87,6 +87,44 @@ def _run_git(root: Path, args: list[str]) -> tuple[int, str, str]:
     return result.returncode, result.stdout.strip(), result.stderr.strip()
 
 
+def _dedupe(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        text = str(value).strip()
+        if text and text not in seen:
+            seen.add(text)
+            result.append(text)
+    return result
+
+
+WARNING_PREFIXES = (
+    "pre_submission_gate_refresh:",
+    "pre_submission_refresh_freshness:",
+    "submission_release_candidate:",
+    "final_submission_gate:",
+    "review_continuation:",
+    "submission_package:",
+    "submission_source_package:",
+    "submission_source_package_rebuild:",
+    "submission_metadata_packet:",
+    "manual_submission_checklist:",
+    "external_proceedings_metadata:",
+)
+
+
+def _normalize_warning(value: Any) -> str:
+    text = str(value).strip()
+    changed = True
+    while changed:
+        changed = False
+        for prefix in WARNING_PREFIXES:
+            if text.startswith(prefix):
+                text = text[len(prefix) :]
+                changed = True
+    return text
+
+
 def _git_state(root: Path) -> dict[str, Any]:
     code, head, err = _run_git(root, ["rev-parse", "HEAD"])
     if code != 0:
@@ -357,7 +395,14 @@ def refresh_pre_submission_gates(
             text = str(blocker)
             if text not in blockers:
                 blockers.append(text)
-    warnings = [f"{step['step_id']}:{warning}" for step in steps for warning in step["warnings"]]
+    warnings = _dedupe(
+        [
+            f"{step['step_id']}:{normalized}"
+            for step in steps
+            for warning in step["warnings"]
+            if (normalized := _normalize_warning(warning))
+        ]
+    )
 
     return {
         "schema_version": "2026-06-12.pre_submission_gate_refresh.v1",

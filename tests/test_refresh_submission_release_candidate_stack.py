@@ -163,3 +163,35 @@ def test_refresh_submission_release_candidate_stack_fails_when_freshness_fails(
     assert "pre_submission_refresh_freshness:input_fingerprint_mismatch:Paper/main.tex" in stack[
         "failures"
     ]
+
+
+def test_refresh_submission_release_candidate_stack_normalizes_recursive_warning_prefixes(
+    tmp_path: Path,
+) -> None:
+    refresh = _refresh_payload()
+    refresh["warnings"] = [
+        "pre_submission_gate_refresh:final_submission_gate:review_continuation:underfull_layout_warnings:hbox=6,vbox=8"
+    ]
+    freshness = _freshness_payload()
+    freshness["warnings"] = [
+        "submission_release_candidate:final_submission_gate:external_proceedings_metadata:proex:crossref_not_visible:status=404"
+    ]
+    candidate = _candidate_payload()
+    candidate["warnings"] = [
+        "final_submission_gate:review_continuation:pre_submission_gate_refresh:submission_package:underfull_layout_warnings:hbox=6,vbox=8"
+    ]
+
+    stack = refresh_submission_release_candidate_stack(
+        root=tmp_path,
+        output_dir="out",
+        stamp="test",
+        refresh_runner=lambda **kwargs: refresh,
+        freshness_builder=lambda **kwargs: freshness,
+        candidate_builder=lambda **kwargs: candidate,
+    )
+
+    assert stack["warnings"] == [
+        "pre_submission_gate_refresh:underfull_layout_warnings:hbox=6,vbox=8",
+        "pre_submission_refresh_freshness:proex:crossref_not_visible:status=404",
+        "submission_release_candidate:underfull_layout_warnings:hbox=6,vbox=8",
+    ]

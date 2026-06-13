@@ -102,15 +102,16 @@ ACM DL returns `403`; arXiv HTML ACM metadata, the SIGIR accepted-paper page,
 the UQ author-profile source probe, the author Google Sites publications
 source probe, and the UQ Experts profile source probe remain passing.
 Follow-up live probes at `2026-06-13T00:49:05Z`,
-`2026-06-13T01:59:36Z`, and `2026-06-13T02:32:01Z` found the same direct
-blocker state, and the closure packet was refreshed most recently at
-`2026-06-13T02:32:56Z`; this is stronger public accepted-paper provenance, not
-a readiness upgrade. The closure packet Markdown now lists latest public source
-probes in addition to direct Crossref/DOI/ACM statuses. Codex also refreshed
+`2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`, and
+`2026-06-13T03:16:11Z` found the same direct blocker state, and the closure
+packet was refreshed most recently at `2026-06-13T03:28:25Z`; this is stronger
+public accepted-paper provenance, not a readiness upgrade. The closure packet
+Markdown now lists latest public source probes in addition to direct
+Crossref/DOI/ACM statuses. Codex also refreshed
 the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
-the latest `2026-06-13T02:51:34Z` stack reports `ok=true`,
+the latest `2026-06-13T03:28:07Z` stack reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `blocking_status=external_manual_or_review_blocked`, `failures=[]`, and
 `final_submission_ready=false`. Its freshness audit checks `23` input
@@ -191,6 +192,14 @@ and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
 The refreshed review-continuation packet now reports eight
 failed attempts while keeping `explicit_claude_opus_present=false`.
+Codex then retried a ninth asynchronous Claude call through
+`mcp__claude_review.review_start`; job
+`a3863723466147e9b9b849cf994ca8fd` failed with the same connector-layer
+`Claude CLI did not return JSON output` error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_ninth_20260613.json`.
+The refreshed review-continuation packet and Claude request packet now record
+failed Claude attempts `9`, still with `explicit_claude_opus_present=false`,
+`final_panel_coverage_complete=false`, and `final_submission_ready=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local
@@ -221,6 +230,15 @@ reports `refresh_artifact_fresh=true`. Codex also updated
 the ProMax probe, closure packet, or release-candidate stack has legitimately
 closed no longer causes a review-continuation failure; the final submission
 decision remains delegated to the final gate.
+Codex later fixed a release-stack artifact hygiene bug in the same gate family:
+recursive warning prefixes from nested artifacts were growing across refreshes.
+The builders now normalize known aggregator prefixes before adding the current
+layer prefix in review-continuation, final-gate, pre-submission-refresh,
+release-candidate, stack, and closure packet outputs. The refreshed artifacts
+have compact warning lists with no detected recursive warning chains. This is
+an evidence-hygiene fix only; the final gate remains blocked by ProMax public
+metadata, private manual submission-system confirmation, and explicit Claude
+Opus review coverage.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

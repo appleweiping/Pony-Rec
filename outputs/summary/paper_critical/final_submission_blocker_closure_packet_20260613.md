@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-13T03:06:20.524003+00:00
+Generated: 2026-06-13T03:28:25.723087+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -85,7 +85,7 @@ Current ProMax evidence:
 - DOI resolver status: `404`
 
 Latest public probe:
-- Created: `2026-06-13T02:32:01.267216+00:00`
+- Created: `2026-06-13T03:16:11.170702+00:00`
 - ProMax public metadata ready: `false`
 - Crossref status: `404`
 - DOI resolver status: `404`

@@ -84,6 +84,33 @@ def _dedupe(values: list[str]) -> list[str]:
     return result
 
 
+WARNING_PREFIXES = (
+    "pre_submission_gate_refresh:",
+    "pre_submission_refresh_freshness:",
+    "submission_release_candidate:",
+    "final_submission_gate:",
+    "review_continuation:",
+    "submission_package:",
+    "submission_source_package:",
+    "submission_source_package_rebuild:",
+    "submission_metadata_packet:",
+    "manual_submission_checklist:",
+    "external_proceedings_metadata:",
+)
+
+
+def _normalize_warning(value: Any) -> str:
+    text = str(value).strip()
+    changed = True
+    while changed:
+        changed = False
+        for prefix in WARNING_PREFIXES:
+            if text.startswith(prefix):
+                text = text[len(prefix) :]
+                changed = True
+    return text
+
+
 def _parse_score_10(value: Any) -> float | None:
     if isinstance(value, (int, float)):
         return float(value)
@@ -421,12 +448,12 @@ def build_review_continuation_packet(
         "remaining_blockers": blockers,
         "failures": _dedupe(failures),
         "warnings": _dedupe(
-            list(panel.get("warnings") or [])
-            + list(claim.get("warnings") or [])
-            + list(package.get("warnings") or [])
-            + list(stack.get("warnings") or [])
-            + list(closure.get("warnings") or [])
-            + list(promax.get("warnings") or [])
+            [_normalize_warning(item) for item in list(panel.get("warnings") or [])]
+            + [_normalize_warning(item) for item in list(claim.get("warnings") or [])]
+            + [_normalize_warning(item) for item in list(package.get("warnings") or [])]
+            + [_normalize_warning(item) for item in list(stack.get("warnings") or [])]
+            + [_normalize_warning(item) for item in list(closure.get("warnings") or [])]
+            + [_normalize_warning(item) for item in list(promax.get("warnings") or [])]
             + validation_warnings
         ),
         "next_actions": [

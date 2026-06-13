@@ -41,6 +41,33 @@ def _dedupe(values: list[str]) -> list[str]:
     return result
 
 
+WARNING_PREFIXES = (
+    "pre_submission_gate_refresh:",
+    "pre_submission_refresh_freshness:",
+    "submission_release_candidate:",
+    "final_submission_gate:",
+    "review_continuation:",
+    "submission_package:",
+    "submission_source_package:",
+    "submission_source_package_rebuild:",
+    "submission_metadata_packet:",
+    "manual_submission_checklist:",
+    "external_proceedings_metadata:",
+)
+
+
+def _normalize_warning(value: Any) -> str:
+    text = str(value).strip()
+    changed = True
+    while changed:
+        changed = False
+        for prefix in WARNING_PREFIXES:
+            if text.startswith(prefix):
+                text = text[len(prefix) :]
+                changed = True
+    return text
+
+
 def _classify_remaining_blockers(blockers: list[str]) -> dict[str, list[str]]:
     external: list[str] = []
     manual: list[str] = []
@@ -302,7 +329,10 @@ def build_final_submission_blocker_closure_packet(
         "classified_remaining_blockers": classified,
         "closure_groups": closure_groups,
         "failures": failures,
-        "warnings": _dedupe(list(final_gate.get("warnings") or []) + list(stack.get("warnings") or [])),
+        "warnings": _dedupe(
+            [_normalize_warning(item) for item in list(final_gate.get("warnings") or [])]
+            + [_normalize_warning(item) for item in list(stack.get("warnings") or [])]
+        ),
         "next_actions": [
             "Monitor or recheck ProMax public ACM/Crossref/DOI metadata; update BibTeX only after final public page range is available.",
             "Attach a valid explicit Claude Opus review through the review-continuation packet before closing review coverage.",
