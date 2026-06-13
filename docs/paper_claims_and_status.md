@@ -233,20 +233,21 @@ Codex then retried an eleventh asynchronous Claude Opus call through
 short schema-aligned ARIS hostile-review prompt, but again failed with
 `Claude CLI did not return JSON output`. The failure is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
-The refreshed review-continuation packet, Claude request packet, and
-final-blocker consistency audit now record failed Claude attempts `11`, still
-with `explicit_claude_opus_present=false`,
+That eleventh-attempt refresh still left
+`explicit_claude_opus_present=false`,
 `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
 Codex then added
 `scripts/audit/main_audit_claude_review_connector_health.py` as a local
 read-only health audit for the repeated Claude connector failures. The current
 `outputs/summary/paper_critical/claude_review_connector_health_20260613.{json,md}`
-reports failed attempt count `11`, valid review evidence count `0`,
-`same_error_tail_streak=11`, `connector_unhealthy=true`,
-`same_route_retry_recommended=false`, and recommends
-`external_claude_opus_json_via_request_packet_and_validator`. This does not
-close the explicit Claude Opus blocker; it prevents unproductive retries of the
-same connector route unless the tooling changes.
+now reports failed attempt count `13`, valid review evidence count `0`,
+`same_error_tail_streak=1`, `connector_unhealthy=false`,
+`same_route_retry_recommended=true`, and recommends
+`retry_connector_or_refresh_request_packet`. This does not close the explicit
+Claude Opus blocker. The changed health verdict is diagnostic: the twelfth
+direct `mcp__claude_review.review` attempt exposed a prompt shell-escaping
+failure, and the thirteenth safe-prompt retry returned to the prior
+`Claude CLI did not return JSON output` failure mode.
 Codex then hardened the external JSON intake path: the refreshed
 `claude_opus_review_request_packet_20260613.{json,md}` now carries a fillable
 `response_template` with `valid_review_evidence=false` by default, while
@@ -256,7 +257,7 @@ Claude Opus review JSON to acknowledge both the open ProMax public metadata
 blocker and the private manual submission-system blocker before it can count as
 explicit Claude Opus coverage. The refreshed review-continuation packet exposes
 `required_claude_blocker_ack_groups=["manual_submission_system",
-"promax_public_metadata"]`, still records failed Claude attempts `11`, and
+"promax_public_metadata"]`, now records failed Claude attempts `13`, and
 keeps `final_submission_ready=false`.
 The final-blocker consistency audit is now schema
 `2026-06-13.final_blocker_consistency_audit.v3` and explicitly guards this
@@ -329,7 +330,7 @@ Codex then added
 as a cross-packet consistency check over the final gate, release stack, closure
 packet, review-continuation packet, Claude request packet, ProMax probe, and
 manual request packet. The audit reports `ok=true`,
-`final_blocker_consistency_ok=true`, failed Claude attempts `11`,
+`final_blocker_consistency_ok=true`, failed Claude attempts `13`,
 `explicit_claude_opus_present=false`, ProMax public metadata still false with
 Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
 needed, recursive warning regressions `0`, and

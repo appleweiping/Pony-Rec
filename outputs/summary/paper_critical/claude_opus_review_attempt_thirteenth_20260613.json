@@ -1,0 +1,10 @@
+{
+  "completed_at_utc": "2026-06-13T07:12:21Z",
+  "created_at_utc": "2026-06-13T07:12:21Z",
+  "error": "Claude CLI did not return JSON output",
+  "notes": "Thirteenth attempt retried the newly exposed mcp__claude_review.review direct tool surface with model=opus and tools disabled after removing shell-sensitive pipe characters from the verdict enum prompt. The shell-escaping error from the twelfth attempt did not recur, but the connector returned to the prior Claude CLI no-JSON failure mode. This is not valid reviewer coverage.",
+  "reviewer": "claude-opus",
+  "source": "mcp__claude_review.review direct opus no-tools safe-prompt continuation attempt 2026-06-13",
+  "status": "failed",
+  "valid_review_evidence": false
+}

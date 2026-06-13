@@ -112,22 +112,32 @@ PIDs, audit summaries, and missing-file errors.
    a short schema-aligned ARIS hostile-review prompt; it again failed with
    `Claude CLI did not return JSON output` and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
-   The current packet reports failed Claude attempts `11` and still keeps
-   `explicit_claude_opus_present=false`. Use the new public-safe request packet
+   A twelfth direct `mcp__claude_review.review` call used the newly exposed
+   tool surface with `model=opus`, tools disabled, and a schema-aligned prompt,
+   but failed at the CLI/shell layer because prompt enum pipe characters were
+   interpreted by the shell; it is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_twelfth_20260613.json`.
+   A thirteenth safe-prompt direct call removed those shell-sensitive
+   characters, but returned to `Claude CLI did not return JSON output`; it is
+   recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_thirteenth_20260613.json`.
+   The current packet reports failed Claude attempts `13` and still keeps
+   `explicit_claude_opus_present=false`. Use the public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
    before trying another Claude route; it was refreshed at
-   `2026-06-13T05:31Z`, records failed Claude attempts `11`, contains the
+   `2026-06-13T07:13Z`, records failed Claude attempts `13`, contains the
    exact prompt/schema for a valid additional review JSON, dynamically includes
    all recorded failed-attempt artifacts in the follow-up command, and is not
    itself reviewer coverage. The
    local connector-health audit
    `outputs/summary/paper_critical/claude_review_connector_health_20260613.{json,md}`
-   reports failed attempt count `11`, valid review evidence count `0`,
-   `same_error_tail_streak=11`, `connector_unhealthy=true`, and
-   `same_route_retry_recommended=false`; do not keep retrying the same
-   `mcp__claude_review` route unless the connector/tooling changes. Use the
-   request packet to obtain an external Claude Opus JSON and run
+   reports failed attempt count `13`, valid review evidence count `0`,
+   `same_error_tail_streak=1`, `connector_unhealthy=false`, and
+   `same_route_retry_recommended=true`. Treat this as diagnostic, not coverage:
+   if retrying this route again, keep the shell-safe prompt style and still use
+   the request packet to obtain an external Claude Opus JSON if the connector
+   returns no substantive JSON. Run
    `scripts/audit/main_validate_claude_opus_review_json.py` before attaching
    it.
    The

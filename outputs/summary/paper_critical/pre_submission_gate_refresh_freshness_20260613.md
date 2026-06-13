@@ -1,6 +1,6 @@
 # Pre-Submission Refresh Freshness Audit
 
-Generated: 2026-06-13T06:06:08.637606+00:00
+Generated: 2026-06-13T07:14:03.958758+00:00
 
 - OK: `true`
 - Refresh artifact fresh: `true`
@@ -16,8 +16,8 @@ Generated: 2026-06-13T06:06:08.637606+00:00
 
 Git HEAD is provenance for the code/input state that generated the refresh. Freshness is decided by current file fingerprints and generated gate hashes, because committing generated artifacts necessarily changes HEAD.
 
-- Refresh generation HEAD: `2fb5a4186c600b0162af002227dc24087f97e64d`
-- Current HEAD: `2fb5a4186c600b0162af002227dc24087f97e64d`
+- Refresh generation HEAD: `f88a47b34c120febd6dff2a40d4413894ac6072d`
+- Current HEAD: `f88a47b34c120febd6dff2a40d4413894ac6072d`
 - HEAD changed since refresh generation: `false`
 
 ## Failures

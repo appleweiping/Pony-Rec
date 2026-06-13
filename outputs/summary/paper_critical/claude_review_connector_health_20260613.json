@@ -109,15 +109,36 @@
       "source": "mcp__claude_review.review_start async job bf4b6b8145404ffa881cd99ed3c73429 with model=opus and tools disabled",
       "status": "failed",
       "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T07:08:20Z",
+      "created_at_utc": "2026-06-13T07:08:20Z",
+      "error": "Claude CLI returned empty output. stderr: 'WEAK_ACCEPT' is not recognized as an internal or external command, operable program or batch file.",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_twelfth_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review direct opus no-tools continuation attempt 2026-06-13",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T07:12:21Z",
+      "created_at_utc": "2026-06-13T07:12:21Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_thirteenth_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review direct opus no-tools safe-prompt continuation attempt 2026-06-13",
+      "status": "failed",
+      "valid_review_evidence": false
     }
   ],
-  "connector_unhealthy": true,
-  "created_at_utc": "2026-06-13T06:05:27.117341+00:00",
+  "connector_unhealthy": false,
+  "created_at_utc": "2026-06-13T07:13:12.061439+00:00",
   "error_counts": {
-    "Claude CLI did not return JSON output": 11
+    "Claude CLI did not return JSON output": 12,
+    "Claude CLI returned empty output. stderr: 'WEAK_ACCEPT' is not recognized as an internal or external command, operable program or batch file.": 1
   },
   "external_json_route_ready": true,
-  "failed_attempt_count": 11,
+  "failed_attempt_count": 13,
   "failures": [],
   "final_submission_ready": false,
   "final_submission_ready_policy": "This health packet cannot close final readiness; it only decides whether the same Claude connector route is worth retrying.",
@@ -199,14 +220,28 @@
         "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_third_20260613.json",
         "sha256": "e04a30471dacc5038202588b6ffd6b95a3e378522ec97b008b946153b0c0e464",
         "size_bytes": 573
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_thirteenth_20260613.json",
+        "sha256": "c3fc74baf5e75b3658492d8a796f9a6e2b369929f6c00f225e64cebb188eda48",
+        "size_bytes": 728
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_twelfth_20260613.json",
+        "sha256": "6f24b299bf0605e7b45d2b078214b45ffb48c91f1642ec21972d79c790683413",
+        "size_bytes": 778
       }
     ],
     "review_request_packet": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\claude_opus_review_request_packet_20260613.json",
-      "sha256": "e7597df3ed55c80312a7090b305619b2ccefbcc532a84af0b01242ddc8ee7e0c",
-      "size_bytes": 16445
+      "sha256": "9f74d45398c5527261336863aae95368d067f9ca2305d87cb314f00357ccc134",
+      "size_bytes": 17362
     }
   },
   "last_error": "Claude CLI did not return JSON output",
@@ -220,18 +255,16 @@
   "ok": true,
   "project": "uncertainty",
   "read_only": true,
-  "recommended_next_route": "external_claude_opus_json_via_request_packet_and_validator",
+  "recommended_next_route": "retry_connector_or_refresh_request_packet",
   "repeat_error_threshold": 3,
   "review_request_packet_claude_needed": true,
   "review_request_packet_ok": true,
-  "same_error_tail_streak": 11,
-  "same_route_retry_recommended": false,
+  "same_error_tail_streak": 1,
+  "same_route_retry_recommended": true,
   "schema_version": "2026-06-13.claude_review_connector_health.v1",
-  "unique_error_count": 1,
+  "unique_error_count": 2,
   "valid_review_evidence_count": 0,
-  "warnings": [
-    "same_connector_error_repeated:11:Claude_CLI_did_not_return_JSON_output"
-  ],
+  "warnings": [],
   "will_copy": false,
   "will_delete": false,
   "will_ssh": false,

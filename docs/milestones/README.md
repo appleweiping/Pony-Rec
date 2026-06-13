@@ -238,16 +238,22 @@ Codex then retried an eleventh asynchronous Claude Opus call through
 `bf4b6b8145404ffa881cd99ed3c73429` again failed with
 `Claude CLI did not return JSON output` and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
-The refreshed review-continuation packet, Claude request packet, and
-final-blocker consistency audit now record failed Claude attempts `11` while
-keeping `explicit_claude_opus_present=false`,
+That eleventh-attempt refresh still kept
+`explicit_claude_opus_present=false`,
 `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
 Codex also added
 `scripts/audit/main_audit_claude_review_connector_health.py`, which reports
-the same connector error repeated across all `11` failed attempts,
+the then-same connector error repeated across all `11` failed attempts,
 `connector_unhealthy=true`, `same_route_retry_recommended=false`, and the
 recommended route `external_claude_opus_json_via_request_packet_and_validator`.
 This health audit is advisory and does not close review coverage.
+Codex later tested the changed direct `mcp__claude_review.review` tool surface:
+the twelfth attempt exposed a prompt shell-escaping failure caused by pipe
+characters in the verdict enum, and the thirteenth shell-safe retry returned to
+`Claude CLI did not return JSON output`. The current request, health,
+review-continuation, final-gate, release-stack, closure, and consistency
+artifacts now record `13` failed Claude attempts with no valid Claude Opus
+review evidence.
 Codex then hardened that external JSON intake route: the refreshed
 `claude_opus_review_request_packet_20260613.{json,md}` includes a fillable
 response template with `valid_review_evidence=false` by default, and both the
@@ -289,7 +295,7 @@ Codex then added
 `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
 to audit cross-packet consistency after blocker refreshes. The current audit
 reports `ok=true`, `final_blocker_consistency_ok=true`, failed Claude attempts
-`11`, `explicit_claude_opus_present=false`,
+`13`, `explicit_claude_opus_present=false`,
 `promax_public_metadata_ready=false`, manual confirmation still needed,
 recursive warning regressions `0`, and `final_submission_ready=false`. This is
 a handoff consistency guard, not a final-readiness upgrade.
@@ -299,7 +305,7 @@ Codex then added
 `outputs/summary/paper_critical/final_blocker_doc_status_audit_20260613.{json,md}`
 to audit the canonical current-status docs against the consistency audit. It
 reports `ok=true`, `final_blocker_doc_status_ok=true`, failed Claude attempts
-`10`, `explicit_claude_opus_present=false`,
+`13`, `explicit_claude_opus_present=false`,
 `promax_public_metadata_ready=false`, private manual confirmation still needed,
 recursive warning regressions `0`, and `final_submission_ready=false`, while
 rejecting current/handoff wording that still presents eight-attempt or

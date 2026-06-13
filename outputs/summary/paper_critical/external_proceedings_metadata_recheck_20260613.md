@@ -1,6 +1,6 @@
 # External Proceedings Metadata Audit
 
-Generated: 2026-06-13T06:05:50.342242+00:00
+Generated: 2026-06-13T07:13:45.952359+00:00
 
 - OK: `true`
 - External proceedings metadata ready: `false`

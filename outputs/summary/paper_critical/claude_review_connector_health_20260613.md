@@ -1,23 +1,24 @@
 # Claude Review Connector Health
 
-- Created UTC: `2026-06-13T06:05:27.117341+00:00`
+- Created UTC: `2026-06-13T07:13:12.061439+00:00`
 - OK: `true`
 - Final submission ready: `false`
-- Failed attempt count: `11`
+- Failed attempt count: `13`
 - Valid review evidence count: `0`
 - Last error: `Claude CLI did not return JSON output`
-- Same-error tail streak: `11`
-- Connector unhealthy: `true`
-- Same route retry recommended: `false`
-- Recommended next route: `external_claude_opus_json_via_request_packet_and_validator`
+- Same-error tail streak: `1`
+- Connector unhealthy: `false`
+- Same route retry recommended: `true`
+- Recommended next route: `retry_connector_or_refresh_request_packet`
 
 ## Error Counts
 
-- `Claude CLI did not return JSON output`: `11`
+- `Claude CLI did not return JSON output`: `12`
+- `Claude CLI returned empty output. stderr: 'WEAK_ACCEPT' is not recognized as an internal or external command, operable program or batch file.`: `1`
 
 ## Warnings
 
-- same_connector_error_repeated:11:Claude_CLI_did_not_return_JSON_output
+- none
 
 ## Next Actions
 

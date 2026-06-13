@@ -1,10 +1,10 @@
 # Final Blocker Doc Status Audit
 
-- Created UTC: `2026-06-13T06:58:16.692263+00:00`
+- Created UTC: `2026-06-13T07:30:51.140933+00:00`
 - OK: `true`
 - Final blocker doc status OK: `true`
 - Final submission ready: `false`
-- Expected failed Claude attempts: `11`
+- Expected failed Claude attempts: `13`
 - Expected explicit Claude Opus present: `false`
 - Expected ProMax public metadata ready: `false`
 - Expected manual submission system ready: `false`
@@ -14,7 +14,7 @@
 
 ### `docs/active_todo_pony_uncertainty.md`
 - OK: `true`
-- Current section lines: `10-1138`
+- Current section lines: `10-1166`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`
@@ -24,7 +24,7 @@
 
 ### `docs/paper_claims_and_status.md`
 - OK: `true`
-- Current section lines: `41-1625`
+- Current section lines: `41-1626`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`
@@ -34,7 +34,7 @@
 
 ### `docs/milestones/README.md`
 - OK: `true`
-- Current section lines: `74-466`
+- Current section lines: `74-472`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`
@@ -44,7 +44,7 @@
 
 ### `docs/server_runbook.md`
 - OK: `true`
-- Current section lines: `37-290`
+- Current section lines: `37-300`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`

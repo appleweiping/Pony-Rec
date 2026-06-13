@@ -1,6 +1,6 @@
 # Final Submission Gate
 
-Generated: 2026-06-13T06:06:27.653430+00:00
+Generated: 2026-06-13T07:14:03.184052+00:00
 
 - Verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
 - OK: `true`
@@ -13,11 +13,11 @@ Generated: 2026-06-13T06:06:27.653430+00:00
 
 ## Gate Summary
 
-- `submission_package`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_package_audit_20260612.json`
-- `submission_metadata_packet`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_metadata_packet_20260612.json`
-- `submission_source_package_rebuild`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_source_package_rebuild_20260612.json`
-- `external_proceedings_metadata`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\external_proceedings_metadata_recheck_20260612.json`
-- `manual_submission_checklist`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\manual_submission_checklist_20260612.json`
+- `submission_package`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_package_audit_20260613.json`
+- `submission_metadata_packet`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_metadata_packet_20260613.json`
+- `submission_source_package_rebuild`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\submission_source_package_rebuild_20260613.json`
+- `external_proceedings_metadata`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\external_proceedings_metadata_recheck_20260613.json`
+- `manual_submission_checklist`: ok=`true`, ready=`false`, final_ready=`false`, path=`outputs\summary\paper_critical\manual_submission_checklist_20260613.json`
 - `review_continuation`: ok=`true`, ready=`true`, final_ready=`false`, path=`outputs\summary\paper_critical\review_continuation_packet_20260613.json`
 
 ## Remaining Blockers

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 08:54 CEST
+Last updated: 2026-06-13 09:16 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,29 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 Claude direct-review route re-probe:
+  Codex retried the now-exposed `mcp__claude_review.review` direct tool surface
+  because the available Claude tooling differed from the previously unhealthy
+  `review_start` route. The twelfth attempt used `model=opus`, tools disabled,
+  and a schema-aligned ARIS hostile-review prompt, but failed at the
+  CLI/shell layer because the prompt's verdict enum used pipe characters; the
+  failure is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_twelfth_20260613.json`.
+  Codex then removed the shell-sensitive enum characters and retried a
+  thirteenth direct no-tools Claude Opus call; the shell error did not recur,
+  but the connector returned to `Claude CLI did not return JSON output`. That
+  failure is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_thirteenth_20260613.json`.
+  The refreshed review-continuation packet, Claude request packet,
+  connector-health audit, final gate, release-candidate stack, closure packet,
+  and final-blocker consistency audit now record `13` failed Claude attempts,
+  `explicit_claude_opus_present=false`,
+  `final_panel_coverage_complete=false`, and
+  `final_submission_ready=false`. The current connector-health audit reports
+  `same_error_tail_streak=1`, because the twelfth attempt exposed a different
+  shell-escaping failure before the thirteenth returned to the no-JSON failure;
+  this is diagnostic evidence, not reviewer coverage.
 
 - 2026-06-13 bounded ProMax live-probe refresh:
   Codex reran the ARIS citation/proceedings metadata live probe for ProMax at
@@ -63,7 +86,7 @@ cycle.
   submission-system blocker before it can count for explicit Claude Opus
   coverage. `review_continuation_packet_20260613.json` now exposes
   `required_claude_blocker_ack_groups=["manual_submission_system",
-  "promax_public_metadata"]`, keeps failed Claude attempts at `11`, keeps
+  "promax_public_metadata"]`, keeps failed Claude attempts at `13`, keeps
   `explicit_claude_opus_present=false`, and keeps
   `final_submission_ready=false`. The latest live ProMax public metadata probe
   at `2026-06-13T06:52:21Z` still reports Crossref `404`, DOI resolver `404`,
@@ -76,17 +99,22 @@ cycle.
   `outputs/summary/paper_critical/claude_review_connector_health_20260613.{json,md}`.
   The audit is local-only/read-only and does not close review coverage or final
   submission readiness. It counts the recorded Claude Opus failed-attempt JSONs
-  and reports `ok=true`, failed attempt count `11`, valid review evidence count
+  and reports `ok=true`, failed attempt count `13`, valid review evidence count
   `0`, last error `Claude CLI did not return JSON output`,
-  `same_error_tail_streak=11`, `connector_unhealthy=true`,
-  `same_route_retry_recommended=false`, and recommended next route
-  `external_claude_opus_json_via_request_packet_and_validator`. The refreshed
+  `same_error_tail_streak=1`, `connector_unhealthy=false`,
+  `same_route_retry_recommended=true`, and recommended next route
+  `retry_connector_or_refresh_request_packet`. This reflects the twelfth
+  attempt's distinct prompt shell-escaping failure followed by the thirteenth
+  attempt's return to the prior no-JSON failure; it still provides no valid
+  review evidence. The refreshed
   `claude_opus_review_request_packet_20260613.{json,md}` now includes
   `connector_health_command_before_retry` before the validation and attachment
-  commands. Future agents should not keep retrying the same
-  `mcp__claude_review` route unless the connector/tooling changes; use the
-  request packet to obtain a substantive external Claude Opus JSON, then run
-  `main_validate_claude_opus_review_json.py` before attaching it.
+  commands. Because the twelfth attempt exposed a prompt shell-escaping issue,
+  one future shell-safe direct-route retry is defensible if the operator wants
+  to test the corrected prompt path; any no-JSON result still remains failed
+  connector evidence, not reviewer coverage. The robust route remains to use
+  the request packet to obtain a substantive external Claude Opus JSON, then
+  run `main_validate_claude_opus_review_json.py` before attaching it.
 
 - 2026-06-13 strict Claude Opus review-import guard:
   Codex found that the review-continuation coverage check was too permissive:
@@ -106,7 +134,7 @@ cycle.
   `validation_command_before_attach`, and the closure packet's
   `review_panel_coverage` next commands include the validator before the
   review-continuation and final-gate rebuild commands. This is a gate-hardening
-  change only: failed Claude connector attempts are now `11`,
+  change only: failed Claude connector attempts are now `13`,
   `explicit_claude_opus_present=false`,
   `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
   The eleventh `mcp__claude_review.review_start` attempt, job
@@ -116,7 +144,7 @@ cycle.
   at
   `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
   The refreshed review-continuation packet, Claude request packet, and
-  final-blocker consistency audit all record failed Claude attempts `11` while
+  final-blocker consistency audit all record failed Claude attempts `13` while
   preserving the explicit Claude Opus blocker. The latest live ProMax probe at
   `2026-06-13T06:52:21Z` still reports
   Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
@@ -174,7 +202,7 @@ cycle.
   `docs/paper_claims_and_status.md`, `docs/milestones/README.md`, and
   `docs/server_runbook.md` against
   `final_blocker_consistency_audit_20260613.json`. It reports `ok=true`,
-  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `11`,
+  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `13`,
   `explicit_claude_opus_present=false`,
   `promax_public_metadata_ready=false`,
   `manual_submission_system_ready=false`, recursive warning regressions `0`,
@@ -279,7 +307,7 @@ cycle.
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
   `review_continuation_packet_20260613.{json,md}` now reports
-  `review_continuation_ready=true`, failed Claude attempts `11`,
+  `review_continuation_ready=true`, failed Claude attempts `13`,
   `explicit_claude_opus_present=false`, and
   `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
   veto the hardening, but flagged that the pre-submission freshness audit must

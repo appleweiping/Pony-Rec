@@ -28,7 +28,7 @@
       "explicit_claude_opus_review"
     ]
   },
-  "created_at_utc": "2026-06-13T06:05:00.004480+00:00",
+  "created_at_utc": "2026-06-13T07:12:55.783220+00:00",
   "failed_review_attempt_paths": [
     {
       "exists": true,
@@ -40,23 +40,16 @@
     {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_retry_20260613.json",
-      "sha256": "9da30150d005ff3e108894b8babf921adbe2eb148558baca4093866864181828",
-      "size_bytes": 528
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eighth_20260613.json",
+      "sha256": "598d1e88a935a0e9f9373a5929e5f0e40ec339c3db3b85df9193fa974ec021a5",
+      "size_bytes": 673
     },
     {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_third_20260613.json",
-      "sha256": "e04a30471dacc5038202588b6ffd6b95a3e378522ec97b008b946153b0c0e464",
-      "size_bytes": 573
-    },
-    {
-      "exists": true,
-      "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sync_notools_20260613.json",
-      "sha256": "bfbad83626fb9d1e381f5d66ab1e9442174688560df1a3b08787f9f0588eb141",
-      "size_bytes": 559
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eleventh_20260613.json",
+      "sha256": "64be9e0eb6af3d78d2c7ffe2d029b0b2b304f538e9e2c36fb93fe73aaa6246a4",
+      "size_bytes": 700
     },
     {
       "exists": true,
@@ -68,9 +61,16 @@
     {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sixth_20260613.json",
-      "sha256": "df5c4527bd9f878c11718e1d82f18201e6af049629b4d5d7e9c17e91e092334c",
-      "size_bytes": 287
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_ninth_20260613.json",
+      "sha256": "d8859f2d16907f3560dcb1f935ddcd9a887d26dcfddf0c7fc23805a2a24fb115",
+      "size_bytes": 697
+    },
+    {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_retry_20260613.json",
+      "sha256": "9da30150d005ff3e108894b8babf921adbe2eb148558baca4093866864181828",
+      "size_bytes": 528
     },
     {
       "exists": true,
@@ -82,16 +82,16 @@
     {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eighth_20260613.json",
-      "sha256": "598d1e88a935a0e9f9373a5929e5f0e40ec339c3db3b85df9193fa974ec021a5",
-      "size_bytes": 673
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sixth_20260613.json",
+      "sha256": "df5c4527bd9f878c11718e1d82f18201e6af049629b4d5d7e9c17e91e092334c",
+      "size_bytes": 287
     },
     {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_ninth_20260613.json",
-      "sha256": "d8859f2d16907f3560dcb1f935ddcd9a887d26dcfddf0c7fc23805a2a24fb115",
-      "size_bytes": 697
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sync_notools_20260613.json",
+      "sha256": "bfbad83626fb9d1e381f5d66ab1e9442174688560df1a3b08787f9f0588eb141",
+      "size_bytes": 559
     },
     {
       "exists": true,
@@ -103,9 +103,23 @@
     {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eleventh_20260613.json",
-      "sha256": "64be9e0eb6af3d78d2c7ffe2d029b0b2b304f538e9e2c36fb93fe73aaa6246a4",
-      "size_bytes": 700
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_third_20260613.json",
+      "sha256": "e04a30471dacc5038202588b6ffd6b95a3e378522ec97b008b946153b0c0e464",
+      "size_bytes": 573
+    },
+    {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_thirteenth_20260613.json",
+      "sha256": "c3fc74baf5e75b3658492d8a796f9a6e2b369929f6c00f225e64cebb188eda48",
+      "size_bytes": 728
+    },
+    {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_twelfth_20260613.json",
+      "sha256": "6f24b299bf0605e7b45d2b078214b45ffb48c91f1642ec21972d79c790683413",
+      "size_bytes": 778
     }
   ],
   "failed_review_attempts": [
@@ -119,21 +133,14 @@
     {
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
+      "source": "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled",
       "status": "failed",
       "valid_review_evidence": false
     },
     {
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357",
-      "status": "failed",
-      "valid_review_evidence": false
-    },
-    {
-      "error": "Claude CLI did not return JSON output",
-      "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review synchronous call with tools disabled",
+      "source": "mcp__claude_review.review_start async job bf4b6b8145404ffa881cd99ed3c73429 with model=opus and tools disabled",
       "status": "failed",
       "valid_review_evidence": false
     },
@@ -147,7 +154,14 @@
     {
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled",
+      "source": "mcp__claude_review.review_start async job a3863723466147e9b9b849cf994ca8fd with model=opus and tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "error": "Claude CLI did not return JSON output",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
       "status": "failed",
       "valid_review_evidence": false
     },
@@ -161,14 +175,14 @@
     {
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled",
+      "source": "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled",
       "status": "failed",
       "valid_review_evidence": false
     },
     {
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review_start async job a3863723466147e9b9b849cf994ca8fd with model=opus and tools disabled",
+      "source": "mcp__claude_review.review synchronous call with tools disabled",
       "status": "failed",
       "valid_review_evidence": false
     },
@@ -182,7 +196,21 @@
     {
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
-      "source": "mcp__claude_review.review_start async job bf4b6b8145404ffa881cd99ed3c73429 with model=opus and tools disabled",
+      "source": "mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "error": "Claude CLI did not return JSON output",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review direct opus no-tools safe-prompt continuation attempt 2026-06-13",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "error": "Claude CLI returned empty output. stderr: 'WEAK_ACCEPT' is not recognized as an internal or external command, operable program or batch file.",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review direct opus no-tools continuation attempt 2026-06-13",
       "status": "failed",
       "valid_review_evidence": false
     }
@@ -216,8 +244,8 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "3ee1fbc70d527e1564a5416d19db454078fa3fa73cf7904ab7e8edcacb19d8f0",
-      "size_bytes": 15992
+      "sha256": "96d44e07c6d8bbf74f8eee472c3c1f02480bf78dfc68c57453a9a49283fc2716",
+      "size_bytes": 16587
     },
     "panel_review": {
       "exists": true,
@@ -230,21 +258,21 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
-      "sha256": "65c8da02769db31051e38a55ad2e75afbba5a3b04b09cb0a0c49b4b774596550",
+      "sha256": "58ad30be94a5f4b4ca1cfe2c6904a83dd32d1a2d1b54a4a7bd7681237d260130",
       "size_bytes": 6963
     },
     "release_candidate_stack": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_release_candidate_stack_refresh_20260613.json",
-      "sha256": "e655d1a76f2e57882e86e770150cd7a8d625fe4efc6e478821932703fcb15b52",
+      "sha256": "b7b83f409387eb6d4ee925ff90306fb5c4416ebcf48e2782d77aea212138df96",
       "size_bytes": 10658
     },
     "submission_package_audit": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260613.json",
-      "sha256": "b45359e32d24db45215b6d6d9e15059f72dac033c20ff8e44e18ee6110dc1874",
+      "sha256": "f07ec05e0654b2d9eef76d8eb0e42d9ebb7b329db187edfa440ee1d96aed88e9",
       "size_bytes": 16084
     }
   },
