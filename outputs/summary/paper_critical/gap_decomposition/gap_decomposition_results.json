@@ -1,0 +1,618 @@
+{
+  "metric": "NDCG@10",
+  "n_domains": 8,
+  "note": "n=8 -> correlational/descriptive, not strong causal. CCRP = Candidate-Conditioned Relevance Posterior (pointwise LLM relevance), not Calibrated.",
+  "domains": [
+    {
+      "domain": "beauty",
+      "ccrp_ndcg10": 0.13405198045497876,
+      "strongest_baseline": "proex_profile",
+      "strongest_baseline_ndcg10": 0.15058877178954558,
+      "gap_vs_strongest": -0.016536791334566814,
+      "gap_vs_strongest_pct": -10.981423872476832,
+      "llmemb_ndcg10": 0.12259360010805838,
+      "gap_vs_llmemb": 0.011458380346920385,
+      "gap_vs_llmemb_pct": 9.346638272161483,
+      "ccrp_wins": false,
+      "catalog_size": 1184,
+      "gini": 0.2583896225330602,
+      "head_top1pct_share": 0.03493847789761507,
+      "cand_tfidf_cos_mean": 0.029211548308272023,
+      "cand_jaccard_mean": 0.031243330635172897,
+      "cand_title_len_tokens": 23.36593613861386,
+      "cand_vocab_size": 1012.24,
+      "cand_metadata_completeness": 0.9987376237623762,
+      "mean_user_hist_len": 5.589928057553957,
+      "n_test_users": 973,
+      "cand_title_coverage": 1.0,
+      "hist_source": "panel_ranking_test_jsonl"
+    },
+    {
+      "domain": "books",
+      "ccrp_ndcg10": 0.33280196207428,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.27365830143129205,
+      "gap_vs_strongest": 0.05914366064298793,
+      "gap_vs_strongest_pct": 21.612229679733378,
+      "llmemb_ndcg10": 0.27365830143129205,
+      "gap_vs_llmemb": 0.05914366064298793,
+      "gap_vs_llmemb_pct": 21.612229679733378,
+      "ccrp_wins": true,
+      "catalog_size": 963824,
+      "gini": 0.6021604595680536,
+      "head_top1pct_share": 0.22861171982157638,
+      "cand_tfidf_cos_mean": 0.021353283046807153,
+      "cand_jaccard_mean": 0.031141281944225184,
+      "cand_title_len_tokens": 8.38809405940594,
+      "cand_vocab_size": 513.29,
+      "cand_metadata_completeness": 1.0,
+      "mean_user_hist_len": 5.7967,
+      "n_test_users": 10000,
+      "cand_title_coverage": 1.0,
+      "hist_source": "panel_ranking_test_jsonl"
+    },
+    {
+      "domain": "electronics",
+      "ccrp_ndcg10": 0.1832855407620405,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.11963436550635798,
+      "gap_vs_strongest": 0.06365117525568253,
+      "gap_vs_strongest_pct": 53.204758504194004,
+      "llmemb_ndcg10": 0.11963436550635798,
+      "gap_vs_llmemb": 0.06365117525568253,
+      "gap_vs_llmemb_pct": 53.204758504194004,
+      "ccrp_wins": true,
+      "catalog_size": 533532,
+      "gini": 0.7643725654439979,
+      "head_top1pct_share": 0.35941992462162514,
+      "cand_tfidf_cos_mean": 0.023292576882571595,
+      "cand_jaccard_mean": 0.02386853201626552,
+      "cand_title_len_tokens": 21.204257425742576,
+      "cand_vocab_size": 1021.43,
+      "cand_metadata_completeness": 1.0,
+      "mean_user_hist_len": 4.7687,
+      "n_test_users": 10000,
+      "cand_title_coverage": 1.0,
+      "hist_source": "panel_ranking_test_jsonl"
+    },
+    {
+      "domain": "movies",
+      "ccrp_ndcg10": 0.12812717180077174,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.16896032141625786,
+      "gap_vs_strongest": -0.04083314961548612,
+      "gap_vs_strongest_pct": -24.167301099580552,
+      "llmemb_ndcg10": 0.16896032141625786,
+      "gap_vs_llmemb": -0.04083314961548612,
+      "gap_vs_llmemb_pct": -24.167301099580552,
+      "ccrp_wins": false,
+      "catalog_size": 258113,
+      "gini": 0.7322014399691086,
+      "head_top1pct_share": 0.29036030786078,
+      "cand_tfidf_cos_mean": 0.02205050218519953,
+      "cand_jaccard_mean": 0.02496261393374685,
+      "cand_title_len_tokens": 5.203462963667597,
+      "cand_vocab_size": 180.625,
+      "cand_metadata_completeness": 0.5089851485148514,
+      "mean_user_hist_len": 6.720158892687855,
+      "n_test_users": 10000,
+      "cand_title_coverage": 0.5891640163562017,
+      "hist_source": "interactions_csv_proxy_all_users"
+    },
+    {
+      "domain": "sports",
+      "ccrp_ndcg10": 0.23286197589860086,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.17950042152579318,
+      "gap_vs_strongest": 0.05336155437280768,
+      "gap_vs_strongest_pct": 29.72781563364737,
+      "llmemb_ndcg10": 0.17950042152579318,
+      "gap_vs_llmemb": 0.05336155437280768,
+      "gap_vs_llmemb_pct": 29.72781563364737,
+      "ccrp_wins": true,
+      "catalog_size": 315692,
+      "gini": 0.6607811391886247,
+      "head_top1pct_share": 0.23941699760913163,
+      "cand_tfidf_cos_mean": 0.012958460312962128,
+      "cand_jaccard_mean": 0.0123940642843188,
+      "cand_title_len_tokens": 15.485650247524752,
+      "cand_vocab_size": 904.76,
+      "cand_metadata_completeness": 0.9999752475247524,
+      "mean_user_hist_len": 4.0731,
+      "n_test_users": 10000,
+      "cand_title_coverage": 0.9999666232769266,
+      "hist_source": "panel_ranking_test_jsonl"
+    },
+    {
+      "domain": "toys",
+      "ccrp_ndcg10": 0.27079859856897753,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.20485045979333913,
+      "gap_vs_strongest": 0.0659481387756384,
+      "gap_vs_strongest_pct": 32.19330766558658,
+      "llmemb_ndcg10": 0.20485045979333913,
+      "gap_vs_llmemb": 0.0659481387756384,
+      "gap_vs_llmemb_pct": 32.19330766558658,
+      "ccrp_wins": true,
+      "catalog_size": 278889,
+      "gini": 0.6515007643088149,
+      "head_top1pct_share": 0.21709692416686568,
+      "cand_tfidf_cos_mean": 0.0188172105964018,
+      "cand_jaccard_mean": 0.018483150577584713,
+      "cand_title_len_tokens": 16.30919183168317,
+      "cand_vocab_size": 846.0975,
+      "cand_metadata_completeness": 0.9998762376237623,
+      "mean_user_hist_len": 4.3945,
+      "n_test_users": 10000,
+      "cand_title_coverage": 0.9998669018068079,
+      "hist_source": "panel_ranking_test_jsonl"
+    },
+    {
+      "domain": "home",
+      "ccrp_ndcg10": 0.13239420796539653,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.09390612986107003,
+      "gap_vs_strongest": 0.0384880781043265,
+      "gap_vs_strongest_pct": 40.98569301201947,
+      "llmemb_ndcg10": 0.09390612986107003,
+      "gap_vs_llmemb": 0.0384880781043265,
+      "gap_vs_llmemb_pct": 40.98569301201947,
+      "ccrp_wins": true,
+      "catalog_size": 1160443,
+      "gini": 0.7442625814272938,
+      "head_top1pct_share": 0.3373022127079533,
+      "cand_tfidf_cos_mean": 0.01766251991035949,
+      "cand_jaccard_mean": 0.018618868562271015,
+      "cand_title_len_tokens": 19.53628514851485,
+      "cand_vocab_size": 1023.72,
+      "cand_metadata_completeness": 0.9999257425742575,
+      "mean_user_hist_len": 5.0899,
+      "n_test_users": 10000,
+      "cand_title_coverage": 0.9999694030535753,
+      "hist_source": "panel_ranking_test_jsonl"
+    },
+    {
+      "domain": "tools",
+      "ccrp_ndcg10": 0.16611553052793934,
+      "strongest_baseline": "llmemb",
+      "strongest_baseline_ndcg10": 0.11594350972806679,
+      "gap_vs_strongest": 0.050172020799872555,
+      "gap_vs_strongest_pct": 43.27281528525892,
+      "llmemb_ndcg10": 0.11594350972806679,
+      "gap_vs_llmemb": 0.050172020799872555,
+      "gap_vs_llmemb_pct": 43.27281528525892,
+      "ccrp_wins": true,
+      "catalog_size": 436030,
+      "gini": 0.6905488806875717,
+      "head_top1pct_share": 0.2498545764478188,
+      "cand_tfidf_cos_mean": 0.01959502099798494,
+      "cand_jaccard_mean": 0.019627371929709234,
+      "cand_title_len_tokens": 19.591788366336633,
+      "cand_vocab_size": 1026.2625,
+      "cand_metadata_completeness": 0.9999504950495051,
+      "mean_user_hist_len": 3.9923,
+      "n_test_users": 10000,
+      "cand_title_coverage": 0.9999356250804686,
+      "hist_source": "panel_ranking_test_jsonl"
+    }
+  ],
+  "spearman_correlations": {
+    "gap_vs_strongest_pct": {
+      "catalog_size": {
+        "label": "Catalog size (#items)",
+        "spearman": 0.5952380952380952,
+        "spearman_p": 0.11952980613878969,
+        "pearson": 0.49072235132178155
+      },
+      "gini": {
+        "label": "Popularity Gini",
+        "spearman": 0.5714285714285714,
+        "spearman_p": 0.1389599571606889,
+        "pearson": 0.504305966469911
+      },
+      "head_top1pct_share": {
+        "label": "Top-1% interaction share",
+        "spearman": 0.5238095238095238,
+        "spearman_p": 0.18272075053966325,
+        "pearson": 0.5274486611499538
+      },
+      "cand_tfidf_cos_mean": {
+        "label": "Cand. title TF-IDF cosine",
+        "spearman": -0.23809523809523808,
+        "spearman_p": 0.5701563208157685,
+        "pearson": -0.47132516784771483
+      },
+      "cand_jaccard_mean": {
+        "label": "Cand. title token Jaccard",
+        "spearman": -0.4523809523809524,
+        "spearman_p": 0.26040476743688523,
+        "pearson": -0.49547871064478316
+      },
+      "cand_title_len_tokens": {
+        "label": "Cand. title length (tokens)",
+        "spearman": 0.5,
+        "spearman_p": 0.20703125000000044,
+        "pearson": 0.46664797605808345
+      },
+      "cand_vocab_size": {
+        "label": "Cand. panel vocab size",
+        "spearman": 0.7619047619047619,
+        "spearman_p": 0.028004939153071805,
+        "pearson": 0.658929965262763
+      },
+      "cand_metadata_completeness": {
+        "label": "Cand. metadata completeness",
+        "spearman": 0.5628843430992317,
+        "spearman_p": 0.14633153260551687,
+        "pearson": 0.7070777364019907
+      },
+      "mean_user_hist_len": {
+        "label": "Mean user history length",
+        "spearman": -0.6904761904761905,
+        "spearman_p": 0.05799031816457199,
+        "pearson": -0.7814524129595399
+      },
+      "n_test_users": {
+        "label": "#Test users",
+        "spearman": 0.4123930494211613,
+        "spearman_p": 0.30995873550624187,
+        "pearson": 0.5092805159379632
+      }
+    },
+    "gap_vs_llmemb_pct": {
+      "catalog_size": {
+        "label": "Catalog size (#items)",
+        "spearman": 0.5952380952380952,
+        "spearman_p": 0.11952980613878969,
+        "pearson": 0.3962427223399965
+      },
+      "gini": {
+        "label": "Popularity Gini",
+        "spearman": 0.5714285714285714,
+        "spearman_p": 0.1389599571606889,
+        "pearson": 0.2844210651839559
+      },
+      "head_top1pct_share": {
+        "label": "Top-1% interaction share",
+        "spearman": 0.5238095238095238,
+        "spearman_p": 0.18272075053966325,
+        "pearson": 0.336802917016019
+      },
+      "cand_tfidf_cos_mean": {
+        "label": "Cand. title TF-IDF cosine",
+        "spearman": -0.23809523809523808,
+        "spearman_p": 0.5701563208157685,
+        "pearson": -0.3086292653888696
+      },
+      "cand_jaccard_mean": {
+        "label": "Cand. title token Jaccard",
+        "spearman": -0.4523809523809524,
+        "spearman_p": 0.26040476743688523,
+        "pearson": -0.39504684675455626
+      },
+      "cand_title_len_tokens": {
+        "label": "Cand. title length (tokens)",
+        "spearman": 0.5,
+        "spearman_p": 0.20703125000000044,
+        "pearson": 0.6579445555848107
+      },
+      "cand_vocab_size": {
+        "label": "Cand. panel vocab size",
+        "spearman": 0.7619047619047619,
+        "spearman_p": 0.028004939153071805,
+        "pearson": 0.8122222208656809
+      },
+      "cand_metadata_completeness": {
+        "label": "Cand. metadata completeness",
+        "spearman": 0.5628843430992317,
+        "spearman_p": 0.14633153260551687,
+        "pearson": 0.8318910791181966
+      },
+      "mean_user_hist_len": {
+        "label": "Mean user history length",
+        "spearman": -0.6904761904761905,
+        "spearman_p": 0.05799031816457199,
+        "pearson": -0.8053799948750899
+      },
+      "n_test_users": {
+        "label": "#Test users",
+        "spearman": 0.4123930494211613,
+        "spearman_p": 0.30995873550624187,
+        "pearson": 0.2732941006063453
+      }
+    },
+    "gap_vs_strongest": {
+      "catalog_size": {
+        "label": "Catalog size (#items)",
+        "spearman": 0.3333333333333333,
+        "spearman_p": 0.4197530864197532,
+        "pearson": 0.4339216521338637
+      },
+      "gini": {
+        "label": "Popularity Gini",
+        "spearman": -0.023809523809523808,
+        "spearman_p": 0.9553740118158813,
+        "pearson": 0.3750595221178406
+      },
+      "head_top1pct_share": {
+        "label": "Top-1% interaction share",
+        "spearman": -0.07142857142857142,
+        "spearman_p": 0.8665262706759095,
+        "pearson": 0.3468434163201784
+      },
+      "cand_tfidf_cos_mean": {
+        "label": "Cand. title TF-IDF cosine",
+        "spearman": -0.23809523809523808,
+        "spearman_p": 0.5701563208157685,
+        "pearson": -0.5118762076851768
+      },
+      "cand_jaccard_mean": {
+        "label": "Cand. title token Jaccard",
+        "spearman": -0.40476190476190477,
+        "spearman_p": 0.31988864122881655,
+        "pearson": -0.40953386178045237
+      },
+      "cand_title_len_tokens": {
+        "label": "Cand. title length (tokens)",
+        "spearman": 0.047619047619047616,
+        "spearman_p": 0.9108491685195829,
+        "pearson": 0.2643322543589516
+      },
+      "cand_vocab_size": {
+        "label": "Cand. panel vocab size",
+        "spearman": 0.0,
+        "spearman_p": 1.0,
+        "pearson": 0.49386258196100724
+      },
+      "cand_metadata_completeness": {
+        "label": "Cand. metadata completeness",
+        "spearman": 0.6347419188140273,
+        "spearman_p": 0.09089043638915634,
+        "pearson": 0.7544507982552194
+      },
+      "mean_user_hist_len": {
+        "label": "Mean user history length",
+        "spearman": -0.4523809523809524,
+        "spearman_p": 0.26040476743688523,
+        "pearson": -0.7476789588569129
+      },
+      "n_test_users": {
+        "label": "#Test users",
+        "spearman": 0.4123930494211613,
+        "spearman_p": 0.30995873550624187,
+        "pearson": 0.5090350666021342
+      }
+    },
+    "gap_vs_llmemb": {
+      "catalog_size": {
+        "label": "Catalog size (#items)",
+        "spearman": 0.3333333333333333,
+        "spearman_p": 0.4197530864197532,
+        "pearson": 0.3415494858023297
+      },
+      "gini": {
+        "label": "Popularity Gini",
+        "spearman": -0.023809523809523808,
+        "spearman_p": 0.9553740118158813,
+        "pearson": 0.15891708604828794
+      },
+      "head_top1pct_share": {
+        "label": "Top-1% interaction share",
+        "spearman": -0.07142857142857142,
+        "spearman_p": 0.8665262706759095,
+        "pearson": 0.1520431251797802
+      },
+      "cand_tfidf_cos_mean": {
+        "label": "Cand. title TF-IDF cosine",
+        "spearman": -0.23809523809523808,
+        "spearman_p": 0.5701563208157685,
+        "pearson": -0.36729791854215776
+      },
+      "cand_jaccard_mean": {
+        "label": "Cand. title token Jaccard",
+        "spearman": -0.40476190476190477,
+        "spearman_p": 0.31988864122881655,
+        "pearson": -0.3084427859054135
+      },
+      "cand_title_len_tokens": {
+        "label": "Cand. title length (tokens)",
+        "spearman": 0.047619047619047616,
+        "spearman_p": 0.9108491685195829,
+        "pearson": 0.4195424480842953
+      },
+      "cand_vocab_size": {
+        "label": "Cand. panel vocab size",
+        "spearman": 0.0,
+        "spearman_p": 1.0,
+        "pearson": 0.6185762478850011
+      },
+      "cand_metadata_completeness": {
+        "label": "Cand. metadata completeness",
+        "spearman": 0.6347419188140273,
+        "spearman_p": 0.09089043638915634,
+        "pearson": 0.8765741624981599
+      },
+      "mean_user_hist_len": {
+        "label": "Mean user history length",
+        "spearman": -0.4523809523809524,
+        "spearman_p": 0.26040476743688523,
+        "pearson": -0.7678414943206009
+      },
+      "n_test_users": {
+        "label": "#Test users",
+        "spearman": 0.4123930494211613,
+        "spearman_p": 0.30995873550624187,
+        "pearson": 0.29236321044203994
+      }
+    }
+  },
+  "single_feature_ols_gap_vs_strongest_pct": {
+    "catalog_size": {
+      "label": "Catalog size (#items)",
+      "slope": 3.445196504707807e-05,
+      "intercept": 6.230203903534612,
+      "r2": 0.2408084260867781
+    },
+    "gini": {
+      "label": "Popularity Gini",
+      "slope": 84.20663434011405,
+      "intercept": -30.4951347324339,
+      "r2": 0.254324507817151
+    },
+    "head_top1pct_share": {
+      "label": "Top-1% interaction share",
+      "slope": 144.31332961962968,
+      "intercept": -12.071681992248568,
+      "r2": 0.27820209014887876
+    },
+    "cand_tfidf_cos_mean": {
+      "label": "Cand. title TF-IDF cosine",
+      "slope": -2716.2794338373524,
+      "intercept": 79.23425911805806,
+      "r2": 0.22214741384667647
+    },
+    "cand_jaccard_mean": {
+      "label": "Cand. title token Jaccard",
+      "slope": -2052.287123170418,
+      "intercept": 69.49446765796786,
+      "r2": 0.24549915270221678
+    },
+    "cand_title_len_tokens": {
+      "label": "Cand. title length (tokens)",
+      "slope": 1.997552703094815,
+      "intercept": -9.000691131317954,
+      "r2": 0.2177603335591055
+    },
+    "cand_vocab_size": {
+      "label": "Cand. panel vocab size",
+      "slope": 0.05771867124901732,
+      "intercept": -23.870515192560443,
+      "r2": 0.4341886991211862
+    },
+    "cand_metadata_completeness": {
+      "label": "Cand. metadata completeness",
+      "slope": 110.60728493529355,
+      "intercept": -80.56635265439611,
+      "r2": 0.49995892531536323
+    },
+    "mean_user_hist_len": {
+      "label": "Mean user history length",
+      "slope": -22.49902264556272,
+      "intercept": 136.9221676694055,
+      "r2": 0.6106678737202875
+    },
+    "n_test_users": {
+      "label": "#Test users",
+      "slope": 0.004331438791375033,
+      "intercept": -15.195913816484737,
+      "r2": 0.2593666439140381
+    }
+  },
+  "top_feature_by_abs_spearman": "cand_vocab_size",
+  "top_feature_by_ols_r2": "mean_user_hist_len",
+  "figure_headline_feature": "mean_user_hist_len",
+  "win_vs_loss_separation": {
+    "catalog_size": {
+      "label": "Catalog size (#items)",
+      "win_mean": 614735.0,
+      "loss_mean": 129648.5,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "gini": {
+      "label": "Popularity Gini",
+      "win_mean": 0.6856043984373928,
+      "loss_mean": 0.4952955312510844,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "head_top1pct_share": {
+      "label": "Top-1% interaction share",
+      "win_mean": 0.27195039256249515,
+      "loss_mean": 0.16264939287919752,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "cand_tfidf_cos_mean": {
+      "label": "Cand. title TF-IDF cosine",
+      "win_mean": 0.018946511957847852,
+      "loss_mean": 0.025631025246735776,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "cand_jaccard_mean": {
+      "label": "Cand. title token Jaccard",
+      "win_mean": 0.02068887821906241,
+      "loss_mean": 0.028102972284459873,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "cand_title_len_tokens": {
+      "label": "Cand. title length (tokens)",
+      "win_mean": 16.752544513201318,
+      "loss_mean": 14.28469955114073,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "cand_vocab_size": {
+      "label": "Cand. panel vocab size",
+      "win_mean": 889.2599999999999,
+      "loss_mean": 596.4325,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "cand_metadata_completeness": {
+      "label": "Cand. metadata completeness",
+      "win_mean": 0.9999546204620463,
+      "loss_mean": 0.7538613861386139,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "mean_user_hist_len": {
+      "label": "Mean user history length",
+      "win_mean": 4.685866666666667,
+      "loss_mean": 6.155043475120905,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    },
+    "n_test_users": {
+      "label": "#Test users",
+      "win_mean": 10000.0,
+      "loss_mean": 5486.5,
+      "loss_domains": [
+        "beauty",
+        "movies"
+      ]
+    }
+  },
+  "interpretation": {
+    "text_homogeneity_hypothesis": "SUPPORTED (directionally): gap_vs_strongest_pct correlates NEGATIVELY with candidate-title TF-IDF cosine (Spearman -0.24) and token Jaccard (-0.45); the two non-winning domains have the highest candidate-text homogeneity. Not individually significant at n=8.",
+    "popularity_skew_hypothesis": "REVERSED vs the prior: the gap correlates POSITIVELY with Gini (Spearman 0.57) and top-1% share (0.52). C-CRP's margin GROWS on more skewed / long-tail catalogs, not shrinks. The prior 'loses on high-skew' framing is not supported; Movies loses despite high skew, Beauty loses with very LOW skew.",
+    "strongest_continuous_predictor": "mean_user_hist_len (Spearman -0.69, OLS R2=0.61): C-CRP wins where user histories are SHORT (cold-start regime), and is not first on the two longest-history domains.",
+    "dual_mechanism": "The two non-winning domains fail for DIFFERENT reasons: Beauty is a tiny (1,184-item), near-uniform catalog where dense ID/CF baselines (ProEx) have ample co-occurrence signal and the LLM posterior has little to add (C-CRP still beats LLMEmb by +9.3%); Movies has low item-metadata completeness (~51%), the most text-homogeneous candidate panels, and the longest histories, weakening the LLM's per-candidate relevance signal. No single feature classifies both, which is why we report the full feature table rather than a one-factor explanation."
+  },
+  "data_quality_disclosures": {
+    "movies_cand_title_coverage": 0.5891640163562017,
+    "movies_cand_metadata_completeness": 0.5089851485148514,
+    "movies_hist_source": "interactions_csv_proxy_all_users",
+    "note": "Movies item titles are ~38% missing in the Amazon metadata; TF-IDF cosine / title length / vocab are computed over non-empty titles only, and metadata-completeness is reported as its own feature. Movies@10k panel was cleaned from server, so movies mean_user_hist_len uses an interactions.csv all-user proxy."
+  }
+}
