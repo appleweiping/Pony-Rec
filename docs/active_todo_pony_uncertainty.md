@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 09:41 CEST
+Last updated: 2026-06-13 10:13 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,24 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 private manual-confirmation request refresh:
+  Codex refreshed the public-safe private manual submission confirmation
+  request packet at `2026-06-13T08:10:35Z`:
+  `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.{json,md}`.
+  The packet remains `ok=true`, `manual_confirmation_needed=true`,
+  `manual_submission_system_ready=false`, and `final_submission_ready=false`.
+  It still recommends the ignored path
+  `artifacts/private/manual_submission_private_confirmation_20260613.json` and
+  routes any future private JSON through
+  `main_validate_manual_submission_private_confirmation_json` before the public
+  manual checklist consumes it. Codex then refreshed the closure packet at
+  `2026-06-13T08:11:17Z` and reran the final-blocker consistency audit at
+  `2026-06-13T08:11:51Z`; the audit reports
+  `manual_request_has_private_confirmation_validator=true`,
+  `closure_manual_group_has_private_confirmation_validator=true`, and
+  `final_submission_ready=false`. This is a handoff freshness update, not a
+  manual-gate closure.
 
 - 2026-06-13 Claude direct-review route re-probe:
   Codex retried the now-exposed `mcp__claude_review.review` direct tool surface

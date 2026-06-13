@@ -1,9 +1,9 @@
 {
-  "created_at_utc": "2026-06-13T07:48:41.559561+00:00",
+  "created_at_utc": "2026-06-13T08:15:56.071651+00:00",
   "doc_results": {
     "docs/active_todo_pony_uncertainty.md": {
       "current_section": {
-        "end_line": 1167,
+        "end_line": 1185,
         "end_marker": "## Hard Invariants",
         "start_line": 10,
         "start_marker": "## Current Checkpoint"
@@ -22,15 +22,15 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\active_todo_pony_uncertainty.md",
-        "sha256": "edf6b72203956be6edb01da17392002ebd3e7d86c0392f7da68a8b63e17a6ff1",
-        "size_bytes": 328406
+        "sha256": "d3d828e7da8c7181eb436f495d30542c6b2aa508c38037ccbe86fcb2e279b5ae",
+        "size_bytes": 329497
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/milestones/README.md": {
       "current_section": {
-        "end_line": 473,
+        "end_line": 477,
         "end_marker": "## Current Evidence Integrity (updated 2026-06-06)",
         "start_line": 74,
         "start_marker": "## Current Evidence Integrity (updated 2026-06-13)"
@@ -49,15 +49,15 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\milestones\\README.md",
-        "sha256": "894df1f264010abfb24cf3ab237ad4d211dd35878be9851a712eca449a65f736",
-        "size_bytes": 160558
+        "sha256": "ccef6902e0234d66a4cb4c4eacf94d74ca1cf4a4a3d5885b91e3777eda75246f",
+        "size_bytes": 160837
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/paper_claims_and_status.md": {
       "current_section": {
-        "end_line": 1626,
+        "end_line": 1631,
         "end_marker": "## Not primary claims",
         "start_line": 41,
         "start_marker": "## Paper-critical readiness modules"
@@ -76,15 +76,15 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\paper_claims_and_status.md",
-        "sha256": "da4cad992adc6c549967ffe2a55deac4c2c1f931512726e11dfba492d93d0004",
-        "size_bytes": 206653
+        "sha256": "5921d0fb7b6e2567706af4d66d8972b60adf6f9be7bc9cd7960defba38ad16a6",
+        "size_bytes": 206997
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/server_runbook.md": {
       "current_section": {
-        "end_line": 301,
+        "end_line": 306,
         "end_marker": "## Key Scripts",
         "start_line": 37,
         "start_marker": "## Current Priority Order (2026-06-13)"
@@ -103,8 +103,8 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\server_runbook.md",
-        "sha256": "a4f69ad27c26a60e3d477830b252451309e8107d7a63bcb451ff1ca9c93e4f7b",
-        "size_bytes": 88230
+        "sha256": "21ee85c98cbd78e0b75980b81a845577d929f567f42c52400606ca5bdb801e80",
+        "size_bytes": 88537
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
@@ -128,7 +128,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_blocker_consistency_audit_20260613.json",
-      "sha256": "f848664af0792c256e24f0626a14a74bea8ca60fae5db0034b464babb7cb661a",
+      "sha256": "3e9805196ca088fed30320fa1a1f2d13e38be171d11d574e209ff9f82e5ada50",
       "size_bytes": 4717
     },
     "docs": {
@@ -136,29 +136,29 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\active_todo_pony_uncertainty.md",
-        "sha256": "edf6b72203956be6edb01da17392002ebd3e7d86c0392f7da68a8b63e17a6ff1",
-        "size_bytes": 328406
+        "sha256": "d3d828e7da8c7181eb436f495d30542c6b2aa508c38037ccbe86fcb2e279b5ae",
+        "size_bytes": 329497
       },
       "docs/milestones/README.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\milestones\\README.md",
-        "sha256": "894df1f264010abfb24cf3ab237ad4d211dd35878be9851a712eca449a65f736",
-        "size_bytes": 160558
+        "sha256": "ccef6902e0234d66a4cb4c4eacf94d74ca1cf4a4a3d5885b91e3777eda75246f",
+        "size_bytes": 160837
       },
       "docs/paper_claims_and_status.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\paper_claims_and_status.md",
-        "sha256": "da4cad992adc6c549967ffe2a55deac4c2c1f931512726e11dfba492d93d0004",
-        "size_bytes": 206653
+        "sha256": "5921d0fb7b6e2567706af4d66d8972b60adf6f9be7bc9cd7960defba38ad16a6",
+        "size_bytes": 206997
       },
       "docs/server_runbook.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\server_runbook.md",
-        "sha256": "a4f69ad27c26a60e3d477830b252451309e8107d7a63bcb451ff1ca9c93e4f7b",
-        "size_bytes": 88230
+        "sha256": "21ee85c98cbd78e0b75980b81a845577d929f567f42c52400606ca5bdb801e80",
+        "size_bytes": 88537
       }
     }
   },

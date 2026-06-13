@@ -192,6 +192,11 @@ PIDs, audit summaries, and missing-file errors.
    artifact, review-panel coverage, external metadata, and private manual
    submission blockers and
    gives the exact next commands without storing private fields.
+   The public-safe private manual submission confirmation request packet was
+   refreshed at `2026-06-13T08:10:35Z`, then the closure packet and
+   final-blocker consistency audit were refreshed at `2026-06-13T08:11Z`; the
+   private manual gate remains open with
+   `manual_submission_system_ready=false`.
    The latest ProMax public probe is
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
    Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,

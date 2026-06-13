@@ -115,6 +115,11 @@ The closure packet was refreshed after the latest probe at
 a readiness upgrade. The closure packet Markdown now lists latest public source
 probes in addition to direct Crossref/DOI/ACM statuses and explicitly carries
 the review-panel blockers.
+Codex also refreshed the public-safe private manual submission confirmation
+request packet at `2026-06-13T08:10:35Z` and reran the closure/consistency
+handoff at `2026-06-13T08:11Z`; the private manual gate remains open with
+`manual_submission_system_ready=false`, while the consistency audit keeps the
+validator-before-checklist route intact.
 Codex also refreshed
 the complete local release-candidate stack
 as

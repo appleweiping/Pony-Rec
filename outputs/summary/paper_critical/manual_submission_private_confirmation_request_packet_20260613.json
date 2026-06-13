@@ -1,6 +1,6 @@
 {
   "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
-  "created_at_utc": "2026-06-13T06:35:54.238601+00:00",
+  "created_at_utc": "2026-06-13T08:10:35.650981+00:00",
   "failures": [],
   "final_submission_ready": false,
   "follow_up_commands_after_human_completion": [
@@ -51,7 +51,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260613.json",
-      "sha256": "255382ecd76d7b28a6592f8ce90eb511b1144716e1b3f6f993727bbe24d5c5a5",
+      "sha256": "efb9147263c8bf2e9b488c0dd8e01709bb275813f21557db562007809610f7e2",
       "size_bytes": 15331
     },
     "private_confirmation_template_json": {

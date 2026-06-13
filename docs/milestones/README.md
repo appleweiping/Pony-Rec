@@ -150,6 +150,10 @@ accepted papers, UQ author profile, author Google Sites publications, and UQ
 Experts profile. The closure packet refreshed after the latest probes and now
 lists those source probes plus the explicit review-panel blockers in Markdown;
 this strengthens provenance but is not a readiness upgrade.
+The public-safe private manual submission confirmation request packet was
+refreshed at `2026-06-13T08:10:35Z`, and the closure/consistency handoff was
+refreshed at `2026-06-13T08:11Z`; the manual submission-system gate remains
+private-pending and `final_submission_ready=false`.
 The complete release-candidate stack was also
 refreshed at `2026-06-13T04:31:25Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
