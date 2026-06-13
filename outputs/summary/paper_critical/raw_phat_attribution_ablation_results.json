@@ -1,0 +1,229 @@
+{
+  "experiment": "raw_phat_attribution_ablation",
+  "description": "Rank 101 sampled-negative candidates by RAW LLM relevance_probability alone (no calibration, no uncertainty, eta=0-equivalent), using the project's own seeded tie-break + ranking_task_metrics. Compares to reported main-table C-CRP v3.",
+  "tie_break_seed": 20260607,
+  "domains": [
+    {
+      "domain": "sports",
+      "status": "ok",
+      "prob_column": "relevance_probability",
+      "tie_break_seed": 20260607,
+      "n_events": 10000,
+      "n_candidate_scores": 1010000,
+      "ranking_eval_records_source": "outputs\\baselines\\official_adapters\\sports_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "signal_rows_source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_sports\\test\\test_ccrp_signal_rows.csv",
+      "raw_phat_metrics": {
+        "HR@5": 0.2652,
+        "HR@10": 0.3687,
+        "HR@20": 0.5052,
+        "NDCG@5": 0.1913876688467332,
+        "NDCG@10": 0.2247500905392827,
+        "NDCG@20": 0.2591389279231462,
+        "MRR": 0.20149781834981742
+      },
+      "reported_ccrp_main_metrics": {
+        "HR@5": 0.2745,
+        "HR@10": 0.3819,
+        "HR@20": 0.5172,
+        "NDCG@5": 0.19845140673482808,
+        "NDCG@10": 0.23286197589860086,
+        "NDCG@20": 0.2670062993241999,
+        "MRR": 0.20756582350031022
+      },
+      "raw_phat_minus_ccrp_main": {
+        "HR@5": -0.00930000000000003,
+        "HR@10": -0.01319999999999999,
+        "HR@20": -0.01200000000000001,
+        "NDCG@5": -0.00706373788809489,
+        "NDCG@10": -0.008111885359318172,
+        "NDCG@20": -0.007867371401053702,
+        "MRR": -0.0060680051504928
+      },
+      "selector_route_same_tiebreak_reference": {
+        "status": "ok",
+        "source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_sports\\ccrp_ablation_diagnostics.csv",
+        "ccrp_full": {
+          "HR@10": 0.3793,
+          "NDCG@10": 0.2280957895657901,
+          "MRR": 0.2025303644834656
+        },
+        "confidence_only_no_uncertainty_no_risk": {
+          "HR@10": 0.3805,
+          "NDCG@10": 0.2286769117070504,
+          "MRR": 0.2028865825821798
+        },
+        "without_risk_penalty": {
+          "HR@10": 0.3805,
+          "NDCG@10": 0.2286769117070504,
+          "MRR": 0.2028865825821798
+        },
+        "without_calibration_gap": {
+          "HR@10": 0.3788,
+          "NDCG@10": 0.2283132273300448,
+          "MRR": 0.2029633141570405
+        }
+      }
+    },
+    {
+      "domain": "toys",
+      "status": "skipped_missing_local_test_signal_rows",
+      "expected_signal_path": "D:\\Research\\Uncertainty\\outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_toys\\test\\test_ccrp_signal_rows.csv",
+      "note": "Test signal rows not present locally for this domain; re-run requires server copy.",
+      "reported_ccrp_main_metrics": {
+        "HR@5": 0.3172,
+        "HR@10": 0.3964,
+        "HR@20": 0.5059,
+        "NDCG@5": 0.2451904009717959,
+        "NDCG@10": 0.27079859856897753,
+        "NDCG@20": 0.298341205798594,
+        "MRR": 0.2503049488607351
+      },
+      "selector_route_same_tiebreak_reference": {
+        "status": "ok",
+        "source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_toys\\ccrp_ablation_diagnostics.csv",
+        "ccrp_full": {
+          "HR@10": 0.3987,
+          "NDCG@10": 0.2717104421622066,
+          "MRR": 0.2510749496922561
+        },
+        "confidence_only_no_uncertainty_no_risk": {
+          "HR@10": 0.3996,
+          "NDCG@10": 0.2717138285180185,
+          "MRR": 0.2508049060992021
+        },
+        "without_risk_penalty": {
+          "HR@10": 0.3996,
+          "NDCG@10": 0.2717138285180185,
+          "MRR": 0.2508049060992021
+        },
+        "without_calibration_gap": {
+          "HR@10": 0.3931,
+          "NDCG@10": 0.2694610337825951,
+          "MRR": 0.2499163886799058
+        }
+      }
+    },
+    {
+      "domain": "home",
+      "status": "ok",
+      "prob_column": "relevance_probability",
+      "tie_break_seed": 20260607,
+      "n_events": 10000,
+      "n_candidate_scores": 1010000,
+      "ranking_eval_records_source": "outputs\\baselines\\official_adapters\\home_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "signal_rows_source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_home\\test\\test_ccrp_signal_rows.csv",
+      "raw_phat_metrics": {
+        "HR@5": 0.156,
+        "HR@10": 0.2329,
+        "HR@20": 0.3524,
+        "NDCG@5": 0.10999121956829012,
+        "NDCG@10": 0.13478374458746442,
+        "NDCG@20": 0.16474502785148726,
+        "MRR": 0.1267612712894753
+      },
+      "reported_ccrp_main_metrics": {
+        "HR@5": 0.1561,
+        "HR@10": 0.2264,
+        "HR@20": 0.3505,
+        "NDCG@5": 0.10978017620744406,
+        "NDCG@10": 0.13239420796539653,
+        "NDCG@20": 0.16351113583680343,
+        "MRR": 0.1259477884601691
+      },
+      "raw_phat_minus_ccrp_main": {
+        "HR@5": -9.999999999998899e-05,
+        "HR@10": 0.006500000000000006,
+        "HR@20": 0.0019000000000000128,
+        "NDCG@5": 0.00021104336084606934,
+        "NDCG@10": 0.002389536622067895,
+        "NDCG@20": 0.001233892014683824,
+        "MRR": 0.0008134828293062113
+      },
+      "selector_route_same_tiebreak_reference": {
+        "status": "ok",
+        "source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_home\\ccrp_ablation_diagnostics.csv",
+        "ccrp_full": {
+          "HR@10": 0.2368,
+          "NDCG@10": 0.136355033529387,
+          "MRR": 0.1278244723305659
+        },
+        "confidence_only_no_uncertainty_no_risk": {
+          "HR@10": 0.239,
+          "NDCG@10": 0.1374367737683685,
+          "MRR": 0.1285410099577449
+        },
+        "without_risk_penalty": {
+          "HR@10": 0.239,
+          "NDCG@10": 0.1374367737683685,
+          "MRR": 0.1285410099577449
+        },
+        "without_calibration_gap": {
+          "HR@10": 0.2357,
+          "NDCG@10": 0.1348636112794733,
+          "MRR": 0.1265019955851839
+        }
+      }
+    },
+    {
+      "domain": "tools",
+      "status": "ok",
+      "prob_column": "relevance_probability",
+      "tie_break_seed": 20260607,
+      "n_events": 10000,
+      "n_candidate_scores": 1010000,
+      "ranking_eval_records_source": "outputs\\baselines\\official_adapters\\tools_large10000_100neg_elmrec_graph_official_qwen3base_same_candidate\\tables\\ranking_eval_records.csv",
+      "signal_rows_source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_signal_rows_tools\\test\\test_ccrp_signal_rows.csv",
+      "raw_phat_metrics": {
+        "HR@5": 0.197,
+        "HR@10": 0.2755,
+        "HR@20": 0.3971,
+        "NDCG@5": 0.14468975387168803,
+        "NDCG@10": 0.1699581251905123,
+        "NDCG@20": 0.2004719913117229,
+        "MRR": 0.15899216288979823
+      },
+      "reported_ccrp_main_metrics": {
+        "HR@5": 0.1937,
+        "HR@10": 0.2696,
+        "HR@20": 0.3931,
+        "NDCG@5": 0.14186375906171483,
+        "NDCG@10": 0.16611553052793934,
+        "NDCG@20": 0.19703986741872317,
+        "MRR": 0.15585924577949772
+      },
+      "raw_phat_minus_ccrp_main": {
+        "HR@5": 0.0032999999999999974,
+        "HR@10": 0.005900000000000016,
+        "HR@20": 0.0040000000000000036,
+        "NDCG@5": 0.002825994809973198,
+        "NDCG@10": 0.0038425946625729457,
+        "NDCG@20": 0.003432123892999739,
+        "MRR": 0.003132917110300504
+      },
+      "selector_route_same_tiebreak_reference": {
+        "status": "ok",
+        "source": "outputs\\summary\\paper_critical\\ccrp_signal_generation_plan_post_performance_gate_20260606\\ccrp_ablation_tools\\ccrp_ablation_diagnostics.csv",
+        "ccrp_full": {
+          "HR@10": 0.276,
+          "NDCG@10": 0.1694977081356276,
+          "MRR": 0.1584648371713279
+        },
+        "confidence_only_no_uncertainty_no_risk": {
+          "HR@10": 0.2795,
+          "NDCG@10": 0.1711310231989598,
+          "MRR": 0.1594101620450473
+        },
+        "without_risk_penalty": {
+          "HR@10": 0.2795,
+          "NDCG@10": 0.1711310231989598,
+          "MRR": 0.1594101620450473
+        },
+        "without_calibration_gap": {
+          "HR@10": 0.2782,
+          "NDCG@10": 0.1698812847605033,
+          "MRR": 0.1582590620893312
+        }
+      }
+    }
+  ]
+}
