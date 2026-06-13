@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-13T00:19:58.821486+00:00
+Generated: 2026-06-13T00:52:22.413117+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -62,11 +62,18 @@ Current ProMax evidence:
 - DOI resolver status: `404`
 
 Latest public probe:
-- Created: `2026-06-13T00:19:37.522858+00:00`
+- Created: `2026-06-13T00:49:05.508136+00:00`
 - ProMax public metadata ready: `false`
 - Crossref status: `404`
 - DOI resolver status: `404`
 - ACM DL status: `403`
+
+Latest public source probes:
+- `arxiv_html_promax_acm_metadata`: ok=`true`, status=`200`, missing=``
+- `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing=``
+- `uq_author_profile_promax_sigir2026`: ok=`true`, status=`200`, missing=``
+- `author_publications_promax_sigir2026`: ok=`true`, status=`200`, missing=``
+- `uq_experts_profile_promax_sigir2026`: ok=`true`, status=`200`, missing=``
 
 ### manual_submission_system
 

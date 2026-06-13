@@ -136,10 +136,12 @@ monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. A follow-up live
-probe at `2026-06-13T00:19:37Z` found the same blocker state with all three
-source probes passing and refreshed the closure packet at
-`2026-06-13T00:19:58Z`; this is fresh monitoring evidence, not a readiness
-upgrade. The complete release-candidate stack was also
+probe at `2026-06-13T00:49:05Z` found the same direct blocker state with five
+source probes passing: arXiv HTML ACM metadata, SIGIR accepted papers, UQ
+author profile, author Google Sites publications, and UQ Experts profile. The
+closure packet refreshed at `2026-06-13T00:49:43Z` and now lists those source
+probes in Markdown; this strengthens provenance but is not a readiness upgrade.
+The complete release-candidate stack was also
 refreshed at `2026-06-13T00:04:17Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `failures=[]`, and `final_submission_ready=false`; its freshness audit checks

@@ -211,4 +211,6 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
     assert "main_probe_promax_public_metadata" in text
     assert "main_refresh_submission_release_candidate_stack" in text
     assert "Latest public probe" in text
+    assert "Latest public source probes" in text
+    assert "arxiv_html_promax_acm_metadata" in text
     assert "ACM DL status: `403`" in text

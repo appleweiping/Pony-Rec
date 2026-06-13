@@ -347,6 +347,17 @@ def _write_md(path: Path, packet: dict[str, Any]) -> None:
                         f"- ACM DL status: `{probe.get('acm_dl_status_code')}`",
                     ]
                 )
+                source_probes = probe.get("source_probes") or []
+                if source_probes:
+                    lines.extend(["", "Latest public source probes:"])
+                    for source in source_probes:
+                        missing = ", ".join(source.get("missing_patterns") or [])
+                        lines.append(
+                            "- "
+                            f"`{source.get('name', '')}`: ok=`{str(source.get('ok')).lower()}`, "
+                            f"status=`{source.get('status_code')}`, "
+                            f"missing=`{missing}`"
+                        )
         if group["group_id"] == "manual_submission_system":
             lines.extend(
                 [

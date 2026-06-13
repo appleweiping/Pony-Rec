@@ -116,10 +116,12 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
    Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,
    and `promax_public_metadata_ready=false`; arXiv HTML ACM metadata, the
-   SIGIR accepted-paper page, and the UQ author-profile source probe all pass.
-   A follow-up live probe at `2026-06-13T00:19:37Z` found the same blocker
-   state and refreshed the closure packet at `2026-06-13T00:19:58Z`; this is
-   fresh monitoring evidence, not a readiness upgrade. The complete local release-candidate
+   SIGIR accepted-paper page, the UQ author-profile page, the author Google
+   Sites publications page, and the UQ Experts profile source probes all pass.
+   A follow-up live probe at `2026-06-13T00:49:05Z` found the same direct
+   blocker state and refreshed the closure packet at `2026-06-13T00:49:43Z`;
+   the closure Markdown now lists those latest public source probes. This is
+   stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
    stack was also refreshed at `2026-06-13T00:04:17Z`: it reports `ok=true`,
    `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
    `failures=[]`, and `final_submission_ready=false`; the freshness audit has
@@ -219,7 +221,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, external proceedings metadata, and manual checklist; keeps final readiness false while external DOI/page-range or private submission-system blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_audit_external_proceedings_metadata.py` | Local read-only ARIS citation/proceedings metadata recheck for ProEx/ProMax; records BibTeX, DOI/Crossref, arXiv, DBLP/SIGIR source visibility, and advisory Crossref title-discovery candidates while keeping final submission blocked until exact public page-range/registry evidence is present |
-| `scripts/audit/main_probe_promax_public_metadata.py` | Lightweight local live probe for the ProMax public metadata blocker; checks BibTeX pages, Crossref `/works`, DOI resolver, ACM DL, arXiv HTML ACM metadata, SIGIR accepted-paper source, and UQ author-profile announcement without running the full submission stack |
+| `scripts/audit/main_probe_promax_public_metadata.py` | Lightweight local live probe for the ProMax public metadata blocker; checks BibTeX pages, Crossref `/works`, DOI resolver, ACM DL, arXiv HTML ACM metadata, SIGIR accepted-paper source, UQ author-profile announcement, author Google Sites publications, and UQ Experts profile without running the full submission stack |
 | `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}` | ARIS-style citation repair audit for the active manuscript; records all eight official baseline citations, recency counts, and `bibtex main` warning status |
 | `experiments/rsc/run_ccrp_v3_domain.py` | Single-domain C-CRP v3 runner |
 | `experiments/rsc/run_ccrp_v3_signal_rows.py` | Phase 2.5 server-side C-CRP signal-row runner; emits recomputable rows with identity, raw/calibrated relevance probability, evidence support, counterevidence strength, provenance, and parse-failure audit; do not use outputs until `main_audit_ccrp_uncertainty_sources.py` passes |

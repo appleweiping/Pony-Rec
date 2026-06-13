@@ -1,6 +1,6 @@
 # ProMax Public Metadata Probe
 
-Generated: 2026-06-13T00:19:37.522858+00:00
+Generated: 2026-06-13T00:49:05.508136+00:00
 
 - OK: `true`
 - ProMax public metadata ready: `false`
@@ -28,6 +28,8 @@ Generated: 2026-06-13T00:19:37.522858+00:00
 - `arxiv_html_promax_acm_metadata`: ok=`true`, status=`200`, missing_patterns=[]
 - `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing_patterns=[]
 - `uq_author_profile_promax_sigir2026`: ok=`true`, status=`200`, missing_patterns=[]
+- `author_publications_promax_sigir2026`: ok=`true`, status=`200`, missing_patterns=[]
+- `uq_experts_profile_promax_sigir2026`: ok=`true`, status=`200`, missing_patterns=[]
 
 ## Remaining Blockers
 
