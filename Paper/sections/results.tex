@@ -26,6 +26,24 @@ recommendation SOTA because candidate generation is not evaluated here.
 \input{tables/ccrp_rank_by_metric}
 \input{tables/full_official_ndcg10_ranking}
 
+\paragraph{Reading the absolute scale.} Several official baselines sit close to
+the random-ranking floor in Table~\ref{tab:full_official_ndcg10} (analytical
+NDCG@10 $\approx 0.045$ for one positive among 101 candidates). This is expected
+rather than anomalous. The unified protocol holds the backbone (Qwen3-8B), the
+candidate set, and the score schema fixed for \emph{every} method, which removes
+the native advantages of approaches whose value lies outside same-candidate
+reranking: ELMRec is officially a T5 generative recommender bridged to Qwen3-8B
+representations, and the LightGCN-profile methods ProEx/ProMax derive much of
+their reported strength from full-catalog retrieval and popularity structure
+that a 101-candidate sampled panel does not reward. We therefore do not rest the
+claim on the weakest rows. The informative comparison is against the strongest
+baseline that is clearly above the floor, LLMEmb (NDCG@10 $0.094$--$0.205$):
+\method{} still improves over LLMEmb by 30--43\% NDCG@10 across the four domains,
+and all 56 per-domain paired tests remain positive and Holm-significant. The
+result is thus a robustness claim under a fair common-denominator reranking
+protocol, not a statement that these methods are weak in their native
+full-catalog setting (see Limitation~5).
+
 \subsection{Uncertainty as a Reliability Signal}
 
 The observation module asks whether \method{} uncertainty is informative about

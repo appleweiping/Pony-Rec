@@ -31,7 +31,9 @@ rows are used only for final reporting and paired significance tests.
 The resulting evidence supports a scoped conclusion. On four Amazon domains
 (Sports, Toys, Home, and Tools), \method{} ranks first against eight
 official-code-level baselines under the unified Qwen3-8B, same-candidate
-protocol. The same evidence also limits the story: component ablations show
+protocol; relative to the strongest above-floor baseline (LLMEmb), the
+NDCG@10 improvement is 30--43\% and is Holm-significant in every domain. The
+same evidence also limits the story: component ablations show
 that several uncertainty terms are neutral, weak, or redundant, and
 hyperparameter analyses support stability/sensitivity rather than a claim that
 every risk term is necessary. We therefore frame \method{} as an actionable

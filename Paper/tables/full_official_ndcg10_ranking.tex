@@ -2,7 +2,7 @@
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\caption{Complete same-candidate NDCG@10 ranking for the four new domains. Each domain contains 10,000 users, 101 candidates per user, one C-CRP row, and all eight official-code-level baseline rows.}
+\caption{Complete same-candidate NDCG@10 ranking for the four new domains. Each domain contains 10,000 users, 101 candidates per user, one C-CRP row, and all eight official-code-level baseline rows. A \textit{Random} reference (NDCG@10$=$0.045, HR@10$=$0.099, MRR$=$0.051; analytical expectation for one positive among 101 candidates) calibrates the absolute scale: rows near this floor (e.g.\ ELMRec) retain little same-candidate signal once their native serving stack is replaced by the unified Qwen3-8B backbone, whereas \method{} and the strongest baseline LLMEmb are well above it.}
 \label{tab:full_official_ndcg10}
 \begin{tabular}{llrrrr}
 \toprule
@@ -17,6 +17,8 @@ Sports & LLM-ESR & 6 & 0.0758 & 0.1564 & 0.0751 \\
 Sports & ProEx & 7 & 0.0742 & 0.1527 & 0.0743 \\
 Sports & ProMax & 8 & 0.0722 & 0.1387 & 0.0741 \\
 Sports & ELMRec & 9 & 0.0484 & 0.1054 & 0.0537 \\
+\addlinespace
+Sports & \textit{Random} & -- & 0.0450 & 0.0990 & 0.0515 \\
 \midrule
 Toys & \method{} & 1 & \textbf{0.2708} & \textbf{0.3964} & \textbf{0.2503} \\
 Toys & LLMEmb & 2 & 0.2049 & 0.3505 & 0.1814 \\
@@ -27,6 +29,8 @@ Toys & ProEx & 6 & 0.0810 & 0.1615 & 0.0812 \\
 Toys & ProMax & 7 & 0.0794 & 0.1435 & 0.0818 \\
 Toys & LLM-ESR & 8 & 0.0546 & 0.1172 & 0.0584 \\
 Toys & ELMRec & 9 & 0.0486 & 0.1043 & 0.0543 \\
+\addlinespace
+Toys & \textit{Random} & -- & 0.0450 & 0.0990 & 0.0515 \\
 \midrule
 Home & \method{} & 1 & \textbf{0.1324} & \textbf{0.2264} & \textbf{0.1259} \\
 Home & LLMEmb & 2 & 0.0939 & 0.1856 & 0.0901 \\
@@ -37,6 +41,8 @@ Home & ProEx & 6 & 0.0549 & 0.1177 & 0.0593 \\
 Home & LLM2Rec & 7 & 0.0509 & 0.1101 & 0.0564 \\
 Home & ProMax & 8 & 0.0469 & 0.1019 & 0.0535 \\
 Home & ELMRec & 9 & 0.0460 & 0.1021 & 0.0520 \\
+\addlinespace
+Home & \textit{Random} & -- & 0.0450 & 0.0990 & 0.0515 \\
 \midrule
 Tools & \method{} & 1 & \textbf{0.1661} & \textbf{0.2696} & \textbf{0.1559} \\
 Tools & LLMEmb & 2 & 0.1159 & 0.2257 & 0.1065 \\
@@ -47,6 +53,8 @@ Tools & LLM-ESR & 6 & 0.0606 & 0.1270 & 0.0633 \\
 Tools & ProEx & 7 & 0.0557 & 0.1177 & 0.0607 \\
 Tools & ProMax & 8 & 0.0503 & 0.1046 & 0.0565 \\
 Tools & ELMRec & 9 & 0.0459 & 0.1010 & 0.0524 \\
+\addlinespace
+Tools & \textit{Random} & -- & 0.0450 & 0.0990 & 0.0515 \\
 \bottomrule
 \end{tabular}
 \end{table*}
