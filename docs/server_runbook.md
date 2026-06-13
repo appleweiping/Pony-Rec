@@ -86,7 +86,11 @@ PIDs, audit summaries, and missing-file errors.
    A sixth synchronous JSON-only call with `model=opus` and tools disabled
    failed with the same connector-layer error and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
-   The current packet reports six failed attempts and still keeps
+   A seventh synchronous JSON-only call with `model=opus`, tools disabled, and
+   a shorter structured JSON-only prompt failed with the same connector-layer
+   error and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
+   The current packet reports seven failed attempts and still keeps
    `explicit_claude_opus_present=false`. Use the new public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
@@ -150,11 +154,12 @@ PIDs, audit summaries, and missing-file errors.
    SIGIR accepted-paper page, the UQ author-profile page, the author Google
    Sites publications page, and the UQ Experts profile source probes all pass.
    Follow-up live probes at `2026-06-13T00:49:05Z` and
-   `2026-06-13T01:59:36Z` found the same direct blocker state and refreshed the
-   closure packet most recently at `2026-06-13T02:00:24Z`;
+   `2026-06-13T01:59:36Z` found the same direct blocker state. After the
+   seventh failed Claude connector attempt, the closure packet refreshed most
+   recently at `2026-06-13T02:21:48Z`;
    the closure Markdown now lists those latest public source probes. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
-   stack was also refreshed at `2026-06-13T00:04:17Z`: it reports `ok=true`,
+   stack was also refreshed at `2026-06-13T02:21:31Z`: it reports `ok=true`,
    `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
    `failures=[]`, and `final_submission_ready=false`; the freshness audit has
    zero input or generated-gate mismatches, and the independent source-package

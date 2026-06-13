@@ -1,0 +1,9 @@
+{
+  "created_at_utc": "2026-06-13T02:18:54.6219435Z",
+  "error": "Claude CLI did not return JSON output",
+  "notes": "Seventh attempt used mcp__claude_review.review with model=opus, tools disabled, a short structured JSON-only prompt, and a system instruction requiring JSON-only output. The connector returned the same Claude CLI layer error and this artifact is not valid reviewer coverage.",
+  "reviewer": "claude-opus",
+  "source": "mcp__claude_review.review synchronous JSON-only call with model=opus, tools disabled, seventh attempt",
+  "status": "failed",
+  "valid_review_evidence": false
+}

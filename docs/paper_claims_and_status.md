@@ -103,13 +103,14 @@ the UQ author-profile source probe, the author Google Sites publications
 source probe, and the UQ Experts profile source probe remain passing.
 Follow-up live probes at `2026-06-13T00:49:05Z` and
 `2026-06-13T01:59:36Z` found the same direct blocker state, and the closure
-packet was refreshed most recently at `2026-06-13T02:00:24Z`; this is stronger
-public accepted-paper provenance, not a readiness upgrade. The closure
-packet Markdown now lists latest public source probes in addition to direct
-Crossref/DOI/ACM statuses. Codex also refreshed the complete local release-candidate stack
+packet was refreshed after the seventh failed Claude connector attempt at
+`2026-06-13T02:21:48Z`; this is stronger public accepted-paper provenance, not
+a readiness upgrade. The closure packet Markdown now lists latest public source
+probes in addition to direct Crossref/DOI/ACM statuses. Codex also refreshed
+the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
-the `2026-06-13T00:04:17Z` stack reports `ok=true`,
+the latest `2026-06-13T02:21:31Z` stack reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `blocking_status=external_manual_or_review_blocked`, `failures=[]`, and
 `final_submission_ready=false`. Its freshness audit checks `23` input
@@ -176,7 +177,11 @@ Codex then retried a sixth synchronous JSON-only Claude call with `model=opus`
 and tools disabled; it failed with the same connector-layer error and is
 recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
-The refreshed review-continuation and Claude request packets now report six
+Codex then retried a seventh synchronous JSON-only Claude call with `model=opus`,
+tools disabled, and a shorter structured JSON-only prompt; it failed with the
+same connector-layer error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
+The refreshed review-continuation packet now reports seven
 failed attempts while keeping `explicit_claude_opus_present=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 04:00 CEST
+Last updated: 2026-06-13 04:22 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -24,7 +24,7 @@ cycle.
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
   `review_continuation_packet_20260613.{json,md}` still reports
-  `review_continuation_ready=true`, failed Claude attempts `6`,
+  `review_continuation_ready=true`, failed Claude attempts `7`,
   `explicit_claude_opus_present=false`, and
   `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
   veto the hardening, but flagged that the pre-submission freshness audit must
@@ -78,7 +78,11 @@ cycle.
   `model=opus` and tools disabled failed with the same connector-layer error
   and is recorded at
   `outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
-  The refreshed packet reports `failed_review_attempts` count `6` while keeping
+  A seventh synchronous JSON-only `mcp__claude_review.review` call with the
+  same `model=opus`, tools disabled, and a shorter structured JSON-only prompt
+  failed with the same connector-layer error and is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
+  The refreshed packet reports `failed_review_attempts` count `7` while keeping
   `explicit_claude_opus_present=false`. Codex added
   `scripts/audit/main_build_claude_review_request_packet.py` and generated
   `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
@@ -96,7 +100,7 @@ cycle.
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`
   is now the latest full local release-candidate stack, not just a probe
-  overlay. The follow-up complete refresh at `2026-06-13T00:04:17Z` reports
+  overlay. The follow-up complete refresh at `2026-06-13T02:21:31Z` reports
   `ok=true`, `local_release_candidate_ready=true`, `refresh_ok=true`,
   `freshness_ok=true`, `refresh_artifact_fresh=true`,
   `release_candidate_ok=true`, `failures=[]`, and
@@ -114,10 +118,13 @@ cycle.
   metadata, the SIGIR accepted-paper page, the UQ author-profile page, the
   author Google Sites publications page, and the UQ Experts profile source
   probes pass. Follow-up live probes at `2026-06-13T00:49:05Z` and
-  `2026-06-13T01:59:36Z` found the same direct blocker state; the closure
-  packet was refreshed most recently at `2026-06-13T02:00:24Z` so its
-  latest-public-probe section points to the newest probe. This strengthens
-  public accepted-paper provenance but is not a readiness upgrade. The
+  `2026-06-13T01:59:36Z` found the same direct blocker state; after the seventh
+  failed Claude connector attempt, the review-continuation packet refreshed at
+  `2026-06-13T02:19:28Z`, the release-candidate stack refreshed at
+  `2026-06-13T02:21:31Z`, and the closure packet refreshed most recently at
+  `2026-06-13T02:21:48Z` while keeping `final_submission_ready=false`. This
+  strengthens public accepted-paper provenance but is not a readiness upgrade.
+  The
   refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
   now uses the 2026-06-13 final gate, external metadata audit, manual

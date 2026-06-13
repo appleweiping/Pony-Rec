@@ -140,10 +140,11 @@ at `2026-06-13T00:49:05Z` and `2026-06-13T01:59:36Z` found the same direct
 blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
 accepted papers, UQ author profile, author Google Sites publications, and UQ
 Experts profile. The closure packet refreshed most recently at
-`2026-06-13T02:00:24Z` and now lists those source probes in Markdown; this
-strengthens provenance but is not a readiness upgrade.
+`2026-06-13T02:21:48Z` after the seventh failed Claude connector attempt and
+now lists those source probes in Markdown; this strengthens provenance but is
+not a readiness upgrade.
 The complete release-candidate stack was also
-refreshed at `2026-06-13T00:04:17Z` and reports `ok=true`,
+refreshed at `2026-06-13T02:21:31Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `failures=[]`, and `final_submission_ready=false`; its freshness audit checks
 `23` input fingerprints and `14` generated gate files with zero mismatches,
@@ -183,7 +184,11 @@ CLI/connector layer and is recorded at
 The sixth synchronous JSON-only Claude call with `model=opus` and tools
 disabled failed with the same connector-layer error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
-The refreshed packet records six failed attempts and still keeps
+The seventh synchronous JSON-only Claude call with `model=opus`, tools disabled,
+and a shorter structured JSON-only prompt failed with the same connector-layer
+error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
+The refreshed packet records seven failed attempts and still keeps
 `explicit_claude_opus_present=false`. Codex also added
 `scripts/audit/main_build_claude_review_request_packet.py`, generating
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
