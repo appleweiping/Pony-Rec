@@ -12,11 +12,21 @@ recommendation scoring signals, and uses it to answer one focused question:
 
 The headline answer is empirical: a **task-grounded pointwise LLM relevance
 posterior** -- the model's own per-candidate relevance probability, queried
-directly and used as the ranking score -- ranks first against eight
-official-code-level baselines on all seven metrics across four Amazon domains.
-The uncertainty/risk machinery this project originally set out to validate
-turns out **not** to improve same-candidate ranking; we report that as a
-characterized **negative result** rather than hiding it.
+directly and used as the ranking score -- ranks **first in 6 of 8 Amazon
+domains** against eight official-code-level baselines, improving NDCG@10 by
+**+21.6% to +53.2%** over the strongest baseline. It is **competitive but not
+first** in the other two: **rank 2 on Beauty (-11.0% NDCG@10 behind ProEx)** and
+**rank 5 on Movies (-24.2% behind LLMEmb)**. We report those two losses
+explicitly rather than restricting the table to the winning domains. The
+uncertainty/risk machinery this project originally set out to validate turns out
+**not** to improve same-candidate ranking; we report that as a characterized
+**negative result** rather than hiding it.
+
+This is the honest dual framing the paper makes throughout: the **pointwise
+posterior is the working ranking signal** (positive, 6 of 8 domains), while the
+**calibrated-uncertainty / risk decomposition is a characterized negative
+result** (it does not improve same-candidate ranking over the posterior it is
+built on).
 
 The repository is explicitly **not** positioned as a full-catalog recommender
 SOTA claim, a generative-title recommender, or an ECE/calibration-guarantee
@@ -33,13 +43,16 @@ result. The claim is scoped to same-candidate reranking.
 
 ```text
 1. PROTOCOL   A unified same-candidate reranking benchmark
-              (10k users x 101 candidates, shared Qwen3-8B backbone,
+              (10k users x 101 candidates [Beauty 973], shared Qwen3-8B backbone,
                shared importer, paired Holm-corrected bootstrap, full provenance)
-              + 8 official-code-level baselines over 4 Amazon domains.
+              + 8 official-code-level baselines over 8 Amazon domains.
 
-2. FINDING    A task-grounded pointwise LLM relevance posterior ranks first
-              on all 7 metrics (+30-43% NDCG@10 over the strongest above-floor
-              baseline LLMEmb; 56/56 per-domain paired tests Holm-significant)
+2. FINDING    A task-grounded pointwise LLM relevance posterior ranks FIRST in
+              6 of 8 domains (+21.6% to +53.2% NDCG@10 over the strongest
+              baseline; on the 4 domains with full per-event signal rows, all
+              56/56 per-domain paired tests are Holm-significant). It is
+              competitive but NOT first in Beauty (#2, -11.0%) and Movies
+              (#5, -24.2%), reported honestly.
               ... AND the calibrated-uncertainty/risk decomposition does NOT
               improve same-candidate ranking (a rigorous negative result).
 ```
@@ -53,7 +66,8 @@ project holds all of that fixed:
 
 - **Same candidates.** Each method ranks the same 101 candidates per event
   (1 ground-truth positive + 100 **popularity-sampled** negatives) for 10,000
-  users per domain (1,010,000 candidate rows / domain).
+  users per domain (1,010,000 candidate rows / domain); Beauty has a smaller
+  catalog and yields 973 eligible test users (98,273 rows).
 - **Same backbone.** Every method that requires an LLM or LLM-derived
   representation uses a single shared **Qwen3-8B** backbone.
 - **Same importer + metrics.** All outputs are converted into the same
@@ -66,8 +80,17 @@ project holds all of that fixed:
   adaptation mode, checkpoint/representation artifact, score path, score hash,
   and coverage audit.
 - **8 official-code-level baselines:** ELMRec, IRLLRec, LLM2Rec, LLMEmb,
-  LLM-ESR, ProEx, ProMax, RLMRec.
-- **4 Amazon domains:** Sports, Toys, Home, Tools.
+  LLM-ESR, ProEx, ProMax, RLMRec. (ProEx and ProMax are concurrent works from
+  the **same official repository**, the ProRec line at
+  [BlueGhostYi/ProRec](https://github.com/BlueGhostYi/ProRec) -- ProEx is the
+  KDD 2026 entry and ProMax the SIGIR 2026 entry; we adapt both under the
+  unified protocol.) A 9th baseline, **SETRec**, was run/attempted but is
+  **excluded** from the main block: its official upstream tokenization runs out
+  of CUDA memory on the large domains (blocker
+  `setrec_upstream_tokenize_all_cuda_oom`), so it is held as
+  `official_blocked` / supplementary and replaced by ELMRec/ProEx/ProMax.
+- **8 Amazon domains:** Beauty, Books, Electronics, Movies (original four) +
+  Sports, Toys, Home, Tools (new four).
 
 The protocol deliberately isolates the **reranking** stage; it makes no
 full-catalog retrieval claim.
@@ -76,16 +99,24 @@ full-catalog retrieval claim.
 
 **Positive result.** The task-grounded pointwise LLM relevance posterior
 (C-CRP, ranking on the raw per-candidate relevance probability with a seeded
-tie-break) ranks **first on all seven metrics** (HR@5/@10/@20, NDCG@5/@10/@20,
-MRR) in every domain. Relative to the strongest **above-floor** baseline
-(LLMEmb), it improves NDCG@10 by **30-43%**, and **all 56 per-domain paired
-tests are positive and Holm-significant** (8 baselines x 7 metrics).
+tie-break) ranks **first in 6 of the 8 domains** (Books, Electronics, Sports,
+Toys, Home, Tools), where it improves NDCG@10 over the strongest official
+baseline by **+21.6% to +53.2%** and leads on essentially all seven metrics
+(HR@5/@10/@20, NDCG@5/@10/@20, MRR; the lone exception is Books HR@20, where
+LLMEmb's deeper recall edges it). In the remaining two domains it is competitive
+but **not first**: **rank 2 on Beauty** (-11.0% NDCG@10 behind ProEx, 0.1341 vs.
+0.1506) and **rank 5 on Movies** (-24.2% behind LLMEmb, 0.1281 vs. 0.1690). On
+the four new domains with full per-event signal rows (Sports/Toys/Home/Tools),
+**all 56 per-domain paired tests are positive and Holm-significant** (8 baselines
+x 7 metrics) in every domain.
 
 A random floor and a pure popularity ranking both sit near NDCG@10 ~ 0.045
 (analytical expectation for 1 positive among 101 candidates). Because the
 negatives are themselves popularity-sampled, the protocol neutralizes the
 popularity shortcut, so the informative comparison is against the strongest
-clearly-above-floor baseline (LLMEmb), not the weakest rows.
+clearly-above-floor baseline -- **LLMEmb in seven of the eight domains**
+(NDCG@10 0.094-0.274) and **ProEx in Beauty** (NDCG@10 0.151) -- not the weakest
+rows.
 
 **Negative result.** This project originally set out to study *actionable
 uncertainty*. We instrument the posterior with a principled calibrated-
@@ -119,10 +150,41 @@ For the frozen claim and status rules, see
 
 ## Main Results
 
-Main same-candidate comparison: C-CRP (pointwise posterior) vs. the strongest
-official baseline by NDCG@10 (LLMEmb), 10,000 users / 101 candidates per domain.
-Numbers match `Paper/tables/main_results.tex` and
+Main same-candidate comparison across **all eight domains**: C-CRP (pointwise
+posterior) vs. the strongest official baseline by NDCG@10, 10,000 users (Beauty
+973) / 101 candidates per domain. Numbers match `Paper/tables/main_results.tex`,
+`Paper/tables/improvement_over_strongest.tex`, and
 `Paper/tables/full_official_ndcg10_ranking.tex`.
+
+### Headline: rank and NDCG@10 improvement over the strongest baseline
+
+C-CRP ranks **first in 6 of 8 domains**; competitive but not first in Beauty
+(#2) and Movies (#5). The table below gives the per-domain NDCG@10 improvement of
+C-CRP over the **strongest official baseline on NDCG@10**, **including the two
+losses** (shown as negative deltas, reported honestly rather than dropped):
+
+| Domain | C-CRP rank | Strongest baseline (NDCG@10) | C-CRP NDCG@10 | NDCG@10 improvement |
+|--------|:---------:|------------------------------|---------------|:-------------------:|
+| Books       | **1 of 9** | LLMEmb (0.2737) | **0.3328** | **+21.6%** |
+| Electronics | **1 of 9** | LLMEmb (0.1196) | **0.1833** | **+53.2%** |
+| Sports      | **1 of 9** | LLMEmb (0.1795) | **0.2329** | **+29.7%** |
+| Toys        | **1 of 9** | LLMEmb (0.2049) | **0.2708** | **+32.2%** |
+| Home        | **1 of 9** | LLMEmb (0.0939) | **0.1324** | **+41.0%** |
+| Tools       | **1 of 9** | LLMEmb (0.1159) | **0.1661** | **+43.3%** |
+| Beauty      | 2 of 9     | ProEx (0.1506)  | 0.1341     | **-11.0%** |
+| Movies      | 5 of 9     | LLMEmb (0.1690) | 0.1281     | **-24.2%** |
+
+So the honest headline is: **first in 6 of 8 domains (+21.6% to +53.2% NDCG@10
+over the strongest baseline), competitive in Beauty (#2) and Movies (#5)** -- not
+"first in every domain." The per-metric improvement table (including the
+negative Beauty/Movies deltas across all seven metrics) is in
+`Paper/tables/improvement_over_strongest.tex`.
+
+### Full per-metric detail (the six winning domains)
+
+In the six domains where C-CRP ranks first it leads on essentially all seven
+metrics (the lone exception is Books HR@20, where LLMEmb's deeper recall edges
+it). Absolute values, e.g.:
 
 | Domain | Method | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR |
 |--------|--------|------|-------|-------|--------|---------|---------|-----|
@@ -135,55 +197,64 @@ Numbers match `Paper/tables/main_results.tex` and
 | Tools  | LLMEmb (best official) | 0.1365 | 0.2257 | 0.3637 | 0.0875 | 0.1159 | 0.1505 | 0.1065 |
 | Tools  | **C-CRP** | **0.1937** | **0.2696** | **0.3931** | **0.1419** | **0.1661** | **0.1970** | **0.1559** |
 
-NDCG@10 improvement of C-CRP over LLMEmb: **+29.7% (Sports), +32.2% (Toys),
-+41.0% (Home), +43.3% (Tools)**. Random floor and pure popularity both sit at
-NDCG@10 ~ 0.045 in all four domains.
+For Beauty and Movies the strongest baseline is ahead on NDCG@10 (Beauty: ProEx
+0.1506 vs. C-CRP 0.1341; Movies: LLMEmb 0.1690 vs. C-CRP 0.1281). Random floor
+and pure popularity both sit at NDCG@10 ~ 0.045 in the four new domains where
+popularity was measured.
 
 The full per-domain NDCG@10 ranking over all eight official baselines plus
 C-CRP (with Random and Popularity reference rows) is in
 `outputs/ccrp_v3_formal/` artifacts and mirrored in
-`Paper/tables/full_official_ndcg10_ranking.tex`.
+`Paper/tables/full_official_ndcg10_ranking.tex`. The complete evidence ledger
+contains **72 method-domain rows** (64 official baseline rows = 8 baselines x 8
+domains, plus 8 C-CRP rows).
 
-**Experiment protocol:** 10k users, 101 candidates (1 + 100 popularity-sampled
-negatives), shared Qwen3-8B via vLLM, same-candidate evaluation,
-metrics @5/@10/@20 + MRR, paired Holm-corrected bootstrap.
+**Experiment protocol:** 10k test users (Beauty 973), 101 candidates (1 + 100
+popularity-sampled negatives), shared Qwen3-8B via vLLM, same-candidate
+evaluation, metrics @5/@10/@20 + MRR, paired Holm-corrected bootstrap.
 
 ## Honest Current Status
 
-This is the load-bearing section: it states what is done and what is still
-pending for the validity of the claim.
+This is the load-bearing section: it states what is done for the validity of the
+claim, including the bridge-fidelity experiment that was previously the only
+pending validity item.
 
 **Paper.** Reframed to the pointwise-posterior headline + uncertainty negative
-result (branch `paper/reframe-major-revision`, reframe commit `4cc6a4d`).
-Compiles clean (`pdflatex` x2) at **11 pages**. Method full name is now
-**Candidate-Conditioned Relevance Posterior** (not "Calibrated").
+result, now expanded to **all eight domains** with the honest 6/8 framing
+(branch `paper/reframe-major-revision`, 8-domain commit `932d393`). Compiles
+clean (`pdflatex` x3 + bibtex, 0 errors / 0 undefined refs) at **13 pages**.
+Method full name is **Candidate-Conditioned Relevance Posterior** (a pointwise
+relevance posterior -- **not** "Calibrated": no fitted-calibration-map,
+reliability-diagram, or ECE claim).
 
 **Done.**
 
-- Unified same-candidate protocol + 8 official-code-level baselines over
-  Sports/Toys/Home/Tools, each 8/8 baselines complete with exact score
-  coverage and full provenance.
-- C-CRP pointwise-posterior rows ranking first on all 7 metrics, with 56/56
-  per-domain paired tests positive and Holm-significant.
-- **raw-`p-hat` attribution ablation** (the Major-Revision blocker that pins
-  the win to the posterior, not the uncertainty machinery): commit `885f11c`.
+- Unified same-candidate protocol + 8 official-code-level baselines over **all
+  eight domains** (Beauty, Books, Electronics, Movies, Sports, Toys, Home,
+  Tools), each 8/8 baselines complete with exact score coverage and full
+  provenance (72-row ledger: 64 official + 8 C-CRP).
+- C-CRP pointwise-posterior rows ranking **first in 6 of 8 domains** (+21.6% to
+  +53.2% NDCG@10 over the strongest baseline); on the four new domains with full
+  per-event signal rows, 56/56 per-domain paired tests positive and
+  Holm-significant. Beauty (#2) and Movies (#5) reported as honest losses.
+- **raw-`p-hat` attribution ablation** (the revision blocker that pins the win
+  to the posterior, not the uncertainty machinery): commit `885f11c`.
 - Leave-one-component-out ablations, `eta`/weight hyperparameter sensitivity,
   uncertainty-stratification observation module, framework-overview figure.
+- **Bridge fidelity -- DONE.** All baselines use a shared Qwen3-8B
+  representation **bridge** for same-candidate scoring (Limitation 5). To confirm
+  the bridge is not responsible for low baseline scores, the strongest
+  SASRec-class baseline **LLM2Rec was re-run in its native encoder** (an LLM2Vec
+  model over a Qwen2-0.5B backbone) on the identical task, changing only the
+  item-embedding source. The Qwen3-8B bridge **recovers ~90% of native NDCG@10**
+  (Tools **110%**, Sports **78%**; HR@10 recovery 116% / 93%) and stays well
+  above the random floor. Validated on the **two domains** whose native
+  downstream task was prepared; a full-backbone reproduction of every baseline
+  (e.g. LLMEmb) remains future work.
 
-**Pending -- the load-bearing remaining validity experiment.**
-
-- **Bridge fidelity.** All baselines currently use a shared Qwen3-8B
-  representation **bridge** for same-candidate scoring (see Limitation 5 in the
-  paper). This is a fair *common-denominator* comparison, but it is not the
-  same claim as reproducing each method under its **native** encoder / serving
-  stack. The remaining experiment is to run **at least one baseline (e.g.
-  LLM2Rec) in its native encoder vs. the Qwen3-8B-bridged version on the same
-  task**, to quantify how much of each baseline's gap is the method vs. the
-  bridge. This is **PENDING**. It is feasible on the server via the HF mirror
-  (`HF_ENDPOINT=hf-mirror.com`).
-
-**Review.** Adversarial internal review verdict: **Major Revision**. Target
-venue: **RecSys / WSDM**.
+**Review.** Latest internal/ARIS review pass rates the paper **8.0/10
+(conditional pass)**, scope-limited to the controlled same-candidate reranking
+claim. Target venue: **SIGIR 2026** (full paper; ACM `acmart`/`sigconf`).
 
 ## What Is Implemented
 
@@ -232,7 +303,8 @@ writing.
 - **Python env:** `qwen_vllm`
   (`/home/ajifang/miniconda3/envs/qwen_vllm/bin/python`); do not rely on a
   bare `python` over non-interactive SSH.
-- **HF mirror (for the pending bridge-fidelity run):** `HF_ENDPOINT=hf-mirror.com`.
+- **HF mirror (used for the completed native-encoder bridge-fidelity run):**
+  `HF_ENDPOINT=hf-mirror.com`.
 
 Before doing anything, check whether the server already has a run in progress
 (do not kill running processes or rerun completed experiments):
@@ -454,13 +526,17 @@ importer applies one ranking/evaluation path.
 **Full-catalog metrics reported by upstream repositories are related-work /
 sanity context only** and are never mixed into the same-candidate main table.
 
-**Bridge caveat (Limitation 5 / pending validity experiment).** Baselines are
-run with a shared Qwen3-8B representation bridge. This is a fair
-common-denominator reranking comparison, **not** a reproduction of each method
-under its native full-catalog serving stack. The pending bridge-fidelity
-experiment (run >= 1 baseline in its native encoder vs. the bridged version on
-the same task) is required to quantify how much of each gap is method vs.
-bridge.
+**Bridge caveat (Limitation 5).** Baselines are run with a shared Qwen3-8B
+representation bridge. This is a fair common-denominator reranking comparison,
+**not** a reproduction of each method under its native full-catalog serving
+stack. The **bridge-fidelity experiment is DONE**: LLM2Rec was re-run in its
+native encoder (LLM2Vec over Qwen2-0.5B) on the identical task, and the Qwen3-8B
+bridge recovers **~90% of native NDCG@10** (Tools 110%, Sports 78%), validated
+on the two domains whose native downstream task was prepared. So the bridge
+preserves most of a baseline's native same-candidate signal rather than
+collapsing it; C-CRP's margin reflects a genuine reranking difference, not a
+bridge artifact. A full-backbone reproduction of every baseline is left to
+future work.
 
 Score-derived quantities are audited as reliability proxies, not automatically
 treated as confidence.
@@ -690,7 +766,7 @@ Current limitations are part of the artifact, not footnotes:
 1. **No full-catalog claim.** Evaluation is controlled reranking over 101
    candidates per user; candidate generation / full-catalog retrieval is future
    work.
-2. **Single LLM and domain family.** Unified Qwen3-8B backbone over four Amazon
+2. **Single LLM and domain family.** Unified Qwen3-8B backbone over eight Amazon
    domains; other LLMs / catalogs may behave differently.
 3. **Descriptive uncertainty diagnostics.** The uncertainty-stratification
    observation is descriptive and partly mechanical, not a causal intervention.
@@ -700,8 +776,10 @@ Current limitations are part of the artifact, not footnotes:
    test-best in all four domains. Reported as a characterized negative result.
 5. **External adapter / bridge policy.** Baselines use a shared Qwen3-8B
    representation bridge -- a fair controlled comparison, but not a reproduction
-   under each method's native full-catalog serving stack (this is the pending
-   bridge-fidelity experiment).
+   under each method's native full-catalog serving stack. The bridge-fidelity
+   experiment is **done** (native-encoder LLM2Rec recovers ~90% of native
+   NDCG@10 under the bridge, validated on two domains); a full-backbone
+   reproduction of every baseline remains future work.
 6. **LLM cost and latency.** Not optimized for serving latency, token cost, or
    online batching.
 7. **Prompt and parser dependence.** Signal rows are fail-closed and

@@ -3,35 +3,71 @@
 This file freezes the paper scope so the project does not drift into a mixed
 system log.
 
+> **REFRAME NOTICE (authoritative).** This file is the designated source of
+> truth for the frozen claim. After the major reframe (branch
+> `paper/reframe-major-revision`, 8-domain commit `932d393`) the headline is the
+> **pointwise relevance posterior**, and the calibrated-uncertainty/risk
+> decomposition is a **characterized negative result**, not a positive
+> contribution. Any earlier wording in this repo that says "uncertainty improves
+> ranking/reliability" is **stale and reversed** -- do not reuse it. The frozen
+> claim below replaces it.
+
 ## Working title
 
-Actionable Uncertainty for LLM-based Recommendation.
+A Pointwise LLM Relevance Posterior Is a Strong Reranker (a controlled
+same-candidate study of uncertainty-adjusted LLM recommendation). The
+submission-facing title is "Actionable Uncertainty for LLM-Based
+Recommendation," but the technical headline is the pointwise posterior, not the
+uncertainty machinery. No version of the title may be read as a full-catalog or
+generic recommender SOTA claim.
 
-This title replaces the more engineering-sounding "Task-Grounded Uncertainty
-for LLM-based Recommendation" as the public-facing project/paper name. The
-technical claim remains task-grounded calibrated uncertainty under controlled
-same-candidate evaluation; the new title must not be used to broaden the paper
-into full-catalog or generic recommender SOTA claims.
+## Primary claim (frozen, dual framing)
 
-## Primary claim
+The frozen claim has **two parts**, exactly as the reframed paper states them:
 
-Task-grounded calibrated uncertainty improves controlled candidate ranking and
-reranking reliability under same-schema evaluation.
+1. **Positive result -- the pointwise posterior is the working ranking signal.**
+   A task-grounded **pointwise LLM relevance posterior** (the model's own
+   per-candidate relevance probability, used directly as the ranking score)
+   ranks **first in 6 of 8 Amazon domains** (Books, Electronics, Sports, Toys,
+   Home, Tools), improving NDCG@10 over the strongest official baseline by
+   **+21.6% to +53.2%**. It is **competitive but not first** in the remaining
+   two domains: **rank 2 on Beauty** (-11.0% NDCG@10 behind ProEx, 0.1341 vs.
+   0.1506) and **rank 5 on Movies** (-24.2% behind LLMEmb, 0.1281 vs. 0.1690),
+   reported honestly rather than dropped. On the four new domains with full
+   per-event signal rows (Sports/Toys/Home/Tools), all 56 per-domain paired
+   tests are positive and Holm-significant.
 
-The main paper studies whether uncertainty signals can be made decision-useful
-for LLM-based recommendation. The contribution is not a new model backbone and
-not a generic recommender system.
+2. **Negative result -- the calibrated-uncertainty / risk decomposition does
+   NOT improve ranking.** The principled uncertainty decomposition (boundary
+   ambiguity, calibration gap, evidence support, counterevidence) and the
+   one-parameter risk-adjusted family `r = p * (1 - U)^eta` do **not** improve
+   same-candidate ranking over the bare posterior: `eta = 0` is test-best in all
+   four diagnostic domains, a confidence-only variant matches or exceeds the
+   full family in 3 of 4, boundary uncertainty is exactly inert (4/4), and
+   ranking on the raw `p-hat` tracks the reported configuration within <= 0.008.
+   This is reported as a **characterized negative result**.
+
+This is a scoped **same-candidate reranking** claim, not a full-catalog
+recommender SOTA claim, and **not** an ECE / calibration-guarantee claim. The
+method name expands to **Candidate-Conditioned Relevance Posterior** (not
+"Calibrated"). The contribution is not a new model backbone and not a generic
+recommender system.
 
 ## Primary contribution statements
 
-1. Diagnosis: verbalized LLM confidence is informative in recommendation, but
-   unreliable under miscalibration, confidence collapse, and domain-dependent
-   failure.
-2. Method: C-CRP, a task-grounded calibrated candidate relevance posterior with
-   boundary uncertainty, calibration gap, and evidence insufficiency.
-3. Decision: validation-controlled candidate ranking/reranking with an
-   ablated risk term, evaluated with utility metrics, uncertainty diagnostics,
-   provenance gates, and paired statistical tests.
+1. Protocol: a unified same-candidate reranking benchmark (10,000 users / 101
+   candidates per domain [Beauty 973], shared Qwen3-8B backbone, shared
+   importer, paired Holm-corrected bootstrap, full provenance) over **8 official
+   -code-level baselines** and **8 Amazon domains**.
+2. Positive finding: the **task-grounded pointwise relevance posterior** is the
+   strongest single reranking signal, ranking first in 6 of 8 domains (see the
+   frozen claim above). The win is attributed to the posterior itself by a
+   raw-`p-hat` attribution ablation, not to the uncertainty machinery.
+3. Negative finding: the calibrated-uncertainty / risk decomposition, evaluated
+   as leave-one-component-out ablations and a raw-probability attribution, does
+   **not** improve same-candidate ranking. The event-level uncertainty signal
+   does stratify reliability, but this is reported as a descriptive,
+   partly-circular observation, **not** a ranking-improvement claim.
 
 C-CRP is the main internal method line. SRPD is the trainable
 framework/ablation line and becomes paper-facing only after leakage-clean

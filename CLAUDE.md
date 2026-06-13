@@ -20,10 +20,10 @@ server evidence locally before cleanup.
   this thread; when multi-agent review is required, use GPT-5.5 xhigh
   sub-agents instead.
 - **Stage**: M5/M6 handoff (C-CRP v3 and sports/toys/home/tools official gates passed; Phase 2.5 paper-critical modules closed; local submission-package/release-candidate stack ready, but final submission blocked by ProMax public page-range/DOI-Crossref visibility and private manual submission-system confirmation)
-- **Core Claim**: Task-grounded calibrated uncertainty improves controlled candidate ranking/reranking reliability under same-schema evaluation.
-- **Methods**: C-CRP v3 (main), SRPD (ablation/supplementary)
-- **Baselines**: 8 official external (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). SETRec is blocked/supplementary unless future official gates pass.
-- **Domains**: beauty, books, electronics, movies (original 4) + sports, toys, home, tools (new 4)
+- **Core Claim (REFRAMED, dual framing — authoritative)**: A task-grounded **pointwise LLM relevance posterior** (the model's own per-candidate relevance probability, used directly as the ranking score) is the working reranking signal — it ranks **first in 6 of 8 domains** (+21.6% to +53.2% NDCG@10 over the strongest baseline; competitive but not first in Beauty #2 / Movies #5). The **calibrated-uncertainty / risk decomposition does NOT improve same-candidate ranking** — that is reported as a **characterized negative result**. This is a scoped same-candidate reranking claim, not full-catalog SOTA and not an ECE/calibration-guarantee claim. C-CRP now expands to **Candidate-Conditioned Relevance Posterior** (not "Calibrated"). The old "calibrated uncertainty improves ranking" wording is **stale/reversed** — see `docs/paper_claims_and_status.md` (source of truth).
+- **Methods**: C-CRP v3 = pointwise relevance posterior (main/headline); the uncertainty/risk family is an analyzed-and-inert design space (negative result). SRPD = trainable framework (ablation/supplementary).
+- **Baselines**: 8 official external in the main block (ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLMESR, ProEx, ProMax, RLMRec). ProEx (KDD 2026) and ProMax (SIGIR 2026) share one official repo (BlueGhostYi/ProRec). SETRec is a 9th baseline run/attempted but EXCLUDED (official_blocked, `setrec_upstream_tokenize_all_cuda_oom` CUDA-OOM on large domains), held supplementary unless a future official gate passes.
+- **Domains (all 8 in the main comparison)**: beauty, books, electronics, movies (original 4) + sports, toys, home, tools (new 4). Diagnostic modules (ablation/hyperparameter/observation/raw-p attribution) are scoped to the 4 new domains with full per-event signal rows.
 - **Server**: `pony-rec-gpu` (SSH accessible via `ssh pony-rec-gpu`, key-based auth configured)
   - Server project path: `~/projects/pony-rec-rescue-shadow-v6`
   - Local project path: `D:\Research\Uncertainty`
@@ -120,7 +120,7 @@ lightweight local evidence package with server/local manifest comparison.
 
 本项目的最终目标是产出一篇达到顶会投稿水平的论文。具体要求：
 
-1. **必须达到 SOTA** — C-CRP v3 在多个域上超越所有 8 个 official baselines
+1. **诚实的强结果（非"每个域都 SOTA"）** — C-CRP v3 的 pointwise posterior 在 **8 个域中的 6 个**排第一（超越全部 8 个 official baselines，+21.6%~+53.2% NDCG@10）；Beauty(#2)/Movies(#5) 如实报告为落后域。**严禁**写成"first in every domain / 每个域都 SOTA"。uncertainty/risk 分解是 characterized **negative result**，不得作为 headline 贡献。
 2. **创新非缝合** — 方法必须是原创的、有理论动机的，不是拼凑已有方法
 3. **禁止 toy 化** — 所有实验必须是 full-scale（10k 用户、101 候选），不能用小样本代替
 4. **8 个 official baselines** — 每个域都必须有完整的 8 个 baseline 对比
