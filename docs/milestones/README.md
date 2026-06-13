@@ -144,7 +144,7 @@ packet refreshed most recently at `2026-06-13T02:32:56Z` and now lists those
 source probes in Markdown; this strengthens provenance but is not a readiness
 upgrade.
 The complete release-candidate stack was also
-refreshed at `2026-06-13T02:21:31Z` and reports `ok=true`,
+refreshed at `2026-06-13T02:51:34Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `failures=[]`, and `final_submission_ready=false`; its freshness audit checks
 `23` input fingerprints and `14` generated gate files with zero mismatches,
@@ -188,13 +188,17 @@ The seventh synchronous JSON-only Claude call with `model=opus`, tools disabled,
 and a shorter structured JSON-only prompt failed with the same connector-layer
 error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
-The refreshed packet records seven failed attempts and still keeps
+The eighth asynchronous Claude call with `mcp__claude_review.review_start` plus
+`review_status`, `model=opus`, tools disabled, and a short JSON-only prompt
+failed with the same connector-layer error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
+The refreshed packet records eight failed attempts and still keeps
 `explicit_claude_opus_present=false`. Codex also added
 `scripts/audit/main_build_claude_review_request_packet.py`, generating
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for a future valid Claude Opus review;
-after the seventh failed connector attempt, that request packet was refreshed
-at `2026-06-13T02:40:47Z` and now records seven failed Claude attempts. The
+after the eighth failed connector attempt, that request packet was refreshed
+at `2026-06-13T02:50:36Z` and now records eight failed Claude attempts. The
 request packet is not reviewer coverage. The review-continuation gate now
 validates additional reviewer JSONs before counting them for panel coverage:
 Claude/Opus JSON must include `valid_review_evidence=true`,

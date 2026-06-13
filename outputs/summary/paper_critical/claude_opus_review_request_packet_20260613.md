@@ -1,11 +1,11 @@
 # Claude Opus Review Request Packet
 
-- Created UTC: `2026-06-13T02:40:47.320647+00:00`
+- Created UTC: `2026-06-13T02:50:36.106362+00:00`
 - OK: `true`
 - Claude review needed: `true`
 - Existing score floor: `8.0`
-- Failed Claude attempts: `7`
-- Prompt sha256: `2ca9e0b34a2eceb846ed85fc7bc1fdfff73748e8b97aadf56cc2c51b873807a8`
+- Failed Claude attempts: `8`
+- Prompt sha256: `0981de74eb1c772700e6c74c753e2eee14ae0f3e98b3967a0e6b598a9a5be13d`
 
 ## Missing Perspectives
 
@@ -69,7 +69,7 @@
       "explicit_claude_opus_review"
     ],
     "failed_claude_attempts": {
-      "count": 7,
+      "count": 8,
       "unique_errors": [
         "Claude CLI did not return JSON output"
       ],
@@ -80,7 +80,8 @@
         "mcp__claude_review.review synchronous call with tools disabled",
         "mcp__claude_review.review minimal JSON-oriented no-tools call",
         "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled",
-        "mcp__claude_review.review synchronous JSON-only call with model=opus, tools disabled, seventh attempt"
+        "mcp__claude_review.review synchronous JSON-only call with model=opus, tools disabled, seventh attempt",
+        "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled"
       ]
     },
     "gpt55_verdict": "CONDITIONAL_PASS",

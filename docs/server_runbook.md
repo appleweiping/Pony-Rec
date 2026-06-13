@@ -95,12 +95,16 @@ PIDs, audit summaries, and missing-file errors.
    a shorter structured JSON-only prompt failed with the same connector-layer
    error and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
-   The current packet reports seven failed attempts and still keeps
+   An eighth asynchronous call with `mcp__claude_review.review_start`,
+   `review_status`, `model=opus`, tools disabled, and a short JSON-only prompt
+   failed with the same connector-layer error and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
+   The current packet reports eight failed attempts and still keeps
    `explicit_claude_opus_present=false`. Use the new public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
    before trying another Claude route; it was refreshed at
-   `2026-06-13T02:40:47Z`, records seven failed Claude attempts, contains the
+   `2026-06-13T02:50:36Z`, records eight failed Claude attempts, contains the
    exact prompt/schema for a valid additional review JSON, and is not itself
    reviewer coverage. The
    review-continuation builder now validates additional reviewer JSONs before
@@ -166,7 +170,7 @@ PIDs, audit summaries, and missing-file errors.
    recently at `2026-06-13T02:32:56Z`;
    the closure Markdown now lists those latest public source probes. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
-   stack was also refreshed at `2026-06-13T02:21:31Z`: it reports `ok=true`,
+   stack was also refreshed at `2026-06-13T02:51:34Z`: it reports `ok=true`,
    `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
    `failures=[]`, and `final_submission_ready=false`; the freshness audit has
    zero input or generated-gate mismatches, and the independent source-package

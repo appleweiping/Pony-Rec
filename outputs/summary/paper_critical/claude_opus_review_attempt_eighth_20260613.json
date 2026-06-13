@@ -1,0 +1,11 @@
+{
+  "completed_at_utc": "2026-06-13T02:49:21Z",
+  "created_at_utc": "2026-06-13T02:49:20Z",
+  "error": "Claude CLI did not return JSON output",
+  "job_id": "b1b88420168a4e498029a00a8695098a",
+  "notes": "Eighth attempt used mcp__claude_review.review_start with model=opus, tools disabled, a bounded review_status poll, and a short JSON-only prompt. The async job failed at the Claude CLI/connector layer with the same error and is not valid reviewer coverage.",
+  "reviewer": "claude-opus",
+  "source": "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled",
+  "status": "failed",
+  "valid_review_evidence": false
+}

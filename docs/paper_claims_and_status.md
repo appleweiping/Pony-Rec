@@ -110,7 +110,7 @@ probes in addition to direct Crossref/DOI/ACM statuses. Codex also refreshed
 the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
-the latest `2026-06-13T02:21:31Z` stack reports `ok=true`,
+the latest `2026-06-13T02:51:34Z` stack reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `blocking_status=external_manual_or_review_blocked`, `failures=[]`, and
 `final_submission_ready=false`. Its freshness audit checks `23` input
@@ -165,8 +165,8 @@ so the packet at that point exposed five failed Claude attempts while preserving
 `scripts/audit/main_build_claude_review_request_packet.py` and generated
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for the next valid Claude Opus review.
-After the seventh failed connector attempt, the request packet was refreshed at
-`2026-06-13T02:40:47Z` and now records seven failed Claude attempts. The
+After the eighth failed connector attempt, the request packet was refreshed at
+`2026-06-13T02:50:36Z` and now records eight failed Claude attempts. The
 request packet is not reviewer coverage and does not close final
 readiness. The review-continuation packet builder now validates additional
 reviewer JSONs before counting them for panel coverage: a Claude/Opus review
@@ -183,7 +183,13 @@ Codex then retried a seventh synchronous JSON-only Claude call with `model=opus`
 tools disabled, and a shorter structured JSON-only prompt; it failed with the
 same connector-layer error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_seventh_20260613.json`.
-The refreshed review-continuation packet now reports seven
+Codex then retried an eighth asynchronous Claude call with
+`mcp__claude_review.review_start` plus `review_status`, `model=opus`, tools
+disabled, and a short JSON-only prompt; the job
+`b1b88420168a4e498029a00a8695098a` failed with the same connector-layer error
+and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
+The refreshed review-continuation packet now reports eight
 failed attempts while keeping `explicit_claude_opus_present=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
