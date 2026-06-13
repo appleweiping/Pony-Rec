@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 04:52 CEST
+Last updated: 2026-06-13 05:06 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,30 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 private manual-submission confirmation request packet:
+  Codex added
+  `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py`
+  plus
+  `tests/test_build_manual_submission_private_confirmation_request_packet.py`
+  and generated
+  `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.{json,md}`.
+  The packet is local-only and public-safe: `ok=true`,
+  `request_packet_ready=true`, `manual_confirmation_needed=true`,
+  `manual_submission_system_ready=false`, and `final_submission_ready=false`.
+  It records the current source manifest sha256
+  `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`,
+  the full safe `completed_item_ids` skeleton, the recommended ignored path
+  `artifacts/private/manual_submission_private_confirmation_20260613.json`,
+  forbidden private fields/JSON keys, and exact follow-up commands for
+  rerunning the manual checklist, release-candidate stack, and final gate after
+  a human completes the submission-system fields. Codex also linked this packet
+  from
+  `scripts/audit/main_build_final_submission_blocker_closure_packet.py` and
+  refreshed
+  `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`.
+  This does not close the manual gate, ProMax metadata gate, or explicit Claude
+  Opus review gate.
 
 - 2026-06-13 final submission gate hardening after review-continuation audit:
   `scripts/audit/main_build_final_submission_gate.py` now consumes the

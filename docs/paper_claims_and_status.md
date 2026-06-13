@@ -370,6 +370,29 @@ reviewer preferences, and account metadata. This gives the manual gate a
 privacy-preserving closure path but does not change the current committed
 status: `manual_submission_system_ready=false`.
 
+**2026-06-13 manual private-confirmation request packet.** Codex added
+`scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py`
+and generated
+`outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.{json,md}`
+as the public-safe handoff into the private submission-system step. The packet
+reports `ok=true`, `request_packet_ready=true`,
+`manual_confirmation_needed=true`, `manual_submission_system_ready=false`, and
+`final_submission_ready=false`. It records the current source manifest sha256
+`91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`, a safe
+confirmation JSON skeleton under the ignored recommended path
+`artifacts/private/manual_submission_private_confirmation_20260613.json`, all
+manual item IDs needed for the full manual gate, currently blocked item
+`confirm_external_proceedings_metadata`, rejected private JSON keys, and exact
+follow-up commands for rerunning the manual checklist, release-candidate stack,
+and final gate after a human completes the submission-system fields. Codex also
+linked this request packet from
+`scripts/audit/main_build_final_submission_blocker_closure_packet.py` and
+refreshed
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`.
+This request packet is not a private confirmation and does not waive the ProMax
+public metadata blocker, private manual confirmation blocker, or explicit
+Claude Opus review blocker.
+
 **2026-06-12 external proceedings metadata recheck.** Codex added
 `scripts/audit/main_audit_external_proceedings_metadata.py` and
 `configs/paper_external_proceedings_metadata_checks.json` to turn the remaining

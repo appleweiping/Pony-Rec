@@ -255,6 +255,7 @@ def build_final_submission_blocker_closure_packet(
                 "Do not store author identities, conflicts, reviewer preferences, declarations, account metadata, or other private payloads in git.",
             ],
             "next_commands": [
+                "python -m scripts.audit.main_build_manual_submission_private_confirmation_request_packet --output-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.md",
                 "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json path/to/untracked_private_confirmation.json --output-json outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.json --output-md outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.md",
                 "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --manual-private-confirmation-json path/to/untracked_private_confirmation.json --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md",
             ],

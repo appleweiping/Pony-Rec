@@ -268,6 +268,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, and release-candidate stack; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, source-package rebuild, external proceedings metadata, manual checklist, and review-continuation coverage; keeps final readiness false while external DOI/page-range, private submission-system, or explicit Claude Opus review blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
+| `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py` | Local read-only public-safe request-packet builder for the private manual submission-system confirmation; emits the current source-manifest hash, safe confirmation skeleton, forbidden private fields/keys, recommended ignored path, and follow-up commands without consuming private data or closing final readiness |
 | `scripts/audit/main_audit_external_proceedings_metadata.py` | Local read-only ARIS citation/proceedings metadata recheck for ProEx/ProMax; records BibTeX, DOI/Crossref, arXiv, DBLP/SIGIR source visibility, and advisory Crossref title-discovery candidates while keeping final submission blocked until exact public page-range/registry evidence is present |
 | `scripts/audit/main_probe_promax_public_metadata.py` | Lightweight local live probe for the ProMax public metadata blocker; checks BibTeX pages, Crossref `/works`, DOI resolver, ACM DL, arXiv HTML ACM metadata, SIGIR accepted-paper source, UQ author-profile announcement, author Google Sites publications, and UQ Experts profile without running the full submission stack |
 | `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}` | ARIS-style citation repair audit for the active manuscript; records all eight official baseline citations, recency counts, and `bibtex main` warning status |
@@ -302,6 +303,17 @@ pre-submission handoff status.
 
 Private manual submission confirmation, after a human has completed the
 submission-system fields:
+
+```bash
+python -m scripts.audit.main_build_manual_submission_private_confirmation_request_packet \
+  --output-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.md
+```
+
+Use the request packet first to get the current source manifest sha256, the full
+safe `completed_item_ids` skeleton, the recommended ignored confirmation path,
+and the forbidden private fields/JSON keys. The request packet is public-safe
+and does not close any gate.
 
 ```bash
 python -m scripts.audit.main_build_manual_submission_checklist \

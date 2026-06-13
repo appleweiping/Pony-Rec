@@ -218,6 +218,7 @@ def test_final_submission_blocker_closure_packet_markdown_has_commands(
     assert "manual_submission_system" in text
     assert "review_panel_coverage" in text
     assert "main_build_review_continuation_packet" in text
+    assert "main_build_manual_submission_private_confirmation_request_packet" in text
     assert "Source manifest sha256: `" + "a" * 64 + "`" in text
     assert "main_probe_promax_public_metadata" in text
     assert "main_refresh_submission_release_candidate_stack" in text

@@ -241,7 +241,22 @@ confirmation file can prove submission-system items are done by hash and item
 IDs without storing author/COI/reviewer/account payloads in git. The current
 committed state has no private confirmation and remains
 `manual_submission_system_ready=false`. The recorded Git HEAD is generation
-provenance, not a strict post-commit freshness condition. The stale
+provenance, not a strict post-commit freshness condition. Codex then added
+`scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py`
+and
+`outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.{json,md}`
+as a public-safe request packet for that private manual step. It reports
+`ok=true`, `request_packet_ready=true`, `manual_confirmation_needed=true`,
+`manual_submission_system_ready=false`, and `final_submission_ready=false`;
+records the current source manifest sha256
+`91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`,
+the safe confirmation skeleton, recommended ignored path
+`artifacts/private/manual_submission_private_confirmation_20260613.json`,
+forbidden private fields/keys, and follow-up commands; and is linked from the
+refreshed
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`.
+This request packet is a handoff artifact only and does not close manual,
+ProMax, or Claude review blockers. The stale
 `paper/` draft was rewritten to the current C-CRP same-candidate
 official-baseline spine, stale calibration table removed, current main/module
 tables added, and `scripts/analysis/main_build_paper_result_tables.py`
