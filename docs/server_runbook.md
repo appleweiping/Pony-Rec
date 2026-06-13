@@ -83,7 +83,10 @@ PIDs, audit summaries, and missing-file errors.
    a fifth minimal JSON-oriented no-tools call failed at the same
    CLI/connector layer and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`.
-   The current packet reports five failed attempts and still keeps
+   A sixth synchronous JSON-only call with `model=opus` and tools disabled
+   failed with the same connector-layer error and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
+   The current packet reports six failed attempts and still keeps
    `explicit_claude_opus_present=false`. Use the new public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
@@ -107,6 +110,14 @@ PIDs, audit summaries, and missing-file errors.
    locally ready source/package stack as final ready until ProMax metadata,
    private manual submission-system confirmation, and explicit Claude Opus
    coverage all close.
+   A GPT-5.5 xhigh sidecar audit found no veto but identified stale-input risk:
+   because the final gate reads the review-continuation packet, the
+   pre-submission refresh must fingerprint that packet and its builder. This is
+   now fixed in `scripts/audit/main_refresh_pre_submission_gates.py`; the
+   refreshed 2026-06-13 freshness artifact records
+   `refresh_artifact_fresh=true`. The review-continuation builder also now
+   accepts future closed ProMax/closure/release-candidate states instead of
+   requiring the current ProMax-blocked shape.
    The latest `Paper/main.pdf` compiles to 9 pages /
    546716 bytes with visible
    official-baseline provenance, all-metric rank-first, and four-domain

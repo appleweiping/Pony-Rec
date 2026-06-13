@@ -179,7 +179,10 @@ review call failed with the same error and is recorded at
 the fifth minimal JSON-oriented no-tools Claude call failed at the same
 CLI/connector layer and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`.
-The refreshed packet records five failed attempts and still keeps
+The sixth synchronous JSON-only Claude call with `model=opus` and tools
+disabled failed with the same connector-layer error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
+The refreshed packet records six failed attempts and still keeps
 `explicit_claude_opus_present=false`. Codex also added
 `scripts/audit/main_build_claude_review_request_packet.py`, generating
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
@@ -197,6 +200,13 @@ reports `review_panel_coverage_complete=false`, verdict
 `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`, and
 `final_submission_ready=false`; the blocker closure packet now includes a
 separate `review_panel_coverage` group for `explicit_claude_opus_review`.
+After a GPT-5.5 xhigh sidecar audit, Codex also fixed the freshness edge:
+`scripts/audit/main_refresh_pre_submission_gates.py` now fingerprints the
+review-continuation packet and its builder because the final gate reads that
+packet. The refreshed freshness artifact reports `refresh_artifact_fresh=true`.
+`scripts/audit/main_build_review_continuation_packet.py` now accepts future
+closed ProMax/closure/release-candidate states instead of requiring the current
+blocked ProMax state as the only valid handoff shape.
 The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,

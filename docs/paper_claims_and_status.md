@@ -158,7 +158,7 @@ and is recorded at
 and a fifth minimal JSON-oriented no-tools call failed the same way at the
 Claude CLI/connector layer. The fifth failure is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`,
-so the refreshed packet exposes five failed Claude attempts while preserving
+so the packet at that point exposed five failed Claude attempts while preserving
 `explicit_claude_opus_present=false`. Codex added
 `scripts/audit/main_build_claude_review_request_packet.py` and generated
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
@@ -171,6 +171,12 @@ must be valid substantive evidence with `valid_review_evidence=true`,
 kill-argument, major concerns, required changes, and acknowledged remaining
 blockers. This prevents an empty Claude name+score JSON from closing the
 explicit Claude Opus review blocker.
+Codex then retried a sixth synchronous JSON-only Claude call with `model=opus`
+and tools disabled; it failed with the same connector-layer error and is
+recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
+The refreshed review-continuation and Claude request packets now report six
+failed attempts while keeping `explicit_claude_opus_present=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local
@@ -188,6 +194,19 @@ adds a separate `review_panel_coverage` closure group containing
 `review_panel_coverage_not_complete` and `explicit_claude_opus_review`. This is
 a guardrail hardening, not a readiness upgrade: the paper remains locally
 handoff-ready but not final-submission-ready.
+After an independent GPT-5.5 xhigh sidecar audit, Codex fixed one stale-input
+risk in `scripts/audit/main_refresh_pre_submission_gates.py`: the
+pre-submission refresh now fingerprints both the review-continuation packet and
+`scripts/audit/main_build_review_continuation_packet.py`, because the final gate
+reads that packet. The refreshed
+`outputs/summary/paper_critical/pre_submission_gate_refresh_20260613.json`
+records those fingerprints and
+`outputs/summary/paper_critical/pre_submission_gate_refresh_freshness_20260613.json`
+reports `refresh_artifact_fresh=true`. Codex also updated
+`scripts/audit/main_build_review_continuation_packet.py` so a future state where
+the ProMax probe, closure packet, or release-candidate stack has legitimately
+closed no longer causes a review-continuation failure; the final submission
+decision remains delegated to the final gate.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

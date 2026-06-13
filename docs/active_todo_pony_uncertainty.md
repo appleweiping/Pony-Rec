@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 03:29 CEST
+Last updated: 2026-06-13 03:45 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -24,9 +24,22 @@ cycle.
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
   `review_continuation_packet_20260613.{json,md}` still reports
-  `review_continuation_ready=true`, failed Claude attempts `5`,
+  `review_continuation_ready=true`, failed Claude attempts `6`,
   `explicit_claude_opus_present=false`, and
-  `final_panel_coverage_complete=false`.
+  `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
+  veto the hardening, but flagged that the pre-submission freshness audit must
+  fingerprint the review-continuation packet and builder because the final gate
+  reads that packet. Codex fixed this in
+  `scripts/audit/main_refresh_pre_submission_gates.py`: the refreshed
+  `pre_submission_gate_refresh_20260613.json` now fingerprints both
+  `outputs/summary/paper_critical/review_continuation_packet_20260613.json`
+  and `scripts/audit/main_build_review_continuation_packet.py`, and
+  `pre_submission_gate_refresh_freshness_20260613.json` reports
+  `refresh_artifact_fresh=true`. Codex also relaxed
+  `scripts/audit/main_build_review_continuation_packet.py` so future ProMax
+  public metadata / closure / release-candidate final-ready states are accepted
+  instead of being treated as an unexpected blocked-state mismatch; final
+  submission is still decided only by the final gate.
 
 - 2026-06-13 review-continuation refresh after GPT-5.5 xhigh handoff:
   GPT-5.5 xhigh returned an `8.0/10` `CONDITIONAL_PASS`, while keeping
@@ -61,7 +74,11 @@ cycle.
   A fifth minimal JSON-oriented, no-tools `mcp__claude_review.review` call also
   failed at the Claude CLI/connector layer and is recorded at
   `outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`.
-  The refreshed packet reports `failed_review_attempts` count `5` while keeping
+  A sixth synchronous JSON-only `mcp__claude_review.review` call with
+  `model=opus` and tools disabled failed with the same connector-layer error
+  and is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_sixth_20260613.json`.
+  The refreshed packet reports `failed_review_attempts` count `6` while keeping
   `explicit_claude_opus_present=false`. Codex added
   `scripts/audit/main_build_claude_review_request_packet.py` and generated
   `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`

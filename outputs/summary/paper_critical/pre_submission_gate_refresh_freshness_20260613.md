@@ -1,13 +1,13 @@
 # Pre-Submission Refresh Freshness Audit
 
-Generated: 2026-06-13T01:26:02.895127+00:00
+Generated: 2026-06-13T01:51:23.864207+00:00
 
 - OK: `true`
 - Refresh artifact fresh: `true`
 - Final submission ready: `false`
 - Refresh JSON: `outputs\summary\paper_critical\pre_submission_gate_refresh_20260613.json`
 - Refresh verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
-- Input fingerprints checked: `21`
+- Input fingerprints checked: `23`
 - Generated step files checked: `14`
 - Input mismatches: `0`
 - Generated output mismatches: `0`
@@ -16,8 +16,8 @@ Generated: 2026-06-13T01:26:02.895127+00:00
 
 Git HEAD is provenance for the code/input state that generated the refresh. Freshness is decided by current file fingerprints and generated gate hashes, because committing generated artifacts necessarily changes HEAD.
 
-- Refresh generation HEAD: `3c3dff8ec8f355b1767bfc9a957048aa1bf3144e`
-- Current HEAD: `3c3dff8ec8f355b1767bfc9a957048aa1bf3144e`
+- Refresh generation HEAD: `c2c88a4f90f85b183f50c05c305fd7ace78ef64f`
+- Current HEAD: `c2c88a4f90f85b183f50c05c305fd7ace78ef64f`
 - HEAD changed since refresh generation: `false`
 
 ## Failures

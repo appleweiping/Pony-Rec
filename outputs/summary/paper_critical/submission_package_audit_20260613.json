@@ -57,7 +57,7 @@
     "underfull_hbox_count": 6,
     "underfull_vbox_count": 8
   },
-  "created_at_utc": "2026-06-13T01:25:38.766585+00:00",
+  "created_at_utc": "2026-06-13T01:51:04.357986+00:00",
   "documentclass": {
     "documentclass": "acmart",
     "options": [
@@ -85,7 +85,7 @@
     "external_metadata_audit": {
       "exists": true,
       "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260613.json",
-      "size_bytes": 21295
+      "size_bytes": 21291
     },
     "metadata_followup": {
       "exists": true,

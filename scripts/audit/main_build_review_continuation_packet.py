@@ -304,19 +304,18 @@ def build_review_continuation_packet(
     stack_ok = (
         stack.get("ok") is True
         and stack.get("local_release_candidate_ready") is True
-        and stack.get("final_submission_ready") is False
     )
     closure_ok = (
         closure.get("ok") is True
         and closure.get("closure_packet_ready") is True
-        and closure.get("ready_for_human_handoff") is True
-        and closure.get("final_submission_ready") is False
+        and (
+            closure.get("ready_for_human_handoff") is True
+            or closure.get("final_submission_ready") is True
+        )
         and not other_blockers
     )
     promax_ok = (
         promax.get("ok") is True
-        and promax.get("promax_public_metadata_ready") is False
-        and promax.get("final_submission_ready") is False
     )
 
     if not panel_ok:
@@ -330,13 +329,18 @@ def build_review_continuation_packet(
     if not closure_ok:
         failures.append("closure_packet_not_ready_or_has_other_blockers")
     if not promax_ok:
-        failures.append("promax_probe_not_in_expected_blocked_state")
+        failures.append("promax_probe_not_ok")
 
-    final_submission_ready = any(
-        bool(payload.get("final_submission_ready")) for payload in loaded.values()
-    )
-    if final_submission_ready:
-        failures.append("unexpected_input_claims_final_submission_ready")
+    unexpected_final_ready_inputs = [
+        key
+        for key in ["claim_audit", "submission_package_audit"]
+        if loaded[key].get("final_submission_ready") is True
+    ]
+    if unexpected_final_ready_inputs:
+        failures.extend(
+            f"{key}:unexpected_local_final_submission_ready"
+            for key in unexpected_final_ready_inputs
+        )
 
     blockers = _dedupe(
         list(claim.get("remaining_blockers") or [])
@@ -401,7 +405,12 @@ def build_review_continuation_packet(
             "submission_package_audit_ok": package_ok,
             "release_candidate_stack_ok": stack_ok,
             "closure_packet_ok": closure_ok,
-            "promax_probe_expected_blocked": promax_ok,
+            "promax_probe_ok": promax_ok,
+            "promax_probe_expected_blocked": (
+                promax.get("ok") is True
+                and promax.get("promax_public_metadata_ready") is False
+                and promax.get("final_submission_ready") is False
+            ),
             "closure_other_blockers": other_blockers,
             "external_proceedings_metadata_ready": closure.get("external_proceedings_metadata_ready")
             is True,

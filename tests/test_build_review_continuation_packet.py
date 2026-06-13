@@ -152,6 +152,70 @@ def test_review_continuation_accepts_additional_claude_review(tmp_path: Path) ->
     ]
 
 
+def test_review_continuation_accepts_closed_external_and_final_gate_inputs(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_inputs(tmp_path)
+    stack = json.loads(paths["stack"].read_text(encoding="utf-8"))
+    stack["final_submission_ready"] = True
+    stack["remaining_blockers"] = []
+    paths["stack"].write_text(json.dumps(stack), encoding="utf-8")
+    closure = json.loads(paths["closure"].read_text(encoding="utf-8"))
+    closure["ready_for_human_handoff"] = False
+    closure["final_submission_ready"] = True
+    closure["external_proceedings_metadata_ready"] = True
+    closure["manual_submission_system_ready"] = True
+    closure["classified_remaining_blockers"] = {
+        "external_proceedings_metadata": [],
+        "manual_submission_system": [],
+        "review_panel_coverage": [],
+        "other": [],
+    }
+    closure["remaining_blockers"] = []
+    paths["closure"].write_text(json.dumps(closure), encoding="utf-8")
+    promax = json.loads(paths["promax"].read_text(encoding="utf-8"))
+    promax["promax_public_metadata_ready"] = True
+    promax["final_submission_ready"] = False
+    promax["remaining_blockers"] = []
+    paths["promax"].write_text(json.dumps(promax), encoding="utf-8")
+    claude = _write_json(
+        tmp_path / "claude.json",
+        {
+            "reviewer": "claude-opus",
+            "score_0_to_10": 8.1,
+            "verdict": "CONDITIONAL_PASS",
+            "valid_review_evidence": True,
+            "claim_boundary_ok": True,
+            "final_submission_ready_claim_allowed": False,
+            "kill_argument": "Final approval should still be delegated to final gates.",
+            "major_concerns": ["Do not broaden beyond same-candidate ranking."],
+            "required_changes": ["Keep claim wording scoped."],
+            "remaining_blockers_acknowledged": ["none"],
+        },
+    )
+
+    packet = build_review_continuation_packet(
+        root=tmp_path,
+        panel_review_json=paths["panel"].relative_to(tmp_path),
+        claim_audit_json=paths["claim"].relative_to(tmp_path),
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        release_candidate_stack_json=paths["stack"].relative_to(tmp_path),
+        closure_packet_json=paths["closure"].relative_to(tmp_path),
+        promax_probe_json=paths["promax"].relative_to(tmp_path),
+        additional_review_jsons=[claude.relative_to(tmp_path)],
+    )
+
+    assert packet["ok"] is True
+    assert packet["review_continuation_ready"] is True
+    assert packet["final_panel_coverage_complete"] is True
+    assert packet["final_submission_ready"] is False
+    assert packet["gate_summary"]["release_candidate_stack_ok"] is True
+    assert packet["gate_summary"]["closure_packet_ok"] is True
+    assert packet["gate_summary"]["promax_probe_ok"] is True
+    assert packet["gate_summary"]["promax_probe_expected_blocked"] is False
+    assert packet["failures"] == []
+
+
 def test_minimal_claude_additional_review_is_not_coverage(tmp_path: Path) -> None:
     paths = _seed_inputs(tmp_path)
     claude = _write_json(

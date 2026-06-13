@@ -1,0 +1,8 @@
+{
+  "created_at_utc": "2026-06-13T01:39:58Z",
+  "error": "Claude CLI did not return JSON output",
+  "reviewer": "claude-opus",
+  "source": "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled",
+  "status": "failed",
+  "valid_review_evidence": false
+}

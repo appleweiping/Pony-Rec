@@ -1,11 +1,11 @@
 # Claude Opus Review Request Packet
 
-- Created UTC: `2026-06-13T01:28:41.928704+00:00`
+- Created UTC: `2026-06-13T01:52:00.766335+00:00`
 - OK: `true`
 - Claude review needed: `true`
 - Existing score floor: `8.0`
-- Failed Claude attempts: `5`
-- Prompt sha256: `77cff9a37307d06f687f6c85eab6a2cb11cd0122ca5f0a4e864b500c7476d94e`
+- Failed Claude attempts: `6`
+- Prompt sha256: `451d7e64d376ae547f6ec211c76292ca59ae436c61d559026bb77b3de8d9c25d`
 
 ## Missing Perspectives
 
@@ -69,7 +69,7 @@
       "explicit_claude_opus_review"
     ],
     "failed_claude_attempts": {
-      "count": 5,
+      "count": 6,
       "unique_errors": [
         "Claude CLI did not return JSON output"
       ],
@@ -78,7 +78,8 @@
         "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
         "mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357",
         "mcp__claude_review.review synchronous call with tools disabled",
-        "mcp__claude_review.review minimal JSON-oriented no-tools call"
+        "mcp__claude_review.review minimal JSON-oriented no-tools call",
+        "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled"
       ]
     },
     "gpt55_verdict": "CONDITIONAL_PASS",
@@ -137,6 +138,7 @@
       "manual_submission_system_ready": false,
       "panel_ok": true,
       "promax_probe_expected_blocked": true,
+      "promax_probe_ok": true,
       "promax_public_metadata_ready": false,
       "release_candidate_stack_ok": true,
       "submission_package_audit_ok": true

@@ -202,6 +202,7 @@ def refresh_pre_submission_gates(
         target_profile_json,
         metadata_config,
         manual_config,
+        review_continuation_packet_json,
         "scripts/audit/main_refresh_pre_submission_gates.py",
         "scripts/audit/main_audit_external_proceedings_metadata.py",
         "scripts/audit/main_audit_submission_package.py",
@@ -210,6 +211,7 @@ def refresh_pre_submission_gates(
         "scripts/audit/main_build_submission_metadata_packet.py",
         "scripts/audit/main_build_manual_submission_checklist.py",
         "scripts/audit/main_build_final_submission_gate.py",
+        "scripts/audit/main_build_review_continuation_packet.py",
         "scripts/audit/main_audit_pre_submission_refresh_freshness.py",
     ]
     if manual_private_confirmation_json:

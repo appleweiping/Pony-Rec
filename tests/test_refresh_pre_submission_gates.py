@@ -277,6 +277,8 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     assert "scripts/audit/main_audit_pre_submission_refresh_freshness.py" in input_paths
     assert "scripts/audit/main_build_submission_source_package.py" in input_paths
     assert "scripts/audit/main_audit_submission_source_package_rebuild.py" in input_paths
+    assert "scripts/audit/main_build_review_continuation_packet.py" in input_paths
+    assert "review_continuation.json" in input_paths
     assert "promax:final_page_range_missing_in_bib" in refresh["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in refresh["remaining_blockers"]
     assert "explicit_claude_opus_review" in refresh["remaining_blockers"]
