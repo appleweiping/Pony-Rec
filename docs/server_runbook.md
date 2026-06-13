@@ -121,6 +121,16 @@ PIDs, audit summaries, and missing-file errors.
    exact prompt/schema for a valid additional review JSON, dynamically includes
    all recorded failed-attempt artifacts in the follow-up command, and is not
    itself reviewer coverage. The
+   local connector-health audit
+   `outputs/summary/paper_critical/claude_review_connector_health_20260613.{json,md}`
+   reports failed attempt count `11`, valid review evidence count `0`,
+   `same_error_tail_streak=11`, `connector_unhealthy=true`, and
+   `same_route_retry_recommended=false`; do not keep retrying the same
+   `mcp__claude_review` route unless the connector/tooling changes. Use the
+   request packet to obtain an external Claude Opus JSON and run
+   `scripts/audit/main_validate_claude_opus_review_json.py` before attaching
+   it.
+   The
    review-continuation builder now validates additional reviewer JSONs before
    counting them for panel coverage; a Claude/Opus JSON must be complete
    substantive evidence (`valid_review_evidence=true`, scoped claim boundary,
@@ -182,9 +192,9 @@ PIDs, audit summaries, and missing-file errors.
    `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
    `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
    `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
-   `2026-06-13T05:11:34Z`, and `2026-06-13T05:31:00Z` again found Crossref
-   `404`, DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes
-   passing. After the
+   `2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`, and
+   `2026-06-13T05:42:19Z` again found Crossref `404`, DOI resolver `404`, ACM
+   DL `403`, and all `5/5` public source probes passing. After the
    latest probe, the closure packet was refreshed again;
    the closure Markdown now lists those latest public source probes and
    explicitly keeps the review-panel blockers. This is

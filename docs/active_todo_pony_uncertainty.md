@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 07:32 CEST
+Last updated: 2026-06-13 07:46 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,25 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 Claude connector-health audit:
+  Codex added
+  `scripts/audit/main_audit_claude_review_connector_health.py` plus
+  `tests/test_audit_claude_review_connector_health.py` and generated
+  `outputs/summary/paper_critical/claude_review_connector_health_20260613.{json,md}`.
+  The audit is local-only/read-only and does not close review coverage or final
+  submission readiness. It counts the recorded Claude Opus failed-attempt JSONs
+  and reports `ok=true`, failed attempt count `11`, valid review evidence count
+  `0`, last error `Claude CLI did not return JSON output`,
+  `same_error_tail_streak=11`, `connector_unhealthy=true`,
+  `same_route_retry_recommended=false`, and recommended next route
+  `external_claude_opus_json_via_request_packet_and_validator`. The refreshed
+  `claude_opus_review_request_packet_20260613.{json,md}` now includes
+  `connector_health_command_before_retry` before the validation and attachment
+  commands. Future agents should not keep retrying the same
+  `mcp__claude_review` route unless the connector/tooling changes; use the
+  request packet to obtain a substantive external Claude Opus JSON, then run
+  `main_validate_claude_opus_review_json.py` before attaching it.
 
 - 2026-06-13 strict Claude Opus review-import guard:
   Codex found that the review-continuation coverage check was too permissive:
@@ -39,7 +58,7 @@ cycle.
   The refreshed review-continuation packet, Claude request packet, and
   final-blocker consistency audit all record failed Claude attempts `11` while
   preserving the explicit Claude Opus blocker. The latest live ProMax probe at
-  `2026-06-13T05:31:00Z` still reports
+  `2026-06-13T05:42:19Z` still reports
   Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
   source probes passing.
 
@@ -112,7 +131,7 @@ cycle.
   request packet, ProMax probe, and manual confirmation request packet agree on
   the current blocked state. The current audit reports `ok=true`,
   `final_blocker_consistency_ok=true`, `final_submission_ready=false`, failed
-  Claude attempts `10`, `explicit_claude_opus_present=false`,
+  Claude attempts `11`, `explicit_claude_opus_present=false`,
   `promax_public_metadata_ready=false`, ProMax direct statuses
   Crossref `404` / DOI resolver `404` / ACM DL `403`,
   `manual_confirmation_needed=true`, and recursive warning regressions `0`.

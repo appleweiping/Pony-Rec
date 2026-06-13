@@ -105,9 +105,9 @@ Follow-up live probes at `2026-06-13T00:49:05Z`,
 `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
 `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
 `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
-`2026-06-13T05:11:34Z`, and `2026-06-13T05:31:00Z` found the same direct
-blocker state: Crossref `404`, DOI resolver `404`, ACM DL `403`, and all
-`5/5` public source probes passing.
+`2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`, and
+`2026-06-13T05:42:19Z` found the same direct blocker state: Crossref `404`,
+DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes passing.
 The closure packet was refreshed after the latest probes; this is stronger
 public accepted-paper provenance, not a readiness upgrade. The closure packet
 Markdown now lists latest public source probes in addition to direct
@@ -234,6 +234,16 @@ The refreshed review-continuation packet, Claude request packet, and
 final-blocker consistency audit now record failed Claude attempts `11`, still
 with `explicit_claude_opus_present=false`,
 `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
+Codex then added
+`scripts/audit/main_audit_claude_review_connector_health.py` as a local
+read-only health audit for the repeated Claude connector failures. The current
+`outputs/summary/paper_critical/claude_review_connector_health_20260613.{json,md}`
+reports failed attempt count `11`, valid review evidence count `0`,
+`same_error_tail_streak=11`, `connector_unhealthy=true`,
+`same_route_retry_recommended=false`, and recommends
+`external_claude_opus_json_via_request_packet_and_validator`. This does not
+close the explicit Claude Opus blocker; it prevents unproductive retries of the
+same connector route unless the tooling changes.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local

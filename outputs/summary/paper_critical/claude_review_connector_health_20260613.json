@@ -1,0 +1,239 @@
+{
+  "attempt_summaries": [
+    {
+      "completed_at_utc": "2026-06-12T23:04:39+00:00",
+      "created_at_utc": "2026-06-12T23:04:37+00:00",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start job 999276b352b940c0b957e3be212f9919",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-12T23:36:41+00:00",
+      "created_at_utc": "2026-06-12T23:36:40+00:00",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_retry_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-12T23:50:03+00:00",
+      "created_at_utc": "2026-06-12T23:50:02+00:00",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_third_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T00:17:01+00:00",
+      "created_at_utc": "2026-06-13T00:17:00+00:00",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sync_notools_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review synchronous call with tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T00:32:00+00:00",
+      "created_at_utc": null,
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_minimal_json_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review minimal JSON-oriented no-tools call",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": null,
+      "created_at_utc": "2026-06-13T01:39:58Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sixth_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review synchronous JSON-only call with model=opus and tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": null,
+      "created_at_utc": "2026-06-13T02:18:54.6219435Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_seventh_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review synchronous JSON-only call with model=opus, tools disabled, seventh attempt",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T02:49:21Z",
+      "created_at_utc": "2026-06-13T02:49:20Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eighth_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start async job b1b88420168a4e498029a00a8695098a with model=opus and tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T03:18:05Z",
+      "created_at_utc": "2026-06-13T03:18:04Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_ninth_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start async job a3863723466147e9b9b849cf994ca8fd with model=opus and tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T04:12:57Z",
+      "created_at_utc": "2026-06-13T04:12:56Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_tenth_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start async job b6e19654680c457d8be4845e168ce251 with model=opus and tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "completed_at_utc": "2026-06-13T05:29:28Z",
+      "created_at_utc": "2026-06-13T05:29:27Z",
+      "error": "Claude CLI did not return JSON output",
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eleventh_20260613.json",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review_start async job bf4b6b8145404ffa881cd99ed3c73429 with model=opus and tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    }
+  ],
+  "connector_unhealthy": true,
+  "created_at_utc": "2026-06-13T05:44:39.412449+00:00",
+  "error_counts": {
+    "Claude CLI did not return JSON output": 11
+  },
+  "external_json_route_ready": true,
+  "failed_attempt_count": 11,
+  "failures": [],
+  "final_submission_ready": false,
+  "final_submission_ready_policy": "This health packet cannot close final readiness; it only decides whether the same Claude connector route is worth retrying.",
+  "input_paths": {
+    "failed_attempts": [
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_20260613.json",
+        "sha256": "f7951575c676d6566d077c54c2897d0a19021d3e6a61ad76ee92c2cfe88e1e7c",
+        "size_bytes": 532
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eighth_20260613.json",
+        "sha256": "598d1e88a935a0e9f9373a5929e5f0e40ec339c3db3b85df9193fa974ec021a5",
+        "size_bytes": 673
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_eleventh_20260613.json",
+        "sha256": "64be9e0eb6af3d78d2c7ffe2d029b0b2b304f538e9e2c36fb93fe73aaa6246a4",
+        "size_bytes": 700
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_minimal_json_20260613.json",
+        "sha256": "d22cf9810eafd2073f025e84397993497bf5952dc4fa62cde251d42116eb5db7",
+        "size_bytes": 599
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_ninth_20260613.json",
+        "sha256": "d8859f2d16907f3560dcb1f935ddcd9a887d26dcfddf0c7fc23805a2a24fb115",
+        "size_bytes": 697
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_retry_20260613.json",
+        "sha256": "9da30150d005ff3e108894b8babf921adbe2eb148558baca4093866864181828",
+        "size_bytes": 528
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_seventh_20260613.json",
+        "sha256": "9ae1244948318e8ee21b5e7b747398014ddd79ba946e49a1bf72fc62ee105850",
+        "size_bytes": 598
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sixth_20260613.json",
+        "sha256": "df5c4527bd9f878c11718e1d82f18201e6af049629b4d5d7e9c17e91e092334c",
+        "size_bytes": 287
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sync_notools_20260613.json",
+        "sha256": "bfbad83626fb9d1e381f5d66ab1e9442174688560df1a3b08787f9f0588eb141",
+        "size_bytes": 559
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_tenth_20260613.json",
+        "sha256": "2daa212c68da4bf21f62bb549bc9063eeca882e9e558d32fe07d5a0894190f52",
+        "size_bytes": 697
+      },
+      {
+        "exists": true,
+        "is_file": true,
+        "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_third_20260613.json",
+        "sha256": "e04a30471dacc5038202588b6ffd6b95a3e378522ec97b008b946153b0c0e464",
+        "size_bytes": 573
+      }
+    ],
+    "review_request_packet": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_request_packet_20260613.json",
+      "sha256": "894e0896c4404d10371e12c9fef9cc689d53741cb0d3dd90ed2324bc9e326e95",
+      "size_bytes": 14883
+    }
+  },
+  "last_error": "Claude CLI did not return JSON output",
+  "mode": "local_read_only_claude_review_connector_health",
+  "next_actions": [
+    "If connector_unhealthy=true, do not keep retrying the same mcp__claude_review route unless the connector/tooling changes.",
+    "Use claude_opus_review_request_packet_20260613.{json,md} to obtain a substantive external Claude Opus JSON.",
+    "Run main_validate_claude_opus_review_json.py before attaching any returned Claude Opus JSON with --additional-review-json.",
+    "Keep final_submission_ready=false until the final submission gate reports true."
+  ],
+  "ok": true,
+  "project": "uncertainty",
+  "read_only": true,
+  "recommended_next_route": "external_claude_opus_json_via_request_packet_and_validator",
+  "repeat_error_threshold": 3,
+  "review_request_packet_claude_needed": true,
+  "review_request_packet_ok": true,
+  "same_error_tail_streak": 11,
+  "same_route_retry_recommended": false,
+  "schema_version": "2026-06-13.claude_review_connector_health.v1",
+  "unique_error_count": 1,
+  "valid_review_evidence_count": 0,
+  "warnings": [
+    "same_connector_error_repeated:11:Claude_CLI_did_not_return_JSON_output"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

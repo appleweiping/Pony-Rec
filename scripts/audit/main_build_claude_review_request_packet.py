@@ -288,6 +288,11 @@ def build_claude_review_request_packet(
             "--output-json outputs/summary/paper_critical/claude_opus_review_validation_20260613.json "
             "--output-md outputs/summary/paper_critical/claude_opus_review_validation_20260613.md"
         ),
+        "connector_health_command_before_retry": (
+            "python -m scripts.audit.main_audit_claude_review_connector_health "
+            "--output-json outputs/summary/paper_critical/claude_review_connector_health_20260613.json "
+            "--output-md outputs/summary/paper_critical/claude_review_connector_health_20260613.md"
+        ),
         "review_continuation_command_after_valid_review": " ".join(
             part
             for part in [
@@ -339,6 +344,12 @@ def render_markdown(packet: dict[str, Any]) -> str:
             "",
             "```json",
             packet["claude_review_prompt"],
+            "```",
+            "",
+            "## Connector Health Command Before Another Retry",
+            "",
+            "```bash",
+            packet["connector_health_command_before_retry"],
             "```",
             "",
             "## Validation Command Before Attach",

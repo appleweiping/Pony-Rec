@@ -19,7 +19,7 @@
     "pdf": {
       "exists": true,
       "path": "artifacts\\submission_source_package_rebuild_20260613\\work\\Paper\\main.pdf",
-      "sha256": "57b8b2a7178b4163685f66de43726e72cf1f9cfe1476836a1c1014c34bf0639c",
+      "sha256": "187b507f7c19161673b80c9a889e5fc5d2d74835df08f322ab0000e8ee3bbe39",
       "size_bytes": 546716
     },
     "rerun_warning_count": 0,
@@ -38,7 +38,7 @@
       ],
       "resolved_executable": "C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\miktex\\bin\\x64\\pdflatex.EXE",
       "returncode": 0,
-      "started_at_utc": "2026-06-13T05:31:44.238480+00:00",
+      "started_at_utc": "2026-06-13T05:44:53.423725+00:00",
       "stderr_tail": "pdflatex: major issue: So far, you have not checked for MiKTeX updates.\n",
       "stdout_tail": "6]\nUnderfull \\vbox (badness 10000) has occurred while \\output is active [7.7])\n(sections/conclusion.tex)\nNo file main.bbl.\n\nPackage natbib Warning: There were undefined citations.\n\n[8.8]\n(C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\tex/generic/stringenc\\se-pdfdoc.d\nef)\n(C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\tex/generic/stringenc\\se-utf8.def\n) [9.8] (main.aux)\n\nLaTeX Warning: There were undefined references.\n\n\nLaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.\n\n\nLaTeX Warning: Temporary extra page added at the end. Rerun to get it removed.\n\n\nPackage rerunfilecheck Warning: File `main.out' has changed.\n(rerunfilecheck)                Rerun to get outlines right\n(rerunfilecheck)                or use package `bookmark'.\n\n )\n(see the transcript file for additional information)<C:/Users/admin/AppData/Loc\nal/Programs/MiKTeX/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><C:/User\ns/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/LibertineMathMI.\npfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/Libe\nrtineMathMI7.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/publ\nic/newtx/LibertineMathRM.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/font\ns/type1/public/libertine/LinBiolinumT.pfb><C:/Users/admin/AppData/Local/Program\ns/MiKTeX/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Users/admin/AppData\n/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Users\n/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT\nB.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertin\ne/LinLibertineTI.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/\npublic/newtx/txexs.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type\n1/public/newtx/txmiaX.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/t\nype1/public/newtx/txsys.pfb>\nOutput written on main.pdf (9 pages, 506125 bytes).\nTranscript written on main.log.\n"
     },
@@ -49,7 +49,7 @@
       ],
       "resolved_executable": "C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\miktex\\bin\\x64\\bibtex.EXE",
       "returncode": 0,
-      "started_at_utc": "2026-06-13T05:31:47.406665+00:00",
+      "started_at_utc": "2026-06-13T05:44:56.531396+00:00",
       "stderr_tail": "bibtex: major issue: So far, you have not checked for MiKTeX updates.\n",
       "stdout_tail": "This is BibTeX, Version 0.99e (MiKTeX 25.12)\nThe top-level auxiliary file: main.aux\nThe style file: ACM-Reference-Format.bst\nDatabase file #1: references.bib\n"
     },
@@ -62,7 +62,7 @@
       ],
       "resolved_executable": "C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\miktex\\bin\\x64\\pdflatex.EXE",
       "returncode": 0,
-      "started_at_utc": "2026-06-13T05:31:47.986376+00:00",
+      "started_at_utc": "2026-06-13T05:44:57.127563+00:00",
       "stderr_tail": "pdflatex: major issue: So far, you have not checked for MiKTeX updates.\n",
       "stdout_tail": "ed while \\output is active\n(C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\tex/generic/stringenc\\se-pdfdoc.d\nef)\n(C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\tex/generic/stringenc\\se-utf8.def\n) [8.8])\n\nPackage natbib Warning: There were undefined citations.\n\n[9.9]\n\nLaTeX Warning: Hook 'shipout/lastpage' executed on wrong page (8 not 9).\n               Rerun to correct this.\n\n(main.aux\n\nPackage natbib Warning: Citation(s) may have changed.\n(natbib)                Rerun to get citations correct.\n\n)\n\nLaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.\n\n\nPackage rerunfilecheck Warning: File `main.out' has changed.\n(rerunfilecheck)                Rerun to get outlines right\n(rerunfilecheck)                or use package `bookmark'.\n\n )\n(see the transcript file for additional information)<C:/Users/admin/AppData/Loc\nal/Programs/MiKTeX/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><C:/User\ns/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/LibertineMathMI.\npfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/Libe\nrtineMathMI7.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/publ\nic/newtx/LibertineMathRM.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/font\ns/type1/public/libertine/LinBiolinumT.pfb><C:/Users/admin/AppData/Local/Program\ns/MiKTeX/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Users/admin/AppData\n/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Users\n/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT\nB.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertin\ne/LinLibertineTI.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/\npublic/newtx/txexs.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type\n1/public/newtx/txmiaX.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/t\nype1/public/newtx/txsys.pfb>\nOutput written on main.pdf (9 pages, 538933 bytes).\nTranscript written on main.log.\n"
     },
@@ -75,12 +75,12 @@
       ],
       "resolved_executable": "C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\miktex\\bin\\x64\\pdflatex.EXE",
       "returncode": 0,
-      "started_at_utc": "2026-06-13T05:31:50.887086+00:00",
+      "started_at_utc": "2026-06-13T05:45:00.196648+00:00",
       "stderr_tail": "pdflatex: major issue: So far, you have not checked for MiKTeX updates.\n",
       "stdout_tail": "ce-ment for Long-tailed Se-quen-t\nial Rec-om-men-da-tion.  \\T1/LinuxLibertineT-TLF/m/it/7 (+20) Ad-\n\nUnderfull \\hbox (badness 10000) in paragraph at lines 206--217\n\\T1/LinuxLibertineT-TLF/m/it/7 (+20) vances in Neu-ral In-for-ma-tion Pro-cess-\ning Sys-tems \\T1/LinuxLibertineT-TLF/m/n/7 (+20) 37 (2024), 26701--\n\nUnderfull \\hbox (badness 10000) in paragraph at lines 206--217\n\\T1/LinuxLibertineT-TLF/m/n/7 (+20) 26727.   []$https : / / proceedings . neuri\nps . cc / paper _ ^^[les / paper / 2024 / hash /\n\nUnderfull \\vbox (badness 10000) has occurred while \\output is active [8.8])\n(C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\tex/generic/stringenc\\se-pdfdoc.d\nef)\n(C:\\Users\\admin\\AppData\\Local\\Programs\\MiKTeX\\tex/generic/stringenc\\se-utf8.def\n) [9.9] (main.aux) )\n(see the transcript file for additional information)<C:/Users/admin/AppData/Loc\nal/Programs/MiKTeX/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><C:/User\ns/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/LibertineMathMI.\npfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/Libe\nrtineMathMI7.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/publ\nic/newtx/LibertineMathRM.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/font\ns/type1/public/libertine/LinBiolinumT.pfb><C:/Users/admin/AppData/Local/Program\ns/MiKTeX/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Users/admin/AppData\n/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Users\n/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT\nB.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertin\ne/LinLibertineTI.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type1/\npublic/newtx/txexs.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/type\n1/public/newtx/txmiaX.pfb><C:/Users/admin/AppData/Local/Programs/MiKTeX/fonts/t\nype1/public/newtx/txsys.pfb>\nOutput written on main.pdf (9 pages, 546716 bytes).\nTranscript written on main.log.\n"
     }
   ],
-  "created_at_utc": "2026-06-13T05:31:53.641372+00:00",
+  "created_at_utc": "2026-06-13T05:45:03.054231+00:00",
   "failures": [],
   "final_submission_ready": false,
   "input_paths": {
