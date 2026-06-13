@@ -106,9 +106,14 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
    Crossref remains `404`, DOI resolver remains `404`, ACM DL returns `403`,
    and `promax_public_metadata_ready=false`. A follow-up live probe at
-   `2026-06-12T23:48:38Z` found the same blocker state and refreshed the
-   closure packet at `2026-06-12T23:48:55Z`; this is fresh monitoring
-   evidence, not a readiness upgrade.
+   `2026-06-13T00:04:41Z` found the same blocker state and refreshed the
+   closure packet at `2026-06-13T00:05:03Z`; this is fresh monitoring
+   evidence, not a readiness upgrade. The complete local release-candidate
+   stack was also refreshed at `2026-06-13T00:04:17Z`: it reports `ok=true`,
+   `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
+   `failures=[]`, and `final_submission_ready=false`; the freshness audit has
+   zero input or generated-gate mismatches, and the independent source-package
+   rebuild produces a `9`-page PDF with zero BibTeX and overfull hbox warnings.
    The current priority is to capture explicit Claude Opus reviewer output if
    available, then keep monitoring the ProMax public metadata and private manual
    submission-system blockers. Do not claim final readiness until the final

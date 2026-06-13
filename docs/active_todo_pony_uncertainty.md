@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 01:52 CEST
+Last updated: 2026-06-13 02:06 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -42,18 +42,24 @@ cycle.
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`
   is now the latest full local release-candidate stack, not just a probe
-  overlay. It reports `ok=true`, `local_release_candidate_ready=true`,
-  `refresh_ok=true`, `freshness_ok=true`,
-  `refresh_artifact_fresh=true`, `release_candidate_ok=true`, and
-  `final_submission_ready=false`. The latest lightweight live probe
+  overlay. The follow-up complete refresh at `2026-06-13T00:04:17Z` reports
+  `ok=true`, `local_release_candidate_ready=true`, `refresh_ok=true`,
+  `freshness_ok=true`, `refresh_artifact_fresh=true`,
+  `release_candidate_ok=true`, `failures=[]`, and
+  `final_submission_ready=false`. The freshness audit checks `21` input
+  fingerprints and `14` generated gate files with zero mismatches; the source
+  package summary reports `21` files, manifest sha256
+  `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`, and
+  the independent rebuild reports a `9`-page PDF with zero BibTeX and overfull
+  hbox warnings. The latest lightweight live probe
   `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
   reports `ok=true`,
   `promax_public_metadata_ready=false`, and `final_submission_ready=false`.
   Direct public checks still do not close the blocker: Crossref `/works` is
   `404`, the DOI resolver is `404`, and ACM DL is `403`, while arXiv HTML ACM
   metadata and SIGIR accepted-paper source probes pass. A follow-up live probe
-  at `2026-06-12T23:48:38Z` found the same blocker state and refreshed the
-  closure packet at `2026-06-12T23:48:55Z`; this is fresh monitoring evidence,
+  at `2026-06-13T00:04:41Z` found the same blocker state and refreshed the
+  closure packet at `2026-06-13T00:05:03Z`; this is fresh monitoring evidence,
   not a readiness upgrade. The refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
   now uses the 2026-06-13 final gate, external metadata audit, manual

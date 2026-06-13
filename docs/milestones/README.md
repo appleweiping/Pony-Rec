@@ -135,9 +135,15 @@ monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. A follow-up live
-probe at `2026-06-12T23:48:38Z` found the same blocker state and refreshed the
-closure packet at `2026-06-12T23:48:55Z`; this is fresh monitoring evidence,
-not a readiness upgrade. The matching
+probe at `2026-06-13T00:04:41Z` found the same blocker state and refreshed the
+closure packet at `2026-06-13T00:05:03Z`; this is fresh monitoring evidence,
+not a readiness upgrade. The complete release-candidate stack was also
+refreshed at `2026-06-13T00:04:17Z` and reports `ok=true`,
+`local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
+`failures=[]`, and `final_submission_ready=false`; its freshness audit checks
+`21` input fingerprints and `14` generated gate files with zero mismatches,
+and the independent source-package rebuild produces a `9`-page PDF with zero
+BibTeX and overfull hbox warnings. The matching
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
 now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
 full release-candidate stack, and public probe while keeping

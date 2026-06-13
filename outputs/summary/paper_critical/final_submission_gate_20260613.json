@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-12T23:22:01.461853+00:00",
+  "created_at_utc": "2026-06-13T00:04:16.174641+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-12T23:21:34.917082+00:00",
+      "created_at_utc": "2026-06-13T00:04:00.154410+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T23:22:01.310509+00:00",
+      "created_at_utc": "2026-06-13T00:04:16.088617+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-12T23:22:01.277586+00:00",
+      "created_at_utc": "2026-06-13T00:04:16.074737+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_source_package_rebuild",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T23:21:34.118026+00:00",
+      "created_at_utc": "2026-06-13T00:03:59.658089+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-12T23:22:01.360011+00:00",
+      "created_at_utc": "2026-06-13T00:04:16.112788+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",

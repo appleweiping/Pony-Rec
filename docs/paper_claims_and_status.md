@@ -98,15 +98,21 @@ itself mark the paper final-submission-ready.
 still reports `promax_public_metadata_ready=false`: Crossref `/works` for
 `10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`, and
 ACM DL returns `403`; arXiv HTML ACM metadata and SIGIR accepted-paper probes
-remain passing. A follow-up live probe at `2026-06-12T23:48:38Z` found the
+remain passing. A follow-up live probe at `2026-06-13T00:04:41Z` found the
 same blocker state and refreshed the closure packet at
-`2026-06-12T23:48:55Z`; this is fresh monitoring evidence, not a readiness
+`2026-06-13T00:05:03Z`; this is fresh monitoring evidence, not a readiness
 upgrade. Codex also refreshed the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
-it reports `ok=true`, `local_release_candidate_ready=true`,
-`refresh_artifact_fresh=true`, `blocking_status=external_or_manual_blocked`,
-and `final_submission_ready=false`. The refreshed closure packet
+the `2026-06-13T00:04:17Z` stack reports `ok=true`,
+`local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
+`blocking_status=external_or_manual_blocked`, `failures=[]`, and
+`final_submission_ready=false`. Its freshness audit checks `21` input
+fingerprints and `14` generated gate files with zero mismatches; the source
+package has `21` files with manifest sha256
+`91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`, and the
+independent rebuild produces a `9`-page PDF with zero BibTeX and overfull hbox
+warnings. The refreshed closure packet
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
 now uses the 2026-06-13 final gate, external metadata audit, manual checklist,
 release-candidate stack, and latest probe while preserving

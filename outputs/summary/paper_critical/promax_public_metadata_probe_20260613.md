@@ -1,6 +1,6 @@
 # ProMax Public Metadata Probe
 
-Generated: 2026-06-12T23:48:38.377651+00:00
+Generated: 2026-06-13T00:04:41.595560+00:00
 
 - OK: `true`
 - ProMax public metadata ready: `false`
