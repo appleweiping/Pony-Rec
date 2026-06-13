@@ -1,6 +1,6 @@
 {
   "blocking_status": "external_manual_or_review_blocked",
-  "created_at_utc": "2026-06-13T05:19:42.950183+00:00",
+  "created_at_utc": "2026-06-13T05:31:55.191494+00:00",
   "failures": [],
   "final_submission_ready": false,
   "final_submission_ready_source": "outputs\\summary\\paper_critical\\final_submission_gate_20260613.json",
@@ -38,13 +38,13 @@
   "stamp": "20260613",
   "steps": [
     {
-      "created_at_utc": "2026-06-13T05:19:41.909100+00:00",
+      "created_at_utc": "2026-06-13T05:31:53.968404+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\pre_submission_gate_refresh_20260613.json",
-        "size_bytes": 21771
+        "size_bytes": 20029
       },
       "md": {
         "exists": true,
@@ -89,13 +89,13 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T05:19:42.420574+00:00",
+      "created_at_utc": "2026-06-13T05:31:54.522386+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\pre_submission_gate_refresh_freshness_20260613.json",
-        "size_bytes": 32440
+        "size_bytes": 30120
       },
       "md": {
         "exists": true,
@@ -127,13 +127,13 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T05:19:42.511693+00:00",
+      "created_at_utc": "2026-06-13T05:31:54.596575+00:00",
       "failures": [],
       "final_submission_ready": false,
       "json": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\submission_release_candidate_20260613.json",
-        "size_bytes": 26817
+        "size_bytes": 26427
       },
       "md": {
         "exists": true,

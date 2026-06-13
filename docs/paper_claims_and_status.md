@@ -104,9 +104,10 @@ source probe, and the UQ Experts profile source probe remain passing.
 Follow-up live probes at `2026-06-13T00:49:05Z`,
 `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
 `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
-`2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`, and
-`2026-06-13T05:11:34Z` found the same direct blocker state: Crossref `404`,
-DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes passing.
+`2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
+`2026-06-13T05:11:34Z`, and `2026-06-13T05:31:00Z` found the same direct
+blocker state: Crossref `404`, DOI resolver `404`, ACM DL `403`, and all
+`5/5` public source probes passing.
 The closure packet was refreshed after the latest probes; this is stronger
 public accepted-paper provenance, not a readiness upgrade. The closure packet
 Markdown now lists latest public source probes in addition to direct
@@ -208,9 +209,10 @@ Codex then retried a tenth asynchronous Claude Opus call through
 `b6e19654680c457d8be4845e168ce251` failed with the same connector-layer
 `Claude CLI did not return JSON output` error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_tenth_20260613.json`.
-The refreshed review-continuation packet and Claude request packet now record
-failed Claude attempts `10`, still with `explicit_claude_opus_present=false`,
-`final_panel_coverage_complete=false`, and `final_submission_ready=false`.
+At that historical tenth-attempt point, the refreshed review-continuation packet
+and Claude request packet recorded ten failed Claude attempts, still with
+`explicit_claude_opus_present=false`, `final_panel_coverage_complete=false`,
+and `final_submission_ready=false`.
 Codex later tightened this import path further: explicit Claude Opus coverage
 now requires the reviewer identity to contain both `claude` and `opus`, and
 `scripts/audit/main_validate_claude_opus_review_json.py` provides a read-only
@@ -222,6 +224,16 @@ remain, and `score_0_to_10 >= 8.0` before the review is attached through
 `claude_opus_review_request_packet_20260613.{json,md}` now includes the
 validation command before the review-continuation command, and the closure
 packet's review-panel next commands mirror that order.
+Codex then retried an eleventh asynchronous Claude Opus call through
+`mcp__claude_review.review_start`; job
+`bf4b6b8145404ffa881cd99ed3c73429` used `model=opus`, tools disabled, and a
+short schema-aligned ARIS hostile-review prompt, but again failed with
+`Claude CLI did not return JSON output`. The failure is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
+The refreshed review-continuation packet, Claude request packet, and
+final-blocker consistency audit now record failed Claude attempts `11`, still
+with `explicit_claude_opus_present=false`,
+`final_panel_coverage_complete=false`, and `final_submission_ready=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local
@@ -283,7 +295,7 @@ Codex then added
 as a cross-packet consistency check over the final gate, release stack, closure
 packet, review-continuation packet, Claude request packet, ProMax probe, and
 manual request packet. The audit reports `ok=true`,
-`final_blocker_consistency_ok=true`, failed Claude attempts `10`,
+`final_blocker_consistency_ok=true`, failed Claude attempts `11`,
 `explicit_claude_opus_present=false`, ProMax public metadata still false with
 Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
 needed, recursive warning regressions `0`, and
@@ -296,7 +308,7 @@ Codex then added
 as the matching canonical-doc status guard. The audit reports `ok=true` and
 `final_blocker_doc_status_ok=true` for the current sections of the active TODO,
 claim/status doc, milestone README, and server runbook, while requiring the
-latest failed-Claude count `10`, explicit Claude missing state, ProMax
+latest failed-Claude count `11`, explicit Claude missing state, ProMax
 `404/404/403` blocked state, private manual blocked state, recursive warning
 regressions `0`, and `final_submission_ready=false`. It prevents historical
 eight-attempt or two-blocker wording from reading like current truth.

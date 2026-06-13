@@ -107,12 +107,17 @@ PIDs, audit summaries, and missing-file errors.
    `b6e19654680c457d8be4845e168ce251`, again failed with the same connector
    error and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_tenth_20260613.json`.
-   The current packet reports ten failed attempts and still keeps
+   An eleventh asynchronous call with `mcp__claude_review.review_start`, job
+   `bf4b6b8145404ffa881cd99ed3c73429`, used `model=opus`, tools disabled, and
+   a short schema-aligned ARIS hostile-review prompt; it again failed with
+   `Claude CLI did not return JSON output` and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
+   The current packet reports failed Claude attempts `11` and still keeps
    `explicit_claude_opus_present=false`. Use the new public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
    before trying another Claude route; it was refreshed at
-   `2026-06-13T04:15:35Z`, records ten failed Claude attempts, contains the
+   `2026-06-13T05:31Z`, records failed Claude attempts `11`, contains the
    exact prompt/schema for a valid additional review JSON, dynamically includes
    all recorded failed-attempt artifacts in the follow-up command, and is not
    itself reviewer coverage. The
@@ -176,9 +181,10 @@ PIDs, audit summaries, and missing-file errors.
    Follow-up live probes at `2026-06-13T00:49:05Z`,
    `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
    `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
-   `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`, and
-   `2026-06-13T05:11:34Z` again found Crossref `404`, DOI resolver `404`, ACM
-   DL `403`, and all `5/5` public source probes passing. After the
+   `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
+   `2026-06-13T05:11:34Z`, and `2026-06-13T05:31:00Z` again found Crossref
+   `404`, DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes
+   passing. After the
    latest probe, the closure packet was refreshed again;
    the closure Markdown now lists those latest public source probes and
    explicitly keeps the review-panel blockers. This is

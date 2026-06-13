@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 07:18 CEST
+Last updated: 2026-06-13 07:32 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -27,10 +27,19 @@ cycle.
   `validation_command_before_attach`, and the closure packet's
   `review_panel_coverage` next commands include the validator before the
   review-continuation and final-gate rebuild commands. This is a gate-hardening
-  change only: failed Claude connector attempts remain `10`,
+  change only: failed Claude connector attempts are now `11`,
   `explicit_claude_opus_present=false`,
   `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
-  The latest live ProMax probe at `2026-06-13T05:11:34Z` still reports
+  The eleventh `mcp__claude_review.review_start` attempt, job
+  `bf4b6b8145404ffa881cd99ed3c73429`, used `model=opus`, tools disabled, and
+  a short schema-aligned ARIS hostile-review prompt; it again failed at the
+  connector layer with `Claude CLI did not return JSON output` and is recorded
+  at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
+  The refreshed review-continuation packet, Claude request packet, and
+  final-blocker consistency audit all record failed Claude attempts `11` while
+  preserving the explicit Claude Opus blocker. The latest live ProMax probe at
+  `2026-06-13T05:31:00Z` still reports
   Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
   source probes passing.
 
@@ -86,7 +95,7 @@ cycle.
   `docs/paper_claims_and_status.md`, `docs/milestones/README.md`, and
   `docs/server_runbook.md` against
   `final_blocker_consistency_audit_20260613.json`. It reports `ok=true`,
-  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `10`,
+  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `11`,
   `explicit_claude_opus_present=false`,
   `promax_public_metadata_ready=false`,
   `manual_submission_system_ready=false`, recursive warning regressions `0`,
@@ -191,7 +200,7 @@ cycle.
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
   `review_continuation_packet_20260613.{json,md}` now reports
-  `review_continuation_ready=true`, failed Claude attempts `10`,
+  `review_continuation_ready=true`, failed Claude attempts `11`,
   `explicit_claude_opus_present=false`, and
   `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
   veto the hardening, but flagged that the pre-submission freshness audit must

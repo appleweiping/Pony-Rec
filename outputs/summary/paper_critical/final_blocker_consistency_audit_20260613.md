@@ -1,13 +1,13 @@
 # Final Blocker Consistency Audit
 
-- Created UTC: `2026-06-13T05:24:25.891543+00:00`
+- Created UTC: `2026-06-13T05:36:44.956110+00:00`
 - OK: `true`
 - Final blocker consistency OK: `true`
 - Final submission ready: `false`
 - Blocking status: `external_manual_or_review_blocked`
 - Local release candidate ready: `true`
 - Closure ready for human handoff: `true`
-- Failed Claude attempts: `10`
+- Failed Claude attempts: `11`
 - Explicit Claude Opus present: `false`
 - ProMax public metadata ready: `false`
 - Closure carries ProMax probe: `true`

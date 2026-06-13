@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-13T05:19:41.671036+00:00",
+  "created_at_utc": "2026-06-13T05:31:53.762534+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-13T05:19:24.104362+00:00",
+      "created_at_utc": "2026-06-13T05:31:36.054933+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T05:19:41.562796+00:00",
+      "created_at_utc": "2026-06-13T05:31:53.663094+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-13T05:19:41.549639+00:00",
+      "created_at_utc": "2026-06-13T05:31:53.641372+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_source_package_rebuild",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T05:19:23.698853+00:00",
+      "created_at_utc": "2026-06-13T05:31:35.642779+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -87,7 +87,7 @@
       "path": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260613.json",
-        "size_bytes": 21289
+        "size_bytes": 21295
       },
       "ready": false,
       "ready_field": "external_proceedings_metadata_ready",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T05:19:41.592046+00:00",
+      "created_at_utc": "2026-06-13T05:31:53.697118+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",
@@ -131,7 +131,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-13T05:19:18.730269+00:00",
+      "created_at_utc": "2026-06-13T05:31:30.006112+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "review_continuation",
@@ -139,7 +139,7 @@
       "path": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\review_continuation_packet_20260613.json",
-        "size_bytes": 12007
+        "size_bytes": 12582
       },
       "ready": true,
       "ready_field": "review_continuation_ready",
