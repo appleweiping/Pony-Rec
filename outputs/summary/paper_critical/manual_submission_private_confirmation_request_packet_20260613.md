@@ -1,6 +1,6 @@
 # Manual Submission Private Confirmation Request Packet
 
-- Created UTC: `2026-06-13T03:28:25.688585+00:00`
+- Created UTC: `2026-06-13T06:35:54.238601+00:00`
 - OK: `true`
 - Request packet ready: `true`
 - Manual confirmation needed: `true`
@@ -105,9 +105,14 @@ Rejected JSON keys:
 - Do not store author names, affiliations, COI details, reviewer preferences, declarations, account metadata, or submission-account data.
 - Only record booleans, source_manifest_sha256, completed_item_ids, and non-sensitive notes if absolutely needed.
 - Do not set completed_item_ids until the corresponding action is genuinely complete in the submission system.
+- Run the private confirmation validator before consuming the JSON in the public manual checklist.
 - This request packet does not close ProMax public metadata or Claude Opus review blockers.
 
 ## Follow-Up Commands
+
+```bash
+python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.md
+```
 
 ```bash
 python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --output-json outputs/summary/paper_critical/manual_submission_checklist_20260613.json --output-md outputs/summary/paper_critical/manual_submission_checklist_20260613.md

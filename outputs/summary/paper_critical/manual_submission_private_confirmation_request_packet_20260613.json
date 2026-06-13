@@ -1,9 +1,10 @@
 {
   "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
-  "created_at_utc": "2026-06-13T03:28:25.688585+00:00",
+  "created_at_utc": "2026-06-13T06:35:54.238601+00:00",
   "failures": [],
   "final_submission_ready": false,
   "follow_up_commands_after_human_completion": [
+    "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.md",
     "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --output-json outputs/summary/paper_critical/manual_submission_checklist_20260613.json --output-md outputs/summary/paper_critical/manual_submission_checklist_20260613.md",
     "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp 20260613 --manual-private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.md",
     "python -m scripts.audit.main_build_final_submission_gate --manual-checklist-json outputs/summary/paper_critical/manual_submission_checklist_20260613.json --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md"
@@ -50,7 +51,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260613.json",
-      "sha256": "afb7463200853c61426bf34ba15f0200fdf626cd60cc1d76be19e53065df49d0",
+      "sha256": "255382ecd76d7b28a6592f8ce90eb511b1144716e1b3f6f993727bbe24d5c5a5",
       "size_bytes": 15331
     },
     "private_confirmation_template_json": {
@@ -66,7 +67,7 @@
   "mode": "local_read_only_manual_submission_private_confirmation_request_packet",
   "notes": [
     "This packet is a public-safe handoff request only; it is not a private confirmation.",
-    "The manual gate remains open until the checklist consumes a valid untracked private confirmation JSON.",
+    "The manual gate remains open until the checklist consumes a validated untracked private confirmation JSON.",
     "Final submission readiness must stay false while external metadata or review coverage blockers remain."
   ],
   "ok": true,
@@ -76,8 +77,10 @@
     "Do not store author names, affiliations, COI details, reviewer preferences, declarations, account metadata, or submission-account data.",
     "Only record booleans, source_manifest_sha256, completed_item_ids, and non-sensitive notes if absolutely needed.",
     "Do not set completed_item_ids until the corresponding action is genuinely complete in the submission system.",
+    "Run the private confirmation validator before consuming the JSON in the public manual checklist.",
     "This request packet does not close ProMax public metadata or Claude Opus review blockers."
   ],
+  "private_confirmation_validation_command": "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.md",
   "project": "uncertainty",
   "public_prefill_index": [
     {

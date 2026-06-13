@@ -257,11 +257,15 @@ explicit Claude Opus coverage. The refreshed review-continuation packet exposes
 "promax_public_metadata"]`, still records failed Claude attempts `11`, and
 keeps `final_submission_ready=false`.
 The final-blocker consistency audit is now schema
-`2026-06-13.final_blocker_consistency_audit.v2` and explicitly guards this
-handoff path: it fails if the Claude request packet loses the response template,
-if the template defaults `valid_review_evidence` to true, if ProMax/manual
-blocker-acknowledgement rules disappear, or if the current review-continuation
-packet stops exposing the required Claude blocker acknowledgement groups.
+`2026-06-13.final_blocker_consistency_audit.v3` and explicitly guards this
+handoff path plus the private manual-confirmation path: it fails if the Claude
+request packet loses the response template, if the template defaults
+`valid_review_evidence` to true, if ProMax/manual blocker-acknowledgement rules
+disappear, if the current review-continuation packet stops exposing the
+required Claude blocker acknowledgement groups, or if the manual request and
+closure packets stop routing a private confirmation JSON through
+`main_validate_manual_submission_private_confirmation_json` before the public
+manual checklist consumes it.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local
@@ -329,6 +333,14 @@ Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
 needed, recursive warning regressions `0`, and
 `final_submission_ready=false`. This prevents stale handoff artifacts from
 contradicting each other, but it is not a readiness upgrade.
+Codex later upgraded this audit to schema
+`2026-06-13.final_blocker_consistency_audit.v3` and added
+`scripts/audit/main_validate_manual_submission_private_confirmation_json.py`
+as the preflight for any future untracked private confirmation JSON. The
+refreshed request packet and closure packet both list this validator before the
+manual checklist command, and the consistency audit now records
+`manual_request_has_private_confirmation_validator=true` and
+`closure_manual_group_has_private_confirmation_validator=true`.
 Codex then added
 `scripts/audit/main_audit_final_blocker_doc_status.py`,
 `tests/test_audit_final_blocker_doc_status.py`, and
@@ -502,15 +514,31 @@ confirmation JSON skeleton under the ignored recommended path
 `artifacts/private/manual_submission_private_confirmation_20260613.json`, all
 manual item IDs needed for the full manual gate, currently blocked item
 `confirm_external_proceedings_metadata`, rejected private JSON keys, and exact
-follow-up commands for rerunning the manual checklist, release-candidate stack,
-and final gate after a human completes the submission-system fields. Codex also
-linked this request packet from
+follow-up commands for validating the private confirmation JSON before
+rerunning the manual checklist, release-candidate stack, and final gate after a
+human completes the submission-system fields. Codex also linked this request
+packet from
 `scripts/audit/main_build_final_submission_blocker_closure_packet.py` and
 refreshed
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`.
 This request packet is not a private confirmation and does not waive the ProMax
 public metadata blocker, private manual confirmation blocker, or explicit
 Claude Opus review blocker.
+
+**2026-06-13 manual private-confirmation validator.** Codex added
+`scripts/audit/main_validate_manual_submission_private_confirmation_json.py`
+and `tests/test_validate_manual_submission_private_confirmation_json.py` as a
+local read-only preflight for any future untracked private confirmation JSON.
+It reports only booleans, item IDs, key names, hashes, and path state; it
+rejects forbidden private keys, schema/source-manifest/profile/checklist
+mismatches, in-repo paths outside ignored `artifacts/private/`, unknown or
+duplicate item IDs, missing current required item IDs, and attempts to mark a
+currently blocked item such as `confirm_external_proceedings_metadata`
+complete before ProMax public metadata closes. The refreshed request packet and
+closure packet now place this validator before the manual checklist command,
+and the v3 consistency audit fails if that order disappears. This is privacy
+and handoff hardening only; `manual_submission_system_ready=false` and
+`final_submission_ready=false` remain the live committed state.
 
 **2026-06-12 external proceedings metadata recheck.** Codex added
 `scripts/audit/main_audit_external_proceedings_metadata.py` and

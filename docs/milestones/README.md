@@ -259,9 +259,9 @@ count as explicit Claude Opus coverage. The refreshed
 `required_claude_blocker_ack_groups=["manual_submission_system",
 "promax_public_metadata"]` while keeping `final_submission_ready=false`.
 The final-blocker consistency audit is now schema
-`2026-06-13.final_blocker_consistency_audit.v2` and checks that these Claude
-intake safeguards remain present before any final-readiness report can pass the
-local consistency layer.
+`2026-06-13.final_blocker_consistency_audit.v3` and checks that these Claude
+intake safeguards plus the private manual-confirmation validator path remain
+present before any final-readiness report can pass the local consistency layer.
 The final submission gate has also been hardened to consume the
 review-continuation packet directly: the refreshed
 `outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`
@@ -289,7 +289,7 @@ Codex then added
 `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
 to audit cross-packet consistency after blocker refreshes. The current audit
 reports `ok=true`, `final_blocker_consistency_ok=true`, failed Claude attempts
-`10`, `explicit_claude_opus_present=false`,
+`11`, `explicit_claude_opus_present=false`,
 `promax_public_metadata_ready=false`, manual confirmation still needed,
 recursive warning regressions `0`, and `final_submission_ready=false`. This is
 a handoff consistency guard, not a final-readiness upgrade.
@@ -337,11 +337,26 @@ records the current source manifest sha256
 `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`,
 the safe confirmation skeleton, recommended ignored path
 `artifacts/private/manual_submission_private_confirmation_20260613.json`,
-forbidden private fields/keys, and follow-up commands; and is linked from the
+forbidden private fields/keys, and follow-up commands that validate the
+private confirmation JSON before the manual checklist consumes it; and is
+linked from the
 refreshed
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`.
 This request packet is a handoff artifact only and does not close manual,
-ProMax, or Claude review blockers. The stale
+ProMax, or Claude review blockers. Codex later added
+`scripts/audit/main_validate_manual_submission_private_confirmation_json.py`
+and
+`tests/test_validate_manual_submission_private_confirmation_json.py` as the
+local read-only preflight for any future untracked private confirmation JSON.
+The refreshed request packet and closure packet now place this validator before
+the manual checklist command, and the v3 consistency audit records
+`manual_request_has_private_confirmation_validator=true` and
+`closure_manual_group_has_private_confirmation_validator=true`. The validator
+rejects forbidden private keys, source-manifest/profile/checklist mismatches,
+in-repo paths outside ignored `artifacts/private/`, unknown/duplicate/missing
+item IDs, and early completion of currently blocked IDs such as
+`confirm_external_proceedings_metadata`.
+The stale
 `paper/` draft was rewritten to the current C-CRP same-candidate
 official-baseline spine, stale calibration table removed, current main/module
 tables added, and `scripts/analysis/main_build_paper_result_tables.py`

@@ -1,6 +1,6 @@
 # Final Blocker Consistency Audit
 
-- Created UTC: `2026-06-13T06:22:38.489917+00:00`
+- Created UTC: `2026-06-13T06:36:10.976995+00:00`
 - OK: `true`
 - Final blocker consistency OK: `true`
 - Final submission ready: `false`
@@ -15,6 +15,8 @@
 - ProMax public metadata ready: `false`
 - Closure carries ProMax probe: `true`
 - Manual confirmation needed: `true`
+- Manual request has private confirmation validator: `true`
+- Closure manual group has private confirmation validator: `true`
 - Recursive warning regressions: `0`
 
 ## ProMax Direct Status

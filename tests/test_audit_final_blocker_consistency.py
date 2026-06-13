@@ -69,6 +69,14 @@ def _seed_inputs(tmp_path: Path, *, overrides: dict[str, dict] | None = None) ->
                     "promax:doi_resolver_not_visible",
                 ],
             },
+            {
+                "group_id": "manual_submission_system",
+                "next_commands": [
+                    "python -m scripts.audit.main_build_manual_submission_private_confirmation_request_packet --output-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json --output-md outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.md",
+                    "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json path/to/untracked_private_confirmation.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.md",
+                    "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json path/to/untracked_private_confirmation.json --output-json outputs/summary/paper_critical/manual_submission_checklist_20260613.json --output-md outputs/summary/paper_critical/manual_submission_checklist_20260613.md",
+                ],
+            },
         ],
         "warnings": ["underfull_layout_warnings:hbox=6,vbox=8"],
     }
@@ -148,6 +156,17 @@ def _seed_inputs(tmp_path: Path, *, overrides: dict[str, dict] | None = None) ->
             "source_manifest_sha256": "a" * 64,
             "completed_item_ids_for_full_manual_gate": ["paste_title", "enter_authors"],
         },
+        "private_confirmation_validation_command": (
+            "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json "
+            "--private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json "
+            "--manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json "
+            "--output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.json "
+            "--output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.md"
+        ),
+        "follow_up_commands_after_human_completion": [
+            "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260613.md",
+            "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json --output-json outputs/summary/paper_critical/manual_submission_checklist_20260613.json --output-md outputs/summary/paper_critical/manual_submission_checklist_20260613.md",
+        ],
         "warnings": [],
     }
     payloads = {
@@ -205,6 +224,8 @@ def test_final_blocker_consistency_audit_passes_on_expected_blocked_state(tmp_pa
         "doi_resolver": 404,
         "acm_dl": 403,
     }
+    assert audit["summary"]["manual_request_has_private_confirmation_validator"] is True
+    assert audit["summary"]["closure_manual_group_has_private_confirmation_validator"] is True
     assert audit["summary"]["recursive_warning_regression_count"] == 0
     assert "explicit_claude_opus_review" in audit["required_open_blockers"]["review_missing_perspectives"]
 
@@ -304,3 +325,25 @@ def test_final_blocker_consistency_audit_rejects_missing_current_claude_ack_grou
 
     assert audit["ok"] is False
     assert "review_missing_required_claude_ack_group:manual_submission_system" in audit["failures"]
+
+
+def test_final_blocker_consistency_audit_rejects_missing_manual_private_validator(
+    tmp_path: Path,
+) -> None:
+    paths = _seed_inputs(
+        tmp_path,
+        overrides={
+            "manual_request": {
+                "private_confirmation_validation_command": "",
+                "follow_up_commands_after_human_completion": [
+                    "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json"
+                ],
+            }
+        },
+    )
+
+    audit = _run(paths, tmp_path)
+
+    assert audit["ok"] is False
+    assert "manual_request_missing_private_confirmation_validator_command" in audit["failures"]
+    assert "manual_request_followups_missing_private_confirmation_validator" in audit["failures"]

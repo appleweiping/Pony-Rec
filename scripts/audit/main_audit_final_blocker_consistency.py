@@ -261,6 +261,69 @@ def audit_final_blocker_consistency(
         failures.append("manual_request_missing_source_manifest_sha256")
     if not _string_list(manual_required.get("completed_item_ids_for_full_manual_gate")):
         failures.append("manual_request_missing_completed_item_ids")
+    manual_validation_command = str(manual.get("private_confirmation_validation_command") or "")
+    manual_follow_up_commands = _string_list(manual.get("follow_up_commands_after_human_completion"))
+    manual_validator_in_followups = any(
+        "main_validate_manual_submission_private_confirmation_json" in command
+        for command in manual_follow_up_commands
+    )
+    manual_checklist_command_index = next(
+        (
+            index
+            for index, command in enumerate(manual_follow_up_commands)
+            if "main_build_manual_submission_checklist" in command
+        ),
+        None,
+    )
+    manual_validator_command_index = next(
+        (
+            index
+            for index, command in enumerate(manual_follow_up_commands)
+            if "main_validate_manual_submission_private_confirmation_json" in command
+        ),
+        None,
+    )
+    if "main_validate_manual_submission_private_confirmation_json" not in manual_validation_command:
+        failures.append("manual_request_missing_private_confirmation_validator_command")
+    if "--manual-request-packet-json" not in manual_validation_command:
+        failures.append("manual_request_validator_missing_request_packet_arg")
+    if not manual_validator_in_followups:
+        failures.append("manual_request_followups_missing_private_confirmation_validator")
+    if (
+        manual_validator_command_index is not None
+        and manual_checklist_command_index is not None
+        and manual_validator_command_index > manual_checklist_command_index
+    ):
+        failures.append("manual_request_validator_after_checklist_command")
+
+    closure_manual_group = _closure_group(closure, "manual_submission_system")
+    if not closure_manual_group:
+        failures.append("closure_missing_manual_submission_group")
+    closure_manual_commands = _string_list(closure_manual_group.get("next_commands"))
+    closure_validator_command_index = next(
+        (
+            index
+            for index, command in enumerate(closure_manual_commands)
+            if "main_validate_manual_submission_private_confirmation_json" in command
+        ),
+        None,
+    )
+    closure_checklist_command_index = next(
+        (
+            index
+            for index, command in enumerate(closure_manual_commands)
+            if "main_build_manual_submission_checklist" in command
+        ),
+        None,
+    )
+    if closure_validator_command_index is None:
+        failures.append("closure_manual_group_missing_private_confirmation_validator")
+    if (
+        closure_validator_command_index is not None
+        and closure_checklist_command_index is not None
+        and closure_validator_command_index > closure_checklist_command_index
+    ):
+        failures.append("closure_manual_validator_after_checklist_command")
 
     warning_regressions = _warning_regressions(**payloads)
     if warning_regressions:
@@ -278,7 +341,7 @@ def audit_final_blocker_consistency(
             failures.append(f"final_gate_missing_blocker:{blocker}")
 
     return {
-        "schema_version": "2026-06-13.final_blocker_consistency_audit.v2",
+        "schema_version": "2026-06-13.final_blocker_consistency_audit.v3",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "mode": "local_read_only_final_blocker_consistency_audit",
         "read_only": True,
@@ -308,6 +371,11 @@ def audit_final_blocker_consistency(
             "closure_promax_probe_status": closure_probe_status,
             "manual_confirmation_needed": manual.get("manual_confirmation_needed"),
             "manual_submission_system_ready": manual.get("manual_submission_system_ready"),
+            "manual_request_has_private_confirmation_validator": (
+                "main_validate_manual_submission_private_confirmation_json" in manual_validation_command
+            ),
+            "manual_request_validator_in_followups": manual_validator_in_followups,
+            "closure_manual_group_has_private_confirmation_validator": closure_validator_command_index is not None,
             "recursive_warning_regression_count": len(warning_regressions),
         },
         "required_open_blockers": {
@@ -345,6 +413,8 @@ def render_markdown(audit: dict[str, Any]) -> str:
         f"- ProMax public metadata ready: `{str(summary.get('promax_public_metadata_ready')).lower()}`",
         f"- Closure carries ProMax probe: `{str(summary.get('closure_promax_probe_provided')).lower()}`",
         f"- Manual confirmation needed: `{str(summary.get('manual_confirmation_needed')).lower()}`",
+        f"- Manual request has private confirmation validator: `{str(summary.get('manual_request_has_private_confirmation_validator')).lower()}`",
+        f"- Closure manual group has private confirmation validator: `{str(summary.get('closure_manual_group_has_private_confirmation_validator')).lower()}`",
         f"- Recursive warning regressions: `{summary.get('recursive_warning_regression_count')}`",
         "",
         "## ProMax Direct Status",

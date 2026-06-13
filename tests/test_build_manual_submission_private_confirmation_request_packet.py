@@ -115,9 +115,12 @@ def test_private_confirmation_request_packet_builds_public_safe_skeleton(tmp_pat
     assert "authors" not in skeleton
     assert "conflicts" not in skeleton
     assert "Paper Title" in packet["public_prefill_index"][0]["prefill_summary"]
-    assert "--private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json" in packet[
-        "follow_up_commands_after_human_completion"
-    ][0]
+    commands = packet["follow_up_commands_after_human_completion"]
+    assert "main_validate_manual_submission_private_confirmation_json" in commands[0]
+    assert "--manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json" in commands[0]
+    assert "--private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260613.json" in commands[0]
+    assert packet["private_confirmation_validation_command"] == commands[0]
+    assert "main_build_manual_submission_checklist" in commands[1]
 
 
 def test_private_confirmation_request_packet_fails_closed_when_checklist_not_ready(tmp_path: Path) -> None:

@@ -409,7 +409,16 @@ submission system.
 After a human completes the private submission-system fields, copy
 `configs/paper_manual_submission_private_confirmation.template.json` to an
 untracked local path, fill only booleans, the current source-manifest sha256,
-and completed item IDs, and rerun:
+and completed item IDs, validate that private confirmation JSON, and then
+rerun the public checklist:
+
+```bash
+python -m scripts.audit.main_validate_manual_submission_private_confirmation_json \
+  --private-confirmation-json path/to/untracked_private_confirmation.json \
+  --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json \
+  --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.md
+```
 
 ```bash
 python -m scripts.audit.main_build_manual_submission_checklist \

@@ -191,6 +191,16 @@ def build_manual_submission_private_confirmation_request_packet(
     )
 
     recommended_path = f"artifacts/private/manual_submission_private_confirmation_{stamp}.json"
+    request_packet_path = (
+        f"outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_{stamp}.json"
+    )
+    follow_up_validation_command = (
+        "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json "
+        f"--private-confirmation-json {recommended_path} "
+        f"--manual-request-packet-json {request_packet_path} "
+        f"--output-json outputs/summary/paper_critical/manual_private_confirmation_validation_{stamp}.json "
+        f"--output-md outputs/summary/paper_critical/manual_private_confirmation_validation_{stamp}.md"
+    )
     follow_up_checklist_command = (
         "python -m scripts.audit.main_build_manual_submission_checklist "
         f"--private-confirmation-json {recommended_path} "
@@ -263,9 +273,12 @@ def build_manual_submission_private_confirmation_request_packet(
             "Do not store author names, affiliations, COI details, reviewer preferences, declarations, account metadata, or submission-account data.",
             "Only record booleans, source_manifest_sha256, completed_item_ids, and non-sensitive notes if absolutely needed.",
             "Do not set completed_item_ids until the corresponding action is genuinely complete in the submission system.",
+            "Run the private confirmation validator before consuming the JSON in the public manual checklist.",
             "This request packet does not close ProMax public metadata or Claude Opus review blockers.",
         ],
+        "private_confirmation_validation_command": follow_up_validation_command,
         "follow_up_commands_after_human_completion": [
+            follow_up_validation_command,
             follow_up_checklist_command,
             follow_up_stack_command,
             (
@@ -277,7 +290,7 @@ def build_manual_submission_private_confirmation_request_packet(
         ],
         "notes": [
             "This packet is a public-safe handoff request only; it is not a private confirmation.",
-            "The manual gate remains open until the checklist consumes a valid untracked private confirmation JSON.",
+            "The manual gate remains open until the checklist consumes a validated untracked private confirmation JSON.",
             "Final submission readiness must stay false while external metadata or review coverage blockers remain.",
         ],
         "failures": failures,

@@ -230,10 +230,12 @@ PIDs, audit summaries, and missing-file errors.
    `required_claude_blocker_ack_groups=["manual_submission_system",
    "promax_public_metadata"]`.
    `scripts/audit/main_audit_final_blocker_consistency.py` now uses schema
-   `2026-06-13.final_blocker_consistency_audit.v2` and fails if those Claude
+   `2026-06-13.final_blocker_consistency_audit.v3` and fails if those Claude
    intake safeguards disappear from the request packet or review-continuation
-   packet. Rerun it after any Claude request/review, final-gate, closure, or
-   release-stack refresh.
+   packet, or if the private manual-confirmation validator is no longer routed
+   before the public manual checklist. Rerun it after any Claude
+   request/review, final-gate, closure, manual-request, or release-stack
+   refresh.
    The current priority is to capture explicit Claude Opus reviewer output
    using the request packet if available, then keep monitoring the ProMax public
    metadata and private manual submission-system blockers. Do not claim final
@@ -324,12 +326,13 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_audit_pre_submission_refresh_freshness.py` | Local read-only freshness audit for a pre-submission refresh artifact; verifies recorded input fingerprints and generated gate JSON/MD hashes against the current worktree, treating Git HEAD as generation provenance rather than a strict post-commit equality gate |
 | `scripts/audit/main_build_submission_release_candidate_packet.py` | Local read-only release-candidate handoff index over the final gate, freshness audit, source package, rebuild audit, metadata packet, manual checklist, and external metadata audit; distinguishes `local_release_candidate_ready` from `final_submission_ready` and surfaces `external_manual_or_review_blocked` when review coverage is still incomplete |
 | `scripts/audit/main_refresh_submission_release_candidate_stack.py` | Preferred sequential local handoff wrapper; runs pre-submission refresh, freshness audit, and release-candidate packet generation in order, then emits a compact stack artifact while preserving external/manual/review blockers and `final_submission_ready=false` |
-| `scripts/audit/main_audit_final_blocker_consistency.py` | Local read-only consistency audit over the final gate, release stack, closure packet, review-continuation packet, Claude request packet, ProMax probe, and manual request packet; catches stale failed-Claude counts, missing open blockers, unexpected final-ready states, recursive warning-prefix regressions, and closure packets that omit or mismatch the same-stamp ProMax probe |
+| `scripts/audit/main_audit_final_blocker_consistency.py` | Local read-only consistency audit over the final gate, release stack, closure packet, review-continuation packet, Claude request packet, ProMax probe, and manual request packet; catches stale failed-Claude counts, missing open blockers, unexpected final-ready states, recursive warning-prefix regressions, closure packets that omit or mismatch the same-stamp ProMax probe, and manual handoffs that skip the private-confirmation validator |
 | `scripts/audit/main_audit_final_blocker_doc_status.py` | Local read-only canonical-doc status audit over active TODO, claim/status, milestones, and server runbook current sections; compares them with the final-blocker consistency audit and catches stale current failed-Claude counts, old two-class blocker taxonomy, missing ProMax/manual/Claude blocker wording, or accidental final-ready wording |
 | `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, release-candidate stack, and same-stamp ProMax public probe; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths; infers the stamp from dated output paths when `--stamp` is omitted |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, source-package rebuild, external proceedings metadata, manual checklist, and review-continuation coverage; keeps final readiness false while external DOI/page-range, private submission-system, or explicit Claude Opus review blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
 | `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py` | Local read-only public-safe request-packet builder for the private manual submission-system confirmation; emits the current source-manifest hash, safe confirmation skeleton, forbidden private fields/keys, recommended ignored path, and follow-up commands without consuming private data or closing final readiness |
+| `scripts/audit/main_validate_manual_submission_private_confirmation_json.py` | Local read-only preflight for an untracked private manual confirmation JSON; checks schema/profile/checklist/source-manifest agreement, ignored-path placement, forbidden private keys, item IDs, and currently blocked items before the public manual checklist consumes the file |
 | `scripts/audit/main_audit_external_proceedings_metadata.py` | Local read-only ARIS citation/proceedings metadata recheck for ProEx/ProMax; records BibTeX, DOI/Crossref, arXiv, DBLP/SIGIR source visibility, and advisory Crossref title-discovery candidates while keeping final submission blocked until exact public page-range/registry evidence is present |
 | `scripts/audit/main_probe_promax_public_metadata.py` | Lightweight local live probe for the ProMax public metadata blocker; checks BibTeX pages, Crossref `/works`, DOI resolver, ACM DL, arXiv HTML ACM metadata, SIGIR accepted-paper source, UQ author-profile announcement, author Google Sites publications, and UQ Experts profile without running the full submission stack |
 | `outputs/summary/paper_critical/citation_audit_repair_20260612.{json,md}` | ARIS-style citation repair audit for the active manuscript; records all eight official baseline citations, recency counts, and `bibtex main` warning status |
@@ -400,6 +403,19 @@ Use the request packet first to get the current source manifest sha256, the full
 safe `completed_item_ids` skeleton, the recommended ignored confirmation path,
 and the forbidden private fields/JSON keys. The request packet is public-safe
 and does not close any gate.
+
+```bash
+python -m scripts.audit.main_validate_manual_submission_private_confirmation_json \
+  --private-confirmation-json path/to/untracked_private_confirmation.json \
+  --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json \
+  --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.md
+```
+
+Run this validator before the checklist consumes the private confirmation JSON.
+It must pass without storing private field values; if it reports a currently
+blocked item such as `confirm_external_proceedings_metadata`, refresh/close the
+public ProMax metadata gate first instead of marking that item complete early.
 
 ```bash
 python -m scripts.audit.main_build_manual_submission_checklist \

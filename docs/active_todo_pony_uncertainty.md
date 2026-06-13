@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 08:25 CEST
+Last updated: 2026-06-13 08:37 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -9,23 +9,32 @@ cycle.
 
 ## Current Checkpoint (2026-06-13)
 
-- 2026-06-13 final-blocker consistency audit v2:
-  Codex extended
-  `scripts/audit/main_audit_final_blocker_consistency.py` so the final blocker
-  consistency audit now verifies the Claude external-review intake safeguards,
-  not only the failed-attempt count. The audit fails if the Claude request
-  packet loses its `response_template`, if that template defaults
-  `valid_review_evidence` to anything other than `false`, if the request packet
-  stops requiring ProMax/manual blocker acknowledgement, or if the current
-  review-continuation packet stops exposing required Claude blocker ack groups
-  for the open ProMax public metadata and private manual submission-system
-  blockers. The refreshed
+- 2026-06-13 final-blocker consistency audit v3 and private manual validator:
+  Codex added
+  `scripts/audit/main_validate_manual_submission_private_confirmation_json.py`
+  plus `tests/test_validate_manual_submission_private_confirmation_json.py`,
+  then wired it into
+  `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py`
+  and
+  `scripts/audit/main_build_final_submission_blocker_closure_packet.py`. Any
+  future untracked private manual-confirmation JSON must now pass this local
+  read-only validator before it is consumed by the public manual checklist. The
+  validator checks schema/profile/checklist/source-manifest agreement, rejects
+  forbidden private keys, enforces `artifacts/private/` for in-repo paths,
+  rejects unknown/duplicate/missing item IDs, and refuses early completion of
+  currently blocked IDs such as `confirm_external_proceedings_metadata` while
+  ProMax metadata remains open. The refreshed
+  `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.{json,md}`
+  and
+  `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
+  both put `main_validate_manual_submission_private_confirmation_json` before
+  the checklist command. Codex also upgraded
+  `scripts/audit/main_audit_final_blocker_consistency.py` to schema
+  `2026-06-13.final_blocker_consistency_audit.v3`; the refreshed
   `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
-  reports schema `2026-06-13.final_blocker_consistency_audit.v2`, `ok=true`,
-  `claude_request_has_response_template=true`, template
-  `valid_review_evidence=false`,
-  `review_required_claude_ack_groups=["manual_submission_system",
-  "promax_public_metadata"]`, and still `final_submission_ready=false`.
+  reports `ok=true`, `manual_request_has_private_confirmation_validator=true`,
+  `closure_manual_group_has_private_confirmation_validator=true`, Claude intake
+  safeguards still present, and `final_submission_ready=false`.
 
 - 2026-06-13 Claude external-review intake hardening:
   Codex tightened the public-safe external Claude Opus handoff path without
@@ -231,9 +240,9 @@ cycle.
   the full safe `completed_item_ids` skeleton, the recommended ignored path
   `artifacts/private/manual_submission_private_confirmation_20260613.json`,
   forbidden private fields/JSON keys, and exact follow-up commands for
-  rerunning the manual checklist, release-candidate stack, and final gate after
-  a human completes the submission-system fields. Codex also linked this packet
-  from
+  validating the private confirmation JSON, rerunning the manual checklist,
+  release-candidate stack, and final gate after a human completes the
+  submission-system fields. Codex also linked this packet from
   `scripts/audit/main_build_final_submission_blocker_closure_packet.py` and
   refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`.

@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-13T06:22:38.489917+00:00",
+  "created_at_utc": "2026-06-13T06:36:10.976995+00:00",
   "failures": [],
   "final_blocker_consistency_ok": true,
   "final_submission_ready": false,
@@ -15,8 +15,8 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "c2bc35fa08e08ff295f48efa862d1bcc624d4191d3313296e03c344dc611bf2e",
-      "size_bytes": 15992
+      "sha256": "53bae3be795bc1a0a6d9b68a1c5ed27e709fb9f305113bce70c6c4ab55dbc686",
+      "size_bytes": 16587
     },
     "final_gate": {
       "exists": true,
@@ -29,8 +29,8 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\manual_submission_private_confirmation_request_packet_20260613.json",
-      "sha256": "35d3bb26b05a2990a0e987aad809265fc2ca4ce2ef0a9b655c796da44ffb72dd",
-      "size_bytes": 10847
+      "sha256": "2f2993a64d7fd3b6d3d61b6417226b00ca3c5b75a763f939a950c9cfff9bd8d1",
+      "size_bytes": 12015
     },
     "promax_probe": {
       "exists": true,
@@ -78,12 +78,13 @@
       "explicit_claude_opus_review"
     ]
   },
-  "schema_version": "2026-06-13.final_blocker_consistency_audit.v2",
+  "schema_version": "2026-06-13.final_blocker_consistency_audit.v3",
   "summary": {
     "blocking_status": "external_manual_or_review_blocked",
     "claude_request_failed_attempt_count": 11,
     "claude_request_has_response_template": true,
     "claude_request_template_valid_review_evidence": false,
+    "closure_manual_group_has_private_confirmation_validator": true,
     "closure_promax_probe_provided": true,
     "closure_promax_probe_status": {
       "acm_dl": 403,
@@ -96,6 +97,8 @@
     "final_panel_coverage_complete": false,
     "local_release_candidate_ready": true,
     "manual_confirmation_needed": true,
+    "manual_request_has_private_confirmation_validator": true,
+    "manual_request_validator_in_followups": true,
     "manual_submission_system_ready": false,
     "promax_direct_status": {
       "acm_dl": 403,
