@@ -230,6 +230,16 @@ release-candidate, stack, and closure packet builders. The refreshed artifacts
 now have compact warning lists and the stack still reports
 `blocking_status=external_manual_or_review_blocked` and
 `final_submission_ready=false`.
+Codex then added
+`scripts/audit/main_audit_final_blocker_consistency.py`,
+`tests/test_audit_final_blocker_consistency.py`, and
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
+to audit cross-packet consistency after blocker refreshes. The current audit
+reports `ok=true`, `final_blocker_consistency_ok=true`, failed Claude attempts
+`9`, `explicit_claude_opus_present=false`,
+`promax_public_metadata_ready=false`, manual confirmation still needed,
+recursive warning regressions `0`, and `final_submission_ready=false`. This is
+a handoff consistency guard, not a final-readiness upgrade.
 The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,

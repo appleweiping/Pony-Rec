@@ -166,8 +166,8 @@ so the packet at that point exposed five failed Claude attempts while preserving
 `scripts/audit/main_build_claude_review_request_packet.py` and generated
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for the next valid Claude Opus review.
-After the eighth failed connector attempt, the request packet was refreshed at
-`2026-06-13T02:50:36Z` and now records eight failed Claude attempts. The
+After the ninth failed connector attempt, the request packet was refreshed at
+`2026-06-13T03:28:45Z` and now records nine failed Claude attempts. The
 request packet is not reviewer coverage and does not close final
 readiness. The review-continuation packet builder now validates additional
 reviewer JSONs before counting them for panel coverage: a Claude/Opus review
@@ -239,6 +239,18 @@ have compact warning lists with no detected recursive warning chains. This is
 an evidence-hygiene fix only; the final gate remains blocked by ProMax public
 metadata, private manual submission-system confirmation, and explicit Claude
 Opus review coverage.
+Codex then added
+`scripts/audit/main_audit_final_blocker_consistency.py` and
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
+as a cross-packet consistency check over the final gate, release stack, closure
+packet, review-continuation packet, Claude request packet, ProMax probe, and
+manual request packet. The audit reports `ok=true`,
+`final_blocker_consistency_ok=true`, failed Claude attempts `9`,
+`explicit_claude_opus_present=false`, ProMax public metadata still false with
+Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
+needed, recursive warning regressions `0`, and
+`final_submission_ready=false`. This prevents stale handoff artifacts from
+contradicting each other, but it is not a readiness upgrade.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

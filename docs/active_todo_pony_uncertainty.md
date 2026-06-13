@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 05:29 CEST
+Last updated: 2026-06-13 05:42 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,22 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 final-blocker consistency audit:
+  Codex added `scripts/audit/main_audit_final_blocker_consistency.py` plus
+  `tests/test_audit_final_blocker_consistency.py` and generated
+  `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`.
+  The audit is local-only/read-only and verifies the final gate,
+  release-candidate stack, closure packet, review-continuation packet, Claude
+  request packet, ProMax probe, and manual confirmation request packet agree on
+  the current blocked state. The current audit reports `ok=true`,
+  `final_blocker_consistency_ok=true`, `final_submission_ready=false`, failed
+  Claude attempts `9`, `explicit_claude_opus_present=false`,
+  `promax_public_metadata_ready=false`, ProMax direct statuses
+  Crossref `404` / DOI resolver `404` / ACM DL `403`,
+  `manual_confirmation_needed=true`, and recursive warning regressions `0`.
+  Future agents should rerun this audit after any final-gate, stack, closure,
+  review, ProMax, or manual-request refresh before reporting readiness.
 
 - 2026-06-13 bounded heartbeat refresh after manual-confirmation handoff:
   Codex reran the required server preflight and found no active Uncertainty
