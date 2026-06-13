@@ -105,7 +105,7 @@ the current stack artifact reports `ok=true`,
 local release-candidate refresh
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`
 also reports `ok=true`, `local_release_candidate_ready=true`,
-`refresh_artifact_fresh=true`, `blocking_status=external_or_manual_blocked`,
+`refresh_artifact_fresh=true`, `blocking_status=external_manual_or_review_blocked`,
 and `final_submission_ready=false`; this is now the latest stack artifact for
 handoff. The new closure packet
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`
@@ -135,17 +135,18 @@ source probes passing, and `promax_public_metadata_ready=false`, so it is
 monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
-probes passing, and `promax_public_metadata_ready=false`. A follow-up live
-probe at `2026-06-13T00:49:05Z` found the same direct blocker state with five
-source probes passing: arXiv HTML ACM metadata, SIGIR accepted papers, UQ
-author profile, author Google Sites publications, and UQ Experts profile. The
-closure packet refreshed at `2026-06-13T00:49:43Z` and now lists those source
-probes in Markdown; this strengthens provenance but is not a readiness upgrade.
+probes passing, and `promax_public_metadata_ready=false`. Follow-up live probes
+at `2026-06-13T00:49:05Z` and `2026-06-13T01:59:36Z` found the same direct
+blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
+accepted papers, UQ author profile, author Google Sites publications, and UQ
+Experts profile. The closure packet refreshed most recently at
+`2026-06-13T02:00:24Z` and now lists those source probes in Markdown; this
+strengthens provenance but is not a readiness upgrade.
 The complete release-candidate stack was also
 refreshed at `2026-06-13T00:04:17Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `failures=[]`, and `final_submission_ready=false`; its freshness audit checks
-`21` input fingerprints and `14` generated gate files with zero mismatches,
+`23` input fingerprints and `14` generated gate files with zero mismatches,
 and the independent source-package rebuild produces a `9`-page PDF with zero
 BibTeX and overfull hbox warnings. The matching
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`

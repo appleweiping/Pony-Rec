@@ -100,18 +100,19 @@ still reports `promax_public_metadata_ready=false`: Crossref `/works` for
 `10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`, and
 ACM DL returns `403`; arXiv HTML ACM metadata, the SIGIR accepted-paper page,
 the UQ author-profile source probe, the author Google Sites publications
-source probe, and the UQ Experts profile source probe remain passing. A
-follow-up live probe at `2026-06-13T00:49:05Z` found the same direct blocker
-state and refreshed the closure packet at `2026-06-13T00:49:43Z`; this is
-stronger public accepted-paper provenance, not a readiness upgrade. The closure
+source probe, and the UQ Experts profile source probe remain passing.
+Follow-up live probes at `2026-06-13T00:49:05Z` and
+`2026-06-13T01:59:36Z` found the same direct blocker state, and the closure
+packet was refreshed most recently at `2026-06-13T02:00:24Z`; this is stronger
+public accepted-paper provenance, not a readiness upgrade. The closure
 packet Markdown now lists latest public source probes in addition to direct
 Crossref/DOI/ACM statuses. Codex also refreshed the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
 the `2026-06-13T00:04:17Z` stack reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
-`blocking_status=external_or_manual_blocked`, `failures=[]`, and
-`final_submission_ready=false`. Its freshness audit checks `21` input
+`blocking_status=external_manual_or_review_blocked`, `failures=[]`, and
+`final_submission_ready=false`. Its freshness audit checks `23` input
 fingerprints and `14` generated gate files with zero mismatches; the source
 package has `21` files with manifest sha256
 `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`, and the

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 03:45 CEST
+Last updated: 2026-06-13 04:00 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -100,7 +100,7 @@ cycle.
   `ok=true`, `local_release_candidate_ready=true`, `refresh_ok=true`,
   `freshness_ok=true`, `refresh_artifact_fresh=true`,
   `release_candidate_ok=true`, `failures=[]`, and
-  `final_submission_ready=false`. The freshness audit checks `21` input
+  `final_submission_ready=false`. The freshness audit checks `23` input
   fingerprints and `14` generated gate files with zero mismatches; the source
   package summary reports `21` files, manifest sha256
   `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`, and
@@ -113,16 +113,19 @@ cycle.
   `404`, the DOI resolver is `404`, and ACM DL is `403`, while arXiv HTML ACM
   metadata, the SIGIR accepted-paper page, the UQ author-profile page, the
   author Google Sites publications page, and the UQ Experts profile source
-  probes pass. A follow-up live probe at `2026-06-13T00:49:05Z` found the same
-  direct blocker state and refreshed the closure packet at
-  `2026-06-13T00:49:43Z`; this strengthens public accepted-paper provenance
-  but is not a readiness upgrade. The refreshed
+  probes pass. Follow-up live probes at `2026-06-13T00:49:05Z` and
+  `2026-06-13T01:59:36Z` found the same direct blocker state; the closure
+  packet was refreshed most recently at `2026-06-13T02:00:24Z` so its
+  latest-public-probe section points to the newest probe. This strengthens
+  public accepted-paper provenance but is not a readiness upgrade. The
+  refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
   now uses the 2026-06-13 final gate, external metadata audit, manual
   checklist, full release-candidate stack, and public probe. The closure
   Markdown now lists the latest public source probes. It still reports
-  local artifact handoff `ready`, external proceedings metadata `blocked`,
-  manual submission system `manual_private_pending`, and
+  local artifact handoff `ready`, review-panel coverage `blocked`, external
+  proceedings metadata `blocked`, manual submission system
+  `manual_private_pending`, and
   `final_submission_ready=false`.
 
 - ProMax public metadata probe added:

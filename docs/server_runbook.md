@@ -129,9 +129,10 @@ PIDs, audit summaries, and missing-file errors.
    The current local handoff index is
    `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`:
    it reports `ok=true`, `local_release_candidate_ready=true`,
-   `refresh_artifact_fresh=true`, `blocking_status=external_or_manual_blocked`,
+   `refresh_artifact_fresh=true`, `blocking_status=external_manual_or_review_blocked`,
    and `final_submission_ready=false` because ProMax public proceedings
-   metadata and private manual submission-system confirmation remain open. The ProMax
+   metadata, private manual submission-system confirmation, and explicit Claude
+   Opus review coverage remain open. The ProMax
    audit now records passing arXiv HTML ACM-metadata evidence for the expected
    DOI/ISBN/venue/location and exposes BibTeX `isbn`/`location`, but final ACM
    page range plus Crossref/DOI resolver visibility are still unresolved.
@@ -139,7 +140,8 @@ PIDs, audit summaries, and missing-file errors.
    `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`;
    it now uses the 2026-06-13 final gate, external metadata audit, manual
    checklist, full release-candidate stack, and public probe; it groups local
-   artifact, external metadata, and private manual submission blockers and
+   artifact, review-panel coverage, external metadata, and private manual
+   submission blockers and
    gives the exact next commands without storing private fields.
    The latest ProMax public probe is
    `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`:
@@ -147,8 +149,9 @@ PIDs, audit summaries, and missing-file errors.
    and `promax_public_metadata_ready=false`; arXiv HTML ACM metadata, the
    SIGIR accepted-paper page, the UQ author-profile page, the author Google
    Sites publications page, and the UQ Experts profile source probes all pass.
-   A follow-up live probe at `2026-06-13T00:49:05Z` found the same direct
-   blocker state and refreshed the closure packet at `2026-06-13T00:49:43Z`;
+   Follow-up live probes at `2026-06-13T00:49:05Z` and
+   `2026-06-13T01:59:36Z` found the same direct blocker state and refreshed the
+   closure packet most recently at `2026-06-13T02:00:24Z`;
    the closure Markdown now lists those latest public source probes. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
    stack was also refreshed at `2026-06-13T00:04:17Z`: it reports `ok=true`,
