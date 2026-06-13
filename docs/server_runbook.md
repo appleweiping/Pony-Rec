@@ -38,6 +38,11 @@ PIDs, audit summaries, and missing-file errors.
 
 ```text
 1. Pull latest repo state.
+1.5. The current Codex thread has heartbeat automation
+   `uncertainty-2h-goal-heartbeat` active at a two-hour interval. Treat each
+   wakeup as one bounded monitor/progress cycle: verify server/git/memory/docs,
+   then advance one final-readiness gate without starting or stopping
+   experiments blindly.
 2. Do not launch a new default experiment. Phase 2.5 evidence is ready for
    strict manuscript-level claim/citation review, not final submission. Citation
    repair for `paper/references.bib` is complete enough for audit:
@@ -94,8 +99,10 @@ PIDs, audit summaries, and missing-file errors.
    `explicit_claude_opus_present=false`. Use the new public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
-   before trying another Claude route; it contains the exact prompt/schema for
-   a valid additional review JSON and is not itself reviewer coverage. The
+   before trying another Claude route; it was refreshed at
+   `2026-06-13T02:40:47Z`, records seven failed Claude attempts, contains the
+   exact prompt/schema for a valid additional review JSON, and is not itself
+   reviewer coverage. The
    review-continuation builder now validates additional reviewer JSONs before
    counting them for panel coverage; a Claude/Opus JSON must be complete
    substantive evidence (`valid_review_evidence=true`, scoped claim boundary,

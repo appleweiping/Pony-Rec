@@ -193,7 +193,9 @@ The refreshed packet records seven failed attempts and still keeps
 `scripts/audit/main_build_claude_review_request_packet.py`, generating
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for a future valid Claude Opus review;
-this request packet is not reviewer coverage. The review-continuation gate now
+after the seventh failed connector attempt, that request packet was refreshed
+at `2026-06-13T02:40:47Z` and now records seven failed Claude attempts. The
+request packet is not reviewer coverage. The review-continuation gate now
 validates additional reviewer JSONs before counting them for panel coverage:
 Claude/Opus JSON must include `valid_review_evidence=true`,
 `claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`,

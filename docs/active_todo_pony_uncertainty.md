@@ -41,6 +41,15 @@ cycle.
   instead of being treated as an unexpected blocked-state mismatch; final
   submission is still decided only by the final gate.
 
+- 2026-06-13 continuation heartbeat:
+  Codex app heartbeat automation `uncertainty-2h-goal-heartbeat` is active with
+  a two-hour interval for this thread. Each wakeup should perform a bounded
+  monitor/progress cycle: check `pony-rec-gpu` process/GPU state, local git
+  status, agentmemory, and canonical docs; do not start/stop experiments
+  blindly; then progress one final-readiness gate such as explicit Claude Opus
+  coverage, ProMax public metadata, private manual checklist documentation, or
+  final-gate freshness.
+
 - 2026-06-13 review-continuation refresh after GPT-5.5 xhigh handoff:
   GPT-5.5 xhigh returned an `8.0/10` `CONDITIONAL_PASS`, while keeping
   `final_submission_ready_claim_allowed=false`. Codex fixed the PDF-visible
@@ -87,7 +96,9 @@ cycle.
   `scripts/audit/main_build_claude_review_request_packet.py` and generated
   `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
   so the next valid Claude Opus review can be requested with a stable
-  public-safe prompt and then attached through `--additional-review-json`.
+  public-safe prompt and then attached through `--additional-review-json`. The
+  request packet was refreshed at `2026-06-13T02:40:47Z` after the seventh
+  failed connector attempt and now records failed Claude attempts `7`.
   This request packet is not reviewer coverage and does not close final
   readiness. `scripts/audit/main_build_review_continuation_packet.py` now
   validates additional reviewer JSONs before they can count as coverage:

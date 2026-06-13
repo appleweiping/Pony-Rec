@@ -165,7 +165,9 @@ so the packet at that point exposed five failed Claude attempts while preserving
 `scripts/audit/main_build_claude_review_request_packet.py` and generated
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for the next valid Claude Opus review.
-The request packet is not reviewer coverage and does not close final
+After the seventh failed connector attempt, the request packet was refreshed at
+`2026-06-13T02:40:47Z` and now records seven failed Claude attempts. The
+request packet is not reviewer coverage and does not close final
 readiness. The review-continuation packet builder now validates additional
 reviewer JSONs before counting them for panel coverage: a Claude/Opus review
 must be valid substantive evidence with `valid_review_evidence=true`,
