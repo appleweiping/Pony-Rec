@@ -13,15 +13,40 @@ methods} including ProEx~\cite{proex} and ProMax~\cite{promax} use LLM-derived
 profiles as preference signals. \textbf{High-order, representation, and intent
 methods} such as ELMRec~\cite{elmrec}, RLMRec~\cite{rlmrec}, and
 IRLLRec~\cite{irllrec} combine collaborative structure or user intent with
-language-derived representations.
+language-derived representations. A complementary line treats the LLM itself as
+a zero-shot ranker over a small candidate set, formatting the user history and
+candidates in a prompt and reading a ranked list back out~\cite{llmrank}.
 
 Because these methods differ in architecture and training objective, fair
 comparison requires a tightly controlled protocol. We treat them as official
 external baselines: each method keeps its declared architecture and objective,
 while the data adapter, LLM backbone, and score exporter are standardized so
 all methods are evaluated over the same candidate rows.
+We differ by holding the candidate set, backbone, and importer fixed across all
+eight baselines and our method, so the comparison isolates the scoring signal
+rather than the surrounding architecture.
 
-\subsection{Calibration and Uncertainty}
+\subsection{LLMs as Scorers and Rerankers}
+
+A parallel line of work in information retrieval uses LLMs directly as
+relevance scorers or list rerankers rather than as feature extractors.
+Listwise approaches prompt the model to reorder a candidate list in a single
+pass, either through a sliding-window permutation generation strategy such as
+RankGPT~\cite{rankgpt} or by reading a full listwise ranking out of one
+prompt as in LRL~\cite{lrl}. Pairwise prompting (PRP) instead asks the model
+which of two candidates is more relevant and aggregates the comparisons into a
+ranking, trading inference cost for robustness~\cite{prp}. A related strand
+studies whether LLMs can stand in for human relevance assessors at all, framing
+the model as a (potentially noisy) judge of query--document
+relevance~\cite{faggioli2023perspectives}. These methods establish that LLM
+relevance signals are competitive, but they are predominantly listwise or
+pairwise and are evaluated on document-retrieval benchmarks rather than
+sequential recommendation.
+We differ by using a task-grounded \emph{pointwise} per-candidate relevance
+posterior in the recommendation setting, scoring each candidate independently
+under a fixed same-candidate contract instead of a listwise or pairwise prompt.
+
+\subsection{Calibration and Verbalized Confidence}
 
 Calibration of neural predictions has been extensively studied in supervised
 learning~\cite{guo2017calibration,niculescu2005predicting}. Post-hoc methods
@@ -29,37 +54,51 @@ such as temperature scaling, Platt scaling~\cite{platt1999probabilistic}, and
 isotonic regression~\cite{zadrozny2002transforming} can improve probability
 calibration when a suitable calibration set is available. In the LLM setting,
 prior work has studied whether models can express their own uncertainty in
-words or probabilities~\cite{kadavath2022language,tian2023just,lin2022teaching}.
-Selective classification and risk-coverage formulations study when a predictor
-should abstain or control decision risk under uncertainty~\cite{elyaniv2010foundations,geifman2017selective}.
-Our setting differs because every method must rank every candidate; the
-selective-prediction connection is used only to motivate decision-useful
-uncertainty rather than an abstention claim.
+words or probabilities~\cite{kadavath2022language,tian2023just,lin2022teaching},
+and how best to \emph{elicit} that confidence: black-box prompting strategies
+can surface a model's verbalized uncertainty even without access to its
+logits~\cite{xiong2024can}. This literature largely asks whether a scalar
+confidence is well calibrated against correctness, typically in classification
+or question answering.
+We differ by asking not whether a confidence value is calibrated in isolation
+but whether an elicited, task-grounded uncertainty signal changes a downstream
+ranking decision under a fixed candidate set.
 
-Recommendation adds a different challenge: for an uncertainty signal to be
-worth adding, it must improve a ranking decision rather than only be well
-calibrated as a scalar probability. We therefore test this directly: we measure
-whether an event-level uncertainty signal stratifies ranking reliability and,
-through leave-one-component-out ablations and a raw-probability attribution,
-whether the uncertainty and risk terms add ranking utility over the pointwise
-posterior. We report that under our same-candidate protocol they do not, which
-is the negative result we characterize in this paper.
+\subsection{Uncertainty, Conformal, and Selective Prediction}
 
-\subsection{Uncertainty in Recommendation}
+Uncertainty quantification has been studied across ranking, recommendation, and
+prediction-set frameworks. For neural learning-to-rank, prior work measures the
+calibration and uncertainty of ranking models directly~\cite{penha2021calibration},
+while field-aware calibration targets calibrated probability estimates in
+large-scale prediction settings~\cite{pan2020fieldaware}. A separate and
+frequently confused notion is \emph{calibrated recommendations} in the sense of
+Steck~\cite{steck2018calibrated}, which matches the genre/category
+\emph{distribution} of a recommendation list to the user's consumption history;
+this is distribution calibration of list composition, a different sense from the
+probability calibration of a per-candidate score that we study, and we cite it
+only to disambiguate the term. Conformal and selective-prediction methods
+provide distribution-free guarantees: conformal prediction yields valid
+prediction sets~\cite{angelopoulos2021gentle}, conformal risk control extends
+these guarantees to bounded monotone losses~\cite{angelopoulos2024crc}, and
+selective classification studies when a predictor should abstain to control
+risk, whether through classical foundations~\cite{elyaniv2010foundations},
+deep selective classifiers~\cite{geifman2017selective}, or an explicit
+risk--coverage training objective such as SelectiveNet~\cite{geifman2019selectivenet}.
+We differ by requiring every method to rank every candidate -- there is no
+abstention and no prediction set -- so we use these formulations only to
+motivate decision-useful uncertainty, and we report that under our protocol the
+risk-adjusted family does not improve ranking.
 
-Uncertainty quantification for recommendation has been explored through
-Bayesian approaches~\cite{wang2016bayesian}, ensembles, and conformal
-prediction~\cite{angelopoulos2021gentle}. Much of this work focuses on model
-uncertainty or prediction-set validity. Our focus is complementary: we construct
-a task-grounded candidate-level posterior and study whether its uncertainty
-components are actionable for reranking under the same candidate set.
+\subsection{Sampled versus Full-Catalog Evaluation}
 
-\subsection{Same-Candidate Evaluation}
-
-Sampled candidate evaluation can introduce subtle fairness risks if different
-methods score different candidates or if full-catalog metrics are mixed with
-reranking metrics~\cite{krichene2020sampled}. For this reason, our comparison
-uses a same-candidate score contract: every method must emit a finite score for
-the exact candidate key set, and all metrics are computed by a shared importer.
-This does not replace full-catalog retrieval evaluation, but it makes the
-reranking claim auditable.
+Offline recommendation metrics are sensitive to how the candidate set is
+constructed. Sampled candidate evaluation can distort metric estimates and
+their relative ordering~\cite{krichene2020sampled}, and the specific choice of
+which target items and negatives to sample further shifts measured
+performance~\cite{canamares2020target}. These findings caution against mixing
+full-catalog retrieval metrics with reranking metrics computed over different
+candidate pools, or comparing methods that score different candidates.
+We differ by enforcing a same-candidate score contract -- every method emits a
+finite score for the exact candidate key set and all metrics are computed by a
+shared importer -- which makes the reranking claim auditable while explicitly
+scoping it away from full-catalog SOTA.
