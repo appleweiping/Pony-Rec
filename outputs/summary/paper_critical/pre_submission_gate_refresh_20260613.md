@@ -1,13 +1,13 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-13T04:50:08.627422+00:00
+Generated: 2026-06-13T05:08:27.378349+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260613`
-- Git HEAD before refresh: `bb4003d1dcb6bcc81ae89f0b6d3fb0f40205972e`
+- Git HEAD before refresh: `c133970c0aa8c5eff3aacddba9912f827e9b8524`
 - Tracked dirty before refresh: `true`
 
 ## Steps
@@ -34,7 +34,7 @@ Generated: 2026-06-13T04:50:08.627422+00:00
 - `configs\paper_submission_profiles.json`: `00a083d7fca48c521814ce9effe6bf9294c7ddf7e071879edaa4739f39a67d2d` (1276 bytes)
 - `configs\paper_submission_metadata.json`: `908484005b171a66d3e9424d36986d26286e86a0272a456b461a9e75b204e1c1` (1005 bytes)
 - `configs\paper_manual_submission_checklist.json`: `e8bbef232cc418ca45976cb675411e2128075b6d8eae6d3ce23b561ecf666174` (4732 bytes)
-- `outputs\summary\paper_critical\review_continuation_packet_20260613.json`: `c0d0acb60d66486f7cce9b336459fbb8320fc0021512c51c866ba64e3a2924f1` (12007 bytes)
+- `outputs\summary\paper_critical\review_continuation_packet_20260613.json`: `920dab817c067e6a8c3dd0b86c05063f0bc347cf3625dc94f39d28cdd9f59b50` (12007 bytes)
 - `scripts\audit\main_refresh_pre_submission_gates.py`: `14ede23eeaf1d5535ce9fba44adfcf219ffb620a1813aff0253b68c3b64be77b` (21984 bytes)
 - `scripts\audit\main_audit_external_proceedings_metadata.py`: `0663e10b9d9aefb74346c23f63241167b50654f591acb0c7ec0c6373474389ff` (27205 bytes)
 - `scripts\audit\main_audit_submission_package.py`: `abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53` (33787 bytes)
@@ -43,7 +43,7 @@ Generated: 2026-06-13T04:50:08.627422+00:00
 - `scripts\audit\main_build_submission_metadata_packet.py`: `01b66efe8a816d5681cef351fdf87a594ad935193e1f9bf2336f5d8a559e513c` (10113 bytes)
 - `scripts\audit\main_build_manual_submission_checklist.py`: `c6e50da192f1c8ee970e96e0241d2d614f739b2507b258dec88877d7d0d9dce3` (21881 bytes)
 - `scripts\audit\main_build_final_submission_gate.py`: `47d6bc59bd6c3fa532d424fca0cb61ac5ab7481d5517a5a6531a0f787f21004c` (15125 bytes)
-- `scripts\audit\main_build_review_continuation_packet.py`: `5ab2cd7c1157d407203b49ed01a08100e262273fad5d7d5193f9a27f927f9848` (24283 bytes)
+- `scripts\audit\main_build_review_continuation_packet.py`: `de207aa31bba30ae8939d457d5f4369b7a44f9ede431372c0a80b723bf74a4a7` (24532 bytes)
 - `scripts\audit\main_audit_pre_submission_refresh_freshness.py`: `6c0ebf3d3243b552005226cee4cc5d2065d3b2c3c55dfc95f7016545e0740f91` (13914 bytes)
 
 ## Remaining Blockers

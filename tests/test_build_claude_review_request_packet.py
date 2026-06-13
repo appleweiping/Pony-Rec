@@ -99,6 +99,7 @@ def test_claude_review_request_packet_preserves_missing_claude_gap(tmp_path: Pat
     assert packet["failed_claude_attempt_summary"]["count"] == 1
     assert packet["expected_additional_review_json"]["recommended_path"].endswith("claude_opus_review_20260613.json")
     assert "valid_review_evidence" in packet["expected_additional_review_json"]["schema"]
+    assert "main_validate_claude_opus_review_json" in packet["validation_command_before_attach"]
     assert "promax:doi_resolver_not_visible:status=404" in packet["claude_review_prompt"]
     assert "final_submission_ready_claim_allowed" in packet["claude_review_prompt"]
     assert "claude_opus_review_attempt_20260613.json" in packet["review_continuation_command_after_valid_review"]

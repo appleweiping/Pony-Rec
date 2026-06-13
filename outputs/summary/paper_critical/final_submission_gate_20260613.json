@@ -1,12 +1,12 @@
 {
   "all_local_artifact_gates_ok": true,
-  "created_at_utc": "2026-06-13T04:50:08.450027+00:00",
+  "created_at_utc": "2026-06-13T05:08:27.125784+00:00",
   "external_proceedings_metadata_ready": false,
   "failures": [],
   "final_submission_ready": false,
   "gates": [
     {
-      "created_at_utc": "2026-06-13T04:49:51.073688+00:00",
+      "created_at_utc": "2026-06-13T05:08:09.919334+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_package",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T04:50:08.372986+00:00",
+      "created_at_utc": "2026-06-13T05:08:27.013934+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_metadata_packet",
@@ -54,7 +54,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-13T04:50:08.358167+00:00",
+      "created_at_utc": "2026-06-13T05:08:26.992290+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "submission_source_package_rebuild",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T04:49:50.660134+00:00",
+      "created_at_utc": "2026-06-13T05:08:09.444725+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "external_proceedings_metadata",
@@ -87,7 +87,7 @@
       "path": {
         "exists": true,
         "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260613.json",
-        "size_bytes": 21297
+        "size_bytes": 21295
       },
       "ready": false,
       "ready_field": "external_proceedings_metadata_ready",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "created_at_utc": "2026-06-13T04:50:08.398860+00:00",
+      "created_at_utc": "2026-06-13T05:08:27.050025+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "manual_submission_checklist",
@@ -131,7 +131,7 @@
       "warnings": []
     },
     {
-      "created_at_utc": "2026-06-13T04:15:15.226116+00:00",
+      "created_at_utc": "2026-06-13T05:08:03.571785+00:00",
       "failures": [],
       "final_submission_ready": false,
       "gate_id": "review_continuation",

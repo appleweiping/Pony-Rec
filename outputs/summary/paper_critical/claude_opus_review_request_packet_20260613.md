@@ -1,6 +1,6 @@
 # Claude Opus Review Request Packet
 
-- Created UTC: `2026-06-13T04:15:35.573789+00:00`
+- Created UTC: `2026-06-13T05:08:28.936887+00:00`
 - OK: `true`
 - Claude review needed: `true`
 - Existing score floor: `8.0`
@@ -192,6 +192,12 @@
     "valid_review_evidence": "Boolean; true only for a complete substantive review."
   }
 }
+```
+
+## Validation Command Before Attach
+
+```bash
+python -m scripts.audit.main_validate_claude_opus_review_json --review-json outputs/summary/paper_critical/claude_opus_review_20260613.json --output-json outputs/summary/paper_critical/claude_opus_review_validation_20260613.json --output-md outputs/summary/paper_critical/claude_opus_review_validation_20260613.md
 ```
 
 ## Follow-Up Command

@@ -272,15 +272,22 @@ def build_claude_review_request_packet(
             "recommended_path": "outputs/summary/paper_critical/claude_opus_review_20260613.json",
             "schema": EXPECTED_CLAUDE_REVIEW_SCHEMA,
             "must_count_as_coverage": [
-                "reviewer contains claude and opus",
+                "reviewer contains both claude and opus",
                 "valid_review_evidence is true",
                 "score_0_to_10 is present",
+                "score_0_to_10 is at least 8.0 for the review gate",
                 "claim_boundary_ok is true",
                 "final_submission_ready_claim_allowed is false while current blockers remain",
             ],
         },
         "claude_review_prompt": prompt,
         "claude_review_prompt_sha256": _sha256_text(prompt),
+        "validation_command_before_attach": (
+            "python -m scripts.audit.main_validate_claude_opus_review_json "
+            "--review-json outputs/summary/paper_critical/claude_opus_review_20260613.json "
+            "--output-json outputs/summary/paper_critical/claude_opus_review_validation_20260613.json "
+            "--output-md outputs/summary/paper_critical/claude_opus_review_validation_20260613.md"
+        ),
         "review_continuation_command_after_valid_review": " ".join(
             part
             for part in [
@@ -332,6 +339,12 @@ def render_markdown(packet: dict[str, Any]) -> str:
             "",
             "```json",
             packet["claude_review_prompt"],
+            "```",
+            "",
+            "## Validation Command Before Attach",
+            "",
+            "```bash",
+            packet["validation_command_before_attach"],
             "```",
             "",
             "## Follow-Up Command",

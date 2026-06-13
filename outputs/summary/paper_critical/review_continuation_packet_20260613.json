@@ -28,7 +28,7 @@
       "explicit_claude_opus_review"
     ]
   },
-  "created_at_utc": "2026-06-13T04:15:15.226116+00:00",
+  "created_at_utc": "2026-06-13T05:08:03.571785+00:00",
   "failed_review_attempt_paths": [
     {
       "exists": true,
@@ -202,7 +202,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "03cfccb2dfee816e244cda0ada1f50e17253fe2e47e6544673a606778f232b91",
+      "sha256": "e66fa71a4327db00a2ca23052dc8157ca34019a9b21cc7d6a3e0c17d3b964486",
       "size_bytes": 15406
     },
     "panel_review": {
@@ -216,21 +216,21 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
-      "sha256": "29b9693664dde36b394ce26aa77feec272a694c98efc24e960d77af864327958",
+      "sha256": "02a27bfb71ce959a42617d8bcaedf787ce6957eff354509646548fb715ec14fe",
       "size_bytes": 6963
     },
     "release_candidate_stack": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_release_candidate_stack_refresh_20260613.json",
-      "sha256": "b3028fb6e25c4a29dec7cffa038188f693b328b2e6b784eb3dfb925f22f1f84b",
+      "sha256": "a229eaf1f76b9e0b415afd6f68c11e2b86be621da9a34f31075a4242d4931814",
       "size_bytes": 10658
     },
     "submission_package_audit": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260613.json",
-      "sha256": "3da6309d33c1b6dd03e08c8f485b9d93f9bb11da596c02b08e4889030f4bc2f9",
+      "sha256": "4ada7c3ca7edf667b2b82a5d11b909ca7f3f7e3cab93ce1bd59eff8ccc437604",
       "size_bytes": 16084
     }
   },

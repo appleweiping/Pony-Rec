@@ -155,6 +155,11 @@ def _contains_any(value: str, needles: list[str]) -> bool:
     return any(needle in lower for needle in needles)
 
 
+def _is_explicit_claude_opus_name(value: str) -> bool:
+    lower = value.lower()
+    return "claude" in lower and "opus" in lower
+
+
 def _is_claude_review(review: dict[str, Any]) -> bool:
     return _contains_any(str(review.get("reviewer") or ""), ["claude", "opus"])
 
@@ -168,6 +173,8 @@ def _validate_additional_review(review: dict[str, Any]) -> tuple[bool, list[str]
     if score is None:
         failures.append("missing_score_0_to_10")
     if _is_claude_review(review):
+        if not _is_explicit_claude_opus_name(reviewer):
+            failures.append("claude_reviewer_not_explicit_opus")
         if review.get("valid_review_evidence") is not True:
             failures.append("claude_valid_review_evidence_not_true")
         if review.get("claim_boundary_ok") is not True:
@@ -208,7 +215,7 @@ def _reviewer_coverage(
     names = _reviewer_names(panel_review, additional_reviews)
     score_values = _score_values(panel_review, additional_reviews)
     score_floor = min(score_values) if score_values else None
-    explicit_claude = any(_contains_any(name, ["claude", "opus"]) for name in names)
+    explicit_claude = any(_is_explicit_claude_opus_name(name) for name in names)
     explicit_gpt55 = any(_contains_any(name, ["gpt-5.5", "gpt5.5", "meitner"]) for name in names)
     panel_count = len(panel_review.get("panel_reviews") or [])
     missing: list[str] = []

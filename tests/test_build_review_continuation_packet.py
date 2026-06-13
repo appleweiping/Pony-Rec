@@ -245,6 +245,44 @@ def test_minimal_claude_additional_review_is_not_coverage(tmp_path: Path) -> Non
     assert "explicit_claude_opus_review" in packet["remaining_blockers"]
 
 
+def test_claude_sonnet_additional_review_is_not_explicit_opus_coverage(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    claude = _write_json(
+        tmp_path / "claude_sonnet.json",
+        {
+            "reviewer": "claude-sonnet",
+            "score_0_to_10": 8.1,
+            "verdict": "CONDITIONAL_PASS",
+            "valid_review_evidence": True,
+            "claim_boundary_ok": True,
+            "final_submission_ready_claim_allowed": False,
+            "kill_argument": "Final blockers remain external/manual, not method evidence.",
+            "major_concerns": ["ProMax direct metadata remains unresolved."],
+            "required_changes": ["Keep final readiness false until final gates close."],
+            "remaining_blockers_acknowledged": ["promax:doi_resolver_not_visible"],
+        },
+    )
+
+    packet = build_review_continuation_packet(
+        root=tmp_path,
+        panel_review_json=paths["panel"].relative_to(tmp_path),
+        claim_audit_json=paths["claim"].relative_to(tmp_path),
+        submission_package_audit_json=paths["package"].relative_to(tmp_path),
+        release_candidate_stack_json=paths["stack"].relative_to(tmp_path),
+        closure_packet_json=paths["closure"].relative_to(tmp_path),
+        promax_probe_json=paths["promax"].relative_to(tmp_path),
+        additional_review_jsons=[claude.relative_to(tmp_path)],
+    )
+
+    assert packet["ok"] is True
+    assert packet["final_panel_coverage_complete"] is False
+    assert packet["reviewer_coverage"]["explicit_claude_opus_present"] is False
+    validation = packet["additional_review_validation"][0]
+    assert validation["counted_for_coverage"] is False
+    assert "claude_reviewer_not_explicit_opus" in validation["validation_failures"]
+    assert "explicit_claude_opus_review" in packet["remaining_blockers"]
+
+
 def test_failed_claude_attempt_is_recorded_but_not_coverage(tmp_path: Path) -> None:
     paths = _seed_inputs(tmp_path)
     failed = _write_json(

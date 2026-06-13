@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-13T04:50:28.753043+00:00
+Generated: 2026-06-13T05:08:28.669514+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -45,6 +45,7 @@ Closure conditions:
 
 Next commands:
 - `python -m scripts.audit.main_build_claude_review_request_packet --output-json outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.md`
+- `python -m scripts.audit.main_validate_claude_opus_review_json --review-json outputs/summary/paper_critical/valid_claude_opus_review_YYYYMMDD.json --output-json outputs/summary/paper_critical/claude_opus_review_validation_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_opus_review_validation_YYYYMMDD.md`
 - `python -m scripts.audit.main_build_review_continuation_packet --additional-review-json outputs/summary/paper_critical/valid_claude_opus_review_YYYYMMDD.json --output-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.md`
 - `python -m scripts.audit.main_build_final_submission_gate --review-continuation-packet-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md`
 
@@ -85,7 +86,7 @@ Current ProMax evidence:
 - DOI resolver status: `404`
 
 Latest public probe:
-- Created: `2026-06-13T04:49:27.783097+00:00`
+- Created: `2026-06-13T05:02:37.123126+00:00`
 - ProMax public metadata ready: `false`
 - Crossref status: `404`
 - DOI resolver status: `404`
