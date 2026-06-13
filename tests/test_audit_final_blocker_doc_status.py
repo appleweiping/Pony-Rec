@@ -19,6 +19,10 @@ def _write_json(path: Path, payload: dict) -> Path:
 
 
 def _consistency(tmp_path: Path) -> Path:
+    return _consistency_with_count(tmp_path, 9)
+
+
+def _consistency_with_count(tmp_path: Path, count: int) -> Path:
     return _write_json(
         tmp_path / "out" / "final_blocker_consistency_audit_20260613.json",
         {
@@ -26,7 +30,7 @@ def _consistency(tmp_path: Path) -> Path:
             "final_blocker_consistency_ok": True,
             "final_submission_ready": False,
             "summary": {
-                "review_failed_claude_attempt_count": 9,
+                "review_failed_claude_attempt_count": count,
                 "explicit_claude_opus_present": False,
                 "final_panel_coverage_complete": False,
                 "promax_public_metadata_ready": False,
@@ -67,6 +71,20 @@ Historical line outside current section: failed Claude attempts `8`.
 """
 
 
+def _current_body_with_count(count: int) -> str:
+    return f"""
+## Current Checkpoint (2026-06-13)
+
+`final_submission_ready=false`. The refreshed packet now records failed Claude attempts `{count}`.
+`explicit_claude_opus_present=false` and `final_panel_coverage_complete=false`.
+`promax_public_metadata_ready=false`; Crossref `404` / DOI resolver `404` / ACM DL `403`.
+`manual_confirmation_needed=true` and `manual_submission_system_ready=false`.
+recursive warning regressions `0`.
+
+## Hard Invariants
+"""
+
+
 def test_doc_status_audit_passes_when_current_sections_match_latest_truth(tmp_path: Path) -> None:
     consistency = _consistency(tmp_path)
     docs = [
@@ -102,6 +120,7 @@ def test_doc_status_audit_passes_when_current_sections_match_latest_truth(tmp_pa
 
     assert audit["ok"] is True
     assert audit["final_submission_ready"] is False
+    assert audit["expected_current_truth"]["final_submission_ready"] is False
     assert audit["expected_current_truth"]["failed_claude_attempts"] == 9
 
 
@@ -192,3 +211,17 @@ This is now the compact first-read artifact for the two remaining blocker classe
 
     assert audit["ok"] is False
     assert any("stale_blocker_taxonomy" in failure for failure in audit["failures"])
+
+
+def test_doc_status_audit_treats_ten_as_complete_count_not_one(tmp_path: Path) -> None:
+    consistency = _consistency_with_count(tmp_path, 10)
+    doc = _doc(tmp_path, "docs/active_todo_pony_uncertainty.md", _current_body_with_count(10))
+
+    audit = audit_final_blocker_doc_status(
+        root=tmp_path,
+        consistency_audit_json=consistency.relative_to(tmp_path),
+        docs=[doc.relative_to(tmp_path)],
+    )
+
+    assert audit["ok"] is True
+    assert audit["doc_results"]["docs/active_todo_pony_uncertainty.md"]["stale_count_hits"] == []

@@ -103,14 +103,19 @@ PIDs, audit summaries, and missing-file errors.
    `a3863723466147e9b9b849cf994ca8fd`, again failed with
    `Claude CLI did not return JSON output` and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_ninth_20260613.json`.
-   The current packet reports nine failed attempts and still keeps
+   A tenth asynchronous call with `mcp__claude_review.review_start`, job
+   `b6e19654680c457d8be4845e168ce251`, again failed with the same connector
+   error and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_tenth_20260613.json`.
+   The current packet reports ten failed attempts and still keeps
    `explicit_claude_opus_present=false`. Use the new public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
    before trying another Claude route; it was refreshed at
-   `2026-06-13T03:28:45Z`, records nine failed Claude attempts, contains the
-   exact prompt/schema for a valid additional review JSON, and is not itself
-   reviewer coverage. The
+   `2026-06-13T04:15:35Z`, records ten failed Claude attempts, contains the
+   exact prompt/schema for a valid additional review JSON, dynamically includes
+   all recorded failed-attempt artifacts in the follow-up command, and is not
+   itself reviewer coverage. The
    review-continuation builder now validates additional reviewer JSONs before
    counting them for panel coverage; a Claude/Opus JSON must be complete
    substantive evidence (`valid_review_evidence=true`, scoped claim boundary,
@@ -169,8 +174,9 @@ PIDs, audit summaries, and missing-file errors.
    SIGIR accepted-paper page, the UQ author-profile page, the author Google
    Sites publications page, and the UQ Experts profile source probes all pass.
    Follow-up live probes at `2026-06-13T00:49:05Z`,
-   `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`, and
-   `2026-06-13T03:16:11Z` found the same direct blocker state. After the
+   `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
+   `2026-06-13T03:16:11Z`, and `2026-06-13T04:11:37Z` found the same direct
+   blocker state. After the
    latest probe, the closure packet refreshed most recently at
    `2026-06-13T03:28:25Z`;
    the closure Markdown now lists those latest public source probes. This is

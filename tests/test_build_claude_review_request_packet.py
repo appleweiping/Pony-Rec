@@ -44,6 +44,10 @@ def test_claude_review_request_packet_preserves_missing_claude_gap(tmp_path: Pat
                     "source": "test",
                 }
             ],
+            "failed_review_attempt_paths": [
+                {"path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_20260613.json"},
+                {"path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_retry_20260613.json"},
+            ],
         },
     )
     panel = _write_json(
@@ -97,6 +101,8 @@ def test_claude_review_request_packet_preserves_missing_claude_gap(tmp_path: Pat
     assert "valid_review_evidence" in packet["expected_additional_review_json"]["schema"]
     assert "promax:doi_resolver_not_visible:status=404" in packet["claude_review_prompt"]
     assert "final_submission_ready_claim_allowed" in packet["claude_review_prompt"]
+    assert "claude_opus_review_attempt_20260613.json" in packet["review_continuation_command_after_valid_review"]
+    assert "claude_opus_review_attempt_retry_20260613.json" in packet["review_continuation_command_after_valid_review"]
     assert packet["will_start_experiment"] is False
 
 

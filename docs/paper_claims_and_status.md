@@ -167,7 +167,8 @@ so the packet at that point exposed five failed Claude attempts while preserving
 `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
 as a public-safe prompt/schema handoff for the next valid Claude Opus review.
 After the ninth failed connector attempt, the request packet was refreshed at
-`2026-06-13T03:28:45Z` and now records nine failed Claude attempts. The
+`2026-06-13T03:28:45Z` and, at that point, recorded nine failed Claude
+attempts. The tenth-attempt refresh below supersedes that count. The
 request packet is not reviewer coverage and does not close final
 readiness. The review-continuation packet builder now validates additional
 reviewer JSONs before counting them for panel coverage: a Claude/Opus review
@@ -190,15 +191,20 @@ disabled, and a short JSON-only prompt; the job
 `b1b88420168a4e498029a00a8695098a` failed with the same connector-layer error
 and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
-The refreshed review-continuation packet now reports eight
+At that point, the refreshed review-continuation packet reported eight
 failed attempts while keeping `explicit_claude_opus_present=false`.
 Codex then retried a ninth asynchronous Claude call through
 `mcp__claude_review.review_start`; job
 `a3863723466147e9b9b849cf994ca8fd` failed with the same connector-layer
 `Claude CLI did not return JSON output` error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_ninth_20260613.json`.
+Codex then retried a tenth asynchronous Claude Opus call through
+`mcp__claude_review.review_start`; job
+`b6e19654680c457d8be4845e168ce251` failed with the same connector-layer
+`Claude CLI did not return JSON output` error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_tenth_20260613.json`.
 The refreshed review-continuation packet and Claude request packet now record
-failed Claude attempts `9`, still with `explicit_claude_opus_present=false`,
+failed Claude attempts `10`, still with `explicit_claude_opus_present=false`,
 `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
@@ -245,7 +251,7 @@ Codex then added
 as a cross-packet consistency check over the final gate, release stack, closure
 packet, review-continuation packet, Claude request packet, ProMax probe, and
 manual request packet. The audit reports `ok=true`,
-`final_blocker_consistency_ok=true`, failed Claude attempts `9`,
+`final_blocker_consistency_ok=true`, failed Claude attempts `10`,
 `explicit_claude_opus_present=false`, ProMax public metadata still false with
 Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
 needed, recursive warning regressions `0`, and
@@ -258,7 +264,7 @@ Codex then added
 as the matching canonical-doc status guard. The audit reports `ok=true` and
 `final_blocker_doc_status_ok=true` for the current sections of the active TODO,
 claim/status doc, milestone README, and server runbook, while requiring the
-latest failed-Claude count `9`, explicit Claude missing state, ProMax
+latest failed-Claude count `10`, explicit Claude missing state, ProMax
 `404/404/403` blocked state, private manual blocked state, recursive warning
 regressions `0`, and `final_submission_ready=false`. It prevents historical
 eight-attempt or two-blocker wording from reading like current truth.

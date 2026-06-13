@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 06:01 CEST
+Last updated: 2026-06-13 06:18 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -18,13 +18,13 @@ cycle.
   `docs/paper_claims_and_status.md`, `docs/milestones/README.md`, and
   `docs/server_runbook.md` against
   `final_blocker_consistency_audit_20260613.json`. It reports `ok=true`,
-  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `9`,
+  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `10`,
   `explicit_claude_opus_present=false`,
   `promax_public_metadata_ready=false`,
   `manual_submission_system_ready=false`, recursive warning regressions `0`,
   and `final_submission_ready=false`. It also catches current/handoff text that
-  still says `8`, `three`, or old two-class blocker taxonomy unless the text is
-  explicitly historical and superseded.
+  still says `9`, `8`, `three`, or old two-class blocker taxonomy unless the
+  text is explicitly historical and superseded.
 
 - 2026-06-13 final-blocker consistency audit:
   Codex added `scripts/audit/main_audit_final_blocker_consistency.py` plus
@@ -35,7 +35,7 @@ cycle.
   request packet, ProMax probe, and manual confirmation request packet agree on
   the current blocked state. The current audit reports `ok=true`,
   `final_blocker_consistency_ok=true`, `final_submission_ready=false`, failed
-  Claude attempts `9`, `explicit_claude_opus_present=false`,
+  Claude attempts `10`, `explicit_claude_opus_present=false`,
   `promax_public_metadata_ready=false`, ProMax direct statuses
   Crossref `404` / DOI resolver `404` / ACM DL `403`,
   `manual_confirmation_needed=true`, and recursive warning regressions `0`.
@@ -47,19 +47,22 @@ cycle.
   experiment; C-CRP v3 still reports all-domain completion, while the GPU is
   occupied by an unrelated TGL-Rec process that must not be touched. The live
   ProMax public metadata probe was refreshed at
-  `2026-06-13T03:16:11Z`: `ok=true`,
+  `2026-06-13T04:11:37Z`: `ok=true`,
   `promax_public_metadata_ready=false`, Crossref remains `404`, DOI resolver
   remains `404`, ACM DL remains `403`, and all `5/5` auxiliary source probes
   still pass. Codex also retried the explicit Claude Opus route with
   `mcp__claude_review.review_start`; job
-  `a3863723466147e9b9b849cf994ca8fd` again failed at the connector layer with
+  `b6e19654680c457d8be4845e168ce251` again failed at the connector layer with
   `Claude CLI did not return JSON output`. The failure is recorded at
-  `outputs/summary/paper_critical/claude_opus_review_attempt_ninth_20260613.json`
+  `outputs/summary/paper_critical/claude_opus_review_attempt_tenth_20260613.json`
   with `valid_review_evidence=false`; the refreshed
   `review_continuation_packet_20260613.{json,md}` and
   `claude_opus_review_request_packet_20260613.{json,md}` now record failed
-  Claude attempts `9`, `explicit_claude_opus_present=false`, and
-  `final_panel_coverage_complete=false`.
+  Claude attempts `10`, `explicit_claude_opus_present=false`, and
+  `final_panel_coverage_complete=false`. Codex also fixed
+  `scripts/audit/main_build_claude_review_request_packet.py` so the follow-up
+  command dynamically includes all recorded failed-attempt artifacts instead of
+  a stale hard-coded subset.
 
 - 2026-06-13 release-stack warning normalization fix:
   While refreshing the release-candidate stack, Codex found recursive warning
@@ -120,7 +123,7 @@ cycle.
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
   `review_continuation_packet_20260613.{json,md}` now reports
-  `review_continuation_ready=true`, failed Claude attempts `9`,
+  `review_continuation_ready=true`, failed Claude attempts `10`,
   `explicit_claude_opus_present=false`, and
   `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
   veto the hardening, but flagged that the pre-submission freshness audit must

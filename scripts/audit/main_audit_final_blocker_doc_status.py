@@ -149,14 +149,15 @@ def _stale_count_hits(section: str, *, latest_count: int, start_line: int) -> li
             continue
         for stale_count in range(1, latest_count):
             stale_word = NUMBER_WORDS.get(stale_count, str(stale_count))
+            stale_number = rf"(?<!\d){stale_count}(?!\d)"
             patterns = [
-                rf"failed\s+Claude\s+attempts\s+`?{stale_count}`?",
-                rf"failed_review_attempts`\s+count\s+`?{stale_count}`?",
+                rf"failed\s+Claude\s+attempts\s+`?{stale_number}`?",
+                rf"failed_review_attempts`\s+count\s+`?{stale_number}`?",
                 rf"current\s+packet\s+reports\s+{stale_word}\s+failed",
                 rf"now\s+records\s+{stale_word}\s+failed",
-                rf"now\s+records\s+failed\s+Claude\s+attempts\s+`?{stale_count}`?",
+                rf"now\s+records\s+failed\s+Claude\s+attempts\s+`?{stale_number}`?",
                 rf"now\s+reports\s+{stale_word}\s+failed",
-                rf"refreshed\s+packet\s+reports.*`?{stale_count}`?",
+                rf"refreshed\s+packet\s+reports.*`?{stale_number}`?",
             ]
             if any(re.search(pattern, line, flags=re.IGNORECASE) for pattern in patterns):
                 hits.append(
@@ -252,7 +253,7 @@ def audit_final_blocker_doc_status(
     summary = consistency.get("summary") or {}
     latest_count = int(summary.get("review_failed_claude_attempt_count") or 0)
     expected = {
-        "final_submission_ready": consistency.get("final_submission_ready") is False,
+        "final_submission_ready": consistency.get("final_submission_ready"),
         "failed_claude_attempts": latest_count,
         "explicit_claude_opus_present": summary.get("explicit_claude_opus_present"),
         "final_panel_coverage_complete": summary.get("final_panel_coverage_complete"),

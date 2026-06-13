@@ -1,6 +1,6 @@
 # Final Submission Blocker Closure Packet
 
-Generated: 2026-06-13T03:28:25.723087+00:00
+Generated: 2026-06-13T04:16:37.995929+00:00
 
 - OK: `true`
 - Closure packet ready: `true`
@@ -9,7 +9,7 @@ Generated: 2026-06-13T03:28:25.723087+00:00
 - External proceedings metadata ready: `false`
 - Manual submission system ready: `false`
 - Review panel coverage complete: `false`
-- Remaining blocker count: `13`
+- Remaining blocker count: `9`
 
 ## Closure Groups
 
@@ -35,8 +35,7 @@ Next commands:
 - Can close without private data: `true`
 
 Remaining blockers:
-- review_panel_coverage_not_complete
-- explicit_claude_opus_review
+- None
 
 Closure conditions:
 - Capture a substantive explicit Claude Opus review JSON that satisfies the review-continuation schema.
@@ -61,8 +60,6 @@ Remaining blockers:
 - promax:doi_resolver_not_visible:status=404
 - external_proceedings_metadata_not_ready
 - confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
-- promax:crossref_registry_not_visible
-- promax:doi_resolver_not_visible
 
 Closure conditions:
 - Add the final ProMax ACM page range to Paper/references.bib when it is public.
@@ -83,20 +80,6 @@ Current ProMax evidence:
 - Location: `Melbourne, VIC, Australia`
 - Crossref status: `404`
 - DOI resolver status: `404`
-
-Latest public probe:
-- Created: `2026-06-13T03:16:11.170702+00:00`
-- ProMax public metadata ready: `false`
-- Crossref status: `404`
-- DOI resolver status: `404`
-- ACM DL status: `403`
-
-Latest public source probes:
-- `arxiv_html_promax_acm_metadata`: ok=`true`, status=`200`, missing=``
-- `sigir2026_accepted_papers_promax`: ok=`true`, status=`200`, missing=``
-- `uq_author_profile_promax_sigir2026`: ok=`true`, status=`200`, missing=``
-- `author_publications_promax_sigir2026`: ok=`true`, status=`200`, missing=``
-- `uq_experts_profile_promax_sigir2026`: ok=`true`, status=`200`, missing=``
 
 ### manual_submission_system
 
@@ -121,7 +104,7 @@ Next commands:
 - `python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --manual-private-confirmation-json path/to/untracked_private_confirmation.json --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md`
 
 Manual confirmation safe fields:
-- Source manifest sha256: `91d1d6495fe3fa85608d7711fb5873730d907237242b3b3fa489c6f1ed516424`
+- Source manifest sha256: `795aa65895cf06452a3cf48b6519bece473cd61fc2ee33c2becb7c2d8b2e79cc`
 - Unconfirmed item IDs: `select_track_and_paper_type, paste_title, paste_abstract, paste_keywords, select_topic_areas, upload_pdf, upload_source_if_required, confirm_anonymous_shell, enter_authors, complete_conflicts, complete_reviewer_preferences, complete_declarations, final_preview_and_submit`
 - Private item IDs: `enter_authors, complete_conflicts, complete_reviewer_preferences, complete_declarations, final_preview_and_submit`
 
@@ -136,10 +119,6 @@ Manual confirmation safe fields:
 - manual_submission_system_not_ready
 - confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
 - manual_submission_system_items_not_confirmed
-- review_panel_coverage_not_complete
-- promax:crossref_registry_not_visible
-- promax:doi_resolver_not_visible
-- explicit_claude_opus_review
 
 ## Failures
 

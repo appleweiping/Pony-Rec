@@ -128,6 +128,18 @@ def _failed_attempt_summary(review_packet: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _failed_attempt_command_args(review_packet: dict[str, Any]) -> str:
+    paths: list[str] = []
+    for state in _as_list(review_packet.get("failed_review_attempt_paths")):
+        if isinstance(state, dict):
+            path = str(state.get("path") or "").strip()
+            if path:
+                paths.append(path.replace("\\", "/"))
+    seen: set[str] = set()
+    deduped = [path for path in paths if not (path in seen or seen.add(path))]
+    return " ".join(f"--failed-review-attempt-json {path}" for path in deduped)
+
+
 def _build_prompt(
     *,
     review_packet: dict[str, Any],
@@ -269,14 +281,14 @@ def build_claude_review_request_packet(
         },
         "claude_review_prompt": prompt,
         "claude_review_prompt_sha256": _sha256_text(prompt),
-        "review_continuation_command_after_valid_review": (
-            "python -m scripts.audit.main_build_review_continuation_packet "
-            "--additional-review-json outputs/summary/paper_critical/claude_opus_review_20260613.json "
-            "--failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json "
-            "--failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json "
-            "--failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json "
-            "--failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json "
-            "--failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json"
+        "review_continuation_command_after_valid_review": " ".join(
+            part
+            for part in [
+                "python -m scripts.audit.main_build_review_continuation_packet",
+                "--additional-review-json outputs/summary/paper_critical/claude_opus_review_20260613.json",
+                _failed_attempt_command_args(review_packet),
+            ]
+            if part
         ),
         "notes": [
             "This packet is a request artifact only; it is not valid Claude review coverage.",

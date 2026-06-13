@@ -1,6 +1,6 @@
 # External Proceedings Metadata Audit
 
-Generated: 2026-06-13T03:27:48.931484+00:00
+Generated: 2026-06-13T04:15:59.217565+00:00
 
 - OK: `true`
 - External proceedings metadata ready: `false`
@@ -63,8 +63,8 @@ Warnings:
 - Discovery policy: Discovery candidates are advisory only. They help detect newly public or changed metadata, but they do not by themselves satisfy the exact BibTeX page-range, DOI resolver, or Crossref final-readiness gates.
 - Discovery query `crossref_title_search_promax`: ok=`true`, status=`200`, candidates=`5`, error=``
   - candidate doi=`10.26481/dis.20220324sh`, year=`None`, pages=``, expected_doi_match=`false`, title=`Health recommender systems for behavior change`
-  - candidate doi=`10.1145/3701716.3717734`, year=`2025`, pages=`2102-2111`, expected_doi_match=`false`, title=`Improving LLM-Based Recommender Systems with User-Controllable Profiles`
   - candidate doi=`10.1007/978-3-032-01152-7_4`, year=`2025`, pages=`99-129`, expected_doi_match=`false`, title=`LLM as Recommender`
+  - candidate doi=`10.1145/3701716.3717734`, year=`2025`, pages=`2102-2111`, expected_doi_match=`false`, title=`Improving LLM-Based Recommender Systems with User-Controllable Profiles`
 
 Blockers:
 - `promax:final_page_range_missing_in_bib`
