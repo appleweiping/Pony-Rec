@@ -29,7 +29,7 @@
     ],
     "other": []
   },
-  "created_at_utc": "2026-06-13T00:19:59.312402+00:00",
+  "created_at_utc": "2026-06-13T00:35:24.435985+00:00",
   "failed_review_attempt_paths": [
     {
       "exists": true,
@@ -58,6 +58,13 @@
       "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_sync_notools_20260613.json",
       "sha256": "bfbad83626fb9d1e381f5d66ab1e9442174688560df1a3b08787f9f0588eb141",
       "size_bytes": 559
+    },
+    {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\claude_opus_review_attempt_minimal_json_20260613.json",
+      "sha256": "d22cf9810eafd2073f025e84397993497bf5952dc4fa62cde251d42116eb5db7",
+      "size_bytes": 599
     }
   ],
   "failed_review_attempts": [
@@ -86,6 +93,13 @@
       "error": "Claude CLI did not return JSON output",
       "reviewer": "claude-opus",
       "source": "mcp__claude_review.review synchronous call with tools disabled",
+      "status": "failed",
+      "valid_review_evidence": false
+    },
+    {
+      "error": "Claude CLI did not return JSON output",
+      "reviewer": "claude-opus",
+      "source": "mcp__claude_review.review minimal JSON-oriented no-tools call",
       "status": "failed",
       "valid_review_evidence": false
     }

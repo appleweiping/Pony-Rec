@@ -1,0 +1,11 @@
+{
+  "completed_at_utc": "2026-06-13T00:32:00+00:00",
+  "error": "Claude CLI did not return JSON output",
+  "model": "opus",
+  "notes": "Fifth attempt used the newly rediscovered mcp__claude_review.review tool with a minimal evidence summary, tools disabled, and JSON-oriented review fields in the prompt. It failed at the Claude CLI/connector layer and is not valid reviewer coverage.",
+  "reviewer": "claude-opus",
+  "source": "mcp__claude_review.review minimal JSON-oriented no-tools call",
+  "started_at_utc": "2026-06-13T00:31:59+00:00",
+  "status": "failed",
+  "valid_review_evidence": false
+}

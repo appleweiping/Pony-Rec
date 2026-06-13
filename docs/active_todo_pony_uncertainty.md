@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 02:21 CEST
+Last updated: 2026-06-13 02:40 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -39,8 +39,17 @@ cycle.
   no-tools Claude review call failed with the same `Claude CLI did not return
   JSON output` error and is recorded at
   `outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`.
-  The refreshed packet reports `failed_review_attempts` count `4` while keeping
-  `explicit_claude_opus_present=false`.
+  A fifth minimal JSON-oriented, no-tools `mcp__claude_review.review` call also
+  failed at the Claude CLI/connector layer and is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`.
+  The refreshed packet reports `failed_review_attempts` count `5` while keeping
+  `explicit_claude_opus_present=false`. Codex added
+  `scripts/audit/main_build_claude_review_request_packet.py` and generated
+  `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
+  so the next valid Claude Opus review can be requested with a stable
+  public-safe prompt and then attached through `--additional-review-json`.
+  This request packet is not reviewer coverage and does not close final
+  readiness.
 
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
   `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`

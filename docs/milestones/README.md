@@ -174,8 +174,15 @@ The review-continuation packet now records three failed Claude attempts
 separately from valid reviewer JSONs. A fourth synchronous no-tools Claude
 review call failed with the same error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`;
-the refreshed packet records four failed attempts and still keeps
-`explicit_claude_opus_present=false`. The submission package
+the fifth minimal JSON-oriented no-tools Claude call failed at the same
+CLI/connector layer and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`.
+The refreshed packet records five failed attempts and still keeps
+`explicit_claude_opus_present=false`. Codex also added
+`scripts/audit/main_build_claude_review_request_packet.py`, generating
+`outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
+as a public-safe prompt/schema handoff for a future valid Claude Opus review;
+this request packet is not reviewer coverage. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
 non-anonymous-author, or non-anonymous-affiliation hits. The manual submission

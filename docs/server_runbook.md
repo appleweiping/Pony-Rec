@@ -80,8 +80,15 @@ PIDs, audit summaries, and missing-file errors.
    reviewer attempts separately from valid reviewer JSONs. A fourth synchronous
    no-tools Claude review call failed with the same error and is recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`;
-   the current packet reports four failed attempts and still keeps
-   `explicit_claude_opus_present=false`.
+   a fifth minimal JSON-oriented no-tools call failed at the same
+   CLI/connector layer and is recorded at
+   `outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`.
+   The current packet reports five failed attempts and still keeps
+   `explicit_claude_opus_present=false`. Use the new public-safe request packet
+   at
+   `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
+   before trying another Claude route; it contains the exact prompt/schema for
+   a valid additional review JSON and is not itself reviewer coverage.
    The latest `Paper/main.pdf` compiles to 9 pages /
    546716 bytes with visible
    official-baseline provenance, all-metric rank-first, and four-domain
@@ -118,10 +125,10 @@ PIDs, audit summaries, and missing-file errors.
    `failures=[]`, and `final_submission_ready=false`; the freshness audit has
    zero input or generated-gate mismatches, and the independent source-package
    rebuild produces a `9`-page PDF with zero BibTeX and overfull hbox warnings.
-   The current priority is to capture explicit Claude Opus reviewer output if
-   available, then keep monitoring the ProMax public metadata and private manual
-   submission-system blockers. Do not claim final readiness until the final
-   submission gate reports true.
+   The current priority is to capture explicit Claude Opus reviewer output
+   using the request packet if available, then keep monitoring the ProMax public
+   metadata and private manual submission-system blockers. Do not claim final
+   readiness until the final submission gate reports true.
 3. Treat performance/table evidence as complete for the current same-candidate
    claim: C-CRP v3 has eight-domain reports; Sports/Toys/Home/Tools each have
    all eight official-code-level baseline rows complete; the four-new-domain
@@ -199,6 +206,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_build_final_paper_claim_audit.py` | Local-only final evidence-to-claim gate for the current paper-facing evidence package; emits supported/contradicted/unsupported claim rows and citation/manuscript readiness status without SSH or experiment execution |
 | `scripts/audit/main_build_final_citation_spot_check.py` | Local-only ARIS citation spot-check over the current TeX aux/BibTeX files; verifies cited/bibliography key counts, missing/uncited keys, BibTeX warnings, official-baseline citation coverage, and keeps final readiness false while metadata blockers remain |
 | `scripts/audit/main_build_review_continuation_packet.py` | Local-only review-continuation handoff over the full-panel review, claim audit, submission package audit, release-candidate stack, closure packet, ProMax probe, and optional fresh reviewer JSONs; records score floor, missing reviewer perspectives, and final-blocked status |
+| `scripts/audit/main_build_claude_review_request_packet.py` | Local-only request-packet builder for the missing explicit Claude Opus review; emits a public-safe prompt, expected JSON schema, failed-attempt summary, and follow-up command without counting as reviewer coverage |
 | `scripts/analysis/main_build_paper_result_tables.py` | Local-only paper-table builder for the visible complete NDCG@10 ranking over all eight official baselines plus C-CRP and the per-domain paired-test summary; reads existing local CSV evidence only |
 | `scripts/audit/main_audit_submission_package.py` | Local read-only package/source/PDF gate for the anonymous ACM submission package; verifies source closure, local figures, BibTeX/build health, profile constraints, source manifest, final-panel evidence, external metadata blockers, and privacy-preserving anonymous source leak scan counts |
 | `scripts/audit/main_build_submission_source_package.py` | Local-only anonymous source-package staging builder; copies exactly the audited `source_package_manifest` files into ignored `artifacts/`, validates hashes/sizes/git allowlist/private-path exclusions/exact tree replacement, and writes a compact JSON/MD manifest without changing final submission readiness |

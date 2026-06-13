@@ -152,8 +152,16 @@ separately from valid reviewer JSONs. A fourth synchronous no-tools Claude
 review call failed with the same `Claude CLI did not return JSON output` error
 and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`,
-so the refreshed packet exposes four
-failed Claude attempts while preserving `explicit_claude_opus_present=false`.
+and a fifth minimal JSON-oriented no-tools call failed the same way at the
+Claude CLI/connector layer. The fifth failure is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json`,
+so the refreshed packet exposes five failed Claude attempts while preserving
+`explicit_claude_opus_present=false`. Codex added
+`scripts/audit/main_build_claude_review_request_packet.py` and generated
+`outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
+as a public-safe prompt/schema handoff for the next valid Claude Opus review.
+The request packet is not reviewer coverage and does not close final
+readiness.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

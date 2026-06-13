@@ -1,0 +1,93 @@
+{
+  "claude_review_needed": true,
+  "claude_review_prompt": "{\n  \"review_role\": \"Claude Opus independent hostile top-conference reviewer\",\n  \"claim_scope\": \"Task-grounded calibrated uncertainty improves controlled same-candidate candidate ranking/reranking reliability. Do not expand this into a full-catalog recommender SOTA claim.\",\n  \"evidence_summary\": {\n    \"official_same_candidate_rows\": \"32 official baseline rows + 4 C-CRP rows on sports/toys/home/tools\",\n    \"protocol\": \"10k users per new domain, 101 same candidates, Qwen3-8B backbone, full @5/@10/@20 + MRR metrics\",\n    \"comparison_result\": \"C-CRP rank 1 on all 7 metrics with 56/56 positive Holm-significant paired tests per domain\",\n    \"phase_2_5_limits\": [\n      \"observation module is motivation-only, not causal or SOTA evidence\",\n      \"component ablation is supplementary diagnostic-only; do not claim every component is necessary\",\n      \"hyperparameter analysis is supplementary stability/sensitivity evidence\"\n    ]\n  },\n  \"panel_state\": {\n    \"existing_panel_score_floor\": 8.0,\n    \"existing_reviewers\": [\n      \"Faraday existing subagent\",\n      \"Avicenna existing subagent\",\n      \"Meitner existing subagent\",\n      \"gpt-5.5-xhigh\"\n    ],\n    \"panel_consensus\": {\n      \"score_floor\": \"8.0/10\",\n      \"score_ceiling\": \"8.3/10\",\n      \"verdict\": \"weak_accept_conditional_pass_under_scope_guards\",\n      \"new_experiment_required\": false,\n      \"claim_boundary_ok\": true,\n      \"final_submission_ready\": false\n    },\n    \"explicit_claude_opus_present\": false,\n    \"missing_perspectives\": [\n      \"explicit_claude_opus_review\"\n    ],\n    \"failed_claude_attempts\": {\n      \"count\": 5,\n      \"unique_errors\": [\n        \"Claude CLI did not return JSON output\"\n      ],\n      \"sources\": [\n        \"mcp__claude_review.review_start job 999276b352b940c0b957e3be212f9919\",\n        \"mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c\",\n        \"mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357\",\n        \"mcp__claude_review.review synchronous call with tools disabled\",\n        \"mcp__claude_review.review minimal JSON-oriented no-tools call\"\n      ]\n    },\n    \"gpt55_verdict\": \"CONDITIONAL_PASS\",\n    \"gpt55_score_0_to_10\": 8.0,\n    \"gpt55_critical_blockers\": [\n      \"Final submission gate is explicitly false: external proceedings metadata and manual submission-system gates remain open.\",\n      \"ProMax final ACM page range is missing; Crossref /works and DOI resolver for 10.1145/3805712.3809600 still return 404.\",\n      \"Private manual submission-system confirmation is not completed; author/COI/reviewer/declaration/final-preview fields remain manual/private pending.\"\n    ]\n  },\n  \"claim_audit_state\": {\n    \"ok\": true,\n    \"paper_evidence_ready_for_drafting\": true,\n    \"final_submission_ready\": false,\n    \"claim_status_counts\": {\n      \"SUPPORTED\": 6,\n      \"CONTRADICTED\": 2,\n      \"UNSUPPORTED\": 2\n    },\n    \"non_supported_or_contradicted_claims\": [\n      {\n        \"id\": \"C5\",\n        \"status\": \"CONTRADICTED\",\n        \"allowed_wording\": \"Do not make this claim.\",\n        \"forbidden_wording\": \"necessary; essential; each component contributes; removing any component hurts\"\n      },\n      {\n        \"id\": \"C7\",\n        \"status\": \"CONTRADICTED\",\n        \"allowed_wording\": \"Do not claim risk-penalty necessity; discuss eta as stable/sensitivity-only.\",\n        \"forbidden_wording\": \"eta must be positive; risk penalty is necessary; risk penalty uniformly improves\"\n      },\n      {\n        \"id\": \"C9\",\n        \"status\": \"UNSUPPORTED\",\n        \"allowed_wording\": \"Evidence is ready for strict paper drafting and subsequent manuscript-level claim/citation review.\",\n        \"forbidden_wording\": \"submission-ready; final READY; cleared for camera-ready\"\n      },\n      {\n        \"id\": \"C10\",\n        \"status\": \"UNSUPPORTED\",\n        \"allowed_wording\": \"Controlled same-candidate ranking/reranking reliability under the tested protocol.\",\n        \"forbidden_wording\": \"full-catalog SOTA; universal cross-domain winner beyond tested same-candidate domains\"\n      }\n    ]\n  },\n  \"current_gates\": {\n    \"review_continuation_ready\": true,\n    \"local_release_candidate_ready\": true,\n    \"final_submission_ready\": false,\n    \"gate_summary\": {\n      \"claim_audit_ok\": true,\n      \"closure_other_blockers\": [],\n      \"closure_packet_ok\": true,\n      \"external_proceedings_metadata_ready\": false,\n      \"manual_submission_system_ready\": false,\n      \"panel_ok\": true,\n      \"promax_probe_expected_blocked\": true,\n      \"promax_public_metadata_ready\": false,\n      \"release_candidate_stack_ok\": true,\n      \"submission_package_audit_ok\": true\n    },\n    \"classified_remaining_blockers\": {\n      \"external_proceedings_metadata\": [\n        \"ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.\",\n        \"promax:final_page_range_missing_in_bib\",\n        \"promax:crossref_registry_not_visible:status=404\",\n        \"promax:doi_resolver_not_visible:status=404\",\n        \"external_proceedings_metadata_not_ready\",\n        \"confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed\"\n      ],\n      \"manual_submission_system\": [\n        \"Final manual submission-system metadata/format checklist is not closed.\",\n        \"manual_submission_system_not_ready\",\n        \"manual_submission_system_items_not_confirmed\"\n      ],\n      \"other\": []\n    }\n  },\n  \"review_instructions\": [\n    \"Return a single JSON object matching the requested schema; do not include markdown.\",\n    \"Be strict and identify the strongest remaining kill argument.\",\n    \"Do not waive ProMax public proceedings metadata blockers.\",\n    \"Do not waive private manual submission-system blockers.\",\n    \"Set final_submission_ready_claim_allowed=false unless all final gates are genuinely closed.\",\n    \"A score below 8.0 is allowed if the evidence does not satisfy top-conference standards.\"\n  ],\n  \"required_output_schema\": {\n    \"reviewer\": \"Must include claude and opus, e.g. claude-opus.\",\n    \"created_at_utc\": \"ISO-8601 UTC timestamp.\",\n    \"source\": \"Tool, thread, or manual channel that produced the review.\",\n    \"score_0_to_10\": \"Numeric top-conference review score.\",\n    \"verdict\": \"ACCEPT, WEAK_ACCEPT, CONDITIONAL_PASS, BORDERLINE, WEAK_REJECT, or REJECT.\",\n    \"claim_boundary_ok\": \"Boolean; true only if scoped same-candidate claim is respected.\",\n    \"final_submission_ready_claim_allowed\": \"Boolean; must stay false while final gates are open.\",\n    \"kill_argument\": \"The strongest remaining rejection argument.\",\n    \"major_concerns\": \"Array of concrete concerns.\",\n    \"required_changes\": \"Array of concrete changes before submission/final-ready claim.\",\n    \"remaining_blockers_acknowledged\": \"Array naming external/manual blockers the review did not waive.\",\n    \"valid_review_evidence\": \"Boolean; true only for a complete substantive review.\"\n  }\n}",
+  "claude_review_prompt_sha256": "aeabc0d2d08caa95ea4e1b76887e6f9be90c91ca52d95a89a66692060ba012d2",
+  "created_at_utc": "2026-06-13T00:36:18.637741+00:00",
+  "existing_score_floor_0_to_10": 8.0,
+  "expected_additional_review_json": {
+    "must_count_as_coverage": [
+      "reviewer contains claude and opus",
+      "valid_review_evidence is true",
+      "score_0_to_10 is present",
+      "claim_boundary_ok is true",
+      "final_submission_ready_claim_allowed is false while current blockers remain"
+    ],
+    "recommended_path": "outputs/summary/paper_critical/claude_opus_review_20260613.json",
+    "schema": {
+      "claim_boundary_ok": "Boolean; true only if scoped same-candidate claim is respected.",
+      "created_at_utc": "ISO-8601 UTC timestamp.",
+      "final_submission_ready_claim_allowed": "Boolean; must stay false while final gates are open.",
+      "kill_argument": "The strongest remaining rejection argument.",
+      "major_concerns": "Array of concrete concerns.",
+      "remaining_blockers_acknowledged": "Array naming external/manual blockers the review did not waive.",
+      "required_changes": "Array of concrete changes before submission/final-ready claim.",
+      "reviewer": "Must include claude and opus, e.g. claude-opus.",
+      "score_0_to_10": "Numeric top-conference review score.",
+      "source": "Tool, thread, or manual channel that produced the review.",
+      "valid_review_evidence": "Boolean; true only for a complete substantive review.",
+      "verdict": "ACCEPT, WEAK_ACCEPT, CONDITIONAL_PASS, BORDERLINE, WEAK_REJECT, or REJECT."
+    }
+  },
+  "failed_claude_attempt_summary": {
+    "count": 5,
+    "sources": [
+      "mcp__claude_review.review_start job 999276b352b940c0b957e3be212f9919",
+      "mcp__claude_review.review_start job b9757b214eb84142bce54dd28f7e258c",
+      "mcp__claude_review.review_start job 2d4e39f665de4a848138ca2fc9630357",
+      "mcp__claude_review.review synchronous call with tools disabled",
+      "mcp__claude_review.review minimal JSON-oriented no-tools call"
+    ],
+    "unique_errors": [
+      "Claude CLI did not return JSON output"
+    ]
+  },
+  "failures": [],
+  "input_paths": {
+    "claim_audit": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\final_paper_claim_audit_after_full_panel_review_20260612.json",
+      "sha256": "ceb6ff1eb1393580dab990e58b37afe8ff1dcb4324134ca2d04969c6c376a6db",
+      "size_bytes": 13282
+    },
+    "gpt55_review": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\gpt55_section_review_after_handoff_20260613.json",
+      "sha256": "5593f1450fef9ce0bdf85943cb2f3ce733ed6acbddeb32c26ee190b12b82b00e",
+      "size_bytes": 4476
+    },
+    "panel_review": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\final_full_manuscript_panel_review_20260612.json",
+      "sha256": "6cbad714fe6488e649bc580c1e952054ebcc6a37075050ecf0e47c4152fbad84",
+      "size_bytes": 4596
+    },
+    "review_continuation_packet": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\review_continuation_packet_20260613.json",
+      "sha256": "543e9247d54994016fcbcf9942a0255ad2b7f07433645ef770cff6cbe53ea1ac",
+      "size_bytes": 12197
+    }
+  },
+  "missing_perspectives": [
+    "explicit_claude_opus_review"
+  ],
+  "mode": "local_read_only_claude_review_request_packet",
+  "notes": [
+    "This packet is a request artifact only; it is not valid Claude review coverage.",
+    "Do not lower final blockers because this request packet exists.",
+    "If the Claude connector fails, store the failure separately with valid_review_evidence=false."
+  ],
+  "ok": true,
+  "project": "uncertainty",
+  "read_only": true,
+  "review_continuation_command_after_valid_review": "python -m scripts.audit.main_build_review_continuation_packet --additional-review-json outputs/summary/paper_critical/claude_opus_review_20260613.json --failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_20260613.json --failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json --failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json --failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json --failed-review-attempt-json outputs/summary/paper_critical/claude_opus_review_attempt_minimal_json_20260613.json",
+  "schema_version": "2026-06-13.claude_review_request_packet.v1",
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}
