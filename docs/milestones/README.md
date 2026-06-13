@@ -128,16 +128,18 @@ final page range and DOI/Crossref visibility remain unresolved. The lightweight
 ProMax public metadata probe
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260612.{json,md}`
 now checks BibTeX pages, Crossref, DOI resolver, ACM DL, arXiv HTML ACM
-metadata, and the SIGIR accepted-paper source without running the full
+metadata, the SIGIR accepted-paper source, and the UQ author-profile
+announcement source without running the full
 submission stack; it reports Crossref `404`, DOI resolver `404`, ACM DL `403`,
 source probes passing, and `promax_public_metadata_ready=false`, so it is
 monitoring evidence rather than a readiness upgrade. The 2026-06-13 refresh
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. A follow-up live
-probe at `2026-06-13T00:04:41Z` found the same blocker state and refreshed the
-closure packet at `2026-06-13T00:05:03Z`; this is fresh monitoring evidence,
-not a readiness upgrade. The complete release-candidate stack was also
+probe at `2026-06-13T00:19:37Z` found the same blocker state with all three
+source probes passing and refreshed the closure packet at
+`2026-06-13T00:19:58Z`; this is fresh monitoring evidence, not a readiness
+upgrade. The complete release-candidate stack was also
 refreshed at `2026-06-13T00:04:17Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
 `failures=[]`, and `final_submission_ready=false`; its freshness audit checks
@@ -169,7 +171,10 @@ tool-discovered retry failed with the same error and are recorded at
 and
 `outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
 The review-continuation packet now records three failed Claude attempts
-separately from valid reviewer JSONs and still keeps
+separately from valid reviewer JSONs. A fourth synchronous no-tools Claude
+review call failed with the same error and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`;
+the refreshed packet records four failed attempts and still keeps
 `explicit_claude_opus_present=false`. The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,

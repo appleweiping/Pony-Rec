@@ -1,0 +1,13 @@
+{
+  "reviewer": "claude-opus",
+  "created_at_utc": "2026-06-13T00:17:00+00:00",
+  "completed_at_utc": "2026-06-13T00:17:01+00:00",
+  "source": "mcp__claude_review.review synchronous call with tools disabled",
+  "status": "failed",
+  "valid_review_evidence": false,
+  "error": "Claude CLI did not return JSON output",
+  "notes": [
+    "This fourth attempt used a synchronous review call with tools disabled and still did not return valid reviewer JSON.",
+    "The review-continuation packet records failed attempts separately from valid reviewer JSONs."
+  ]
+}

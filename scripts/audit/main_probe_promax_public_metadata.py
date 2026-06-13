@@ -19,6 +19,7 @@ from scripts.audit.main_audit_external_proceedings_metadata import (
 DEFAULT_DOI = "10.1145/3805712.3809600"
 DEFAULT_ARXIV_HTML_URL = "https://arxiv.org/html/2604.26231v1"
 DEFAULT_SIGIR_ACCEPTED_URL = "https://sigir2026.org/en-AU/pages/program/accepted-papers"
+DEFAULT_UQ_AUTHOR_PROFILE_URL = "https://eecs.uq.edu.au/profile/2696/hongzhi-yin"
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
 DEFAULT_STAMP = "20260612"
 EXPECTED_TITLE = (
@@ -132,6 +133,14 @@ def build_promax_public_metadata_probe(
             name="sigir2026_accepted_papers_promax",
             url=DEFAULT_SIGIR_ACCEPTED_URL,
             required_patterns=[EXPECTED_TITLE, EXPECTED_AUTHORS],
+            network_mode=network_mode,
+            timeout_seconds=timeout_seconds,
+            fixtures=fixtures,
+        ),
+        _source_probe(
+            name="uq_author_profile_promax_sigir2026",
+            url=DEFAULT_UQ_AUTHOR_PROFILE_URL,
+            required_patterns=[EXPECTED_TITLE, "SIGIR 2026"],
             network_mode=network_mode,
             timeout_seconds=timeout_seconds,
             fixtures=fixtures,

@@ -89,19 +89,20 @@ monitor for the public ProMax metadata blocker. The generated
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260612.{json,md}`
 reports `promax_public_metadata_ready=false`, `final_submission_ready=false`,
 Crossref status `404`, DOI resolver status `404`, ACM DL status `403`, and
-passing arXiv HTML / SIGIR accepted-paper source probes. The probe is now the
-first external-metadata command in the blocker closure packet, but it cannot by
-itself mark the paper final-submission-ready.
+passing arXiv HTML / SIGIR accepted-paper source probes. The probe is now
+extended with a UQ author-profile announcement source check for the accepted
+ProMax title. These source checks strengthen accepted-paper provenance, but the
+probe still cannot by itself mark the paper final-submission-ready.
 
 **2026-06-13 ProMax public metadata recheck.** The latest live probe
 `outputs/summary/paper_critical/promax_public_metadata_probe_20260613.{json,md}`
 still reports `promax_public_metadata_ready=false`: Crossref `/works` for
 `10.1145/3805712.3809600` returns `404`, the DOI resolver returns `404`, and
-ACM DL returns `403`; arXiv HTML ACM metadata and SIGIR accepted-paper probes
-remain passing. A follow-up live probe at `2026-06-13T00:04:41Z` found the
-same blocker state and refreshed the closure packet at
-`2026-06-13T00:05:03Z`; this is fresh monitoring evidence, not a readiness
-upgrade. Codex also refreshed the complete local release-candidate stack
+ACM DL returns `403`; arXiv HTML ACM metadata, the SIGIR accepted-paper page,
+and the UQ author-profile source probe remain passing. A follow-up live probe
+at `2026-06-13T00:19:37Z` found the same blocker state and refreshed the
+closure packet at `2026-06-13T00:19:58Z`; this is fresh monitoring evidence,
+not a readiness upgrade. Codex also refreshed the complete local release-candidate stack
 as
 `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260613.{json,md}`;
 the `2026-06-13T00:04:17Z` stack reports `ok=true`,
@@ -147,7 +148,11 @@ third tool-discovered retry failed with the same error and are recorded at
 and
 `outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
 The review-continuation packet builder now records failed reviewer attempts
-separately from valid reviewer JSONs, so the refreshed packet exposes three
+separately from valid reviewer JSONs. A fourth synchronous no-tools Claude
+review call failed with the same `Claude CLI did not return JSON output` error
+and is recorded at
+`outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`,
+so the refreshed packet exposes four
 failed Claude attempts while preserving `explicit_claude_opus_present=false`.
 
 **2026-06-12 submission release-candidate packet.** Codex added

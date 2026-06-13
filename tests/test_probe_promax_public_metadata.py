@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from scripts.audit.main_probe_promax_public_metadata import (
+    DEFAULT_UQ_AUTHOR_PROFILE_URL,
     _write_md,
     build_promax_public_metadata_probe,
 )
@@ -94,6 +95,15 @@ def _source_fixtures(*, crossref_ok: bool, doi_ok: bool, page: str = "") -> dict
                 "Yi Zhang, Yiwen Zhang, Kai Zheng, Tong Chen, Hongzhi Yin"
             ),
         },
+        DEFAULT_UQ_AUTHOR_PROFILE_URL: {
+            "ok": True,
+            "status_code": 200,
+            "text": (
+                "We have 3 research papers accepted by the top conference SIGIR 2026. "
+                "ProMax: Exploring the Potential of LLM-derived Profiles with "
+                "Distribution Shaping for Recommender Systems"
+            ),
+        },
     }
 
 
@@ -119,6 +129,8 @@ def test_promax_public_metadata_probe_keeps_current_blockers(tmp_path: Path) -> 
     assert "promax:doi_resolver_not_visible" in probe["remaining_blockers"]
     assert probe["bibtex"]["isbn"] == "979-8-4007-2599-9"
     assert probe["source_probes"][0]["ok"] is True
+    assert probe["source_probes"][2]["name"] == "uq_author_profile_promax_sigir2026"
+    assert probe["source_probes"][2]["ok"] is True
 
 
 def test_promax_public_metadata_probe_ready_requires_direct_gates(tmp_path: Path) -> None:
@@ -162,3 +174,4 @@ def test_promax_public_metadata_probe_markdown_lists_statuses(tmp_path: Path) ->
     assert "Crossref status: `404`" in text
     assert "DOI resolver status: `404`" in text
     assert "arxiv_html_promax_acm_metadata" in text
+    assert "uq_author_profile_promax_sigir2026" in text

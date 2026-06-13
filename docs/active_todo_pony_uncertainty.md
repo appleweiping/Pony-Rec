@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 02:06 CEST
+Last updated: 2026-06-13 02:21 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -35,8 +35,11 @@ cycle.
   and
   `outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
   `scripts/audit/main_build_review_continuation_packet.py` now records failed
-  reviewer attempts separately from valid reviewer JSONs; the refreshed packet
-  reports `failed_review_attempts` count `3` while keeping
+  reviewer attempts separately from valid reviewer JSONs; a fourth synchronous
+  no-tools Claude review call failed with the same `Claude CLI did not return
+  JSON output` error and is recorded at
+  `outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`.
+  The refreshed packet reports `failed_review_attempts` count `4` while keeping
   `explicit_claude_opus_present=false`.
 
 - 2026-06-13 full local release-candidate refresh and ProMax recheck:
@@ -57,10 +60,10 @@ cycle.
   `promax_public_metadata_ready=false`, and `final_submission_ready=false`.
   Direct public checks still do not close the blocker: Crossref `/works` is
   `404`, the DOI resolver is `404`, and ACM DL is `403`, while arXiv HTML ACM
-  metadata and SIGIR accepted-paper source probes pass. A follow-up live probe
-  at `2026-06-13T00:04:41Z` found the same blocker state and refreshed the
-  closure packet at `2026-06-13T00:05:03Z`; this is fresh monitoring evidence,
-  not a readiness upgrade. The refreshed
+  metadata, the SIGIR accepted-paper page, and the UQ author-profile source
+  probe pass. A follow-up live probe at `2026-06-13T00:19:37Z` found the same
+  blocker state and refreshed the closure packet at `2026-06-13T00:19:58Z`;
+  this is fresh monitoring evidence, not a readiness upgrade. The refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
   now uses the 2026-06-13 final gate, external metadata audit, manual
   checklist, full release-candidate stack, and public probe. It still reports
@@ -72,8 +75,9 @@ cycle.
   `scripts/audit/main_probe_promax_public_metadata.py` is now the lightweight
   live monitor for the remaining public ProMax proceedings blocker. It checks
   the local ProMax BibTeX page field, direct Crossref `/works` lookup, DOI
-  resolver, ACM DL, arXiv HTML ACM metadata, and the SIGIR 2026 accepted-papers
-  source without running the full submission stack. The generated
+  resolver, ACM DL, arXiv HTML ACM metadata, the SIGIR 2026 accepted-papers
+  source, and the UQ author-profile announcement without running the full
+  submission stack. The generated
   `outputs/summary/paper_critical/promax_public_metadata_probe_20260612.{json,md}`
   reports `ok=true`, `promax_public_metadata_ready=false`, and
   `final_submission_ready=false`: Crossref remains `404`, DOI resolver remains
