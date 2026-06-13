@@ -103,11 +103,11 @@ the UQ author-profile source probe, the author Google Sites publications
 source probe, and the UQ Experts profile source probe remain passing.
 Follow-up live probes at `2026-06-13T00:49:05Z`,
 `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
-`2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`, and
-`2026-06-13T04:30:39Z` found the same direct blocker state. A later probe at
-`2026-06-13T04:49:27Z` again found Crossref `404`, DOI resolver `404`, ACM DL
-`403`, and all `5/5` public source probes passing. The closure packet was
-refreshed most recently after that probe; this is stronger
+`2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
+`2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`, and
+`2026-06-13T05:11:34Z` found the same direct blocker state: Crossref `404`,
+DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes passing.
+The closure packet was refreshed after the latest probes; this is stronger
 public accepted-paper provenance, not a readiness upgrade. The closure packet
 Markdown now lists latest public source probes in addition to direct
 Crossref/DOI/ACM statuses and explicitly carries the review-panel blockers.
@@ -176,7 +176,8 @@ attempts. The tenth-attempt refresh below supersedes that count. The
 request packet is not reviewer coverage and does not close final
 readiness. The review-continuation packet builder now validates additional
 reviewer JSONs before counting them for panel coverage: a Claude/Opus review
-must be valid substantive evidence with `valid_review_evidence=true`,
+must explicitly identify a Claude Opus reviewer and be valid substantive
+evidence with `valid_review_evidence=true`,
 `claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`, a
 kill-argument, major concerns, required changes, and acknowledged remaining
 blockers. This prevents an empty Claude name+score JSON from closing the
@@ -210,6 +211,17 @@ Codex then retried a tenth asynchronous Claude Opus call through
 The refreshed review-continuation packet and Claude request packet now record
 failed Claude attempts `10`, still with `explicit_claude_opus_present=false`,
 `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
+Codex later tightened this import path further: explicit Claude Opus coverage
+now requires the reviewer identity to contain both `claude` and `opus`, and
+`scripts/audit/main_validate_claude_opus_review_json.py` provides a read-only
+preflight for future external Claude JSONs. The validator checks the expected
+schema, explicit Claude Opus identity, substantive evidence fields, scoped
+claim boundary, `final_submission_ready_claim_allowed=false` while blockers
+remain, and `score_0_to_10 >= 8.0` before the review is attached through
+`--additional-review-json`. The refreshed
+`claude_opus_review_request_packet_20260613.{json,md}` now includes the
+validation command before the review-continuation command, and the closure
+packet's review-panel next commands mirror that order.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local

@@ -140,13 +140,13 @@ continues to show Crossref `404`, DOI resolver `404`, ACM DL `403`, source
 probes passing, and `promax_public_metadata_ready=false`. Follow-up live probes
 at `2026-06-13T00:49:05Z`, `2026-06-13T01:59:36Z`,
 `2026-06-13T02:32:01Z`, `2026-06-13T03:16:11Z`,
-`2026-06-13T04:11:37Z`, `2026-06-13T04:30:39Z`, and
-`2026-06-13T04:49:27Z` found the same direct blocker state with five source
-probes passing: arXiv HTML ACM metadata, SIGIR accepted papers, UQ author
-profile, author Google Sites publications, and UQ Experts profile. The closure
-packet refreshed most recently after the `04:49:27Z` probe and now lists those
-source probes plus the explicit review-panel blockers in Markdown; this
-strengthens provenance but is not a readiness upgrade.
+`2026-06-13T04:11:37Z`, `2026-06-13T04:30:39Z`,
+`2026-06-13T04:49:27Z`, and `2026-06-13T05:11:34Z` found the same direct
+blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
+accepted papers, UQ author profile, author Google Sites publications, and UQ
+Experts profile. The closure packet refreshed after the latest probes and now
+lists those source probes plus the explicit review-panel blockers in Markdown;
+this strengthens provenance but is not a readiness upgrade.
 The complete release-candidate stack was also
 refreshed at `2026-06-13T04:31:25Z` and reports `ok=true`,
 `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
@@ -221,10 +221,16 @@ After the tenth failed connector attempt, the request packet was refreshed at
 `2026-06-13T04:15:35Z` and now records ten failed Claude attempts. The request
 packet is not reviewer coverage. The review-continuation gate now
 validates additional reviewer JSONs before counting them for panel coverage:
-Claude/Opus JSON must include `valid_review_evidence=true`,
+Claude/Opus JSON must explicitly identify a Claude Opus reviewer and include
+`valid_review_evidence=true`,
 `claim_boundary_ok=true`, `final_submission_ready_claim_allowed=false`,
 substantive kill-argument/concerns/required changes, and acknowledged
 remaining blockers; a name+score shell cannot close the explicit Claude gap.
+Codex later tightened this path so explicit Claude Opus coverage requires a
+reviewer identity containing both `claude` and `opus`, and added
+`scripts/audit/main_validate_claude_opus_review_json.py` as a read-only
+preflight for future external Claude JSONs before they are attached to the
+review-continuation packet.
 The final submission gate has also been hardened to consume the
 review-continuation packet directly: the refreshed
 `outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`

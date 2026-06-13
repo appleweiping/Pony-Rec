@@ -1,6 +1,6 @@
 # Submission Release-Candidate Packet
 
-Generated: 2026-06-13T05:13:39.242958+00:00
+Generated: 2026-06-13T05:19:42.511693+00:00
 
 - Verdict: `LOCAL_RELEASE_CANDIDATE_READY_FINAL_BLOCKED`
 - OK: `true`
@@ -63,6 +63,7 @@ Generated: 2026-06-13T05:13:39.242958+00:00
 - `final_submission_gate:promax:crossref_discovery_alternate_doi_candidates_present`
 - `final_submission_gate:acm_dl_not_accessible:status=403`
 - `final_submission_gate:refresh_recorded_tracked_dirty_inputs_before_generation`
+- `pre_submission_refresh_freshness:refresh_recorded_tracked_dirty_inputs_before_generation`
 - `submission_source_package_rebuild:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
 - `external_proceedings_metadata:proex:crossref_not_visible:status=404`
 - `external_proceedings_metadata:proex:doi_resolver_not_visible:status=404`

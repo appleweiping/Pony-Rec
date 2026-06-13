@@ -175,10 +175,10 @@ PIDs, audit summaries, and missing-file errors.
    Sites publications page, and the UQ Experts profile source probes all pass.
    Follow-up live probes at `2026-06-13T00:49:05Z`,
    `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
-   `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`, and
-   `2026-06-13T04:30:39Z` found the same direct blocker state. A later
-   `2026-06-13T04:49:27Z` probe again found Crossref `404`, DOI resolver
-   `404`, ACM DL `403`, and all `5/5` public source probes passing. After the
+   `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
+   `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`, and
+   `2026-06-13T05:11:34Z` again found Crossref `404`, DOI resolver `404`, ACM
+   DL `403`, and all `5/5` public source probes passing. After the
    latest probe, the closure packet was refreshed again;
    the closure Markdown now lists those latest public source probes and
    explicitly keeps the review-panel blockers. This is
@@ -198,6 +198,14 @@ PIDs, audit summaries, and missing-file errors.
    same-stamp `promax_public_metadata_probe_<stamp>.json` when available; the
    final-blocker consistency audit now fails if the closure packet omits that
    probe or records direct status codes inconsistent with the standalone probe.
+   The Claude review handoff is also stricter now: explicit Claude Opus
+   coverage requires a reviewer identity containing both `claude` and `opus`,
+   and `scripts/audit/main_validate_claude_opus_review_json.py` must be run on
+   any external Claude Opus JSON before attaching it through
+   `--additional-review-json`. The refreshed
+   `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
+   includes the exact validation command plus the follow-up
+   review-continuation command.
    The current priority is to capture explicit Claude Opus reviewer output
    using the request packet if available, then keep monitoring the ProMax public
    metadata and private manual submission-system blockers. Do not claim final

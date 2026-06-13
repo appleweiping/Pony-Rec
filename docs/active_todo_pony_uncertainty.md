@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 06:52 CEST
+Last updated: 2026-06-13 07:18 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,31 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 strict Claude Opus review-import guard:
+  Codex found that the review-continuation coverage check was too permissive:
+  a reviewer name containing only `claude` or only `opus` could satisfy the
+  explicit Claude Opus perspective. Codex hardened
+  `scripts/audit/main_build_review_continuation_packet.py` so explicit Claude
+  Opus coverage now requires the reviewer name to contain both `claude` and
+  `opus`, and a Claude-family additional review that is not explicit Opus is
+  rejected with `claude_reviewer_not_explicit_opus`. Codex also added
+  `scripts/audit/main_validate_claude_opus_review_json.py` and
+  `tests/test_validate_claude_opus_review_json.py` as a local read-only
+  preflight for any future external Claude Opus JSON: it checks schema keys,
+  explicit `claude`+`opus` identity, `valid_review_evidence=true`,
+  claim-boundary fields, and `score_0_to_10 >= 8.0` before the JSON is
+  attached through `--additional-review-json`. The refreshed
+  `claude_opus_review_request_packet_20260613.{json,md}` now carries a
+  `validation_command_before_attach`, and the closure packet's
+  `review_panel_coverage` next commands include the validator before the
+  review-continuation and final-gate rebuild commands. This is a gate-hardening
+  change only: failed Claude connector attempts remain `10`,
+  `explicit_claude_opus_present=false`,
+  `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
+  The latest live ProMax probe at `2026-06-13T05:11:34Z` still reports
+  Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
+  source probes passing.
 
 - 2026-06-13 closure ProMax-probe handoff guard:
   Codex found that the 20260613 closure packet could be regenerated with the

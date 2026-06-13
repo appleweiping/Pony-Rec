@@ -1,14 +1,14 @@
 # Pre-Submission Gate Refresh
 
-Generated: 2026-06-13T05:13:38.650568+00:00
+Generated: 2026-06-13T05:19:41.909100+00:00
 
 - OK: `true`
 - Final submission ready: `false`
 - Final verdict: `LOCAL_PACKAGE_READY_BUT_EXTERNAL_MANUAL_OR_REVIEW_BLOCKED`
 - External network mode: `live`
 - Stamp: `20260613`
-- Git HEAD before refresh: `97d447fa1f4d7381a574ce5bc12499eca12a1c8d`
-- Tracked dirty before refresh: `false`
+- Git HEAD before refresh: `d9e6ea02870b48ffde6c3ee31ad37a0f2f5480c9`
+- Tracked dirty before refresh: `true`
 
 ## Steps
 
@@ -34,8 +34,8 @@ Generated: 2026-06-13T05:13:38.650568+00:00
 - `configs\paper_submission_profiles.json`: `00a083d7fca48c521814ce9effe6bf9294c7ddf7e071879edaa4739f39a67d2d` (1276 bytes)
 - `configs\paper_submission_metadata.json`: `908484005b171a66d3e9424d36986d26286e86a0272a456b461a9e75b204e1c1` (1005 bytes)
 - `configs\paper_manual_submission_checklist.json`: `e8bbef232cc418ca45976cb675411e2128075b6d8eae6d3ce23b561ecf666174` (4732 bytes)
-- `outputs\summary\paper_critical\review_continuation_packet_20260613.json`: `5f155551c4f97afbfe643aac9cfca02b2e6c2f82950155cd0de492c62a6f384e` (12007 bytes)
-- `scripts\audit\main_refresh_pre_submission_gates.py`: `14ede23eeaf1d5535ce9fba44adfcf219ffb620a1813aff0253b68c3b64be77b` (21984 bytes)
+- `outputs\summary\paper_critical\review_continuation_packet_20260613.json`: `01795bd7c80cd4c59d64da2617bb517a9b048013495f91291a55af40b57c510c` (12007 bytes)
+- `scripts\audit\main_refresh_pre_submission_gates.py`: `757036636bee7c32932529349793490c3186dd8806d00daa39a1a29ac16162a6` (22396 bytes)
 - `scripts\audit\main_audit_external_proceedings_metadata.py`: `0663e10b9d9aefb74346c23f63241167b50654f591acb0c7ec0c6373474389ff` (27205 bytes)
 - `scripts\audit\main_audit_submission_package.py`: `abec9b5125f278db49e825397d3b0499dcec5cfacafa80488316745e3a562b53` (33787 bytes)
 - `scripts\audit\main_build_submission_source_package.py`: `9de0d0402285cab61cb6b5acd8a1c6e1870bac5e3365b495d126ddd292ec2796` (18252 bytes)
