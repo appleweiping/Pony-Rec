@@ -35,7 +35,13 @@ the native advantages of approaches whose value lies outside same-candidate
 reranking: ELMRec is officially a T5 generative recommender bridged to Qwen3-8B
 representations, and the LightGCN-profile methods ProEx/ProMax derive much of
 their reported strength from full-catalog retrieval and popularity structure
-that a 101-candidate sampled panel does not reward. We therefore do not rest the
+that a 101-candidate sampled panel does not reward. Indeed, a pure popularity ranking also scores at the random
+floor in all four domains (the \textit{Popularity} rows of
+Table~\ref{tab:full_official_ndcg10}): because the sampled negatives are
+themselves popularity-matched, the protocol deliberately neutralizes the
+popularity shortcut, so a row near the floor is not unfairly penalized---it
+simply fails to recover user-conditional relevance beyond a popularity prior.
+We therefore do not rest the
 claim on the weakest rows. The informative comparison is against the strongest
 baseline that is clearly above the floor, LLMEmb (NDCG@10 $0.094$--$0.205$):
 \method{} still improves over LLMEmb by 30--43\% NDCG@10 across the four domains,
