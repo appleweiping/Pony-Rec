@@ -275,6 +275,7 @@ PIDs, audit summaries, and missing-file errors.
 | `scripts/audit/main_build_submission_release_candidate_packet.py` | Local read-only release-candidate handoff index over the final gate, freshness audit, source package, rebuild audit, metadata packet, manual checklist, and external metadata audit; distinguishes `local_release_candidate_ready` from `final_submission_ready` and surfaces `external_manual_or_review_blocked` when review coverage is still incomplete |
 | `scripts/audit/main_refresh_submission_release_candidate_stack.py` | Preferred sequential local handoff wrapper; runs pre-submission refresh, freshness audit, and release-candidate packet generation in order, then emits a compact stack artifact while preserving external/manual/review blockers and `final_submission_ready=false` |
 | `scripts/audit/main_audit_final_blocker_consistency.py` | Local read-only consistency audit over the final gate, release stack, closure packet, review-continuation packet, Claude request packet, ProMax probe, and manual request packet; catches stale failed-Claude counts, missing open blockers, unexpected final-ready states, and recursive warning-prefix regressions |
+| `scripts/audit/main_audit_final_blocker_doc_status.py` | Local read-only canonical-doc status audit over active TODO, claim/status, milestones, and server runbook current sections; compares them with the final-blocker consistency audit and catches stale current failed-Claude counts, old two-class blocker taxonomy, missing ProMax/manual/Claude blocker wording, or accidental final-ready wording |
 | `scripts/audit/main_build_final_submission_blocker_closure_packet.py` | Local read-only closure packet over the final gate, external metadata audit, manual checklist, and release-candidate stack; groups final blockers into local artifact, review-panel coverage, public external metadata, and private manual-submission closure paths |
 | `scripts/audit/main_build_final_submission_gate.py` | Local read-only final pre-submission aggregator over package audit, metadata packet, source-package rebuild, external proceedings metadata, manual checklist, and review-continuation coverage; keeps final readiness false while external DOI/page-range, private submission-system, or explicit Claude Opus review blockers remain |
 | `scripts/audit/main_build_manual_submission_checklist.py` | Local read-only checklist builder for submission-system actions; safely pre-fills public metadata and can optionally consume an untracked `--private-confirmation-json` while keeping authors, conflicts, reviewer preferences, declarations, and private account metadata out of git |
@@ -323,6 +324,18 @@ python -m scripts.audit.main_audit_final_blocker_consistency \
 This command is local-only and must not close readiness by itself. It verifies
 that the current expected blockers are still consistently represented across
 the handoff artifacts.
+
+Canonical-doc status audit after any current-status documentation update:
+
+```bash
+python -m scripts.audit.main_audit_final_blocker_doc_status \
+  --output-json outputs/summary/paper_critical/final_blocker_doc_status_audit_YYYYMMDD.json \
+  --output-md outputs/summary/paper_critical/final_blocker_doc_status_audit_YYYYMMDD.md
+```
+
+This command is local-only and must not close readiness by itself. It verifies
+that first-read docs match the latest consistency audit and that old
+eight-attempt/two-blocker chronology is either historical or removed.
 
 Private manual submission confirmation, after a human has completed the
 submission-system fields:

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 05:42 CEST
+Last updated: 2026-06-13 06:01 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,23 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 final-blocker doc-status audit:
+  Codex added `scripts/audit/main_audit_final_blocker_doc_status.py` plus
+  `tests/test_audit_final_blocker_doc_status.py` and generated
+  `outputs/summary/paper_critical/final_blocker_doc_status_audit_20260613.{json,md}`.
+  The audit is local-only/read-only and compares the canonical current-status
+  sections in `docs/active_todo_pony_uncertainty.md`,
+  `docs/paper_claims_and_status.md`, `docs/milestones/README.md`, and
+  `docs/server_runbook.md` against
+  `final_blocker_consistency_audit_20260613.json`. It reports `ok=true`,
+  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `9`,
+  `explicit_claude_opus_present=false`,
+  `promax_public_metadata_ready=false`,
+  `manual_submission_system_ready=false`, recursive warning regressions `0`,
+  and `final_submission_ready=false`. It also catches current/handoff text that
+  still says `8`, `three`, or old two-class blocker taxonomy unless the text is
+  explicitly historical and superseded.
 
 - 2026-06-13 final-blocker consistency audit:
   Codex added `scripts/audit/main_audit_final_blocker_consistency.py` plus
@@ -102,8 +119,8 @@ cycle.
   `final_submission_blocker_closure_packet_20260613.{json,md}` groups blockers
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
-  `review_continuation_packet_20260613.{json,md}` still reports
-  `review_continuation_ready=true`, failed Claude attempts `8`,
+  `review_continuation_packet_20260613.{json,md}` now reports
+  `review_continuation_ready=true`, failed Claude attempts `9`,
   `explicit_claude_opus_present=false`, and
   `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
   veto the hardening, but flagged that the pre-submission freshness audit must
@@ -174,14 +191,16 @@ cycle.
   `review_status`, `model=opus`, tools disabled, and a short JSON-only prompt
   failed with the same connector-layer error and is recorded at
   `outputs/summary/paper_critical/claude_opus_review_attempt_eighth_20260613.json`.
-  The refreshed packet reports `failed_review_attempts` count `8` while keeping
-  `explicit_claude_opus_present=false`. Codex added
+  At that point, the refreshed packet reported `failed_review_attempts` count
+  `8` while keeping `explicit_claude_opus_present=false`; the ninth-attempt
+  refresh above supersedes that count. Codex added
   `scripts/audit/main_build_claude_review_request_packet.py` and generated
   `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
   so the next valid Claude Opus review can be requested with a stable
   public-safe prompt and then attached through `--additional-review-json`. The
   request packet was refreshed at `2026-06-13T02:50:36Z` after the eighth
-  failed connector attempt and now records failed Claude attempts `8`.
+  failed connector attempt and, at that point, recorded eight failed Claude
+  connector attempts. This is superseded by the ninth-attempt refresh above.
   This request packet is not reviewer coverage and does not close final
   readiness. `scripts/audit/main_build_review_continuation_packet.py` now
   validates additional reviewer JSONs before they can count as coverage:
@@ -258,8 +277,10 @@ cycle.
   (`manual_private_pending`, not public-safe). It records the current ProMax
   DOI/ISBN/location/source-check evidence, the exact ProMax public metadata
   closure conditions, and the source-manifest sha256 plus required item IDs for
-  an untracked private manual confirmation. This is the first-read artifact for
-  closing the final two blocker classes; it is not a readiness upgrade.
+  an untracked private manual confirmation. This was the first-read artifact for
+  the then-two public/manual blocker classes; the current final blocker taxonomy
+  is three-class: explicit Claude Opus review coverage, ProMax public metadata,
+  and private manual submission confirmation. It is not a readiness upgrade.
 
 - Submission release-candidate stack refresh added:
   `scripts/audit/main_refresh_submission_release_candidate_stack.py` is now the

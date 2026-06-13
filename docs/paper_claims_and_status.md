@@ -251,6 +251,17 @@ Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
 needed, recursive warning regressions `0`, and
 `final_submission_ready=false`. This prevents stale handoff artifacts from
 contradicting each other, but it is not a readiness upgrade.
+Codex then added
+`scripts/audit/main_audit_final_blocker_doc_status.py`,
+`tests/test_audit_final_blocker_doc_status.py`, and
+`outputs/summary/paper_critical/final_blocker_doc_status_audit_20260613.{json,md}`
+as the matching canonical-doc status guard. The audit reports `ok=true` and
+`final_blocker_doc_status_ok=true` for the current sections of the active TODO,
+claim/status doc, milestone README, and server runbook, while requiring the
+latest failed-Claude count `9`, explicit Claude missing state, ProMax
+`404/404/403` blocked state, private manual blocked state, recursive warning
+regressions `0`, and `final_submission_ready=false`. It prevents historical
+eight-attempt or two-blocker wording from reading like current truth.
 
 **2026-06-12 submission release-candidate packet.** Codex added
 `scripts/audit/main_build_submission_release_candidate_packet.py` as a local

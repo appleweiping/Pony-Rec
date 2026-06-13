@@ -109,9 +109,11 @@ also reports `ok=true`, `local_release_candidate_ready=true`,
 and `final_submission_ready=false`; this is now the latest stack artifact for
 handoff. The new closure packet
 `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260612.{json,md}`
-is now the compact first-read artifact for the two remaining blocker classes:
-external ProMax proceedings metadata and private manual submission-system
-confirmation. It reports `closure_packet_ready=true`,
+was the compact first-read artifact for the then-two public/manual blocker
+classes: external ProMax proceedings metadata and private manual
+submission-system confirmation. The current final blocker taxonomy is
+three-class: explicit Claude Opus review coverage, ProMax public metadata, and
+private manual submission confirmation. It reports `closure_packet_ready=true`,
 `ready_for_human_handoff=true`, local artifact handoff `ready`, external
 metadata `blocked`, and manual submission `manual_private_pending`, while
 preserving `final_submission_ready=false`. The refreshed external metadata audit also
@@ -174,8 +176,8 @@ tool-discovered retry failed with the same error and are recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_retry_20260613.json`
 and
 `outputs/summary/paper_critical/claude_opus_review_attempt_third_20260613.json`.
-The review-continuation packet now records three failed Claude attempts
-separately from valid reviewer JSONs. A fourth synchronous no-tools Claude
+At that point, the review-continuation packet recorded three failed Claude
+attempts separately from valid reviewer JSONs. A fourth synchronous no-tools Claude
 review call failed with the same error and is recorded at
 `outputs/summary/paper_critical/claude_opus_review_attempt_sync_notools_20260613.json`;
 the fifth minimal JSON-oriented no-tools Claude call failed at the same
@@ -240,6 +242,17 @@ reports `ok=true`, `final_blocker_consistency_ok=true`, failed Claude attempts
 `promax_public_metadata_ready=false`, manual confirmation still needed,
 recursive warning regressions `0`, and `final_submission_ready=false`. This is
 a handoff consistency guard, not a final-readiness upgrade.
+Codex then added
+`scripts/audit/main_audit_final_blocker_doc_status.py`,
+`tests/test_audit_final_blocker_doc_status.py`, and
+`outputs/summary/paper_critical/final_blocker_doc_status_audit_20260613.{json,md}`
+to audit the canonical current-status docs against the consistency audit. It
+reports `ok=true`, `final_blocker_doc_status_ok=true`, failed Claude attempts
+`9`, `explicit_claude_opus_present=false`,
+`promax_public_metadata_ready=false`, private manual confirmation still needed,
+recursive warning regressions `0`, and `final_submission_ready=false`, while
+rejecting current/handoff wording that still presents eight-attempt or
+two-blocker states as live truth.
 The submission package
 audit now includes a privacy-preserving anonymous source leak scan over the TeX closure and the
 current package has zero email, ORCID, acknowledgment, local-path,
