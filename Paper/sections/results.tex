@@ -77,6 +77,22 @@ result is thus a robustness claim under a fair common-denominator reranking
 protocol, not a statement that these methods are weak in their native
 full-catalog setting (see Limitation~5).
 
+\paragraph{Bridge fidelity.} To confirm the unified Qwen3-8B representation
+bridge is not itself responsible for the low baseline scores, we re-ran the
+strongest SASRec-class baseline, LLM2Rec, in its \emph{native} encoder---an
+LLM2Vec model over a Qwen2-0.5B backbone---on the identical same-candidate task,
+holding the official LLM2Rec training and scoring fixed and changing only the
+item-embedding source. The Qwen3-8B bridge recovers $110\%$ of native NDCG@10 on
+Tools and $78\%$ on Sports (pooled $90\%$; HR@10 recovery $116\%$ and $93\%$),
+and the bridged baseline stays well above the random floor in both domains. The
+bridge therefore preserves most of a baseline's native same-candidate signal
+rather than collapsing it, so \method{}'s margin reflects a genuine reranking
+difference, not a bridge artifact. (We use a faithful community reproduction of
+LLM2Rec, since the authors release code and data but no trained checkpoint, and
+validate on the two domains whose native downstream task was prepared; a
+full-backbone reproduction of every baseline, e.g.\ LLMEmb, is left to future
+work.)
+
 \subsection{Uncertainty as a Reliability Signal}
 
 The observation module asks whether \method{} uncertainty is informative about

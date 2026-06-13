@@ -77,7 +77,11 @@ we leave to future work.
     baseline mechanisms and use a shared Qwen3-8B representation bridge for
     same-candidate scoring. This gives a fair controlled comparison, but it is
     not the same claim as reproducing each method under its original full-catalog
-    serving stack.
+    serving stack. A bridge-fidelity check (\S\ref{sec:results}) finds the
+    Qwen3-8B bridge recovers $\approx\!90\%$ of LLM2Rec's native same-candidate
+    NDCG@10 (Tools $110\%$, Sports $78\%$), so the bridge does not collapse
+    baselines to the floor; we have not, however, run a native-backbone
+    reproduction for every baseline.
     \item \textbf{LLM cost and latency.} \method{} relies on task-grounded LLM
     evidence before score export. The current paper audits ranking quality and
     evidence integrity, but it does not optimize serving latency, token cost, or
