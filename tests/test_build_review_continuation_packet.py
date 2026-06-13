@@ -123,7 +123,10 @@ def test_review_continuation_accepts_additional_claude_review(tmp_path: Path) ->
             "kill_argument": "Final blockers remain external/manual, not method evidence.",
             "major_concerns": ["ProMax direct metadata remains unresolved."],
             "required_changes": ["Keep final readiness false until final gates close."],
-            "remaining_blockers_acknowledged": ["promax:doi_resolver_not_visible"],
+            "remaining_blockers_acknowledged": [
+                "promax:doi_resolver_not_visible",
+                "manual_submission_system:not_ready_private_confirmation_pending",
+            ],
         },
     )
 
@@ -141,6 +144,10 @@ def test_review_continuation_accepts_additional_claude_review(tmp_path: Path) ->
     assert packet["ok"] is True
     assert packet["final_panel_coverage_complete"] is True
     assert packet["reviewer_coverage"]["explicit_claude_opus_present"] is True
+    assert packet["required_claude_blocker_ack_groups"] == [
+        "manual_submission_system",
+        "promax_public_metadata",
+    ]
     assert packet["reviewer_coverage"]["score_floor_0_to_10"] == 8.0
     assert packet["additional_review_validation"] == [
         {
@@ -208,6 +215,7 @@ def test_review_continuation_accepts_closed_external_and_final_gate_inputs(
     assert packet["ok"] is True
     assert packet["review_continuation_ready"] is True
     assert packet["final_panel_coverage_complete"] is True
+    assert packet["required_claude_blocker_ack_groups"] == []
     assert packet["final_submission_ready"] is False
     assert packet["gate_summary"]["release_candidate_stack_ok"] is True
     assert packet["gate_summary"]["closure_packet_ok"] is True
@@ -259,7 +267,10 @@ def test_claude_sonnet_additional_review_is_not_explicit_opus_coverage(tmp_path:
             "kill_argument": "Final blockers remain external/manual, not method evidence.",
             "major_concerns": ["ProMax direct metadata remains unresolved."],
             "required_changes": ["Keep final readiness false until final gates close."],
-            "remaining_blockers_acknowledged": ["promax:doi_resolver_not_visible"],
+            "remaining_blockers_acknowledged": [
+                "promax:doi_resolver_not_visible",
+                "manual_submission_system:not_ready_private_confirmation_pending",
+            ],
         },
     )
 

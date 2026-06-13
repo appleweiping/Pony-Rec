@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-13T05:47:38.519302+00:00",
+  "created_at_utc": "2026-06-13T06:12:20.325349+00:00",
   "failures": [],
   "final_blocker_consistency_ok": true,
   "final_submission_ready": false,
@@ -8,21 +8,21 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\claude_opus_review_request_packet_20260613.json",
-      "sha256": "5edef98fd251f8e34659b76919ac8fa50410580b26a6ce905a0f21f50d4160e8",
-      "size_bytes": 15172
+      "sha256": "e7597df3ed55c80312a7090b305619b2ccefbcc532a84af0b01242ddc8ee7e0c",
+      "size_bytes": 16445
     },
     "closure_packet": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "3ee1fbc70d527e1564a5416d19db454078fa3fa73cf7904ab7e8edcacb19d8f0",
+      "sha256": "c2bc35fa08e08ff295f48efa862d1bcc624d4191d3313296e03c344dc611bf2e",
       "size_bytes": 15992
     },
     "final_gate": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_gate_20260613.json",
-      "sha256": "e5ac3257e423f88aeddbfb810652a53c5d763eb0741f906f4d73a7ee52bedcb1",
+      "sha256": "ee06b489f1e5f9b6e4e5835f8a1388e145630a805692ba0dc4a12b60ad1fefc1",
       "size_bytes": 11155
     },
     "manual_request": {
@@ -36,22 +36,22 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
-      "sha256": "650d3d21f1ee240e07501fd9c55777fe5bdb708849e164a6712198a2fdb7a1e6",
+      "sha256": "65c8da02769db31051e38a55ad2e75afbba5a3b04b09cb0a0c49b4b774596550",
       "size_bytes": 6963
     },
     "release_stack": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_release_candidate_stack_refresh_20260613.json",
-      "sha256": "e655d1a76f2e57882e86e770150cd7a8d625fe4efc6e478821932703fcb15b52",
+      "sha256": "17945652ddc4bd995c6eeb4cc7aafa0737e6e182a68199e50349f6bc7db0855f",
       "size_bytes": 10658
     },
     "review_continuation": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\review_continuation_packet_20260613.json",
-      "sha256": "0f21cae243128d089efdeeffec1047ee1961f2e1630be9426cf0892b196de431",
-      "size_bytes": 12582
+      "sha256": "7601e31931e85d080f90099f715aeeaf9535b780eddcd0f3fb738f98cad5525b",
+      "size_bytes": 12694
     }
   },
   "mode": "local_read_only_final_blocker_consistency_audit",

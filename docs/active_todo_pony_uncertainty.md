@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 07:46 CEST
+Last updated: 2026-06-13 08:10 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,24 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-13)
+
+- 2026-06-13 Claude external-review intake hardening:
+  Codex tightened the public-safe external Claude Opus handoff path without
+  counting it as review coverage. The refreshed
+  `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
+  now includes a fillable `response_template` whose
+  `valid_review_evidence=false` placeholder prevents accidental attachment
+  before a real substantive review is returned. The review-continuation and
+  standalone validator gates now require any current Claude Opus JSON to
+  acknowledge the open ProMax public metadata blocker and the private manual
+  submission-system blocker before it can count for explicit Claude Opus
+  coverage. `review_continuation_packet_20260613.json` now exposes
+  `required_claude_blocker_ack_groups=["manual_submission_system",
+  "promax_public_metadata"]`, keeps failed Claude attempts at `11`, keeps
+  `explicit_claude_opus_present=false`, and keeps
+  `final_submission_ready=false`. The latest live ProMax public metadata probe
+  at `2026-06-13T06:04:37Z` still reports Crossref `404`, DOI resolver `404`,
+  ACM DL `403`, and all `5/5` public source probes passing.
 
 - 2026-06-13 Claude connector-health audit:
   Codex added
@@ -58,7 +76,7 @@ cycle.
   The refreshed review-continuation packet, Claude request packet, and
   final-blocker consistency audit all record failed Claude attempts `11` while
   preserving the explicit Claude Opus blocker. The latest live ProMax probe at
-  `2026-06-13T05:42:19Z` still reports
+  `2026-06-13T06:04:37Z` still reports
   Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
   source probes passing.
 

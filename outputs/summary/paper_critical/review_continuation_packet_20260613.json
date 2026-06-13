@@ -28,7 +28,7 @@
       "explicit_claude_opus_review"
     ]
   },
-  "created_at_utc": "2026-06-13T05:31:30.006112+00:00",
+  "created_at_utc": "2026-06-13T06:05:00.004480+00:00",
   "failed_review_attempt_paths": [
     {
       "exists": true,
@@ -216,8 +216,8 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "f6d0a6ec369a4ef01e0d41ffd9970f167ca1a2b70c864a234819fde2a33e47fa",
-      "size_bytes": 15738
+      "sha256": "3ee1fbc70d527e1564a5416d19db454078fa3fa73cf7904ab7e8edcacb19d8f0",
+      "size_bytes": 15992
     },
     "panel_review": {
       "exists": true,
@@ -230,21 +230,21 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
-      "sha256": "6197ab80490084018a44375d9108b63e79e9e2dc48deafe2ef8819bdb82975f6",
+      "sha256": "65c8da02769db31051e38a55ad2e75afbba5a3b04b09cb0a0c49b4b774596550",
       "size_bytes": 6963
     },
     "release_candidate_stack": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_release_candidate_stack_refresh_20260613.json",
-      "sha256": "70ad091c37434ef3d87b4d2acbba116deb5346b58e67a98409fdfd4ee43396cf",
+      "sha256": "e655d1a76f2e57882e86e770150cd7a8d625fe4efc6e478821932703fcb15b52",
       "size_bytes": 10658
     },
     "submission_package_audit": {
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\submission_package_audit_20260613.json",
-      "sha256": "1303e811e78abab769ba717a1000f6ab42a69c67d20c3c94154b2b02c74d1044",
+      "sha256": "b45359e32d24db45215b6d6d9e15059f72dac033c20ff8e44e18ee6110dc1874",
       "size_bytes": 16084
     }
   },
@@ -273,6 +273,10 @@
     "promax:crossref_registry_not_visible",
     "promax:doi_resolver_not_visible",
     "explicit_claude_opus_review"
+  ],
+  "required_claude_blocker_ack_groups": [
+    "manual_submission_system",
+    "promax_public_metadata"
   ],
   "review_continuation_ready": true,
   "reviewer_coverage": {

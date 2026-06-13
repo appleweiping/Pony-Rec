@@ -192,14 +192,14 @@ PIDs, audit summaries, and missing-file errors.
    `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
    `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
    `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
-   `2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`, and
-   `2026-06-13T05:42:19Z` again found Crossref `404`, DOI resolver `404`, ACM
+   `2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`,
+   `2026-06-13T05:42:19Z`, and `2026-06-13T06:04:37Z` again found Crossref `404`, DOI resolver `404`, ACM
    DL `403`, and all `5/5` public source probes passing. After the
    latest probe, the closure packet was refreshed again;
    the closure Markdown now lists those latest public source probes and
    explicitly keeps the review-panel blockers. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
-   stack was also refreshed at `2026-06-13T04:31:25Z`: it reports `ok=true`,
+   stack was also refreshed at `2026-06-13T06:06:09Z`: it reports `ok=true`,
    `local_release_candidate_ready=true`, `refresh_artifact_fresh=true`,
    `failures=[]`, and `final_submission_ready=false`; the freshness audit has
    zero input or generated-gate mismatches, and the independent source-package
@@ -220,8 +220,15 @@ PIDs, audit summaries, and missing-file errors.
    any external Claude Opus JSON before attaching it through
    `--additional-review-json`. The refreshed
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
-   includes the exact validation command plus the follow-up
-   review-continuation command.
+   includes the exact validation command, a fillable `response_template` whose
+   `valid_review_evidence=false` placeholder prevents accidental attachment,
+   plus the follow-up review-continuation command. The current validator and
+   review-continuation builder require any returned Claude Opus JSON to
+   acknowledge the open ProMax public metadata blocker and the private manual
+   submission-system blocker before it can count for explicit Claude Opus
+   coverage; the refreshed review-continuation packet exposes
+   `required_claude_blocker_ack_groups=["manual_submission_system",
+   "promax_public_metadata"]`.
    The current priority is to capture explicit Claude Opus reviewer output
    using the request packet if available, then keep monitoring the ProMax public
    metadata and private manual submission-system blockers. Do not claim final

@@ -105,8 +105,9 @@ Follow-up live probes at `2026-06-13T00:49:05Z`,
 `2026-06-13T01:59:36Z`, `2026-06-13T02:32:01Z`,
 `2026-06-13T03:16:11Z`, `2026-06-13T04:11:37Z`,
 `2026-06-13T04:30:39Z`, `2026-06-13T04:49:27Z`,
-`2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`, and
-`2026-06-13T05:42:19Z` found the same direct blocker state: Crossref `404`,
+`2026-06-13T05:11:34Z`, `2026-06-13T05:31:00Z`,
+`2026-06-13T05:42:19Z`, and `2026-06-13T06:04:37Z` found the same direct
+blocker state: Crossref `404`,
 DOI resolver `404`, ACM DL `403`, and all `5/5` public source probes passing.
 The closure packet was refreshed after the latest probes; this is stronger
 public accepted-paper provenance, not a readiness upgrade. The closure packet
@@ -244,6 +245,17 @@ reports failed attempt count `11`, valid review evidence count `0`,
 `external_claude_opus_json_via_request_packet_and_validator`. This does not
 close the explicit Claude Opus blocker; it prevents unproductive retries of the
 same connector route unless the tooling changes.
+Codex then hardened the external JSON intake path: the refreshed
+`claude_opus_review_request_packet_20260613.{json,md}` now carries a fillable
+`response_template` with `valid_review_evidence=false` by default, while
+`scripts/audit/main_build_review_continuation_packet.py` and
+`scripts/audit/main_validate_claude_opus_review_json.py` require a current
+Claude Opus review JSON to acknowledge both the open ProMax public metadata
+blocker and the private manual submission-system blocker before it can count as
+explicit Claude Opus coverage. The refreshed review-continuation packet exposes
+`required_claude_blocker_ack_groups=["manual_submission_system",
+"promax_public_metadata"]`, still records failed Claude attempts `11`, and
+keeps `final_submission_ready=false`.
 
 **2026-06-13 final submission gate review-coverage hardening.** Codex updated
 `scripts/audit/main_build_final_submission_gate.py` so the final local

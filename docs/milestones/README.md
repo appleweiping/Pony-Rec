@@ -142,7 +142,8 @@ at `2026-06-13T00:49:05Z`, `2026-06-13T01:59:36Z`,
 `2026-06-13T02:32:01Z`, `2026-06-13T03:16:11Z`,
 `2026-06-13T04:11:37Z`, `2026-06-13T04:30:39Z`,
 `2026-06-13T04:49:27Z`, `2026-06-13T05:11:34Z`,
-`2026-06-13T05:31:00Z`, and `2026-06-13T05:42:19Z` found the same direct
+`2026-06-13T05:31:00Z`, `2026-06-13T05:42:19Z`, and
+`2026-06-13T06:04:37Z` found the same direct
 blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
 accepted papers, UQ author profile, author Google Sites publications, and UQ
 Experts profile. The closure packet refreshed after the latest probes and now
@@ -247,6 +248,16 @@ the same connector error repeated across all `11` failed attempts,
 `connector_unhealthy=true`, `same_route_retry_recommended=false`, and the
 recommended route `external_claude_opus_json_via_request_packet_and_validator`.
 This health audit is advisory and does not close review coverage.
+Codex then hardened that external JSON intake route: the refreshed
+`claude_opus_review_request_packet_20260613.{json,md}` includes a fillable
+response template with `valid_review_evidence=false` by default, and both the
+review-continuation packet builder and standalone Claude JSON validator now
+require a current Claude Opus JSON to acknowledge the open ProMax public
+metadata blocker and the private manual submission-system blocker before it can
+count as explicit Claude Opus coverage. The refreshed
+`review_continuation_packet_20260613.json` exposes
+`required_claude_blocker_ack_groups=["manual_submission_system",
+"promax_public_metadata"]` while keeping `final_submission_ready=false`.
 The final submission gate has also been hardened to consume the
 review-continuation packet directly: the refreshed
 `outputs/summary/paper_critical/final_submission_gate_20260613.{json,md}`

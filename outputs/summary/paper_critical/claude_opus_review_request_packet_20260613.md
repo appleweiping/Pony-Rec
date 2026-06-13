@@ -1,6 +1,6 @@
 # Claude Opus Review Request Packet
 
-- Created UTC: `2026-06-13T05:44:39.694329+00:00`
+- Created UTC: `2026-06-13T06:05:27.106632+00:00`
 - OK: `true`
 - Claude review needed: `true`
 - Existing score floor: `8.0`
@@ -29,6 +29,36 @@
   "required_changes": "Array of concrete changes before submission/final-ready claim.",
   "remaining_blockers_acknowledged": "Array naming external/manual blockers the review did not waive.",
   "valid_review_evidence": "Boolean; true only for a complete substantive review."
+}
+```
+
+## Response Template
+
+This template is intentionally not ready to attach until the reviewer fills it and sets `valid_review_evidence=true`.
+
+```json
+{
+  "reviewer": "claude-opus",
+  "created_at_utc": "YYYY-MM-DDTHH:MM:SS+00:00",
+  "source": "external Claude Opus review channel or tool/job id",
+  "score_0_to_10": null,
+  "verdict": "CONDITIONAL_PASS",
+  "claim_boundary_ok": true,
+  "final_submission_ready_claim_allowed": false,
+  "kill_argument": "Replace with the strongest remaining rejection argument.",
+  "major_concerns": [
+    "Replace with substantive concern 1.",
+    "Replace with substantive concern 2."
+  ],
+  "required_changes": [
+    "Replace with concrete required change 1.",
+    "Replace with concrete required change 2."
+  ],
+  "remaining_blockers_acknowledged": [
+    "promax_public_metadata: final page range, Crossref, and DOI resolver visibility remain open",
+    "manual_submission_system: private submission-system confirmation remains open"
+  ],
+  "valid_review_evidence": false
 }
 ```
 

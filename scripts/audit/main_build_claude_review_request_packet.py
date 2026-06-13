@@ -40,6 +40,31 @@ EXPECTED_CLAUDE_REVIEW_SCHEMA: dict[str, str] = {
 }
 
 
+CLAUDE_REVIEW_RESPONSE_TEMPLATE: dict[str, Any] = {
+    "reviewer": "claude-opus",
+    "created_at_utc": "YYYY-MM-DDTHH:MM:SS+00:00",
+    "source": "external Claude Opus review channel or tool/job id",
+    "score_0_to_10": None,
+    "verdict": "CONDITIONAL_PASS",
+    "claim_boundary_ok": True,
+    "final_submission_ready_claim_allowed": False,
+    "kill_argument": "Replace with the strongest remaining rejection argument.",
+    "major_concerns": [
+        "Replace with substantive concern 1.",
+        "Replace with substantive concern 2.",
+    ],
+    "required_changes": [
+        "Replace with concrete required change 1.",
+        "Replace with concrete required change 2.",
+    ],
+    "remaining_blockers_acknowledged": [
+        "promax_public_metadata: final page range, Crossref, and DOI resolver visibility remain open",
+        "manual_submission_system: private submission-system confirmation remains open",
+    ],
+    "valid_review_evidence": False,
+}
+
+
 def _sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
@@ -271,6 +296,10 @@ def build_claude_review_request_packet(
         "expected_additional_review_json": {
             "recommended_path": "outputs/summary/paper_critical/claude_opus_review_20260613.json",
             "schema": EXPECTED_CLAUDE_REVIEW_SCHEMA,
+            "response_template": CLAUDE_REVIEW_RESPONSE_TEMPLATE,
+            "response_template_sha256": _sha256_text(
+                json.dumps(CLAUDE_REVIEW_RESPONSE_TEMPLATE, indent=2, sort_keys=True)
+            ),
             "must_count_as_coverage": [
                 "reviewer contains both claude and opus",
                 "valid_review_evidence is true",
@@ -278,6 +307,8 @@ def build_claude_review_request_packet(
                 "score_0_to_10 is at least 8.0 for the review gate",
                 "claim_boundary_ok is true",
                 "final_submission_ready_claim_allowed is false while current blockers remain",
+                "remaining_blockers_acknowledged names the ProMax public metadata blocker",
+                "remaining_blockers_acknowledged names the private manual submission-system blocker",
             ],
         },
         "claude_review_prompt": prompt,
@@ -338,6 +369,14 @@ def render_markdown(packet: dict[str, Any]) -> str:
             "",
             "```json",
             json.dumps(packet["expected_additional_review_json"]["schema"], indent=2),
+            "```",
+            "",
+            "## Response Template",
+            "",
+            "This template is intentionally not ready to attach until the reviewer fills it and sets `valid_review_evidence=true`.",
+            "",
+            "```json",
+            json.dumps(packet["expected_additional_review_json"]["response_template"], indent=2),
             "```",
             "",
             "## Prompt",

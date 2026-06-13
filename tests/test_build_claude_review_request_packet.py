@@ -99,6 +99,14 @@ def test_claude_review_request_packet_preserves_missing_claude_gap(tmp_path: Pat
     assert packet["failed_claude_attempt_summary"]["count"] == 1
     assert packet["expected_additional_review_json"]["recommended_path"].endswith("claude_opus_review_20260613.json")
     assert "valid_review_evidence" in packet["expected_additional_review_json"]["schema"]
+    assert packet["expected_additional_review_json"]["response_template"]["reviewer"] == "claude-opus"
+    assert packet["expected_additional_review_json"]["response_template"]["valid_review_evidence"] is False
+    assert "manual_submission_system" in " ".join(
+        packet["expected_additional_review_json"]["response_template"]["remaining_blockers_acknowledged"]
+    )
+    assert "remaining_blockers_acknowledged names the ProMax public metadata blocker" in packet[
+        "expected_additional_review_json"
+    ]["must_count_as_coverage"]
     assert "main_audit_claude_review_connector_health" in packet["connector_health_command_before_retry"]
     assert "main_validate_claude_opus_review_json" in packet["validation_command_before_attach"]
     assert "promax:doi_resolver_not_visible:status=404" in packet["claude_review_prompt"]

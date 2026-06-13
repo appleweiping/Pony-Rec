@@ -112,7 +112,7 @@
     }
   ],
   "connector_unhealthy": true,
-  "created_at_utc": "2026-06-13T05:44:39.412449+00:00",
+  "created_at_utc": "2026-06-13T06:05:27.117341+00:00",
   "error_counts": {
     "Claude CLI did not return JSON output": 11
   },
@@ -205,8 +205,8 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\claude_opus_review_request_packet_20260613.json",
-      "sha256": "894e0896c4404d10371e12c9fef9cc689d53741cb0d3dd90ed2324bc9e326e95",
-      "size_bytes": 14883
+      "sha256": "e7597df3ed55c80312a7090b305619b2ccefbcc532a84af0b01242ddc8ee7e0c",
+      "size_bytes": 16445
     }
   },
   "last_error": "Claude CLI did not return JSON output",

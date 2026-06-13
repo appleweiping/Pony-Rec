@@ -164,7 +164,37 @@ def _is_claude_review(review: dict[str, Any]) -> bool:
     return _contains_any(str(review.get("reviewer") or ""), ["claude", "opus"])
 
 
-def _validate_additional_review(review: dict[str, Any]) -> tuple[bool, list[str]]:
+CLAUDE_REQUIRED_REMAINING_BLOCKER_ACKS = {
+    "promax_public_metadata": [
+        "promax",
+        "crossref",
+        "doi resolver",
+        "doi_resolver",
+        "page range",
+        "external proceedings",
+        "public metadata",
+    ],
+    "manual_submission_system": [
+        "manual",
+        "private",
+        "submission-system",
+        "submission system",
+        "submission_system",
+    ],
+}
+
+
+def _joined_lower_list(values: Any) -> str:
+    if not isinstance(values, list):
+        return ""
+    return " ".join(str(value).lower() for value in values if str(value).strip())
+
+
+def _validate_additional_review(
+    review: dict[str, Any],
+    *,
+    required_blocker_ack_groups: dict[str, list[str]] | None = None,
+) -> tuple[bool, list[str]]:
     failures: list[str] = []
     reviewer = str(review.get("reviewer") or "")
     score = _parse_score_10(review.get("score_0_to_10") or review.get("score_10"))
@@ -188,14 +218,25 @@ def _validate_additional_review(review: dict[str, Any]) -> tuple[bool, list[str]
             values = review.get(key)
             if not isinstance(values, list) or not values:
                 failures.append(f"claude_missing_{key}")
+        blocker_ack_text = _joined_lower_list(review.get("remaining_blockers_acknowledged"))
+        for blocker_group, needles in (required_blocker_ack_groups or {}).items():
+            if not any(needle in blocker_ack_text for needle in needles):
+                failures.append(f"claude_remaining_blockers_missing_{blocker_group}")
     return not failures, failures
 
 
-def _additional_review_validation(reviews: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def _additional_review_validation(
+    reviews: list[dict[str, Any]],
+    *,
+    required_blocker_ack_groups: dict[str, list[str]] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     countable: list[dict[str, Any]] = []
     states: list[dict[str, Any]] = []
     for idx, review in enumerate(reviews):
-        valid, failures = _validate_additional_review(review)
+        valid, failures = _validate_additional_review(
+            review,
+            required_blocker_ack_groups=required_blocker_ack_groups,
+        )
         states.append(
             {
                 "index": idx,
@@ -207,6 +248,24 @@ def _additional_review_validation(reviews: list[dict[str, Any]]) -> tuple[list[d
         if valid:
             countable.append(review)
     return countable, states
+
+
+def _required_claude_blocker_ack_groups(
+    *,
+    closure: dict[str, Any],
+    promax: dict[str, Any],
+) -> dict[str, list[str]]:
+    classified = closure.get("classified_remaining_blockers") or {}
+    groups: dict[str, list[str]] = {}
+    external_blockers = list(classified.get("external_proceedings_metadata") or []) + list(
+        promax.get("remaining_blockers") or []
+    )
+    manual_blockers = list(classified.get("manual_submission_system") or [])
+    if external_blockers or promax.get("promax_public_metadata_ready") is False:
+        groups["promax_public_metadata"] = CLAUDE_REQUIRED_REMAINING_BLOCKER_ACKS["promax_public_metadata"]
+    if manual_blockers or closure.get("manual_submission_system_ready") is False:
+        groups["manual_submission_system"] = CLAUDE_REQUIRED_REMAINING_BLOCKER_ACKS["manual_submission_system"]
+    return groups
 
 
 def _reviewer_coverage(
@@ -303,7 +362,6 @@ def build_review_continuation_packet(
         root=repo,
     )
     failures.extend([f"additional_review:{failure}" for failure in additional_failures])
-    countable_additional_reviews, additional_review_validation = _additional_review_validation(additional_reviews)
     failed_attempts, failed_attempt_states, failed_attempt_failures = _load_failed_review_attempts(
         list(failed_review_attempt_jsons or []),
         root=repo,
@@ -316,6 +374,14 @@ def build_review_continuation_packet(
     stack = loaded["release_candidate_stack"]
     closure = loaded["closure_packet"]
     promax = loaded["promax_probe"]
+    required_blocker_ack_groups = _required_claude_blocker_ack_groups(
+        closure=closure,
+        promax=promax,
+    )
+    countable_additional_reviews, additional_review_validation = _additional_review_validation(
+        additional_reviews,
+        required_blocker_ack_groups=required_blocker_ack_groups,
+    )
 
     coverage = _reviewer_coverage(panel, countable_additional_reviews)
     package_gates = package.get("evidence_gates") or {}
@@ -421,6 +487,7 @@ def build_review_continuation_packet(
         "input_paths": {key: _path_state(path, repo) for key, path in paths.items()},
         "additional_review_paths": additional_states,
         "additional_review_validation": additional_review_validation,
+        "required_claude_blocker_ack_groups": sorted(required_blocker_ack_groups),
         "failed_review_attempt_paths": failed_attempt_states,
         "failed_review_attempts": [
             {

@@ -12,6 +12,7 @@ from scripts.audit.main_build_claude_review_request_packet import (
     EXPECTED_CLAUDE_REVIEW_SCHEMA,
 )
 from scripts.audit.main_build_review_continuation_packet import (
+    CLAUDE_REQUIRED_REMAINING_BLOCKER_ACKS,
     _is_explicit_claude_opus_name,
     _parse_score_10,
     _validate_additional_review,
@@ -96,7 +97,14 @@ def build_claude_opus_review_validation_packet(
     request_packet, request_errors = _read_json(paths["review_request_packet"])
     continuation_packet, continuation_errors = _read_json(paths["review_continuation_packet"])
 
-    validation_ok, validation_failures = _validate_additional_review(review) if review else (False, [])
+    validation_ok, validation_failures = (
+        _validate_additional_review(
+            review,
+            required_blocker_ack_groups=CLAUDE_REQUIRED_REMAINING_BLOCKER_ACKS,
+        )
+        if review
+        else (False, [])
+    )
     reviewer = str(review.get("reviewer") or "")
     score = _parse_score_10(review.get("score_0_to_10") or review.get("score_10")) if review else None
     explicit_claude_opus = _is_explicit_claude_opus_name(reviewer)
