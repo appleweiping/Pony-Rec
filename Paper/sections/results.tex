@@ -63,7 +63,11 @@ signal stratifies same-candidate ranking reliability.
 
 The module is descriptive. It does not show that manipulating uncertainty
 causes a metric change, and it is not a substitute for the official-baseline
-comparison in Table~\ref{tab:main_results}.
+comparison in Table~\ref{tab:main_results}. Because events are binned by
+\method{}'s own uncertainty and the ranking score is itself a monotone function
+of the same calibrated posterior, part of this stratification is mechanical; we
+therefore read it as confirmation that the uncertainty signal is monotonically
+aligned with realized reliability, not as an independent causal effect.
 
 \input{tables/uncertainty_stratification}
 
