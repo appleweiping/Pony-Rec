@@ -32,10 +32,15 @@ Within this protocol, our central empirical finding is simple. A
 per-candidate relevance probability, queried directly and used as the ranking
 score -- ranks first in \emph{six of the eight} domains (Books, Electronics,
 Sports, Toys, Home, Tools), improving NDCG@10 by $+21.6\%$ to $+53.2\%$ over the
-strongest baseline; on these six domains it leads on essentially all seven
-metrics (HR@5/@10/@20, NDCG@5/@10/@20, MRR). It is not first in the other two:
-on Beauty it is rank~2, $-11\%$ on NDCG@10 behind ProEx, and on Movies it is
-rank~5, $-24\%$ behind LLMEmb. We state these two losses openly rather than
+strongest baseline; it leads on all seven metrics (HR@5/@10/@20,
+NDCG@5/@10/@20, MRR) in five of these six domains (Electronics, Sports, Toys,
+Home, Tools; 56/56 paired-significant) and on six of seven on Books (HR@20
+versus LLMEmb the exception). It is not first in the other two:
+on Beauty it is rank~2, $-11\%$ on NDCG@10 behind ProEx, though its shortfall
+versus ProEx is not Holm-significant on any metric, leaving it statistically
+indistinguishable from the strongest baseline; on Movies it is mid-pack,
+rank~5 and $-24\%$ behind LLMEmb, substantially behind the four stronger
+baselines. We state these two losses openly rather than
 restricting the reported domain set to the wins. A random floor and a popularity
 baseline both sit near NDCG@10~$\approx 0.045$, so the gains are over a
 genuinely informative comparison, not the floor. This says that for
@@ -58,7 +63,9 @@ improve same-candidate ranking: the zero-risk setting ($\eta=0$) is test-best in
 all four diagnostic domains, a confidence-only variant (the calibrated posterior
 with no uncertainty and no risk) matches or exceeds the full family in three of
 those four domains, and the raw probability without any calibration map tracks
-the full family within $\approx 0.003$ NDCG@10. The boundary-uncertainty term is
+the full family within $\leq 0.008$ (mean $\approx 0.005$) NDCG@10 on the three
+domains with local raw-probability rows (Sports, Home, Tools); the fourth
+diagnostic domain's row is server-side. The boundary-uncertainty term is
 inert in all four, and removing the counterevidence and risk terms is
 non-worse. The working ranking signal is located in the pointwise posterior
 itself, not in the uncertainty machinery built on top of it. As a minor,
@@ -85,11 +92,17 @@ Our contributions are:
     eight domains.} Under this protocol, the model's directly elicited
     per-candidate relevance probability ranks first in six of the eight domains,
     improving NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline and
-    leading on essentially all seven metrics in those six domains. We report the
+    leading on all seven metrics in five of those six domains (Electronics,
+    Sports, Toys, Home, Tools; 56/56 paired-significant) and on six of seven on
+    Books (HR@20 versus LLMEmb the exception). We report the
     two non-winning domains explicitly (Beauty rank~2, $-11\%$; Movies rank~5,
-    $-24\%$) instead of dropping them. On the four domains with full per-event
-    signal rows, all 56 per-domain paired tests are positive and
-    Holm-significant. The claim is scoped to same-candidate reranking, not
+    $-24\%$) instead of dropping them. We compute paired Holm-corrected bootstrap
+    tests on all eight domains: on the six winning domains \method{} is
+    significantly ahead on all 56 metric/baseline pairs (54/56 on Books), while on
+    the two losing domains the paired tests quantify the gap honestly --- on Beauty
+    none of the losses to ProEx is Holm-significant, and on Movies \method{} is
+    significantly behind the stronger baselines on 22 of 56 pairs. The claim is
+    scoped to same-candidate reranking, not
     full-catalog SOTA.
 
     \item \textbf{A rigorous negative result on calibrated uncertainty and

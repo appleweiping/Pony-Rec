@@ -11,13 +11,18 @@ task-grounded pointwise LLM relevance posterior---the model's own per-candidate
 relevance probability used directly as the ranking score---ranks first against
 eight official-code-level baselines in six of the eight Amazon domains we tested
 (Books, Electronics, Sports, Toys, Home, Tools), improving NDCG@10 by $+21.6\%$
-to $+53.2\%$ over the strongest baseline and leading on essentially all seven
-HR/NDCG/MRR metrics in those six. In the other two domains it is competitive but
-not first---rank~2 on Beauty ($-11\%$ NDCG@10) and rank~5 on Movies
-($-24\%$)---which we report rather than omit. On the four domains with full
-per-event signal rows all 56 per-domain paired tests are positive and
-Holm-significant. This is a scoped same-candidate reranking claim, not a
-full-catalog recommender SOTA result.
+to $+53.2\%$ over the strongest baseline and leading on all seven HR/NDCG/MRR
+metrics in five of those six domains (Electronics, Sports, Toys, Home, Tools) and
+on six of seven on Books (HR@20 versus LLMEmb the exception). In the other two
+domains it is not first---rank~2 on Beauty ($-11\%$ NDCG@10, though its shortfall
+versus ProEx is not Holm-significant on any metric) and mid-pack at rank~5 on
+Movies ($-24\%$, substantially behind the four stronger baselines)---which we
+report rather than omit. We compute paired Holm-corrected bootstrap tests on all
+eight domains: on the six winning domains \method{} is significantly ahead on all
+56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly
+behind the stronger baselines on 22 of 56 pairs and on Beauty none of the losses
+to ProEx is Holm-significant. This is a scoped same-candidate reranking claim, not
+a full-catalog recommender SOTA result.
 
 The diagnostic modules locate this signal precisely and yield a rigorous
 negative result. Leave-one-component-out ablations and a raw-probability

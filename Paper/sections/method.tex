@@ -1,6 +1,22 @@
 \section{Method}
 \label{sec:method}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/framework_overview_v2.png}
+\caption{Overview of the unified same-candidate reranking protocol and
+\method{}. Every method scores the same fixed 101-candidate panel (one positive,
+100 popularity-sampled negatives) for each user under a shared Qwen3-8B backbone;
+\method{} ranks the panel directly by the task-grounded \emph{pointwise} relevance
+posterior $\hat{p}$, and all methods are compared on HR/NDCG/MRR against eight
+official-code-level baselines with paired Holm-corrected bootstrap tests. The
+calibrated-uncertainty decomposition and risk-adjusted ranking family (dashed,
+off the main path) are \emph{analyzed and found not to improve} same-candidate
+ranking over the posterior they are built on---a characterized negative
+result---rather than the source of the gain.}
+\label{fig:framework}
+\end{figure*}
+
 \subsection{Problem Formulation}
 
 Given a user $u$ with interaction history $H_u$ and a candidate set
@@ -10,8 +26,8 @@ our formal setting, $n=101$ for every test event: one positive item and 100
 negatives. Every compared method must produce one finite score per
 $(u,c_i)$ pair under the same key schema.
 
-The working scorer in \method{} is a task-grounded candidate relevance
-posterior $p_i=P(y_i=1\mid H_u,c_i)$: a pointwise relevance probability that
+The working scorer in \method{} (Figure~\ref{fig:framework}) is a task-grounded
+candidate relevance posterior $p_i=P(y_i=1\mid H_u,c_i)$: a pointwise relevance probability that
 the LLM emits when asked to judge each candidate under the next-interaction
 task. Around this posterior we define an \emph{analyzed design space} of
 uncertainty-adjusted ranking. We attach to each posterior an uncertainty

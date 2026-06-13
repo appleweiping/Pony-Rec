@@ -60,7 +60,9 @@ we leave to future work.
     uses a unified Qwen3-8B backbone and eight Amazon-domain same-candidate
     tasks (with the uncertainty diagnostics run on four of them). Other LLMs,
     catalogs, or retriever distributions may change calibration and uncertainty
-    behavior.
+    behavior. A second-backbone replication, to test whether the same-candidate
+    ranking advantage transfers across model families, is underway and left to
+    future work; the present results should be read as single-backbone evidence.
     \item \textbf{Descriptive uncertainty diagnostics.} The observation module
     shows that uncertainty stratifies reliability, but it is not a causal
     intervention. It does not prove that changing uncertainty alone would change
@@ -83,6 +85,18 @@ we leave to future work.
     NDCG@10 (Tools $110\%$, Sports $78\%$), so the bridge does not collapse
     baselines to the floor; we have not, however, run a native-backbone
     reproduction for every baseline.
+    \item \textbf{Exploratory gap decomposition.} Our analysis of why \method{}
+    wins on six domains but not Beauty or Movies relates the per-domain NDCG@10
+    gap to interpretable domain features (Table~\ref{tab:gap_decomposition}).
+    With only eight domains these are exploratory, descriptive associations, not
+    causal claims: no single feature remains significant once the number of
+    features tested is accounted for, and no feature separates both non-winning
+    domains. Two measurement confounds further limit the Movies row in
+    particular: only $\approx\!51\%$ of its candidate items have title metadata,
+    which itself handicaps a text-grounded scorer, and its history-length
+    feature uses an all-user interactions proxy (a different source) because the
+    evaluation panel was pruned for storage. We therefore present the
+    decomposition as motivating analysis, not a validated mechanism.
     \item \textbf{LLM cost and latency.} \method{} relies on task-grounded LLM
     evidence before score export. The current paper audits ranking quality and
     evidence integrity, but it does not optimize serving latency, token cost, or

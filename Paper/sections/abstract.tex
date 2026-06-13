@@ -13,13 +13,19 @@ domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools), our
 central empirical finding is that a \emph{task-grounded pointwise LLM relevance
 posterior} -- the model's own per-candidate relevance probability, used directly
 as the ranking score -- ranks first in six of the eight domains, improving
-NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline (and on the six
-winning domains it leads on essentially all seven metrics HR@5/@10/@20,
-NDCG@5/@10/@20, MRR). In the remaining two domains it is competitive but not
-first: rank~2 on Beauty ($-11\%$ NDCG@10 behind ProEx) and rank~5 on Movies
-($-24\%$ behind LLMEmb). We report these two losses explicitly rather than
-dropping them. On the four domains with full per-event signal rows, all 56
-per-domain paired tests are positive and Holm-significant.
+NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline (leading on all
+seven metrics HR@5/@10/@20, NDCG@5/@10/@20, MRR in five of these six domains ---
+Electronics, Sports, Toys, Home, Tools; 56/56 paired-significant --- and on six
+of seven on Books, HR@20 versus LLMEmb the exception). In the remaining two
+domains it is not first: rank~2 on Beauty ($-11\%$ NDCG@10 behind ProEx, though
+this shortfall is not Holm-significant on any metric, leaving \method{}
+statistically indistinguishable from the strongest baseline) and mid-pack at
+rank~5 on Movies ($-24\%$ behind LLMEmb, substantially behind the stronger
+baselines). We report these two losses explicitly rather than
+dropping them. We compute paired Holm-corrected bootstrap tests on all eight
+domains: on the six winning domains \method{} is significantly ahead on all 56
+metric/baseline pairs (54/56 on Books), while on Movies it is significantly
+behind the stronger baselines on 22 of 56 pairs.
 
 We then report a rigorous \emph{negative result} on the design space this work
 set out to study. We instrument the pointwise posterior with a principled

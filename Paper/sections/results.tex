@@ -9,10 +9,15 @@ baseline, it improves NDCG@10 by +21.6\% on Books, +53.2\% on Electronics,
 +29.7\% on Sports, +32.2\% on Toys, +41.0\% on Home, and +43.3\% on Tools; in
 these six domains the same pattern holds for HR@5/@10/@20, NDCG@5/@10/@20, and
 MRR (the lone exception is Books HR@20, where LLMEmb's deeper recall edges
-\method{}). In the remaining two domains \method{} is competitive but not
-first: on \textbf{Beauty} it is rank~2 of nine, trailing ProEx by $-11.0\%$
-NDCG@10 ($0.1341$ vs.\ $0.1506$), and on \textbf{Movies} it is rank~5 of nine,
-trailing LLMEmb by $-24.2\%$ ($0.1281$ vs.\ $0.1690$). We report these two
+\method{}). In the remaining two domains \method{} does not rank first. On
+\textbf{Beauty} it is rank~2 of nine, trailing ProEx by $-11.0\%$ NDCG@10
+($0.1341$ vs.\ $0.1506$); we report this point estimate honestly, but the
+shortfall is not Holm-significant on any of the seven metrics
+(Table~\ref{tab:significance_summary}), so \method{} is statistically
+indistinguishable from the strongest baseline there. On \textbf{Movies} it is
+mid-pack---rank~5 of nine, trailing LLMEmb by $-24.2\%$ ($0.1281$ vs.\ $0.1690$)
+and substantially behind: it is significantly behind the four stronger
+baselines on 22 of the 56 paired tests. We report these two
 losses explicitly; restricting the table to the six winning domains would
 overstate the method. Table~\ref{tab:improvement_over_strongest} gives the full
 per-domain per-metric improvement over the strongest baseline, including the
@@ -22,40 +27,29 @@ gives the per-metric ranks.
 The complete evidence ledger contains 72 method-domain rows: eight official
 baseline rows and one \method{} row for each of the eight domains. Every row has
 10,000 users (Beauty 973), 101 candidates per user, score coverage 1.0, and the
-expected row counts. For the four domains with full per-event signal rows
-(Sports, Toys, Home, Tools), the paired test family contains 56 comparisons
-(eight baselines times seven metrics) and all 56 deltas are positive and
-Holm-significant in every one of them. Table~\ref{tab:significance_summary}
-summarizes that paired-test gate, and Table~\ref{tab:full_official_ndcg10}
+expected row counts. For every one of the eight domains the paired-test family
+contains 56 comparisons (eight baselines times seven metrics). On the six
+domains where \method{} ranks first (Sports, Toys, Home, Tools, Electronics:
+56/56; Books: 54/56), almost all deltas are positive and Holm-significant; the
+only exceptions on Books are HR@20 versus LLMEmb (a significant loss) and HR@10
+versus LLMEmb (not significant). On the two domains where \method{} does not
+rank first we report the losses with the same paired uncertainty: on Beauty
+(rank~2) \method{} trails ProEx on every metric but none of those gaps is
+Holm-significant, while it is significantly ahead of the seven weaker baselines
+on 14 pairs; on Movies (rank~5) \method{} is significantly behind the four
+stronger baselines on 22 metric/baseline pairs and significantly ahead of the
+weaker baselines on 16. Table~\ref{tab:significance_summary}
+summarizes the signed paired-test outcomes for all eight domains, and
+Table~\ref{tab:full_official_ndcg10}
 shows the complete per-domain NDCG@10 ranking over all eight official baselines
 plus \method{} for all eight domains.
 
 This supports a controlled reranking claim. It does not establish full-catalog
 recommendation SOTA because candidate generation is not evaluated here.
 
-\paragraph{Why the posterior wins on six domains but not Beauty or Movies.} We
-read the two non-winning domains as informative rather than as noise, and offer
-the following analysis---hypothesized from domain characteristics, not proven by
-a controlled intervention. The six domains where the pointwise posterior wins
-are ones in which a strong general-purpose LLM can recover user-conditional
-relevance directly from item text and short histories. Beauty and Movies share
-two properties that work against a text-only pointwise scorer and in favour of
-the baselines that beat it. First, both are comparatively
-\emph{popularity- and taste-skewed}: Movies in particular has heavy blockbuster
-concentration and strong collaborative signal, which is exactly what LLMEmb's
-trained embeddings and ProEx's profile module capture and what a per-candidate
-text posterior does not. Second, both have \emph{denser, more homogeneous
-candidate descriptions} (cosmetics variants; films within a genre) where 101
-sampled items are textually close, so the LLM's per-candidate relevance gap is
-small and easily dominated by a learned collaborative ranker. Beauty also has
-by far the smallest test pool (973 users), so its margins are the least
-stable. Consistent with this, the methods that beat \method{} are precisely the
-embedding/profile baselines (LLMEmb on Movies, ProEx on Beauty) rather than the
-floor-level generative or graph baselines. We therefore frame the result as: a
-directly elicited pointwise LLM posterior is the strongest single reranking
-signal in most domains we tested, but it does not subsume trained collaborative
-structure in popularity-skewed, text-homogeneous catalogues. We flag this as
-analysis to motivate future hybridization, not as a validated causal claim.
+\paragraph{Why the posterior wins on six domains but not Beauty or Movies: an exploratory decomposition.} To replace a qualitative guess with measurement, we relate the per-domain NDCG@10 gap between \method{} and the strongest same-candidate baseline to interpretable domain features---catalogue size, popularity skew (Gini and top-1\% interaction share), candidate-title textual homogeneity (mean pairwise TF--IDF cosine and token Jaccard over the 101 panel titles, and panel vocabulary size), and mean user-history length (Table~\ref{tab:gap_decomposition}). With only eight domains these are deliberately \emph{exploratory, descriptive correlations, not causal claims}, and no single feature remains significant once we account for the number of features tested; we therefore report the full feature table rather than a one-factor story. Three associations emerge. (i)~The strongest single continuous predictor is mean user-history length (Spearman $\rho=-0.69$, single-feature OLS $R^2=0.61$): \method{}'s relative advantage is largest where evaluation histories are \emph{shorter} and smallest on the two longest-history domains, consistent with directly elicited relevance helping most before a user has accumulated the long interaction history that ID/collaborative baselines exploit. We read this as a shorter-history \emph{tendency} rather than a cold-start regime, since mean histories span only $4.0$--$6.7$ items and Books is a winning domain with the second-longest history. (ii)~Candidate-text homogeneity moves inversely with the gap ($\rho=-0.24$ for TF--IDF cosine, $-0.45$ for token Jaccard): the two non-winning domains have the most textually homogeneous panels, where a per-candidate text posterior is least discriminative. (iii)~Contrary to our own prior conjecture, popularity skew does \emph{not} work against the posterior: the gap correlates \emph{positively} with skew ($\rho=+0.57$ for Gini, $+0.52$ for top-1\% share), \method{}'s margin in fact grows on more skewed long-tail catalogues, and Beauty---a non-winning domain---has the \emph{lowest} skew of all eight (Gini $0.26$). We state this reversal explicitly rather than retain the intuitive but unsupported ``loses on skewed catalogues'' reading. Finally, no single feature separates both non-winning domains, because they differ in kind: Beauty is a tiny ($1{,}184$-item), near-uniform catalogue where the dense-ID baseline ProEx has ample co-occurrence signal and the LLM posterior adds little---\method{} still beats LLMEmb there by $+9.3\%$, and its shortfall versus ProEx is not Holm-significant on any metric (Table~\ref{tab:significance_summary})---whereas Movies combines the most homogeneous candidate text with the longest histories and only $51\%$ item-title metadata coverage, a measurement limitation that itself handicaps a text-grounded scorer. (For Movies the history length uses an all-user interactions proxy because its $10{,}000$-user evaluation panel was pruned for storage; the released feature table flags this.) Taken together, the profile---larger margins on large, higher-skew, shorter-history, text-heterogeneous catalogues---motivates future hybridisation of the pointwise posterior with collaborative structure, and we offer it as analysis rather than a validated causal mechanism.
+
+\input{tables/gap_decomposition_table}
 
 \paragraph{Attribution: the win is the pointwise posterior.} We are explicit
 about which signal produces the headline ranking. The reported \method{} rows

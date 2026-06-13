@@ -76,7 +76,7 @@ official-code-level LLM-based recommendation baselines:
     \item \textbf{LLMEmb}~\cite{llmemb}: LLM-generated embeddings for recommendation
     \item \textbf{LLM-ESR}~\cite{llmesr}: LLM-enhanced long-tailed sequential recommendation
     \item \textbf{ProEx}~\cite{proex}: Profile extrapolation with LLMs
-    \item \textbf{ProMax}~\cite{promax}: LLM-derived profiles with distribution shaping\footnote{ProEx and ProMax are concurrent/forthcoming works from the ProRec line; we include them as strong recent profile-based baselines and adapt their official code under our unified protocol.}
+    \item \textbf{ProMax}~\cite{promax}: LLM-derived profiles with distribution shaping\footnote{ProEx (arXiv:2512.00679) and ProMax (arXiv:2604.26231) are recent preprints (to appear) from the ProRec line, released through the shared official repository \texttt{BlueGhostYi/ProRec}; we include them as strong recent profile-based baselines and adapt their official shared code under our unified protocol.}
     \item \textbf{RLMRec}~\cite{rlmrec}: Representation learning with LLMs
 \end{itemize}
 
@@ -96,10 +96,19 @@ corresponding per-event score of an official baseline. For each domain,
 yielding 56 paired tests (8 baselines $\times$ 7 metrics). We use paired
 event bootstrap confidence intervals with 2,000 bootstrap samples, 95\%
 percentile intervals, and Holm correction at $\alpha=0.05$ over the full
-family of 56 tests in that domain. The Holm-corrected paired-test gate is
-reported for the four domains where \method{} ranks first on every metric
-(Sports, Toys, Home, Tools); for the four original domains we report ranks and
-per-metric improvements directly.
+family of 56 tests in that domain. The Holm-corrected paired tests are
+reported for all eight domains, including the two where \method{} does not
+rank first (Beauty, Movies), so that the losses carry the same paired
+uncertainty as the wins; Table~\ref{tab:significance_summary} gives the signed
+counts (ahead / behind / non-significant) out of 56 per domain.
+
+\paragraph{Cost and Latency.} \method{} requires one LLM forward pass per
+candidate to obtain its per-candidate relevance posterior, i.e.\ 101 scoring
+calls per user and roughly $1.01$M scoring calls per 10,000-user domain (we
+batch these through vLLM). This is a same-candidate reranking cost incurred at
+scoring time; the present paper audits ranking quality and evidence integrity
+and does \emph{not} optimise online serving latency, per-token cost, or online
+batching (cf.\ the LLM cost-and-latency limitation in \S\ref{sec:analysis}).
 
 \paragraph{Evidence Packaging.} Every completed row has a lightweight local
 evidence package with metrics, row counts, provenance, score audits, logs, and
