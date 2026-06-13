@@ -1,16 +1,44 @@
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Paired-test gate summary for C-CRP versus the eight official baselines. The Holm family contains seven metrics for each of eight baselines per domain; confidence intervals use 2,000 paired event bootstrap samples.}
+\caption{Paired-test summary for C-CRP versus the eight official baselines on all
+eight domains. For each domain the Holm family contains seven metrics
+(HR/NDCG@$\{5,10,20\}$, MRR) for each of eight baselines ($56$ tests). We report
+\emph{signed} outcomes: ``C-CRP ahead'' (Holm-significant at $\alpha{=}0.05$ with a
+strictly positive $95\%$ paired-event bootstrap CI), ``C-CRP behind''
+(Holm-significant with a strictly negative CI), and ``n.s.'' (not Holm-significant,
+or significant with a CI straddling zero). Confidence intervals use $2{,}000$ paired
+event bootstrap resamples; $p$-values use the two-sided Wilcoxon signed-rank test.}
 \label{tab:significance_summary}
-\begin{tabular}{lrrrr}
+\begin{tabular}{llrrr}
 \toprule
-Domain & Holm-pos. tests & Min $\Delta$ & Min CI low & Max Holm $p$ \\
+Domain & C-CRP rank & C-CRP ahead & C-CRP behind & n.s. \\
+ & (NDCG@10) & (Holm-sig.) & (Holm-sig.) & \\
 \midrule
-Sports & 56/56 & 0.0272 & 0.0164 & 1.22e-06 \\
-Toys & 56/56 & 0.0193 & 0.0083 & 4.06e-04 \\
-Home & 56/56 & 0.0336 & 0.0216 & 1.02e-08 \\
-Tools & 56/56 & 0.0294 & 0.0173 & 9.72e-07 \\
+\multicolumn{5}{l}{\emph{Domains where C-CRP ranks first}}\\
+Sports      & 1 & 56/56 & 0/56 & 0/56 \\
+Toys        & 1 & 56/56 & 0/56 & 0/56 \\
+Home        & 1 & 56/56 & 0/56 & 0/56 \\
+Tools       & 1 & 56/56 & 0/56 & 0/56 \\
+Electronics & 1 & 56/56 & 0/56 & 0/56 \\
+Books       & 1 & 54/56 & 1/56 & 1/56 \\
+\midrule
+\multicolumn{5}{l}{\emph{Domains where C-CRP does not rank first (reported for completeness)}}\\
+Beauty      & 2 & 14/56 & 0/56 & 42/56 \\
+Movies      & 5 & 16/56 & 22/56 & 18/56 \\
 \bottomrule
 \end{tabular}
+
+\vspace{2pt}
+{\scriptsize \emph{Notes.} On \textbf{Books}, the single ``behind'' test is HR@20
+versus LLMEmb ($\Delta{=}-0.039$) and the single n.s.\ test is HR@10 versus LLMEmb;
+C-CRP is significantly ahead on the other $54$ metric/baseline pairs. On
+\textbf{Beauty}, C-CRP trails ProEx on every metric but \emph{none} of these gaps is
+Holm-significant (all CIs straddle zero), so there are no significant losses; C-CRP
+is significantly ahead of the seven weaker baselines on $14$ pairs. On
+\textbf{Movies}, C-CRP is significantly behind the stronger baselines (LLMEmb,
+LLM2Rec, IRLLRec, RLMRec) on $22$ pairs and ahead of the weaker baselines on $16$;
+the n.s.\ column for Movies includes five tests that are Wilcoxon-significant but
+whose bootstrap CI straddles zero (negligible effect size), conservatively counted
+as non-significant.}
 \end{table}

@@ -1,0 +1,145 @@
+{
+  "schema_version": "2026-06-14.v1",
+  "method": "paired_event_bootstrap_2000_percentile95_wilcoxon_pratt_holm_alpha0.05_over_56test_family",
+  "metrics": [
+    "HR@5",
+    "HR@10",
+    "HR@20",
+    "NDCG@5",
+    "NDCG@10",
+    "NDCG@20",
+    "MRR"
+  ],
+  "baselines": [
+    "llmemb",
+    "proex_profile",
+    "promax_profile",
+    "elmrec_graph",
+    "irllrec_intent",
+    "rlmrec_graphcl",
+    "llm2rec_sasrec",
+    "llmesr_sasrec"
+  ],
+  "signed_label_definition": {
+    "positive_significant": "Holm-significant AND delta>0 AND bootstrap 95% CI lower>0 (C-CRP significantly ahead)",
+    "negative_significant": "Holm-significant AND delta<0 AND bootstrap 95% CI upper<0 (C-CRP significantly BEHIND)",
+    "significant_ambiguous_sign": "Wilcoxon Holm-significant but bootstrap 95% CI straddles 0 (tiny effect, sign undetermined by CI)",
+    "not_significant": "not Holm-significant"
+  },
+  "domain_order": [
+    "books",
+    "electronics",
+    "sports",
+    "toys",
+    "home",
+    "tools",
+    "beauty",
+    "movies"
+  ],
+  "domains": [
+    {
+      "domain": "books",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 1,
+      "positive_significant": 54,
+      "negative_significant": 1,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 1,
+      "paired_test_count": 56,
+      "max_holm_p_value": 0.5157294738083533,
+      "ccrp_event_means_match_published": true,
+      "source": "original_recomputed_20260614"
+    },
+    {
+      "domain": "electronics",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 1,
+      "positive_significant": 56,
+      "negative_significant": 0,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 0,
+      "paired_test_count": 56,
+      "max_holm_p_value": 0.0029331400150986245,
+      "ccrp_event_means_match_published": true,
+      "source": "original_recomputed_20260614"
+    },
+    {
+      "domain": "sports",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 1,
+      "positive_significant": 56,
+      "negative_significant": 0,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 0,
+      "paired_test_count": 56,
+      "max_holm_p_value": 1.219129314796352e-06,
+      "ccrp_event_means_match_published": true,
+      "source": "new4_existing_20260601-05"
+    },
+    {
+      "domain": "toys",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 1,
+      "positive_significant": 56,
+      "negative_significant": 0,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 0,
+      "paired_test_count": 56,
+      "max_holm_p_value": 0.0004061119980698498,
+      "ccrp_event_means_match_published": true,
+      "source": "new4_existing_20260601-05"
+    },
+    {
+      "domain": "home",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 1,
+      "positive_significant": 56,
+      "negative_significant": 0,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 0,
+      "paired_test_count": 56,
+      "max_holm_p_value": 1.0216927255359559e-08,
+      "ccrp_event_means_match_published": true,
+      "source": "new4_existing_20260601-05"
+    },
+    {
+      "domain": "tools",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 1,
+      "positive_significant": 56,
+      "negative_significant": 0,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 0,
+      "paired_test_count": 56,
+      "max_holm_p_value": 9.7172307634557e-07,
+      "ccrp_event_means_match_published": true,
+      "source": "new4_existing_20260601-05"
+    },
+    {
+      "domain": "beauty",
+      "n_paired_events": 973,
+      "ccrp_rank_by_NDCG10": 2,
+      "positive_significant": 14,
+      "negative_significant": 0,
+      "significant_ambiguous_sign": 0,
+      "not_significant": 42,
+      "paired_test_count": 56,
+      "max_holm_p_value": 1.0,
+      "ccrp_event_means_match_published": true,
+      "source": "original_recomputed_20260614"
+    },
+    {
+      "domain": "movies",
+      "n_paired_events": 10000,
+      "ccrp_rank_by_NDCG10": 5,
+      "positive_significant": 16,
+      "negative_significant": 22,
+      "significant_ambiguous_sign": 5,
+      "not_significant": 13,
+      "paired_test_count": 56,
+      "max_holm_p_value": 1.0,
+      "ccrp_event_means_match_published": true,
+      "source": "original_recomputed_20260614"
+    }
+  ]
+}

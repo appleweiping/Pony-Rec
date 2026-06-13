@@ -1,0 +1,9 @@
+domain,ccrp_rank_by_NDCG10,n_paired_events,paired_test_count,positive_significant,negative_significant,significant_ambiguous_sign,not_significant,max_holm_p_value,ccrp_event_means_match_published,source
+books,1,10000,56,54,1,0,1,0.5157294738083533,True,original_recomputed_20260614
+electronics,1,10000,56,56,0,0,0,0.0029331400150986245,True,original_recomputed_20260614
+sports,1,10000,56,56,0,0,0,1.219129314796352e-06,True,new4_existing_20260601-05
+toys,1,10000,56,56,0,0,0,0.0004061119980698498,True,new4_existing_20260601-05
+home,1,10000,56,56,0,0,0,1.0216927255359559e-08,True,new4_existing_20260601-05
+tools,1,10000,56,56,0,0,0,9.7172307634557e-07,True,new4_existing_20260601-05
+beauty,2,973,56,14,0,0,42,1.0,True,original_recomputed_20260614
+movies,5,10000,56,16,22,5,13,1.0,True,original_recomputed_20260614
