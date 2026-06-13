@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 04:22 CEST
+Last updated: 2026-06-13 04:33 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -117,15 +117,12 @@ cycle.
   `404`, the DOI resolver is `404`, and ACM DL is `403`, while arXiv HTML ACM
   metadata, the SIGIR accepted-paper page, the UQ author-profile page, the
   author Google Sites publications page, and the UQ Experts profile source
-  probes pass. Follow-up live probes at `2026-06-13T00:49:05Z` and
-  `2026-06-13T01:59:36Z` found the same direct blocker state; after the seventh
-  failed Claude connector attempt, the review-continuation packet refreshed at
-  `2026-06-13T02:19:28Z`, the release-candidate stack refreshed at
-  `2026-06-13T02:21:31Z`, and the closure packet refreshed most recently at
-  `2026-06-13T02:21:48Z` while keeping `final_submission_ready=false`. This
-  strengthens public accepted-paper provenance but is not a readiness upgrade.
-  The
-  refreshed
+  probes pass. Follow-up live probes at `2026-06-13T00:49:05Z`,
+  `2026-06-13T01:59:36Z`, and `2026-06-13T02:32:01Z` found the same direct
+  blocker state; after the latest probe, the closure packet refreshed most
+  recently at `2026-06-13T02:32:56Z` while keeping
+  `final_submission_ready=false`. This strengthens public accepted-paper
+  provenance but is not a readiness upgrade. The refreshed
   `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260613.{json,md}`
   now uses the 2026-06-13 final gate, external metadata audit, manual
   checklist, full release-candidate stack, and public probe. The closure

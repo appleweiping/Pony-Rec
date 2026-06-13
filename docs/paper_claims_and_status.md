@@ -101,10 +101,10 @@ still reports `promax_public_metadata_ready=false`: Crossref `/works` for
 ACM DL returns `403`; arXiv HTML ACM metadata, the SIGIR accepted-paper page,
 the UQ author-profile source probe, the author Google Sites publications
 source probe, and the UQ Experts profile source probe remain passing.
-Follow-up live probes at `2026-06-13T00:49:05Z` and
-`2026-06-13T01:59:36Z` found the same direct blocker state, and the closure
-packet was refreshed after the seventh failed Claude connector attempt at
-`2026-06-13T02:21:48Z`; this is stronger public accepted-paper provenance, not
+Follow-up live probes at `2026-06-13T00:49:05Z`,
+`2026-06-13T01:59:36Z`, and `2026-06-13T02:32:01Z` found the same direct
+blocker state, and the closure packet was refreshed most recently at
+`2026-06-13T02:32:56Z`; this is stronger public accepted-paper provenance, not
 a readiness upgrade. The closure packet Markdown now lists latest public source
 probes in addition to direct Crossref/DOI/ACM statuses. Codex also refreshed
 the complete local release-candidate stack

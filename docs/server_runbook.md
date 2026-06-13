@@ -153,10 +153,10 @@ PIDs, audit summaries, and missing-file errors.
    and `promax_public_metadata_ready=false`; arXiv HTML ACM metadata, the
    SIGIR accepted-paper page, the UQ author-profile page, the author Google
    Sites publications page, and the UQ Experts profile source probes all pass.
-   Follow-up live probes at `2026-06-13T00:49:05Z` and
-   `2026-06-13T01:59:36Z` found the same direct blocker state. After the
-   seventh failed Claude connector attempt, the closure packet refreshed most
-   recently at `2026-06-13T02:21:48Z`;
+   Follow-up live probes at `2026-06-13T00:49:05Z`,
+   `2026-06-13T01:59:36Z`, and `2026-06-13T02:32:01Z` found the same direct
+   blocker state. After the latest probe, the closure packet refreshed most
+   recently at `2026-06-13T02:32:56Z`;
    the closure Markdown now lists those latest public source probes. This is
    stronger provenance evidence, not a readiness upgrade. The complete local release-candidate
    stack was also refreshed at `2026-06-13T02:21:31Z`: it reports `ok=true`,
