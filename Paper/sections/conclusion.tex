@@ -1,19 +1,30 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We studied whether a task-grounded uncertainty framework can improve LLM-based
-reranking under a controlled same-candidate protocol. \method{} turns LLM
-evidence into a calibrated candidate relevance posterior, estimates
-uncertainty, and applies a validation-controlled ranking family whose risk term
-is audited rather than assumed necessary. Across Sports, Toys, Home, and Tools,
-it ranks first against eight official-code-level baselines on HR/NDCG/MRR, with
-all paired Holm-corrected tests positive and significant in each domain.
+We set out to study whether a task-grounded uncertainty framework can improve
+LLM-based reranking under a controlled same-candidate protocol, and our main
+contribution is the protocol itself: every method ranks the same 101 candidates
+per event for 10{,}000 users, with a shared Qwen3-8B backbone, a shared
+importer, identical metrics, exact coverage checks, and paired Holm-corrected
+bootstrap tests. Under this protocol, our central finding is that a
+task-grounded pointwise LLM relevance posterior---the model's own per-candidate
+relevance probability used directly as the ranking score---ranks first against
+eight official-code-level baselines on HR/NDCG/MRR across Sports, Toys, Home,
+and Tools, improving NDCG@10 by 30--43\% over the strongest above-floor baseline
+(LLMEmb), with all 56 per-domain paired tests positive and Holm-significant.
+This is a scoped same-candidate reranking claim, not a full-catalog recommender
+SOTA result.
 
-The diagnostic modules refine this result. Event-level uncertainty stratifies
-ranking reliability, supporting the motivation for actionable uncertainty.
-Component ablations and hyperparameter analyses show a more nuanced picture:
-some uncertainty terms are weak or redundant, and positive risk penalty is not
-necessary in the current sweeps. This honesty is part of the contribution. The
-paper supports a scoped claim that C-CRP improves controlled same-candidate
-ranking while uncertainty stratifies reliability, not a universal full-catalog
-recommender SOTA result.
+The diagnostic modules locate this signal precisely and yield a rigorous
+negative result. Leave-one-component-out ablations and a raw-probability
+attribution show that the uncertainty decomposition and the risk-adjusted
+ranking family do not improve same-candidate ranking over the posterior they are
+built on: the test-best risk exponent is zero in all four domains, a
+confidence-only variant matches or exceeds the full configuration, and the
+individual uncertainty terms are inert or mildly harmful. The working ranking
+signal lies in the pointwise posterior itself, not in the uncertainty machinery.
+The event-level uncertainty signal does stratify ranking reliability, but we
+report this only as a caveated, partly mechanical descriptor, not as evidence
+that uncertainty improves ranking. We present the calibrated-uncertainty and
+risk-adjusted family as an analyzed and characterized design space, and leave
+its use as a reliability descriptor or for downstream abstention to future work.

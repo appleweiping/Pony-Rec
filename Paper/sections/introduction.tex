@@ -5,59 +5,89 @@ Large language models (LLMs) have become a common component in modern
 recommendation systems. Recent methods use LLM-derived embeddings,
 sequential adapters, graph representations, profile modules, or intent
 representations to improve candidate scoring~\cite{llm2rec,llmemb,llmesr,irllrec,proex,promax,elmrec,rlmrec}.
-These systems are normally judged by ranking metrics, but the decision problem
-faced by a recommender is richer than rank alone: when should a high-scoring
-candidate be trusted, and when should the system recognize that the evidence is
-thin, conflicting, or near a decision boundary?
+These systems are normally judged by ranking metrics, but comparisons across
+them are difficult to trust: different papers use different candidate sets,
+different backbones, different importers, and different evaluation schemas, so
+it is rarely clear whether a reported gain reflects the modeling idea or the
+evaluation setup. A prerequisite for studying any LLM-based scoring signal is
+therefore a comparison in which the candidate set, backbone, and evaluation
+pipeline are held fixed.
 
-This paper studies actionable uncertainty for LLM-based recommendation under a
-strict controlled evaluation setting. We focus on the reranking stage: each
-method receives the same user histories and the same 101 candidates per event,
-and all outputs are converted into the same score schema before metrics are
-computed. This same-candidate protocol intentionally avoids claims about
-full-catalog retrieval. It asks a narrower but sharper question: can
-task-grounded uncertainty improve the reliability of candidate ranking when
-the candidate set and evaluation schema are held fixed?
+We address this with a rigorous unified same-candidate reranking protocol. We
+focus on the reranking stage: each method receives the same user histories and
+the same 101 candidates per event (one ground-truth positive and 100
+popularity-sampled negatives), and all outputs are converted into the same
+score schema before metrics are computed. Every method that requires an LLM
+uses a single shared Qwen3-8B backbone, a shared importer, exact coverage
+checks, and paired Holm-corrected bootstrap tests, with visible provenance.
+This same-candidate protocol intentionally avoids claims about full-catalog
+retrieval; it isolates the question of which scoring signal ranks a fixed
+candidate set most accurately. We instantiate the protocol over four Amazon
+domains (Sports, Toys, Home, Tools), 10{,}000 users each, against eight
+official-code-level LLM-based recommendation baselines.
 
-We propose \methodfull{} (\method), which turns LLM-derived relevance evidence
-into a calibrated candidate posterior and an event-level uncertainty signal.
-The uncertainty combines boundary ambiguity, calibration gap, evidence support,
-and counterevidence. \method{} defines a validation-controlled ranking family:
-one setting can downweight candidates whose relevance estimate is high but
-poorly supported, while the $\eta=0$ setting reduces to the calibrated
-posterior. Hyperparameters are fixed or selected on validation data only; test
-rows are used only for final reporting and paired significance tests.
+Within this protocol, our central empirical finding is simple. A
+\emph{task-grounded pointwise LLM relevance posterior} -- the model's own
+per-candidate relevance probability, queried directly and used as the ranking
+score -- ranks first on all seven metrics (HR@5/@10/@20, NDCG@5/@10/@20, MRR)
+in every domain. Relative to the strongest above-floor baseline (LLMEmb), it
+improves NDCG@10 by 30--43\% (Sports, Toys, Home, Tools), and all 56 per-domain
+paired tests are positive and Holm-significant. A random floor and a
+popularity baseline both sit near NDCG@10~$\approx 0.045$, so the gain is over
+a genuinely informative comparison, not the floor. This says that for
+same-candidate reranking, a directly elicited pointwise posterior from a strong
+general-purpose LLM is a remarkably strong signal, ahead of trained-embedding
+and adapter-based recommenders run under identical conditions.
 
-The resulting evidence supports a scoped conclusion. On four Amazon domains
-(Sports, Toys, Home, and Tools), \method{} ranks first against eight
-official-code-level baselines under the unified Qwen3-8B, same-candidate
-protocol; relative to the strongest above-floor baseline (LLMEmb), the
-NDCG@10 improvement is 30--43\% and is Holm-significant in every domain. The
-same evidence also limits the story: component ablations show
-that several uncertainty terms are neutral, weak, or redundant, and
-hyperparameter analyses support stability/sensitivity rather than a claim that
-every risk term is necessary. We therefore frame \method{} as an actionable
-uncertainty framework for controlled reranking reliability, not as a universal
-recommendation architecture.
+This work originally set out to study \emph{actionable uncertainty}: whether a
+calibrated candidate posterior, instrumented with a task-grounded uncertainty
+decomposition (boundary ambiguity, a calibration gap, evidence support, and
+counterevidence) and a validation-controlled risk-adjusted ranking family
+($\eta=0$ recovering the bare posterior), could rank a fixed candidate set more
+reliably. We therefore report a rigorous \emph{negative result} about this
+design space. Under a leave-one-component-out ablation and a raw-probability
+attribution, the uncertainty decomposition and risk penalty do not improve
+same-candidate ranking: the zero-risk setting ($\eta=0$) is test-best in all
+four domains, a confidence-only variant (the calibrated posterior with no
+uncertainty and no risk) matches or exceeds the full family in three of four
+domains, and the raw probability without any calibration map tracks the full
+family within $\approx 0.003$ NDCG@10. The boundary-uncertainty term is inert
+in all four domains, and removing the counterevidence and risk terms is
+non-worse. The working ranking signal is located in the pointwise posterior
+itself, not in the uncertainty machinery built on top of it. As a minor,
+descriptive observation, the event-level uncertainty signal does stratify
+ranking reliability across all four domains, but this is partly circular and we
+do not claim it improves ranking. We accordingly present the
+calibrated-uncertainty/risk family as an analyzed and characterized design
+space, not as a validated headline contribution.
 
 Our contributions are:
 
 \begin{enumerate}
-    \item \textbf{Controlled official comparison.} We build a four-domain,
-    10,000-user, 101-candidate same-candidate benchmark with eight
-    official-code-level adapted LLM recommendation baselines, unified Qwen3-8B
-    use, exact coverage checks, full HR/NDCG/MRR reporting, paired
-    Holm-corrected tests, and visible provenance summarized in
-    Table~\ref{tab:baseline_provenance}.
+    \item \textbf{A unified same-candidate reranking protocol and benchmark.}
+    We build a four-domain, 10{,}000-user, 101-candidate (one positive, 100
+    popularity-sampled negatives) same-candidate benchmark with eight
+    official-code-level adapted LLM recommendation baselines, a single shared
+    Qwen3-8B backbone, a shared importer, exact coverage checks, full
+    HR/NDCG/MRR reporting, paired Holm-corrected bootstrap tests, and visible
+    provenance (Table~\ref{tab:baseline_provenance}). This lets LLM-based
+    scoring signals be compared without candidate-set, backbone, or
+    importer confounds.
 
-    \item \textbf{Method.} We introduce \method, a calibrated candidate
-    relevance posterior with task-grounded uncertainty components and a
-    validation-controlled ranking family whose risk term is explicitly
-    ablated.
+    \item \textbf{A task-grounded pointwise LLM posterior ranks first.} Under
+    this protocol, the model's directly elicited per-candidate relevance
+    probability ranks first on all seven metrics across the four domains,
+    improving NDCG@10 by 30--43\% over the strongest above-floor baseline
+    (LLMEmb) with all 56 per-domain paired tests positive and Holm-significant.
+    The claim is scoped to same-candidate reranking, not full-catalog SOTA.
 
-    \item \textbf{Evidence discipline.} We pair the main comparison with
-    paper-critical diagnostic modules: an uncertainty motivation study,
-    leave-one-component-out ablations, hyperparameter stability analyses, and a
-    framework overview. These modules define what can be claimed and what must
-    be downgraded.
+    \item \textbf{A rigorous negative result on calibrated uncertainty and
+    risk.} Via leave-one-component-out ablations and a raw-probability
+    attribution, we show that the calibrated-uncertainty decomposition and the
+    risk-adjusted ranking family do not improve same-candidate ranking
+    ($\eta=0$ test-best in all domains; confidence-only $\geq$ full family in
+    three of four; components inert or mildly harmful), locating the working
+    signal in the posterior. We keep the uncertainty signal's descriptive
+    reliability stratification as a caveated minor observation, not a ranking
+    claim.
 \end{enumerate}

@@ -1,25 +1,33 @@
 \begin{abstract}
 Large language models (LLMs) are increasingly used as scoring and
-representation engines for recommendation, but high ranking scores do not by
-themselves tell us when a recommendation decision is reliable. We study this
-problem under a controlled same-candidate protocol: every method ranks the same
-101 candidates for each user, uses the same Qwen3-8B backbone when an LLM is
-required, and is evaluated with the same importer, metrics, provenance checks,
-and paired tests.
+representation engines for recommendation, yet comparisons across LLM-based
+recommenders are often confounded by different candidate sets, backbones,
+importers, and evaluation schemas. We first contribute a rigorous unified
+same-candidate reranking protocol: every method ranks the same 101 candidates
+(one positive and 100 popularity-sampled negatives) for each of 10{,}000 users,
+uses the same Qwen3-8B backbone when an LLM is required, and is evaluated with a
+shared importer, identical metrics, exact coverage checks, and paired
+Holm-corrected bootstrap tests, with full provenance. Against eight
+official-code-level LLM-based recommendation baselines on Sports, Toys, Home,
+and Tools, our central empirical finding is that a \emph{task-grounded
+pointwise LLM relevance posterior} -- the model's own per-candidate relevance
+probability, used directly as the ranking score -- ranks first on all seven
+metrics (HR@5/@10/@20, NDCG@5/@10/@20, MRR). Relative to the strongest
+above-floor baseline (LLMEmb), it improves NDCG@10 by 30--43\%, and all 56
+per-domain paired tests are positive and Holm-significant.
 
-We propose \method, a task-grounded calibrated candidate relevance posterior
-that decomposes uncertainty into boundary ambiguity, calibration gap, evidence
-support, and counterevidence, and defines a validation-controlled ranking
-family whose zero-risk special case is explicitly allowed. Across Sports,
-Toys, Home, and Tools, \method{} ranks first against eight official-code-level
-LLM-based recommendation baselines on HR@5/@10/@20, NDCG@5/@10/@20, and MRR.
-All 56 per-domain paired C-CRP-vs-baseline tests are positive and
-Holm-significant in each domain. We also provide paper-critical diagnostic
-evidence: event-level uncertainty stratifies ranking reliability in all four
-domains, component ablations reveal that several uncertainty terms are weak or
-redundant rather than uniformly necessary, and validation-selected
-hyperparameters are stable within the pre-registered tolerance on NDCG@10. The
-result is a scoped claim: the C-CRP ranking line improves controlled
-same-candidate ranking, while its uncertainty signal stratifies reliability; it
-is not a full-catalog recommender SOTA claim.
+We then report a rigorous \emph{negative result} on the design space this work
+set out to study. We instrument the pointwise posterior with a principled
+calibrated-uncertainty and risk-adjusted ranking family that decomposes
+uncertainty into boundary ambiguity, a calibration gap, evidence support, and
+counterevidence. Under a leave-one-component-out ablation and a
+raw-probability attribution, this machinery does not improve same-candidate
+ranking: the zero-risk setting is test-best in all four domains, a
+confidence-only variant matches or exceeds the full family in three of four
+domains, and individual uncertainty terms are inert or mildly harmful. The
+working ranking signal lies in the posterior itself, not in the
+uncertainty decomposition. As a minor, descriptive observation -- and one we
+caveat as partly circular -- the event-level uncertainty signal does stratify
+reliability, but we do not claim it improves ranking. This is a scoped result
+about same-candidate reranking, not a full-catalog recommender SOTA claim.
 \end{abstract}

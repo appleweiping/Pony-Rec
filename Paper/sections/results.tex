@@ -22,6 +22,33 @@ all-metric rank-first claim explicit.
 This supports a controlled reranking claim. It does not establish full-catalog
 recommendation SOTA because candidate generation is not evaluated here.
 
+\paragraph{Attribution: the win is the pointwise posterior.} We are explicit
+about which signal produces the headline ranking. The reported \method{} rows
+in Table~\ref{tab:main_results} are obtained by ranking the 101 same candidates
+by the raw task-grounded LLM relevance probability $\hat{p}$ alone---a pointwise
+posterior per candidate---ranked descending with a fixed seeded tie-break. The
+calibrated/uncertainty/risk-adjusted machinery is not what carries the gain.
+Two pieces of evidence support this. First, the leave-one-component-out summary
+(Table~\ref{tab:ablation_ndcg10}) shows the uncertainty terms are inert or
+redundant for ranking: boundary uncertainty is exactly inert in 4/4 domains,
+and removing counterevidence or the risk penalty is nonworse in 4/4 domains on
+NDCG@10. Second, a raw-probability attribution ablation
+isolates the posterior directly. Holding the candidate rows, importer, and
+seeded tie-break fixed, ranking by $\hat{p}$ alone tracks the reported \method{}
+NDCG@10 within $\le 0.008$ across the three domains with local signal rows
+(raw-$\hat{p}$ minus reported NDCG@10: $-0.0081$ on Sports, $+0.0024$ on Home,
+$+0.0038$ on Tools). On the matched selector route, a calibrated
+confidence-only variant that zeroes out the uncertainty and risk terms is
+nonworse than the full configuration in at least 3 of 4 domains
+(e.g.\ NDCG@10 $0.2287$ vs.\ $0.2281$ on Sports, $0.1374$ vs.\ $0.1364$ on Home,
+$0.1711$ vs.\ $0.1695$ on Tools). We therefore attribute the headline result to
+the task-grounded pointwise relevance posterior itself, and treat the
+uncertainty decomposition as an analyzed---and for ranking, inert---design space
+rather than the source of the gain. We make no claim that the posterior is
+calibrated in the reliability-diagram sense; ``calibrated'' here refers to the
+self-reported probability target of the scoring prompt, not to a measured
+expected-calibration-error guarantee.
+
 \input{tables/significance_summary}
 \input{tables/ccrp_rank_by_metric}
 \input{tables/full_official_ndcg10_ranking}
@@ -71,9 +98,12 @@ The module is descriptive. It does not show that manipulating uncertainty
 causes a metric change, and it is not a substitute for the official-baseline
 comparison in Table~\ref{tab:main_results}. Because events are binned by
 \method{}'s own uncertainty and the ranking score is itself a monotone function
-of the same calibrated posterior, part of this stratification is mechanical; we
+of the same posterior, part of this stratification is mechanical; we
 therefore read it as confirmation that the uncertainty signal is monotonically
-aligned with realized reliability, not as an independent causal effect.
+aligned with realized reliability, not as an independent causal effect. This is
+consistent with the attribution above: the uncertainty signal is a useful
+\emph{descriptor} of where the posterior is reliable, but adding it to the
+ranking score does not improve same-candidate ranking.
 
 \input{tables/uncertainty_stratification}
 
@@ -91,11 +121,13 @@ domains), and removing evidence support is directionally harmful but small
 
 \input{tables/ablation_ndcg10_summary}
 
-The honest conclusion is that the full \method{} design is a useful
-paper-facing method line under the same-candidate comparison, while several
-individual uncertainty components are weak or redundant under the frozen
-configuration. We therefore report component ablations as supplementary
-diagnostics, not as proof that every component is necessary.
+The honest conclusion is that the same-candidate ranking gain is carried by the
+task-grounded pointwise posterior, while the individual uncertainty components
+are weak, redundant, or exactly inert under the frozen configuration. We
+therefore report component ablations not as proof that every component is
+necessary, but as a characterized negative result: the calibrated-uncertainty
+and risk-adjusted ranking family, evaluated as ablations, does not improve
+same-candidate ranking over the posterior it is built on.
 
 \subsection{Hyperparameter Stability}
 

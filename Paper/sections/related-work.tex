@@ -36,12 +36,14 @@ Our setting differs because every method must rank every candidate; the
 selective-prediction connection is used only to motivate decision-useful
 uncertainty rather than an abstention claim.
 
-Recommendation adds a different challenge: uncertainty must be useful for a
-ranking decision rather than only well calibrated as a scalar probability. We
-therefore evaluate whether an event-level uncertainty signal stratifies ranking
-reliability and whether a validation-controlled C-CRP ranking line improves
-same-candidate performance under paired tests, while diagnostics test which
-uncertainty and risk terms actually matter.
+Recommendation adds a different challenge: for an uncertainty signal to be
+worth adding, it must improve a ranking decision rather than only be well
+calibrated as a scalar probability. We therefore test this directly: we measure
+whether an event-level uncertainty signal stratifies ranking reliability and,
+through leave-one-component-out ablations and a raw-probability attribution,
+whether the uncertainty and risk terms add ranking utility over the pointwise
+posterior. We report that under our same-candidate protocol they do not, which
+is the negative result we characterize in this paper.
 
 \subsection{Uncertainty in Recommendation}
 

@@ -14,25 +14,41 @@ The same-candidate protocol makes this claim auditable. Since all methods rank
 the same candidate rows, performance differences cannot be explained by a
 different candidate generator. Since all methods are imported through the same
 metric code, the comparison is not mixing native full-catalog metrics with
-reranking metrics. This is the setting in which the uncertainty signal can be
-evaluated as a decision feature rather than as a post-hoc explanation.
+reranking metrics. This is also the setting in which we can cleanly test whether
+the uncertainty decomposition adds anything to the underlying pointwise
+posterior, and---as the diagnostics below show---measure exactly where the
+ranking signal lives.
 
 \subsection{What the Diagnostics Say}
 
-The diagnostics support a careful interpretation. The observation module shows
-that high uncertainty corresponds to lower ranking reliability, which justifies
-including uncertainty in the framework. The component ablation, however, shows
-that not every uncertainty component is equally useful. Boundary uncertainty is
-neutral, and removing counterevidence or the risk penalty can be nonworse or
-better on NDCG@10. Hyperparameter analyses reinforce the same caution: settings
-selected on validation remain stable, but a positive risk exponent is not
-required by the current evidence.
+The diagnostics support a careful and, we think, scientifically informative
+interpretation. The headline gain comes from a single, simple signal: the
+task-grounded pointwise relevance posterior, used directly as the ranking score
+(\S\ref{sec:results}). The uncertainty machinery layered on top of it---boundary
+uncertainty, calibration-gap, counterevidence, and risk penalty---does not add
+ranking utility in the same-candidate setting. Boundary uncertainty is exactly
+inert, removing counterevidence or the risk penalty is nonworse on NDCG@10, the
+test-best risk exponent is zero in all four domains, and a raw-probability
+attribution shows that ranking on the posterior alone matches the full
+configuration to within a few thousandths of NDCG@10. The observation module
+shows separately that high uncertainty corresponds to lower ranking reliability,
+but because events are binned by the method's own uncertainty and the score is a
+monotone function of the same posterior, this is a descriptive (and partly
+mechanical) reliability stratification, not evidence that the uncertainty term
+improves ranking.
 
-This combination is scientifically useful. It suggests that task-grounded
-posterior estimation is strong under the same-candidate protocol, while the
-exact decomposition of actionable uncertainty remains an open design question.
-Rather than hiding the weak components, we report them as constraints on the
-method story.
+We read this as a clean negative result worth stating plainly rather than
+hiding. The actionable signal that a calibrated-uncertainty decomposition was
+designed to surface is, for same-candidate ranking, already captured by the
+pointwise posterior itself; the decomposition is therefore best understood as an
+analyzed design space whose components we have measured and found inert for
+ranking, not as a validated source of the improvement. This is a more honest
+and more useful contribution than an unsupported claim that uncertainty
+decomposition drives the gain: it tells future work where the signal actually
+lives, and it cautions against adding risk/uncertainty terms to a ranking score
+without measuring their effect. The uncertainty signal may still be valuable as
+a reliability descriptor or for downstream abstention/deferral decisions, which
+we leave to future work.
 
 \subsection{Limitations}
 
@@ -48,11 +64,15 @@ method story.
     shows that uncertainty stratifies reliability, but it is not a causal
     intervention. It does not prove that changing uncertainty alone would change
     ranking utility.
-    \item \textbf{Component necessity is not established.} Several uncertainty
-    components are weak or redundant in leave-one-component-out diagnostics.
-    The paper therefore claims that the C-CRP ranking framework improves
-    controlled same-candidate ranking and that its uncertainty signal
-    stratifies reliability, not that every decomposed term is essential.
+    \item \textbf{Uncertainty decomposition is inert for ranking.} The
+    leave-one-component-out diagnostics and the raw-probability attribution show
+    that the calibrated-uncertainty and risk-adjusted terms do not improve
+    same-candidate ranking over the pointwise posterior they are built on; the
+    test-best risk exponent is zero in all four domains. The paper therefore
+    claims that a task-grounded pointwise relevance posterior ranks first under
+    the controlled same-candidate protocol, and reports the uncertainty
+    decomposition as a characterized negative result plus a descriptive
+    reliability signal---not as a validated ranking-improvement mechanism.
     \item \textbf{External adapter policy.} We preserve official-code-level
     baseline mechanisms and use a shared Qwen3-8B representation bridge for
     same-candidate scoring. This gives a fair controlled comparison, but it is

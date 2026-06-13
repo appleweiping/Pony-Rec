@@ -10,32 +10,42 @@ our formal setting, $n=101$ for every test event: one positive item and 100
 negatives. Every compared method must produce one finite score per
 $(u,c_i)$ pair under the same key schema.
 
-The core object in \method{} is a calibrated candidate relevance posterior
-$p_i=P(y_i=1\mid H_u,c_i)$ and an uncertainty estimate $U_i\in[0,1]$ attached
-to that posterior. The ranking family score is
+The working scorer in \method{} is a task-grounded candidate relevance
+posterior $p_i=P(y_i=1\mid H_u,c_i)$: a pointwise relevance probability that
+the LLM emits when asked to judge each candidate under the next-interaction
+task. Around this posterior we define an \emph{analyzed design space} of
+uncertainty-adjusted ranking. We attach to each posterior an uncertainty
+estimate $U_i\in[0,1]$ and define a one-parameter ranking family
 \begin{equation}
     r_i = p_i(1-U_i)^\eta ,
     \label{eq:risk-score}
 \end{equation}
-where $\eta$ is fixed or selected using validation data only. When $\eta=0$,
-the score reduces to the calibrated posterior. This special case is important:
-our hyperparameter analysis treats it as a valid setting, and the paper does
-not claim that a positive risk exponent is always necessary.
+where the risk exponent $\eta$ is fixed or selected using validation data only.
+When $\eta=0$, the score reduces to the bare relevance posterior. We treat this
+family as a hypothesis to be tested rather than as validated machinery: the
+ablations in Section~\ref{sec:results} ask whether any positive $\eta$ or any
+uncertainty term improves same-candidate ranking, and we report that they do
+not. The $\eta=0$ row is test-best in all four domains, so the relevance
+posterior itself is the operative ranking signal and the risk term is retained
+only as an analyzed, and empirically inert, design choice.
 
 The formulation is intentionally limited to reranking. It assumes a candidate
-set has already been generated and asks whether a language-model scoring layer
-can expose enough calibrated evidence to make the ordering more reliable. This
-choice gives the method a narrow but auditable contract: for every event, each
-candidate must receive exactly one posterior, one uncertainty value, and one
-final score before the shared importer computes metrics.
+set has already been generated and asks whether a pointwise language-model
+relevance posterior orders the same candidates more reliably than existing
+LLM-based scoring and representation baselines. This choice gives the method a
+narrow but auditable contract: for every event, each candidate must receive
+exactly one posterior, one uncertainty value, and one final score before the
+shared importer computes metrics.
 
 \subsection{Task-Grounded Candidate Evidence}
 
 For each user-candidate pair, the LLM is asked to evaluate the candidate under
 the next-interaction task rather than under a generic similarity task. The
-signal row records a raw relevance probability, the calibrated posterior used
-for ranking, evidence support, counterevidence strength, and a short rationale.
-The prompt does not reveal the positive item index or test label.
+signal row records a pointwise relevance probability, a model-reported adjusted
+probability, evidence support, counterevidence strength, and a short rationale.
+The relevance probability is the working ranking score; the remaining fields
+feed the analyzed uncertainty design space. The prompt does not reveal the
+positive item index or test label.
 
 The signal package is reproducible at the artifact level. Provenance records
 the generation command, split-specific task paths, parser-compatible schema,
@@ -71,34 +81,44 @@ and the amount of unresolved risk. The final score exporter keeps all candidate
 keys aligned with the same-candidate task so downstream metrics can be audited
 without relying on candidate order or missing-score imputation.
 
-Let $\hat{p}_i$ denote the raw probability emitted by the LLM evidence parser,
-and let $p_i$ denote the schema field
+Let $\hat{p}_i$ denote the pointwise relevance probability emitted by the LLM
+evidence parser, and let $p_i$ denote the schema field
 \texttt{calibrated\_relevance\_\allowbreak{}probability} consumed by the
-paper-facing scorer. The current reconstruction does not fit a new post-hoc
-calibrator on test rows: validation controls select the score family, weights,
-and $\eta$, while the scorer records the gap $|\hat{p}_i-p_i|$ as an
-uncertainty term. If the calibrated field is absent, the exporter falls back to
-the raw probability and the provenance exposes that source choice. For
-candidate evidence we also record support $s_i\in[0,1]$ and counterevidence
+paper-facing scorer. We emphasize that this field is a model-reported adjusted
+probability, not the output of a fitted statistical calibrator: \method{} does
+\emph{not} estimate a post-hoc calibration map, and we make no
+reliability-diagram or expected-calibration-error guarantee about it. In the
+paper-facing configuration the working ranking score is the pointwise
+posterior; validation controls only select among the score family, weights, and
+$\eta$, and the scorer records the gap $|\hat{p}_i-p_i|$ as one input to the
+uncertainty design space. If the adjusted field is absent, the exporter falls
+back to $\hat{p}_i$ and the provenance exposes that source choice; in practice
+the two probabilities track each other closely, which is consistent with the
+ablation finding that the calibration-gap term carries little ranking signal.
+For candidate evidence we also record support $s_i\in[0,1]$ and counterevidence
 $q_i\in[0,1]$. The effective evidence score is
 \begin{equation}
     e_i = \max(0, \min(1, s_i-q_i)).
 \end{equation}
-This makes counterevidence part of the evidence channel rather than a separate
-post-hoc penalty. The leave-one-component-out diagnostics later test whether
-this channel is useful under the frozen same-candidate configuration.
+This places counterevidence inside the evidence channel rather than as a
+separate post-hoc penalty. The leave-one-component-out diagnostics later test
+whether this channel adds ranking signal under the frozen same-candidate
+configuration, and find that it does not.
 
 \subsection{Uncertainty Decomposition}
 
-\method{} computes event-level and candidate-level uncertainty from four
-signals:
+As part of the analyzed design space, \method{} derives an event-level and
+candidate-level uncertainty estimate from four signals. We define these
+components precisely so that each can be ablated; we do not assume any of them
+improves ranking, and our experiments show that they do not.
 
 \begin{itemize}
     \item \textbf{Boundary ambiguity:} candidates close to the decision
     boundary are treated as less certain than clearly high- or low-relevance
     candidates.
-    \item \textbf{Calibration gap:} disagreement between raw and calibrated
-    relevance estimates indicates posterior instability.
+    \item \textbf{Calibration gap:} disagreement between the pointwise
+    relevance probability and the model-reported adjusted probability, used as a
+    proxy for posterior instability (not a measured calibration error).
     \item \textbf{Evidence insufficiency:} weak support from user history and
     item evidence increases uncertainty.
     \item \textbf{Counterevidence:} opposing evidence raises the risk attached
@@ -106,9 +126,13 @@ signals:
 \end{itemize}
 
 These components are deliberately auditable. Section~\ref{sec:results}
-reports leave-one-component-out diagnostics rather than assuming that every
-component is beneficial. In fact, the current evidence shows that several
-components are neutral or redundant under the frozen configuration.
+reports leave-one-component-out diagnostics rather than assuming that any
+component is beneficial. The resulting evidence is the basis for a
+\emph{characterized negative result}: boundary uncertainty is inert in all four
+domains, removing counterevidence and the risk penalty is non-worse, and a
+confidence-only variant matches or exceeds the full configuration. The
+decomposition is therefore reported as an analyzed but empirically inert design
+space, not as necessary machinery.
 
 In the current implementation, boundary ambiguity is computed as
 $b_i=4p_i(1-p_i)$, which is largest near the posterior boundary and smallest
@@ -130,14 +154,18 @@ tests, not as proofs of independent causal necessity.
 
 \subsection{Ranking Family and Risk Term}
 
-The final ranking score in Equation~\ref{eq:risk-score} is multiplicative:
-uncertainty reduces the calibrated base score through $(1-U_i)^\eta$. This is
-different from subtracting a fixed uncertainty penalty, and it matters for
-claim interpretation. A low-probability candidate cannot become attractive
-only because it is certain, while a high-probability but high-uncertainty
-candidate can be damped. When the risk-penalty ablation is active, or when a
-diagnostic score mode does not use uncertainty, the score is the base posterior
-or evidence score directly.
+The ranking-family score in Equation~\ref{eq:risk-score} is multiplicative:
+uncertainty would discount the base relevance posterior through $(1-U_i)^\eta$.
+This is different from subtracting a fixed uncertainty penalty, and it matters
+for claim interpretation. In principle a high-probability but high-uncertainty
+candidate could be damped while a low-probability candidate cannot become
+attractive only because it is certain. Empirically, however, the
+discounting does not help: the test-best exponent is $\eta=0$ in every domain,
+which collapses Equation~\ref{eq:risk-score} to the bare posterior $r_i=p_i$.
+We therefore treat the multiplicative form as the analyzed hypothesis and the
+$\eta=0$ posterior as the operative scorer. When the risk-penalty ablation is
+active, or when a diagnostic score mode does not use uncertainty, the score is
+the posterior or evidence score directly.
 
 For each event, candidates are sorted by descending final score. Ties
 are broken by a deterministic hash keyed by source event, user, item, and a
@@ -183,12 +211,16 @@ entering the paper table without exact candidate coverage.
 \centering
 \includegraphics[width=\textwidth]{figures/framework_overview.pdf}
 \caption{Framework overview. \method{} converts same-candidate user-item
-events into task-grounded LLM evidence, calibrates candidate relevance
-posteriors, estimates uncertainty, and applies a validation-controlled ranking
-family whose risk term is ablated in diagnostics. The official baselines and
-\method{} share the same candidate rows, metric importer, and evidence gates.}
+events into task-grounded LLM evidence, scores each candidate with a pointwise
+relevance posterior, and wraps that posterior in an analyzed
+uncertainty-adjusted ranking family whose components and risk term are ablated
+in diagnostics and found inert (the operative scorer is the posterior itself,
+i.e.\ $\eta=0$). The official baselines and \method{} share the same candidate
+rows, metric importer, and evidence gates.}
 \Description{Pipeline diagram showing same-candidate task construction, LLM
-signal extraction, calibration, C-CRP uncertainty, the ranking-family risk
-term, and shared evidence gates for official baselines and C-CRP.}
+signal extraction, the pointwise relevance posterior used for ranking, the
+analyzed C-CRP uncertainty components and ranking-family risk term shown as
+ablated diagnostics, and shared evidence gates for official baselines and
+C-CRP.}
 \label{fig:framework}
 \end{figure*}

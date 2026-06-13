@@ -1,4 +1,14 @@
-% Actionable Uncertainty for LLM-Based Recommendation
+% Title (reframed). Orchestrator to finalize among the options below.
+% Leading framing = controlled same-candidate protocol + pointwise-LLM finding;
+% uncertainty negative result is secondary. Tentatively set to Option 1.
+%   Option 1 (SET BELOW): "A Pointwise LLM Relevance Posterior Is a Strong
+%       Reranker: A Controlled Same-Candidate Study of Uncertainty-Adjusted
+%       LLM Recommendation"
+%   Option 2: "When Does Uncertainty Help LLM Reranking? A Controlled
+%       Same-Candidate Protocol and a Pointwise-Posterior Baseline That Wins"
+%   Option 3: "Same-Candidate Reranking with LLMs: A Task-Grounded Relevance
+%       Posterior Outranks Eight Baselines, and Calibrated Uncertainty Does Not
+%       Help"
 % Main paper file
 
 \documentclass[sigconf,nonacm]{acmart}
@@ -11,11 +21,17 @@
 \usepackage{subcaption}
 
 \newcommand{\method}{C-CRP}
-\newcommand{\methodfull}{Calibrated Candidate Relevance Posterior}
+% NOTE (reframe): the acronym C-CRP is retained because it is the canonical
+% method/artifact identifier used throughout the paper and the result files.
+% The expansion no longer claims a fitted "Calibrated" posterior (no ECE /
+% reliability evidence exists); it now reads as a candidate-conditioned
+% pointwise relevance posterior, which is what the working scorer actually is.
+\newcommand{\methodfull}{Candidate-Conditioned Relevance Posterior}
 
 \begin{document}
 
-\title{Actionable Uncertainty for LLM-Based Recommendation}
+\title{A Pointwise LLM Relevance Posterior Is a Strong Reranker: A Controlled
+Same-Candidate Study of Uncertainty-Adjusted LLM Recommendation}
 
 \author{Anonymous}
 \affiliation{\institution{Anonymous Institution}\city{Anonymous}\country{Anonymous}}
