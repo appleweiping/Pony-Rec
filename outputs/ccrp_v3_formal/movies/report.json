@@ -1,0 +1,13 @@
+{
+  "hr5": 0.1447,
+  "ndcg5": 0.10765826125645794,
+  "hr10": 0.2083,
+  "ndcg10": 0.12812717180077174,
+  "hr20": 0.3306,
+  "ndcg20": 0.15870858810297278,
+  "mrr": 0.1270954817375341,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 22798.41936159134,
+  "data_path": "outputs/baselines/external_tasks/movies_large10000_100neg_test_same_candidate/ranking_test.jsonl"
+}
