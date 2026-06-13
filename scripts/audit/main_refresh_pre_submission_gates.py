@@ -125,6 +125,15 @@ def _normalize_warning(value: Any) -> str:
     return text
 
 
+def _keep_warning_for_current_refresh(normalized_warning: str, git_state_before_refresh: dict[str, Any]) -> bool:
+    if (
+        normalized_warning == "refresh_recorded_tracked_dirty_inputs_before_generation"
+        and git_state_before_refresh.get("tracked_dirty") is False
+    ):
+        return False
+    return True
+
+
 def _git_state(root: Path) -> dict[str, Any]:
     code, head, err = _run_git(root, ["rev-parse", "HEAD"])
     if code != 0:
@@ -401,6 +410,7 @@ def refresh_pre_submission_gates(
             for step in steps
             for warning in step["warnings"]
             if (normalized := _normalize_warning(warning))
+            and _keep_warning_for_current_refresh(normalized, git_state_before_refresh)
         ]
     )
 

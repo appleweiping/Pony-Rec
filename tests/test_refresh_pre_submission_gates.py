@@ -2,7 +2,10 @@ import json
 import subprocess
 from pathlib import Path
 
-from scripts.audit.main_refresh_pre_submission_gates import refresh_pre_submission_gates
+from scripts.audit.main_refresh_pre_submission_gates import (
+    _keep_warning_for_current_refresh,
+    refresh_pre_submission_gates,
+)
 
 
 def _write(path: Path, text: str) -> Path:
@@ -282,3 +285,21 @@ def test_refresh_pre_submission_gates_runs_in_dependency_order(tmp_path: Path) -
     assert "promax:final_page_range_missing_in_bib" in refresh["remaining_blockers"]
     assert "manual_submission_system_items_not_confirmed" in refresh["remaining_blockers"]
     assert "explicit_claude_opus_review" in refresh["remaining_blockers"]
+
+
+def test_clean_pre_submission_refresh_drops_stale_nested_dirty_warning() -> None:
+    assert (
+        _keep_warning_for_current_refresh(
+            "refresh_recorded_tracked_dirty_inputs_before_generation",
+            {"tracked_dirty": False},
+        )
+        is False
+    )
+    assert (
+        _keep_warning_for_current_refresh(
+            "refresh_recorded_tracked_dirty_inputs_before_generation",
+            {"tracked_dirty": True},
+        )
+        is True
+    )
+    assert _keep_warning_for_current_refresh("underfull_layout_warnings:hbox=1,vbox=0", {"tracked_dirty": False}) is True
