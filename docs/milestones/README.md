@@ -142,8 +142,8 @@ at `2026-06-13T00:49:05Z`, `2026-06-13T01:59:36Z`,
 `2026-06-13T02:32:01Z`, `2026-06-13T03:16:11Z`,
 `2026-06-13T04:11:37Z`, `2026-06-13T04:30:39Z`,
 `2026-06-13T04:49:27Z`, `2026-06-13T05:11:34Z`,
-`2026-06-13T05:31:00Z`, `2026-06-13T05:42:19Z`, and
-`2026-06-13T06:04:37Z` found the same direct
+`2026-06-13T05:31:00Z`, `2026-06-13T05:42:19Z`,
+`2026-06-13T06:04:37Z`, and `2026-06-13T06:52:21Z` found the same direct
 blocker state with five source probes passing: arXiv HTML ACM metadata, SIGIR
 accepted papers, UQ author profile, author Google Sites publications, and UQ
 Experts profile. The closure packet refreshed after the latest probes and now

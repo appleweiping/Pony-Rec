@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-13T06:36:10.976995+00:00",
+  "created_at_utc": "2026-06-13T06:54:04.943978+00:00",
   "failures": [],
   "final_blocker_consistency_ok": true,
   "final_submission_ready": false,
@@ -15,7 +15,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\final_submission_blocker_closure_packet_20260613.json",
-      "sha256": "53bae3be795bc1a0a6d9b68a1c5ed27e709fb9f305113bce70c6c4ab55dbc686",
+      "sha256": "02ed021da9c386e8d617c6bce1f88b060c79308266dd08e2aba4611cf7993acb",
       "size_bytes": 16587
     },
     "final_gate": {
@@ -36,7 +36,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260613.json",
-      "sha256": "65c8da02769db31051e38a55ad2e75afbba5a3b04b09cb0a0c49b4b774596550",
+      "sha256": "58ad30be94a5f4b4ca1cfe2c6904a83dd32d1a2d1b54a4a7bd7681237d260130",
       "size_bytes": 6963
     },
     "release_stack": {
