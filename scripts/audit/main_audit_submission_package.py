@@ -204,6 +204,38 @@ def _parse_build_state(paper_dir: Path, root: Path) -> dict[str, Any]:
     }
 
 
+def _audit_framework_overview(paper_dir: Path, root: Path) -> dict[str, Any]:
+    pdf = paper_dir / "figures" / "framework_overview.pdf"
+    svg = paper_dir / "figures" / "framework_overview.svg"
+    method = paper_dir / "sections" / "method.tex"
+    main = paper_dir / "main.tex"
+    method_text = _read_text(method)
+    main_text = _read_text(main)
+
+    external_pdf_svg = pdf.exists() and svg.exists()
+    inline_tikz = (
+        "\\begin{tikzpicture}" in method_text
+        and "\\label{fig:framework}" in method_text
+        and "\\usepackage{tikz}" in main_text
+    )
+    accepted_mode = (
+        "external_pdf_svg"
+        if external_pdf_svg
+        else "inline_tikz"
+        if inline_tikz
+        else "missing"
+    )
+    return {
+        "ok": external_pdf_svg or inline_tikz,
+        "accepted_mode": accepted_mode,
+        "external_pdf_svg": external_pdf_svg,
+        "inline_tikz": inline_tikz,
+        "pdf": _file_state(pdf, root),
+        "svg": _file_state(svg, root),
+        "method_tex": _file_state(method, root),
+    }
+
+
 def _build_source_package_manifest(paper_dir: Path, root: Path, source: dict[str, Any]) -> dict[str, Any]:
     files: dict[str, dict[str, Any]] = {}
 
@@ -490,6 +522,7 @@ def build_submission_package_audit(
         anonymity=anonymity,
         source_manifest=source_manifest,
     )
+    framework_overview = _audit_framework_overview(paper, repo)
     claim_audit = _read_json(claim_path)
     panel_review = _read_json(panel_path)
     metadata_followup = _read_json(metadata_path)
@@ -505,11 +538,11 @@ def build_submission_package_audit(
         "main_log": paper / "main.log",
         "main_blg": paper / "main.blg",
         "main_bbl": paper / "main.bbl",
-        "framework_overview_pdf": paper / "figures" / "framework_overview.pdf",
-        "framework_overview_svg": paper / "figures" / "framework_overview.svg",
     }
     missing_required = [label for label, path in required_files.items() if not path.exists()]
     failures.extend(f"missing_required_file:{label}:{_rel(required_files[label], repo)}" for label in missing_required)
+    if not framework_overview["ok"]:
+        failures.append("framework_overview_missing_external_pdf_svg_or_inline_tikz")
     failures.extend(f"missing_input:{item}" for item in source["missing_inputs"])
     failures.extend(f"missing_graphic:{item}" for item in source["missing_graphics"])
     failures.extend(
@@ -644,6 +677,7 @@ def build_submission_package_audit(
             "target_profile": _file_state(target_profile_path, repo),
         },
         "required_files": {label: _file_state(path, repo) for label, path in required_files.items()},
+        "framework_overview": framework_overview,
         "source_closure": source,
         "source_package_manifest": source_manifest,
         "build": build,
@@ -691,6 +725,7 @@ def _write_md(path: Path, audit: dict[str, Any]) -> None:
         f"- Underfull hbox/vbox warnings: `{audit['build']['underfull_hbox_count']}` / "
         f"`{audit['build']['underfull_vbox_count']}`",
         f"- Cited keys: `{audit['build']['cited_key_count']}`",
+        f"- Framework overview: `{audit['framework_overview']['accepted_mode']}`",
         f"- Panel score floor: `{audit['evidence_gates']['panel_score_floor']}`",
         "- Anonymous source leak scan: "
         f"`{str(audit['anonymity']['source_leak_scan_ok']).lower()}` "
