@@ -1,13 +1,47 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-14 14:45 CEST
+Last updated: 2026-06-15 01:35 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
 official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
-## Current Checkpoint (2026-06-14)
+## Current Checkpoint (2026-06-15)
+
+- 2026-06-15 Claude Opus coverage gate refresh:
+  server preflight found no matching Uncertainty/Pony Python experiment process
+  and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. Codex
+  fixed `scripts/audit/main_build_claude_review_request_packet.py` so the
+  Claude Opus handoff uses the current reframed dual claim (pointwise posterior
+  positive result, uncertainty/risk negative result), stamp-specific
+  20260615 paths, and a request-allowed warning instead of treating the still
+  open final-submission gate as a packet-generation failure. The refreshed
+  `outputs/summary/paper_critical/claude_opus_review_request_packet_20260615.{json,md}`
+  is `ok=true`, `claude_review_needed=true`, and still lists
+  `explicit_claude_opus_review` as missing. Two current-claim Opus attempts were
+  recorded without counting as coverage:
+  `claude_opus_review_attempt_fourteenth_20260615.json` failed because the full
+  request-packet prompt exceeded the connector command-line length, and
+  `claude_opus_review_attempt_fifteenth_20260615.json` failed with
+  `Claude CLI did not return JSON output` after a compressed prompt. Codex then
+  updated `scripts/audit/main_audit_claude_review_connector_health.py` so the
+  health audit uses the current packet path and treats repeated failed attempts
+  with zero valid reviews as unhealthy. The refreshed
+  `outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
+  reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
+  `connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+  `recommended_next_route=external_claude_opus_json_via_request_packet_and_validator`.
+  The refreshed
+  `outputs/summary/paper_critical/review_continuation_packet_20260615.{json,md}`
+  keeps `explicit_claude_opus_present=false`,
+  `final_panel_coverage_complete=false`, and `final_submission_ready=false`.
+  Next action for this gate is no longer blind retry of the same MCP route:
+  obtain a substantive Claude Opus JSON through the fixed connector or an
+  external/manual Opus channel using the 20260615 request packet, then run
+  `scripts.audit.main_validate_claude_opus_review_json` before attaching it.
+
+## Previous Checkpoint (2026-06-14)
 
 - 2026-06-14 live ProMax/final-stack refresh:
   Codex reran the ARIS citation/proceedings metadata path with live network:

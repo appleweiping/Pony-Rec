@@ -11,7 +11,7 @@ from typing import Any
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
 DEFAULT_STAMP = "20260613"
-DEFAULT_GLOB = "claude_opus_review_attempt*_20260613.json"
+DEFAULT_GLOB = "claude_opus_review_attempt*.json"
 DEFAULT_REVIEW_REQUEST_PACKET_JSON = Path(
     "outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.json"
 )
@@ -116,17 +116,27 @@ def build_claude_review_connector_health_packet(
     errors = [str(attempt.get("error") or "") for attempt in failed_attempts if attempt.get("error")]
     error_counts = dict(sorted(Counter(errors).items()))
     last_error, same_error_tail_streak = _same_error_tail_streak(failed_attempts)
-    connector_unhealthy = bool(last_error) and same_error_tail_streak >= repeat_error_threshold
+    failure_count_unhealthy = bool(last_error) and len(failed_attempts) >= repeat_error_threshold and valid_review_count == 0
+    connector_unhealthy = bool(last_error) and (
+        same_error_tail_streak >= repeat_error_threshold or failure_count_unhealthy
+    )
     same_route_retry_recommended = not connector_unhealthy
     external_json_route_ready = request_packet.get("ok") is True and request_packet.get("claude_review_needed") is True
 
     warnings: list[str] = []
     warnings.extend(request_warnings)
-    if connector_unhealthy:
+    if bool(last_error) and same_error_tail_streak >= repeat_error_threshold:
         warnings.append(
             f"same_connector_error_repeated:{same_error_tail_streak}:"
             f"{last_error.replace(' ', '_')}"
         )
+    elif failure_count_unhealthy:
+        warnings.append(
+            f"connector_failed_attempts_without_valid_review:{len(failed_attempts)}:"
+            f"threshold={repeat_error_threshold}"
+        )
+
+    request_packet_rel = _repo_relative(request_path, repo)
 
     return {
         "schema_version": "2026-06-13.claude_review_connector_health.v1",
@@ -156,6 +166,7 @@ def build_claude_review_connector_health_packet(
         "error_counts": error_counts,
         "last_error": last_error,
         "same_error_tail_streak": same_error_tail_streak,
+        "failure_count_unhealthy": failure_count_unhealthy,
         "repeat_error_threshold": repeat_error_threshold,
         "connector_unhealthy": connector_unhealthy,
         "same_route_retry_recommended": same_route_retry_recommended,
@@ -169,7 +180,7 @@ def build_claude_review_connector_health_packet(
         ),
         "next_actions": [
             "If connector_unhealthy=true, do not keep retrying the same mcp__claude_review route unless the connector/tooling changes.",
-            "Use claude_opus_review_request_packet_20260613.{json,md} to obtain a substantive external Claude Opus JSON.",
+            f"Use {request_packet_rel} and its sibling Markdown packet to obtain a substantive external Claude Opus JSON.",
             "Run main_validate_claude_opus_review_json.py before attaching any returned Claude Opus JSON with --additional-review-json.",
             "Keep final_submission_ready=false until the final submission gate reports true.",
         ],

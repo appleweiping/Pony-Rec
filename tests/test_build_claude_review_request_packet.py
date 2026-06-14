@@ -116,7 +116,7 @@ def test_claude_review_request_packet_preserves_missing_claude_gap(tmp_path: Pat
     assert packet["will_start_experiment"] is False
 
 
-def test_claude_review_request_packet_fails_closed_on_not_ready_review_packet(tmp_path: Path) -> None:
+def test_claude_review_request_packet_allows_not_ready_review_packet_with_warning(tmp_path: Path) -> None:
     review_packet = _write_json(
         tmp_path / "review_packet.json",
         {
@@ -140,5 +140,9 @@ def test_claude_review_request_packet_fails_closed_on_not_ready_review_packet(tm
         gpt55_review_json=gpt55.relative_to(tmp_path),
     )
 
-    assert packet["ok"] is False
-    assert "review_continuation_packet_not_ready" in packet["failures"]
+    assert packet["ok"] is True
+    assert packet["failures"] == []
+    assert packet["claude_review_needed"] is True
+    assert packet["warnings"] == [
+        "review_continuation_packet_not_ready_request_allowed_for_missing_claude_coverage"
+    ]

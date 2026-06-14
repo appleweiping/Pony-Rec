@@ -34,7 +34,7 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order (2026-06-14)
+## Current Priority Order (2026-06-15)
 
 ```text
 1. Pull latest repo state.
@@ -71,15 +71,33 @@ PIDs, audit summaries, and missing-file errors.
    `404`; ACM DL `403`), while arXiv/SIGIR/UQ source probes pass. Codex also
    aligned `configs/paper_submission_metadata.json` with the current reframed
    manuscript title, removing the stale title-mismatch gate failure. The stack
-   still reports `local_release_candidate_ready=false` and
-   `final_submission_ready=false` because target formatting, ProMax metadata,
-   manual submission-system confirmation, and explicit Claude Opus coverage
-   remain open. The same-stamp consistency audit
-   `outputs/summary/paper_critical/final_blocker_consistency_audit_20260614.{json,md}`
-   is expected to be `ok=false` while the release stack reports
-   `blocking_status=local_artifact_repair_required`.
-3. Historical 2026-06-12/2026-06-13 handoff details below still matter, but
-   treat them as subordinate to the 2026-06-14 branch and package-smoke status.
+    still reports `local_release_candidate_ready=false` and
+    `final_submission_ready=false` because target formatting, ProMax metadata,
+    manual submission-system confirmation, and explicit Claude Opus coverage
+    remain open. The same-stamp consistency audit
+    `outputs/summary/paper_critical/final_blocker_consistency_audit_20260614.{json,md}`
+    is expected to be `ok=false` while the release stack reports
+    `blocking_status=local_artifact_repair_required`.
+    On 2026-06-15 Codex refreshed the explicit Claude Opus coverage handoff
+    without starting any experiments. The current request packet is
+    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260615.{json,md}`;
+    it uses the reframed dual claim and is `ok=true`, but it is not review
+    coverage. Direct `mcp__claude_review.review` attempts with the full packet
+    and a compressed prompt are recorded as
+    `claude_opus_review_attempt_fourteenth_20260615.json` and
+    `claude_opus_review_attempt_fifteenth_20260615.json`; both have
+    `valid_review_evidence=false`. The current health audit
+    `outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
+    reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
+    `connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+    recommends
+    `external_claude_opus_json_via_request_packet_and_validator`. Do not keep
+    retrying the same MCP Claude route unless the connector/tooling changes; use
+    the 20260615 request packet to obtain a substantive Claude Opus JSON and run
+    `scripts.audit.main_validate_claude_opus_review_json` before attachment.
+3. Historical 2026-06-12/2026-06-14 handoff details below still matter, but
+   treat them as subordinate to the 2026-06-15 Claude-coverage and package
+   gate status.
    Phase 2.5 evidence is ready for
    strict manuscript-level claim/citation review, not final submission. Citation
    repair for `paper/references.bib` is complete enough for audit:

@@ -73,7 +73,7 @@ The repository is currently between M4 and M5:
   baselines, Shadow large-scale diagnostics, and LoRA/generative modules are
   completed under the same protocol.
 
-## Current Evidence Integrity (updated 2026-06-14)
+## Current Evidence Integrity (updated 2026-06-15)
 
 Phase 2.5 evidence is ready for strict manuscript-level claim and citation
 review, but not final submission. The current paper branch
@@ -93,7 +93,19 @@ but ProMax page-range/Crossref/DOI visibility, manual submission-system
 confirmation, explicit Claude Opus coverage, and target formatting remain open.
 The same-stamp final-blocker consistency audit is `ok=false` for the expected
 `local_artifact_repair_required` reason until the target-formatting repair is
-done.
+done. The 2026-06-15 Claude Opus coverage refresh repaired the request-packet
+builder to use this current dual claim and stamp-specific 20260615 paths, then
+recorded two additional failed direct Opus attempts:
+`outputs/summary/paper_critical/claude_opus_review_attempt_fourteenth_20260615.json`
+(`The command line is too long`) and
+`outputs/summary/paper_critical/claude_opus_review_attempt_fifteenth_20260615.json`
+(`Claude CLI did not return JSON output`). The refreshed
+`outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
+reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
+`connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+`recommended_next_route=external_claude_opus_json_via_request_packet_and_validator`.
+This is connector-failure evidence only; explicit Claude Opus coverage and
+`final_submission_ready` remain false.
 `scripts/audit/main_build_final_paper_claim_audit.py`
 generates
 `outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md,csv}`

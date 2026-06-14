@@ -1,0 +1,178 @@
+{
+  "created_at_utc": "2026-06-14T23:37:01.942155+00:00",
+  "doc_results": {
+    "docs/active_todo_pony_uncertainty.md": {
+      "current_section": {
+        "end_line": 1268,
+        "end_marker": "## Hard Invariants",
+        "start_line": 10,
+        "start_marker": "## Current Checkpoint"
+      },
+      "failures": [],
+      "observations": {
+        "explicit_claude_opus_missing": true,
+        "failed_claude_attempt_count_current": true,
+        "final_submission_ready_false": true,
+        "manual_submission_blocked": true,
+        "promax_metadata_blocked": true,
+        "recursive_warning_regression_clear_or_fix_recorded": true
+      },
+      "ok": true,
+      "path": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\active_todo_pony_uncertainty.md",
+        "sha256": "f2f5dd9931cee20f1f62c39d15b1b5f1b2f37bb2a49e79fa5436e355053be80a",
+        "size_bytes": 335054
+      },
+      "stale_blocker_taxonomy_hits": [],
+      "stale_count_hits": []
+    },
+    "docs/milestones/README.md": {
+      "current_section": {
+        "end_line": 509,
+        "end_marker": "## Current Evidence Integrity (updated 2026-06-06)",
+        "start_line": 76,
+        "start_marker": "## Current Evidence Integrity"
+      },
+      "failures": [],
+      "observations": {
+        "explicit_claude_opus_missing": true,
+        "failed_claude_attempt_count_current": true,
+        "final_submission_ready_false": true,
+        "manual_submission_blocked": true,
+        "promax_metadata_blocked": true,
+        "recursive_warning_regression_clear_or_fix_recorded": true
+      },
+      "ok": true,
+      "path": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\milestones\\README.md",
+        "sha256": "2324c85f74c460c40650d5783726e13756ae9de3bdd10298985cb19870709b82",
+        "size_bytes": 163052
+      },
+      "stale_blocker_taxonomy_hits": [],
+      "stale_count_hits": []
+    },
+    "docs/paper_claims_and_status.md": {
+      "current_section": {
+        "end_line": 1735,
+        "end_marker": "## Not primary claims",
+        "start_line": 76,
+        "start_marker": "## Paper-critical readiness modules"
+      },
+      "failures": [],
+      "observations": {
+        "explicit_claude_opus_missing": true,
+        "failed_claude_attempt_count_current": true,
+        "final_submission_ready_false": true,
+        "manual_submission_blocked": true,
+        "promax_metadata_blocked": true,
+        "recursive_warning_regression_clear_or_fix_recorded": true
+      },
+      "ok": true,
+      "path": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\paper_claims_and_status.md",
+        "sha256": "4fe512305f54ac536cb885297e7c1c14e5eb0cd9c0f0ba9358afd6569aa92ec3",
+        "size_bytes": 211885
+      },
+      "stale_blocker_taxonomy_hits": [],
+      "stale_count_hits": []
+    },
+    "docs/server_runbook.md": {
+      "current_section": {
+        "end_line": 361,
+        "end_marker": "## Key Scripts",
+        "start_line": 37,
+        "start_marker": "## Current Priority Order"
+      },
+      "failures": [],
+      "observations": {
+        "explicit_claude_opus_missing": true,
+        "failed_claude_attempt_count_current": true,
+        "final_submission_ready_false": true,
+        "manual_submission_blocked": true,
+        "promax_metadata_blocked": true,
+        "recursive_warning_regression_clear_or_fix_recorded": true
+      },
+      "ok": true,
+      "path": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\server_runbook.md",
+        "sha256": "d370d7408977e0586d05c01c5817d50695861781d4c891535d2b13dbaaadec60",
+        "size_bytes": 92308
+      },
+      "stale_blocker_taxonomy_hits": [],
+      "stale_count_hits": []
+    }
+  },
+  "expected_current_truth": {
+    "explicit_claude_opus_present": false,
+    "failed_claude_attempts": 13,
+    "final_panel_coverage_complete": false,
+    "final_submission_ready": false,
+    "manual_confirmation_needed": true,
+    "manual_submission_system_ready": false,
+    "promax_public_metadata_ready": false,
+    "recursive_warning_regression_count": 0
+  },
+  "failures": [],
+  "final_blocker_doc_status_ok": true,
+  "final_submission_ready": false,
+  "input_paths": {
+    "consistency_audit": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\final_blocker_consistency_audit_20260613.json",
+      "sha256": "3e9805196ca088fed30320fa1a1f2d13e38be171d11d574e209ff9f82e5ada50",
+      "size_bytes": 4717
+    },
+    "docs": {
+      "docs/active_todo_pony_uncertainty.md": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\active_todo_pony_uncertainty.md",
+        "sha256": "f2f5dd9931cee20f1f62c39d15b1b5f1b2f37bb2a49e79fa5436e355053be80a",
+        "size_bytes": 335054
+      },
+      "docs/milestones/README.md": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\milestones\\README.md",
+        "sha256": "2324c85f74c460c40650d5783726e13756ae9de3bdd10298985cb19870709b82",
+        "size_bytes": 163052
+      },
+      "docs/paper_claims_and_status.md": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\paper_claims_and_status.md",
+        "sha256": "4fe512305f54ac536cb885297e7c1c14e5eb0cd9c0f0ba9358afd6569aa92ec3",
+        "size_bytes": 211885
+      },
+      "docs/server_runbook.md": {
+        "exists": true,
+        "is_file": true,
+        "path": "docs\\server_runbook.md",
+        "sha256": "d370d7408977e0586d05c01c5817d50695861781d4c891535d2b13dbaaadec60",
+        "size_bytes": 92308
+      }
+    }
+  },
+  "mode": "local_read_only_final_blocker_doc_status_audit",
+  "next_actions": [
+    "Rerun this doc-status audit after any canonical doc, final blocker, review, ProMax, or manual-request refresh.",
+    "Treat stale current failed-Claude counts or final-ready wording as blockers before handoff.",
+    "Keep final_submission_ready=false until ProMax public metadata, private manual confirmation, and explicit Claude Opus review coverage all close."
+  ],
+  "ok": true,
+  "read_only": true,
+  "schema_version": "2026-06-13.final_blocker_doc_status_audit.v1",
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

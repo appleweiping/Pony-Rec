@@ -79,6 +79,29 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-15 Claude Opus coverage gate refresh.** Codex repaired the Claude Opus
+request path so it no longer carries the stale positive "uncertainty improves
+ranking" claim as the live claim: the generated prompt now uses the current dual
+framing, where the pointwise posterior is the positive result and
+uncertainty/risk is a characterized negative result. The refreshed
+`outputs/summary/paper_critical/claude_opus_review_request_packet_20260615.{json,md}`
+is `ok=true`, `claude_review_needed=true`, has no hard failures, and is a
+request artifact only. Two additional direct `mcp__claude_review.review`
+attempts with `model=opus` and tools disabled failed:
+`claude_opus_review_attempt_fourteenth_20260615.json` records the full-packet
+prompt failure (`The command line is too long`), and
+`claude_opus_review_attempt_fifteenth_20260615.json` records the compressed
+current-claim prompt failure (`Claude CLI did not return JSON output`). The
+refreshed connector-health packet
+`outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
+reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
+`connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+`recommended_next_route=external_claude_opus_json_via_request_packet_and_validator`.
+This does **not** close explicit Claude Opus coverage or final readiness:
+`review_continuation_packet_20260615.{json,md}` still records
+`explicit_claude_opus_present=false`, `final_panel_coverage_complete=false`, and
+`final_submission_ready=false`.
+
 **2026-06-14 inline framework figure and package-polish smoke audit.** The
 current branch `paper/reframe-major-revision` now contains an inline TikZ
 framework overview at Figure~`fig:framework` (upstream commit `ee98fec`),

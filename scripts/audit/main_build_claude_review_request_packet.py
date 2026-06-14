@@ -184,18 +184,24 @@ def _build_prompt(
     prompt_payload = {
         "review_role": "Claude Opus independent hostile top-conference reviewer",
         "claim_scope": (
-            "Task-grounded calibrated uncertainty improves controlled same-candidate "
-            "candidate ranking/reranking reliability. Do not expand this into a "
-            "full-catalog recommender SOTA claim."
+            "Controlled same-candidate LLM recommendation reranking. The current "
+            "honest claim is dual: a task-grounded pointwise LLM relevance posterior "
+            "is the working ranking signal and ranks first in 6 of 8 domains, while "
+            "the calibrated-uncertainty/risk decomposition is a characterized "
+            "negative result that does not improve ranking. Do not claim full-catalog "
+            "SOTA, universal cross-domain dominance, calibration guarantees, or that "
+            "uncertainty improves ranking."
         ),
         "evidence_summary": {
-            "official_same_candidate_rows": "32 official baseline rows + 4 C-CRP rows on sports/toys/home/tools",
-            "protocol": "10k users per new domain, 101 same candidates, Qwen3-8B backbone, full @5/@10/@20 + MRR metrics",
-            "comparison_result": "C-CRP rank 1 on all 7 metrics with 56/56 positive Holm-significant paired tests per domain",
+            "official_same_candidate_rows": "8 Amazon domains, 8 official-code-level baselines, shared same-candidate importer, C-CRP/pointwise-posterior rows.",
+            "protocol": "10k users per full domain where eligible, 101 same candidates, shared Qwen3-8B backbone when an LLM is required, full HR/NDCG @5/@10/@20 plus MRR metrics, paired Holm-corrected bootstrap tests.",
+            "comparison_result": "Pointwise posterior ranks first in 6 of 8 domains; Beauty is rank 2 behind ProEx and Movies is rank 5 behind LLMEmb, both reported rather than dropped. On Sports/Toys/Home/Tools, per-event signal rows support full paired-test evidence.",
+            "negative_uncertainty_result": "Risk/uncertainty adjustment does not improve ranking over the bare posterior: eta=0 is test-best in four diagnostic domains, confidence-only can match or exceed the full family, and boundary uncertainty is inert.",
             "phase_2_5_limits": [
                 "observation module is motivation-only, not causal or SOTA evidence",
-                "component ablation is supplementary diagnostic-only; do not claim every component is necessary",
+                "component ablation is supplementary diagnostic-only; do not claim every component is necessary or beneficial",
                 "hyperparameter analysis is supplementary stability/sensitivity evidence",
+                "current target-formatting gate is not closed: 15 pages against the 9-page profile and 8 overfull hbox warnings",
             ],
         },
         "panel_state": {
@@ -228,6 +234,7 @@ def _build_prompt(
             "Be strict and identify the strongest remaining kill argument.",
             "Do not waive ProMax public proceedings metadata blockers.",
             "Do not waive private manual submission-system blockers.",
+            "Do not waive target-formatting blockers or explicit Claude Opus coverage requirements.",
             "Set final_submission_ready_claim_allowed=false unless all final gates are genuinely closed.",
             "A score below 8.0 is allowed if the evidence does not satisfy top-conference standards.",
         ],
@@ -239,6 +246,7 @@ def _build_prompt(
 def build_claude_review_request_packet(
     *,
     root: str | Path = ".",
+    stamp: str = DEFAULT_STAMP,
     review_continuation_packet_json: str | Path = DEFAULT_REVIEW_CONTINUATION_PACKET_JSON,
     panel_review_json: str | Path = DEFAULT_PANEL_REVIEW_JSON,
     claim_audit_json: str | Path = DEFAULT_CLAIM_AUDIT_JSON,
@@ -270,11 +278,21 @@ def build_claude_review_request_packet(
     )
 
     if review_packet and review_packet.get("review_continuation_ready") is not True:
-        failures.append("review_continuation_packet_not_ready")
+        warnings = ["review_continuation_packet_not_ready_request_allowed_for_missing_claude_coverage"]
+    else:
+        warnings = []
     if review_packet and review_packet.get("final_submission_ready") is not False:
         failures.append("unexpected_review_packet_final_submission_ready_state")
     if review_packet and not claude_needed and coverage.get("explicit_claude_opus_present") is not True:
         failures.append("claude_gap_state_inconsistent")
+
+    review_path = f"outputs/summary/paper_critical/claude_opus_review_{stamp}.json"
+    validation_json = f"outputs/summary/paper_critical/claude_opus_review_validation_{stamp}.json"
+    validation_md = f"outputs/summary/paper_critical/claude_opus_review_validation_{stamp}.md"
+    connector_health_json = f"outputs/summary/paper_critical/claude_review_connector_health_{stamp}.json"
+    connector_health_md = f"outputs/summary/paper_critical/claude_review_connector_health_{stamp}.md"
+    continuation_json = f"outputs/summary/paper_critical/review_continuation_packet_{stamp}.json"
+    continuation_md = f"outputs/summary/paper_critical/review_continuation_packet_{stamp}.md"
 
     return {
         "schema_version": "2026-06-13.claude_review_request_packet.v1",
@@ -288,13 +306,14 @@ def build_claude_review_request_packet(
         "will_start_experiment": False,
         "ok": not failures,
         "failures": failures,
+        "warnings": warnings,
         "input_paths": {key: _path_state(path, repo) for key, path in paths.items()},
         "claude_review_needed": claude_needed,
         "existing_score_floor_0_to_10": coverage.get("score_floor_0_to_10"),
         "missing_perspectives": missing,
         "failed_claude_attempt_summary": _failed_attempt_summary(review_packet),
         "expected_additional_review_json": {
-            "recommended_path": "outputs/summary/paper_critical/claude_opus_review_20260613.json",
+            "recommended_path": review_path,
             "schema": EXPECTED_CLAUDE_REVIEW_SCHEMA,
             "response_template": CLAUDE_REVIEW_RESPONSE_TEMPLATE,
             "response_template_sha256": _sha256_text(
@@ -315,20 +334,24 @@ def build_claude_review_request_packet(
         "claude_review_prompt_sha256": _sha256_text(prompt),
         "validation_command_before_attach": (
             "python -m scripts.audit.main_validate_claude_opus_review_json "
-            "--review-json outputs/summary/paper_critical/claude_opus_review_20260613.json "
-            "--output-json outputs/summary/paper_critical/claude_opus_review_validation_20260613.json "
-            "--output-md outputs/summary/paper_critical/claude_opus_review_validation_20260613.md"
+            f"--review-json {review_path} "
+            f"--review-request-packet-json outputs/summary/paper_critical/claude_opus_review_request_packet_{stamp}.json "
+            f"--review-continuation-packet-json outputs/summary/paper_critical/review_continuation_packet_{stamp}.json "
+            f"--output-json {validation_json} "
+            f"--output-md {validation_md}"
         ),
         "connector_health_command_before_retry": (
             "python -m scripts.audit.main_audit_claude_review_connector_health "
-            "--output-json outputs/summary/paper_critical/claude_review_connector_health_20260613.json "
-            "--output-md outputs/summary/paper_critical/claude_review_connector_health_20260613.md"
+            f"--output-json {connector_health_json} "
+            f"--output-md {connector_health_md}"
         ),
         "review_continuation_command_after_valid_review": " ".join(
             part
             for part in [
                 "python -m scripts.audit.main_build_review_continuation_packet",
-                "--additional-review-json outputs/summary/paper_critical/claude_opus_review_20260613.json",
+                f"--additional-review-json {review_path}",
+                f"--output-json {continuation_json}",
+                f"--output-md {continuation_md}",
                 _failed_attempt_command_args(review_packet),
             ]
             if part
@@ -352,9 +375,21 @@ def render_markdown(packet: dict[str, Any]) -> str:
         f"- Failed Claude attempts: `{packet['failed_claude_attempt_summary']['count']}`",
         f"- Prompt sha256: `{packet['claude_review_prompt_sha256']}`",
         "",
-        "## Missing Perspectives",
+        "## Warnings",
         "",
     ]
+    warnings = packet.get("warnings") or []
+    if warnings:
+        lines.extend([f"- `{item}`" for item in warnings])
+    else:
+        lines.append("- None")
+    lines.extend(
+        [
+            "",
+            "## Missing Perspectives",
+            "",
+        ]
+    )
     missing = packet.get("missing_perspectives") or []
     if missing:
         lines.extend([f"- `{item}`" for item in missing])
@@ -425,6 +460,7 @@ def main() -> int:
 
     packet = build_claude_review_request_packet(
         root=args.root,
+        stamp=args.stamp,
         review_continuation_packet_json=args.review_continuation_packet_json,
         panel_review_json=args.panel_review_json,
         claim_audit_json=args.claim_audit_json,
