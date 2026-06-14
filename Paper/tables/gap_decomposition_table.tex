@@ -3,6 +3,8 @@
 \centering\small
 \caption{Per-domain ranking gap of the Candidate-Conditioned Relevance Posterior (C-CRP) vs the strongest baseline (NDCG@10), against interpretable domain features. $\Delta$ is C-CRP$-$strongest baseline; positive = C-CRP first. $n{=}8$ domains (correlational, not causal).}
 \label{tab:gap_decomposition}
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lrrrrrr}
 \toprule
 Domain & $\Delta$\% vs best & vs LLMEmb\% & Gini & Top-1\% & Cand.\,cos & Hist.\,len \\
@@ -18,5 +20,6 @@ movies & -24.2 & -24.2 & 0.732 & 0.290 & 0.0221 & 6.72 \\
 \midrule
 \multicolumn{7}{l}{\footnotesize Spearman $\rho$ (feature, $\Delta\%$ vs best): Gini 0.57, Top-1\% 0.52, Cand.\,cos -0.24, Hist.\,len -0.69.} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}

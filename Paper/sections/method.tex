@@ -14,6 +14,13 @@ calibrated-uncertainty decomposition and risk-adjusted ranking family (dashed,
 off the main path) are \emph{analyzed and found not to improve} same-candidate
 ranking over the posterior they are built on---a characterized negative
 result---rather than the source of the gain.}
+\Description{Pipeline diagram: a fixed 101-candidate same-candidate panel and
+user history feed a shared Qwen3-8B judge that emits a pointwise per-candidate
+relevance posterior; candidates are ranked by that posterior and scored on
+HR/NDCG/MRR against eight official baselines with paired Holm bootstrap tests.
+A dashed box off the main path shows the calibrated-uncertainty decomposition
+and risk-adjusted family, labelled as analyzed and not improving ranking---a
+characterized negative result.}
 \label{fig:framework}
 \end{figure*}
 
@@ -223,20 +230,5 @@ not align with the same-candidate task. These checks are part of the method
 contract because they prevent a superficially plausible uncertainty score from
 entering the paper table without exact candidate coverage.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/framework_overview_v2.png}
-\caption{Framework overview. \method{} converts same-candidate user-item
-events into task-grounded LLM evidence, scores each candidate with a pointwise
-relevance posterior, and wraps that posterior in an analyzed
-uncertainty-adjusted ranking family whose components and risk term are ablated
-in diagnostics and found inert (the operative scorer is the posterior itself,
-i.e.\ $\eta=0$). The official baselines and \method{} share the same candidate
-rows, metric importer, and evidence gates.}
-\Description{Pipeline diagram showing same-candidate task construction, LLM
-signal extraction, the pointwise relevance posterior used for ranking, the
-analyzed C-CRP uncertainty components and ranking-family risk term shown as
-ablated diagnostics, and shared evidence gates for official baselines and
-C-CRP.}
-\label{fig:framework}
-\end{figure*}
+% (The framework overview figure is defined exactly once, at the top of this
+% section; the earlier duplicate placement here has been removed.)
