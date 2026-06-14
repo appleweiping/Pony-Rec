@@ -3,7 +3,25 @@
 
 \subsection{Main Same-Candidate Comparison}
 
-Table~\ref{tab:main_results} reports the main result across all eight domains.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_improvement_bars}
+\caption{Per-domain NDCG@10 improvement of \method{} over the \emph{strongest
+official baseline in that domain} (\%), sorted descending. \method{} ranks first
+in six of eight domains (green, $+21.6\%$ to $+53.2\%$) and is not first in
+Beauty ($-11.0\%$, rank~2) and Movies ($-24.2\%$, rank~5), shown in red rather
+than dropped. Values match Table~\ref{tab:improvement_over_strongest}.}
+\Description{Horizontal bar chart of the per-domain NDCG@10 percentage
+improvement of C-CRP over the strongest official baseline. Six green bars show
+gains of plus 53.2 percent on Electronics, plus 43.3 on Tools, plus 41.0 on
+Home, plus 32.2 on Toys, plus 29.7 on Sports, and plus 21.6 on Books; two red
+bars show losses of minus 11.0 percent on Beauty and minus 24.2 percent on
+Movies.}
+\label{fig:improvement_bars}
+\end{figure}
+
+Table~\ref{tab:main_results} reports the main result across all eight domains,
+and Figure~\ref{fig:improvement_bars} summarises it visually.
 \method{} ranks first in six of the eight domains. Over the strongest official
 baseline, it improves NDCG@10 by +21.6\% on Books, +53.2\% on Electronics,
 +29.7\% on Sports, +32.2\% on Toys, +41.0\% on Home, and +43.3\% on Tools; in
@@ -39,15 +57,56 @@ Holm-significant, while it is significantly ahead of the seven weaker baselines
 on 14 pairs; on Movies (rank~5) \method{} is significantly behind the four
 stronger baselines on 22 metric/baseline pairs and significantly ahead of the
 weaker baselines on 16. Table~\ref{tab:significance_summary}
-summarizes the signed paired-test outcomes for all eight domains, and
+summarizes the signed paired-test outcomes for all eight domains
+(visualized in Figure~\ref{fig:significance}), and
 Table~\ref{tab:full_official_ndcg10}
 shows the complete per-domain NDCG@10 ranking over all eight official baselines
-plus \method{} for all eight domains.
+plus \method{} for all eight domains, the same values rendered as a heatmap in
+Figure~\ref{fig:main_heatmap}.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_main_heatmap}
+\caption{Same-candidate NDCG@10 of \method{} and the eight official baselines
+across all eight domains (rows = methods, columns = domains; darker is better).
+The boxed top row is \method{}; a star marks the best method in each column.
+\method{} attains the per-domain best in six of eight domains, trailing only
+ProEx on Beauty and LLMEmb (with three further baselines) on Movies. Cell values
+match Table~\ref{tab:full_official_ndcg10}.}
+\Description{Heatmap of NDCG@10 with nine method rows and eight domain columns.
+The C-CRP row is highlighted with a box and holds the highest value in six of
+the eight columns (Books, Electronics, Sports, Toys, Home, Tools); ProEx is best
+on Beauty and LLMEmb is best on Movies, each marked with a star.}
+\label{fig:main_heatmap}
+\end{figure*}
 
 This supports a controlled reranking claim. It does not establish full-catalog
 recommendation SOTA because candidate generation is not evaluated here.
 
-\paragraph{Why the posterior wins on six domains but not Beauty or Movies: an exploratory decomposition.} To replace a qualitative guess with measurement, we relate the per-domain NDCG@10 gap between \method{} and the strongest same-candidate baseline to interpretable domain features---catalogue size, popularity skew (Gini and top-1\% interaction share), candidate-title textual homogeneity (mean pairwise TF--IDF cosine and token Jaccard over the 101 panel titles, and panel vocabulary size), and mean user-history length (Table~\ref{tab:gap_decomposition}). With only eight domains these are deliberately \emph{exploratory, descriptive correlations, not causal claims}, and no single feature remains significant once we account for the number of features tested; we therefore report the full feature table rather than a one-factor story. Three associations emerge. (i)~The strongest single continuous predictor is mean user-history length (Spearman $\rho=-0.69$, single-feature OLS $R^2=0.61$): \method{}'s relative advantage is largest where evaluation histories are \emph{shorter} and smallest on the two longest-history domains, consistent with directly elicited relevance helping most before a user has accumulated the long interaction history that ID/collaborative baselines exploit. We read this as a shorter-history \emph{tendency} rather than a cold-start regime, since mean histories span only $4.0$--$6.7$ items and Books is a winning domain with the second-longest history. (ii)~Candidate-text homogeneity moves inversely with the gap ($\rho=-0.24$ for TF--IDF cosine, $-0.45$ for token Jaccard): the two non-winning domains have the most textually homogeneous panels, where a per-candidate text posterior is least discriminative. (iii)~Contrary to our own prior conjecture, popularity skew does \emph{not} work against the posterior: the gap correlates \emph{positively} with skew ($\rho=+0.57$ for Gini, $+0.52$ for top-1\% share), \method{}'s margin in fact grows on more skewed long-tail catalogues, and Beauty---a non-winning domain---has the \emph{lowest} skew of all eight (Gini $0.26$). We state this reversal explicitly rather than retain the intuitive but unsupported ``loses on skewed catalogues'' reading. Finally, no single feature separates both non-winning domains, because they differ in kind: Beauty is a tiny ($1{,}184$-item), near-uniform catalogue where the dense-ID baseline ProEx has ample co-occurrence signal and the LLM posterior adds little---\method{} still beats LLMEmb there by $+9.3\%$, and its shortfall versus ProEx is not Holm-significant on any metric (Table~\ref{tab:significance_summary})---whereas Movies combines the most homogeneous candidate text with the longest histories and only $51\%$ item-title metadata coverage, a measurement limitation that itself handicaps a text-grounded scorer. (For Movies the history length uses an all-user interactions proxy because its $10{,}000$-user evaluation panel was pruned for storage; the released feature table flags this.) Taken together, the profile---larger margins on large, higher-skew, shorter-history, text-heterogeneous catalogues---motivates future hybridisation of the pointwise posterior with collaborative structure, and we offer it as analysis rather than a validated causal mechanism.
+\paragraph{Why the posterior wins on six domains but not Beauty or Movies: an exploratory decomposition.} To replace a qualitative guess with measurement, we relate the per-domain NDCG@10 gap between \method{} and the strongest same-candidate baseline to interpretable domain features---catalogue size, popularity skew (Gini and top-1\% interaction share), candidate-title textual homogeneity (mean pairwise TF--IDF cosine and token Jaccard over the 101 panel titles, and panel vocabulary size), and mean user-history length (Table~\ref{tab:gap_decomposition}; the two headline associations are plotted in Figure~\ref{fig:gap_decomp}). With only eight domains these are deliberately \emph{exploratory, descriptive correlations, not causal claims}, and no single feature remains significant once we account for the number of features tested; we therefore report the full feature table rather than a one-factor story. Three associations emerge. (i)~The strongest single continuous predictor is mean user-history length (Spearman $\rho=-0.69$, single-feature OLS $R^2=0.61$): \method{}'s relative advantage is largest where evaluation histories are \emph{shorter} and smallest on the two longest-history domains, consistent with directly elicited relevance helping most before a user has accumulated the long interaction history that ID/collaborative baselines exploit. We read this as a shorter-history \emph{tendency} rather than a cold-start regime, since mean histories span only $4.0$--$6.7$ items and Books is a winning domain with the second-longest history. (ii)~Candidate-text homogeneity moves inversely with the gap ($\rho=-0.24$ for TF--IDF cosine, $-0.45$ for token Jaccard): the two non-winning domains have the most textually homogeneous panels, where a per-candidate text posterior is least discriminative. (iii)~Contrary to our own prior conjecture, popularity skew does \emph{not} work against the posterior: the gap correlates \emph{positively} with skew ($\rho=+0.57$ for Gini, $+0.52$ for top-1\% share), \method{}'s margin in fact grows on more skewed long-tail catalogues, and Beauty---a non-winning domain---has the \emph{lowest} skew of all eight (Gini $0.26$). We state this reversal explicitly rather than retain the intuitive but unsupported ``loses on skewed catalogues'' reading. Finally, no single feature separates both non-winning domains, because they differ in kind: Beauty is a tiny ($1{,}184$-item), near-uniform catalogue where the dense-ID baseline ProEx has ample co-occurrence signal and the LLM posterior adds little---\method{} still beats LLMEmb there by $+9.3\%$, and its shortfall versus ProEx is not Holm-significant on any metric (Table~\ref{tab:significance_summary})---whereas Movies combines the most homogeneous candidate text with the longest histories and only $51\%$ item-title metadata coverage, a measurement limitation that itself handicaps a text-grounded scorer. (For Movies the history length uses an all-user interactions proxy because its $10{,}000$-user evaluation panel was pruned for storage; the released feature table flags this.) Taken together, the profile---larger margins on large, higher-skew, shorter-history, text-heterogeneous catalogues---motivates future hybridisation of the pointwise posterior with collaborative structure, and we offer it as analysis rather than a validated causal mechanism.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_gap_decomp}
+\caption{Exploratory decomposition of the per-domain NDCG@10 gap between
+\method{} and the strongest same-candidate baseline ($n{=}8$ domains;
+\emph{descriptive}, not causal). (a)~The gap is largest where mean user-history
+length is shorter (Spearman $\rho=-0.69$). (b)~The gap correlates
+\emph{positively} with popularity skew (Gini, $\rho=+0.57$): \method{}'s margin
+grows on more skewed catalogues, reversing the intuitive ``loses on skewed
+catalogues'' conjecture. Green/red markers denote domains where \method{} ranks
+first / not first; the line is a single-feature OLS fit. No single feature
+separates both non-winning domains; with $n{=}8$ no association is significant
+after accounting for the features tested (Table~\ref{tab:gap_decomposition}).}
+\Description{Two scatter panels, each with eight points (one per domain), a
+regression line, and per-point domain labels. The left panel plots the NDCG@10
+gap versus mean user-history length with a downward trend (Spearman rho minus
+0.69): winning domains cluster at shorter histories. The right panel plots the
+gap versus the popularity Gini coefficient with an upward trend (Spearman rho
+plus 0.57): the gap increases with skew. Beauty and Movies, the two non-winning
+domains, are shown in red.}
+\label{fig:gap_decomp}
+\end{figure*}
 
 \input{tables/gap_decomposition_table}
 
@@ -78,6 +137,24 @@ rather than the source of the gain. We make no claim that the posterior is
 calibrated in the reliability-diagram sense; ``calibrated'' here refers to the
 self-reported probability target of the scoring prompt, not to a measured
 expected-calibration-error guarantee.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_significance}
+\caption{Signed paired-test outcomes per domain (out of $56$: eight baselines
+$\times$ seven metrics). Green = \method{} significantly ahead (Holm-corrected at
+$\alpha{=}0.05$ with a strictly positive bootstrap CI), red = significantly
+behind, gray = not significant. \method{} sweeps $56/56$ on five domains and
+$54/56$ on Books; Beauty has \emph{zero} significant losses (rank~2 but
+indistinguishable from the best baseline), while Movies is significantly behind
+on $22$ pairs. Counts match Table~\ref{tab:significance_summary}.}
+\Description{Horizontal stacked bar chart with one bar per domain summing to 56
+paired tests. Sports, Toys, Home, Tools, and Electronics are fully green at
+56/56 ahead; Books is 54 ahead, 1 behind, 1 not significant; Beauty is 14 ahead
+and 42 not significant with no losses; Movies is 16 ahead, 18 not significant,
+and 22 behind.}
+\label{fig:significance}
+\end{figure}
 
 \input{tables/significance_summary}
 \input{tables/ccrp_rank_by_metric}
