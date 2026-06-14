@@ -3,15 +3,58 @@
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.92\textwidth]{figures/framework_overview_v2.png}
+\resizebox{0.99\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\small,
+  box/.style={rounded corners=2pt, draw=blue!55, fill=blue!7, line width=0.7pt,
+              align=center, inner sep=4pt, text width=26mm, minimum height=14mm},
+  judge/.style={box, fill=blue!16, draw=blue!70, line width=1pt},
+  result/.style={box, draw=green!55!black, fill=green!12, line width=1pt},
+  evalnode/.style={box, draw=black!40, fill=black!4, text width=32mm, minimum height=12mm},
+  negsub/.style={rounded corners=2pt, draw=black!40, fill=white, align=center,
+                 inner sep=4pt, text width=46mm, font=\footnotesize},
+  flow/.style={-{Stealth[length=2.8mm]}, line width=1pt, draw=blue!60},
+  ev/.style={-{Stealth[length=2.4mm]}, line width=0.9pt, draw=black!50},
+  side/.style={-{Stealth[length=2.4mm]}, line width=0.9pt, draw=red!55!black, dashed},
+]
+% --- main pipeline (operative method) ---
+\node[box] (panel) {\textbf{Same-candidate panel}\\[2pt]{\scriptsize user history + 101\\candidates (1 positive,\\100 popularity-sampled negs)}};
+\node[judge, right=9mm of panel] (judge) {\textbf{Shared Qwen3-8B}\\\textbf{judge}\\[2pt]{\scriptsize pointwise, $T{=}0.1$}};
+\node[box, right=9mm of judge] (post) {\textbf{Relevance}\\\textbf{posterior} $\hat{p}$\\[2pt]{\scriptsize per candidate}};
+\node[box, right=9mm of post] (rank) {\textbf{Rank by} $\hat{p}$};
+\node[result, right=9mm of rank] (list) {\textbf{Ranked list}\\[2pt]{\scriptsize \textbf{first in 6 of 8 domains}}};
+\draw[flow] (panel)--(judge);
+\draw[flow] (judge)--(post);
+\draw[flow] (post)--(rank);
+\draw[flow] (rank)--(list);
+\node[above=3mm of judge, font=\footnotesize\bfseries, text=blue!45!black]
+  {Method (\method{}): rank by the pointwise relevance posterior};
+% --- evaluation ---
+\node[evalnode, below=10mm of list] (eval) {{\scriptsize HR/NDCG/MRR @5/10/20\\ vs 8 official baselines\\ paired Holm bootstrap}};
+\draw[ev] (list)--(eval);
+% --- negative-result tier (analyzed, off the main path) ---
+\node[negsub, below=22mm of post, xshift=-13mm] (unc)
+  {\textbf{Uncertainty decomposition}\\ boundary $\cdot$ calibration gap $\cdot$\\ evidence support $\cdot$ counterevidence};
+\node[negsub, right=7mm of unc] (risk)
+  {\textbf{Risk-adjusted family}\\ $s=\hat{p}-\eta\cdot\mathrm{risk}$\\ $\eta{=}0$ is test-best (inert)};
+\begin{scope}[on background layer]
+  \node[draw=black!45, dashed, rounded corners=3pt, fill=black!4, line width=0.9pt,
+        fit=(unc)(risk), inner sep=8pt] (negbox) {};
+\end{scope}
+\node[font=\footnotesize\bfseries, text=red!55!black, above=0.6mm of negbox.north]
+  {Analyzed --- does \textbf{NOT} improve ranking (characterized negative result)};
+\draw[side] (post.south) -- (post.south |- negbox.north)
+  node[pos=0.5, right=1pt, font=\scriptsize, text=red!55!black] {analyzed only};
+\end{tikzpicture}%
+}
 \caption{Overview of the unified same-candidate reranking protocol and
 \method{}. Every method scores the same fixed 101-candidate panel (one positive,
 100 popularity-sampled negatives) for each user under a shared Qwen3-8B backbone;
 \method{} ranks the panel directly by the task-grounded \emph{pointwise} relevance
 posterior $\hat{p}$, and all methods are compared on HR/NDCG/MRR against eight
 official-code-level baselines with paired Holm-corrected bootstrap tests. The
-calibrated-uncertainty decomposition and risk-adjusted ranking family (dashed,
-off the main path) are \emph{analyzed and found not to improve} same-candidate
+uncertainty decomposition and risk-adjusted ranking family (dashed, off the main
+path) are \emph{analyzed and found not to improve} same-candidate
 ranking over the posterior they are built on---a characterized negative
 result---rather than the source of the gain.}
 \Description{Pipeline diagram: a fixed 101-candidate same-candidate panel and
