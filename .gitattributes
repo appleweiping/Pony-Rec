@@ -6,3 +6,8 @@ outputs/summary/*.csv -text
 outputs/summary/*.json -text
 outputs/summary/*.md -text
 outputs/summary/*.sha256 -text
+
+# GPU queue-to-8 launch scripts must stay LF so they run on the Linux server.
+experiments/rsc/*.sh text eol=lf
+experiments/rsc/run_ccrp_v3_domain_seeded.py text eol=lf
+experiments/rsc/aggregate_multiseed_ndcg.py text eol=lf
