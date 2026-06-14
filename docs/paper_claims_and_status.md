@@ -16,9 +16,8 @@ system log.
 
 A Pointwise LLM Relevance Posterior Is a Strong Reranker (a controlled
 same-candidate study of uncertainty-adjusted LLM recommendation). The
-submission-facing title is "Actionable Uncertainty for LLM-Based
-Recommendation," but the technical headline is the pointwise posterior, not the
-uncertainty machinery. No version of the title may be read as a full-catalog or
+submission metadata config must match this reframed title unless the manuscript
+title itself changes. No version of the title may be read as a full-catalog or
 generic recommender SOTA claim.
 
 ## Primary claim (frozen, dual framing)
@@ -97,6 +96,34 @@ reports `framework_overview.accepted_mode=inline_tikz`,
 false missing-framework-asset blockers for the current manuscript shape; it
 does **not** close the target-formatting blocker because the paper still
 exceeds the 9-page profile and has overfull hbox warnings.
+
+**2026-06-14 live ProMax proceedings and final-stack refresh.** Codex reran the
+read-only live ProMax public metadata probe and external proceedings metadata
+audit:
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260614.{json,md}`
+and
+`outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260614.{json,md}`.
+Both audits keep final readiness blocked. ProMax still has no final ACM page
+range in BibTeX, Crossref `/works/10.1145/3805712.3809600` returns `404`, and
+the DOI resolver returns `404`; ACM DL is inaccessible with `403`. The public
+source probes continue to support accepted-paper provenance (arXiv HTML ACM
+metadata, SIGIR accepted papers, UQ profile/publication pages), but those
+sources do not close the exact page-range/Crossref/DOI gates. Codex refreshed
+the local release-candidate stack and closure packet at
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260614.{json,md}`
+and
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260614.{json,md}`.
+The refreshed stack remains `ok=false`, `local_release_candidate_ready=false`,
+and `final_submission_ready=false`. Codex also updated
+`configs/paper_submission_metadata.json` to match the current reframed
+manuscript title, so the stale title-mismatch failure is gone; remaining
+failures are target formatting (`15 > 9` pages and 8 overfull hbox warnings),
+ProMax public proceedings metadata, manual submission-system confirmation, and
+explicit Claude Opus review coverage. The associated consistency audit
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260614.{json,md}`
+is `ok=false` because the release stack now has
+`blocking_status=local_artifact_repair_required`; this is stricter and more
+accurate than the previous local-ready handoff, not a final-readiness closure.
 
 **2026-06-12 external metadata discovery enhancement.** Codex strengthened
 `scripts/audit/main_audit_external_proceedings_metadata.py` with advisory

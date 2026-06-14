@@ -1,0 +1,368 @@
+{
+  "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
+  "created_at_utc": "2026-06-14T21:21:55.558564+00:00",
+  "crosscheck": {
+    "external_metadata_ok": true,
+    "external_proceedings_metadata_ready": false,
+    "metadata_packet_ok": false,
+    "source_manifest_sha256": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+    "submission_package_ok": false,
+    "submission_package_ready_for_target_formatting": false
+  },
+  "failures": [
+    "submission_metadata_packet_not_ok",
+    "submission_metadata_packet_not_ready",
+    "submission_package_audit_not_ok",
+    "submission_package_not_ready_for_target_formatting"
+  ],
+  "final_submission_ready": false,
+  "input_paths": {
+    "config": "configs\\paper_manual_submission_checklist.json",
+    "external_metadata_audit": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260614.json",
+    "metadata_packet": "outputs\\summary\\paper_critical\\submission_metadata_packet_20260614.json",
+    "private_confirmation_json": "",
+    "submission_package_audit": "outputs\\summary\\paper_critical\\submission_package_audit_20260614.json"
+  },
+  "item_count": 14,
+  "items": [
+    {
+      "blockers": [],
+      "category": "submission_system",
+      "id": "select_track_and_paper_type",
+      "label": "Select the target track and full research paper type",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "manual_confirmation_only",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "metadata",
+      "id": "paste_title",
+      "label": "Paste and verify the title from the metadata packet",
+      "prefill": {
+        "available": true,
+        "source": "submission_fields.title",
+        "summary": "A Pointwise LLM Relevance Posterior Is a Strong Reranker: A Controlled Same-Candidate Study of Uncertainty-Adjusted LLM Recommendation",
+        "value": "A Pointwise LLM Relevance Posterior Is a Strong Reranker: A Controlled Same-Candidate Study of Uncertainty-Adjusted LLM Recommendation"
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "repo_prefill_public_value",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "metadata",
+      "id": "paste_abstract",
+      "label": "Paste and verify the abstract from the metadata packet",
+      "prefill": {
+        "available": true,
+        "source": "submission_fields.abstract",
+        "summary": "Large language models (LLMs) are increasingly used as scoring and representation engines for recommendation, yet comparisons across LLM-based recommenders are often confounded by different candidate sets, backbones, importers, and evaluation schemas. We first contribute a rigorous unified same-candidate reranking protocol: every method ranks the same 101 candidates (one positive and 100 popularity-sampled negatives) for each of 10,000 users, uses the same Qwen3-8B backbone when an LLM is required, and is evaluated with a shared importer, identical metrics, exact coverage checks, and paired Holm-corrected bootstrap tests, with full provenance. Against eight official-code-level LLM-based recommendation baselines across eight Amazon domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools), our central empirical finding is that a task-grounded pointwise LLM relevance posterior -- the model's own per-candidate relevance probability, used directly as the ranking score -- ranks first in six of the eight domains, improving NDCG@10 by +21.6\\ seven metrics HR@5/@10/@20, NDCG@5/@10/@20, MRR in five of these six domains --- Electronics, Sports, Toys, Home, Tools; 56/56 paired-significant --- and on six of seven on Books, HR@20 versus LLMEmb the exception). In the remaining two domains it is not first: rank 2 on Beauty (-11\\ this shortfall is not Holm-significant on any metric, leaving C-CRP statistically indistinguishable from the strongest baseline) and mid-pack at rank 5 on Movies ($-24\\ baselines). We report these two losses explicitly rather than dropping them. We compute paired Holm-corrected bootstrap tests on all eight domains: on the six winning domains C-CRP is significantly ahead on all 56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly behind the stronger baselines on 22 of 56 pairs. We then report a rigorous negative result on the design space this work set out to study. We instrument the pointwise posterior with a principled calibrated-uncertainty and risk-adjusted ranking family that decomposes uncertainty into boundary ambiguity, a calibration gap, evidence support, and counterevidence. Under a leave-one-component-out ablation and a raw-probability attribution, this machinery does not improve same-candidate ranking: the zero-risk setting is test-best in all four diagnostic domains, a confidence-only variant matches or exceeds the full family in three of those four domains, and individual uncertainty terms are inert or mildly harmful. The working ranking signal lies in the posterior itself, not in the uncertainty decomposition. As a minor, descriptive observation -- and one we caveat as partly circular -- the event-level uncertainty signal does stratify reliability, but we do not claim it improves ranking. This is a scoped result about same-candidate reranking, not a full-catalog recommender SOTA claim.",
+        "value": "Large language models (LLMs) are increasingly used as scoring and representation engines for recommendation, yet comparisons across LLM-based recommenders are often confounded by different candidate sets, backbones, importers, and evaluation schemas. We first contribute a rigorous unified same-candidate reranking protocol: every method ranks the same 101 candidates (one positive and 100 popularity-sampled negatives) for each of 10,000 users, uses the same Qwen3-8B backbone when an LLM is required, and is evaluated with a shared importer, identical metrics, exact coverage checks, and paired Holm-corrected bootstrap tests, with full provenance. Against eight official-code-level LLM-based recommendation baselines across eight Amazon domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools), our central empirical finding is that a task-grounded pointwise LLM relevance posterior -- the model's own per-candidate relevance probability, used directly as the ranking score -- ranks first in six of the eight domains, improving NDCG@10 by +21.6\\ seven metrics HR@5/@10/@20, NDCG@5/@10/@20, MRR in five of these six domains --- Electronics, Sports, Toys, Home, Tools; 56/56 paired-significant --- and on six of seven on Books, HR@20 versus LLMEmb the exception). In the remaining two domains it is not first: rank 2 on Beauty (-11\\ this shortfall is not Holm-significant on any metric, leaving C-CRP statistically indistinguishable from the strongest baseline) and mid-pack at rank 5 on Movies ($-24\\ baselines). We report these two losses explicitly rather than dropping them. We compute paired Holm-corrected bootstrap tests on all eight domains: on the six winning domains C-CRP is significantly ahead on all 56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly behind the stronger baselines on 22 of 56 pairs. We then report a rigorous negative result on the design space this work set out to study. We instrument the pointwise posterior with a principled calibrated-uncertainty and risk-adjusted ranking family that decomposes uncertainty into boundary ambiguity, a calibration gap, evidence support, and counterevidence. Under a leave-one-component-out ablation and a raw-probability attribution, this machinery does not improve same-candidate ranking: the zero-risk setting is test-best in all four diagnostic domains, a confidence-only variant matches or exceeds the full family in three of those four domains, and individual uncertainty terms are inert or mildly harmful. The working ranking signal lies in the posterior itself, not in the uncertainty decomposition. As a minor, descriptive observation -- and one we caveat as partly circular -- the event-level uncertainty signal does stratify reliability, but we do not claim it improves ranking. This is a scoped result about same-candidate reranking, not a full-catalog recommender SOTA claim."
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "repo_prefill_public_value",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "metadata",
+      "id": "paste_keywords",
+      "label": "Paste and verify keywords",
+      "prefill": {
+        "available": true,
+        "source": "submission_fields.keywords",
+        "summary": "LLM-based recommendation, uncertainty estimation, calibration, candidate reranking, same-candidate evaluation",
+        "value": [
+          "LLM-based recommendation",
+          "uncertainty estimation",
+          "calibration",
+          "candidate reranking",
+          "same-candidate evaluation"
+        ]
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "repo_prefill_public_value",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "metadata",
+      "id": "select_topic_areas",
+      "label": "Select topic areas",
+      "prefill": {
+        "available": true,
+        "source": "submission_fields.topic_areas",
+        "summary": "Recommender systems, Evaluation and reproducibility, Large language models, Uncertainty and calibration",
+        "value": [
+          "Recommender systems",
+          "Evaluation and reproducibility",
+          "Large language models",
+          "Uncertainty and calibration"
+        ]
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "repo_prefill_public_value",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "files",
+      "id": "upload_pdf",
+      "label": "Upload the audited anonymous PDF",
+      "prefill": {
+        "available": true,
+        "source": "package_crosscheck.pdf_path",
+        "summary": "Paper\\main.pdf",
+        "value": "Paper\\main.pdf"
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "repo_evidence_path_only",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "files",
+      "id": "upload_source_if_required",
+      "label": "Upload source package if required by the submission system",
+      "prefill": {
+        "available": true,
+        "source": "package_crosscheck.source_manifest_sha256",
+        "summary": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+        "value": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08"
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "manual_pending",
+      "storage_policy": "repo_evidence_manifest_only",
+      "warnings": []
+    },
+    {
+      "blockers": [
+        "confirm_anonymous_shell:target_formatting_profile_not_ok",
+        "confirm_anonymous_shell:target_profile_not_ok"
+      ],
+      "category": "formatting",
+      "id": "confirm_anonymous_shell",
+      "label": "Confirm anonymous PDF/source shell in the submission system",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": false,
+      "requires_submission_system": true,
+      "status": "blocked",
+      "storage_policy": "repo_evidence_plus_manual_confirmation",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "private_metadata",
+      "id": "enter_authors",
+      "label": "Enter authors, affiliations, and order inside the submission system",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": true,
+      "requires_submission_system": true,
+      "status": "manual_private_not_stored",
+      "storage_policy": "not_stored_in_repo",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "private_metadata",
+      "id": "complete_conflicts",
+      "label": "Complete conflict-of-interest fields inside the submission system",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": true,
+      "requires_submission_system": true,
+      "status": "manual_private_not_stored",
+      "storage_policy": "not_stored_in_repo",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "private_metadata",
+      "id": "complete_reviewer_preferences",
+      "label": "Complete reviewer suggestions/exclusions only inside the submission system if requested",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": true,
+      "requires_submission_system": true,
+      "status": "manual_private_not_stored",
+      "storage_policy": "not_stored_in_repo",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "declarations",
+      "id": "complete_declarations",
+      "label": "Complete submission-system declarations, ethics, artifact, and policy checkboxes",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": true,
+      "requires_submission_system": true,
+      "status": "manual_private_not_stored",
+      "storage_policy": "manual_confirmation_only",
+      "warnings": []
+    },
+    {
+      "blockers": [
+        "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed"
+      ],
+      "category": "external_metadata",
+      "id": "confirm_external_proceedings_metadata",
+      "label": "Confirm external proceedings metadata blockers are closed",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": false,
+      "requires_submission_system": false,
+      "status": "blocked",
+      "storage_policy": "repo_external_audit_plus_manual_confirmation",
+      "warnings": []
+    },
+    {
+      "blockers": [],
+      "category": "final_review",
+      "id": "final_preview_and_submit",
+      "label": "Review final submission preview and submit",
+      "prefill": {
+        "available": false,
+        "source": "",
+        "summary": "",
+        "value": null
+      },
+      "private": true,
+      "requires_submission_system": true,
+      "status": "manual_private_not_stored",
+      "storage_policy": "manual_confirmation_only",
+      "warnings": []
+    }
+  ],
+  "manual_pending_item_ids": [
+    "select_track_and_paper_type",
+    "paste_title",
+    "paste_abstract",
+    "paste_keywords",
+    "select_topic_areas",
+    "upload_pdf",
+    "upload_source_if_required",
+    "enter_authors",
+    "complete_conflicts",
+    "complete_reviewer_preferences",
+    "complete_declarations",
+    "final_preview_and_submit"
+  ],
+  "manual_private_fields_not_stored": [
+    "author names and affiliations",
+    "author order and contribution declarations",
+    "conflicts of interest",
+    "reviewer suggestions or exclusions",
+    "submission-system declarations",
+    "private submission account metadata"
+  ],
+  "manual_private_item_ids": [
+    "enter_authors",
+    "complete_conflicts",
+    "complete_reviewer_preferences",
+    "complete_declarations",
+    "final_preview_and_submit"
+  ],
+  "manual_submission_checklist_ready": false,
+  "manual_submission_system_ready": false,
+  "mode": "local_read_only_manual_submission_checklist",
+  "next_actions": [
+    "Use this checklist while filling the submission system; do not copy private author/COI/reviewer data into the repository.",
+    "Optionally pass --private-confirmation-json to audit a local untracked confirmation file after the submission-system fields are completed.",
+    "Rerun the external proceedings metadata audit immediately before final submission.",
+    "Rerun submission package, metadata packet, and this checklist after any paper/source/BibTeX change.",
+    "Keep final_submission_ready=false until manual submission-system items and external metadata blockers are all closed."
+  ],
+  "ok": false,
+  "private_confirmation": {
+    "completed_item_ids": [],
+    "confirmed_in_submission_system": false,
+    "exists": false,
+    "no_private_fields_stored": false,
+    "path": "",
+    "provided": false,
+    "schema_version": "",
+    "sha256": "",
+    "size_bytes": 0
+  },
+  "read_only": true,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "Final submission package still needs the external submission-target-specific formatting pass.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed.",
+    "confirm_anonymous_shell:target_formatting_profile_not_ok",
+    "confirm_anonymous_shell:target_profile_not_ok",
+    "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+    "manual_submission_system_items_not_confirmed"
+  ],
+  "schema_version": "2026-06-12.manual_submission_checklist.v1",
+  "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "unconfirmed_required_item_ids": [
+    "select_track_and_paper_type",
+    "paste_title",
+    "paste_abstract",
+    "paste_keywords",
+    "select_topic_areas",
+    "upload_pdf",
+    "upload_source_if_required",
+    "enter_authors",
+    "complete_conflicts",
+    "complete_reviewer_preferences",
+    "complete_declarations",
+    "final_preview_and_submit"
+  ],
+  "warnings": [],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

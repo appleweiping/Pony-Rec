@@ -84,7 +84,17 @@ negative result. The 2026-06-14 package-polish smoke audit
 confirms `Paper/main.blg` is clean (`warning$ -- 0`) and the framework
 overview is accepted as `inline_tikz`, but keeps `final_submission_ready=false`
 because the PDF is 15 pages against the 9-page target profile and has 8
-overfull hbox warnings. `scripts/audit/main_build_final_paper_claim_audit.py`
+overfull hbox warnings. The later 2026-06-14 live ProMax/final-stack refresh
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260614.{json,md}`
+keeps `local_release_candidate_ready=false` and
+`final_submission_ready=false`: the stale title-mismatch failure was removed by
+aligning `configs/paper_submission_metadata.json` with the current paper title,
+but ProMax page-range/Crossref/DOI visibility, manual submission-system
+confirmation, explicit Claude Opus coverage, and target formatting remain open.
+The same-stamp final-blocker consistency audit is `ok=false` for the expected
+`local_artifact_repair_required` reason until the target-formatting repair is
+done.
+`scripts/audit/main_build_final_paper_claim_audit.py`
 generates
 `outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md,csv}`
 with `paper_evidence_ready_for_drafting=true`, `final_submission_ready=false`,

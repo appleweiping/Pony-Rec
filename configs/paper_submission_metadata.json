@@ -2,7 +2,7 @@
   "schema_version": "2026-06-12.paper_submission_metadata.v1",
   "target_profile_id": "sigir2026_full_paper_acm_anonymous",
   "paper_type": "full research paper",
-  "submission_title": "Actionable Uncertainty for LLM-Based Recommendation",
+  "submission_title": "A Pointwise LLM Relevance Posterior Is a Strong Reranker: A Controlled Same-Candidate Study of Uncertainty-Adjusted LLM Recommendation",
   "anonymous_submission": true,
   "suggested_keywords": [
     "LLM-based recommendation",

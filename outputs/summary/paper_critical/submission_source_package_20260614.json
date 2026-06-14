@@ -1,0 +1,57 @@
+{
+  "copied_manifest": {
+    "file_count": 0,
+    "files": [],
+    "manifest_sha256": "",
+    "total_bytes": 0
+  },
+  "created_at_utc": "2026-06-14T21:21:55.422979+00:00",
+  "failures": [
+    "submission_package_audit_not_ok",
+    "submission_package_not_ready_for_target_formatting",
+    "submission_package_audit_failures_not_empty_or_missing"
+  ],
+  "final_submission_ready": false,
+  "input_paths": {
+    "submission_package_audit_json": "outputs\\summary\\paper_critical\\submission_package_audit_20260614.json"
+  },
+  "mode": "local_copy_from_audited_source_manifest",
+  "next_actions": [
+    "Use this package directory as the local anonymous source-package staging area.",
+    "Do not add private confirmation files, author metadata, COI data, or submission-account data to this package.",
+    "Rebuild this package after any Paper source, BibTeX, figure, or PDF change.",
+    "Keep final_submission_ready=false until external proceedings metadata and manual submission-system gates are closed."
+  ],
+  "ok": false,
+  "output": {
+    "files_dir": "artifacts\\submission_source_package_20260614\\files",
+    "overwrite": true,
+    "package_dir": "artifacts\\submission_source_package_20260614"
+  },
+  "read_only": false,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "Final submission package still needs the external submission-target-specific formatting pass.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed."
+  ],
+  "schema_version": "2026-06-12.submission_source_package.v1",
+  "source_audit_crosscheck": {
+    "anonymous_source_leak_scan_ok": true,
+    "audit_final_submission_ready": false,
+    "source_manifest_external_source_references": [],
+    "source_manifest_file_count": 26,
+    "source_manifest_sha256": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+    "source_manifest_total_bytes": 1202188,
+    "submission_package_audit_ok": false,
+    "submission_package_ready_for_target_formatting": false
+  },
+  "submission_source_package_ready": false,
+  "warnings": [],
+  "will_copy": false,
+  "will_delete": true,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

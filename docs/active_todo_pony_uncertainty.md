@@ -9,6 +9,33 @@ cycle.
 
 ## Current Checkpoint (2026-06-14)
 
+- 2026-06-14 live ProMax/final-stack refresh:
+  Codex reran the ARIS citation/proceedings metadata path with live network:
+  `outputs/summary/paper_critical/promax_public_metadata_probe_20260614.{json,md}`
+  and
+  `outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260614.{json,md}`.
+  The refreshed ProMax probe is `ok=true` but still
+  `promax_public_metadata_ready=false` and `final_submission_ready=false`:
+  Crossref `/works/10.1145/3805712.3809600` is `404`, the DOI resolver is
+  `404`, ACM DL is `403`, and the ProMax BibTeX still has no final ACM page
+  range. Public source probes still pass for arXiv HTML ACM metadata, SIGIR
+  2026 accepted papers, UQ author profile, author publications, and UQ Experts.
+  Codex refreshed the full local submission stack at
+  `outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260614.{json,md}`
+  and the closure packet at
+  `outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260614.{json,md}`;
+  both remain not ready with `final_submission_ready=false`. During the refresh
+  Codex also aligned `configs/paper_submission_metadata.json` with the current
+  manuscript title, removing the stale title mismatch from
+  `submission_metadata_packet_20260614.json`. Remaining blockers after that
+  fix are target formatting (`15 > 9` pages and 8 overfull hbox warnings),
+  ProMax page-range/Crossref/DOI visibility, private manual submission-system
+  confirmation, and explicit Claude Opus review coverage. The paired
+  `outputs/summary/paper_critical/final_blocker_consistency_audit_20260614.{json,md}`
+  is therefore `ok=false` for the expected reason
+  `local_artifact_repair_required`; do not treat this as a final-ready packet
+  until target formatting is repaired and the stack is refreshed again.
+
 - 2026-06-14 inline-framework/package-polish heartbeat:
   server preflight found no matching Uncertainty/Pony Python experiment process
   and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. The
@@ -1225,11 +1252,12 @@ cycle.
 
 ## Paper-Critical Readiness Addendum (2026-06-03)
 
-Working display title: **Actionable Uncertainty for LLM-based Recommendation**.
-This replaces the more engineering-sounding "Task-Grounded Uncertainty for
-LLM-based Recommendation" as the repo/paper-facing name, while preserving the
-frozen technical claim: task-grounded calibrated uncertainty under controlled
-same-candidate evaluation.
+Working display title after the 2026-06 major reframe:
+**A Pointwise LLM Relevance Posterior Is a Strong Reranker: A Controlled
+Same-Candidate Study of Uncertainty-Adjusted LLM Recommendation**. The frozen
+technical claim is the honest dual result: the pointwise posterior is the
+working ranking signal, and the calibrated-uncertainty/risk decomposition is a
+characterized negative result under controlled same-candidate evaluation.
 
 The paper is not ready after official-baseline completion alone. Before moving
 to final writing or claiming readiness, add and gate these top-priority modules:

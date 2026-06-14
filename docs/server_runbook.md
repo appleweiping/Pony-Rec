@@ -60,6 +60,24 @@ PIDs, audit summaries, and missing-file errors.
    blocker is therefore target formatting (page count and overfull hbox), while
    ProMax public proceedings metadata and private manual submission-system
    confirmation remain final-submission blockers.
+   Later on 2026-06-14 Codex reran the live ProMax public metadata probe,
+   external proceedings metadata audit, full release-candidate stack, and
+   blocker-closure packet:
+   `outputs/summary/paper_critical/promax_public_metadata_probe_20260614.{json,md}`,
+   `external_proceedings_metadata_recheck_20260614.{json,md}`,
+   `submission_release_candidate_stack_refresh_20260614.{json,md}`, and
+   `final_submission_blocker_closure_packet_20260614.{json,md}`. ProMax remains
+   blocked (`final_page_range_missing_in_bib`, Crossref `404`, DOI resolver
+   `404`; ACM DL `403`), while arXiv/SIGIR/UQ source probes pass. Codex also
+   aligned `configs/paper_submission_metadata.json` with the current reframed
+   manuscript title, removing the stale title-mismatch gate failure. The stack
+   still reports `local_release_candidate_ready=false` and
+   `final_submission_ready=false` because target formatting, ProMax metadata,
+   manual submission-system confirmation, and explicit Claude Opus coverage
+   remain open. The same-stamp consistency audit
+   `outputs/summary/paper_critical/final_blocker_consistency_audit_20260614.{json,md}`
+   is expected to be `ok=false` while the release stack reports
+   `blocking_status=local_artifact_repair_required`.
 3. Historical 2026-06-12/2026-06-13 handoff details below still matter, but
    treat them as subordinate to the 2026-06-14 branch and package-smoke status.
    Phase 2.5 evidence is ready for

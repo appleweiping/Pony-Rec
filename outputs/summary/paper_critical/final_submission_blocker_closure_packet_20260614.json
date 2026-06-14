@@ -1,0 +1,329 @@
+{
+  "classified_remaining_blockers": {
+    "external_proceedings_metadata": [
+      "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+      "promax:final_page_range_missing_in_bib",
+      "promax:crossref_registry_not_visible:status=404",
+      "promax:doi_resolver_not_visible:status=404",
+      "external_proceedings_metadata_not_ready",
+      "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+      "promax:crossref_registry_not_visible",
+      "promax:doi_resolver_not_visible"
+    ],
+    "manual_submission_system": [
+      "Final manual submission-system metadata/format checklist is not closed.",
+      "manual_submission_system_not_ready",
+      "manual_submission_system_items_not_confirmed"
+    ],
+    "other": [
+      "Final submission package still needs the external submission-target-specific formatting pass.",
+      "confirm_anonymous_shell:target_formatting_profile_not_ok",
+      "confirm_anonymous_shell:target_profile_not_ok"
+    ],
+    "review_panel_coverage": [
+      "review_panel_coverage_not_complete",
+      "explicit_claude_opus_review"
+    ]
+  },
+  "closure_groups": [
+    {
+      "can_close_without_private_data": true,
+      "closure_conditions": [
+        "Keep the stack artifact fresh after any paper, bibliography, package, or metadata change."
+      ],
+      "current_evidence": {
+        "blocking_status": "local_artifact_repair_required",
+        "failure_count": 88,
+        "local_release_candidate_ready": false,
+        "readiness_scope": "local_artifacts_only"
+      },
+      "group_id": "local_artifact_handoff",
+      "next_commands": [
+        "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md"
+      ],
+      "public_safe": true,
+      "remaining_blockers": [],
+      "status": "not_ready"
+    },
+    {
+      "can_close_without_private_data": true,
+      "closure_conditions": [
+        "Capture a substantive explicit Claude Opus review JSON that satisfies the review-continuation schema.",
+        "Rerun the review-continuation packet after attaching the valid review JSON.",
+        "Rerun the final submission gate and closure packet after review coverage changes."
+      ],
+      "current_evidence": {
+        "final_gate_verdict": "FINAL_SUBMISSION_GATE_NEEDS_REPAIR",
+        "review_continuation_ready": true,
+        "review_panel_coverage_complete": false
+      },
+      "group_id": "review_panel_coverage",
+      "next_commands": [
+        "python -m scripts.audit.main_build_claude_review_request_packet --output-json outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_opus_review_request_packet_YYYYMMDD.md",
+        "python -m scripts.audit.main_audit_claude_review_connector_health --output-json outputs/summary/paper_critical/claude_review_connector_health_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_review_connector_health_YYYYMMDD.md",
+        "python -m scripts.audit.main_validate_claude_opus_review_json --review-json outputs/summary/paper_critical/valid_claude_opus_review_YYYYMMDD.json --output-json outputs/summary/paper_critical/claude_opus_review_validation_YYYYMMDD.json --output-md outputs/summary/paper_critical/claude_opus_review_validation_YYYYMMDD.md",
+        "python -m scripts.audit.main_build_review_continuation_packet --additional-review-json outputs/summary/paper_critical/valid_claude_opus_review_YYYYMMDD.json --output-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.md",
+        "python -m scripts.audit.main_build_final_submission_gate --review-continuation-packet-json outputs/summary/paper_critical/review_continuation_packet_YYYYMMDD.json --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md"
+      ],
+      "public_safe": true,
+      "remaining_blockers": [
+        "review_panel_coverage_not_complete",
+        "explicit_claude_opus_review"
+      ],
+      "status": "blocked"
+    },
+    {
+      "can_close_without_private_data": true,
+      "closure_conditions": [
+        "Add the final ProMax ACM page range to Paper/references.bib when it is public.",
+        "Direct Crossref /works lookup for DOI 10.1145/3805712.3809600 must return 200 with matching DOI metadata.",
+        "The DOI resolver https://doi.org/10.1145/3805712.3809600 must resolve successfully.",
+        "Rerun the external proceedings metadata audit and the release-candidate stack after metadata changes."
+      ],
+      "current_evidence": {
+        "bibtex": {
+          "booktitle": "Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval",
+          "doi": "10.1145/3805712.3809600",
+          "eprint": "2604.26231",
+          "isbn": "979-8-4007-2599-9",
+          "location": "Melbourne, VIC, Australia",
+          "numpages": "11",
+          "pages": ""
+        },
+        "blockers": [
+          "promax:final_page_range_missing_in_bib",
+          "promax:crossref_registry_not_visible:status=404",
+          "promax:doi_resolver_not_visible:status=404"
+        ],
+        "crossref_status_code": 404,
+        "doi_resolver_status_code": 404,
+        "external_metadata_ready": false,
+        "source_checks": [
+          {
+            "missing_patterns": [],
+            "name": "arxiv_2604_26231",
+            "ok": true,
+            "status_code": 200
+          },
+          {
+            "missing_patterns": [],
+            "name": "arxiv_html_promax_acm_metadata",
+            "ok": true,
+            "status_code": 200
+          },
+          {
+            "missing_patterns": [],
+            "name": "sigir2026_accepted_papers_promax",
+            "ok": true,
+            "status_code": 200
+          }
+        ],
+        "warnings": [
+          "promax:crossref_discovery_alternate_doi_candidates_present"
+        ]
+      },
+      "group_id": "external_proceedings_metadata",
+      "latest_public_probe": {
+        "acm_dl_status_code": 403,
+        "created_at_utc": "2026-06-14T21:16:15.313722+00:00",
+        "crossref_status_code": 404,
+        "doi_resolver_status_code": 404,
+        "final_submission_ready": false,
+        "promax_public_metadata_ready": false,
+        "provided": true,
+        "remaining_blockers": [
+          "promax:final_page_range_missing_in_bib",
+          "promax:crossref_registry_not_visible",
+          "promax:doi_resolver_not_visible"
+        ],
+        "source_probes": [
+          {
+            "missing_patterns": [],
+            "name": "arxiv_html_promax_acm_metadata",
+            "ok": true,
+            "status_code": 200
+          },
+          {
+            "missing_patterns": [],
+            "name": "sigir2026_accepted_papers_promax",
+            "ok": true,
+            "status_code": 200
+          },
+          {
+            "missing_patterns": [],
+            "name": "uq_author_profile_promax_sigir2026",
+            "ok": true,
+            "status_code": 200
+          },
+          {
+            "missing_patterns": [],
+            "name": "author_publications_promax_sigir2026",
+            "ok": true,
+            "status_code": 200
+          },
+          {
+            "missing_patterns": [],
+            "name": "uq_experts_profile_promax_sigir2026",
+            "ok": true,
+            "status_code": 200
+          }
+        ],
+        "warnings": [
+          "acm_dl_not_accessible:status=403"
+        ]
+      },
+      "next_commands": [
+        "python -m scripts.audit.main_probe_promax_public_metadata --network-mode live --timeout-seconds 45 --output-json outputs/summary/paper_critical/promax_public_metadata_probe_YYYYMMDD.json --output-md outputs/summary/paper_critical/promax_public_metadata_probe_YYYYMMDD.md",
+        "python -m scripts.audit.main_audit_external_proceedings_metadata --network-mode live --timeout-seconds 45 --output-json outputs/summary/paper_critical/external_proceedings_metadata_recheck_YYYYMMDD.json --output-md outputs/summary/paper_critical/external_proceedings_metadata_recheck_YYYYMMDD.md",
+        "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md"
+      ],
+      "public_safe": true,
+      "remaining_blockers": [
+        "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+        "promax:final_page_range_missing_in_bib",
+        "promax:crossref_registry_not_visible:status=404",
+        "promax:doi_resolver_not_visible:status=404",
+        "external_proceedings_metadata_not_ready",
+        "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+        "promax:crossref_registry_not_visible",
+        "promax:doi_resolver_not_visible"
+      ],
+      "status": "blocked"
+    },
+    {
+      "can_close_without_private_data": false,
+      "closure_conditions": [
+        "A human must complete the submission-system fields outside git.",
+        "Create an untracked private confirmation JSON from configs/paper_manual_submission_private_confirmation.template.json.",
+        "Set confirmed_in_submission_system=true, private_fields_completed_in_submission_system=true, no_private_fields_stored=true, source_manifest_sha256 to the current value, and completed_item_ids to the required checklist IDs.",
+        "Run the private confirmation validator before consuming the JSON in the public manual checklist.",
+        "Do not store author identities, conflicts, reviewer preferences, declarations, account metadata, or other private payloads in git."
+      ],
+      "current_evidence": {
+        "manual_private_item_ids": [
+          "enter_authors",
+          "complete_conflicts",
+          "complete_reviewer_preferences",
+          "complete_declarations",
+          "final_preview_and_submit"
+        ],
+        "manual_submission_checklist_ready": false,
+        "manual_submission_system_ready": false,
+        "private_confirmation_provided": false,
+        "source_manifest_sha256": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+        "unconfirmed_required_item_ids": [
+          "select_track_and_paper_type",
+          "paste_title",
+          "paste_abstract",
+          "paste_keywords",
+          "select_topic_areas",
+          "upload_pdf",
+          "upload_source_if_required",
+          "enter_authors",
+          "complete_conflicts",
+          "complete_reviewer_preferences",
+          "complete_declarations",
+          "final_preview_and_submit"
+        ]
+      },
+      "group_id": "manual_submission_system",
+      "next_commands": [
+        "python -m scripts.audit.main_build_manual_submission_private_confirmation_request_packet --output-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json --output-md outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.md",
+        "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json path/to/untracked_private_confirmation.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.md",
+        "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json path/to/untracked_private_confirmation.json --output-json outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.json --output-md outputs/summary/paper_critical/manual_submission_checklist_YYYYMMDD.md",
+        "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp YYYYMMDD --manual-private-confirmation-json path/to/untracked_private_confirmation.json --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_YYYYMMDD.md"
+      ],
+      "public_safe": false,
+      "remaining_blockers": [
+        "Final manual submission-system metadata/format checklist is not closed.",
+        "manual_submission_system_not_ready",
+        "manual_submission_system_items_not_confirmed"
+      ],
+      "status": "manual_private_pending"
+    }
+  ],
+  "closure_packet_ready": false,
+  "created_at_utc": "2026-06-14T21:22:23.286239+00:00",
+  "external_proceedings_metadata_ready": false,
+  "failures": [
+    "local_release_candidate_stack_not_ready"
+  ],
+  "final_submission_ready": false,
+  "input_paths": {
+    "external_metadata_json": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\external_proceedings_metadata_recheck_20260614.json",
+      "size_bytes": 21297
+    },
+    "final_gate_json": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\final_submission_gate_20260614.json",
+      "size_bytes": 14055
+    },
+    "manual_checklist_json": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260614.json",
+      "size_bytes": 18649
+    },
+    "promax_probe_json": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\promax_public_metadata_probe_20260614.json",
+      "size_bytes": 6963
+    },
+    "release_candidate_stack_json": {
+      "exists": true,
+      "path": "outputs\\summary\\paper_critical\\submission_release_candidate_stack_refresh_20260614.json",
+      "size_bytes": 28721
+    }
+  },
+  "local_release_candidate_ready": false,
+  "manual_submission_system_ready": false,
+  "mode": "local_read_only_final_submission_blocker_closure_packet",
+  "next_actions": [
+    "Monitor or recheck ProMax public ACM/Crossref/DOI metadata; update BibTeX only after final public page range is available.",
+    "Attach a valid explicit Claude Opus review through the review-continuation packet before closing review coverage.",
+    "Prepare the private manual submission confirmation outside git after the submission-system fields are completed.",
+    "Rerun the release-candidate stack and this closure packet after any blocker group changes."
+  ],
+  "ok": false,
+  "read_only": true,
+  "ready_for_human_handoff": false,
+  "remaining_blocker_count": 16,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "Final submission package still needs the external submission-target-specific formatting pass.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed.",
+    "external_proceedings_metadata_not_ready",
+    "manual_submission_system_not_ready",
+    "confirm_anonymous_shell:target_formatting_profile_not_ok",
+    "confirm_anonymous_shell:target_profile_not_ok",
+    "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+    "manual_submission_system_items_not_confirmed",
+    "review_panel_coverage_not_complete",
+    "promax:crossref_registry_not_visible",
+    "promax:doi_resolver_not_visible",
+    "explicit_claude_opus_review"
+  ],
+  "review_panel_coverage_complete": false,
+  "schema_version": "2026-06-12.final_submission_blocker_closure_packet.v1",
+  "stamp": "20260614",
+  "warnings": [
+    "underfull_layout_warnings:hbox=10,vbox=12",
+    "abstract_word_count_outside_common_range:419",
+    "proex:crossref_not_visible:status=404",
+    "proex:doi_resolver_not_visible:status=404",
+    "proex:crossref_discovery_alternate_doi_candidates_present",
+    "promax:crossref_discovery_alternate_doi_candidates_present",
+    "underfull_layout_warnings:hbox=6,vbox=8",
+    "rebuilt_underfull_layout_warnings:hbox=6,vbox=8",
+    "acm_dl_not_accessible:status=403",
+    "refresh_recorded_tracked_dirty_inputs_before_generation"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}
