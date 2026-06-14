@@ -80,6 +80,24 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-14 inline framework figure and package-polish smoke audit.** The
+current branch `paper/reframe-major-revision` now contains an inline TikZ
+framework overview at Figure~`fig:framework` (upstream commit `ee98fec`),
+replacing the stale raster figure path. Codex refreshed the local package
+polish around that change: `Paper/references.bib` now produces
+`Paper/main.blg` with `warning$ -- 0` after
+`pdflatex -> bibtex -> pdflatex -> pdflatex`, and
+`scripts/audit/main_audit_submission_package.py` now treats either
+external `framework_overview.pdf/svg` assets or the inline TikZ figure as a
+valid framework-overview source. The smoke audit
+`outputs/summary/paper_critical/submission_package_tikz_smoke_20260614.{json,md}`
+reports `framework_overview.accepted_mode=inline_tikz`,
+`bibtex_warning_count=0`, `page_count=15`, `overfull_hbox_count=8`,
+`ok=false`, and `final_submission_ready=false`. This closes the BibTeX and
+false missing-framework-asset blockers for the current manuscript shape; it
+does **not** close the target-formatting blocker because the paper still
+exceeds the 9-page profile and has overfull hbox warnings.
+
 **2026-06-12 external metadata discovery enhancement.** Codex strengthened
 `scripts/audit/main_audit_external_proceedings_metadata.py` with advisory
 Crossref title discovery for ProEx/ProMax. The discovery layer records candidate

@@ -19,9 +19,11 @@ M0 Week1-4 / pony12 observation
 The defended paper story is narrower than the full roadmap:
 
 ```text
-LLM recommendation confidence is informative but unreliable.
-Task-grounded calibrated uncertainty can turn it into a decision-useful signal
-under a controlled same-candidate recommendation protocol.
+A task-grounded pointwise LLM relevance posterior is a strong same-candidate
+reranking signal under a controlled recommendation protocol.
+The calibrated-uncertainty/risk decomposition is a characterized negative
+result: it stratifies reliability but does not improve ranking over the
+posterior.
 ```
 
 For the current cumulative execution checklist, see
@@ -71,10 +73,18 @@ The repository is currently between M4 and M5:
   baselines, Shadow large-scale diagnostics, and LoRA/generative modules are
   completed under the same protocol.
 
-## Current Evidence Integrity (updated 2026-06-13)
+## Current Evidence Integrity (updated 2026-06-14)
 
 Phase 2.5 evidence is ready for strict manuscript-level claim and citation
-review, but not final submission. `scripts/audit/main_build_final_paper_claim_audit.py`
+review, but not final submission. The current paper branch
+`paper/reframe-major-revision` uses the reframed 8-domain claim: pointwise
+posterior first in 6/8 domains, with uncertainty/risk adjustment reported as a
+negative result. The 2026-06-14 package-polish smoke audit
+`outputs/summary/paper_critical/submission_package_tikz_smoke_20260614.{json,md}`
+confirms `Paper/main.blg` is clean (`warning$ -- 0`) and the framework
+overview is accepted as `inline_tikz`, but keeps `final_submission_ready=false`
+because the PDF is 15 pages against the 9-page target profile and has 8
+overfull hbox warnings. `scripts/audit/main_build_final_paper_claim_audit.py`
 generates
 `outputs/summary/paper_critical/final_paper_claim_audit_20260612.{json,md,csv}`
 with `paper_evidence_ready_for_drafting=true`, `final_submission_ready=false`,

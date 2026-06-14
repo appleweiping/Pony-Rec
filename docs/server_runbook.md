@@ -34,7 +34,7 @@ The agent normally cannot see this server. Do not assume server state from
 local files. Paste back command outputs when something is run, especially logs,
 PIDs, audit summaries, and missing-file errors.
 
-## Current Priority Order (2026-06-13)
+## Current Priority Order (2026-06-14)
 
 ```text
 1. Pull latest repo state.
@@ -44,6 +44,25 @@ PIDs, audit summaries, and missing-file errors.
    then advance one final-readiness gate without starting or stopping
    experiments blindly.
 2. Do not launch a new default experiment. Phase 2.5 evidence is ready for
+   strict manuscript-level claim/citation review, not final submission. The
+   current paper branch `paper/reframe-major-revision` has moved to the honest
+   8-domain reframe: pointwise posterior first in 6/8 domains, with
+   uncertainty/risk adjustment reported as a characterized negative result.
+   Commit `ee98fec` replaces the raster framework overview with an inline TikZ
+   diagram. Codex then fixed the exposed BibTeX warnings and updated
+   `scripts/audit/main_audit_submission_package.py` so the framework-overview
+   gate accepts either external PDF/SVG assets or the inline TikZ figure. The
+   local smoke audit
+   `outputs/summary/paper_critical/submission_package_tikz_smoke_20260614.{json,md}`
+   reports `framework_overview.accepted_mode=inline_tikz`,
+   `bibtex_warning_count=0`, `page_count=15`, `overfull_hbox_count=8`,
+   `ok=false`, and `final_submission_ready=false`. The immediate paper-package
+   blocker is therefore target formatting (page count and overfull hbox), while
+   ProMax public proceedings metadata and private manual submission-system
+   confirmation remain final-submission blockers.
+3. Historical 2026-06-12/2026-06-13 handoff details below still matter, but
+   treat them as subordinate to the 2026-06-14 branch and package-smoke status.
+   Phase 2.5 evidence is ready for
    strict manuscript-level claim/citation review, not final submission. Citation
    repair for `paper/references.bib` is complete enough for audit:
    `Paper/main.blg` reports `warning$ -- 0`,

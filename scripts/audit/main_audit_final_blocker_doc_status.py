@@ -23,10 +23,10 @@ CURRENT_SECTION_BOUNDS = {
     "docs/active_todo_pony_uncertainty.md": ("## Current Checkpoint", "## Hard Invariants"),
     "docs/paper_claims_and_status.md": ("## Paper-critical readiness modules", "## Not primary claims"),
     "docs/milestones/README.md": (
-        "## Current Evidence Integrity (updated 2026-06-13)",
+        "## Current Evidence Integrity",
         "## Current Evidence Integrity (updated 2026-06-06)",
     ),
-    "docs/server_runbook.md": ("## Current Priority Order (2026-06-13)", "## Key Scripts"),
+    "docs/server_runbook.md": ("## Current Priority Order", "## Key Scripts"),
 }
 
 NUMBER_WORDS = {

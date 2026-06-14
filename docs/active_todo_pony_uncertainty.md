@@ -1,13 +1,35 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-13 10:13 CEST
+Last updated: 2026-06-14 14:45 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
 official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
-## Current Checkpoint (2026-06-13)
+## Current Checkpoint (2026-06-14)
+
+- 2026-06-14 inline-framework/package-polish heartbeat:
+  server preflight found no matching Uncertainty/Pony Python experiment process
+  and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. The
+  current paper branch is `paper/reframe-major-revision`; upstream commit
+  `ee98fec` already replaces the raster framework overview with an inline TikZ
+  diagram. Codex fixed the newly exposed BibTeX metadata warnings in
+  `Paper/references.bib` (ICLR OpenReview publisher/address/numpages for
+  Xiong et al. and Angelopoulos et al.; ICML/PMLR address for SelectiveNet),
+  rebuilt `Paper/main.pdf` with `pdflatex -> bibtex -> pdflatex -> pdflatex`,
+  and verified `Paper/main.blg` reports `warning$ -- 0`. Codex also updated
+  `scripts/audit/main_audit_submission_package.py` so the framework-overview
+  gate accepts either external PDF/SVG assets or the current inline TikZ figure
+  at `fig:framework`. The local smoke audit
+  `outputs/summary/paper_critical/submission_package_tikz_smoke_20260614.{json,md}`
+  records `framework_overview.accepted_mode=inline_tikz`,
+  `bibtex_warning_count=0`, `page_count=15`, `overfull_hbox_count=8`,
+  `ok=false`, and `final_submission_ready=false`. Remaining package blockers
+  are now real target-formatting blockers (`15 > 9` pages and 8 overfull hbox
+  warnings), not missing framework assets or BibTeX metadata warnings.
+
+## Previous Checkpoint (2026-06-13)
 
 - 2026-06-13 private manual-confirmation request refresh:
   Codex refreshed the public-safe private manual submission confirmation
