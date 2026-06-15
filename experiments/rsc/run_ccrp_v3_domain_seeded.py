@@ -60,6 +60,35 @@ def build_v3_prompt(history, candidate_title, candidate_text=""):
     )
 
 
+def build_v3_prompt_int100(history, candidate_title, candidate_text=""):
+    # int100 score-scale variant: 0-100 INTEGER relevance score, with an explicit
+    # instruction to distinguish even weak/partial relevance (so the model does NOT
+    # floor loosely-related off-category items at 0). Tests whether a granular
+    # integer scale elicits a GRADED posterior from a backbone (e.g. Llama-3.1-8B)
+    # whose verbalized [0,1] probability degenerates to 0.0 for off-category items.
+    # The history/candidate framing is identical to build_v3_prompt; only the
+    # response scale + the "give small positive scores to loosely-related items"
+    # guidance differ.
+    hist_block = "\n".join([f"- {h}" for h in history[-5:]])
+    meta = candidate_text[:200] if candidate_text else ""
+    desc_line = f"\nDescription: {meta}" if meta else ""
+    return (
+        "You are an expert recommendation system.\n\n"
+        f"User purchase history (most recent first):\n{hist_block}\n\n"
+        f"Candidate item:\nTitle: {candidate_title}{desc_line}\n\n"
+        "Rate how relevant this candidate is to the user's next purchase on an "
+        "INTEGER scale from 0 to 100, where 100 = certain next purchase and 0 = "
+        "completely irrelevant. Consider category alignment, brand, use-case, and "
+        "complementarity, AND the purchase trajectory.\n"
+        "IMPORTANT: distinguish even weak or partial relevance. Do NOT default to 0 "
+        "for items that are only loosely related. Give small positive scores (e.g. "
+        "5, 10, 15) to items that share a brand, a use-case, a complementary role, "
+        "or a broad category with the user's history. Reserve 0 for items with no "
+        "plausible connection at all.\n\n"
+        'Return ONLY JSON: {"relevance_score": 0, "reason": "one sentence"}'
+    )
+
+
 def parse_score(text):
     # IDENTICAL to run_ccrp_v3_domain.py parse_score
     try:
@@ -69,6 +98,22 @@ def parse_score(text):
         m = re.search(r'(0\.\d+|1\.0)', text)
         if m:
             return float(m.group(1))
+    except Exception:
+        pass
+    return 0.0
+
+
+def parse_score_int100(text):
+    # int100 score-scale parser: read the integer "relevance_score" (0..100) and
+    # divide by 100 to return a score in [0,1] (same downstream scale as parse_score).
+    # Falls back to the first standalone integer if the field is missing, then 0.0.
+    try:
+        m = re.search(r'"relevance_score"\s*:\s*(\d+)', text)
+        if m:
+            return max(0.0, min(1.0, int(m.group(1)) / 100.0))
+        m = re.search(r'\b(\d{1,3})\b', text)
+        if m:
+            return max(0.0, min(1.0, int(m.group(1)) / 100.0))
     except Exception:
         pass
     return 0.0
@@ -93,6 +138,17 @@ def main():
                              "DEFAULT OFF: when off, SamplingParams are byte-identical to the "
                              "original Qwen behavior. Use ON for Llama, which does not reliably "
                              "follow the free-form 'Return ONLY JSON' instruction.")
+    parser.add_argument("--score-scale", dest="score_scale", type=str,
+                        default="prob01", choices=["prob01", "int100"],
+                        help="Elicitation scale. DEFAULT 'prob01': verbalized [0,1] "
+                             "relevance_probability (byte-identical to the original Qwen path). "
+                             "'int100': elicit a 0-100 INTEGER relevance_score (with an explicit "
+                             "instruction to give small positive scores to weakly/partially "
+                             "relevant items) and divide by 100. Tests whether a granular integer "
+                             "scale elicits a GRADED posterior from a backbone whose [0,1] "
+                             "probability floors off-category items at 0.0 (e.g. Llama-3.1-8B). "
+                             "int100 implies a different prompt, an integer JSON schema, and the "
+                             "integer parser; with --guided-json the schema is enforced.")
     args = parser.parse_args()
 
     backbone = args.backbone or Path(args.model).name
@@ -136,24 +192,50 @@ def main():
     # When the flag is OFF, sampling_kwargs is unchanged -> Qwen path is identical.
     if args.guided_json:
         from vllm.sampling_params import GuidedDecodingParams
-        relevance_schema = {
-            "type": "object",
-            "properties": {
-                "relevance_probability": {
-                    "type": "number", "minimum": 0.0, "maximum": 1.0,
+        if args.score_scale == "int100":
+            relevance_schema = {
+                "type": "object",
+                "properties": {
+                    "relevance_score": {
+                        "type": "integer", "minimum": 0, "maximum": 100,
+                    },
+                    "reason": {"type": "string"},
                 },
-                "reason": {"type": "string"},
-            },
-            "required": ["relevance_probability", "reason"],
-            "additionalProperties": False,
-        }
+                "required": ["relevance_score", "reason"],
+                "additionalProperties": False,
+            }
+            schema_desc = '{"relevance_score": integer[0,100], "reason": string}'
+        else:
+            relevance_schema = {
+                "type": "object",
+                "properties": {
+                    "relevance_probability": {
+                        "type": "number", "minimum": 0.0, "maximum": 1.0,
+                    },
+                    "reason": {"type": "string"},
+                },
+                "required": ["relevance_probability", "reason"],
+                "additionalProperties": False,
+            }
+            schema_desc = '{"relevance_probability": number[0,1], "reason": string}'
         sampling_kwargs["guided_decoding"] = GuidedDecodingParams(json=relevance_schema)
-        print("Guided JSON decoding: ON (schema-constrained "
-              '{"relevance_probability": number[0,1], "reason": string})')
+        print(f"Guided JSON decoding: ON (schema-constrained {schema_desc})")
     else:
         print("Guided JSON decoding: OFF (free-form prompt; original Qwen behavior)")
 
     sampling_params = SamplingParams(**sampling_kwargs)
+
+    # --- score-scale selection (DEFAULT prob01 = original Qwen path). ---
+    # int100 swaps the prompt builder + the score parser; prob01 leaves both at
+    # the original functions, so the Qwen default path is byte-identical.
+    if args.score_scale == "int100":
+        prompt_builder = build_v3_prompt_int100
+        score_parser = parse_score_int100
+        print('Score scale: int100 (0-100 integer relevance_score -> /100 to [0,1])')
+    else:
+        prompt_builder = build_v3_prompt
+        score_parser = parse_score
+        print("Score scale: prob01 (verbalized [0,1] relevance_probability; original path)")
 
     # --- chat template applied GENERICALLY (no hard-coded Qwen/Llama format). ---
     def format_prompt(p):
@@ -176,7 +258,7 @@ def main():
         candidates = rec["candidate_titles"]
         candidate_texts = rec.get("candidate_texts", [""] * len(candidates))
         for i, (title, text) in enumerate(zip(candidates, candidate_texts)):
-            all_prompts.append(format_prompt(build_v3_prompt(history, title, text)))
+            all_prompts.append(format_prompt(prompt_builder(history, title, text)))
             all_meta.append({"user_id": rec["user_id"], "candidate_idx": i})
 
     n_candidates = len(records[0]["candidate_titles"])
@@ -199,10 +281,21 @@ def main():
 
     user_scores = defaultdict(list)
     for meta, text in zip(all_meta, results):
-        user_scores[meta["user_id"]].append((meta["candidate_idx"], parse_score(text)))
+        user_scores[meta["user_id"]].append((meta["candidate_idx"], score_parser(text)))
 
     out_dir = Path(args.output)
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Persist a small sample of raw model outputs (first 20) for diagnostics, so a
+    # FAIL/degenerate-distribution inspection does not require re-running inference.
+    with open(out_dir / "raw_text_samples.jsonl", "w") as f:
+        for meta, text in list(zip(all_meta, results))[:20]:
+            f.write(json.dumps({
+                "user_id": meta["user_id"],
+                "candidate_idx": meta["candidate_idx"],
+                "raw_text": text,
+                "parsed_score": score_parser(text),
+            }) + "\n")
 
     scores_csv_path = out_dir / "scores.csv"
     with open(scores_csv_path, "w", newline="") as f:
@@ -243,6 +336,7 @@ def main():
     report["seed"] = args.seed
     report["temperature"] = args.temperature
     report["guided_json"] = bool(args.guided_json)
+    report["score_scale"] = args.score_scale
 
     with open(out_dir / "report.json", "w") as f:
         json.dump(report, f, indent=2)
