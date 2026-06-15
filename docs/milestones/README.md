@@ -91,9 +91,19 @@ keeps `local_release_candidate_ready=false` and
 aligning `configs/paper_submission_metadata.json` with the current paper title,
 but ProMax page-range/Crossref/DOI visibility, manual submission-system
 confirmation, explicit Claude Opus coverage, and target formatting remain open.
-The same-stamp final-blocker consistency audit is `ok=false` for the expected
-`local_artifact_repair_required` reason until the target-formatting repair is
-done. The 2026-06-15 Claude Opus coverage refresh repaired the request-packet
+The 2026-06-15 ProMax/final-stack refresh
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260615.{json,md}`,
+`outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260615.{json,md}`,
+and
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260615.{json,md}`
+keeps the same state: ProMax Crossref and DOI resolver are still `404`, ACM DL
+is still `403`, the ProMax BibTeX still has no final ACM page range, and the
+stack still reports `local_release_candidate_ready=false`,
+`blocking_status=local_artifact_repair_required`, and
+`final_submission_ready=false`. The same-stamp final-blocker consistency audit
+is `ok=false` for the expected blocker set until target formatting, ProMax
+metadata, manual submission, and Claude Opus coverage all close. The 2026-06-15
+Claude Opus coverage refresh repaired the request-packet
 builder to use this current dual claim and stamp-specific 20260615 paths, then
 recorded two additional failed direct Opus attempts:
 `outputs/summary/paper_critical/claude_opus_review_attempt_fourteenth_20260615.json`

@@ -78,7 +78,22 @@ PIDs, audit summaries, and missing-file errors.
     `outputs/summary/paper_critical/final_blocker_consistency_audit_20260614.{json,md}`
     is expected to be `ok=false` while the release stack reports
     `blocking_status=local_artifact_repair_required`.
-    On 2026-06-15 Codex refreshed the explicit Claude Opus coverage handoff
+    Later on 2026-06-15 Codex reran the ProMax live public metadata probe,
+    external proceedings metadata audit, full release-candidate stack, and
+    blocker-closure/consistency handoff:
+    `outputs/summary/paper_critical/promax_public_metadata_probe_20260615.{json,md}`,
+    `external_proceedings_metadata_recheck_20260615.{json,md}`,
+    `submission_release_candidate_stack_refresh_20260615.{json,md}`,
+    `final_submission_blocker_closure_packet_20260615.{json,md}`, and
+    `final_blocker_consistency_audit_20260615.{json,md}`. ProMax remains
+    blocked (`final_page_range_missing_in_bib`, Crossref `404`, DOI resolver
+    `404`; ACM DL `403`), while arXiv/SIGIR/UQ source probes pass. The stack
+    still reports `local_release_candidate_ready=false`,
+    `blocking_status=local_artifact_repair_required`, and
+    `final_submission_ready=false` because target formatting, ProMax metadata,
+    manual submission-system confirmation, and explicit Claude Opus coverage
+    remain open.
+    Earlier on 2026-06-15 Codex refreshed the explicit Claude Opus coverage handoff
     without starting any experiments. The current request packet is
     `outputs/summary/paper_critical/claude_opus_review_request_packet_20260615.{json,md}`;
     it uses the reframed dual claim and is `ok=true`, but it is not review

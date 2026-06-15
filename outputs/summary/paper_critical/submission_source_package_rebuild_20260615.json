@@ -1,0 +1,52 @@
+{
+  "build": {},
+  "commands": [],
+  "created_at_utc": "2026-06-15T01:19:00.130131+00:00",
+  "failures": [
+    "source_package_not_ok",
+    "source_package_not_ready",
+    "source_package_failures_not_empty_or_missing",
+    "copied_manifest_missing_files"
+  ],
+  "final_submission_ready": false,
+  "input_paths": {
+    "source_package_json": "outputs\\summary\\paper_critical\\submission_source_package_20260615.json"
+  },
+  "mode": "local_rebuild_from_staged_anonymous_source_package",
+  "next_actions": [
+    "Treat this as a local rebuildability gate, not as final submission readiness.",
+    "Re-run source package staging and this rebuild audit after any paper/source/BibTeX/figure/PDF change.",
+    "Keep final_submission_ready=false until ProMax proceedings metadata and private manual submission-system gates close."
+  ],
+  "ok": false,
+  "output": {
+    "build_dir": "artifacts\\submission_source_package_rebuild_20260615",
+    "overwrite": true,
+    "work_dir": "artifacts\\submission_source_package_rebuild_20260615\\work"
+  },
+  "read_only": false,
+  "remaining_blockers": [
+    "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+    "Final submission package still needs the external submission-target-specific formatting pass.",
+    "promax:final_page_range_missing_in_bib",
+    "promax:crossref_registry_not_visible:status=404",
+    "promax:doi_resolver_not_visible:status=404",
+    "Final manual submission-system metadata/format checklist is not closed."
+  ],
+  "removed_stale_outputs_before_rebuild": [],
+  "schema_version": "2026-06-12.submission_source_package_rebuild.v1",
+  "source_package_crosscheck": {
+    "copied_manifest_sha256": "",
+    "source_manifest_sha256": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+    "source_package_final_submission_ready": false,
+    "source_package_ok": false,
+    "source_package_ready": false,
+    "verified_file_count": 0
+  },
+  "submission_source_package_rebuild_ready": false,
+  "warnings": [],
+  "will_copy": true,
+  "will_delete": true,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

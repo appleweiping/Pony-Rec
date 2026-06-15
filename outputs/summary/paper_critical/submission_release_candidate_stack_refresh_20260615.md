@@ -1,0 +1,164 @@
+# Submission Release-Candidate Stack Refresh
+
+Generated: 2026-06-15T01:19:01.399177+00:00
+
+- OK: `false`
+- Local release candidate ready: `false`
+- Readiness scope: `local_artifacts_only`
+- Blocking status: `local_artifact_repair_required`
+- Final submission ready: `false`
+- Stamp: `20260615`
+
+## Steps
+
+- `pre_submission_gate_refresh`: ok=`false`, ready=`false`, json=`outputs\summary\paper_critical\pre_submission_gate_refresh_20260615.json`
+- `pre_submission_refresh_freshness`: ok=`true`, ready=`true`, json=`outputs\summary\paper_critical\pre_submission_gate_refresh_freshness_20260615.json`
+- `submission_release_candidate`: ok=`false`, ready=`false`, json=`outputs\summary\paper_critical\submission_release_candidate_20260615.json`
+
+## Remaining Blockers
+
+- promax:final_page_range_missing_in_bib
+- promax:crossref_registry_not_visible:status=404
+- promax:doi_resolver_not_visible:status=404
+- Final manual submission-system metadata/format checklist is not closed.
+- ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.
+- Final submission package still needs the external submission-target-specific formatting pass.
+- confirm_anonymous_shell:target_formatting_profile_not_ok
+- confirm_anonymous_shell:target_profile_not_ok
+- confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed
+- manual_submission_system_items_not_confirmed
+- external_proceedings_metadata_not_ready
+- manual_submission_system_not_ready
+- review_panel_coverage_not_complete
+- promax:crossref_registry_not_visible
+- promax:doi_resolver_not_visible
+- explicit_claude_opus_review
+
+## Failures
+
+- `pre_submission_gate_refresh:submission_package:page_count_exceeds_limit:15 > 9`
+- `pre_submission_gate_refresh:submission_package:overfull_hbox_count:8 > 0`
+- `pre_submission_gate_refresh:submission_package:target_profile:target_profile_page_count_exceeds_limit:15 > 9`
+- `pre_submission_gate_refresh:submission_package:target_profile:target_profile_requires_no_overfull_hbox`
+- `pre_submission_gate_refresh:submission_source_package:submission_package_audit_not_ok`
+- `pre_submission_gate_refresh:submission_source_package:submission_package_not_ready_for_target_formatting`
+- `pre_submission_gate_refresh:submission_source_package:submission_package_audit_failures_not_empty_or_missing`
+- `pre_submission_gate_refresh:submission_source_package_rebuild:source_package_not_ok`
+- `pre_submission_gate_refresh:submission_source_package_rebuild:source_package_not_ready`
+- `pre_submission_gate_refresh:submission_source_package_rebuild:source_package_failures_not_empty_or_missing`
+- `pre_submission_gate_refresh:submission_source_package_rebuild:copied_manifest_missing_files`
+- `pre_submission_gate_refresh:submission_metadata_packet:submission_package_audit_not_ok`
+- `pre_submission_gate_refresh:submission_metadata_packet:submission_package_not_ready_for_target_formatting`
+- `pre_submission_gate_refresh:submission_metadata_packet:target_profile_not_ok`
+- `pre_submission_gate_refresh:manual_submission_checklist:submission_metadata_packet_not_ok`
+- `pre_submission_gate_refresh:manual_submission_checklist:submission_metadata_packet_not_ready`
+- `pre_submission_gate_refresh:manual_submission_checklist:submission_package_audit_not_ok`
+- `pre_submission_gate_refresh:manual_submission_checklist:submission_package_not_ready_for_target_formatting`
+- `pre_submission_gate_refresh:final_submission_gate:submission_package:not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:submission_package:not_ready`
+- `pre_submission_gate_refresh:final_submission_gate:submission_package:page_count_exceeds_limit:15 > 9`
+- `pre_submission_gate_refresh:final_submission_gate:submission_package:overfull_hbox_count:8 > 0`
+- `pre_submission_gate_refresh:final_submission_gate:submission_package:target_profile:target_profile_page_count_exceeds_limit:15 > 9`
+- `pre_submission_gate_refresh:final_submission_gate:submission_package:target_profile:target_profile_requires_no_overfull_hbox`
+- `pre_submission_gate_refresh:final_submission_gate:submission_metadata_packet:not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:submission_metadata_packet:not_ready`
+- `pre_submission_gate_refresh:final_submission_gate:submission_metadata_packet:submission_package_audit_not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:submission_metadata_packet:submission_package_not_ready_for_target_formatting`
+- `pre_submission_gate_refresh:final_submission_gate:submission_metadata_packet:target_profile_not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:not_ready`
+- `pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:source_package_not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:source_package_not_ready`
+- `pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:source_package_failures_not_empty_or_missing`
+- `pre_submission_gate_refresh:final_submission_gate:submission_source_package_rebuild:copied_manifest_missing_files`
+- `pre_submission_gate_refresh:final_submission_gate:manual_submission_checklist:not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:manual_submission_checklist:submission_metadata_packet_not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:manual_submission_checklist:submission_metadata_packet_not_ready`
+- `pre_submission_gate_refresh:final_submission_gate:manual_submission_checklist:submission_package_audit_not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:manual_submission_checklist:submission_package_not_ready_for_target_formatting`
+- `pre_submission_gate_refresh:final_submission_gate:review_continuation:not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:review_continuation:not_ready`
+- `pre_submission_gate_refresh:final_submission_gate:review_continuation:submission_package_audit_not_ok`
+- `pre_submission_gate_refresh:final_submission_gate:review_continuation:release_candidate_stack_not_local_ready`
+- `pre_submission_gate_refresh:final_submission_gate:review_continuation:closure_packet_not_ready_or_has_other_blockers`
+- `submission_release_candidate:final_submission_gate:not_ok`
+- `submission_release_candidate:final_submission_gate:submission_package:not_ok`
+- `submission_release_candidate:final_submission_gate:submission_package:not_ready`
+- `submission_release_candidate:final_submission_gate:submission_package:page_count_exceeds_limit:15 > 9`
+- `submission_release_candidate:final_submission_gate:submission_package:overfull_hbox_count:8 > 0`
+- `submission_release_candidate:final_submission_gate:submission_package:target_profile:target_profile_page_count_exceeds_limit:15 > 9`
+- `submission_release_candidate:final_submission_gate:submission_package:target_profile:target_profile_requires_no_overfull_hbox`
+- `submission_release_candidate:final_submission_gate:submission_metadata_packet:not_ok`
+- `submission_release_candidate:final_submission_gate:submission_metadata_packet:not_ready`
+- `submission_release_candidate:final_submission_gate:submission_metadata_packet:submission_package_audit_not_ok`
+- `submission_release_candidate:final_submission_gate:submission_metadata_packet:submission_package_not_ready_for_target_formatting`
+- `submission_release_candidate:final_submission_gate:submission_metadata_packet:target_profile_not_ok`
+- `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:not_ok`
+- `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:not_ready`
+- `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:source_package_not_ok`
+- `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:source_package_not_ready`
+- `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:source_package_failures_not_empty_or_missing`
+- `submission_release_candidate:final_submission_gate:submission_source_package_rebuild:copied_manifest_missing_files`
+- `submission_release_candidate:final_submission_gate:manual_submission_checklist:not_ok`
+- `submission_release_candidate:final_submission_gate:manual_submission_checklist:submission_metadata_packet_not_ok`
+- `submission_release_candidate:final_submission_gate:manual_submission_checklist:submission_metadata_packet_not_ready`
+- `submission_release_candidate:final_submission_gate:manual_submission_checklist:submission_package_audit_not_ok`
+- `submission_release_candidate:final_submission_gate:manual_submission_checklist:submission_package_not_ready_for_target_formatting`
+- `submission_release_candidate:final_submission_gate:review_continuation:not_ok`
+- `submission_release_candidate:final_submission_gate:review_continuation:not_ready`
+- `submission_release_candidate:final_submission_gate:review_continuation:submission_package_audit_not_ok`
+- `submission_release_candidate:final_submission_gate:review_continuation:release_candidate_stack_not_local_ready`
+- `submission_release_candidate:final_submission_gate:review_continuation:closure_packet_not_ready_or_has_other_blockers`
+- `submission_release_candidate:submission_source_package:not_ok`
+- `submission_release_candidate:submission_source_package:submission_package_audit_not_ok`
+- `submission_release_candidate:submission_source_package:submission_package_not_ready_for_target_formatting`
+- `submission_release_candidate:submission_source_package:submission_package_audit_failures_not_empty_or_missing`
+- `submission_release_candidate:submission_source_package_rebuild:not_ok`
+- `submission_release_candidate:submission_source_package_rebuild:source_package_not_ok`
+- `submission_release_candidate:submission_source_package_rebuild:source_package_not_ready`
+- `submission_release_candidate:submission_source_package_rebuild:source_package_failures_not_empty_or_missing`
+- `submission_release_candidate:submission_source_package_rebuild:copied_manifest_missing_files`
+- `submission_release_candidate:submission_metadata_packet:not_ok`
+- `submission_release_candidate:submission_metadata_packet:submission_package_audit_not_ok`
+- `submission_release_candidate:submission_metadata_packet:submission_package_not_ready_for_target_formatting`
+- `submission_release_candidate:submission_metadata_packet:target_profile_not_ok`
+- `submission_release_candidate:manual_submission_checklist:not_ok`
+- `submission_release_candidate:manual_submission_checklist:submission_metadata_packet_not_ok`
+- `submission_release_candidate:manual_submission_checklist:submission_metadata_packet_not_ready`
+- `submission_release_candidate:manual_submission_checklist:submission_package_audit_not_ok`
+- `submission_release_candidate:manual_submission_checklist:submission_package_not_ready_for_target_formatting`
+- `submission_release_candidate:final_submission_gate:all_local_artifact_gates_ok_not_true`
+- `submission_release_candidate:submission_source_package:submission_source_package_ready_not_true`
+- `submission_release_candidate:submission_source_package_rebuild:submission_source_package_rebuild_ready_not_true`
+- `submission_release_candidate:submission_metadata_packet:submission_metadata_packet_ready_not_true`
+- `submission_release_candidate:manual_submission_checklist:manual_submission_checklist_ready_not_true`
+- `submission_release_candidate:submission_source_package_rebuild:build_commands_not_all_zero`
+- `submission_release_candidate:source_manifest_sha256_values_do_not_all_match`
+
+## Warnings
+
+- `pre_submission_gate_refresh:proex:crossref_not_visible:status=404`
+- `pre_submission_gate_refresh:proex:doi_resolver_not_visible:status=404`
+- `pre_submission_gate_refresh:proex:crossref_discovery_alternate_doi_candidates_present`
+- `pre_submission_gate_refresh:promax:crossref_discovery_alternate_doi_candidates_present`
+- `pre_submission_gate_refresh:underfull_layout_warnings:hbox=10,vbox=12`
+- `pre_submission_gate_refresh:abstract_word_count_outside_common_range:419`
+- `pre_submission_gate_refresh:underfull_layout_warnings:hbox=6,vbox=8`
+- `pre_submission_gate_refresh:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `pre_submission_gate_refresh:acm_dl_not_accessible:status=403`
+- `submission_release_candidate:underfull_layout_warnings:hbox=10,vbox=12`
+- `submission_release_candidate:abstract_word_count_outside_common_range:419`
+- `submission_release_candidate:proex:crossref_not_visible:status=404`
+- `submission_release_candidate:proex:doi_resolver_not_visible:status=404`
+- `submission_release_candidate:proex:crossref_discovery_alternate_doi_candidates_present`
+- `submission_release_candidate:promax:crossref_discovery_alternate_doi_candidates_present`
+- `submission_release_candidate:underfull_layout_warnings:hbox=6,vbox=8`
+- `submission_release_candidate:rebuilt_underfull_layout_warnings:hbox=6,vbox=8`
+- `submission_release_candidate:acm_dl_not_accessible:status=403`
+- `submission_release_candidate:refresh_recorded_tracked_dirty_inputs_before_generation`
+
+## Next Actions
+
+- Use this stack refresh as the preferred one-command local pre-submission handoff.
+- Keep final_submission_ready=false until the final submission gate reports true.
+- Resolve ProMax public page-range/DOI metadata and private manual submission-system confirmation before final submission.

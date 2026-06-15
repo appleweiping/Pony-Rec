@@ -79,6 +79,29 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-15 ProMax public proceedings and final-stack refresh.** Codex reran
+the live ProMax public metadata probe and the external proceedings metadata
+audit:
+`outputs/summary/paper_critical/promax_public_metadata_probe_20260615.{json,md}`
+and
+`outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260615.{json,md}`.
+Both audits keep final readiness blocked. ProMax still has no final ACM page
+range in BibTeX, Crossref `/works/10.1145/3805712.3809600` returns `404`, and
+the DOI resolver returns `404`; ACM DL is inaccessible with `403`. Public source
+checks still support accepted-paper provenance (arXiv HTML ACM metadata, SIGIR
+2026 accepted papers, UQ author/publication pages, and UQ Experts), but those
+sources do not close the exact page-range/Crossref/DOI gates. Codex refreshed
+the full local final-stack handoff at
+`outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260615.{json,md}`,
+`outputs/summary/paper_critical/final_submission_blocker_closure_packet_20260615.{json,md}`,
+and
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260615.{json,md}`.
+The stack remains `ok=false`, `local_release_candidate_ready=false`,
+`blocking_status=local_artifact_repair_required`, and
+`final_submission_ready=false`. Remaining blocker classes are target formatting
+(`15 > 9` pages and 8 overfull hbox warnings), ProMax public metadata, private
+manual submission-system confirmation, and explicit Claude Opus review coverage.
+
 **2026-06-15 Claude Opus coverage gate refresh.** Codex repaired the Claude Opus
 request path so it no longer carries the stale positive "uncertainty improves
 ranking" claim as the live claim: the generated prompt now uses the current dual

@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-15 01:35 CEST
+Last updated: 2026-06-15 03:25 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,33 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-15)
+
+- 2026-06-15 ProMax public-metadata and final-gate freshness refresh:
+  server preflight found no matching Uncertainty/Pony Python experiment process
+  and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. Codex
+  reran the ARIS citation/proceedings metadata live probes:
+  `outputs/summary/paper_critical/promax_public_metadata_probe_20260615.{json,md}`
+  and
+  `outputs/summary/paper_critical/external_proceedings_metadata_recheck_20260615.{json,md}`.
+  The refreshed ProMax public probe is `ok=true` but still
+  `promax_public_metadata_ready=false` and `final_submission_ready=false`:
+  Crossref `/works/10.1145/3805712.3809600` remains `404`, the DOI resolver
+  remains `404`, ACM DL remains `403`, and the ProMax BibTeX still has no final
+  ACM page range. Public source probes remain positive for arXiv HTML ACM
+  metadata, SIGIR 2026 accepted papers, UQ author profile, author publications,
+  and UQ Experts, but those sources do not close the exact page-range/Crossref
+  / DOI gates. Codex then refreshed the local final-stack handoff:
+  `pre_submission_gate_refresh_20260615.{json,md}`,
+  `pre_submission_gate_refresh_freshness_20260615.{json,md}`,
+  `submission_release_candidate_stack_refresh_20260615.{json,md}`,
+  `final_submission_blocker_closure_packet_20260615.{json,md}`, and
+  `final_blocker_consistency_audit_20260615.{json,md}`. The stack remains
+  `ok=false`, `local_release_candidate_ready=false`,
+  `blocking_status=local_artifact_repair_required`, and
+  `final_submission_ready=false`. Remaining blocker classes are unchanged:
+  target formatting (`15 > 9` pages and 8 overfull hbox warnings), ProMax
+  public page-range/Crossref/DOI metadata, private manual submission-system
+  confirmation, and explicit Claude Opus review coverage.
 
 - 2026-06-15 Claude Opus coverage gate refresh:
   server preflight found no matching Uncertainty/Pony Python experiment process
