@@ -19,6 +19,28 @@ a 300-dpi PNG, into Paper/figures/:
   4. fig_gap_decomp        - two-panel: (left) gap%% vs mean user-history length
                              (rho=-0.69); (right) gap%% vs popularity Gini (rho=+0.57).
 
+It additionally produces three CSV-DRIVEN diagnostic figures (numbers read live
+from the source CSVs at run time, so they always match the data exactly):
+
+  5. fig_hyperparam_sensitivity - single-col line plot: mean NDCG@10 across the 4
+                             diagnostic domains vs the risk exponent eta in
+                             {0,0.25,0.5,1,2,4}, two lines (valid, test). Flat for
+                             eta<=2 then drops at eta=4 (the STABILITY result;
+                             eta=0 is test-best -> consistent with the negative
+                             result, positive eta does not help).
+  6. fig_component_ablation - single-col bar chart: removal-minus-full NDCG@10
+                             delta per C-CRP component, line at 0. Bars >=0 mean
+                             removing the component does NOT hurt / helps. The
+                             characterized negative result (components inert or
+                             redundant), NOT "every component necessary".
+  7. fig_observation        - single-col line plot: mean NDCG@10 across the 4
+                             diagnostic domains vs uncertainty-bin index Q01..Q05,
+                             two lines (C-CRP and LLMEmb). Both DECLINE as
+                             uncertainty rises -> the uncertainty signal stratifies
+                             ranking reliability for the baseline too (descriptive /
+                             partly-circular for C-CRP's own uncertainty; the
+                             cross-method decline is the motivation).
+
 ALL numbers below are transcribed from (and verified against) the paper source:
   - Paper/tables/improvement_over_strongest.tex           (fig 1)
   - Paper/tables/full_official_ndcg10_ranking.tex
@@ -28,11 +50,21 @@ ALL numbers below are transcribed from (and verified against) the paper source:
         all8_domains_significance_summary.csv             (fig 3)
   - outputs/summary/paper_critical/gap_decomposition/
         gap_decomposition_results.json                    (fig 4)
+and the three diagnostic figures read live from (under
+  outputs/summary/paper_critical/
+    ccrp_signal_generation_plan_post_performance_gate_20260606/):
+  - ccrp_hyperparameter_four_domain/
+        ccrp_hyperparameter_four_domain_curve_rows.csv     (fig 5)
+  - ccrp_component_ablation_four_domain/
+        component_ablation_four_domain_component_summary.csv (fig 6)
+  - observation_four_domain/
+        observation_four_domain_summary_rows.csv           (fig 7)
 
 Run (local, CPU):
     C:\\Python314\\python.exe scripts\\make_paper_figures.py
 """
 
+import csv
 import os
 from pathlib import Path
 
@@ -49,6 +81,21 @@ import seaborn as sns
 REPO = Path(__file__).resolve().parents[1]
 FIGDIR = REPO / "Paper" / "figures"
 FIGDIR.mkdir(parents=True, exist_ok=True)
+
+# Source data for the CSV-driven diagnostic figures (numbers read at run time).
+DATA = (REPO / "outputs" / "summary" / "paper_critical" /
+        "ccrp_signal_generation_plan_post_performance_gate_20260606")
+HYPERPARAM_CSV = (DATA / "ccrp_hyperparameter_four_domain" /
+                  "ccrp_hyperparameter_four_domain_curve_rows.csv")
+COMPONENT_CSV = (DATA / "ccrp_component_ablation_four_domain" /
+                 "component_ablation_four_domain_component_summary.csv")
+OBSERVATION_CSV = (DATA / "observation_four_domain" /
+                   "observation_four_domain_summary_rows.csv")
+
+
+def _read_csv(path):
+    with open(path, newline="", encoding="utf-8") as fh:
+        return list(csv.DictReader(fh))
 
 # --------------------------------------------------------------------------- #
 # Global publication style (consistent across every figure)
@@ -339,6 +386,169 @@ def fig_gap_decomp():
     _save(fig, "fig_gap_decomp")
 
 
+# --------------------------------------------------------------------------- #
+# Figure 5: hyperparameter sensitivity - mean NDCG@10 (4 domains) vs eta
+#   Source: ccrp_hyperparameter_four_domain_curve_rows.csv (read live)
+#   Stability result: flat for eta<=2, drops at eta=4; eta=0 is test-best.
+# --------------------------------------------------------------------------- #
+def fig_hyperparam_sensitivity():
+    rows = _read_csv(HYPERPARAM_CSV)
+    # eta sweep is the main_control rows with control == "eta".
+    eta_order = ["0", "0.25", "0.5", "1", "2", "4"]
+    eta_vals = [0.0, 0.25, 0.5, 1.0, 2.0, 4.0]
+
+    def mean_curve(split):
+        out = []
+        for e in eta_order:
+            vals = [float(r["NDCG@10"]) for r in rows
+                    if r["row_kind"] == "main_control" and r["control"] == "eta"
+                    and r["control_value"] == e and r["split"] == split]
+            assert len(vals) == 4, f"expected 4 domains for eta={e}/{split}, got {len(vals)}"
+            out.append(sum(vals) / len(vals))
+        return out
+
+    valid = mean_curve("valid")
+    test = mean_curve("test")
+    x = np.arange(len(eta_vals))
+
+    fig, ax = plt.subplots(figsize=(COL_W, 2.55))
+    ax.plot(x, valid, marker="o", markersize=4.5, linewidth=1.5, color=BLUE,
+            label="Validation")
+    ax.plot(x, test, marker="s", markersize=4.0, linewidth=1.5, color=GREEN,
+            label="Test (reporting only)")
+
+    # mark the 5% pre-registered relative-drop tolerance off the test peak
+    test_peak = max(test)
+    ax.axhline(test_peak * 0.95, color=GRAY, linewidth=0.8, linestyle=":",
+               zorder=0, label=r"$-5\%$ tolerance (test peak)")
+
+    # annotate the test-best (eta=0) point (placed below-right to avoid the title)
+    ax.scatter([0], [test[0]], s=58, facecolors="none", edgecolors="black",
+               linewidths=1.0, zorder=5)
+    span = max(max(valid), max(test)) - min(min(valid), min(test))
+    ax.annotate(r"$\eta{=}0$ test-best", (0, test[0]),
+                (0.30, test[0] - 0.12 * span), fontsize=7.0, ha="left",
+                va="top",
+                arrowprops=dict(arrowstyle="-", color="black", lw=0.6))
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([str(e) for e in eta_vals])
+    ax.set_xlabel(r"Risk exponent $\eta$")
+    ax.set_ylabel("Mean NDCG@10 (4 domains)")
+    ax.set_title(r"Stable for $\eta\leq 2$, degrades at $\eta{=}4$",
+                 fontsize=9.5, pad=6)
+    ax.legend(loc="lower left", frameon=True, framealpha=0.9, borderpad=0.4,
+              handlelength=1.6, fontsize=7.0)
+    fig.tight_layout()
+    _save(fig, "fig_hyperparam_sensitivity")
+
+
+# --------------------------------------------------------------------------- #
+# Figure 6: component ablation - removal-minus-full NDCG@10 delta per component
+#   Source: component_ablation_four_domain_component_summary.csv (read live)
+#   Bars >= 0 -> removing the component does NOT hurt / helps. Negative result.
+# --------------------------------------------------------------------------- #
+def fig_component_ablation():
+    rows = _read_csv(COMPONENT_CSV)
+    # (csv ablation key, display label) in the order we want them plotted.
+    comps = [
+        ("without_boundary_uncertainty", "Boundary\nuncertainty"),
+        ("without_counterevidence",      "Counter-\nevidence"),
+        ("without_risk_penalty",         "Risk\npenalty"),
+        ("without_calibration_gap",      "Calibration\ngap"),
+        ("without_evidence_support",     "Evidence\nsupport"),
+    ]
+    lut = {(r["ablation"], r["metric"]): r for r in rows}
+    deltas, nonworse = [], []
+    for key, _ in comps:
+        rec = lut[(key, "NDCG@10")]
+        deltas.append(float(rec["mean_delta_removal_minus_full"]))
+        nonworse.append(int(rec["nonworse_domain_count"]))
+    deltas = np.array(deltas)
+
+    # green where removing is nonworse / helpful (delta >= 0), gray where mixed,
+    # red where removing the component is harmful on the mean (delta < 0).
+    colors = [GREEN if d >= 0 else RED for d in deltas]
+
+    fig, ax = plt.subplots(figsize=(COL_W, 2.75))
+    xpos = np.arange(len(comps))
+    bars = ax.bar(xpos, deltas * 1e3, color=colors, edgecolor="black",
+                  linewidth=0.5, width=0.66)
+    ax.axhline(0, color="black", linewidth=0.8)
+
+    ax.set_xticks(xpos)
+    ax.set_xticklabels([lbl for _, lbl in comps], fontsize=6.8)
+    ax.set_ylabel(r"$\Delta$NDCG@10 ($\times 10^{-3}$)" "\n(remove $-$ full)")
+    ax.set_title("Removing a component does not hurt ranking",
+                 fontsize=9.0, pad=6)
+
+    # annotate each bar with its raw delta and the nonworse-domain count
+    ymax = max(deltas.max(), 0) * 1e3
+    ymin = min(deltas.min(), 0) * 1e3
+    pad = (ymax - ymin) * 0.06 + 0.05
+    for x, d, nw in zip(xpos, deltas, nonworse):
+        dv = d * 1e3
+        va = "bottom" if dv >= 0 else "top"
+        off = pad if dv >= 0 else -pad
+        ax.text(x, dv + off, f"{d:+.5f}\n{nw}/4 nonworse", ha="center", va=va,
+                fontsize=6.0, fontweight="bold")
+    ax.set_ylim(ymin - 6 * pad, ymax + 6 * pad)
+    ax.grid(axis="x", visible=False)
+
+    legend = [
+        Patch(facecolor=GREEN, edgecolor="black",
+              label=r"Removal helps / inert ($\Delta\geq 0$)"),
+        Patch(facecolor=RED, edgecolor="black",
+              label=r"Removal mildly hurts ($\Delta<0$)"),
+    ]
+    ax.legend(handles=legend, loc="upper right", frameon=True, framealpha=0.9,
+              borderpad=0.3, handlelength=1.1, fontsize=6.4)
+    fig.tight_layout()
+    _save(fig, "fig_component_ablation")
+
+
+# --------------------------------------------------------------------------- #
+# Figure 7: uncertainty-stratified reliability (baseline-inclusive)
+#   Source: observation_four_domain_summary_rows.csv (read live)
+#   Mean NDCG@10 (4 domains) vs uncertainty bin Q01..Q05 for C-CRP and LLMEmb;
+#   both DECLINE as uncertainty rises (cross-method motivation).
+# --------------------------------------------------------------------------- #
+def fig_observation():
+    rows = _read_csv(OBSERVATION_CSV)
+    bins = ["0", "1", "2", "3", "4"]
+    labels = ["Q01\n(low)", "Q02", "Q03", "Q04", "Q05\n(high)"]
+
+    def mean_curve(method):
+        out = []
+        for b in bins:
+            vals = [float(r["NDCG@10"]) for r in rows
+                    if r["method"] == method and r["uncertainty_bin_index"] == b]
+            assert len(vals) == 4, f"expected 4 domains for {method}/bin{b}, got {len(vals)}"
+            out.append(sum(vals) / len(vals))
+        return out
+
+    ccrp = mean_curve("ccrp_v3")
+    llmemb = mean_curve("llmemb")
+    x = np.arange(len(bins))
+
+    fig, ax = plt.subplots(figsize=(COL_W, 2.6))
+    ax.plot(x, ccrp, marker="o", markersize=4.5, linewidth=1.5, color=BLUE,
+            label="C-CRP")
+    ax.plot(x, llmemb, marker="s", markersize=4.0, linewidth=1.5, color=GREEN,
+            label="LLMEmb (baseline)")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=7.0)
+    ax.set_xlabel("C-CRP uncertainty quantile bin")
+    ax.set_ylabel("Mean NDCG@10 (4 domains)")
+    ax.set_title("Ranking quality declines as uncertainty rises",
+                 fontsize=9.0, pad=6)
+    ax.legend(loc="upper right", frameon=True, framealpha=0.9, borderpad=0.4,
+              handlelength=1.6, fontsize=7.5)
+    fig.tight_layout()
+    _save(fig, "fig_observation")
+
+
 def main():
     print(f"Output dir: {FIGDIR}")
     print("Generating figures ...")
@@ -346,7 +556,10 @@ def main():
     fig_main_heatmap()
     fig_significance()
     fig_gap_decomp()
-    print("Done. 4 figures x (pdf + png) = 8 files.")
+    fig_hyperparam_sensitivity()
+    fig_component_ablation()
+    fig_observation()
+    print("Done. 7 figures x (pdf + png) = 14 files.")
 
 
 if __name__ == "__main__":

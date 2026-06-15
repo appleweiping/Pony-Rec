@@ -206,6 +206,28 @@ work.)
 
 \subsection{Uncertainty as a Reliability Signal}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_observation}
+\caption{Ranking quality declines monotonically as \method{} uncertainty rises.
+Mean NDCG@10 across the four diagnostic domains is plotted against the
+\method{} uncertainty quantile bin (Q01 lowest to Q05 highest), for \method{}
+and for the strongest reranking baseline, LLMEmb, scored on the
+\emph{same} events. Both methods drop from the low- to the high-uncertainty
+bin, so the signal stratifies same-candidate reliability for the baseline too.
+For \method{} the stratification is partly mechanical---events are binned by
+\method{}'s own uncertainty and its ranking score is a monotone function of the
+same posterior---so we read the figure descriptively; the cross-method decline
+on LLMEmb is the motivation. Values match the per-bin rows underlying
+Table~\ref{tab:uncertainty_stratification}.}
+\Description{Line chart of mean NDCG@10 across four domains versus the C-CRP
+uncertainty quantile bin from Q01 (low) to Q05 (high). The C-CRP line falls from
+about 0.30 at Q01 to about 0.14 at Q05; the LLMEmb baseline line falls from
+about 0.22 at Q01 to about 0.11 at Q05. Both lines decline monotonically as
+uncertainty increases.}
+\label{fig:observation}
+\end{figure}
+
 The observation module asks whether \method{} uncertainty is informative about
 ranking reliability before using it as a decision feature. We compute
 event-level uncertainty from the candidate-level C-CRP rows, bin events into
@@ -218,8 +240,11 @@ Table~\ref{tab:uncertainty_stratification} reports the high-minus-low
 differences for \method{}. Across all four domains, the high-uncertainty bin is
 worse on NDCG@10, MRR, and HR@10. The largest gap appears on Toys
 ($\Delta$NDCG@10 = -0.3038), while Home and Tools still show clear NDCG@10
-drops of -0.0690 and -0.0849. This supports the motivation that the uncertainty
-signal stratifies same-candidate ranking reliability.
+drops of -0.0690 and -0.0849. Figure~\ref{fig:observation} plots the full
+per-bin trend averaged across the four domains, and crucially overlays the
+LLMEmb baseline scored on the same events: ranking quality declines
+monotonically from Q01 to Q05 for \emph{both} methods, so the uncertainty signal
+stratifies same-candidate ranking reliability beyond \method{}'s own scores.
 
 The module is descriptive. It does not show that manipulating uncertainty
 causes a metric change, and it is not a substitute for the official-baseline
@@ -244,7 +269,32 @@ counterevidence improves the mean by 0.00168 and is nonworse in 4/4 domains;
 removing the risk penalty improves the mean by 0.00082 and is nonworse in 4/4
 domains. Removing calibration gap is mixed (mean -0.00078; nonworse in 2/4
 domains), and removing evidence support is directionally harmful but small
-(mean -0.00013; nonworse in 1/4 domains).
+(mean -0.00013; nonworse in 1/4 domains). Figure~\ref{fig:component_ablation}
+plots these removal-minus-full NDCG@10 deltas: every bar sits at or above zero
+except the small calibration-gap and evidence-support dips, so removing a
+component does not hurt same-candidate ranking.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_component_ablation}
+\caption{Leave-one-component-out NDCG@10 deltas (removal minus full), averaged
+over the four diagnostic domains. Bars at or above zero mean that
+\emph{removing} the component does not hurt---or even helps---ranking: boundary
+uncertainty is exactly inert ($0.00000$, 4/4 domains nonworse), removing
+counterevidence improves the mean by $+0.00168$ (4/4) and removing the risk
+penalty by $+0.00082$ (4/4); removing calibration gap is mixed ($-0.00078$,
+2/4) and removing evidence support is slightly harmful but tiny ($-0.00013$,
+1/4). This is the characterized negative result---the uncertainty components are
+inert or redundant for ranking---\emph{not} evidence that every component is
+necessary. Values match Table~\ref{tab:ablation_ndcg10}.}
+\Description{Bar chart of the removal-minus-full NDCG@10 delta for five C-CRP
+components, in units of one-thousandth. Boundary uncertainty is exactly zero;
+counterevidence is plus 0.00168 and risk penalty plus 0.00082, both above the
+zero line; calibration gap is minus 0.00078 and evidence support minus 0.00013,
+both small and below the zero line. Each bar is annotated with how many of the
+four domains are nonworse when the component is removed.}
+\label{fig:component_ablation}
+\end{figure}
 
 \input{tables/ablation_ndcg10_summary}
 
@@ -258,6 +308,28 @@ same-candidate ranking over the posterior it is built on.
 
 \subsection{Hyperparameter Stability}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_hyperparam_sensitivity}
+\caption{Sensitivity of mean NDCG@10 (averaged over the four diagnostic
+domains) to the risk exponent $\eta$, for the validation and reporting-only test
+splits. NDCG@10 is flat for $\eta\le 2$---well inside the pre-registered $5\%$
+relative-drop tolerance (dotted line, off the test peak)---and only degrades at
+$\eta{=}4$. The test-best value is $\eta{=}0$ (circled), i.e.\ no risk term;
+positive $\eta$ does not help, consistent with the characterized negative result
+that the risk decomposition does not improve same-candidate ranking. Values
+aggregate the per-domain $\eta$-sweep rows underlying
+Table~\ref{tab:module_evidence}.}
+\Description{Line chart of mean NDCG@10 across four domains versus the risk
+exponent eta on a categorical axis at 0, 0.25, 0.5, 1, 2, and 4, with separate
+validation and test lines. Both lines are essentially flat near 0.202 from eta 0
+through eta 2, then drop sharply to about 0.17 at eta 4. The eta equals 0 point
+is circled and labelled as the test-best value, and a dotted horizontal line
+marks the minus 5 percent tolerance below the test peak, which both lines stay
+above until eta 4.}
+\label{fig:hyperparam_sensitivity}
+\end{figure}
+
 The hyperparameter module evaluates two real controls: the risk exponent
 $\eta$ and the uncertainty-weight grid. Validation-selected values are compared
 against reporting-only test sweeps on NDCG@10. Both controls are stable within
@@ -267,6 +339,8 @@ Home, and Tools; Toys selects $\eta=0.25$ on validation while $\eta=0$ is
 test-best, but the relative drop is only $1.25\times 10^{-5}$. For the weight
 grid, the selected value is test-best on Home and within tolerance on Sports,
 Toys, and Tools; the maximum relative drop is $2.97\times 10^{-4}$.
+Figure~\ref{fig:hyperparam_sensitivity} shows the $\eta$ sweep averaged across
+the four domains: NDCG@10 is flat for $\eta\le 2$ and drops only at $\eta{=}4$.
 
 The same result also limits the interpretation. The test-best $\eta$ is zero
 in all four domains, so the paper must not claim that a positive risk penalty
