@@ -93,6 +93,19 @@ PIDs, audit summaries, and missing-file errors.
     `final_submission_ready=false` because target formatting, ProMax metadata,
     manual submission-system confirmation, and explicit Claude Opus coverage
     remain open.
+    On the same date Codex refreshed the public-safe private manual submission
+    confirmation request:
+    `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`.
+    It is `ok=true`, `request_packet_ready=true`,
+    `manual_confirmation_needed=true`, `manual_submission_system_ready=false`,
+    and `final_submission_ready=false`. It recommends the ignored path
+    `artifacts/private/manual_submission_private_confirmation_20260615.json`
+    and pins source manifest
+    `2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08`.
+    Do not commit the filled private confirmation JSON. Any future private
+    confirmation must run through
+    `scripts.audit.main_validate_manual_submission_private_confirmation_json`
+    before the public manual checklist consumes it.
     Earlier on 2026-06-15 Codex refreshed the explicit Claude Opus coverage handoff
     without starting any experiments. The current request packet is
     `outputs/summary/paper_critical/claude_opus_review_request_packet_20260615.{json,md}`;

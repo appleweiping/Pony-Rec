@@ -123,7 +123,7 @@ def test_private_confirmation_request_packet_builds_public_safe_skeleton(tmp_pat
     assert "main_build_manual_submission_checklist" in commands[1]
 
 
-def test_private_confirmation_request_packet_fails_closed_when_checklist_not_ready(tmp_path: Path) -> None:
+def test_private_confirmation_request_packet_allows_not_ready_checklist_with_warning(tmp_path: Path) -> None:
     paths = _seed_inputs(tmp_path, checklist_overrides={"manual_submission_checklist_ready": False})
 
     packet = build_manual_submission_private_confirmation_request_packet(
@@ -132,8 +132,10 @@ def test_private_confirmation_request_packet_fails_closed_when_checklist_not_rea
         template_json=paths["template"].relative_to(tmp_path),
     )
 
-    assert packet["ok"] is False
-    assert "manual_submission_checklist_not_ready" in packet["failures"]
+    assert packet["ok"] is True
+    assert packet["request_packet_ready"] is True
+    assert packet["failures"] == []
+    assert packet["warnings"] == ["manual_submission_checklist_not_ready_request_packet_allowed"]
 
 
 def test_private_confirmation_request_packet_rejects_template_item_mismatch(tmp_path: Path) -> None:

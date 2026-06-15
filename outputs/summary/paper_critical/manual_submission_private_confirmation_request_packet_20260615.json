@@ -1,0 +1,216 @@
+{
+  "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
+  "created_at_utc": "2026-06-15T03:20:17.505872+00:00",
+  "failures": [],
+  "final_submission_ready": false,
+  "follow_up_commands_after_human_completion": [
+    "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260615.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260615.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260615.md",
+    "python -m scripts.audit.main_build_manual_submission_checklist --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260615.json --output-json outputs/summary/paper_critical/manual_submission_checklist_20260615.json --output-md outputs/summary/paper_critical/manual_submission_checklist_20260615.md",
+    "python -m scripts.audit.main_refresh_submission_release_candidate_stack --stamp 20260615 --manual-private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260615.json --external-timeout-seconds 45 --output-json outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260615.json --output-md outputs/summary/paper_critical/submission_release_candidate_stack_refresh_20260615.md",
+    "python -m scripts.audit.main_build_final_submission_gate --manual-checklist-json outputs/summary/paper_critical/manual_submission_checklist_20260615.json --output-json outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.json --output-md outputs/summary/paper_critical/final_submission_gate_YYYYMMDD.md"
+  ],
+  "forbidden_private_fields": {
+    "human_readable": [
+      "author names and affiliations",
+      "author order and contribution declarations",
+      "conflicts of interest",
+      "reviewer suggestions or exclusions",
+      "submission-system declarations",
+      "private submission account metadata"
+    ],
+    "json_keys_rejected_by_checker": [
+      "authors",
+      "author_names",
+      "affiliations",
+      "conflicts",
+      "conflicts_of_interest",
+      "reviewer_suggestions",
+      "reviewer_exclusions",
+      "submission_account",
+      "account_metadata",
+      "private_payload"
+    ]
+  },
+  "gate_state": {
+    "external_proceedings_metadata_ready": false,
+    "manual_submission_checklist_ready": false,
+    "manual_submission_system_ready": false,
+    "private_confirmation_provided": false,
+    "remaining_blockers": [
+      "ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.",
+      "Final submission package still needs the external submission-target-specific formatting pass.",
+      "promax:final_page_range_missing_in_bib",
+      "promax:crossref_registry_not_visible:status=404",
+      "promax:doi_resolver_not_visible:status=404",
+      "Final manual submission-system metadata/format checklist is not closed.",
+      "confirm_anonymous_shell:target_formatting_profile_not_ok",
+      "confirm_anonymous_shell:target_profile_not_ok",
+      "confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed",
+      "manual_submission_system_items_not_confirmed"
+    ]
+  },
+  "input_paths": {
+    "manual_checklist_json": {
+      "exists": true,
+      "is_file": true,
+      "path": "outputs\\summary\\paper_critical\\manual_submission_checklist_20260615.json",
+      "sha256": "66869698a3d37655d1c32dba1a7c0bb34294a11d3153b313eea6d957f576d021",
+      "size_bytes": 18649
+    },
+    "private_confirmation_template_json": {
+      "exists": true,
+      "is_file": true,
+      "path": "configs\\paper_manual_submission_private_confirmation.template.json",
+      "sha256": "6d5748e1fc073a561992678af577b23885d73777abbfaa23cfc07ed48adeaa07",
+      "size_bytes": 848
+    }
+  },
+  "manual_confirmation_needed": true,
+  "manual_submission_system_ready": false,
+  "mode": "local_read_only_manual_submission_private_confirmation_request_packet",
+  "notes": [
+    "This packet is a public-safe handoff request only; it is not a private confirmation.",
+    "The manual gate remains open until the checklist consumes a validated untracked private confirmation JSON.",
+    "The request packet may be ready even while the manual checklist is blocked by current final-submission gates.",
+    "Final submission readiness must stay false while external metadata or review coverage blockers remain."
+  ],
+  "ok": true,
+  "privacy_rules": [
+    "Keep the filled confirmation JSON under an ignored path such as artifacts/private/.",
+    "Do not commit the filled confirmation JSON.",
+    "Do not store author names, affiliations, COI details, reviewer preferences, declarations, account metadata, or submission-account data.",
+    "Only record booleans, source_manifest_sha256, completed_item_ids, and non-sensitive notes if absolutely needed.",
+    "Do not set completed_item_ids until the corresponding action is genuinely complete in the submission system.",
+    "Run the private confirmation validator before consuming the JSON in the public manual checklist.",
+    "This request packet does not close ProMax public metadata or Claude Opus review blockers."
+  ],
+  "private_confirmation_validation_command": "python -m scripts.audit.main_validate_manual_submission_private_confirmation_json --private-confirmation-json artifacts/private/manual_submission_private_confirmation_20260615.json --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.json --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_20260615.json --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_20260615.md",
+  "project": "uncertainty",
+  "public_prefill_index": [
+    {
+      "id": "paste_title",
+      "label": "Paste and verify the title from the metadata packet",
+      "prefill_source": "submission_fields.title",
+      "prefill_summary": "A Pointwise LLM Relevance Posterior Is a Strong Reranker: A Controlled Same-Candidate Study of Uncertainty-Adjusted LLM Recommendation"
+    },
+    {
+      "id": "paste_abstract",
+      "label": "Paste and verify the abstract from the metadata packet",
+      "prefill_source": "submission_fields.abstract",
+      "prefill_summary": "Large language models (LLMs) are increasingly used as scoring and representation engines for recommendation, yet comparisons across LLM-based recommenders are often confounded by different candidate sets, backbones, importers, and evaluation schemas. We first contribute a rigorous unified same-candidate reranking protocol: every method ranks the same 101 candidates (one positive and 100 popularity-sampled negatives) for each of 10,000 users, uses the same Qwen3-8B backbone when an LLM is required, and is evaluated with a shared importer, identical metrics, exact coverage checks, and paired Holm-corrected bootstrap tests, with full provenance. Against eight official-code-level LLM-based recommendation baselines across eight Amazon domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools), our central empirical finding is that a task-grounded pointwise LLM relevance posterior -- the model's own per-candidate relevance probability, used directly as the ranking score -- ranks first in six of the eight domains, improving NDCG@10 by +21.6\\ seven metrics HR@5/@10/@20, NDCG@5/@10/@20, MRR in five of these six domains --- Electronics, Sports, Toys, Home, Tools; 56/56 paired-significant --- and on six of seven on Books, HR@20 versus LLMEmb the exception). In the remaining two domains it is not first: rank 2 on Beauty (-11\\ this shortfall is not Holm-significant on any metric, leaving C-CRP statistically indistinguishable from the strongest baseline) and mid-pack at rank 5 on Movies ($-24\\ baselines). We report these two losses explicitly rather than dropping them. We compute paired Holm-corrected bootstrap tests on all eight domains: on the six winning domains C-CRP is significantly ahead on all 56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly behind the stronger baselines on 22 of 56 pairs. We then report a rigorous negative result on the design space this work set out to study. We instrument the pointwise posterior with a principled calibrated-uncertainty and risk-adjusted ranking family that decomposes uncertainty into boundary ambiguity, a calibration gap, evidence support, and counterevidence. Under a leave-one-component-out ablation and a raw-probability attribution, this machinery does not improve same-candidate ranking: the zero-risk setting is test-best in all four diagnostic domains, a confidence-only variant matches or exceeds the full family in three of those four domains, and individual uncertainty terms are inert or mildly harmful. The working ranking signal lies in the posterior itself, not in the uncertainty decomposition. As a minor, descriptive observation -- and one we caveat as partly circular -- the event-level uncertainty signal does stratify reliability, but we do not claim it improves ranking. This is a scoped result about same-candidate reranking, not a full-catalog recommender SOTA claim."
+    },
+    {
+      "id": "paste_keywords",
+      "label": "Paste and verify keywords",
+      "prefill_source": "submission_fields.keywords",
+      "prefill_summary": "LLM-based recommendation, uncertainty estimation, calibration, candidate reranking, same-candidate evaluation"
+    },
+    {
+      "id": "select_topic_areas",
+      "label": "Select topic areas",
+      "prefill_source": "submission_fields.topic_areas",
+      "prefill_summary": "Recommender systems, Evaluation and reproducibility, Large language models, Uncertainty and calibration"
+    },
+    {
+      "id": "upload_pdf",
+      "label": "Upload the audited anonymous PDF",
+      "prefill_source": "package_crosscheck.pdf_path",
+      "prefill_summary": "Paper\\main.pdf"
+    },
+    {
+      "id": "upload_source_if_required",
+      "label": "Upload source package if required by the submission system",
+      "prefill_source": "package_crosscheck.source_manifest_sha256",
+      "prefill_summary": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08"
+    }
+  ],
+  "read_only": true,
+  "request_packet_ready": true,
+  "required_private_confirmation": {
+    "boolean_fields_that_must_be_true_after_human_completion": [
+      "confirmed_in_submission_system",
+      "private_fields_completed_in_submission_system",
+      "no_private_fields_stored"
+    ],
+    "completed_item_ids_for_full_manual_gate": [
+      "select_track_and_paper_type",
+      "paste_title",
+      "paste_abstract",
+      "paste_keywords",
+      "select_topic_areas",
+      "upload_pdf",
+      "upload_source_if_required",
+      "confirm_anonymous_shell",
+      "enter_authors",
+      "complete_conflicts",
+      "complete_reviewer_preferences",
+      "complete_declarations",
+      "confirm_external_proceedings_metadata",
+      "final_preview_and_submit"
+    ],
+    "currently_blocked_item_ids": [
+      "confirm_anonymous_shell",
+      "confirm_external_proceedings_metadata"
+    ],
+    "currently_unconfirmed_required_item_ids": [
+      "select_track_and_paper_type",
+      "paste_title",
+      "paste_abstract",
+      "paste_keywords",
+      "select_topic_areas",
+      "upload_pdf",
+      "upload_source_if_required",
+      "enter_authors",
+      "complete_conflicts",
+      "complete_reviewer_preferences",
+      "complete_declarations",
+      "final_preview_and_submit"
+    ],
+    "manual_private_item_ids": [
+      "enter_authors",
+      "complete_conflicts",
+      "complete_reviewer_preferences",
+      "complete_declarations",
+      "final_preview_and_submit"
+    ],
+    "recommended_untracked_path": "artifacts/private/manual_submission_private_confirmation_20260615.json",
+    "safe_confirmation_skeleton": {
+      "checklist_id": "sigir2026_anonymous_full_paper_manual_submission",
+      "completed_item_ids": [
+        "select_track_and_paper_type",
+        "paste_title",
+        "paste_abstract",
+        "paste_keywords",
+        "select_topic_areas",
+        "upload_pdf",
+        "upload_source_if_required",
+        "confirm_anonymous_shell",
+        "enter_authors",
+        "complete_conflicts",
+        "complete_reviewer_preferences",
+        "complete_declarations",
+        "confirm_external_proceedings_metadata",
+        "final_preview_and_submit"
+      ],
+      "confirmed_in_submission_system": true,
+      "no_private_fields_stored": true,
+      "private_fields_completed_in_submission_system": true,
+      "schema_version": "2026-06-12.manual_submission_private_confirmation.v1",
+      "source_manifest_sha256": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+      "target_profile_id": "sigir2026_full_paper_acm_anonymous"
+    },
+    "schema_version": "2026-06-12.manual_submission_private_confirmation.v1",
+    "source_manifest_sha256": "2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08",
+    "template_path": "configs\\paper_manual_submission_private_confirmation.template.json"
+  },
+  "schema_version": "2026-06-13.manual_submission_private_confirmation_request_packet.v1",
+  "target_profile_id": "sigir2026_full_paper_acm_anonymous",
+  "warnings": [
+    "manual_submission_checklist_not_ok_request_packet_allowed",
+    "manual_submission_checklist_not_ready_request_packet_allowed"
+  ],
+  "will_copy": false,
+  "will_delete": false,
+  "will_ssh": false,
+  "will_start_experiment": false
+}

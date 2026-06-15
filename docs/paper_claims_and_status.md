@@ -79,6 +79,24 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-15 private manual-confirmation request refresh.** Codex refreshed the
+public-safe handoff for the private submission-system confirmation:
+`outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`.
+The packet is `ok=true`, `request_packet_ready=true`,
+`manual_confirmation_needed=true`, `manual_submission_system_ready=false`, and
+`final_submission_ready=false`. It recommends the ignored path
+`artifacts/private/manual_submission_private_confirmation_20260615.json`,
+requires the current source-manifest hash
+`2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08`, and only
+allows public-safe confirmation fields: booleans, `source_manifest_sha256`, and
+completed item IDs. It explicitly forbids author identities, affiliations,
+conflicts, reviewer preferences, declarations, account metadata, or private
+payloads in git. The request packet remains a handoff artifact only:
+`confirm_anonymous_shell` and `confirm_external_proceedings_metadata` are still
+blocked by target formatting and ProMax metadata, and the manual submission gate
+does not close until a validated untracked private JSON is consumed by the
+manual checklist.
+
 **2026-06-15 ProMax public proceedings and final-stack refresh.** Codex reran
 the live ProMax public metadata probe and the external proceedings metadata
 audit:

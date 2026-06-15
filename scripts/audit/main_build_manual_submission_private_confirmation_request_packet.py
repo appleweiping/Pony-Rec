@@ -142,6 +142,7 @@ def build_manual_submission_private_confirmation_request_packet(
     template, template_errors = _read_json(template_path)
     failures = [f"manual_checklist:{error}" for error in checklist_errors]
     failures.extend(f"template:{error}" for error in template_errors)
+    warnings: list[str] = []
 
     source_manifest_sha256 = str(((checklist.get("crosscheck") or {}).get("source_manifest_sha256") or ""))
     all_item_ids = _checklist_item_ids(checklist)
@@ -155,9 +156,9 @@ def build_manual_submission_private_confirmation_request_packet(
     manual_private_item_ids = _string_list(checklist.get("manual_private_item_ids"))
 
     if checklist and checklist.get("ok") is not True:
-        failures.append("manual_submission_checklist_not_ok")
+        warnings.append("manual_submission_checklist_not_ok_request_packet_allowed")
     if checklist and checklist.get("manual_submission_checklist_ready") is not True:
-        failures.append("manual_submission_checklist_not_ready")
+        warnings.append("manual_submission_checklist_not_ready_request_packet_allowed")
     if checklist and checklist.get("final_submission_ready") is not False:
         failures.append("manual_checklist_unexpected_final_submission_ready_state")
     if checklist and not source_manifest_sha256:
@@ -291,8 +292,10 @@ def build_manual_submission_private_confirmation_request_packet(
         "notes": [
             "This packet is a public-safe handoff request only; it is not a private confirmation.",
             "The manual gate remains open until the checklist consumes a validated untracked private confirmation JSON.",
+            "The request packet may be ready even while the manual checklist is blocked by current final-submission gates.",
             "Final submission readiness must stay false while external metadata or review coverage blockers remain.",
         ],
+        "warnings": warnings,
         "failures": failures,
     }
 
@@ -343,6 +346,9 @@ def render_markdown(packet: dict[str, Any]) -> str:
     lines.extend(["## Remaining Blockers", ""])
     blockers = (packet.get("gate_state") or {}).get("remaining_blockers") or []
     lines.extend(f"- {item}" for item in blockers) if blockers else lines.append("- None")
+    lines.extend(["", "## Warnings", ""])
+    warnings = packet.get("warnings") or []
+    lines.extend(f"- `{item}`" for item in warnings) if warnings else lines.append("- None")
     lines.extend(["", "## Failures", ""])
     failures = packet.get("failures") or []
     lines.extend(f"- `{item}`" for item in failures) if failures else lines.append("- None")

@@ -103,7 +103,14 @@ stack still reports `local_release_candidate_ready=false`,
 `final_submission_ready=false`. The same-stamp final-blocker consistency audit
 is `ok=false` for the expected blocker set until target formatting, ProMax
 metadata, manual submission, and Claude Opus coverage all close. The 2026-06-15
-Claude Opus coverage refresh repaired the request-packet
+private manual-confirmation request refresh
+`outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`
+is public-safe and `ok=true`: it recommends the ignored path
+`artifacts/private/manual_submission_private_confirmation_20260615.json`, pins
+the current source-manifest hash, forbids private author/COI/reviewer/account
+payloads in git, and keeps `manual_submission_system_ready=false` plus
+`final_submission_ready=false` until a validated untracked private JSON is
+provided. The 2026-06-15 Claude Opus coverage refresh repaired the request-packet
 builder to use this current dual claim and stamp-specific 20260615 paths, then
 recorded two additional failed direct Opus attempts:
 `outputs/summary/paper_critical/claude_opus_review_attempt_fourteenth_20260615.json`

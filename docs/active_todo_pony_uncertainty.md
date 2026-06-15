@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-15 03:25 CEST
+Last updated: 2026-06-15 05:22 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,28 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-15)
+
+- 2026-06-15 private manual-confirmation request refresh:
+  server preflight found no matching Uncertainty/Pony Python experiment process
+  and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. Codex
+  refreshed the public-safe manual submission private-confirmation request at
+  `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`.
+  The packet is `ok=true`, `request_packet_ready=true`,
+  `manual_confirmation_needed=true`, `manual_submission_system_ready=false`,
+  and `final_submission_ready=false`. It recommends the ignored/private path
+  `artifacts/private/manual_submission_private_confirmation_20260615.json`,
+  records the current source-manifest hash
+  `2acac6e54318be410e9e216429195cad580fd870b91ef95a6bddb9f361909a08`, lists
+  currently blocked manual items `confirm_anonymous_shell` and
+  `confirm_external_proceedings_metadata`, and keeps private fields out of git
+  by only allowing booleans, source hash, and item IDs. The request packet has
+  warnings `manual_submission_checklist_not_ok_request_packet_allowed` and
+  `manual_submission_checklist_not_ready_request_packet_allowed`, because the
+  current paper still has target-formatting and ProMax metadata blockers; those
+  warnings do not close the manual gate. Codex also refreshed
+  `outputs/summary/paper_critical/final_blocker_consistency_audit_20260615.{json,md}`
+  with the 20260615 manual request packet; it still reports
+  `final_submission_ready=false` for the known blocker set.
 
 - 2026-06-15 ProMax public-metadata and final-gate freshness refresh:
   server preflight found no matching Uncertainty/Pony Python experiment process
