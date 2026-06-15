@@ -24,7 +24,8 @@ $PYTHON experiments/rsc/run_ccrp_v3_domain_seeded.py \
     --model "$MODEL" \
     --backbone llama3.1-8b \
     --n_users 20 \
-    --gpu_mem 0.85
+    --gpu_mem 0.85 \
+    --guided-json
 rc=$?
 [ $rc -ne 0 ] && { echo "SMOKE FAILED rc=$rc"; exit $rc; }
 
@@ -40,7 +41,9 @@ print(f"distinct_values={len(set(scores))}")
 import json
 rep = json.load(open("outputs/_smoke/llama_sports_20u/report.json"))
 print(f"report NDCG@10={rep['NDCG@10']:.4f} HR@10={rep['HR@10']:.4f} backbone={rep['backbone']}")
-ok = len(nz) >= 0.3*len(scores) and len(set(scores)) >= 5
+# Guided-JSON PASS criteria: nonzero >= 80% (schema-forced JSON should give ~100%),
+# distinct_values >= 5, and a real (nonzero) NDCG@10.
+ok = (len(nz) >= 0.80*len(scores)) and (len(set(scores)) >= 5) and (rep['NDCG@10'] > 0.0)
 print("SMOKE VERDICT:", "PASS — proceed to full 4-domain Llama run" if ok
       else "FAIL — inspect raw_text; do NOT launch full run")
 PY

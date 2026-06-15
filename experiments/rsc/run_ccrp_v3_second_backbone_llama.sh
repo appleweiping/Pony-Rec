@@ -4,11 +4,21 @@
 # of Qwen3-8B) on the 4 cleanest-gate domains, to show the 6/8 win pattern + the
 # eta=0 negative result replicate on a NON-Qwen backbone.
 #
-# Only the --model path changes vs the Qwen runs; the prompt, parse_score regex,
-# metrics and output layout are identical (run_ccrp_v3_domain_seeded.py). The chat
-# template is applied generically via the tokenizer, so no Qwen tokens/format are
-# hard-coded. No seed is set here (matches the original Qwen runs' default RNG);
-# run-to-run variance is the separate multi-seed experiment.
+# vs the Qwen runs, --model changes AND --guided-json is added (Llama-only). The
+# prompt, parse_score regex, metrics and output layout are identical
+# (run_ccrp_v3_domain_seeded.py). The chat template is applied generically via the
+# tokenizer, so no Qwen tokens/format are hard-coded. No seed is set here (matches
+# the original Qwen runs' default RNG); run-to-run variance is the separate
+# multi-seed experiment.
+#
+# WHY --guided-json HERE (and NOT on Qwen/multiseed): the smoke showed Llama does
+# not reliably follow the free-form "Return ONLY JSON" instruction (~13% nonzero,
+# 87% degenerate 0.0), while Qwen3-8B followed it naturally. --guided-json forces
+# vLLM structured decoding to the schema {"relevance_probability": number[0,1],
+# "reason": string}, isolating the relevance signal from Llama's formatting quirk.
+# This is a Llama-only fix; the Qwen and multiseed scripts stay free-form so the
+# Qwen path is byte-identical to the published numbers. (A matched Qwen+guided-JSON
+# control may be needed for strict decoding-parity in the paper — see PLAN.md.)
 #
 # CONSTRAINT: only launch when the GPU is FREE (TGL LoRA PID 4090183 done).
 # Run the smoke test (smoke_test_llama_ccrp_v3.sh) FIRST and confirm PASS.
@@ -49,7 +59,8 @@ for domain in $DOMAINS; do
         --model "$MODEL" \
         --backbone "$BACKBONE" \
         --n_users 10000 \
-        --gpu_mem 0.85
+        --gpu_mem 0.85 \
+        --guided-json
     if [ $? -ne 0 ]; then echo "  FAILED: ${domain}"; exit 1; fi
     echo "  DONE: ${domain} -> ${output_dir}"
 done

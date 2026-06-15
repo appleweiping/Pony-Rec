@@ -65,7 +65,61 @@ Validates the Llama template + that it actually emits parseable JSON probabiliti
 ssh pony-rec-gpu 'cd ~/projects/pony-rec-rescue-shadow-v6 && \
   bash experiments/rsc/smoke_test_llama_ccrp_v3.sh 2>&1 | tee logs/smoke_llama_sports.log'
 ```
-**Expected PASS:** `nonzero >= 30%`, `distinct_values >= 5`, a real NDCG@10. **If FAIL** (all 0.0 / degenerate): inspect raw_text — would mean Llama isn't following the JSON instruction; consider enabling the backend's JSON guided-decoding or a Llama-friendly prompt tweak. Do NOT launch the full run on FAIL.
+The smoke (and the full Llama run) now passes `--guided-json` (vLLM 0.10.2 structured
+decoding to the schema `{"relevance_probability": number[0,1], "reason": string}`).
+**Expected PASS:** `nonzero >= 80%`, `distinct_values >= 5`, a real NDCG@10.
+
+---
+
+## 2026-06-15 FINDING — guided JSON works, but the smoke STILL FAILS (do NOT launch yet)
+
+A `--guided-json` mode was added to `run_ccrp_v3_domain_seeded.py` (default OFF, so the
+Qwen path is byte-identical) and wired into the smoke + Llama scripts. vLLM 0.10.2 API used:
+`from vllm.sampling_params import GuidedDecodingParams` →
+`SamplingParams(..., guided_decoding=GuidedDecodingParams(json=<schema dict>))`. Verified the
+`json=` field + `guided_decoding=` kwarg are the correct route for this installed version
+(`structured_outputs` / `response_format` are NOT present in 0.10.2's `SamplingParams`).
+
+**Re-smoke result (20 sports users, guided JSON ON):** `n=2020 scores, nonzero=276 (13.7%),
+distinct_values=8, min=0.0 max=0.8 mean=0.072, NDCG@10=0.2048 HR@10=0.300 MRR=0.199`.
+Verdict = **FAIL** (13.7% ≪ 80%). This is the **same degenerate shape** as the pre-fix smoke.
+
+**Root cause — the original hypothesis was WRONG.** Inspecting raw generated text shows
+guided JSON works PERFECTLY: 16/16 sampled outputs are valid schema-conforming JSON and
+`parse_score` reads every one correctly (it returns 0.8 / 0.2 where the model emits those).
+The 87% zeros are **not** a formatting/parse artifact — **Llama-3.1-8B genuinely assigns
+`relevance_probability: 0.0` to off-category candidates**, only giving nonzero mass to a strong
+category match (e.g. bike-history → bike accessory = 0.8). With 100 negatives + 1 positive
+(mostly off-category) per user, Llama floors almost everything at exactly 0.0, producing a huge
+tie mass that degrades ranking. Representative raw samples (history = bike accessories):
+- `{"relevance_probability": 0.0, "reason": "...unrelated to fishing or outdoor activities..."}`
+- `{"relevance_probability": 0.0, "reason": "...no indication of interest in high-end sports equipment like a carbon fiber road bike."}`
+- `{"relevance_probability": 0.8, "reason": "...recently purchased a bike storage bag and a bike light... the candidate is a bike storage bag, aligning..."}`
+- `{"relevance_probability": 0.2, "reason": "...purchased bike storage and lighting... candidate is a bicycle part, a different category, less likely..."}`
+- `{"relevance_probability": 0.0, "reason": "...recent purchases of bike-related items do not align with hiking backpacks..."}`
+
+**Implication.** This is a **relevance/scoring-behavior gap, not an instruction-following gap**.
+Guided JSON correctly isolated that question and answered it: Llama-3.1-8B, with this exact
+C-CRP v3 prompt at temp 0.1, is a near-binary conservative scorer that does NOT produce the
+graded posterior Qwen3-8B does. Forcing valid JSON cannot manufacture a graded signal the model
+does not hold. So the smoke FAILs and the **35 h full run was NOT launched** (it would burn GPU
+on a known-degenerate signal).
+
+**For the paper / next steps (decision needed before any Llama full run):**
+1. Llama as a second backbone needs a prompt/decoding change that elicits a *graded* probability
+   (e.g. ask for a 0–100 integer or a token-logprob score rather than a [0,1] float the model
+   collapses to 0.0), OR a different non-Qwen backbone whose free posterior is already graded.
+2. **Decoding-parity caveat (still applies, and now sharper):** if a Llama (or other) backbone is
+   ever run with `--guided-json`, a **matched Qwen3-8B + `--guided-json` control** is required so
+   the second-backbone comparison is decoding-parity-clean — guided vs free-form decoding is itself
+   a confound, independent of backbone. The flag is in place for that control.
+3. The original premise — "Llama just doesn't follow the Return-ONLY-JSON instruction" — is
+   **disproven**; do not repeat it in the manuscript. The honest statement is that Llama's free
+   per-candidate relevance posterior under this prompt is degenerate (0.0-dominated), which is a
+   model-behavior finding, not a prompt-engineering bug.
+
+**Expected PASS (kept for reference):** `nonzero >= 80%`, `distinct_values >= 5`, a real NDCG@10.
+**If FAIL** (as on 2026-06-15): inspect raw_text (done above) and do NOT launch the full run.
 
 ### STEP 2 — A. Second-backbone Llama full run (4 domains, ~35 h) [highest priority]
 ```bash
@@ -107,9 +161,9 @@ Writes `outputs/summary/paper_critical/gpu_queue_to8/multiseed_ndcg_{summary.jso
 
 ## Files prepared (committed on branch `paper/reframe-major-revision`)
 
-- `experiments/rsc/run_ccrp_v3_domain_seeded.py` — seed+model-parameterized scoring variant (serves both experiments)
-- `experiments/rsc/smoke_test_llama_ccrp_v3.sh` — 20-user Llama smoke test + JSON-extraction validator
-- `experiments/rsc/run_ccrp_v3_second_backbone_llama.sh` — A launcher (4 domains)
+- `experiments/rsc/run_ccrp_v3_domain_seeded.py` — seed+model-parameterized scoring variant (serves both experiments); now also has an OPTIONAL `--guided-json` mode (vLLM 0.10.2 `GuidedDecodingParams(json=...)`), DEFAULT OFF so the Qwen path is byte-identical
+- `experiments/rsc/smoke_test_llama_ccrp_v3.sh` — 20-user Llama smoke test (now `--guided-json`); PASS threshold raised to nonzero>=80%
+- `experiments/rsc/run_ccrp_v3_second_backbone_llama.sh` — A launcher (4 domains, now `--guided-json`; Qwen/multiseed do NOT use it)
 - `experiments/rsc/run_ccrp_v3_multiseed_qwen.sh` — B launcher (3 seeds × 4 domains)
 - `experiments/rsc/aggregate_multiseed_ndcg.py` — mean±std aggregator
 - `outputs/summary/paper_critical/gpu_queue_to8/PLAN.md` — this file

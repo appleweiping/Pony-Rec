@@ -15,6 +15,19 @@ two gap-to-8 reviewer experiments:
                regex) and the chat template is applied generically via the
                tokenizer's own apply_chat_template — so NO Qwen-specific token
                id / template is hard-coded; swapping --model is sufficient.
+  3. --guided-json (OPTIONAL, DEFAULT OFF): force vLLM structured decoding so the
+               model is CONSTRAINED to emit valid JSON matching the schema
+               {"relevance_probability": number in [0,1], "reason": string}.
+               Needed because Llama-3.1-8B-Instruct does not reliably follow the
+               free-form "Return ONLY JSON" instruction (smoke: only ~13% of
+               candidate scores were nonzero, 87% degenerate to 0.0), whereas
+               Qwen3-8B followed it naturally. This isolates the relevance signal
+               from Llama's instruction-following / formatting quirk. When the
+               flag is OFF the SamplingParams are byte-identical to before, so the
+               existing Qwen / multiseed runs are completely unchanged.
+               vLLM 0.10.2 API (verified on env qwen_vllm):
+                   from vllm.sampling_params import GuidedDecodingParams
+                   SamplingParams(..., guided_decoding=GuidedDecodingParams(json=<schema dict>))
 
 This script builds the vLLM LLM + SamplingParams directly (instead of through
 VLLMBackend) ONLY so it can set the seed; every other knob mirrors VLLMBackend's
@@ -75,6 +88,11 @@ def main():
     parser.add_argument("--temperature", type=float, default=0.1)
     parser.add_argument("--backbone", type=str, default=None,
                         help="Provenance label, e.g. qwen3-8b / llama3.1-8b. Default=model dir name.")
+    parser.add_argument("--guided-json", dest="guided_json", action="store_true",
+                        help="Force vLLM structured JSON decoding (schema-constrained output). "
+                             "DEFAULT OFF: when off, SamplingParams are byte-identical to the "
+                             "original Qwen behavior. Use ON for Llama, which does not reliably "
+                             "follow the free-form 'Return ONLY JSON' instruction.")
     args = parser.parse_args()
 
     backbone = args.backbone or Path(args.model).name
@@ -109,6 +127,32 @@ def main():
     )
     if args.seed is not None:
         sampling_kwargs["seed"] = args.seed
+
+    # --- OPTIONAL guided/structured JSON decoding (DEFAULT OFF). ---
+    # When --guided-json is passed, constrain generation to the schema
+    # {"relevance_probability": number in [0,1], "reason": string} so the model
+    # is FORCED to emit a valid, parseable probability. parse_score then reads
+    # the "relevance_probability" field exactly as in the free-form path.
+    # When the flag is OFF, sampling_kwargs is unchanged -> Qwen path is identical.
+    if args.guided_json:
+        from vllm.sampling_params import GuidedDecodingParams
+        relevance_schema = {
+            "type": "object",
+            "properties": {
+                "relevance_probability": {
+                    "type": "number", "minimum": 0.0, "maximum": 1.0,
+                },
+                "reason": {"type": "string"},
+            },
+            "required": ["relevance_probability", "reason"],
+            "additionalProperties": False,
+        }
+        sampling_kwargs["guided_decoding"] = GuidedDecodingParams(json=relevance_schema)
+        print("Guided JSON decoding: ON (schema-constrained "
+              '{"relevance_probability": number[0,1], "reason": string})')
+    else:
+        print("Guided JSON decoding: OFF (free-form prompt; original Qwen behavior)")
+
     sampling_params = SamplingParams(**sampling_kwargs)
 
     # --- chat template applied GENERICALLY (no hard-coded Qwen/Llama format). ---
@@ -198,6 +242,7 @@ def main():
     report["backbone"] = backbone
     report["seed"] = args.seed
     report["temperature"] = args.temperature
+    report["guided_json"] = bool(args.guided_json)
 
     with open(out_dir / "report.json", "w") as f:
         json.dump(report, f, indent=2)
