@@ -114,7 +114,13 @@ is public-safe and `ok=true`: it recommends the ignored path
 the current source-manifest hash, forbids private author/COI/reviewer/account
 payloads in git, and keeps `manual_submission_system_ready=false` plus
 `final_submission_ready=false` until a validated untracked private JSON is
-provided. The 2026-06-15 Claude Opus coverage refresh repaired the request-packet
+provided. A later 2026-06-15 stamp-aware default refresh repaired the manual
+request-packet builder, private-confirmation validator, and final-blocker
+consistency/doc-status audits so `--stamp YYYYMMDD` selects same-date input
+artifacts by default. The refreshed 20260615 request packet,
+consistency audit, and doc-status audit still report
+`final_submission_ready=false`; this is handoff freshness, not a readiness
+upgrade. The 2026-06-15 Claude Opus coverage refresh repaired the request-packet
 builder to use this current dual claim and stamp-specific 20260615 paths, then
 recorded two additional failed direct Opus attempts:
 `outputs/summary/paper_critical/claude_opus_review_attempt_fourteenth_20260615.json`

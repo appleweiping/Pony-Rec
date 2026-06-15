@@ -79,6 +79,27 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-15 private/manual gate stamp-aware default refresh.** Codex repaired
+the date-sensitive defaults in
+`scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py`,
+`scripts/audit/main_validate_manual_submission_private_confirmation_json.py`,
+`scripts/audit/main_audit_final_blocker_consistency.py`, and
+`scripts/audit/main_audit_final_blocker_doc_status.py`. These tools now use
+the supplied `--stamp YYYYMMDD` to derive their same-date input artifacts when
+explicit paths are omitted, instead of silently falling back to stale 20260613
+manual/final-blocker files. Regression tests cover the stamp-derived manual
+checklist, private-confirmation JSON/request packet, final-blocker consistency
+inputs, and doc-status consistency input. Codex reran
+`outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`
+and
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260615.{json,md}`
+plus
+`outputs/summary/paper_critical/final_blocker_doc_status_audit_20260615.{json,md}`
+with the repaired defaults. This is an evidence-handoff freshness fix only:
+manual submission remains open, explicit Claude Opus coverage remains missing,
+ProMax public metadata remains blocked, target formatting remains blocked,
+doc-status is `ok=true`, and `final_submission_ready=false`.
+
 **2026-06-15 final-blocker consistency semantics refresh.** Codex updated
 `scripts/audit/main_audit_final_blocker_consistency.py` so the audit distinguishes
 between a consistent blocked state and a packet inconsistency. The refreshed

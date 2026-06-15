@@ -124,6 +124,31 @@ def test_doc_status_audit_passes_when_current_sections_match_latest_truth(tmp_pa
     assert audit["expected_current_truth"]["failed_claude_attempts"] == 9
 
 
+def test_doc_status_audit_defaults_consistency_input_to_stamp(tmp_path: Path) -> None:
+    consistency = _consistency(tmp_path)
+    default_consistency = (
+        tmp_path
+        / "outputs"
+        / "summary"
+        / "paper_critical"
+        / "final_blocker_consistency_audit_20260615.json"
+    )
+    default_consistency.parent.mkdir(parents=True, exist_ok=True)
+    default_consistency.write_text(consistency.read_text(encoding="utf-8"), encoding="utf-8")
+    doc = _doc(tmp_path, "docs/active_todo_pony_uncertainty.md", _current_body())
+
+    audit = audit_final_blocker_doc_status(
+        root=tmp_path,
+        stamp="20260615",
+        docs=[doc.relative_to(tmp_path)],
+    )
+
+    assert audit["ok"] is True
+    assert audit["input_paths"]["consistency_audit"]["path"].replace("\\", "/").endswith(
+        "final_blocker_consistency_audit_20260615.json"
+    )
+
+
 def test_doc_status_audit_rejects_stale_current_failed_claude_count(tmp_path: Path) -> None:
     consistency = _consistency(tmp_path)
     doc = _doc(tmp_path, "docs/active_todo_pony_uncertainty.md", _current_body(stale=True))

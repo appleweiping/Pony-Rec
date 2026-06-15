@@ -414,11 +414,16 @@ rerun the public checklist:
 
 ```bash
 python -m scripts.audit.main_validate_manual_submission_private_confirmation_json \
+  --stamp YYYYMMDD \
   --private-confirmation-json path/to/untracked_private_confirmation.json \
   --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json \
   --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.json \
   --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.md
 ```
+
+With `--stamp YYYYMMDD`, the validator defaults to the same-date private
+confirmation and request-packet paths when those explicit path arguments are
+omitted. Keep explicit paths when validating an externally supplied file.
 
 ```bash
 python -m scripts.audit.main_build_manual_submission_checklist \

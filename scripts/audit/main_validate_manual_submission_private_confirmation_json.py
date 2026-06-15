@@ -14,10 +14,18 @@ from scripts.audit.main_build_manual_submission_private_confirmation_request_pac
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
 DEFAULT_STAMP = "20260613"
-DEFAULT_CONFIRMATION_JSON = Path("artifacts/private/manual_submission_private_confirmation_20260613.json")
-DEFAULT_REQUEST_PACKET_JSON = Path(
-    "outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260613.json"
-)
+
+
+def _private_confirmation_json_for_stamp(stamp: str) -> Path:
+    return Path(f"artifacts/private/manual_submission_private_confirmation_{stamp}.json")
+
+
+def _manual_request_packet_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"manual_submission_private_confirmation_request_packet_{stamp}.json"
+
+
+DEFAULT_CONFIRMATION_JSON = _private_confirmation_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_REQUEST_PACKET_JSON = _manual_request_packet_json_for_stamp(DEFAULT_STAMP)
 
 
 def _sha256_file(path: Path) -> str:
@@ -80,10 +88,15 @@ def _is_under_artifacts_private(path: Path, root: Path) -> bool:
 def build_manual_private_confirmation_validation_packet(
     *,
     root: str | Path = ".",
-    confirmation_json: str | Path = DEFAULT_CONFIRMATION_JSON,
-    request_packet_json: str | Path = DEFAULT_REQUEST_PACKET_JSON,
+    confirmation_json: str | Path | None = None,
+    request_packet_json: str | Path | None = None,
+    stamp: str = DEFAULT_STAMP,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
+    if confirmation_json is None:
+        confirmation_json = _private_confirmation_json_for_stamp(stamp)
+    if request_packet_json is None:
+        request_packet_json = _manual_request_packet_json_for_stamp(stamp)
     confirmation_path = (repo / confirmation_json).resolve()
     request_path = (repo / request_packet_json).resolve()
 
@@ -276,8 +289,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--stamp", default=DEFAULT_STAMP)
-    parser.add_argument("--private-confirmation-json", default=str(DEFAULT_CONFIRMATION_JSON))
-    parser.add_argument("--manual-request-packet-json", default=str(DEFAULT_REQUEST_PACKET_JSON))
+    parser.add_argument("--private-confirmation-json")
+    parser.add_argument("--manual-request-packet-json")
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     args = parser.parse_args()
@@ -298,6 +311,7 @@ def main() -> int:
         root=root,
         confirmation_json=args.private_confirmation_json,
         request_packet_json=args.manual_request_packet_json,
+        stamp=args.stamp,
     )
     _write_json(output_json, packet)
     _write_md(output_md, packet)

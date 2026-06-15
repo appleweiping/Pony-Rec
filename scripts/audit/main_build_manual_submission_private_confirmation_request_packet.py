@@ -10,10 +10,14 @@ from typing import Any
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
 DEFAULT_STAMP = "20260613"
-DEFAULT_MANUAL_CHECKLIST_JSON = Path(
-    "outputs/summary/paper_critical/manual_submission_checklist_20260613.json"
-)
 DEFAULT_TEMPLATE_JSON = Path("configs/paper_manual_submission_private_confirmation.template.json")
+
+
+def _manual_checklist_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"manual_submission_checklist_{stamp}.json"
+
+
+DEFAULT_MANUAL_CHECKLIST_JSON = _manual_checklist_json_for_stamp(DEFAULT_STAMP)
 
 
 FORBIDDEN_PRIVATE_KEYS = [
@@ -130,11 +134,13 @@ def _safe_confirmation_skeleton(
 def build_manual_submission_private_confirmation_request_packet(
     *,
     root: str | Path = ".",
-    manual_checklist_json: str | Path = DEFAULT_MANUAL_CHECKLIST_JSON,
+    manual_checklist_json: str | Path | None = None,
     template_json: str | Path = DEFAULT_TEMPLATE_JSON,
     stamp: str = DEFAULT_STAMP,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
+    if manual_checklist_json is None:
+        manual_checklist_json = _manual_checklist_json_for_stamp(stamp)
     checklist_path = (repo / manual_checklist_json).resolve()
     template_path = (repo / template_json).resolve()
 
@@ -359,7 +365,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--stamp", default=DEFAULT_STAMP)
-    parser.add_argument("--manual-checklist-json", default=str(DEFAULT_MANUAL_CHECKLIST_JSON))
+    parser.add_argument("--manual-checklist-json")
     parser.add_argument("--template-json", default=str(DEFAULT_TEMPLATE_JSON))
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")

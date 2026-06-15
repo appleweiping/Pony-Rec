@@ -11,7 +11,13 @@ from typing import Any
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
 DEFAULT_STAMP = "20260613"
-DEFAULT_CONSISTENCY_AUDIT = DEFAULT_OUTPUT_DIR / "final_blocker_consistency_audit_20260613.json"
+
+
+def _consistency_audit_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"final_blocker_consistency_audit_{stamp}.json"
+
+
+DEFAULT_CONSISTENCY_AUDIT = _consistency_audit_json_for_stamp(DEFAULT_STAMP)
 DEFAULT_DOCS = [
     Path("docs/active_todo_pony_uncertainty.md"),
     Path("docs/paper_claims_and_status.md"),
@@ -244,10 +250,13 @@ def _doc_observations(section: str, *, latest_count: int) -> dict[str, bool]:
 def audit_final_blocker_doc_status(
     *,
     root: str | Path = ".",
-    consistency_audit_json: str | Path = DEFAULT_CONSISTENCY_AUDIT,
+    consistency_audit_json: str | Path | None = None,
+    stamp: str = DEFAULT_STAMP,
     docs: list[str | Path] | None = None,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
+    if consistency_audit_json is None:
+        consistency_audit_json = _consistency_audit_json_for_stamp(stamp)
     consistency_path = (repo / consistency_audit_json).resolve()
     consistency, failures = _read_json(consistency_path)
     summary = consistency.get("summary") or {}
@@ -391,7 +400,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--stamp", default=DEFAULT_STAMP)
-    parser.add_argument("--consistency-audit-json", default=str(DEFAULT_CONSISTENCY_AUDIT))
+    parser.add_argument("--consistency-audit-json")
     parser.add_argument("--doc", action="append", default=[], help="Canonical status doc to audit.")
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
@@ -411,6 +420,7 @@ def main() -> int:
     audit = audit_final_blocker_doc_status(
         root=args.root,
         consistency_audit_json=args.consistency_audit_json,
+        stamp=args.stamp,
         docs=list(args.doc) if args.doc else None,
     )
     output_json.parent.mkdir(parents=True, exist_ok=True)

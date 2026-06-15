@@ -230,6 +230,33 @@ def test_final_blocker_consistency_audit_passes_on_expected_blocked_state(tmp_pa
     assert "explicit_claude_opus_review" in audit["required_open_blockers"]["review_missing_perspectives"]
 
 
+def test_final_blocker_consistency_audit_defaults_inputs_to_stamp(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    out = tmp_path / "outputs" / "summary" / "paper_critical"
+    out.mkdir(parents=True, exist_ok=True)
+    stamped_inputs = {
+        "final": "final_submission_gate_20260615.json",
+        "stack": "submission_release_candidate_stack_refresh_20260615.json",
+        "closure": "final_submission_blocker_closure_packet_20260615.json",
+        "review": "review_continuation_packet_20260615.json",
+        "claude": "claude_opus_review_request_packet_20260615.json",
+        "promax": "promax_public_metadata_probe_20260615.json",
+        "manual": "manual_submission_private_confirmation_request_packet_20260615.json",
+    }
+    for key, filename in stamped_inputs.items():
+        (out / filename).write_text(paths[key].read_text(encoding="utf-8"), encoding="utf-8")
+
+    audit = audit_final_blocker_consistency(root=tmp_path, stamp="20260615")
+
+    assert audit["ok"] is True
+    assert audit["input_paths"]["final_gate"]["path"].replace("\\", "/").endswith(
+        "final_submission_gate_20260615.json"
+    )
+    assert audit["input_paths"]["manual_request"]["path"].replace("\\", "/").endswith(
+        "manual_submission_private_confirmation_request_packet_20260615.json"
+    )
+
+
 def test_final_blocker_consistency_audit_accepts_expected_local_repair_state(tmp_path: Path) -> None:
     paths = _seed_inputs(
         tmp_path,

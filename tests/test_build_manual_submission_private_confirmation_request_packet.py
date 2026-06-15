@@ -123,6 +123,34 @@ def test_private_confirmation_request_packet_builds_public_safe_skeleton(tmp_pat
     assert "main_build_manual_submission_checklist" in commands[1]
 
 
+def test_private_confirmation_request_packet_defaults_manual_checklist_to_stamp(tmp_path: Path) -> None:
+    paths = _seed_inputs(tmp_path)
+    default_checklist = (
+        tmp_path
+        / "outputs"
+        / "summary"
+        / "paper_critical"
+        / "manual_submission_checklist_20260615.json"
+    )
+    default_checklist.parent.mkdir(parents=True, exist_ok=True)
+    default_checklist.write_text(paths["checklist"].read_text(encoding="utf-8"), encoding="utf-8")
+
+    packet = build_manual_submission_private_confirmation_request_packet(
+        root=tmp_path,
+        template_json=paths["template"].relative_to(tmp_path),
+        stamp="20260615",
+    )
+
+    assert packet["ok"] is True
+    assert packet["input_paths"]["manual_checklist_json"]["path"].replace("\\", "/").endswith(
+        "manual_submission_checklist_20260615.json"
+    )
+    assert (
+        packet["required_private_confirmation"]["recommended_untracked_path"]
+        == "artifacts/private/manual_submission_private_confirmation_20260615.json"
+    )
+
+
 def test_private_confirmation_request_packet_allows_not_ready_checklist_with_warning(tmp_path: Path) -> None:
     paths = _seed_inputs(tmp_path, checklist_overrides={"manual_submission_checklist_ready": False})
 

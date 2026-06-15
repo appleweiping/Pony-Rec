@@ -70,6 +70,33 @@ def test_manual_private_confirmation_validation_accepts_current_unblocked_items(
     assert packet["observed"]["completed_currently_blocked_item_ids"] == []
 
 
+def test_manual_private_confirmation_validation_defaults_inputs_to_stamp(tmp_path: Path) -> None:
+    request = _seed_request(tmp_path)
+    default_request = (
+        tmp_path
+        / "outputs"
+        / "summary"
+        / "paper_critical"
+        / "manual_submission_private_confirmation_request_packet_20260615.json"
+    )
+    default_request.parent.mkdir(parents=True, exist_ok=True)
+    default_request.write_text(request.read_text(encoding="utf-8"), encoding="utf-8")
+    _write_json(
+        tmp_path / "artifacts" / "private" / "manual_submission_private_confirmation_20260615.json",
+        _confirmation(),
+    )
+
+    packet = build_manual_private_confirmation_validation_packet(root=tmp_path, stamp="20260615")
+
+    assert packet["ok"] is True
+    assert packet["input_paths"]["private_confirmation_json"]["path"].replace("\\", "/").endswith(
+        "manual_submission_private_confirmation_20260615.json"
+    )
+    assert packet["input_paths"]["manual_request_packet_json"]["path"].replace("\\", "/").endswith(
+        "manual_submission_private_confirmation_request_packet_20260615.json"
+    )
+
+
 def test_manual_private_confirmation_validation_rejects_blocked_item_completion(tmp_path: Path) -> None:
     request = _seed_request(tmp_path)
     confirmation = _write_json(

@@ -1,118 +1,171 @@
 {
-  "created_at_utc": "2026-06-15T05:21:58.384777+00:00",
+  "created_at_utc": "2026-06-15T07:35:03.330105+00:00",
   "doc_results": {
     "docs/active_todo_pony_uncertainty.md": {
       "current_section": {
-        "end_line": 1332,
+        "end_line": 1353,
         "end_marker": "## Hard Invariants",
         "start_line": 10,
         "start_marker": "## Current Checkpoint"
       },
-      "failures": [],
+      "failures": [
+        "missing_current_observation:failed_claude_attempt_count_current",
+        "stale_current_failed_claude_count:line=334",
+        "stale_current_failed_claude_count:line=392",
+        "stale_current_failed_claude_count:line=497"
+      ],
       "observations": {
         "explicit_claude_opus_missing": true,
-        "failed_claude_attempt_count_current": true,
+        "failed_claude_attempt_count_current": false,
         "final_submission_ready_false": true,
         "manual_submission_blocked": true,
         "promax_metadata_blocked": true,
         "recursive_warning_regression_clear_or_fix_recorded": true
       },
-      "ok": true,
+      "ok": false,
       "path": {
         "exists": true,
         "is_file": true,
         "path": "docs\\active_todo_pony_uncertainty.md",
-        "sha256": "c79eb782ba0d5fb0a03f0a096021a8271701aa30a2cd9972f5cf5deae6d9a0a6",
-        "size_bytes": 339349
+        "sha256": "6fb92c6eee6281838f0c8aca6368b2023f134b83d198d1dde9453215167e2130",
+        "size_bytes": 340738
       },
       "stale_blocker_taxonomy_hits": [],
-      "stale_count_hits": []
+      "stale_count_hits": [
+        {
+          "line": 334,
+          "stale_count": 13,
+          "text": "final-blocker consistency audit all record failed Claude attempts `13` while"
+        },
+        {
+          "line": 392,
+          "stale_count": 13,
+          "text": "`final_blocker_doc_status_ok=true`, expected failed Claude attempts `13`,"
+        },
+        {
+          "line": 497,
+          "stale_count": 13,
+          "text": "`review_continuation_ready=true`, failed Claude attempts `13`,"
+        }
+      ]
     },
     "docs/milestones/README.md": {
       "current_section": {
-        "end_line": 530,
+        "end_line": 536,
         "end_marker": "## Current Evidence Integrity (updated 2026-06-06)",
         "start_line": 76,
         "start_marker": "## Current Evidence Integrity"
       },
-      "failures": [],
+      "failures": [
+        "missing_current_observation:failed_claude_attempt_count_current"
+      ],
       "observations": {
         "explicit_claude_opus_missing": true,
-        "failed_claude_attempt_count_current": true,
+        "failed_claude_attempt_count_current": false,
         "final_submission_ready_false": true,
         "manual_submission_blocked": true,
         "promax_metadata_blocked": true,
         "recursive_warning_regression_clear_or_fix_recorded": true
       },
-      "ok": true,
+      "ok": false,
       "path": {
         "exists": true,
         "is_file": true,
         "path": "docs\\milestones\\README.md",
-        "sha256": "cc26523c24a72ee2b6b362559fd30226b54589866180267a5ceb3e5631fc4530",
-        "size_bytes": 164482
+        "sha256": "d852a80694f85fcf1f124a86f35dca7e0906b13dc2d26155b17a8c3d7e6f2bcf",
+        "size_bytes": 164897
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/paper_claims_and_status.md": {
       "current_section": {
-        "end_line": 1787,
+        "end_line": 1808,
         "end_marker": "## Not primary claims",
         "start_line": 76,
         "start_marker": "## Paper-critical readiness modules"
       },
-      "failures": [],
+      "failures": [
+        "missing_current_observation:failed_claude_attempt_count_current",
+        "stale_current_failed_claude_count:line=442",
+        "stale_current_failed_claude_count:line=515"
+      ],
       "observations": {
         "explicit_claude_opus_missing": true,
-        "failed_claude_attempt_count_current": true,
+        "failed_claude_attempt_count_current": false,
         "final_submission_ready_false": true,
         "manual_submission_blocked": true,
         "promax_metadata_blocked": true,
         "recursive_warning_regression_clear_or_fix_recorded": true
       },
-      "ok": true,
+      "ok": false,
       "path": {
         "exists": true,
         "is_file": true,
         "path": "docs\\paper_claims_and_status.md",
-        "sha256": "5fa606e9d8bc2257dfee7404649cd69f720f58dc5cebf4aa922646d258138c78",
-        "size_bytes": 215267
+        "sha256": "de845778df5f79562877ceb145f44759cddb3d3f17c14a1f8c8f56c97816ec29",
+        "size_bytes": 216618
       },
       "stale_blocker_taxonomy_hits": [],
-      "stale_count_hits": []
+      "stale_count_hits": [
+        {
+          "line": 442,
+          "stale_count": 13,
+          "text": "\"promax_public_metadata\"]`, now records failed Claude attempts `13`, and"
+        },
+        {
+          "line": 515,
+          "stale_count": 13,
+          "text": "`final_blocker_consistency_ok=true`, failed Claude attempts `13`,"
+        }
+      ]
     },
     "docs/server_runbook.md": {
       "current_section": {
-        "end_line": 391,
+        "end_line": 400,
         "end_marker": "## Key Scripts",
         "start_line": 37,
         "start_marker": "## Current Priority Order"
       },
-      "failures": [],
+      "failures": [
+        "missing_current_observation:failed_claude_attempt_count_current",
+        "stale_current_failed_claude_count:line=218",
+        "stale_current_failed_claude_count:line=223"
+      ],
       "observations": {
         "explicit_claude_opus_missing": true,
-        "failed_claude_attempt_count_current": true,
+        "failed_claude_attempt_count_current": false,
         "final_submission_ready_false": true,
         "manual_submission_blocked": true,
         "promax_metadata_blocked": true,
         "recursive_warning_regression_clear_or_fix_recorded": true
       },
-      "ok": true,
+      "ok": false,
       "path": {
         "exists": true,
         "is_file": true,
         "path": "docs\\server_runbook.md",
-        "sha256": "2a714f7115242ad16515f3ba1e654e44e26de504f4158552e97ac6bb66833d16",
-        "size_bytes": 94346
+        "sha256": "bfe5c092329354e916c90ef2b3ec04e65bf4f3454c4b98c28c66eb79c85433a7",
+        "size_bytes": 95254
       },
       "stale_blocker_taxonomy_hits": [],
-      "stale_count_hits": []
+      "stale_count_hits": [
+        {
+          "line": 218,
+          "stale_count": 13,
+          "text": "The current packet reports failed Claude attempts `13` and still keeps"
+        },
+        {
+          "line": 223,
+          "stale_count": 13,
+          "text": "`2026-06-13T07:13Z`, records failed Claude attempts `13`, contains the"
+        }
+      ]
     }
   },
   "expected_current_truth": {
     "explicit_claude_opus_present": false,
-    "failed_claude_attempts": 13,
+    "failed_claude_attempts": 15,
     "final_panel_coverage_complete": false,
     "final_submission_ready": false,
     "manual_confirmation_needed": true,
@@ -120,45 +173,57 @@
     "promax_public_metadata_ready": false,
     "recursive_warning_regression_count": 0
   },
-  "failures": [],
-  "final_blocker_doc_status_ok": true,
+  "failures": [
+    "docs/active_todo_pony_uncertainty.md:missing_current_observation:failed_claude_attempt_count_current",
+    "docs/active_todo_pony_uncertainty.md:stale_current_failed_claude_count:line=334",
+    "docs/active_todo_pony_uncertainty.md:stale_current_failed_claude_count:line=392",
+    "docs/active_todo_pony_uncertainty.md:stale_current_failed_claude_count:line=497",
+    "docs/paper_claims_and_status.md:missing_current_observation:failed_claude_attempt_count_current",
+    "docs/paper_claims_and_status.md:stale_current_failed_claude_count:line=442",
+    "docs/paper_claims_and_status.md:stale_current_failed_claude_count:line=515",
+    "docs/milestones/README.md:missing_current_observation:failed_claude_attempt_count_current",
+    "docs/server_runbook.md:missing_current_observation:failed_claude_attempt_count_current",
+    "docs/server_runbook.md:stale_current_failed_claude_count:line=218",
+    "docs/server_runbook.md:stale_current_failed_claude_count:line=223"
+  ],
+  "final_blocker_doc_status_ok": false,
   "final_submission_ready": false,
   "input_paths": {
     "consistency_audit": {
       "exists": true,
       "is_file": true,
-      "path": "outputs\\summary\\paper_critical\\final_blocker_consistency_audit_20260613.json",
-      "sha256": "3e9805196ca088fed30320fa1a1f2d13e38be171d11d574e209ff9f82e5ada50",
-      "size_bytes": 4717
+      "path": "outputs\\summary\\paper_critical\\final_blocker_consistency_audit_20260615.json",
+      "sha256": "6b2a6b6781959bf3082d10267a6081ff6861aa1ea72e6b4f45b108ffc9b36548",
+      "size_bytes": 6995
     },
     "docs": {
       "docs/active_todo_pony_uncertainty.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\active_todo_pony_uncertainty.md",
-        "sha256": "c79eb782ba0d5fb0a03f0a096021a8271701aa30a2cd9972f5cf5deae6d9a0a6",
-        "size_bytes": 339349
+        "sha256": "6fb92c6eee6281838f0c8aca6368b2023f134b83d198d1dde9453215167e2130",
+        "size_bytes": 340738
       },
       "docs/milestones/README.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\milestones\\README.md",
-        "sha256": "cc26523c24a72ee2b6b362559fd30226b54589866180267a5ceb3e5631fc4530",
-        "size_bytes": 164482
+        "sha256": "d852a80694f85fcf1f124a86f35dca7e0906b13dc2d26155b17a8c3d7e6f2bcf",
+        "size_bytes": 164897
       },
       "docs/paper_claims_and_status.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\paper_claims_and_status.md",
-        "sha256": "5fa606e9d8bc2257dfee7404649cd69f720f58dc5cebf4aa922646d258138c78",
-        "size_bytes": 215267
+        "sha256": "de845778df5f79562877ceb145f44759cddb3d3f17c14a1f8c8f56c97816ec29",
+        "size_bytes": 216618
       },
       "docs/server_runbook.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\server_runbook.md",
-        "sha256": "2a714f7115242ad16515f3ba1e654e44e26de504f4158552e97ac6bb66833d16",
-        "size_bytes": 94346
+        "sha256": "bfe5c092329354e916c90ef2b3ec04e65bf4f3454c4b98c28c66eb79c85433a7",
+        "size_bytes": 95254
       }
     }
   },
@@ -168,7 +233,7 @@
     "Treat stale current failed-Claude counts or final-ready wording as blockers before handoff.",
     "Keep final_submission_ready=false until ProMax public metadata, private manual confirmation, and explicit Claude Opus review coverage all close."
   ],
-  "ok": true,
+  "ok": false,
   "read_only": true,
   "schema_version": "2026-06-13.final_blocker_doc_status_audit.v1",
   "will_copy": false,

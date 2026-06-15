@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-06-15T05:19:54.676526+00:00",
+  "created_at_utc": "2026-06-15T07:35:01.735154+00:00",
   "failures": [],
   "final_blocker_consistency_ok": true,
   "final_submission_ready": false,
@@ -29,7 +29,7 @@
       "exists": true,
       "is_file": true,
       "path": "outputs\\summary\\paper_critical\\manual_submission_private_confirmation_request_packet_20260615.json",
-      "sha256": "6a599e1adc7dc5fa292b82e6e068ad2d3627ad81342a068c3b7c2b5812fe492e",
+      "sha256": "fbf3e1ca5434dc82bc1b074957c24e0295db147221d864311777189f415ea5df",
       "size_bytes": 13938
     },
     "promax_probe": {

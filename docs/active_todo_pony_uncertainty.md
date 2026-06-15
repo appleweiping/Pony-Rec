@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-15 07:20 CEST
+Last updated: 2026-06-15 09:26 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,27 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-15)
+
+- 2026-06-15 private/manual gate stamp-aware default refresh:
+  server preflight found no matching Uncertainty/Pony Python experiment process
+  and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. Codex
+  repaired the date-sensitive CLI defaults in
+  `scripts/audit/main_build_manual_submission_private_confirmation_request_packet.py`,
+  `scripts/audit/main_validate_manual_submission_private_confirmation_json.py`,
+  `scripts/audit/main_audit_final_blocker_consistency.py`, and
+  `scripts/audit/main_audit_final_blocker_doc_status.py`. When a future
+  heartbeat or human handoff supplies `--stamp YYYYMMDD` without overriding
+  every input path, these tools now read the same-date manual checklist,
+  private-confirmation request packet, private confirmation JSON, final gate,
+  release stack, closure packet, review packet, Claude request, ProMax probe,
+  and final-blocker consistency audit instead of silently falling back to stale
+  20260613 defaults. Codex added regression tests for these stamp-derived
+  defaults and reran the 20260615 public-safe manual request packet,
+  final-blocker consistency audit, and final-blocker doc-status audit. Results
+  remain `manual_submission_system_ready=false`,
+  `final_blocker_consistency_ok=true`, doc-status `ok=true`, and
+  `final_submission_ready=false`; this is a handoff freshness fix only, not a
+  readiness upgrade.
 
 - 2026-06-15 final-blocker consistency semantics refresh:
   server preflight found no matching Uncertainty/Pony Python experiment process
@@ -93,8 +114,9 @@ cycle.
   health audit uses the current packet path and treats repeated failed attempts
   with zero valid reviews as unhealthy. The refreshed
   `outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
-  reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
-  `connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+  records failed Claude attempts `15`, reports `failed_attempt_count=15`,
+  `valid_review_evidence_count=0`, `connector_unhealthy=true`,
+  `same_route_retry_recommended=false`, and
   `recommended_next_route=external_claude_opus_json_via_request_packet_and_validator`.
   The refreshed
   `outputs/summary/paper_critical/review_continuation_packet_20260615.{json,md}`
@@ -309,9 +331,10 @@ cycle.
   connector layer with `Claude CLI did not return JSON output` and is recorded
   at
   `outputs/summary/paper_critical/claude_opus_review_attempt_eleventh_20260613.json`.
-  The refreshed review-continuation packet, Claude request packet, and
-  final-blocker consistency audit all record failed Claude attempts `13` while
-  preserving the explicit Claude Opus blocker. The latest live ProMax probe at
+  At that point, the refreshed review-continuation packet, Claude request
+  packet, and final-blocker consistency audit all record failed Claude attempts
+  `13` while preserving the explicit Claude Opus blocker. The latest live
+  ProMax probe at
   `2026-06-13T07:37:42Z` still reports
   Crossref `404`, DOI resolver `404`, ACM DL `403`, with all `5/5` public
   source probes passing.
@@ -368,8 +391,8 @@ cycle.
   `docs/paper_claims_and_status.md`, `docs/milestones/README.md`, and
   `docs/server_runbook.md` against
   `final_blocker_consistency_audit_20260613.json`. It reports `ok=true`,
-  `final_blocker_doc_status_ok=true`, expected failed Claude attempts `13`,
-  `explicit_claude_opus_present=false`,
+  At that point, `final_blocker_doc_status_ok=true`, expected failed Claude
+  attempts `13`, `explicit_claude_opus_present=false`,
   `promax_public_metadata_ready=false`,
   `manual_submission_system_ready=false`, recursive warning regressions `0`,
   and `final_submission_ready=false`. It also catches current/handoff text that
@@ -473,8 +496,8 @@ cycle.
   into local artifact handoff, review-panel coverage, external proceedings
   metadata, and private manual submission-system closure paths. The refreshed
   `review_continuation_packet_20260613.{json,md}` now reports
-  `review_continuation_ready=true`, failed Claude attempts `13`,
-  `explicit_claude_opus_present=false`, and
+  At that point, `review_continuation_ready=true`, failed Claude attempts
+  `13`, `explicit_claude_opus_present=false`, and
   `final_panel_coverage_complete=false`. A GPT-5.5 xhigh sidecar audit did not
   veto the hardening, but flagged that the pre-submission freshness audit must
   fingerprint the review-continuation packet and builder because the final gate

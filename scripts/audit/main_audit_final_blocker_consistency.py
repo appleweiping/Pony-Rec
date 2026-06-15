@@ -10,15 +10,43 @@ from typing import Any
 
 DEFAULT_OUTPUT_DIR = Path("outputs/summary/paper_critical")
 DEFAULT_STAMP = "20260613"
-DEFAULT_FINAL_GATE = DEFAULT_OUTPUT_DIR / "final_submission_gate_20260613.json"
-DEFAULT_STACK = DEFAULT_OUTPUT_DIR / "submission_release_candidate_stack_refresh_20260613.json"
-DEFAULT_CLOSURE = DEFAULT_OUTPUT_DIR / "final_submission_blocker_closure_packet_20260613.json"
-DEFAULT_REVIEW = DEFAULT_OUTPUT_DIR / "review_continuation_packet_20260613.json"
-DEFAULT_CLAUDE_REQUEST = DEFAULT_OUTPUT_DIR / "claude_opus_review_request_packet_20260613.json"
-DEFAULT_PROMAX_PROBE = DEFAULT_OUTPUT_DIR / "promax_public_metadata_probe_20260613.json"
-DEFAULT_MANUAL_REQUEST = (
-    DEFAULT_OUTPUT_DIR / "manual_submission_private_confirmation_request_packet_20260613.json"
-)
+
+
+def _final_gate_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"final_submission_gate_{stamp}.json"
+
+
+def _stack_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"submission_release_candidate_stack_refresh_{stamp}.json"
+
+
+def _closure_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"final_submission_blocker_closure_packet_{stamp}.json"
+
+
+def _review_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"review_continuation_packet_{stamp}.json"
+
+
+def _claude_request_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"claude_opus_review_request_packet_{stamp}.json"
+
+
+def _promax_probe_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"promax_public_metadata_probe_{stamp}.json"
+
+
+def _manual_request_json_for_stamp(stamp: str) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"manual_submission_private_confirmation_request_packet_{stamp}.json"
+
+
+DEFAULT_FINAL_GATE = _final_gate_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_STACK = _stack_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_CLOSURE = _closure_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_REVIEW = _review_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_CLAUDE_REQUEST = _claude_request_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_PROMAX_PROBE = _promax_probe_json_for_stamp(DEFAULT_STAMP)
+DEFAULT_MANUAL_REQUEST = _manual_request_json_for_stamp(DEFAULT_STAMP)
 
 RECURSIVE_WARNING_MARKERS = [
     "pre_submission_gate_refresh:final_submission_gate:review_continuation:",
@@ -107,15 +135,30 @@ def _closure_group(closure: dict[str, Any], group_id: str) -> dict[str, Any]:
 def audit_final_blocker_consistency(
     *,
     root: str | Path = ".",
-    final_gate_json: str | Path = DEFAULT_FINAL_GATE,
-    stack_json: str | Path = DEFAULT_STACK,
-    closure_json: str | Path = DEFAULT_CLOSURE,
-    review_json: str | Path = DEFAULT_REVIEW,
-    claude_request_json: str | Path = DEFAULT_CLAUDE_REQUEST,
-    promax_probe_json: str | Path = DEFAULT_PROMAX_PROBE,
-    manual_request_json: str | Path = DEFAULT_MANUAL_REQUEST,
+    final_gate_json: str | Path | None = None,
+    stack_json: str | Path | None = None,
+    closure_json: str | Path | None = None,
+    review_json: str | Path | None = None,
+    claude_request_json: str | Path | None = None,
+    promax_probe_json: str | Path | None = None,
+    manual_request_json: str | Path | None = None,
+    stamp: str = DEFAULT_STAMP,
 ) -> dict[str, Any]:
     repo = Path(root).resolve()
+    if final_gate_json is None:
+        final_gate_json = _final_gate_json_for_stamp(stamp)
+    if stack_json is None:
+        stack_json = _stack_json_for_stamp(stamp)
+    if closure_json is None:
+        closure_json = _closure_json_for_stamp(stamp)
+    if review_json is None:
+        review_json = _review_json_for_stamp(stamp)
+    if claude_request_json is None:
+        claude_request_json = _claude_request_json_for_stamp(stamp)
+    if promax_probe_json is None:
+        promax_probe_json = _promax_probe_json_for_stamp(stamp)
+    if manual_request_json is None:
+        manual_request_json = _manual_request_json_for_stamp(stamp)
     paths = {
         "final_gate": (repo / final_gate_json).resolve(),
         "release_stack": (repo / stack_json).resolve(),
@@ -464,13 +507,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--stamp", default=DEFAULT_STAMP)
-    parser.add_argument("--final-gate-json", default=str(DEFAULT_FINAL_GATE))
-    parser.add_argument("--stack-json", default=str(DEFAULT_STACK))
-    parser.add_argument("--closure-json", default=str(DEFAULT_CLOSURE))
-    parser.add_argument("--review-json", default=str(DEFAULT_REVIEW))
-    parser.add_argument("--claude-request-json", default=str(DEFAULT_CLAUDE_REQUEST))
-    parser.add_argument("--promax-probe-json", default=str(DEFAULT_PROMAX_PROBE))
-    parser.add_argument("--manual-request-json", default=str(DEFAULT_MANUAL_REQUEST))
+    parser.add_argument("--final-gate-json")
+    parser.add_argument("--stack-json")
+    parser.add_argument("--closure-json")
+    parser.add_argument("--review-json")
+    parser.add_argument("--claude-request-json")
+    parser.add_argument("--promax-probe-json")
+    parser.add_argument("--manual-request-json")
     parser.add_argument("--output-json")
     parser.add_argument("--output-md")
     args = parser.parse_args()
@@ -495,6 +538,7 @@ def main() -> int:
         claude_request_json=args.claude_request_json,
         promax_probe_json=args.promax_probe_json,
         manual_request_json=args.manual_request_json,
+        stamp=args.stamp,
     )
     output_json.parent.mkdir(parents=True, exist_ok=True)
     output_json.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")

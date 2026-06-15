@@ -108,6 +108,15 @@ PIDs, audit summaries, and missing-file errors.
     confirmation must run through
     `scripts.audit.main_validate_manual_submission_private_confirmation_json`
     before the public manual checklist consumes it.
+    Later on 2026-06-15 Codex repaired the date-sensitive defaults in the
+    manual private request builder, manual private validator, final-blocker
+    consistency audit, and final-blocker doc-status audit. Passing
+    `--stamp YYYYMMDD` now selects same-date input artifacts by default for the
+    manual checklist, private confirmation JSON, request packet, final gate,
+    release stack, closure packet, review packet, Claude request, ProMax probe,
+    and consistency audit. Explicit path arguments still override those
+    defaults. The refreshed 20260615 request packet, consistency audit, and
+    doc-status audit remain `final_submission_ready=false`.
     Earlier on 2026-06-15 Codex refreshed the explicit Claude Opus coverage handoff
     without starting any experiments. The current request packet is
     `outputs/summary/paper_critical/claude_opus_review_request_packet_20260615.{json,md}`;
@@ -509,11 +518,16 @@ and does not close any gate.
 
 ```bash
 python -m scripts.audit.main_validate_manual_submission_private_confirmation_json \
+  --stamp YYYYMMDD \
   --private-confirmation-json path/to/untracked_private_confirmation.json \
   --manual-request-packet-json outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_YYYYMMDD.json \
   --output-json outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.json \
   --output-md outputs/summary/paper_critical/manual_private_confirmation_validation_YYYYMMDD.md
 ```
+
+With `--stamp YYYYMMDD`, the validator defaults to the same-date private
+confirmation and request-packet paths when those explicit path arguments are
+omitted. Keep explicit paths when validating an externally supplied file.
 
 Run this validator before the checklist consumes the private confirmation JSON.
 It must pass without storing private field values; if it reports a currently
