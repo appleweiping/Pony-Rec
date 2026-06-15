@@ -128,8 +128,9 @@ recorded two additional failed direct Opus attempts:
 `outputs/summary/paper_critical/claude_opus_review_attempt_fifteenth_20260615.json`
 (`Claude CLI did not return JSON output`). The refreshed
 `outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
-reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
-`connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+records failed Claude attempts `15`, reports `failed_attempt_count=15`,
+`valid_review_evidence_count=0`, `connector_unhealthy=true`,
+`same_route_retry_recommended=false`, and
 `recommended_next_route=external_claude_opus_json_via_request_packet_and_validator`.
 This is connector-failure evidence only; explicit Claude Opus coverage and
 `final_submission_ready` remain false.

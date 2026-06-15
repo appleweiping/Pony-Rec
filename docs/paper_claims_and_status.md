@@ -167,8 +167,9 @@ prompt failure (`The command line is too long`), and
 current-claim prompt failure (`Claude CLI did not return JSON output`). The
 refreshed connector-health packet
 `outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
-reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
-`connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+records failed Claude attempts `15`, reports `failed_attempt_count=15`,
+`valid_review_evidence_count=0`, `connector_unhealthy=true`,
+`same_route_retry_recommended=false`, and
 `recommended_next_route=external_claude_opus_json_via_request_packet_and_validator`.
 This does **not** close explicit Claude Opus coverage or final readiness:
 `review_continuation_packet_20260615.{json,md}` still records
@@ -439,8 +440,8 @@ Claude Opus review JSON to acknowledge both the open ProMax public metadata
 blocker and the private manual submission-system blocker before it can count as
 explicit Claude Opus coverage. The refreshed review-continuation packet exposes
 `required_claude_blocker_ack_groups=["manual_submission_system",
-"promax_public_metadata"]`, now records failed Claude attempts `13`, and
-keeps `final_submission_ready=false`.
+"promax_public_metadata"]`. At that point, it records failed Claude attempts
+`13` and keeps `final_submission_ready=false`.
 The final-blocker consistency audit is now schema
 `2026-06-13.final_blocker_consistency_audit.v3` and explicitly guards this
 handoff path plus the private manual-confirmation path: it fails if the Claude
@@ -511,8 +512,7 @@ Codex then added
 `outputs/summary/paper_critical/final_blocker_consistency_audit_20260613.{json,md}`
 as a cross-packet consistency check over the final gate, release stack, closure
 packet, review-continuation packet, Claude request packet, ProMax probe, and
-manual request packet. The audit reports `ok=true`,
-`final_blocker_consistency_ok=true`, failed Claude attempts `13`,
+manual request packet. At that point, the audit reports `ok=true`, `final_blocker_consistency_ok=true`, and failed Claude attempts `13`,
 `explicit_claude_opus_present=false`, ProMax public metadata still false with
 Crossref `404` / DOI resolver `404` / ACM DL `403`, manual confirmation still
 needed, recursive warning regressions `0`, and

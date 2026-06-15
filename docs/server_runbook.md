@@ -127,8 +127,9 @@ PIDs, audit summaries, and missing-file errors.
     `claude_opus_review_attempt_fifteenth_20260615.json`; both have
     `valid_review_evidence=false`. The current health audit
     `outputs/summary/paper_critical/claude_review_connector_health_20260615.{json,md}`
-    reports `failed_attempt_count=15`, `valid_review_evidence_count=0`,
-    `connector_unhealthy=true`, `same_route_retry_recommended=false`, and
+    records failed Claude attempts `15`, reports `failed_attempt_count=15`,
+    `valid_review_evidence_count=0`, `connector_unhealthy=true`,
+    `same_route_retry_recommended=false`, and
     recommends
     `external_claude_opus_json_via_request_packet_and_validator`. Do not keep
     retrying the same MCP Claude route unless the connector/tooling changes; use
@@ -215,12 +216,11 @@ PIDs, audit summaries, and missing-file errors.
    characters, but returned to `Claude CLI did not return JSON output`; it is
    recorded at
    `outputs/summary/paper_critical/claude_opus_review_attempt_thirteenth_20260613.json`.
-   The current packet reports failed Claude attempts `13` and still keeps
+   At that point, the current packet reports failed Claude attempts `13` and still keeps
    `explicit_claude_opus_present=false`. Use the public-safe request packet
    at
    `outputs/summary/paper_critical/claude_opus_review_request_packet_20260613.{json,md}`
-   before trying another Claude route; it was refreshed at
-   `2026-06-13T07:13Z`, records failed Claude attempts `13`, contains the
+   before trying another Claude route. At that point, it was refreshed at `2026-06-13T07:13Z` and records failed Claude attempts `13`; it contains the
    exact prompt/schema for a valid additional review JSON, dynamically includes
    all recorded failed-attempt artifacts in the follow-up command, and is not
    itself reviewer coverage. The
