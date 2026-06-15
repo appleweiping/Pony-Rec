@@ -1,6 +1,6 @@
 # Uncertainty Active TODO
 
-Last updated: 2026-06-15 05:22 CEST
+Last updated: 2026-06-15 07:20 CEST
 
 This is the cumulative execution TODO for the active Uncertainty goal. It is a
 handoff artifact, not a claim of paper readiness. Update it after each completed
@@ -8,6 +8,21 @@ official row, blocker, cleanup decision, comparison-table build, or review
 cycle.
 
 ## Current Checkpoint (2026-06-15)
+
+- 2026-06-15 final-blocker consistency semantics refresh:
+  server preflight found no matching Uncertainty/Pony Python experiment process
+  and GPU state `0 %, 15 MiB`, so no experiment was started or stopped. Codex
+  repaired `scripts/audit/main_audit_final_blocker_consistency.py` so it checks
+  handoff consistency rather than treating every expected blocked artifact as a
+  consistency failure. The refreshed
+  `outputs/summary/paper_critical/final_blocker_consistency_audit_20260615.{json,md}`
+  now reports `ok=true`, `final_blocker_consistency_ok=true`, and
+  `final_submission_ready=false`. It explicitly allows the current
+  `blocking_status=local_artifact_repair_required` while preserving all open
+  blockers: target formatting, ProMax public metadata, private manual
+  confirmation, and explicit Claude Opus coverage. This is not a readiness
+  upgrade; it means the blocked-state handoff is internally consistent and no
+  longer conflates "not ready" with "packet mismatch".
 
 - 2026-06-15 private manual-confirmation request refresh:
   server preflight found no matching Uncertainty/Pony Python experiment process

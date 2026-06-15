@@ -92,7 +92,9 @@ PIDs, audit summaries, and missing-file errors.
     `blocking_status=local_artifact_repair_required`, and
     `final_submission_ready=false` because target formatting, ProMax metadata,
     manual submission-system confirmation, and explicit Claude Opus coverage
-    remain open.
+    remain open. The refreshed consistency audit now reports `ok=true` and
+    `final_blocker_consistency_ok=true`; this means the blocked-state handoff is
+    internally consistent, not that final submission is ready.
     On the same date Codex refreshed the public-safe private manual submission
     confirmation request:
     `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`.

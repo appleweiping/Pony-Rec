@@ -1,8 +1,8 @@
 # Final Blocker Consistency Audit
 
-- Created UTC: `2026-06-15T03:21:09.071509+00:00`
-- OK: `false`
-- Final blocker consistency OK: `false`
+- Created UTC: `2026-06-15T05:19:54.676526+00:00`
+- OK: `true`
+- Final blocker consistency OK: `true`
 - Final submission ready: `false`
 - Blocking status: `local_artifact_repair_required`
 - Local release candidate ready: `false`
@@ -33,6 +33,42 @@
 - `review_panel_coverage_not_complete`
 - `explicit_claude_opus_review`
 
+### release_stack
+- `promax:final_page_range_missing_in_bib`
+- `promax:crossref_registry_not_visible:status=404`
+- `promax:doi_resolver_not_visible:status=404`
+- `Final manual submission-system metadata/format checklist is not closed.`
+- `ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.`
+- `Final submission package still needs the external submission-target-specific formatting pass.`
+- `confirm_anonymous_shell:target_formatting_profile_not_ok`
+- `confirm_anonymous_shell:target_profile_not_ok`
+- `confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed`
+- `manual_submission_system_items_not_confirmed`
+- `external_proceedings_metadata_not_ready`
+- `manual_submission_system_not_ready`
+- `review_panel_coverage_not_complete`
+- `promax:crossref_registry_not_visible`
+- `promax:doi_resolver_not_visible`
+- `explicit_claude_opus_review`
+
+### closure_packet
+- `ProMax final ACM page range and ACM/Crossref registry visibility must be rechecked immediately before submission.`
+- `Final submission package still needs the external submission-target-specific formatting pass.`
+- `promax:final_page_range_missing_in_bib`
+- `promax:crossref_registry_not_visible:status=404`
+- `promax:doi_resolver_not_visible:status=404`
+- `Final manual submission-system metadata/format checklist is not closed.`
+- `external_proceedings_metadata_not_ready`
+- `manual_submission_system_not_ready`
+- `confirm_anonymous_shell:target_formatting_profile_not_ok`
+- `confirm_anonymous_shell:target_profile_not_ok`
+- `confirm_external_proceedings_metadata:external_proceedings_metadata_ready_not_closed`
+- `manual_submission_system_items_not_confirmed`
+- `review_panel_coverage_not_complete`
+- `promax:crossref_registry_not_visible`
+- `promax:doi_resolver_not_visible`
+- `explicit_claude_opus_review`
+
 ### promax_probe
 - `promax:final_page_range_missing_in_bib`
 - `promax:crossref_registry_not_visible`
@@ -47,16 +83,10 @@
 
 ## Failures
 
-- `final_gate:not_ok`
-- `release_stack:not_ok`
-- `closure_packet:not_ok`
-- `review_continuation:not_ok`
-- `release_stack_not_local_ready`
-- `closure_packet_not_handoff_ready`
-- `release_stack_blocking_status_unexpected:local_artifact_repair_required`
+- None
 
 ## Next Actions
 
-- Keep final_submission_ready=false until this audit, the final gate, ProMax metadata, manual confirmation, and explicit Claude Opus review coverage all close.
+- This audit checks consistency, not final readiness; keep final_submission_ready=false until the final gate, ProMax metadata, manual confirmation, explicit Claude Opus review coverage, and target-formatting blockers all close.
 - Rerun this audit after any blocker packet, final gate, review-continuation packet, or release-candidate stack refresh.
 - If this audit fails, repair the inconsistent packet before reporting final readiness.

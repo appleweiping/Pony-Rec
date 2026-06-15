@@ -230,6 +230,44 @@ def test_final_blocker_consistency_audit_passes_on_expected_blocked_state(tmp_pa
     assert "explicit_claude_opus_review" in audit["required_open_blockers"]["review_missing_perspectives"]
 
 
+def test_final_blocker_consistency_audit_accepts_expected_local_repair_state(tmp_path: Path) -> None:
+    paths = _seed_inputs(
+        tmp_path,
+        overrides={
+            "final_gate": {"ok": False},
+            "stack": {
+                "ok": False,
+                "local_release_candidate_ready": False,
+                "blocking_status": "local_artifact_repair_required",
+                "remaining_blockers": [
+                    "confirm_anonymous_shell:target_formatting_profile_not_ok",
+                    "external_proceedings_metadata_not_ready",
+                    "manual_submission_system_not_ready",
+                    "explicit_claude_opus_review",
+                ],
+            },
+            "closure": {
+                "ok": False,
+                "ready_for_human_handoff": False,
+                "remaining_blockers": [
+                    "confirm_anonymous_shell:target_formatting_profile_not_ok",
+                    "external_proceedings_metadata_not_ready",
+                    "manual_submission_system_not_ready",
+                    "explicit_claude_opus_review",
+                ],
+            },
+            "review": {"ok": False},
+        },
+    )
+
+    audit = _run(paths, tmp_path)
+
+    assert audit["ok"] is True
+    assert audit["final_submission_ready"] is False
+    assert audit["summary"]["blocking_status"] == "local_artifact_repair_required"
+    assert "confirm_anonymous_shell:target_formatting_profile_not_ok" in audit["required_open_blockers"]["release_stack"]
+
+
 def test_final_blocker_consistency_audit_rejects_failed_claude_count_mismatch(
     tmp_path: Path,
 ) -> None:

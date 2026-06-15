@@ -1,9 +1,9 @@
 {
-  "created_at_utc": "2026-06-15T03:23:15.569042+00:00",
+  "created_at_utc": "2026-06-15T05:21:58.384777+00:00",
   "doc_results": {
     "docs/active_todo_pony_uncertainty.md": {
       "current_section": {
-        "end_line": 1317,
+        "end_line": 1332,
         "end_marker": "## Hard Invariants",
         "start_line": 10,
         "start_marker": "## Current Checkpoint"
@@ -22,15 +22,15 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\active_todo_pony_uncertainty.md",
-        "sha256": "3475079d545387e142deac0980773688e2ed12ce80ca032b3f0e69f6a79bf4d1",
-        "size_bytes": 338361
+        "sha256": "c79eb782ba0d5fb0a03f0a096021a8271701aa30a2cd9972f5cf5deae6d9a0a6",
+        "size_bytes": 339349
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/milestones/README.md": {
       "current_section": {
-        "end_line": 526,
+        "end_line": 530,
         "end_marker": "## Current Evidence Integrity (updated 2026-06-06)",
         "start_line": 76,
         "start_marker": "## Current Evidence Integrity"
@@ -49,15 +49,15 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\milestones\\README.md",
-        "sha256": "f4239580f545408db2db5a3c3f66aa5b02bf3326631f9025c466f5a39857171c",
-        "size_bytes": 164231
+        "sha256": "cc26523c24a72ee2b6b362559fd30226b54589866180267a5ceb3e5631fc4530",
+        "size_bytes": 164482
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/paper_claims_and_status.md": {
       "current_section": {
-        "end_line": 1776,
+        "end_line": 1787,
         "end_marker": "## Not primary claims",
         "start_line": 76,
         "start_marker": "## Paper-critical readiness modules"
@@ -76,15 +76,15 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\paper_claims_and_status.md",
-        "sha256": "c6cf54c0012d623fa114481e66120528daf961064987dbf4d915d8cae3d152cf",
-        "size_bytes": 214572
+        "sha256": "5fa606e9d8bc2257dfee7404649cd69f720f58dc5cebf4aa922646d258138c78",
+        "size_bytes": 215267
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
     },
     "docs/server_runbook.md": {
       "current_section": {
-        "end_line": 389,
+        "end_line": 391,
         "end_marker": "## Key Scripts",
         "start_line": 37,
         "start_marker": "## Current Priority Order"
@@ -103,8 +103,8 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\server_runbook.md",
-        "sha256": "6b805d0b47dc47fb65e9b2649f21d901e6b7739673e5d1afa845b4c456330cea",
-        "size_bytes": 94144
+        "sha256": "2a714f7115242ad16515f3ba1e654e44e26de504f4158552e97ac6bb66833d16",
+        "size_bytes": 94346
       },
       "stale_blocker_taxonomy_hits": [],
       "stale_count_hits": []
@@ -136,29 +136,29 @@
         "exists": true,
         "is_file": true,
         "path": "docs\\active_todo_pony_uncertainty.md",
-        "sha256": "3475079d545387e142deac0980773688e2ed12ce80ca032b3f0e69f6a79bf4d1",
-        "size_bytes": 338361
+        "sha256": "c79eb782ba0d5fb0a03f0a096021a8271701aa30a2cd9972f5cf5deae6d9a0a6",
+        "size_bytes": 339349
       },
       "docs/milestones/README.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\milestones\\README.md",
-        "sha256": "f4239580f545408db2db5a3c3f66aa5b02bf3326631f9025c466f5a39857171c",
-        "size_bytes": 164231
+        "sha256": "cc26523c24a72ee2b6b362559fd30226b54589866180267a5ceb3e5631fc4530",
+        "size_bytes": 164482
       },
       "docs/paper_claims_and_status.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\paper_claims_and_status.md",
-        "sha256": "c6cf54c0012d623fa114481e66120528daf961064987dbf4d915d8cae3d152cf",
-        "size_bytes": 214572
+        "sha256": "5fa606e9d8bc2257dfee7404649cd69f720f58dc5cebf4aa922646d258138c78",
+        "size_bytes": 215267
       },
       "docs/server_runbook.md": {
         "exists": true,
         "is_file": true,
         "path": "docs\\server_runbook.md",
-        "sha256": "6b805d0b47dc47fb65e9b2649f21d901e6b7739673e5d1afa845b4c456330cea",
-        "size_bytes": 94144
+        "sha256": "2a714f7115242ad16515f3ba1e654e44e26de504f4158552e97ac6bb66833d16",
+        "size_bytes": 94346
       }
     }
   },

@@ -101,8 +101,12 @@ is still `403`, the ProMax BibTeX still has no final ACM page range, and the
 stack still reports `local_release_candidate_ready=false`,
 `blocking_status=local_artifact_repair_required`, and
 `final_submission_ready=false`. The same-stamp final-blocker consistency audit
-is `ok=false` for the expected blocker set until target formatting, ProMax
-metadata, manual submission, and Claude Opus coverage all close. The 2026-06-15
+now separates consistency from readiness:
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260615.{json,md}`
+is `ok=true` and `final_blocker_consistency_ok=true` because the blocked-state
+handoff is internally consistent, while `final_submission_ready=false` remains
+unchanged until target formatting, ProMax metadata, manual submission, and
+Claude Opus coverage all close. The 2026-06-15
 private manual-confirmation request refresh
 `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`
 is public-safe and `ok=true`: it recommends the ignored path

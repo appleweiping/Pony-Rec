@@ -1,6 +1,6 @@
 # Final Blocker Doc Status Audit
 
-- Created UTC: `2026-06-15T03:23:15.569042+00:00`
+- Created UTC: `2026-06-15T05:21:58.384777+00:00`
 - OK: `true`
 - Final blocker doc status OK: `true`
 - Final submission ready: `false`
@@ -14,7 +14,7 @@
 
 ### `docs/active_todo_pony_uncertainty.md`
 - OK: `true`
-- Current section lines: `10-1317`
+- Current section lines: `10-1332`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`
@@ -24,7 +24,7 @@
 
 ### `docs/paper_claims_and_status.md`
 - OK: `true`
-- Current section lines: `76-1776`
+- Current section lines: `76-1787`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`
@@ -34,7 +34,7 @@
 
 ### `docs/milestones/README.md`
 - OK: `true`
-- Current section lines: `76-526`
+- Current section lines: `76-530`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`
@@ -44,7 +44,7 @@
 
 ### `docs/server_runbook.md`
 - OK: `true`
-- Current section lines: `37-389`
+- Current section lines: `37-391`
 - final_submission_ready_false: `true`
 - failed_claude_attempt_count_current: `true`
 - explicit_claude_opus_missing: `true`

@@ -79,6 +79,17 @@ Official-baseline completion is necessary but no longer sufficient for paper
 readiness. Before final writing or GPT-5.5/Codex xhigh review, the paper must
 also include:
 
+**2026-06-15 final-blocker consistency semantics refresh.** Codex updated
+`scripts/audit/main_audit_final_blocker_consistency.py` so the audit distinguishes
+between a consistent blocked state and a packet inconsistency. The refreshed
+`outputs/summary/paper_critical/final_blocker_consistency_audit_20260615.{json,md}`
+is now `ok=true` and `final_blocker_consistency_ok=true` while preserving
+`final_submission_ready=false`. It explicitly accepts the current
+`blocking_status=local_artifact_repair_required` as consistent with the open
+target-formatting, ProMax metadata, manual confirmation, and Claude Opus
+coverage blockers. This is an evidence-hygiene fix only, not a final-readiness
+claim.
+
 **2026-06-15 private manual-confirmation request refresh.** Codex refreshed the
 public-safe handoff for the private submission-system confirmation:
 `outputs/summary/paper_critical/manual_submission_private_confirmation_request_packet_20260615.{json,md}`.

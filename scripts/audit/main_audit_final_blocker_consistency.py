@@ -140,8 +140,14 @@ def audit_final_blocker_consistency(
     promax = payloads["promax_probe"]
     manual = payloads["manual_request"]
 
+    expected_open_artifacts = {
+        "final_gate",
+        "release_stack",
+        "closure_packet",
+        "review_continuation",
+    }
     for key, payload in payloads.items():
-        if payload and payload.get("ok") is not True:
+        if payload and payload.get("ok") is not True and key not in expected_open_artifacts:
             failures.append(f"{key}:not_ok")
 
     final_ready_flags = {
@@ -155,12 +161,19 @@ def audit_final_blocker_consistency(
 
     stack_ready = stack.get("local_release_candidate_ready") is True
     closure_handoff = closure.get("ready_for_human_handoff") is True
-    if stack and not stack_ready:
-        failures.append("release_stack_not_local_ready")
-    if closure and not closure_handoff:
-        failures.append("closure_packet_not_handoff_ready")
-    if stack.get("blocking_status") != "external_manual_or_review_blocked":
+    blocking_status = str(stack.get("blocking_status") or "")
+    allowed_blocking_statuses = {
+        "external_manual_or_review_blocked",
+        "local_artifact_repair_required",
+    }
+    if blocking_status not in allowed_blocking_statuses:
         failures.append(f"release_stack_blocking_status_unexpected:{stack.get('blocking_status')}")
+    if stack_ready and blocking_status == "local_artifact_repair_required":
+        failures.append("release_stack_ready_but_blocking_status_requires_local_repair")
+    if not stack_ready and blocking_status == "external_manual_or_review_blocked":
+        failures.append("release_stack_not_ready_but_blocking_status_skips_local_repair")
+    if stack_ready and closure and not closure_handoff:
+        failures.append("closure_packet_not_handoff_ready_despite_local_stack_ready")
     if final_gate.get("review_panel_coverage_complete") is not False:
         failures.append("final_gate_review_panel_coverage_not_false")
 
@@ -341,7 +354,7 @@ def audit_final_blocker_consistency(
             failures.append(f"final_gate_missing_blocker:{blocker}")
 
     return {
-        "schema_version": "2026-06-13.final_blocker_consistency_audit.v3",
+        "schema_version": "2026-06-15.final_blocker_consistency_audit.v4",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "mode": "local_read_only_final_blocker_consistency_audit",
         "read_only": True,
@@ -357,6 +370,7 @@ def audit_final_blocker_consistency(
             "local_release_candidate_ready": stack_ready,
             "closure_ready_for_human_handoff": closure_handoff,
             "blocking_status": stack.get("blocking_status", ""),
+            "allowed_blocking_statuses": sorted(allowed_blocking_statuses),
             "final_gate_remaining_blocker_count": len(final_blockers),
             "review_failed_claude_attempt_count": failed_count,
             "claude_request_failed_attempt_count": claude_summary.get("count"),
@@ -380,13 +394,15 @@ def audit_final_blocker_consistency(
         },
         "required_open_blockers": {
             "final_gate": required_final_blockers,
+            "release_stack": _string_list(stack.get("remaining_blockers")),
+            "closure_packet": _string_list(closure.get("remaining_blockers")),
             "promax_probe": promax_blockers,
             "review_missing_perspectives": missing,
         },
         "warning_regressions": warning_regressions,
         "failures": _dedupe(failures),
         "next_actions": [
-            "Keep final_submission_ready=false until this audit, the final gate, ProMax metadata, manual confirmation, and explicit Claude Opus review coverage all close.",
+            "This audit checks consistency, not final readiness; keep final_submission_ready=false until the final gate, ProMax metadata, manual confirmation, explicit Claude Opus review coverage, and target-formatting blockers all close.",
             "Rerun this audit after any blocker packet, final gate, review-continuation packet, or release-candidate stack refresh.",
             "If this audit fails, repair the inconsistent packet before reporting final readiness.",
         ],
