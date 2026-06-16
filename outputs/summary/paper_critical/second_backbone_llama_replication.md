@@ -38,12 +38,15 @@ Each domain: Qwen3-8B (main, internal) vs Llama-3.1-8B (2nd backbone) vs stronge
 
 → Llama rank-1 on **5/7** (HR@10/@20 lost). NDCG@10 +11.0% over strongest baseline.
 
-### home — strongest baseline: TBD (Qwen NDCG@10 0.132)
+### home — strongest baseline: LLMEmb
 | Model | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR |
 |---|---|---|---|---|---|---|---|
-| Qwen3-8B (main) | 0.156 | 0.226 | 0.351 | 0.110 | 0.132 | 0.164 | 0.126 |
-| **Llama-3.1-8B** | _pending_ | _pending_ | _pending_ | _pending_ | _pending_ | _pending_ | _pending_ |
-| (baseline) | _TBD_ | | | | | | |
+| Qwen3-8B (main) | 0.1561 | 0.2264 | 0.3505 | 0.1098 | 0.1324 | 0.1635 | 0.1259 |
+| **Llama-3.1-8B** | 0.1339 | 0.1980 | 0.3023 | 0.0897 | **0.1103** | 0.1365 | 0.1046 |
+| LLMEmb (baseline) | 0.1079 | 0.1856 | 0.3169 | 0.0690 | 0.0939 | 0.1267 | 0.0901 |
+| Llama vs LLMEmb | win | win | **loss** | win | win (+17.5%) | win | win |
+
+→ Llama rank-1 on **6/7** (only HR@20 lost). NDCG@10 +17.5% over strongest baseline.
 
 ### tools — strongest baseline: TBD (Qwen NDCG@10 0.166)
 | Model | HR@5 | HR@10 | HR@20 | NDCG@5 | NDCG@10 | NDCG@20 | MRR |
@@ -52,18 +55,19 @@ Each domain: Qwen3-8B (main, internal) vs Llama-3.1-8B (2nd backbone) vs stronge
 | **Llama-3.1-8B** | _pending_ | _pending_ | _pending_ | _pending_ | _pending_ | _pending_ | _pending_ |
 | (baseline) | _TBD_ | | | | | | |
 
-## Two-domain pattern (sports + toys, both COMPLETE)
+## Pattern across completed domains (sports + toys + home — tools pending)
 
-- **Headline NDCG@10 rank-1 transfers across backbone families** in both domains
-  (sports +14.4%, toys +11.0% over strongest baseline) → the C-CRP ranking-quality advantage is
-  **not Qwen-specific**.
-- **Absolute level tracks backbone quality**: Llama-3.1-8B ≈ 12–16% below Qwen3-8B on NDCG@10 —
+- **Headline NDCG@10 rank-1 transfers across backbone families** in all three completed domains
+  (sports +14.4%, toys +11.0%, home +17.5% over strongest baseline) → the C-CRP ranking-quality
+  advantage is **not Qwen-specific**.
+- **Absolute level tracks backbone quality**: Llama-3.1-8B ≈ 12–17% below Qwen3-8B on NDCG@10 —
   expected, sensible, and reassuring that the metric discriminates.
 - **Consistent honest nuance — deep recall is backbone-sensitive.** Llama wins all NDCG ranks + MRR +
-  HR@5 in both domains, but cedes the deep-recall metrics (sports HR@20; toys HR@10 & HR@20) to
-  LLMEmb. Mechanism: the coarser Llama verbalized posterior floors off-category candidates at 0.0 →
-  ties deep in the list → sharper top-of-ranking but weaker @10/@20 recall. To be stated plainly in
-  the paper, not hidden.
+  HR@5 in every domain, but cedes the deep-recall metrics (HR@20 in all three; HR@10 additionally in
+  toys) to LLMEmb. Mechanism: the coarser Llama verbalized posterior floors off-category candidates at
+  0.0 → ties deep in the list → sharper top-of-ranking but weaker @10/@20 recall. To be stated plainly
+  in the paper, not hidden.
+- Per-domain rank-1 count vs the 8 official baselines: sports 6/7, toys 5/7, home 6/7.
 
 ## Status
 - sports: DONE + committed (main). toys: DONE + committed (main).
