@@ -200,9 +200,19 @@ bridge therefore preserves most of a baseline's native same-candidate signal
 rather than collapsing it, so \method{}'s margin reflects a genuine reranking
 difference, not a bridge artifact. (We use a faithful community reproduction of
 LLM2Rec, since the authors release code and data but no trained checkpoint, and
-validate on the two domains whose native downstream task was prepared; a
-full-backbone reproduction of every baseline, e.g.\ LLMEmb, is left to future
-work.)
+validate on the two domains whose native downstream task was prepared.) Two
+further considerations bound the residual risk that the shared bridge
+systematically weakens the baselines. First, Qwen3-8B is a strong general-purpose
+$8$B encoder---generally at least as capable as the representation baselines'
+native text encoders (e.g.\ LLM2Rec's LLM2Vec model over a Qwen2-$0.5$B
+backbone)---so substituting it is more likely to \emph{upgrade} than to handicap
+an embedding- or profile-based method, consistent with the $\ge\!90\%$ recovery
+measured above. Second, the binding comparison in seven of the eight domains is
+against LLMEmb, so a native-backbone fidelity check for LLMEmb specifically is the
+single most informative remaining robustness test; we flag it as the priority
+extension of this analysis (Limitation~\ref{lim:backbone} in \S\ref{sec:analysis})
+and a full native-backbone reproduction of every baseline is otherwise left to
+future work.
 
 \subsection{Backbone Robustness: Replication on a Second LLM}
 \label{sec:second_backbone}
@@ -217,16 +227,18 @@ recent LLM-for-recommendation work, which probes a small number of representativ
 Amazon domains rather than the full catalogue
 \citep{xu2025slmrec}, we evaluate the four new domains on which the Qwen3-8B
 posterior ranks first (Sports, Toys, Home, Tools); a single second backbone at
-the same $8$B scale is sufficient to test transfer across model families.
+the same $8$B scale gives a first cross-family test of transfer, not a broad
+backbone-robustness guarantee (the remaining four domains and other model
+families are left to future work, \S\ref{sec:analysis}).
 
 The headline replicates. Table~\ref{tab:second_backbone} shows that the Llama
 posterior ranks first on NDCG@10 over all eight official baselines in
 \emph{all four} domains, improving on the strongest baseline (LLMEmb) by
 $+14.4\%$ (Sports), $+11.0\%$ (Toys), $+17.5\%$ (Home), and $+21.4\%$ (Tools).
 The absolute level is $12$--$17\%$ below the Qwen3-8B posterior, which we read as
-the gain tracking backbone quality while the \emph{ranking advantage itself is
-not Qwen-specific}. The Llama posterior also wins every NDCG rank, MRR, and HR@5
-in all four domains, and HR@10 in three of four.
+the gain tracking backbone quality while the \emph{ranking advantage is not unique
+to Qwen3-8B} on these four domains. The Llama posterior also wins every NDCG rank,
+MRR, and HR@5 in all four domains, and HR@10 in three of four.
 
 The one consistent exception is the deepest-recall metric: Llama cedes HR@20 to
 LLMEmb in all four domains (and HR@10 on Toys). We measure why rather than leave
@@ -240,12 +252,14 @@ top of the ranking---NDCG, MRR, HR@5---stays sharp. This also supplies the
 rationale for ranking by the \emph{raw} posterior ($\eta{=}0$): a risk
 re-weighting acts on the graded structure of the posterior, and a backbone that
 floors $\sim 85$--$90\%$ of scores offers almost no graded signal for such a term
-to exploit. The second backbone therefore extends the characterized
-$\eta{=}0$-best negative result of Section~\ref{sec:results} conservatively---the
-risk decomposition has even less to act on under a coarser posterior---without a
-second risk-instrumented inference pass. The same pointwise scoring code, score
-schema, and tie-break are shared with the Qwen runs, so the replication isolates
-the backbone as the only changed factor.
+to exploit. This is a plausible diagnostic explanation, not a re-derivation: it
+supports the conservative choice of ranking by the raw posterior on the second
+backbone and is consistent with the $\eta{=}0$-best negative result of
+Section~\ref{sec:results}, but it does \emph{not} by itself re-establish that
+result for Llama; a full risk-instrumented $\eta$ sweep on the second backbone is
+left to future work. The same pointwise scoring code, score schema, and tie-break
+are shared with the Qwen runs, so the replication isolates the backbone as the
+only changed factor.
 
 \input{tables/second_backbone_replication}
 

@@ -25,12 +25,12 @@ baselines). We report these two losses explicitly rather than
 dropping them. We compute paired Holm-corrected bootstrap tests on all eight
 domains: on the six winning domains \method{} is significantly ahead on all 56
 metric/baseline pairs (54/56 on Books), while on Movies it is significantly
-behind the stronger baselines on 22 of 56 pairs. To show the advantage is not an
-artifact of the unified Qwen3-8B backbone, we re-run the identical pipeline with a
-second, different-family LLM (Llama-3.1-8B-Instruct) on the four new winning
-domains: the rank-first NDCG@10 result replicates in all four ($+11.0\%$ to
-$+21.4\%$ over the strongest baseline), at a $12$--$17\%$ lower absolute level
-that tracks backbone quality.
+behind the stronger baselines on 22 of 56 pairs. As a first cross-family test of
+whether the advantage is specific to the unified Qwen3-8B backbone, we re-run the
+identical pipeline with a second, different-family LLM (Llama-3.1-8B-Instruct) on
+the four new winning domains: the rank-first NDCG@10 result replicates in all four
+($+11.0\%$ to $+21.4\%$ over the strongest baseline), at a $12$--$17\%$ lower
+absolute level that tracks backbone quality.
 
 We then report a rigorous \emph{negative result} on the design space this work
 set out to study. We instrument the pointwise posterior with a principled
