@@ -1,0 +1,30 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Backbone robustness.} Re-running the identical same-candidate
+pipeline with a second, different-family LLM (Llama-3.1-8B-Instruct) on the four
+new domains where the Qwen3-8B posterior ranks first. The headline rank-1 result
+on NDCG@10 \emph{replicates in all four domains} ($+11.0\%$ to $+21.4\%$ over the
+strongest official baseline, LLMEmb), at a $12$--$17\%$ lower absolute level that
+tracks backbone quality. Rank-1 count is the number of the seven metrics on which
+the Llama posterior is the best of all nine methods; the single consistent
+exception is the deepest-recall metric HR@20 (and HR@10 on Toys). The rightmost
+column reports the fraction of all candidate scores the verbalized posterior
+floors at exactly $0.0$: the coarser Llama posterior floors $84$--$90\%$ of
+candidates (Qwen $19$--$34\%$), which is the measured mechanism for the HR@20
+softness (Section~\ref{sec:results}).}
+\label{tab:second_backbone}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{NDCG@10} & & & \\
+\cmidrule(lr){2-4}
+Domain & Qwen3-8B & Llama-3.1-8B & LLMEmb & Llama vs.\ LLMEmb & Llama rank-1 & Llama floor-rate \\
+\midrule
+Sports & $0.2329$ & $0.2054$ & $0.1795$ & $+14.4\%$ & $6/7$ & $0.84$ \\
+Toys   & $0.2708$ & $0.2274$ & $0.2049$ & $+11.0\%$ & $5/7$ & $0.90$ \\
+Home   & $0.1324$ & $0.1103$ & $0.0939$ & $+17.5\%$ & $6/7$ & $0.89$ \\
+Tools  & $0.1661$ & $0.1407$ & $0.1159$ & $+21.4\%$ & $6/7$ & $0.89$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
