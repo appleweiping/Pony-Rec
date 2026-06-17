@@ -1,0 +1,19 @@
+{
+  "HR@5": 0.12846865364850976,
+  "NDCG@5": 0.0880351056159695,
+  "HR@10": 0.2065775950668037,
+  "NDCG@10": 0.11290786944639726,
+  "HR@20": 0.3227132579650565,
+  "NDCG@20": 0.1419750839927014,
+  "MRR": 0.10651268144949361,
+  "n_users": 973,
+  "n_prompts": 98273,
+  "inference_time_s": 4015.2744500637054,
+  "data_path": "outputs/baselines/external_tasks/beauty_supplementary_smallerN_100neg_test_same_candidate/ranking_test.jsonl",
+  "model": "/home/ajifang/models/Mistral-7B-Instruct-v0.3",
+  "backbone": "mistral-7b",
+  "seed": null,
+  "temperature": 0.1,
+  "guided_json": true,
+  "score_scale": "prob01"
+}
