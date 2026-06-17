@@ -1,0 +1,19 @@
+{
+  "HR@5": 0.1731,
+  "NDCG@5": 0.11801420016573334,
+  "HR@10": 0.2438,
+  "NDCG@10": 0.14074584165636106,
+  "HR@20": 0.342,
+  "NDCG@20": 0.16540453944085606,
+  "MRR": 0.12894302629090731,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 35020.93054962158,
+  "data_path": "outputs/baselines/external_tasks/tools_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+  "model": "/home/ajifang/models/Llama-3.1-8B-Instruct",
+  "backbone": "llama3.1-8b",
+  "seed": null,
+  "temperature": 0.1,
+  "guided_json": true,
+  "score_scale": "prob01"
+}
