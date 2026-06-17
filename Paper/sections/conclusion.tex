@@ -22,7 +22,11 @@ eight domains: on the six winning domains \method{} is significantly ahead on al
 56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly
 behind the stronger baselines on 22 of 56 pairs and on Beauty none of the losses
 to ProEx is Holm-significant. This is a scoped same-candidate reranking claim, not
-a full-catalog recommender SOTA result.
+a full-catalog recommender SOTA result. The advantage is not specific to the
+Qwen3-8B backbone: re-running the identical pipeline with a different-family LLM
+(Llama-3.1-8B-Instruct) reproduces the rank-first NDCG@10 result on all four new
+winning domains ($+11.0\%$ to $+21.4\%$ over the strongest baseline;
+\S\ref{sec:second_backbone}).
 
 The diagnostic modules locate this signal precisely and yield a rigorous
 negative result. Leave-one-component-out ablations and a raw-probability
