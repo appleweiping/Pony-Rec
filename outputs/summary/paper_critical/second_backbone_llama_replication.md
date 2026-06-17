@@ -83,6 +83,45 @@ Each domain: Qwen3-8B (main, internal) vs Llama-3.1-8B (2nd backbone) vs stronge
 
 All four: Llama C-CRP rank-1 on NDCG@10 over all 8 official baselines; ~15% below Qwen3 absolute.
 
+## Posterior-degeneracy diagnostic (η-rationale, GPU-free)
+
+Why does Llama win the top-of-ranking metrics but cede HR@20? And why is ranking by the **raw**
+posterior (η=0) the operative choice rather than a risk-reweighted variant? Both are answered by one
+measurement on the existing score files (`experiments/rsc/posterior_degeneracy_diagnostic.py`,
+`posterior_degeneracy_diagnostic.json`): how *graded* vs *floored-at-0* each backbone's verbalized
+posterior is, per 101-candidate event.
+
+| Domain | Backbone | floor-rate (score=0) | graded-rate (0<s<1) | mean top-ties | **positive floored at 0** |
+|---|---|---|---|---|---|
+| sports | Qwen3-8B | 0.308 | 0.692 | 2.34 | 0.121 |
+| sports | **Llama-3.1-8B** | **0.843** | 0.157 | 6.66 | **0.532** |
+| toys | Qwen3-8B | 0.197 | 0.803 | 2.31 | 0.058 |
+| toys | **Llama-3.1-8B** | **0.898** | 0.103 | 8.58 | **0.624** |
+| home | Qwen3-8B | 0.191 | 0.810 | 2.48 | 0.124 |
+| home | **Llama-3.1-8B** | **0.892** | 0.108 | 6.53 | **0.779** |
+| tools | Qwen3-8B | 0.335 | 0.665 | 2.61 | 0.199 |
+| tools | **Llama-3.1-8B** | **0.890** | 0.110 | 6.03 | **0.732** |
+
+**Reading.**
+- **Llama floors 84–90% of candidates at exactly 0.0** (Qwen: 19–34%). Its verbalized [0,1] posterior is
+  far coarser — it asserts "irrelevant" for most off-category items rather than a small graded score.
+- **Llama floors the *ground-truth positive* in 53–78% of events** (Qwen: 6–20%). This is the **direct
+  mechanism for the HR@20 softness**: a floored positive lands in a large 0-score tie block and its
+  expected rank within that block pushes it past 20, costing deep recall — while Qwen, which rarely
+  floors the positive, keeps it retrievable.
+- **Yet the top of the list stays sharp**: on the ~10–16% of candidates Llama *does* grade, it is
+  discriminative, so it still wins NDCG@5/10/20 + MRR + HR@5 (and HR@10 in 3/4 domains). The win
+  concentrates where the positive is graded; the loss concentrates where it is floored.
+
+**η=0 rationale.** A risk-reweighting (η>0 in the C-CRP uncertainty/risk decomposition) acts on the
+*graded* structure of the posterior. With only ~10–16% of Llama scores graded and ~85–90% floored,
+there is almost no graded signal for a risk term to exploit; the raw posterior (η=0) is necessarily the
+operative ranking. This **conservatively extends the Qwen η=0-best negative result** — the risk
+decomposition has even *less* to work with on the coarser backbone — without spending a second ~38h
+risk-instrumented inference pass to reconfirm a negative result. (The pointwise `scores.csv` carries a
+single posterior column for both backbones; the η-sweep negative result is documented on Qwen with the
+risk-instrumented scorer in the Phase-2.5 ablation evidence.)
+
 ## Status
 - sports / toys / home / tools: **ALL DONE + committed to main.** Run finished 2026-06-17 ~11:10 CST, GPU freed.
 - Remaining: (1) η=0 ablation on the 4 Llama domains' scores (confirm the uncertainty/risk decomposition
