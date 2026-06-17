@@ -180,6 +180,32 @@ over the strongest baseline), competitive in Beauty (#2) and Movies (#5)** -- no
 negative Beauty/Movies deltas across all seven metrics) is in
 `Paper/tables/improvement_over_strongest.tex`.
 
+### Backbone robustness: a second LLM (Llama-3.1-8B)
+
+To test whether the headline is specific to the Qwen3-8B backbone, the identical
+same-candidate pipeline was re-run with a different-family LLM
+(Llama-3.1-8B-Instruct) on the four new winning domains, holding everything else
+fixed (10k users, 101 candidates, same panels/schema/tie-break). The rank-first
+NDCG@10 result **replicates in all four domains**, at a ~12-17% lower absolute
+level that tracks backbone quality (a first cross-family test, not a broad
+robustness guarantee -- the other four domains and other model families remain
+future work):
+
+| Domain | Qwen3-8B NDCG@10 | Llama-3.1-8B NDCG@10 | Strongest baseline (LLMEmb) | Llama vs. baseline |
+|--------|:----------------:|:--------------------:|:---------------------------:|:------------------:|
+| Sports | 0.2329 | **0.2054** | 0.1795 | **+14.4%** |
+| Toys   | 0.2708 | **0.2274** | 0.2049 | **+11.0%** |
+| Home   | 0.1324 | **0.1103** | 0.0939 | **+17.5%** |
+| Tools  | 0.1661 | **0.1407** | 0.1159 | **+21.4%** |
+
+The one consistent exception is deep recall (HR@20): the coarser Llama posterior
+floors 84-90% of candidates at 0 (Qwen 19-34%) and the true positive in 53-78% of
+events (Qwen 6-20%), which pushes floored positives past rank 20 while the top of
+the list stays sharp. Evidence: `outputs/<domain>_large10000_100neg_ccrp_v3_llama/`,
+`outputs/summary/paper_critical/second_backbone_llama_replication.md`, and the
+posterior-degeneracy diagnostic. Paper: the "Backbone Robustness" subsection in
+`Paper/sections/results.tex`.
+
 ### Full per-metric detail (the six winning domains)
 
 In the six domains where C-CRP ranks first it leads on essentially all seven
