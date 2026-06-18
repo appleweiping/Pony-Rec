@@ -1,0 +1,19 @@
+{
+  "HR@5": 0.12846865364850976,
+  "NDCG@5": 0.08652393261302209,
+  "HR@10": 0.20966084275436794,
+  "NDCG@10": 0.11250577576280008,
+  "HR@20": 0.3340184994861254,
+  "NDCG@20": 0.14333120770808416,
+  "MRR": 0.10499894486430945,
+  "n_users": 973,
+  "n_prompts": 98273,
+  "inference_time_s": 3385.4488112926483,
+  "data_path": "outputs/baselines/external_tasks/beauty_supplementary_smallerN_100neg_test_same_candidate/ranking_test.jsonl",
+  "model": "/home/ajifang/models/Llama-3.1-8B-Instruct",
+  "backbone": "llama3.1-8b",
+  "seed": null,
+  "temperature": 0.1,
+  "guided_json": true,
+  "score_scale": "prob01"
+}
