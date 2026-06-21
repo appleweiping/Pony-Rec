@@ -1,0 +1,19 @@
+{
+  "HR@5": 0.132,
+  "NDCG@5": 0.08731273838567333,
+  "HR@10": 0.2105,
+  "NDCG@10": 0.11238260541745926,
+  "HR@20": 0.336,
+  "NDCG@20": 0.14374405209174773,
+  "MRR": 0.10545095398108328,
+  "n_users": 10000,
+  "n_prompts": 1010000,
+  "inference_time_s": 41175.12242722511,
+  "data_path": "outputs/baselines/external_tasks/home_large10000_100neg_test_same_candidate/ranking_test.jsonl",
+  "model": "/home/ajifang/models/Mistral-7B-Instruct-v0.3",
+  "backbone": "mistral-7b",
+  "seed": null,
+  "temperature": 0.1,
+  "guided_json": true,
+  "score_scale": "prob01"
+}
