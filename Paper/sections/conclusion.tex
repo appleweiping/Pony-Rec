@@ -22,11 +22,11 @@ eight domains: on the six winning domains \method{} is significantly ahead on al
 56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly
 behind the stronger baselines on 22 of 56 pairs and on Beauty none of the losses
 to ProEx is Holm-significant. This is a scoped same-candidate reranking claim, not
-a full-catalog recommender SOTA result. The ranking advantage survives
+a full-catalog recommender SOTA result. The ranking advantage largely survives
 frozen-model substitution: re-running the identical C-CRP scoring pipeline under
 two additional different-family LLMs (Llama-3.1-8B-Instruct and
 Mistral-7B-Instruct-v0.3) over all eight domains clears the strongest official
-baseline in $17$ of $18$ backbone$\,\times\,$winning-domain cells (Mistral first
+baseline in $17$ of the $18$ backbone$\,\times\,$(winning-domain) cells (Mistral first
 in all six, Llama in five, with Llama-Books a $1.0\%$ near-miss), with the
 official baselines held at their unified-Qwen comparison values; the absolute
 level is consistent with backbone capability (\S\ref{sec:second_backbone}).
