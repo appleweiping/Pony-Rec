@@ -4,7 +4,7 @@
 \centering
 \scriptsize
 \setlength{\tabcolsep}{5pt}
-\caption{\textbf{Backbone robustness (3 backbones $\times$ 8 domains).} NDCG@10 of the identical same-candidate C-CRP pipeline under three different-family frozen LLMs, with the strongest official baseline per domain for reference. The pointwise-posterior rank-1 result is a property of the method, not of one backbone: across the six domains where Qwen3-8B ranks first, Mistral-7B also ranks first in all six and Llama-3.1-8B in five (Books a $1.0\%$ near-miss vs.\ LLMEmb), i.e.\ $17$ of $18$ backbone$\times$domain cells clear the strongest official baseline. Absolute level tracks backbone quality; Beauty/Movies (where Qwen is not first) are shown honestly.}
+\caption{\textbf{Backbone robustness: the ranking advantage survives frozen-model substitution (3 backbones $\times$ 8 domains).} NDCG@10 of the identical same-candidate C-CRP pipeline under three different-family frozen LLMs, with the strongest official baseline per domain for reference (baselines held at their unified-Qwen comparison values; only the C-CRP scoring LLM is swapped). Across the six domains where Qwen3-8B ranks first, Mistral-7B also ranks first in all six and Llama-3.1-8B in five (Books a $1.0\%$ near-miss vs.\ LLMEmb), i.e.\ $17$ of $18$ backbone$\times$(winning-domain) cells clear the strongest official baseline. Absolute level is consistent with, but not proof of, backbone quality (Qwen3-8B strongest; Mistral/Llama $\sim 10$--$25\%$ lower). Beauty/Movies (where Qwen is not first) are shown honestly and remain below the strongest baseline under all three backbones.}
 \label{tab:three_backbone}
 \begin{tabular}{lcccccc}
 \toprule

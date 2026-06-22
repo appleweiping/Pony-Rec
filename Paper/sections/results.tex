@@ -253,9 +253,15 @@ scope: the official baselines are held at their unified-backbone comparison valu
 while only C-CRP's scoring LLM is swapped, so this establishes that \emph{C-CRP's
 posterior signal stays competitive under frozen-model substitution}, not a
 re-tuned cross-backbone SOTA result. The single sub-baseline winning-domain cell
-(Llama on Books, $-1.0\%$) sits within the margin that per-seed scoring variation
-can flip, so we rest the claim at the domain level---$17/18$ cells across two
-unrelated model families---rather than on any one cell. The same pointwise scoring
+(Llama on Books) is an absolute NDCG@10 gap of $0.2737 - 0.2710 = 0.0027$, a margin
+small enough that we do not read this cell as a stable below-baseline finding; we
+rest the claim at the domain level---$17/18$ cells across two unrelated model
+families---rather than on any one cell. We also do not claim to disentangle two
+distinct sources of the Beauty/Movies losses: it is consistent with the data that
+those two domains are intrinsically harder for this protocol (all three frozen
+backbones land below the strongest baseline, with the same loss direction), and
+also consistent that the added backbones are simply weaker scorers in absolute
+terms; the present table does not separate these. The same pointwise scoring
 code, score schema, and tie-break are shared across all three backbones, so each
 substitution isolates the backbone as the only changed factor.
 
