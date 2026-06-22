@@ -100,8 +100,11 @@ def main():
                  'NDCG@10 of the identical same-candidate C-CRP pipeline under three different-family '
                  'frozen LLMs, with the strongest official baseline per domain for reference. '
                  'The pointwise-posterior rank-1 result is a property of the method, not of one '
-                 'backbone: it replicates across backbones in the six domains where Qwen ranks first '
-                 '(Beauty/Movies shown honestly). Absolute level tracks backbone quality.}')
+                 'backbone: across the six domains where Qwen3-8B ranks first, Mistral-7B also ranks '
+                 'first in all six and Llama-3.1-8B in five (Books a $1.0\\%$ near-miss vs.\\ LLMEmb), '
+                 'i.e.\\ $17$ of $18$ backbone$\\times$domain cells clear the strongest official '
+                 'baseline. Absolute level tracks backbone quality; Beauty/Movies (where Qwen is not '
+                 'first) are shown honestly.}')
     lines.append('\\label{tab:three_backbone}')
     lines.append('\\begin{tabular}{lccccc}')
     lines.append('\\toprule')
