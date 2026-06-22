@@ -6,20 +6,20 @@
 \setlength{\tabcolsep}{5pt}
 \caption{\textbf{Backbone robustness (3 backbones $\times$ 8 domains).} NDCG@10 of the identical same-candidate C-CRP pipeline under three different-family frozen LLMs, with the strongest official baseline per domain for reference. The pointwise-posterior rank-1 result is a property of the method, not of one backbone: across the six domains where Qwen3-8B ranks first, Mistral-7B also ranks first in all six and Llama-3.1-8B in five (Books a $1.0\%$ near-miss vs.\ LLMEmb), i.e.\ $17$ of $18$ backbone$\times$domain cells clear the strongest official baseline. Absolute level tracks backbone quality; Beauty/Movies (where Qwen is not first) are shown honestly.}
 \label{tab:three_backbone}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
-& \multicolumn{3}{c}{C-CRP NDCG@10 by backbone} & & \\
-\cmidrule(lr){2-4}
-Domain & Qwen3-8B & Llama-3.1-8B & Mistral-7B & Strongest base & Mistral vs.\ base \\
+& \multicolumn{3}{c}{C-CRP NDCG@10 by backbone} & & \multicolumn{2}{c}{$\Delta$ vs.\ strongest base} \\
+\cmidrule(lr){2-4}\cmidrule(lr){6-7}
+Domain & Qwen3-8B & Llama-3.1-8B & Mistral-7B & Strongest base & Llama & Mistral \\
 \midrule
-Beauty      & $0.1341$ & $0.1125$ & $0.1129$ & ProEx~$0.1506$ & $-25.0\%$ \\
-Books       & $0.3328$ & $0.2710$ & $0.2960$ & LLMEmb~$0.2737$ & $+8.1\%$ \\
-Elec.       & $0.1833$ & $0.1605$ & $0.1488$ & LLMEmb~$0.1196$ & $+24.4\%$ \\
-Movies      & $0.1281$ & $0.0621$ & $0.1228$ & LLMEmb~$0.1690$ & $-27.3\%$ \\
-Sports      & $0.2329$ & $0.2054$ & $0.1985$ & LLMEmb~$0.1795$ & $+10.6\%$ \\
-Toys        & $0.2708$ & $0.2274$ & $0.2209$ & LLMEmb~$0.2049$ & $+7.8\%$ \\
-Home        & $0.1324$ & $0.1103$ & $0.1124$ & LLMEmb~$0.0939$ & $+19.7\%$ \\
-Tools       & $0.1661$ & $0.1407$ & $0.1364$ & LLMEmb~$0.1159$ & $+17.7\%$ \\
+Beauty      & $0.1341$ & $0.1125$ & $0.1129$ & ProEx~$0.1506$ & $-25.3\%$ & $-25.0\%$ \\
+Books       & $0.3328$ & $0.2710$ & $0.2960$ & LLMEmb~$0.2737$ & $-1.0\%$ & $+8.1\%$ \\
+Elec.       & $0.1833$ & $0.1605$ & $0.1488$ & LLMEmb~$0.1196$ & $+34.2\%$ & $+24.4\%$ \\
+Movies      & $0.1281$ & $0.0621$ & $0.1228$ & LLMEmb~$0.1690$ & $-63.2\%$ & $-27.3\%$ \\
+Sports      & $0.2329$ & $0.2054$ & $0.1985$ & LLMEmb~$0.1795$ & $+14.4\%$ & $+10.6\%$ \\
+Toys        & $0.2708$ & $0.2274$ & $0.2209$ & LLMEmb~$0.2049$ & $+11.0\%$ & $+7.8\%$ \\
+Home        & $0.1324$ & $0.1103$ & $0.1124$ & LLMEmb~$0.0939$ & $+17.5\%$ & $+19.7\%$ \\
+Tools       & $0.1661$ & $0.1407$ & $0.1364$ & LLMEmb~$0.1159$ & $+21.4\%$ & $+17.7\%$ \\
 \bottomrule
 \end{tabular}
 \end{table*}

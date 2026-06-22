@@ -230,24 +230,34 @@ the single-backbone, few-domain checks common in LLM-for-recommendation work,
 which typically vary only one backbone over a handful of representative Amazon
 domains \citep{xu2025slmrec}.
 
-\textbf{The headline is a property of the method, not the backbone.} Across the
+\textbf{The ranking advantage survives frozen-model substitution.} Across the
 six domains where the Qwen3-8B posterior ranks first over all eight official
 baselines, Mistral-7B \emph{also} ranks first in all six, and Llama-3.1-8B in
 five---the lone exception being Books, where the Llama posterior ($0.2710$) trails
 the strongest baseline LLMEmb ($0.2737$) by $1.0\%$, which we report rather than
 round away. In aggregate $17$ of the $18$ backbone$\,\times\,$(winning-domain)
-cells clear the strongest official baseline: Mistral improves on it by $+7.8\%$
+cells clear the strongest official baseline---both per-backbone deltas are shown in
+Table~\ref{tab:three_backbone}: Mistral improves on it by $+7.8\%$
 to $+24.4\%$ and Llama by $-1.0\%$ (Books) to $+34.2\%$ (Electronics). Crucially,
 the two domains where Qwen is honestly \emph{not} first (Beauty, $\#2$; Movies,
 $\#5$) remain below the strongest baseline under \emph{both} additional backbones
-as well, so the full \emph{pattern} of six wins and two losses---not merely the
-average---transfers. Absolute level tracks backbone quality: the Qwen3-8B
-posterior is the strongest, with Mistral-7B and Llama-3.1-8B typically
-$\sim 10\text{--}25\%$ lower, consistent with the headline being a \emph{ranking}
-advantage that a stronger frozen LLM expresses more sharply rather than an
-artefact of any one model. The same pointwise scoring code, score schema, and
-tie-break are shared across all three backbones, so each substitution isolates the
-backbone as the only changed factor.
+as well, so the full \emph{win/loss partition}---six wins and two losses, not the
+average---transfers (the added backbones are weaker in \emph{level} on the two
+losing domains, so we claim transfer of the domain-level partition, not of exact
+ranks or effect sizes). We also observe that the \emph{absolute} level tracks
+backbone capability---Qwen3-8B strongest, Mistral-7B and Llama-3.1-8B typically
+$\sim 10\text{--}25\%$ lower---an observation consistent with, though not proof of,
+the headline being a \emph{ranking} advantage that a stronger frozen LLM expresses
+more sharply rather than an artefact of any one model. We are deliberate about
+scope: the official baselines are held at their unified-backbone comparison values
+while only C-CRP's scoring LLM is swapped, so this establishes that \emph{C-CRP's
+posterior signal stays competitive under frozen-model substitution}, not a
+re-tuned cross-backbone SOTA result. The single sub-baseline winning-domain cell
+(Llama on Books, $-1.0\%$) sits within the margin that per-seed scoring variation
+can flip, so we rest the claim at the domain level---$17/18$ cells across two
+unrelated model families---rather than on any one cell. The same pointwise scoring
+code, score schema, and tie-break are shared across all three backbones, so each
+substitution isolates the backbone as the only changed factor.
 
 \textbf{A backbone-specific deep-recall diagnostic.} The replication also exposes
 a model-specific failure mode that we measure rather than leave qualitative. The
@@ -258,8 +268,8 @@ and floors the \emph{ground-truth positive} in $53$--$78\%$ of events (Qwen
 $6$--$20\%$). A floored positive lands in a large zero-score tie block whose
 expected rank pushes it past $20$, which is precisely a deep-recall loss; yet on
 the $10$--$16\%$ of candidates Llama does grade it remains discriminative, so the
-top of the ranking---NDCG, MRR, HR@5---stays sharp (hence the rank-1 NDCG@10 result
-above). This also supplies the rationale for ranking by the \emph{raw} posterior
+top of the ranking---NDCG, MRR, HR@5---stays sharp (hence the near-universal
+NDCG@10 rank-1 result above). This also supplies the rationale for ranking by the \emph{raw} posterior
 ($\eta{=}0$): a risk re-weighting acts on the graded structure of the posterior,
 and a backbone that floors $\sim 85$--$90\%$ of scores offers almost no graded
 signal for such a term to exploit. This is a plausible diagnostic explanation, not

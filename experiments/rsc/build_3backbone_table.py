@@ -106,12 +106,13 @@ def main():
                  'baseline. Absolute level tracks backbone quality; Beauty/Movies (where Qwen is not '
                  'first) are shown honestly.}')
     lines.append('\\label{tab:three_backbone}')
-    lines.append('\\begin{tabular}{lccccc}')
+    lines.append('\\begin{tabular}{lcccccc}')
     lines.append('\\toprule')
-    lines.append('& \\multicolumn{3}{c}{C-CRP NDCG@10 by backbone} & & \\\\')
-    lines.append('\\cmidrule(lr){2-4}')
+    lines.append('& \\multicolumn{3}{c}{C-CRP NDCG@10 by backbone} & '
+                 '& \\multicolumn{2}{c}{$\\Delta$ vs.\\ strongest base} \\\\')
+    lines.append('\\cmidrule(lr){2-4}\\cmidrule(lr){6-7}')
     lines.append('Domain & Qwen3-8B & Llama-3.1-8B & Mistral-7B & Strongest base & '
-                 'Mistral vs.\\ base \\\\')
+                 'Llama & Mistral \\\\')
     lines.append('\\midrule')
     for dom in DOMAINS:
         q, l, m = grid[dom]['qwen'], grid[dom]['llama'], grid[dom]['mistral']
@@ -120,7 +121,7 @@ def main():
         ln = l['ndcg10'] if l else None
         mn = m['ndcg10'] if m else None
         row = (f"{PRETTY[dom]:11s} & {fmt(qn)} & {fmt(ln)} & {fmt(mn)} & "
-               f"{bname}~{fmt(bval)} & {imp(mn, bval)} \\\\")
+               f"{bname}~{fmt(bval)} & {imp(ln, bval)} & {imp(mn, bval)} \\\\")
         lines.append(row)
     lines.append('\\bottomrule')
     lines.append('\\end{tabular}')
