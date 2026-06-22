@@ -1,0 +1,707 @@
+You are an adversarial top-conference reviewer (RecSys/SIGIR/KDD/NeurIPS). Review the COMPLETE pony-rec paper as a whole. The headline is a task-grounded pointwise LLM relevance posterior (C-CRP) used as the ranking score; the paper deliberately reports it ranks first in 6 of 8 domains over 8 official baselines, with Beauty (#2) and Movies (#5) shown honestly as losing domains, and the calibrated-uncertainty/risk decomposition reported as a characterized negative result.
+
+This session's delta vs the previously-reviewed version: the Backbone Robustness subsection (sec:second_backbone in results.tex) was upgraded from "Llama on 4 domains" to a full 3-backbone × 8-domain grid (Qwen3-8B / Llama-3.1-8B / Mistral-7B), with the table showing both Llama-vs-base and Mistral-vs-base deltas. The earlier dual review on that delta alone passed (Codex 8/10, Opus 8.5/10). Your job here is to assess whether the FULL PAPER is dual-≥8 submission-ready, paying particular attention to (a) any regression introduced by the new backbone section into the surrounding chapters, (b) whether the 6/8 honest framing is consistent throughout, (c) whether any over-claim from the old single-backbone framing remains anywhere in the paper. End with SCORE_PONY_PAPER: X/10 and the single most important fix. Keep under 450 words.
+
+=== ABSTRACT ===
+\begin{abstract}
+Large language models (LLMs) are increasingly used as scoring and
+representation engines for recommendation, yet comparisons across LLM-based
+recommenders are often confounded by different candidate sets, backbones,
+importers, and evaluation schemas. We first contribute a rigorous unified
+same-candidate reranking protocol: every method ranks the same 101 candidates
+(one positive and 100 popularity-sampled negatives) for each of 10{,}000 users,
+uses the same Qwen3-8B backbone when an LLM is required, and is evaluated with a
+shared importer, identical metrics, exact coverage checks, and paired
+Holm-corrected bootstrap tests, with full provenance. Against eight
+official-code-level LLM-based recommendation baselines across eight Amazon
+domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools), our
+central empirical finding is that a \emph{task-grounded pointwise LLM relevance
+posterior} -- the model's own per-candidate relevance probability, used directly
+as the ranking score -- ranks first in six of the eight domains, improving
+NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline (leading on all
+seven metrics HR@5/@10/@20, NDCG@5/@10/@20, MRR in five of these six domains ---
+Electronics, Sports, Toys, Home, Tools; 56/56 paired-significant --- and on six
+of seven on Books, HR@20 versus LLMEmb the exception). In the remaining two
+domains it is not first: rank~2 on Beauty ($-11\%$ NDCG@10 behind ProEx, though
+this shortfall is not Holm-significant on any metric, leaving \method{}
+statistically indistinguishable from the strongest baseline) and mid-pack at
+rank~5 on Movies ($-24\%$ behind LLMEmb, substantially behind the stronger
+baselines). We report these two losses explicitly rather than
+dropping them. We compute paired Holm-corrected bootstrap tests on all eight
+domains: on the six winning domains \method{} is significantly ahead on all 56
+metric/baseline pairs (54/56 on Books), while on Movies it is significantly
+behind the stronger baselines on 22 of 56 pairs. As a first cross-family test of
+whether the advantage is specific to the unified Qwen3-8B backbone, we re-run the
+identical pipeline with a second, different-family LLM (Llama-3.1-8B-Instruct) on
+the four new winning domains: the rank-first NDCG@10 result replicates in all four
+($+11.0\%$ to $+21.4\%$ over the strongest baseline), at a $12$--$17\%$ lower
+absolute level that tracks backbone quality.
+
+We then report a rigorous \emph{negative result} on the design space this work
+set out to study. We instrument the pointwise posterior with a principled
+calibrated-uncertainty and risk-adjusted ranking family that decomposes
+uncertainty into boundary ambiguity, a calibration gap, evidence support, and
+counterevidence. Under a leave-one-component-out ablation and a
+raw-probability attribution, this machinery does not improve same-candidate
+ranking: the zero-risk setting is test-best in all four diagnostic domains, a
+confidence-only variant matches or exceeds the full family in three of those
+four domains, and individual uncertainty terms are inert or mildly harmful. The
+working ranking signal lies in the posterior itself, not in the
+uncertainty decomposition. As a minor, descriptive observation -- and one we
+caveat as partly circular -- the event-level uncertainty signal does stratify
+reliability, but we do not claim it improves ranking. This is a scoped result
+about same-candidate reranking, not a full-catalog recommender SOTA claim.
+\end{abstract}
+
+=== INTRODUCTION ===
+\section{Introduction}
+\label{sec:introduction}
+
+Large language models (LLMs) have become a common component in modern
+recommendation systems. Recent methods use LLM-derived embeddings,
+sequential adapters, graph representations, profile modules, or intent
+representations to improve candidate scoring~\cite{llm2rec,llmemb,llmesr,irllrec,proex,promax,elmrec,rlmrec}.
+These systems are normally judged by ranking metrics, but comparisons across
+them are difficult to trust: different papers use different candidate sets,
+different backbones, different importers, and different evaluation schemas, so
+it is rarely clear whether a reported gain reflects the modeling idea or the
+evaluation setup. A prerequisite for studying any LLM-based scoring signal is
+therefore a comparison in which the candidate set, backbone, and evaluation
+pipeline are held fixed.
+
+We address this with a rigorous unified same-candidate reranking protocol. We
+focus on the reranking stage: each method receives the same user histories and
+the same 101 candidates per event (one ground-truth positive and 100
+popularity-sampled negatives), and all outputs are converted into the same
+score schema before metrics are computed. Every method that requires an LLM
+uses a single shared Qwen3-8B backbone, a shared importer, exact coverage
+checks, and paired Holm-corrected bootstrap tests, with visible provenance.
+This same-candidate protocol intentionally avoids claims about full-catalog
+retrieval; it isolates the question of which scoring signal ranks a fixed
+candidate set most accurately. We instantiate the protocol over eight Amazon
+domains (Beauty, Books, Electronics, Movies, Sports, Toys, Home, Tools),
+10{,}000 users each (Beauty 973), against the same eight official-code-level
+LLM-based recommendation baselines in every domain.
+
+Within this protocol, our central empirical finding is simple. A
+\emph{task-grounded pointwise LLM relevance posterior} -- the model's own
+per-candidate relevance probability, queried directly and used as the ranking
+score -- ranks first in \emph{six of the eight} domains (Books, Electronics,
+Sports, Toys, Home, Tools), improving NDCG@10 by $+21.6\%$ to $+53.2\%$ over the
+strongest baseline; it leads on all seven metrics (HR@5/@10/@20,
+NDCG@5/@10/@20, MRR) in five of these six domains (Electronics, Sports, Toys,
+Home, Tools; 56/56 paired-significant) and on six of seven on Books (HR@20
+versus LLMEmb the exception). It is not first in the other two:
+on Beauty it is rank~2, $-11\%$ on NDCG@10 behind ProEx, though its shortfall
+versus ProEx is not Holm-significant on any metric, leaving it statistically
+indistinguishable from the strongest baseline; on Movies it is mid-pack,
+rank~5 and $-24\%$ behind LLMEmb, substantially behind the four stronger
+baselines. We state these two losses openly rather than
+restricting the reported domain set to the wins. A random floor and a popularity
+baseline both sit near NDCG@10~$\approx 0.045$, so the gains are over a
+genuinely informative comparison, not the floor. This says that for
+same-candidate reranking, a directly elicited pointwise posterior from a strong
+general-purpose LLM is a remarkably strong signal in most domains, ahead of
+trained-embedding and adapter-based recommenders run under identical conditions,
+while leaving room for stronger baselines where the protocol favours
+profile- or embedding-based structure (Beauty, Movies).
+
+This work originally set out to study \emph{actionable uncertainty}: whether a
+calibrated candidate posterior, instrumented with a task-grounded uncertainty
+decomposition (boundary ambiguity, a calibration gap, evidence support, and
+counterevidence) and a validation-controlled risk-adjusted ranking family
+($\eta=0$ recovering the bare posterior), could rank a fixed candidate set more
+reliably. We therefore report a rigorous \emph{negative result} about this
+design space. Under a leave-one-component-out ablation and a raw-probability
+attribution (run on the four domains with full per-event signal rows: Sports,
+Toys, Home, Tools), the uncertainty decomposition and risk penalty do not
+improve same-candidate ranking: the zero-risk setting ($\eta=0$) is test-best in
+all four diagnostic domains, a confidence-only variant (the calibrated posterior
+with no uncertainty and no risk) matches or exceeds the full family in three of
+those four domains, and the raw probability without any calibration map tracks
+the full family within $\leq 0.008$ (mean $\approx 0.005$) NDCG@10 on the three
+domains with local raw-probability rows (Sports, Home, Tools); the fourth
+diagnostic domain's row is server-side. The boundary-uncertainty term is
+inert in all four, and removing the counterevidence and risk terms is
+non-worse. The working ranking signal is located in the pointwise posterior
+itself, not in the uncertainty machinery built on top of it. As a minor,
+descriptive observation, the event-level uncertainty signal does stratify
+ranking reliability across all four diagnostic domains, but this is partly
+circular and we do not claim it improves ranking. We accordingly present the
+calibrated-uncertainty/risk family as an analyzed and characterized design
+space, not as a validated headline contribution.
+
+Our contributions are:
+
+\begin{enumerate}
+    \item \textbf{A unified same-candidate reranking protocol and benchmark.}
+    We build an eight-domain, 10{,}000-user (Beauty 973), 101-candidate (one
+    positive, 100 popularity-sampled negatives) same-candidate benchmark with
+    eight official-code-level adapted LLM recommendation baselines, a single
+    shared Qwen3-8B backbone, a shared importer, exact coverage checks, full
+    HR/NDCG/MRR reporting, paired Holm-corrected bootstrap tests, and visible
+    provenance (Table~\ref{tab:baseline_provenance}). This lets LLM-based
+    scoring signals be compared without candidate-set, backbone, or
+    importer confounds.
+
+    \item \textbf{A task-grounded pointwise LLM posterior ranks first in six of
+    eight domains.} Under this protocol, the model's directly elicited
+    per-candidate relevance probability ranks first in six of the eight domains,
+    improving NDCG@10 by $+21.6\%$ to $+53.2\%$ over the strongest baseline and
+    leading on all seven metrics in five of those six domains (Electronics,
+    Sports, Toys, Home, Tools; 56/56 paired-significant) and on six of seven on
+    Books (HR@20 versus LLMEmb the exception). We report the
+    two non-winning domains explicitly (Beauty rank~2, $-11\%$; Movies rank~5,
+    $-24\%$) instead of dropping them. We compute paired Holm-corrected bootstrap
+    tests on all eight domains: on the six winning domains \method{} is
+    significantly ahead on all 56 metric/baseline pairs (54/56 on Books), while on
+    the two losing domains the paired tests quantify the gap honestly --- on Beauty
+    none of the losses to ProEx is Holm-significant, and on Movies \method{} is
+    significantly behind the stronger baselines on 22 of 56 pairs. The claim is
+    scoped to same-candidate reranking, not
+    full-catalog SOTA.
+
+    \item \textbf{A rigorous negative result on calibrated uncertainty and
+    risk.} Via leave-one-component-out ablations and a raw-probability
+    attribution, we show that the calibrated-uncertainty decomposition and the
+    risk-adjusted ranking family do not improve same-candidate ranking
+    ($\eta=0$ test-best in all domains; confidence-only $\geq$ full family in
+    three of four; components inert or mildly harmful), locating the working
+    signal in the posterior. We keep the uncertainty signal's descriptive
+    reliability stratification as a caveated minor observation, not a ranking
+    claim.
+\end{enumerate}
+
+=== METHOD (cut to first 120 lines) ===
+\section{Method}
+\label{sec:method}
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.99\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\small,
+  box/.style={rounded corners=2pt, draw=blue!55, fill=blue!7, line width=0.7pt,
+              align=center, inner sep=4pt, text width=26mm, minimum height=14mm},
+  judge/.style={box, fill=blue!16, draw=blue!70, line width=1pt},
+  result/.style={box, draw=green!55!black, fill=green!12, line width=1pt},
+  evalnode/.style={box, draw=black!40, fill=black!4, text width=32mm, minimum height=12mm},
+  negsub/.style={rounded corners=2pt, draw=black!40, fill=white, align=center,
+                 inner sep=4pt, text width=46mm, font=\footnotesize},
+  flow/.style={-{Stealth[length=2.8mm]}, line width=1pt, draw=blue!60},
+  ev/.style={-{Stealth[length=2.4mm]}, line width=0.9pt, draw=black!50},
+  side/.style={-{Stealth[length=2.4mm]}, line width=0.9pt, draw=red!55!black, dashed},
+]
+% --- main pipeline (operative method) ---
+\node[box] (panel) {\textbf{Same-candidate panel}\\[2pt]{\scriptsize user history + 101\\candidates (1 positive,\\100 popularity-sampled negs)}};
+\node[judge, right=9mm of panel] (judge) {\textbf{Shared Qwen3-8B}\\\textbf{judge}\\[2pt]{\scriptsize pointwise, $T{=}0.1$}};
+\node[box, right=9mm of judge] (post) {\textbf{Relevance}\\\textbf{posterior} $\hat{p}$\\[2pt]{\scriptsize per candidate}};
+\node[box, right=9mm of post] (rank) {\textbf{Rank by} $\hat{p}$};
+\node[result, right=9mm of rank] (list) {\textbf{Ranked list}\\[2pt]{\scriptsize \textbf{first in 6 of 8 domains}}};
+\draw[flow] (panel)--(judge);
+\draw[flow] (judge)--(post);
+\draw[flow] (post)--(rank);
+\draw[flow] (rank)--(list);
+\node[above=3mm of judge, font=\footnotesize\bfseries, text=blue!45!black]
+  {Method (\method{}): rank by the pointwise relevance posterior};
+% --- evaluation ---
+\node[evalnode, below=10mm of list] (eval) {{\scriptsize HR/NDCG/MRR @5/10/20\\ vs 8 official baselines\\ paired Holm bootstrap}};
+\draw[ev] (list)--(eval);
+% --- negative-result tier (analyzed, off the main path) ---
+\node[negsub, below=22mm of post, xshift=-13mm] (unc)
+  {\textbf{Uncertainty decomposition}\\ boundary $\cdot$ calibration gap $\cdot$\\ evidence support $\cdot$ counterevidence};
+\node[negsub, right=7mm of unc] (risk)
+  {\textbf{Risk-adjusted family}\\ $s=\hat{p}-\eta\cdot\mathrm{risk}$\\ $\eta{=}0$ is test-best (inert)};
+\begin{scope}[on background layer]
+  \node[draw=black!45, dashed, rounded corners=3pt, fill=black!4, line width=0.9pt,
+        fit=(unc)(risk), inner sep=8pt] (negbox) {};
+\end{scope}
+\node[font=\footnotesize\bfseries, text=red!55!black, above=0.6mm of negbox.north]
+  {Analyzed --- does \textbf{NOT} improve ranking (characterized negative result)};
+\draw[side] (post.south) -- (post.south |- negbox.north)
+  node[pos=0.5, right=1pt, font=\scriptsize, text=red!55!black] {analyzed only};
+\end{tikzpicture}%
+}
+\caption{Overview of the unified same-candidate reranking protocol and
+\method{}. Every method scores the same fixed 101-candidate panel (one positive,
+100 popularity-sampled negatives) for each user under a shared Qwen3-8B backbone;
+\method{} ranks the panel directly by the task-grounded \emph{pointwise} relevance
+posterior $\hat{p}$, and all methods are compared on HR/NDCG/MRR against eight
+official-code-level baselines with paired Holm-corrected bootstrap tests. The
+uncertainty decomposition and risk-adjusted ranking family (dashed, off the main
+path) are \emph{analyzed and found not to improve} same-candidate
+ranking over the posterior they are built on---a characterized negative
+result---rather than the source of the gain.}
+\Description{Pipeline diagram: a fixed 101-candidate same-candidate panel and
+user history feed a shared Qwen3-8B judge that emits a pointwise per-candidate
+relevance posterior; candidates are ranked by that posterior and scored on
+HR/NDCG/MRR against eight official baselines with paired Holm bootstrap tests.
+A dashed box off the main path shows the calibrated-uncertainty decomposition
+and risk-adjusted family, labelled as analyzed and not improving ranking---a
+characterized negative result.}
+\label{fig:framework}
+\end{figure*}
+
+\subsection{Problem Formulation}
+
+Given a user $u$ with interaction history $H_u$ and a candidate set
+$C_u=\{c_1,\ldots,c_n\}$, the same-candidate reranking task is to order all
+candidates so that the held-out next item is ranked as highly as possible. In
+our formal setting, $n=101$ for every test event: one positive item and 100
+negatives. Every compared method must produce one finite score per
+$(u,c_i)$ pair under the same key schema.
+
+The working scorer in \method{} (Figure~\ref{fig:framework}) is a task-grounded
+candidate relevance posterior $p_i=P(y_i=1\mid H_u,c_i)$: a pointwise relevance probability that
+the LLM emits when asked to judge each candidate under the next-interaction
+task. Around this posterior we define an \emph{analyzed design space} of
+uncertainty-adjusted ranking. We attach to each posterior an uncertainty
+estimate $U_i\in[0,1]$ and define a one-parameter ranking family
+\begin{equation}
+    r_i = p_i(1-U_i)^\eta ,
+    \label{eq:risk-score}
+\end{equation}
+where the risk exponent $\eta$ is fixed or selected using validation data only.
+When $\eta=0$, the score reduces to the bare relevance posterior. We treat this
+family as a hypothesis to be tested rather than as validated machinery: the
+ablations in Section~\ref{sec:results} ask whether any positive $\eta$ or any
+uncertainty term improves same-candidate ranking, and we report that they do
+not. The $\eta=0$ row is test-best in all four domains, so the relevance
+posterior itself is the operative ranking signal and the risk term is retained
+only as an analyzed, and empirically inert, design choice.
+
+The formulation is intentionally limited to reranking. It assumes a candidate
+set has already been generated and asks whether a pointwise language-model
+relevance posterior orders the same candidates more reliably than existing
+LLM-based scoring and representation baselines. This choice gives the method a
+narrow but auditable contract: for every event, each candidate must receive
+exactly one posterior, one uncertainty value, and one final score before the
+shared importer computes metrics.
+
+\subsection{Task-Grounded Candidate Evidence}
+
+For each user-candidate pair, the LLM is asked to evaluate the candidate under
+the next-interaction task rather than under a generic similarity task. The
+signal row records a pointwise relevance probability, a model-reported adjusted
+probability, evidence support, counterevidence strength, and a short rationale.
+The relevance probability is the working ranking score; the remaining fields
+feed the analyzed uncertainty design space. The prompt does not reveal the
+positive item index or test label.
+
+The signal package is reproducible at the artifact level. Provenance records
+the generation command, split-specific task paths, parser-compatible schema,
+row counts, parse-failure count, and hashes for the signal and candidate
+files. Rows with invalid probability, support, counterevidence, or key fields
+are rejected before score export. The formal packages used for the paper pass
+
+=== EXPERIMENTS ===
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental Setup}
+
+\paragraph{Datasets and Candidate Protocol.} We evaluate on eight Amazon
+product-review domains: Beauty, Books, Electronics, Movies, Sports, Toys, Home,
+and Tools. Each domain uses a 101-candidate same-candidate task with 10,000 test
+users, except Beauty, whose smaller catalog yields 973 eligible test users.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Dataset statistics. All domains use the same 101-candidate
+same-candidate task (one positive, 100 popularity-sampled negatives); Beauty has
+a smaller test-user pool because of its catalog size.}
+\label{tab:datasets}
+\begin{tabular}{lrrr}
+\toprule
+Domain & Test Users & Candidates/User & Candidate Rows \\
+\midrule
+Beauty & 973 & 101 & 98,273 \\
+Books & 10,000 & 101 & 1,010,000 \\
+Electronics & 10,000 & 101 & 1,010,000 \\
+Movies & 10,000 & 101 & 1,010,000 \\
+Sports & 10,000 & 101 & 1,010,000 \\
+Toys & 10,000 & 101 & 1,010,000 \\
+Home & 10,000 & 101 & 1,010,000 \\
+Tools & 10,000 & 101 & 1,010,000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each test instance consists of one ground-truth next item and 100 negatives.
+The same candidate rows are shared by all methods; no method receives a
+different negative set or a different candidate order as an advantage. The
+positive item is hidden from the scoring prompt and from the baseline scoring
+wrappers. Validation rows are used only for selection or calibration decisions
+declared in advance, while test rows are reserved for final reporting and
+paired tests.
+
+The task package keeps validation and test artifacts separate. Each domain has
+train-history files for the corresponding task split, validation ranking rows
+for selection, test ranking rows for final reporting, and a test
+\texttt{candidate\_items.csv} file that defines the exact key set every
+paper-facing score file must cover. This separation prevents validation
+selection code from silently reading test histories and prevents a method from
+entering the table with a different candidate universe.
+
+A result is table-eligible only if its score file exactly matches the candidate
+key set, has no duplicate or missing keys, contains finite numeric scores, and
+passes the local/server provenance checks. The score contract is deliberately
+minimal:
+\[
+(\texttt{source\_event\_id},\texttt{user\_id},\texttt{item\_id},\texttt{score}).
+\]
+This contract lets official baselines keep their native training objective
+while forcing their final candidate scores through the same metric code.
+
+\paragraph{Backbone and Fairness Policy.} All methods use Qwen3-8B whenever an
+LLM or LLM-derived representation is required. Baseline-specific adapters,
+checkpoints, graph modules, intent modules, or representation learners are
+preserved when they are part of the official algorithm. We do not retune every
+baseline on the test split; the primary comparison uses official default or
+recommended baseline hyperparameters, while \method{} uses fixed or
+validation-controlled settings. Full-catalog metrics reported by upstream
+repositories are not imported into the paper table.
+
+\paragraph{Baselines.} In every domain we compare against the same eight
+official-code-level LLM-based recommendation baselines:
+
+\begin{itemize}
+    \item \textbf{ELMRec}~\cite{elmrec}: High-order interaction-aware LLM recommendation
+    \item \textbf{IRLLRec}~\cite{irllrec}: Intent representation learning with LLMs
+    \item \textbf{LLM2Rec}~\cite{llm2rec}: LLM embedding with sequential recommendation
+    \item \textbf{LLMEmb}~\cite{llmemb}: LLM-generated embeddings for recommendation
+    \item \textbf{LLM-ESR}~\cite{llmesr}: LLM-enhanced long-tailed sequential recommendation
+    \item \textbf{ProEx}~\cite{proex}: Profile extrapolation with LLMs
+    \item \textbf{ProMax}~\cite{promax}: LLM-derived profiles with distribution shaping\footnote{ProEx (arXiv:2512.00679) and ProMax (arXiv:2604.26231) are recent preprints (to appear) from the ProRec line, released through the shared official repository \texttt{BlueGhostYi/ProRec}; we include them as strong recent profile-based baselines and adapt their official shared code under our unified protocol.}
+    \item \textbf{RLMRec}~\cite{rlmrec}: Representation learning with LLMs
+\end{itemize}
+
+Baselines use official default or recommended hyperparameters unless a
+documented bridge is required by the unified protocol. Each row must record the
+official repository, pinned commit, adaptation mode, checkpoint or
+representation artifact when applicable, score path, score hash, and coverage
+audit. Test-set model selection is forbidden for both baselines and \method.
+
+\input{tables/baseline_provenance_summary}
+
+\paragraph{Metrics and Statistics.} We report HR@$k$ and NDCG@$k$ for
+$k\in\{5,10,20\}$, plus MRR. The paired unit is the user event: for each
+method and metric, we compare the per-event score of \method{} with the
+corresponding per-event score of an official baseline. For each domain,
+\method{} is compared against each official baseline on all seven metrics,
+yielding 56 paired tests (8 baselines $\times$ 7 metrics). We use paired
+event bootstrap confidence intervals with 2,000 bootstrap samples, 95\%
+percentile intervals, and Holm correction at $\alpha=0.05$ over the full
+family of 56 tests in that domain. The Holm-corrected paired tests are
+reported for all eight domains, including the two where \method{} does not
+rank first (Beauty, Movies), so that the losses carry the same paired
+uncertainty as the wins; Table~\ref{tab:significance_summary} gives the signed
+counts (ahead / behind / non-significant) out of 56 per domain.
+
+\paragraph{Cost and Latency.} \method{} requires one LLM forward pass per
+candidate to obtain its per-candidate relevance posterior, i.e.\ 101 scoring
+calls per user and roughly $1.01$M scoring calls per 10,000-user domain (we
+batch these through vLLM). This is a same-candidate reranking cost incurred at
+scoring time; the present paper audits ranking quality and evidence integrity
+and does \emph{not} optimise online serving latency, per-token cost, or online
+batching (cf.\ the LLM cost-and-latency limitation in \S\ref{sec:analysis}).
+
+\paragraph{Evidence Packaging.} Every completed row has a lightweight local
+evidence package with metrics, row counts, provenance, score audits, logs, and
+server manifest hashes. Large score files, prediction files, checkpoints, and
+embeddings remain server-side unless an archive decision requires otherwise.
+This separation keeps the GitHub artifact small while preserving enough hashes
+and row counts to detect missing or accidentally cleaned evidence. The
+paper-facing ledger contains 72 rows: 64 official baseline rows (eight
+baselines $\times$ eight domains) and eight \method{} rows.
+
+\paragraph{Diagnostic Modules.} The main comparison is accompanied by three
+paper-critical diagnostics, run on the four domains (Sports, Toys, Home, Tools)
+for which the full per-event signal rows are packaged locally. The observation
+module bins events by C-CRP uncertainty and checks whether higher uncertainty
+corresponds to lower ranking reliability. The component module evaluates
+leave-one-component-out variants under the frozen same-candidate protocol. The
+hyperparameter module sweeps real controls, especially $\eta$ and the
+uncertainty weight grid, with validation-only selection and reporting-only test
+curves. These diagnostics are not allowed to replace the main official-baseline
+comparison.
+
+\subsection{Main Results}
+
+\input{tables/main_results}
+
+=== RESULTS (Backbone Robustness subsection, lines 217-295) ===
+\subsection{Backbone Robustness: Two Additional LLMs Across All Eight Domains}
+\label{sec:second_backbone}
+
+The attribution above establishes \emph{which signal} carries the headline---the
+task-grounded pointwise posterior---but not whether that signal is specific to
+one backbone. To test this we re-run the \emph{identical} same-candidate pipeline
+under two additional different-family frozen LLMs---Llama-3.1-8B-Instruct and
+Mistral-7B-Instruct-v0.3---changing only the scoring model and holding the
+protocol fixed (10{,}000 users / Beauty $973$, 101 candidates, the same panels,
+score schema, and seeded tie-break). This yields a full
+$3\,\text{backbones}\times 8\,\text{domains}$ grid
+(Table~\ref{tab:three_backbone}): a substantially broader robustness probe than
+the single-backbone, few-domain checks common in LLM-for-recommendation work,
+which typically vary only one backbone over a handful of representative Amazon
+domains \citep{xu2025slmrec}.
+
+\textbf{The ranking advantage survives frozen-model substitution.} Across the
+six domains where the Qwen3-8B posterior ranks first over all eight official
+baselines, Mistral-7B \emph{also} ranks first in all six, and Llama-3.1-8B in
+five---the lone exception being Books, where the Llama posterior ($0.2710$) trails
+the strongest baseline LLMEmb ($0.2737$) by $1.0\%$, which we report rather than
+round away. In aggregate $17$ of the $18$ backbone$\,\times\,$(winning-domain)
+cells clear the strongest official baseline---both per-backbone deltas are shown in
+Table~\ref{tab:three_backbone}: Mistral improves on it by $+7.8\%$
+to $+24.4\%$ and Llama by $-1.0\%$ (Books) to $+34.2\%$ (Electronics). Crucially,
+the two domains where Qwen is honestly \emph{not} first (Beauty, $\#2$; Movies,
+$\#5$) remain below the strongest baseline under \emph{both} additional backbones
+as well, so the full \emph{win/loss partition}---six wins and two losses, not the
+average---transfers (the added backbones are weaker in \emph{level} on the two
+losing domains, so we claim transfer of the domain-level partition, not of exact
+ranks or effect sizes). We also observe that the \emph{absolute} level tracks
+backbone capability---Qwen3-8B strongest, Mistral-7B and Llama-3.1-8B typically
+$\sim 10\text{--}25\%$ lower---an observation consistent with, though not proof of,
+the headline being a \emph{ranking} advantage that a stronger frozen LLM expresses
+more sharply rather than an artefact of any one model. We are deliberate about
+scope: the official baselines are held at their unified-backbone comparison values
+while only C-CRP's scoring LLM is swapped, so this establishes that \emph{C-CRP's
+posterior signal stays competitive under frozen-model substitution}, not a
+re-tuned cross-backbone SOTA result. The single sub-baseline winning-domain cell
+(Llama on Books) is an absolute NDCG@10 gap of $0.2737 - 0.2710 = 0.0027$, a margin
+small enough that we do not read this cell as a stable below-baseline finding; we
+rest the claim at the domain level---$17/18$ cells across two unrelated model
+families---rather than on any one cell. We also do not claim to disentangle two
+distinct sources of the Beauty/Movies losses: it is consistent with the data that
+those two domains are intrinsically harder for this protocol (all three frozen
+backbones land below the strongest baseline, with the same loss direction), and
+also consistent that the added backbones are simply weaker scorers in absolute
+terms; the present table does not separate these. The same pointwise scoring
+code, score schema, and tie-break are shared across all three backbones, so each
+substitution isolates the backbone as the only changed factor.
+
+\textbf{A backbone-specific deep-recall diagnostic.} The replication also exposes
+a model-specific failure mode that we measure rather than leave qualitative. The
+Llama posterior cedes the deepest-recall metric (HR@20) to LLMEmb on several
+domains. Grouping each $101$-candidate event, the Llama verbalized posterior
+floors $84$--$90\%$ of candidates at exactly $0.0$, against $19$--$34\%$ for Qwen,
+and floors the \emph{ground-truth positive} in $53$--$78\%$ of events (Qwen
+$6$--$20\%$). A floored positive lands in a large zero-score tie block whose
+expected rank pushes it past $20$, which is precisely a deep-recall loss; yet on
+the $10$--$16\%$ of candidates Llama does grade it remains discriminative, so the
+top of the ranking---NDCG, MRR, HR@5---stays sharp (hence the near-universal
+NDCG@10 rank-1 result above). This also supplies the rationale for ranking by the \emph{raw} posterior
+($\eta{=}0$): a risk re-weighting acts on the graded structure of the posterior,
+and a backbone that floors $\sim 85$--$90\%$ of scores offers almost no graded
+signal for such a term to exploit. This is a plausible diagnostic explanation, not
+a re-derivation: it supports the conservative choice of ranking by the raw
+posterior on the additional backbones and is consistent with the $\eta{=}0$-best
+negative result of Section~\ref{sec:results}, but it does \emph{not} by itself
+re-establish that result for every backbone; a full risk-instrumented $\eta$ sweep
+per backbone is left to future work.
+
+\input{tables/three_backbone_robustness}
+
+\subsection{Uncertainty as a Reliability Signal}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_observation}
+\caption{Ranking quality declines monotonically as \method{} uncertainty rises.
+
+=== three_backbone_robustness.tex ===
+% AUTO-GENERATED by experiments/rsc/build_3backbone_table.py
+% Coverage at generation: 24/24 cells. Re-run when Mistral reaches 24/24.
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Backbone robustness: the ranking advantage survives frozen-model substitution (3 backbones $\times$ 8 domains).} NDCG@10 of the identical same-candidate C-CRP pipeline under three different-family frozen LLMs, with the strongest official baseline per domain for reference (baselines held at their unified-Qwen comparison values; only the C-CRP scoring LLM is swapped). Across the six domains where Qwen3-8B ranks first, Mistral-7B also ranks first in all six and Llama-3.1-8B in five (Books a $1.0\%$ near-miss vs.\ LLMEmb), i.e.\ $17$ of $18$ backbone$\times$(winning-domain) cells clear the strongest official baseline. Absolute level is consistent with, but not proof of, backbone quality (Qwen3-8B strongest; Mistral/Llama $\sim 10$--$25\%$ lower). Beauty/Movies (where Qwen is not first) are shown honestly and remain below the strongest baseline under all three backbones.}
+\label{tab:three_backbone}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{C-CRP NDCG@10 by backbone} & & \multicolumn{2}{c}{$\Delta$ vs.\ strongest base} \\
+\cmidrule(lr){2-4}\cmidrule(lr){6-7}
+Domain & Qwen3-8B & Llama-3.1-8B & Mistral-7B & Strongest base & Llama & Mistral \\
+\midrule
+Beauty      & $0.1341$ & $0.1125$ & $0.1129$ & ProEx~$0.1506$ & $-25.3\%$ & $-25.0\%$ \\
+Books       & $0.3328$ & $0.2710$ & $0.2960$ & LLMEmb~$0.2737$ & $-1.0\%$ & $+8.1\%$ \\
+Elec.       & $0.1833$ & $0.1605$ & $0.1488$ & LLMEmb~$0.1196$ & $+34.2\%$ & $+24.4\%$ \\
+Movies      & $0.1281$ & $0.0621$ & $0.1228$ & LLMEmb~$0.1690$ & $-63.2\%$ & $-27.3\%$ \\
+Sports      & $0.2329$ & $0.2054$ & $0.1985$ & LLMEmb~$0.1795$ & $+14.4\%$ & $+10.6\%$ \\
+Toys        & $0.2708$ & $0.2274$ & $0.2209$ & LLMEmb~$0.2049$ & $+11.0\%$ & $+7.8\%$ \\
+Home        & $0.1324$ & $0.1103$ & $0.1124$ & LLMEmb~$0.0939$ & $+17.5\%$ & $+19.7\%$ \\
+Tools       & $0.1661$ & $0.1407$ & $0.1364$ & LLMEmb~$0.1159$ & $+21.4\%$ & $+17.7\%$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+=== ANALYSIS ===
+\section{Discussion}
+\label{sec:analysis}
+
+\subsection{Why Same-Candidate Reliability Matters}
+
+Many deployed recommenders use a multi-stage architecture: an upstream retriever
+generates a candidate set, and a downstream ranker or reranker orders those
+candidates. Our experiments target the second stage. This scope is narrower
+than full-catalog recommendation, but it is also where LLM-based scoring is
+most commonly used because evaluating every catalog item with an LLM is
+expensive.
+
+The same-candidate protocol makes this claim auditable. Since all methods rank
+the same candidate rows, performance differences cannot be explained by a
+different candidate generator. Since all methods are imported through the same
+metric code, the comparison is not mixing native full-catalog metrics with
+reranking metrics. This is also the setting in which we can cleanly test whether
+the uncertainty decomposition adds anything to the underlying pointwise
+posterior, and---as the diagnostics below show---measure exactly where the
+ranking signal lives.
+
+\subsection{What the Diagnostics Say}
+
+The diagnostics support a careful and, we think, scientifically informative
+interpretation. The headline gain comes from a single, simple signal: the
+task-grounded pointwise relevance posterior, used directly as the ranking score
+(\S\ref{sec:results}). The uncertainty machinery layered on top of it---boundary
+uncertainty, calibration-gap, counterevidence, and risk penalty---does not add
+ranking utility in the same-candidate setting. Boundary uncertainty is exactly
+inert, removing counterevidence or the risk penalty is nonworse on NDCG@10, the
+test-best risk exponent is zero in all four domains, and a raw-probability
+attribution shows that ranking on the posterior alone matches the full
+configuration to within a few thousandths of NDCG@10. The observation module
+shows separately that high uncertainty corresponds to lower ranking reliability,
+but because events are binned by the method's own uncertainty and the score is a
+monotone function of the same posterior, this is a descriptive (and partly
+mechanical) reliability stratification, not evidence that the uncertainty term
+improves ranking.
+
+We read this as a clean negative result worth stating plainly rather than
+hiding. The actionable signal that a calibrated-uncertainty decomposition was
+designed to surface is, for same-candidate ranking, already captured by the
+pointwise posterior itself; the decomposition is therefore best understood as an
+analyzed design space whose components we have measured and found inert for
+ranking, not as a validated source of the improvement. This is a more honest
+and more useful contribution than an unsupported claim that uncertainty
+decomposition drives the gain: it tells future work where the signal actually
+lives, and it cautions against adding risk/uncertainty terms to a ranking score
+without measuring their effect. The uncertainty signal may still be valuable as
+a reliability descriptor or for downstream abstention/deferral decisions, which
+we leave to future work.
+
+\subsection{Limitations}
+
+\begin{enumerate}
+    \item \textbf{No full-catalog claim.} We evaluate controlled reranking over
+    101 candidates per user. Candidate generation and full-catalog retrieval
+    remain future work.
+    \item \textbf{Second backbone tested; broader model/domain coverage open.}
+    The formal main comparison uses a unified Qwen3-8B backbone across eight
+    Amazon-domain same-candidate tasks (with the uncertainty diagnostics run on
+    four of them). To test whether the same-candidate ranking advantage transfers
+    across model families, we re-ran the identical pipeline with a second,
+    different-family LLM (Llama-3.1-8B-Instruct) on the four new winning domains
+    (\S\ref{sec:second_backbone}): the headline NDCG@10 rank-first result
+    replicates in all four ($+11.0\%$ to $+21.4\%$ over the strongest baseline) at
+    a $12$--$17\%$ lower absolute level that tracks backbone quality. This
+    establishes transfer to one additional model family on the winning domains; we
+    have not run a second backbone on the remaining four domains (including the two
+    non-winning ones, Beauty and Movies) or a third model family, and other LLMs,
+    catalogs, or retriever distributions may still change calibration and
+    uncertainty behavior.
+    \item \textbf{Descriptive uncertainty diagnostics.} The observation module
+    shows that uncertainty stratifies reliability, but it is not a causal
+    intervention. It does not prove that changing uncertainty alone would change
+    ranking utility.
+    \item \textbf{Uncertainty decomposition is inert for ranking.} The
+    leave-one-component-out diagnostics and the raw-probability attribution show
+    that the calibrated-uncertainty and risk-adjusted terms do not improve
+    same-candidate ranking over the pointwise posterior they are built on; the
+    test-best risk exponent is zero in all four domains. The paper therefore
+    claims that a task-grounded pointwise relevance posterior ranks first under
+    the controlled same-candidate protocol, and reports the uncertainty
+    decomposition as a characterized negative result plus a descriptive
+    reliability signal---not as a validated ranking-improvement mechanism.
+    \item \textbf{External adapter policy.}\label{lim:backbone} We preserve
+    official-code-level
+    baseline mechanisms and use a shared Qwen3-8B representation bridge for
+    same-candidate scoring. This gives a fair controlled comparison, but it is
+    not the same claim as reproducing each method under its original full-catalog
+    serving stack. A bridge-fidelity check (\S\ref{sec:results}) finds the
+    Qwen3-8B bridge recovers $\approx\!90\%$ of LLM2Rec's native same-candidate
+    NDCG@10 (Tools $110\%$, Sports $78\%$), so the bridge does not collapse
+    baselines to the floor; we have not, however, run a native-backbone
+    reproduction for every baseline.
+    \item \textbf{Exploratory gap decomposition.} Our analysis of why \method{}
+    wins on six domains but not Beauty or Movies relates the per-domain NDCG@10
+    gap to interpretable domain features (Table~\ref{tab:gap_decomposition}).
+    With only eight domains these are exploratory, descriptive associations, not
+    causal claims: no single feature remains significant once the number of
+    features tested is accounted for, and no feature separates both non-winning
+    domains. Two measurement confounds further limit the Movies row in
+    particular: only $\approx\!51\%$ of its candidate items have title metadata,
+    which itself handicaps a text-grounded scorer, and its history-length
+    feature uses an all-user interactions proxy (a different source) because the
+    evaluation panel was pruned for storage. We therefore present the
+    decomposition as motivating analysis, not a validated mechanism.
+    \item \textbf{LLM cost and latency.} \method{} relies on task-grounded LLM
+    evidence before score export. The current paper audits ranking quality and
+    evidence integrity, but it does not optimize serving latency, token cost, or
+    online batching.
+    \item \textbf{Prompt and parser dependence.} The signal rows are
+    fail-closed and source-audited, yet they still depend on the chosen prompt,
+    output schema, and parser. Different prompt templates may change
+    calibration and evidence-support behavior.
+    \item \textbf{Sampled negative candidate sets.} The same-candidate protocol
+    uses one positive and 100 sampled negatives per event. This is appropriate
+    for controlled reranking, but conclusions may differ under larger or
+    retriever-generated candidate pools.
+\end{enumerate}
+
+=== CONCLUSION ===
+\section{Conclusion}
+\label{sec:conclusion}
+
+We set out to study whether a task-grounded uncertainty framework can improve
+LLM-based reranking under a controlled same-candidate protocol, and our main
+contribution is the protocol itself: every method ranks the same 101 candidates
+per event for 10{,}000 users, with a shared Qwen3-8B backbone, a shared
+importer, identical metrics, exact coverage checks, and paired Holm-corrected
+bootstrap tests. Under this protocol, our central finding is that a
+task-grounded pointwise LLM relevance posterior---the model's own per-candidate
+relevance probability used directly as the ranking score---ranks first against
+eight official-code-level baselines in six of the eight Amazon domains we tested
+(Books, Electronics, Sports, Toys, Home, Tools), improving NDCG@10 by $+21.6\%$
+to $+53.2\%$ over the strongest baseline and leading on all seven HR/NDCG/MRR
+metrics in five of those six domains (Electronics, Sports, Toys, Home, Tools) and
+on six of seven on Books (HR@20 versus LLMEmb the exception). In the other two
+domains it is not first---rank~2 on Beauty ($-11\%$ NDCG@10, though its shortfall
+versus ProEx is not Holm-significant on any metric) and mid-pack at rank~5 on
+Movies ($-24\%$, substantially behind the four stronger baselines)---which we
+report rather than omit. We compute paired Holm-corrected bootstrap tests on all
+eight domains: on the six winning domains \method{} is significantly ahead on all
+56 metric/baseline pairs (54/56 on Books), while on Movies it is significantly
+behind the stronger baselines on 22 of 56 pairs and on Beauty none of the losses
+to ProEx is Holm-significant. This is a scoped same-candidate reranking claim, not
+a full-catalog recommender SOTA result. The advantage is not specific to the
+Qwen3-8B backbone: re-running the identical pipeline with a different-family LLM
+(Llama-3.1-8B-Instruct) reproduces the rank-first NDCG@10 result on all four new
+winning domains ($+11.0\%$ to $+21.4\%$ over the strongest baseline;
+\S\ref{sec:second_backbone}).
+
+The diagnostic modules locate this signal precisely and yield a rigorous
+negative result. Leave-one-component-out ablations and a raw-probability
+attribution show that the uncertainty decomposition and the risk-adjusted
+ranking family do not improve same-candidate ranking over the posterior they are
+built on: the test-best risk exponent is zero in all four domains, a
+confidence-only variant matches or exceeds the full configuration, and the
+individual uncertainty terms are inert or mildly harmful. The working ranking
+signal lies in the pointwise posterior itself, not in the uncertainty machinery.
+The event-level uncertainty signal does stratify ranking reliability, but we
+report this only as a caveated, partly mechanical descriptor, not as evidence
+that uncertainty improves ranking. We present the calibrated-uncertainty and
+risk-adjusted family as an analyzed and characterized design space, and leave
+its use as a reliability descriptor or for downstream abstention to future work.

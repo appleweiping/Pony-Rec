@@ -128,7 +128,12 @@ def main():
     parser.add_argument("--seed", type=int, default=None,
                         help="Generation seed (SamplingParams.seed + LLM seed). None=vLLM default.")
     parser.add_argument("--gpu_mem", type=float, default=0.85, help="GPU memory utilization (0-1)")
-    parser.add_argument("--max_model_len", type=int, default=1024)
+    # 4096 (was 1024): Mistral-7B's tokenizer expands the 101-candidate panel
+    # prompt on the larger 10k-domain inputs to up to ~1307 tokens (electronics),
+    # overflowing a 1024 cap and raising a fatal ValueError. 4096 admits the full
+    # prompt without truncation; Qwen/Llama prompts fit <=1024 so their results
+    # are unchanged (a higher cap never alters scoring of prompts that already fit).
+    parser.add_argument("--max_model_len", type=int, default=4096)
     parser.add_argument("--max_new_tokens", type=int, default=100)
     parser.add_argument("--temperature", type=float, default=0.1)
     parser.add_argument("--backbone", type=str, default=None,
